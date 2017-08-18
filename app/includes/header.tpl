@@ -2,9 +2,9 @@
 <html lang="en" ng-app="mewApp">
 <head>
 <meta charset="utf-8">
-<title>MyEtherWallet.com</title>
-<link rel="canonical" href="https://www.myetherwallet.com" />
-<meta name="description" content="MyEtherWallet.com is a free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URL ( .com ) before unlocking your wallet.">
+<title>ClassicEtherWallet: Client-Side Classic Ether Wallet</title>
+<link rel="canonical" href="https://classicetherwallet.com" />
+<meta name="description" content="ClassicEtherWallet.com is a free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URL ( .com ) before unlocking your wallet.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/etherwallet-master.min.css">
 <script type="text/javascript" src="js/etherwallet-static.min.js"></script>
@@ -15,17 +15,17 @@
 <link rel="manifest" href="images/fav/manifest.json">
 <link rel="mask-icon" href="images/fav/safari-pinned-tab.svg" color="#2f99b0">
 <link rel="shortcut icon" href="images/fav/favicon.ico">
-<meta name="apple-mobile-web-app-title" content="MyEtherWallet">
-<meta name="application-name" content="MyEtherWallet">
+<meta name="apple-mobile-web-app-title" content="ClassicEtherWallet">
+<meta name="application-name" content="ClassicEtherWallet">
 <meta name="msapplication-config" content="images/fav/browserconfig.xml">
 <meta name="theme-color" content="#1d6986">
-<meta property="og:url" content="https://www.myetherwallet.com" />
-<meta property="og:title" content="MyEtherWallet.com" />
+<meta property="og:url" content="https://classicetherwallet.com" />
+<meta property="og:title" content="ClassicEtherWallet.com" />
 <meta property="og:image" content="/images/myetherwallet-logo-banner.png" />
 <meta property="og:image" content="/images/myetherwallet-logo.png" />
 <meta property="og:image" content="/images/myetherwallet-logo-square.png" />
 <meta property="og:image" content="/images/myetherwallet-banner-fun.jpg" />
-<meta property="og:description" content="MyEtherWallet.com is a free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URL ( .com ) before unlocking your wallet." />
+<meta property="og:description" content="ClassicEtherWallet.com is a free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URL ( .com ) before unlocking your wallet." />
 <script type='application/ld+json'>{"@context":"http://schema.org","@type":"Organization","@id":"#organization","url":"https://www.myetherwallet.com/","name":"MyEtherWallet",
 "logo":"https://myetherwallet.com/images/myetherwallet-logo-banner.png","description": "MyEtherWallet.com is a free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URL ( .com ) before unlocking your wallet.","sameAs":["https://www.myetherwallet.com/","https://chrome.google.com/webstore/detail/myetherwallet-cx/nlbmnnijcnlegkjjpcfjclmcfggfefdm","https://www.facebook.com/MyEtherWallet/","https://twitter.com/myetherwallet","https://medium.com/@myetherwallet_96408","https://myetherwallet.groovehq.com/help_center","https://github.com/kvhnuke/etherwallet","https://github.com/MyEtherWallet","https://kvhnuke.github.io/etherwallet/","https://github.com/kvhnuke/etherwallet/releases/latest","https://github.com/409H/EtherAddressLookup","https://myetherwallet.slack.com/","https://myetherwallet.herokuapp.com/","https://www.reddit.com/r/MyEtherWallet/","https://www.reddit.com/user/insomniasexx/","https://www.reddit.com/user/kvhnuke/","https://www.reddit.com/user/myetherwallet"]}</script>
 </head>
@@ -34,7 +34,15 @@
 
   @@if (site === 'mew' ) {
     <div class="small announcement annoucement-danger">
-      <div class="container">Always check the URL and look for MYETHERWALLET LLC [US] Certificate up there. Look for https://www.myetherwallet.com/. <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/protecting-yourself-and-your-funds" target="_blank" rel="noopener">Be safe &amp; secure</a>.</div>
+      <div class="container">
+        All the latest updates to ClassicEtherWallet, ENS integration with the ETC chain and many other improvements were developed by the Ethereum Commonwealth team. If you want to support further development or get a share in our projects with revenue, contribute to
+        <br />
+        <a href="https://dexaran.github.io/ICO/" target="_blank" rel="noopener">Ethereum Commonwealth</a>.
+        <br />
+        If you don't like ICO, you can donate some funds to the official address of Ethereum Commonwealth: 
+        <br />
+        0x52823e725a34d42e14a1b66fb67299c30c4d8edf
+      </div>
     </div>
   }
 
@@ -48,12 +56,12 @@
     <section class="container">
       @@if (site === 'mew' ) {
         <a class="brand" href="/" aria-label="Go to homepage">
-          <img src="images/logo-myetherwallet.svg"   height="64px" width="245px" alt="MyEtherWallet" />
+          <img src="images/logo-myetherwallet.png"   height="64px" width="245px" alt="MyEtherWallet" />
         </a>
       }
       @@if (site === 'cx'  ) {
         <a class="brand" href="/cx-wallet.html" aria-label="Go to homepage">
-          <img src="images/logo-myetherwalletcx.svg" height="64px" width="245px" alt="MyEtherWallet" />
+          <img src="images/logo-myetherwallet.png" height="64px" width="245px" alt="MyEtherWallet" />
         </a>
       }
       <div class="tagline">

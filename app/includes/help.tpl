@@ -61,7 +61,7 @@
     </div>
     <div ng-show="h1">
       <ol>
-        @@if (site === 'mew' ) {
+        @@if (site === 'cew' ) {
         <li translate="HELP_1_Desc_1"></li>
         }
         @@if (site === 'cx' )  {
@@ -100,7 +100,7 @@
 
 
 
-@@if (site === 'mew' ) {
+@@if (site === 'cew' ) {
   <article class="collapse-container">
     <div ng-click="h2b = !h2b">
       <a class="collapse-button" ><span ng-show="!h2b">+</span><span ng-show="h2b">-</span></a>
@@ -132,7 +132,7 @@
     <div ng-show="h3">
       <p translate="HELP_3_Desc_1">**Before you send any Ether to your new wallet**, you should ensure you have access to it.</p>
       <ol>
-        @@if (site === 'mew' ) {
+        @@if (site === 'cew' ) {
         <li translate="HELP_3_Desc_2"> Navigate to the "View Wallet Info" page. </li>
         }
         @@if (site === 'cx' )  {
@@ -149,7 +149,7 @@
 
 
 
-@@if (site === 'mew' ) {
+@@if (site === 'cew' ) {
   <article class="collapse-container">
     <div ng-click="h4 = !h4">
       <a class="collapse-button" ><span ng-show="!h4">+</span><span ng-show="h4">-</span></a>
@@ -216,7 +216,7 @@
 
 
 
-@@if (site === 'mew' ) {
+@@if (site === 'cew' ) {
   <article class="collapse-container">
     <div  ng-click="h5 = !h5">
       <a class="collapse-button"><span ng-show="!h5">+</span><span ng-show="h5">-</span></a>
@@ -309,7 +309,7 @@
 
 
 
-@@if (site === 'mew' ) {
+@@if (site === 'cew' ) {
   <article class="collapse-container">
     <div ng-click="h8 = !h8">
       <a class="collapse-button"><span ng-show="!h8">+</span><span ng-show="h8">-</span></a>
@@ -387,7 +387,7 @@
     <div ng-show="h12">
       <p class="strong" translate="HELP_12_Desc_1"> Using an Geth/Mist JSON file from MyEtherWallet v2+....</p>
       <ol>
-        @@if (site === 'mew' ) {
+        @@if (site === 'cew' ) {
           <li translate="HELP_12_Desc_2"> Go to the "View Wallet Info" page.</li>
           <li translate="HELP_12_Desc_3"> Unlock your wallet using your **encrypted** private key or JSON file. </li>
         }

@@ -44,7 +44,7 @@
     <a class="btn btn-primary btn-block" data-toggle="modal" data-target="#deployContract" translate="NAV_DeployContract"> Deploy Contract </a>
   </div>
 
-  @@if (site === 'mew' ) { @@include( '../includes/contracts-deploy-modal.tpl', { "site": "mew" } ) }
+  @@if (site === 'cew' ) { @@include( '../includes/contracts-deploy-modal.tpl', { "site": "cew" } ) }
   @@if (site === 'cx'  ) { @@include( '../includes/contracts-deploy-modal.tpl', { "site": "cx"  } ) }
 
 </section>

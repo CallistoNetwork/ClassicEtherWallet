@@ -19,17 +19,17 @@
         Knowledge Base
       </a></p>
 
-      <p><a href="https://www.myetherwallet.com/helpers.html" target="_blank" rel="noopener" role="link" tabindex="0">
+      <p><a href="https://ethereumproject.github.io/etherwallet/helpers.html" target="_blank" rel="noopener" role="link" tabindex="0">
         Helpers &amp; ENS Debugging
       </a></p>
 
-      <p><a href="https://www.myetherwallet.com/signmsg.html" target="_blank" rel="noopener" role="link" tabindex="0">
+      <p><a href="https://ethereumproject.github.io/etherwallet/signmsg.html" target="_blank" rel="noopener" role="link" tabindex="0">
         Sign Message
       </a></p>
 
       <p><a data-target="#disclaimerModal" data-toggle="modal" target="_blank" rel="noopener" role="link" tabindex="0"  translate="FOOTER_4"> Disclaimer </a></p>
 
-      <p> &copy; 2017 MyEtherWallet, LLC </p>
+      <p> &copy; 2017 ClassicEtherWallet, LLC </p>
 
     </section>
 
@@ -61,8 +61,8 @@
 
     <section class="footer--righ">
 
-      <p><a aria-label="website via my ether wallet dot com" href="https://www.MyEtherWallet.com" target="_blank" rel="noopener" role="link" tabindex="0">
-        MyEtherWallet.com
+      <p><a aria-label="website via my ether wallet dot com" href="https://ethereumproject.github.io/etherwallet" target="_blank" rel="noopener" role="link" tabindex="0">
+       ClassicEtherWallet.com
       </a></p>
 
       <p><a aria-label="website via github URL" href="https://kvhnuke.github.io/etherwallet/" target="_blank" rel="noopener" role="link" tabindex="0">
@@ -115,7 +115,7 @@
 
 </footer>
 
-@@if (site === 'mew' ) { @@include( './footer-disclaimer-modal.tpl',   { "site": "mew" } ) }
+@@if (site === 'cew' ) { @@include( './footer-disclaimer-modal.tpl',   { "site": "cew" } ) }
 @@if (site === 'cx'  ) { @@include( './footer-disclaimer-modal.tpl',   { "site": "cx"  } ) }
 
 </main>

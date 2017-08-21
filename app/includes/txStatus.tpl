@@ -149,7 +149,7 @@
         <h4 class="text-danger text-center"> Unlock your wallet to replace your transaction. (But, please be careful) </h4>
       </div>
       <div ng-show="!wd">
-          @@if (site === 'mew' ) {  <wallet-decrypt-drtv></wallet-decrypt-drtv>         }
+          @@if (site === 'cew' ) {  <wallet-decrypt-drtv></wallet-decrypt-drtv>         }
           @@if (site === 'cx' )  {  <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>   }
       </div>
     </section>
@@ -159,10 +159,10 @@
   <!-- Send Tx Content -->
  <section class="row" ng-show="wallet!=null" ng-controller='sendTxCtrl'>
       <div ng-show="wallet.getChecksumAddressString() == txInfo.from">
-      @@if (site === 'mew' ) { @@include( './sendTx-content.tpl', { "site": "mew" } ) }
+      @@if (site === 'cew' ) { @@include( './sendTx-content.tpl', { "site": "cew" } ) }
       @@if (site === 'cx'  ) { @@include( './sendTx-content.tpl', { "site": "cx"  } ) }
 
-      @@if (site === 'mew' ) { @@include( './sendTx-modal.tpl',   { "site": "mew" } ) }
+      @@if (site === 'cew' ) { @@include( './sendTx-modal.tpl',   { "site": "cew" } ) }
       @@if (site === 'cx'  ) { @@include( './sendTx-modal.tpl',   { "site": "cx"  } ) }
       </div>
       <div class="col-xs-12 block block--danger" ng-show="wallet.getChecksumAddressString() != txInfo.from">

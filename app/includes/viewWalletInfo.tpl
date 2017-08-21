@@ -19,7 +19,7 @@
   <article class="row" ng-show="wallet!=null">
 
     @@if (site === 'cx' ) {  @@include( './viewWalletInfo-content.tpl', { "site": "cx" } )    }
-    @@if (site === 'mew') {  @@include( './viewWalletInfo-content.tpl', { "site": "mew" } )   }
+    @@if (site === 'cew') {  @@include( './viewWalletInfo-content.tpl', { "site": "cew" } )   }
 
   </article>
 

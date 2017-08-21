@@ -32,7 +32,7 @@
 <body>
 <header class="{{curNode.name}} {{curNode.service}} {{curNode.service}} nav-index-{{gService.currentTab}}" aria-label="header" ng-controller='tabsCtrl' >
 
-  @@if (site === 'mew' ) {
+  @@if (site === 'cew' ) {
     <div class="small announcement annoucement-danger">
       <div class="container">
         All the latest updates to ClassicEtherWallet, ENS integration with the ETC chain and many other improvements were developed by the Ethereum Commonwealth team. If you want to support further development or get a share in our projects with revenue, contribute to
@@ -54,8 +54,8 @@
     }
   <section class="bg-gradient header-branding">
     <section class="container">
-      @@if (site === 'mew' ) {
-        <a class="brand" href="/" aria-label="Go to homepage">
+      @@if (site === 'cew' ) {
+        <a class="brand" href="https://ethereumproject.github.io/etherwallet/" aria-label="Go to homepage">
           <img src="images/logo-myetherwallet.png"   height="64px" width="245px" alt="MyEtherWallet" />
         </a>
       }
@@ -141,7 +141,7 @@
     <a aria-hidden="true" ng-show="showLeftArrow" class="nav-arrow-left" ng-click="scrollLeft(100);" ng-mouseover="scrollHoverIn(true,2);" ng-mouseleave="scrollHoverOut()">&#171;</a>
     <div class="nav-scroll">
       <ul class="nav-inner">
-        @@if (site === 'mew' ) {
+        @@if (site === 'cew' ) {
         <li ng-repeat="tab in tabNames track by $index" class="nav-item {{tab.name}}" ng-class="{active: $index==gService.currentTab}" ng-show="tab.mew" ng-click="tabClick($index)"> <a tabindex="0" aria-label="nav item: {{tab.name | translate}}" translate="{{tab.name}}"></a></li>
         }
         @@if (site === 'cx' ) {
@@ -153,7 +153,7 @@
     <a aria-hidden="true" ng-show="showRightArrow" class="nav-arrow-right" ng-click="scrollRight(100);" ng-mouseover="scrollHoverIn(false,2);" ng-mouseleave="scrollHoverOut()">&#187;</a>
   </nav>
 
-  @@if (site === 'mew' ) { @@include( './header-node-modal.tpl', { "site": "mew" } ) }
+  @@if (site === 'cew' ) { @@include( './header-node-modal.tpl', { "site": "cew" } ) }
   @@if (site === 'cx'  ) { @@include( './header-node-modal.tpl', { "site": "cx"  } ) }
 
 </header>

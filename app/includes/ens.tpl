@@ -42,24 +42,24 @@
   <!-- / IF NOT ENS CHAIN -->
 
   <!-- General Information Panel -->
-  @@if (site === 'mew' ) { @@include( './ens-general-information.tpl', { "site": "mew" } ) }
+  @@if (site === 'cew' ) { @@include( './ens-general-information.tpl', { "site": "cew" } ) }
   @@if (site === 'cx'  ) { @@include( './ens-general-information.tpl', { "site": "cx"  } ) }
 
 
   <!-- .notAvailable or .forbidden -->
-  @@if (site === 'mew' ) { @@include( './ens-status-notavailable.tpl', { "site": "mew" } ) }
+  @@if (site === 'cew' ) { @@include( './ens-status-notavailable.tpl', { "site": "cew" } ) }
   @@if (site === 'cx'  ) { @@include( './ens-status-notavailable.tpl', { "site": "cx"  } ) }
 
   <!-- .open or .auction -->
-  @@if (site === 'mew' ) { @@include( './ens-status-available.tpl', { "site": "mew" } ) }
+  @@if (site === 'cew' ) { @@include( './ens-status-available.tpl', { "site": "cew" } ) }
   @@if (site === 'cx'  ) { @@include( './ens-status-available.tpl', { "site": "cx"  } ) }
 
   <!-- .reveal -->
-  @@if (site === 'mew' ) { @@include( './ens-status-reveal.tpl', { "site": "mew" } ) }
+  @@if (site === 'cew' ) { @@include( './ens-status-reveal.tpl', { "site": "cew" } ) }
   @@if (site === 'cx'  ) { @@include( './ens-status-reveal.tpl', { "site": "cx"  } ) }
 
   <!-- .owned (finalize) -->
-  @@if (site === 'mew' ) { @@include( './ens-status-owned.tpl', { "site": "mew" } ) }
+  @@if (site === 'cew' ) { @@include( './ens-status-owned.tpl', { "site": "cew" } ) }
   @@if (site === 'cx'  ) { @@include( './ens-status-owned.tpl', { "site": "cx"  } ) }
 
   <!-- Unlock Directive: Everything but notAvailable & forbidden -->
@@ -77,7 +77,7 @@
         </h4>
       </div>
       <div ng-show="!wd">
-          @@if (site === 'mew' ) {  <wallet-decrypt-drtv></wallet-decrypt-drtv>         }
+          @@if (site === 'cew' ) {  <wallet-decrypt-drtv></wallet-decrypt-drtv>         }
           @@if (site === 'cx' )  {  <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>   }
       </div>
     </section>
@@ -85,19 +85,19 @@
   <!-- / Unlock Directive: Everything but notAvailable / forbidden -->
 
 
-  @@if (site === 'mew' ) { @@include( './ens-action-primary.tpl', { "site": "mew" } ) }
+  @@if (site === 'cew' ) { @@include( './ens-action-primary.tpl', { "site": "cew" } ) }
   @@if (site === 'cx'  ) { @@include( './ens-action-primary.tpl', { "site": "cx"  } ) }
 
 
-  @@if (site === 'mew' ) { @@include( './ens-action-finalize.tpl', { "site": "mew" } ) }
+  @@if (site === 'cew' ) { @@include( './ens-action-finalize.tpl', { "site": "cew" } ) }
   @@if (site === 'cx'  ) { @@include( './ens-action-finalize.tpl', { "site": "cx"  } ) }
 
   <!-- .resolve (resolve) -->
-  @@if (site === 'mew' ) { @@include( './ens-action-resolve.tpl', { "site": "mew" } ) }
+  @@if (site === 'cew' ) { @@include( './ens-action-resolve.tpl', { "site": "cew" } ) }
   @@if (site === 'cx'  ) { @@include( './ens-action-resolve.tpl', { "site": "cx"  } ) }
 
 
-  @@if (site === 'mew' ) { @@include( './ens-modal.tpl', { "site": "mew" } ) }
+  @@if (site === 'cew' ) { @@include( './ens-modal.tpl', { "site": "cew" } ) }
   @@if (site === 'cx'  ) { @@include( './ens-modal.tpl', { "site": "cx"  } ) }
 
 

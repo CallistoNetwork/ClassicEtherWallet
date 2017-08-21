@@ -4,7 +4,7 @@
   <!-- TODO VALIDATE IF UNLOCKED WALLET ADDR == OWNER ADDR -->
   <div class="alert alert-danger" ng-show="objENS.owner != wallet.getAddressString()"> This account is not the owner of {{objENS.name}}.eth. Please unlock the Owner Account in order to resolve. </div>
 
-  @@if (site === 'mew' ) { @@include( './ens-resolve-information.tpl', { "site": "mew" } ) }
+  @@if (site === 'cew' ) { @@include( './ens-resolve-information.tpl', { "site": "cew" } ) }
   @@if (site === 'cx'  ) { @@include( './ens-resolve-information.tpl', { "site": "cx"  } ) }
 
   <section class="text-center" ng-hide="objENS.owner != wallet.getAddressString()">
@@ -61,5 +61,5 @@
 
 </article>
 
-@@if (site === 'mew' ) { @@include( './ens-modal-resolve.tpl', { "site": "mew" } ) }
+@@if (site === 'cew' ) { @@include( './ens-modal-resolve.tpl', { "site": "cew" } ) }
 @@if (site === 'cx'  ) { @@include( './ens-modal-resolve.tpl', { "site": "cx"  } ) }

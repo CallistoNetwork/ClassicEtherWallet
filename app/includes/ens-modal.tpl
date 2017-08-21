@@ -29,7 +29,7 @@
           </tbody>
         </table>
 
-        @@if (site === 'mew' ) { @@include( './ens-confirm-table.tpl', { "site": "mew" } ) }
+        @@if (site === 'cew' ) { @@include( './ens-confirm-table.tpl', { "site": "cew" } ) }
         @@if (site === 'cx'  ) { @@include( './ens-confirm-table.tpl', { "site": "cx"  } ) }
 
         <p> The <strong>{{ajaxReq.type}}</strong> node you are sending through is provided by <strong>{{ajaxReq.service}}</strong>.</p>

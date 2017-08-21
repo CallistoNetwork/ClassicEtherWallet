@@ -6,5 +6,5 @@
   <br />
 </article>
 
-@@if (site === 'mew' ) { @@include( './ens-modal-finalize.tpl', { "site": "mew" } ) }
+@@if (site === 'cew' ) { @@include( './ens-modal-finalize.tpl', { "site": "cew" } ) }
 @@if (site === 'cx'  ) { @@include( './ens-modal-finalize.tpl', { "site": "cx"  } ) }

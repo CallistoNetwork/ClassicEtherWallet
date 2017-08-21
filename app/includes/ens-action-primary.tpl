@@ -29,7 +29,7 @@
       <!-- Name -->
       <label>Name</label>
       <div class="input-group">
-        <input class="form-control" type="text" placeholder="myetherwallet" readonly ng-model="objENS.name"/>
+        <input class="form-control" type="text" placeholder="classicetherwallet" readonly ng-model="objENS.name"/>
         <div class="input-group-btn"><a class="btn btn-default">.eth</a></div>
       </div>
       <!-- / Name -->
@@ -79,7 +79,7 @@
       <div class="form-group well" ng-show="objENS.txSent && (objENS.status==ensModes.auction || objENS.status==ensModes.open)">
         <h4 class="text-danger">If you haven't done so already, please screenshot & save the below information.</h4>
         <p>Please check your address on <a href="https://etherscan.io/">https://etherscan.io/</a> to ensure your BID TX is on the blockchain, without errors.</p>
-        @@if (site === 'mew' ) { @@include( './ens-confirm-table.tpl', { "site": "mew" } ) }
+        @@if (site === 'cew' ) { @@include( './ens-confirm-table.tpl', { "site": "cew" } ) }
         @@if (site === 'cx'  ) { @@include( './ens-confirm-table.tpl', { "site": "cx"  } ) }
       </div>
       <!-- / After Sent: Place Bid / Start Auction -->

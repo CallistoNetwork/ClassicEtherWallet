@@ -78,7 +78,7 @@
         <h5 traslate="SWAP_unlock">Unlock your wallet to send ETH or Tokens directly from this page.</h5>
       </div>
       <div ng-show="!wd">
-          @@if (site === 'mew' ) {  <wallet-decrypt-drtv></wallet-decrypt-drtv>         }
+          @@if (site === 'cew' ) {  <wallet-decrypt-drtv></wallet-decrypt-drtv>         }
           @@if (site === 'cx' )  {  <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>   }
       </div>
     </section>
@@ -89,10 +89,10 @@
     </div>
 
     <section class="row" ng-show="wallet!=null" ng-controller='sendTxCtrl'>
-      @@if (site === 'mew' ) { @@include( './sendTx-content.tpl', { "site": "mew" } ) }
+      @@if (site === 'cew' ) { @@include( './sendTx-content.tpl', { "site": "cew" } ) }
       @@if (site === 'cx'  ) { @@include( './sendTx-content.tpl', { "site": "cx"  } ) }
 
-      @@if (site === 'mew' ) { @@include( './sendTx-modal.tpl',   { "site": "mew" } ) }
+      @@if (site === 'cew' ) { @@include( './sendTx-modal.tpl',   { "site": "cew" } ) }
       @@if (site === 'cx'  ) { @@include( './sendTx-modal.tpl',   { "site": "cx"  } ) }
     </section>
   </article>

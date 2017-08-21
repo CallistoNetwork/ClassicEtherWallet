@@ -183,7 +183,7 @@
         <p translate="x_AddessDesc"></p>
       </div>
       <div ng-show="!wd">
-          @@if (site === 'mew' ) {  <wallet-decrypt-drtv></wallet-decrypt-drtv>         }
+          @@if (site === 'cew' ) {  <wallet-decrypt-drtv></wallet-decrypt-drtv>         }
           @@if (site === 'cx' )  {  <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>   }
       </div>
     </div>
@@ -191,7 +191,7 @@
     <div class="row" ng-show="wallet!=null" ng-controller='viewWalletCtrl'>
 
       @@if (site === 'cx' ) {  @@include( './viewWalletInfo-content.tpl', { "site": "cx" } )    }
-      @@if (site === 'mew') {  @@include( './viewWalletInfo-content.tpl', { "site": "mew" } )   }
+      @@if (site === 'cew') {  @@include( './viewWalletInfo-content.tpl', { "site": "cew" } )   }
 
     </div>
   </article>

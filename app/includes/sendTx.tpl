@@ -18,7 +18,7 @@
     </div>
     <div ng-show="!wd">
         @@if (site === 'cx' )  {  <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>   }
-        @@if (site === 'mew' ) {  <wallet-decrypt-drtv></wallet-decrypt-drtv>         }
+        @@if (site === 'cew' ) {  <wallet-decrypt-drtv></wallet-decrypt-drtv>         }
     </div>
   </article>
 
@@ -26,10 +26,10 @@
 
   <!-- Send Tx Content -->
   <article class="row" ng-show="wallet!=null">
-    @@if (site === 'mew' ) { @@include( './sendTx-content.tpl', { "site": "mew" } ) }
+    @@if (site === 'cew' ) { @@include( './sendTx-content.tpl', { "site": "cew" } ) }
     @@if (site === 'cx'  ) { @@include( './sendTx-content.tpl', { "site": "cx"  } ) }
 
-    @@if (site === 'mew' ) { @@include( './sendTx-modal.tpl',   { "site": "mew" } ) }
+    @@if (site === 'cew' ) { @@include( './sendTx-modal.tpl',   { "site": "cew" } ) }
     @@if (site === 'cx'  ) { @@include( './sendTx-modal.tpl',   { "site": "cx"  } ) }
   </article>
 

@@ -9,15 +9,9 @@
 <link rel="stylesheet" href="css/etherwallet-master.min.css">
 <script type="text/javascript" src="js/etherwallet-static.min.js"></script>
 <script type="text/javascript" src="js/etherwallet-master.js"></script>
-<link rel="apple-touch-icon" sizes="180x180" href="images/fav/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="images/fav/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="images/fav/favicon-16x16.png">
-<link rel="manifest" href="images/fav/manifest.json">
-<link rel="mask-icon" href="images/fav/safari-pinned-tab.svg" color="#2f99b0">
-<link rel="shortcut icon" href="images/fav/favicon.ico">
+<link rel="shortcut icon" href="images/fav/favicon.png">
 <meta name="apple-mobile-web-app-title" content="ClassicEtherWallet">
 <meta name="application-name" content="ClassicEtherWallet">
-<meta name="msapplication-config" content="images/fav/browserconfig.xml">
 <meta name="theme-color" content="#1d6986">
 <meta property="og:url" content="https://classicetherwallet.com" />
 <meta property="og:title" content="ClassicEtherWallet.com" />

@@ -17,6 +17,9 @@ var ens = function() {
         case nodes.nodeTypes.ETH:
             _this.setCurrentRegistry(ens.registry.ETH);
             break;
+        case nodes.nodeTypes.ETC:
+            _this.setCurrentRegistry(ens.registry.ETC);
+            break;
         case nodes.nodeTypes.Rinkeby:
             _this.setCurrentRegistry(ens.registry.Rinkeby);
             break;
@@ -29,6 +32,7 @@ var ens = function() {
 };
 ens.registry = {
     ETH: require('./ensConfigs/ETHConfig.json'),
+    ETC: require('./ensConfigs/ETCConfig.json'),
     Rinkeby: require('./ensConfigs/RinkebyConfig.json'),
     ROPSTEN: require('./ensConfigs/ROPConfig.json'),
     NULL: {}
@@ -49,11 +53,16 @@ ens.modes = {
     notAvailable: 5
 };
 ens.prototype.setCurrentRegistry = function(_registry) {
-    this.curRegistry = _registry;
+    this.setAuctionAddress(_registry.public.ethAuction);
+    return this.curRegistry = _registry;
 };
 ens.prototype.getRegistryAddress = function() {
     return this.curRegistry.registry;
 };
+
+ens.prototype.setAuctionAddress = function(address) {
+    return ens.prototype.auctionAddress = address; 
+}
 
 function namehash(name) {
     name = ens.normalise(name);
@@ -145,7 +154,7 @@ ens.prototype.resolveAddressByName = function(name, callback) {
     });
 };
 ens.prototype.getAuctionAddress = function() {
-    return this.curRegistry.public.ethAuction;
+    return ens.prototype.auctionAddress;
 };
 ens.prototype.getStartAuctionData = function(name) {
     var _this = this;
@@ -187,7 +196,7 @@ ens.prototype.getAuctionEntries = function(name, callback) {
     var _this = this;
     name = _this.getSHA3(ens.normalise(name));
     var funcABI = _this.auctionABI.entries;
-    ajaxReq.getEthCall({ to: _this.curRegistry.public.ethAuction, data: _this.getDataString(funcABI, [name]) }, function(data) {
+    ajaxReq.getEthCall({ to: _this.getAuctionAddress(), data: _this.getDataString(funcABI, [name]) }, function(data) {
         if (data.error) callback(data);
         else {
             var outTypes = funcABI.outputs.map(function(i) {
@@ -208,7 +217,7 @@ ens.prototype.getAuctionEntries = function(name, callback) {
 ens.prototype.shaBid = function(hash, owner, value, saltHash, callback) {
     var _this = this;
     var funcABI = _this.auctionABI.shaBid;
-    ajaxReq.getEthCall({ to: _this.curRegistry.public.ethAuction, data: _this.getDataString(funcABI, [hash, owner, value, saltHash]) }, function(data) {
+    ajaxReq.getEthCall({ to: _this.getAuctionAddress(), data: _this.getDataString(funcABI, [hash, owner, value, saltHash]) }, function(data) {
         if (data.error) callback(data);
         else {
             var outTypes = funcABI.outputs.map(function(i) {
@@ -223,7 +232,7 @@ ens.prototype.getAllowedTime = function(name, callback) {
     var _this = this;
     var funcABI = _this.auctionABI.getAllowedTime;
     name = _this.getSHA3(ens.normalise(name));
-    ajaxReq.getEthCall({ to: _this.curRegistry.public.ethAuction, data: _this.getDataString(funcABI, [name]) }, function(data) {
+    ajaxReq.getEthCall({ to: _this.getAuctionAddress(), data: _this.getDataString(funcABI, [name]) }, function(data) {
         if (data.error) callback(data);
         else {
             var outTypes = funcABI.outputs.map(function(i) {

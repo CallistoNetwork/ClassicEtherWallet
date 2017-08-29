@@ -54,14 +54,20 @@ ens.modes = {
 };
 ens.prototype.setCurrentRegistry = function(_registry) {
     this.setAuctionAddress(_registry.public.ethAuction);
+    this.setRegistryAddress(_registry.registry);
     return this.curRegistry = _registry;
 };
+
 ens.prototype.getRegistryAddress = function() {
-    return this.curRegistry.registry;
+    return ens.prototype.registryAddress
 };
 
 ens.prototype.setAuctionAddress = function(address) {
     return ens.prototype.auctionAddress = address; 
+}
+
+ens.prototype.setRegistryAddress = function(_registryAddress) {
+    return ens.prototype.registryAddress = _registryAddress; 
 }
 
 function namehash(name) {

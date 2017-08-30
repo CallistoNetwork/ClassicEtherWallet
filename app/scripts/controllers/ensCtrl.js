@@ -30,12 +30,12 @@ var ensCtrl = function($scope, $sce, walletService) {
     };
     $scope.gasLimitDefaults = {
         startAuction: '200000',
-        newBid: '500000',
+        newBid: '520000',
         reveal: '200000',
         finalize: '200000'
     }
     $scope.tx = {
-        gasLimit: '500000',
+        gasLimit: '520000',
         data: '',
         to: '',
         unit: "ether",

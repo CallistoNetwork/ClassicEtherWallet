@@ -4,5 +4,11 @@
     "symbol":"BEC",
     "decimal":8,
     "type":"default"
+  },
+  {
+    "address":"0x345a9e6c44d546dae5141700372986c4bb532e3d",
+    "symbol":"DEX",
+    "decimal":18,
+    "type":"default"
   }
  ]

@@ -1,6 +1,11 @@
 'use strict';
 var walletBalanceCtrl = function($scope, $sce) {
     $scope.ajaxReq = ajaxReq;
+    $scope.erc20Abi = require('../abiDefinitions/erc20abi.json');
+    $scope.erc20Indexes = {
+      DECIMALS: 2,
+      SYMBOL: 3,
+    }
     $scope.tokensLoaded = true;
     $scope.localToken = {
         contractAdd: "",
@@ -8,6 +13,9 @@ var walletBalanceCtrl = function($scope, $sce) {
         decimals: "",
         type: "custom",
     };
+    $scope.contract = {
+        functions: [],
+    }
 
     $scope.slide = 2;
 
@@ -29,6 +37,72 @@ var walletBalanceCtrl = function($scope, $sce) {
             }
         });
     }
+
+    $scope.initContract = function() {
+        try {
+            $scope.contract.functions = [];
+            var tAbi = $scope.erc20Abi;
+            for (var i in tAbi)
+                if (tAbi[i].type == "function") {
+                    tAbi[i].inputs.map(function(i) { i.value = ''; });
+                    $scope.contract.functions.push(tAbi[i]);
+                }
+        } catch (e) {
+            $scope.notifier.danger(e);
+        }
+    }
+
+    $scope.getTxData = function(indexFunc) {
+      var curFunc = $scope.contract.functions[indexFunc];
+      var fullFuncName = ethUtil.solidityUtils.transformToFullName(curFunc);
+      var funcSig = ethFuncs.getFunctionSignature(fullFuncName);
+      var typeName = ethUtil.solidityUtils.extractTypeName(fullFuncName);
+      var types = typeName.split(',');
+      types = types[0] == "" ? [] : types;
+      var values = [];
+      for (var i in curFunc.inputs) {
+          if (curFunc.inputs[i].value) {
+              if (curFunc.inputs[i].type.indexOf('[') !== -1 && curFunc.inputs[i].type.indexOf(']') !== -1) values.push(curFunc.inputs[i].value.split(','));
+              else values.push(curFunc.inputs[i].value);
+          } else values.push('');
+      }
+      return '0x' + funcSig + ethUtil.solidityCoder.encodeParams(types, values);
+    }
+
+    $scope.readData = function(indexFunc, data) {
+      if (!data.error) {
+          var curFunc = $scope.contract.functions[indexFunc];
+          var outTypes = curFunc.outputs.map(function(i) {
+              return i.type;
+          });
+          var decoded = ethUtil.solidityCoder.decodeParams(outTypes, data.data.replace('0x', ''));
+          for (var i in decoded) {
+              if (decoded[i] instanceof BigNumber) curFunc.outputs[i].value = decoded[i].toFixed(0);
+              else curFunc.outputs[i].value = decoded[i];
+          }
+      } else throw data.msg;
+      return curFunc;
+    }
+
+    $scope.$watch(function() { return $scope.addressDrtv.ensAddressField; }, function (newAddress, oldAddress) {
+        if ($scope.Validator.isValidAddress(newAddress)) {
+            ajaxReq.getEthCall({ to: newAddress, data: $scope.getTxData($scope.erc20Indexes.SYMBOL) }, function(data) {
+                if (!data.error && data.data !== '0x') {
+                    $scope.localToken.symbol = $scope.readData($scope.erc20Indexes.SYMBOL, data).outputs[0].value;
+                } else {
+                    $scope.notifier.danger('This address is not a token contract.');
+                    $scope.localToken.symbol = '';
+                }
+            });
+            ajaxReq.getEthCall({ to: newAddress, data: $scope.getTxData($scope.erc20Indexes.DECIMALS) }, function(data) {
+                if (!data.error && data.data !== '0x') {
+                    $scope.localToken.decimals = $scope.readData($scope.erc20Indexes.DECIMALS, data).outputs[0].value;
+                } else {
+                    $scope.localToken.decimals = '';
+                }
+            });
+        }
+    });
 
     /*
     $scope.$watch('wallet', function() {

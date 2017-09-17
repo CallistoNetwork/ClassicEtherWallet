@@ -20,7 +20,7 @@
       <ul class="account-info">
         <li><a href="" ng-click="displayOnLedger()" translate="sidebar_DisplayOnLedger">Display address on Ledger</a></li>
       </ul>
-    </div>    
+    </div>
     <h5 translate="sidebar_AccountBal">Account Balance</h5>
     <ul class="account-info point" ng-dblclick="showLongBal=!showLongBal" title="{{wallet.balance}} (Double-Click)">
       <li>
@@ -122,7 +122,7 @@
     <a class="btn btn-default btn-xs" ng-click="tokenVisibility='hidden'" ng-show="tokenVisibility=='shown'">
       Hide Tokens
     </a>
-    <a class="btn btn-default btn-xs" ng-click="customTokenField=!customTokenField">
+    <a class="btn btn-default btn-xs" ng-click="customTokenField=!customTokenField; initContract()">
       <span translate="SEND_custom">Add Custom Token</span>
     </a>
     <div class="custom-token-fields" ng-show="customTokenField">

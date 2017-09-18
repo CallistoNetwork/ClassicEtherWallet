@@ -28,6 +28,16 @@
         <span class="mono wrap" ng-show="showLongBal">{{wallet.balance}}</span> {{ajaxReq.type}}
       </li>
     </ul>
+    <div ng-repeat="altBalance in alternativeBalance">
+      <div ng-if="altBalance.symbol !== ajaxReq.type">
+        <ul class="account-info point" ng-dblclick="showLongBal=!showLongBal" title="{{altBalance.balance}} (Double-Click)">
+          <li>
+            <span class="mono wrap" ng-show="!showLongBal">{{altBalance.balance | number}}</span>
+            <span class="mono wrap" ng-show="showLongBal">{{altBalance.balance}}</span> {{altBalance.symbol}}
+          </li>
+        </ul>
+      </div>
+    </div>
     <h5 translate="sidebar_TransHistory"> Transaction History</h5>
     <ul class="account-info">
       <li ng-show="ajaxReq.type != 'CUS'">

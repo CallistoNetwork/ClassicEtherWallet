@@ -1,5 +1,5 @@
 'use strict';
-var walletBalanceCtrl = function($scope, $sce) {
+var walletBalanceCtrl = function($scope, $sce, walletService) {
     $scope.ajaxReq = ajaxReq;
     $scope.erc20Abi = require('../abiDefinitions/erc20abi.json');
     $scope.erc20Indexes = {
@@ -15,11 +15,44 @@ var walletBalanceCtrl = function($scope, $sce) {
     };
     $scope.contract = {
         functions: [],
-    }
-
+    };
     $scope.slide = 2;
+    $scope.alternativeBalance = {
+        ETH: {
+          balance: "Loading",
+          node: "eth_ethscan",
+          symbol: "ETH"
+        },
+        ETC: {
+          balance: "Loading",
+          node: "etc_epool",
+          symbol: "ETC"
+        },
+        UBQ: {
+          balance: "Loading",
+          node: "ubq",
+          symbol: "UBQ"
+        },
+        EXP: {
+          balance: "Loading",
+          node: "exp",
+          symbol: "EXP"
+        },
+    }
+    walletService.wallet = null;
+    $scope.wallet = null;
+    $scope.nodeList = nodes.nodeList;
 
     $scope.customTokenField = false;
+
+    $scope.$watch(function() {
+        if (walletService.wallet == null) return null;
+        return walletService.wallet.getAddressString();
+    }, function() {
+        if (walletService.wallet == null) return;
+        $scope.wallet = walletService.wallet;
+    });
+
     $scope.saveTokenToLocal = function() {
         globalFuncs.saveTokenToLocal($scope.localToken, function(data) {
             if (!data.error) {
@@ -85,6 +118,7 @@ var walletBalanceCtrl = function($scope, $sce) {
     }
 
     $scope.$watch(function() { return $scope.addressDrtv.ensAddressField; }, function (newAddress, oldAddress) {
+        if (!$scope.Validator) return;
         if ($scope.Validator.isValidAddress(newAddress)) {
             ajaxReq.getEthCall({ to: newAddress, data: $scope.getTxData($scope.erc20Indexes.SYMBOL) }, function(data) {
                 if (!data.error && data.data !== '0x') {
@@ -122,6 +156,30 @@ var walletBalanceCtrl = function($scope, $sce) {
         });
     }
     */
+
+    $scope.$watch('wallet.balance', function() {
+        if ($scope.wallet !== null) {
+            $scope.setAllBalance();
+        }
+    });
+
+    $scope.setAllBalance = function() {
+        if (!$scope.nodeList) return;
+        var setBalance = function (currency) {
+          return function (data) {
+              if (data.error) {
+                  $scope.alternativeBalance[currency].balance = data.msg;
+              } else {
+                  $scope.alternativeBalance[currency].balance = etherUnits.toEther(data.data.balance, 'wei');
+              }
+          };
+        };
+        for (var currency in $scope.alternativeBalance) {
+            $scope.nodeList[$scope.alternativeBalance[currency].node].lib.getBalance(
+                $scope.wallet.getAddressString(), setBalance(currency),
+            )
+        }
+    }
 
     $scope.removeTokenFromLocal = function(tokensymbol) {
         globalFuncs.removeTokenFromLocal(tokensymbol, $scope.wallet.tokenObjs);

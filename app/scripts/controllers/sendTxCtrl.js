@@ -1,5 +1,5 @@
 'use strict';
-var sendTxCtrl = function($scope, $sce, walletService) {
+var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.tx = {};
     $scope.ajaxReq = ajaxReq;
     $scope.unitReadable = ajaxReq.type;
@@ -22,7 +22,12 @@ var sendTxCtrl = function($scope, $sce, walletService) {
     $scope.customGasMsg = '';
 
     $scope.customGas = CustomGasMessages;
-
+    $scope.networks = {
+        ETH: "eth_ethscan",
+        ETC: "etc_epool",
+        UBQ: "ubq",
+        EXP: "exp",
+    }
     $scope.tx = {
         // if there is no gasLimit or gas key in the URI, use the default value. Otherwise use value of gas or gasLimit. gasLimit wins over gas if both present
         gasLimit: globalFuncs.urlGet('gaslimit') != null || globalFuncs.urlGet('gas') != null ? globalFuncs.urlGet('gaslimit') != null ? globalFuncs.urlGet('gaslimit') : globalFuncs.urlGet('gas') : globalFuncs.defaultTxGasLimit,
@@ -35,6 +40,12 @@ var sendTxCtrl = function($scope, $sce, walletService) {
         donate: false,
         tokensymbol: globalFuncs.urlGet('tokensymbol') == null ? false : globalFuncs.urlGet('tokensymbol')
     }
+
+    var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
+    if (network) {
+        $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
+    }
+
     $scope.setSendMode = function(sendMode, tokenId = '', tokensymbol = '') {
         $scope.tx.sendMode = sendMode;
         $scope.unitReadable = '';
@@ -73,7 +84,6 @@ var sendTxCtrl = function($scope, $sce, walletService) {
         $scope.gasLimitChanged = globalFuncs.urlGet('gaslimit') != null ? true : false;
         $scope.showAdvance = globalFuncs.urlGet('gaslimit') != null || globalFuncs.urlGet('gas') != null || globalFuncs.urlGet('data') != null;
         if (globalFuncs.urlGet('data') || globalFuncs.urlGet('value') || globalFuncs.urlGet('to') || globalFuncs.urlGet('gaslimit') || globalFuncs.urlGet('sendMode') || globalFuncs.urlGet('gas') || globalFuncs.urlGet('tokensymbol')) $scope.hasQueryString = true // if there is a query string, show an warning at top of page
-
     }
     $scope.$watch(function() {
         if (walletService.wallet == null) return null;

@@ -246,8 +246,6 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
     }
     $scope.setLanguageFromStorage();
 
-
-
     $scope.setHash = function(hash) {
         location.hash = hash;
         $scope.setTab(hash);
@@ -282,6 +280,10 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
         var ele = document.querySelectorAll('.nav-scroll')[0];
         ele.scrollLeft += val;
     }
+
+    $scope.$on('ChangeNode', function(event, nodeId) {
+        $scope.changeNode(nodeId);
+    });
 
     angular.element(document.querySelectorAll('.nav-scroll')[0]).bind('scroll', $scope.setOnScrollArrows);
     globalFuncs.changeHash = $scope.setHash;

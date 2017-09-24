@@ -120,21 +120,24 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
     $scope.$watch(function() { return $scope.addressDrtv.ensAddressField; }, function (newAddress, oldAddress) {
         if (!$scope.Validator) return;
         if ($scope.Validator.isValidAddress(newAddress)) {
-            ajaxReq.getEthCall({ to: newAddress, data: $scope.getTxData($scope.erc20Indexes.SYMBOL) }, function(data) {
-                if (!data.error && data.data !== '0x') {
-                    $scope.localToken.symbol = $scope.readData($scope.erc20Indexes.SYMBOL, data).outputs[0].value;
-                } else {
-                    $scope.notifier.danger('This address is not a token contract.');
-                    $scope.localToken.symbol = '';
-                }
-            });
-            ajaxReq.getEthCall({ to: newAddress, data: $scope.getTxData($scope.erc20Indexes.DECIMALS) }, function(data) {
-                if (!data.error && data.data !== '0x') {
-                    $scope.localToken.decimals = $scope.readData($scope.erc20Indexes.DECIMALS, data).outputs[0].value;
-                } else {
-                    $scope.localToken.decimals = '';
-                }
-            });
+            try{
+                ajaxReq.getEthCall({ to: newAddress, data: $scope.getTxData($scope.erc20Indexes.SYMBOL) }, function(data) {
+                    if (!data.error && data.data !== '0x') {
+                        $scope.localToken.symbol = $scope.readData($scope.erc20Indexes.SYMBOL, data).outputs[0].value;
+                    } else {
+                        $scope.notifier.danger('This address is not a token contract.');
+                        $scope.localToken.symbol = '';
+                    }
+                });
+                ajaxReq.getEthCall({ to: newAddress, data: $scope.getTxData($scope.erc20Indexes.DECIMALS) }, function(data) {
+                    if (!data.error && data.data !== '0x') {
+                        $scope.localToken.decimals = $scope.readData($scope.erc20Indexes.DECIMALS, data).outputs[0].value;
+                    } else {
+                        $scope.localToken.decimals = '';
+                    }
+                });
+            }catch(err) {
+            }
         }
     });
 

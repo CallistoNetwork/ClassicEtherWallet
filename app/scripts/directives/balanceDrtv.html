@@ -157,8 +157,32 @@
       <button class="btn btn-primary btn-xs" ng-click="saveTokenToLocal()" translate="x_Save">Save</button>
       <div ng-bind-html="validateLocalToken"></div>
     </div>
-  </div>
 
+    <a class="btn btn-default btn-xs" ng-click="customTokenDexNSField=!customTokenDexNSField; initContract()">
+      <span translate="SEND_custom_dexns">Add Custom Token by Token Symbol (DexNS)</span>
+    </a>
+    <div class="custom-token-fields" ng-show="customTokenDexNSField">
+      <label translate="TOKEN_Symbol"> Token Symbol: </label>
+
+      <input class="form-control input-sm"
+             type="text"
+             ng-model="customTokenSymbol"
+             ng-class="customTokenSymbol!='' ? 'is-valid' : 'is-invalid'" />
+      <div ng-show="localToken.symbol">
+        <p><strong>You are adding {{ localToken.symbol }} token</strong></p>
+        <p>Information: </p>
+        <p>
+          <ul>
+            <li><strong>Network:</strong> {{ localToken.network }} </li>
+            <li><strong>Decimals:</strong> {{ localToken.decimals }}</li>
+            <li><strong>Contract Address:</strong> {{ localToken.contractAdd }}</li>
+          </ul>
+        </p>
+      <div>
+      <button class="btn btn-primary btn-xs" ng-click="saveTokenToLocal()" translate="x_Save">Save</button>
+      <div ng-bind-html="validateLocalToken"></div>
+    </div>
+  </div>
 
   <div class="block" ng-show="ajaxReq.type=='ETH'">
     <h5 translate="sidebar_Equiv">Equivalent Values:</h5>

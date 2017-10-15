@@ -61,13 +61,7 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
     $scope.saveTokenToLocal = function() {
         globalFuncs.saveTokenToLocal($scope.localToken, function(data) {
             if (!data.error) {
-                $scope.localToken = {
-                    contractAdd: "",
-                    symbol: "",
-                    decimals: "",
-                    type: "custom",
-                    network: ""
-                };
+                $scope.resetLocalToken();
                 $scope.wallet.setTokens();
                 $scope.validateLocalToken = $sce.trustAsHtml('');
                 $scope.customTokenField = false;
@@ -77,6 +71,16 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
                 $scope.notifier.danger(data.msg);
             }
         });
+    }
+
+    $scope.resetLocalToken = function () {
+        $scope.localToken = {
+            contractAdd: "",
+            symbol: "",
+            decimals: "",
+            type: "custom",
+            network: ""
+        };
     }
 
     $scope.initContract = function() {
@@ -153,6 +157,8 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
 
     $scope.$watch(function() { return $scope.customTokenSymbol; }, function (newSymbol, oldSymbol) {
         if (!newSymbol) return;
+        if (newSymbol.length < 3) return;
+
         var getNameFunction = $scope.contract.functions[$scope.erc20Indexes.DEXNSFunction];
         getNameFunction.inputs[0].value = newSymbol;
 
@@ -161,7 +167,11 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
             var contractAddress = outputs[1].value;
             var contractInfo = outputs[2].value.split('-');
 
-            if(contractAddress === "0x0000000000000000000000000000000000000000") return;
+            if(contractAddress === "0x0000000000000000000000000000000000000000") {
+                $scope.resetLocalToken();
+                $scope.notifier.danger('Symbol not found.');
+                return;
+            }
             if (!data.error && data.data !== '0x') {
                 $scope.getTokenInfo(contractAddress, contractInfo[1]);
             } else {

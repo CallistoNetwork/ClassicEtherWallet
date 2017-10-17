@@ -163,6 +163,10 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
         getNameFunction.inputs[0].value = newSymbol;
 
         ajaxReq.getEthCall({ to: $scope.DEXNSAddress, data: $scope.getTxData($scope.erc20Indexes.DEXNSFunction) }, function(data) {
+            if (data.error && data.data === '0x') {
+                $scope.notifier.danger('Ops, we\'d had an error communicating with DexNS.');
+            }
+
             var outputs = $scope.readData($scope.erc20Indexes.DEXNSFunction, data).outputs;
             var contractAddress = outputs[1].value;
             var contractInfo = outputs[2].value.split('-');
@@ -172,11 +176,8 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
                 $scope.notifier.danger('Symbol not found.');
                 return;
             }
-            if (!data.error && data.data !== '0x') {
-                $scope.getTokenInfo(contractAddress, contractInfo[1]);
-            } else {
-                $scope.notifier.danger('Ops, we\'d had an error communicating with DexNS.');
-            }
+
+            $scope.getTokenInfo(contractAddress, contractInfo[1]);
         });
     });
 

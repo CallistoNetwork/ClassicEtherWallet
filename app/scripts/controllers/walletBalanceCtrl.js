@@ -175,8 +175,7 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
             if (!data.error && data.data !== '0x') {
                 $scope.getTokenInfo(contractAddress, contractInfo[1]);
             } else {
-                $scope.notifier.danger('This address is not a token contract.');
-                $scope.localToken.symbol = '';
+                $scope.notifier.danger('Ops, we\'d had an error communicating with DexNS.');
             }
         });
     });

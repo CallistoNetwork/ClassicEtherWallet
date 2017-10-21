@@ -67,5 +67,36 @@
         "outputs": [],
         "payable": false,
         "type": "function"
+    },
+    {
+        "constant":true,
+        "inputs":[
+            {
+                "name":"_name",
+                "type":"string"
+            }
+        ],
+        "name":"getName",
+        "outputs":[
+            {
+                "name":"_owner",
+                "type":"address"
+            },
+            {
+                "name":"_associatedAddress",
+                "type":"address"
+            },
+            {
+                "name":"_value",
+                "type":"string"
+            },
+            {
+                "name":"_signature",
+                "type":"bytes32"
+            }
+        ],
+        "payable":false,
+        "stateMutability":"view",
+        "type":"function"
     }
 ]

@@ -157,8 +157,35 @@
       <button class="btn btn-primary btn-xs" ng-click="saveTokenToLocal()" translate="x_Save">Save</button>
       <div ng-bind-html="validateLocalToken"></div>
     </div>
-  </div>
 
+    <a class="btn btn-default btn-xs wrap" style="white-space: normal;" ng-click="customTokenDexNSField=!customTokenDexNSField; initContract()">
+      <span translate="SEND_custom_dexns">Add Custom Token by Token Symbol (DexNS)</span>
+    </a>
+    <div class="custom-token-fields" ng-show="customTokenDexNSField">
+      <label translate="TOKEN_Symbol"> Token Symbol: </label>
+
+      <input class="form-control input-sm"
+             type="text"
+             ng-model="customTokenSymbol"
+             ng-minlength="3"
+             ng-class="customTokenSymbol!='' ? 'is-valid' : 'is-invalid'" />
+      <div ng-show="localToken.symbol">
+        <p><strong>You are adding {{ localToken.symbol }} token</strong></p>
+        <p>Information: </p>
+        <p>
+          <ul>
+            <li><strong>Network:</strong> {{ localToken.network }} </li>
+            <li><strong>Decimals:</strong> {{ localToken.decimals }}</li>
+            <li class="wrap"><strong>Contract Address:</strong> <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', localToken.contractAdd)}}" target="_blank" rel="noopener">
+              {{ localToken.contractAdd }}
+            </a></li>
+          </ul>
+        </p>
+      <div>
+      <button class="btn btn-primary btn-xs" ng-click="saveTokenToLocal()" translate="x_Save">Save</button>
+      <div ng-bind-html="validateLocalToken"></div>
+    </div>
+  </div>
 
   <div class="block" ng-show="ajaxReq.type=='ETH'">
     <h5 translate="sidebar_Equiv">Equivalent Values:</h5>

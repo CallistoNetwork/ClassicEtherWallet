@@ -33,7 +33,7 @@ If you want to help contribute, here's what you need to know to get it up and ru
 
 - Both the Chrome Extension and the MyEtherWallet.com are compiling from the same codebase. This code is found in the `app` folder. Don't touch the `dist` or `chrome-extension` folders.
 - We use angular and bootstrap. We used to use jQuery and Bootstrap until it was converted in April 2016. If you wonder why some things are set up funky, that's why.
-- The mercury branch is currently the active development branch. We then push the dist folder live to gh-pages, which then gets served to MyEtherWallet.com.
+- The mercury branch is currently the active development branch. We then push the dist folder live to gh-pages, which then gets served to ClassicEtherWallet.com.
 - We use npm / gulp for compiling. There is a lot of stuff happening in the compliation.
 - Old node setups can be found in in `json_relay_node` (node.js) & `json_relay_php` (php). These are great resources for developers looking to get started and launch a public node on a $40 linode instance.
 
@@ -47,9 +47,9 @@ If you want to help contribute, here's what you need to know to get it up and ru
 - `fonts` and `images` get moved into their respective folders. This isn't watched via gulp so if you add an image or font, you need to run `gulp` again.
 - `includes` are the pieces of the pages / the pages themselves. These are pretty self explanatory and where you will make most frontend changes.
 - `layouts` are the pages themselves. These basically take all the pieces of the pages and compile into one massive page. The navigation is also found here...sort of.
-    * `index.html` is for MyEtherWallet.com.
+    * `index.html` is for https://ethereumproject.github.io/etherwallet/
     * `cx-wallet.html` is the main page for the Chrome Extension.
-    * `embedded.html` is for https://www.myetherwallet.com/embedded.html.
+    * `embedded.html` is for https://ethereumproject.github.io/etherwallet/embedded.html.
 
 - You can control what shows up on MyEtherWallet.com vs the Chrome Extension by using: `@@if (site === 'cx' )  {  ...  }` and `@@if (site === 'mew' ) { ... }`. Check out `sendTransaction.tpl` to see it in action. The former will only compile to the Chrome Extension. The latter only to MyEtherWallet.com.
 - `embedded.html` is for embedding the wallet generation into third-party sites. [Read more about it and how to listen for the address generated here.](https://www.reddit.com/r/ethereum/comments/4gn37o/embeddable_myetherwallet_super_simple_wallet/)

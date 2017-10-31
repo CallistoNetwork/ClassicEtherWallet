@@ -1,7 +1,18 @@
 'use strict';
-var offlineTxCtrl = function($scope, $sce, walletService) {
+var offlineTxCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.ajaxReq = ajaxReq;
     walletService.wallet = null;
+    $scope.networks = {
+         ETH: "eth_ethscan",
+         ETC: "etc_epool",
+         UBQ: "ubq",
+         EXP: "exp",
+    }
+var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
+     if (network) {
+         $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
+     }
+
     walletService.password = '';
     $scope.unitReadable = ajaxReq.type;
     $scope.valueReadable = "";

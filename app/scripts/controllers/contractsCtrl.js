@@ -1,7 +1,17 @@
 'use strict';
-var contractsCtrl = function($scope, $sce, walletService) {
+var contractsCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.ajaxReq = ajaxReq;
     walletService.wallet = null;
+    $scope.networks = {
+         ETH: "eth_ethscan",
+         ETC: "etc_epool",
+         UBQ: "ubq",
+         EXP: "exp",
+    }
+var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
+     if (network) {
+         $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
+     }
     $scope.visibility = "interactView";
     $scope.sendContractModal = new Modal(document.getElementById('sendContract'));
     $scope.showReadWrite = false;

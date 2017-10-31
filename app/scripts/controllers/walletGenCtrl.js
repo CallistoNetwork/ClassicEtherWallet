@@ -1,6 +1,16 @@
 'use strict';
-var walletGenCtrl = function($scope) {
+var walletGenCtrl = function($rootScope, $scope) {
     $scope.password = "";
+    $scope.networks = {
+         ETH: "eth_ethscan",
+         ETC: "etc_epool",
+         UBQ: "ubq",
+         EXP: "exp",
+    }
+var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
+     if (network) {
+         $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
+     }
     $scope.wallet = null;
     $scope.showWallet = false;
     $scope.blob = $scope.blobEnc = "";

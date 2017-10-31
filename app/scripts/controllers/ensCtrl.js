@@ -1,7 +1,18 @@
 'use strict';
-var ensCtrl = function($scope, $sce, walletService) {
+var ensCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.ajaxReq = ajaxReq;
     $scope.hideEnsInfoPanel = false;
+    $scope.networks = {
+         ETH: "eth_ethscan",
+         ETC: "etc_epool",
+         UBQ: "ubq",
+         EXP: "exp",
+    }
+var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
+     if (network) {
+         $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
+     }
+
     walletService.wallet = null;
     $scope.ensConfirmModalModal = new Modal(document.getElementById('ensConfirmModal'));
     $scope.ensFinalizeModal = new Modal(document.getElementById('ensFinalizeConfirm'));

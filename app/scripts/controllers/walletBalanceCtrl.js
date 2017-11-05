@@ -21,32 +21,11 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
         functions: [],
     };
     $scope.slide = 2;
-    $scope.alternativeBalance = {
-        ETH: {
-          balance: "Loading",
-          node: "eth_ethscan",
-          symbol: "ETH"
-        },
-        ETC: {
-          balance: "Loading",
-          node: "etc_epool",
-          symbol: "ETC"
-        },
-        UBQ: {
-          balance: "Loading",
-          node: "ubq",
-          symbol: "UBQ"
-        },
-        EXP: {
-          balance: "Loading",
-          node: "exp",
-          symbol: "EXP"
-        }
-    };
     $scope.customTokenSymbol = '';
     walletService.wallet = null;
     $scope.wallet = null;
     $scope.nodeList = nodes.nodeList;
+    $scope.alternativeBalance = nodes.alternativeBalance;
 
     $scope.customTokenField = false;
 
@@ -131,6 +110,7 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
     };
 
     $scope.$watch(function() { return $scope.addressDrtv.ensAddressField; }, function (newAddress, oldAddress) {
+        console.log("The desired WATCH is executed!");
         if (!$scope.Validator) return;
         if ($scope.Validator.isValidAddress(newAddress)) {
             // TODO: Refactor to use getTokenInfo
@@ -178,7 +158,7 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
                 return;
             }
 
-            $scope.getTokenInfo(contractAddress, contractInfo[1]);
+            $scope.getTokenInfo(contractAddress, contractInfo[1], newSymbol);
         });
     });
 
@@ -247,26 +227,21 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
         app.getAddress($scope.wallet.path, function(){}, true, false);
     }
 
-    $scope.getTokenInfo = function(address, network) {
+    $scope.getTokenInfo = function(address, network, symbol) {
         if (!network) {
-            network = 'ETC';
+            network = 'ETC'; // defaults to ETC
         }
         network = network.trim();
+        //    console.log(network.length);
         try{
             $scope.localToken.contractAdd = address;
             $scope.localToken.network = network;
-            $scope.nodeList[$scope.alternativeBalance[network].node].lib.getEthCall({ to: address, data: $scope.getTxData($scope.erc20Indexes.SYMBOL) }, function(data) {
-                if (!data.error && data.data !== '0x') {
-                    $scope.localToken.symbol = $scope.readData($scope.erc20Indexes.SYMBOL, data).outputs[0].value;
-                } else {
-                    $scope.notifier.danger('This address is not a token contract.');
-                    $scope.localToken.symbol = '';
-                }
-            });
+            $scope.localToken.symbol = symbol;
             $scope.nodeList[$scope.alternativeBalance[network].node].lib.getEthCall({ to: address, data: $scope.getTxData($scope.erc20Indexes.DECIMALS) }, function(data) {
                 if (!data.error && data.data !== '0x') {
                     $scope.localToken.decimals = $scope.readData($scope.erc20Indexes.DECIMALS, data).outputs[0].value;
                 } else {
+                    $scope.notifier.danger('This address is not a token contract.');
                     $scope.localToken.decimals = '';
                 }
             });

@@ -24,13 +24,19 @@ validator.isValidTxHash = function(txHash) {
     return txHash.substring(0, 2) == "0x" && txHash.length == 66 && this.isValidHex(txHash);
 }
 validator.isValidENSAddress = function(address) {
-    address = ens.normalise(address);
+    try {
+        address = ens.normalise(address);
+    }
+    catch (e) {
+        return false;
+    }
     var tld = address.substr(address.lastIndexOf('.') + 1);
     var _ens = new ens();
     var validTLDs = {
         eth: true,
         test: true,
-        reverse: true
+        reverse: true,
+        etc: true
     }
     if (validTLDs[tld]) return true;
     return false;

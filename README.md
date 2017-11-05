@@ -21,7 +21,7 @@ Version 2 expands on this vision to offer:
 - Include custom gas / data in the standard send transaction tab.
 - Rewritten in Angular in order to make it was easier to update and maintain.
 - Crowdsale / Token Sale support on a case by case basis (Digix, Slock.it, etc.)
-- New encryption method. Now matches geth / Mist keystore format (v3) to make moving between ClassicEtherWallet and Mist *much* easier.
+- New encryption method. Now matches geth / Mist keystore format (v3) to make moving between MyEtherWallet and Mist *much* easier.
 - QR codes on the Offline Transaction page for easier transferring between computers.
 - Ability to create a custom link that will pre-fill the send transaction tab with the to address, amount, data, and gas. All the user has to do is unlock their wallet and press send.
 
@@ -31,7 +31,7 @@ Version 2 expands on this vision to offer:
 
 If you want to help contribute, here's what you need to know to get it up and running and compiling.
 
-- Both the Chrome Extension and the ClassicEtherWallet.com are compiling from the same codebase. This code is found in the `app` folder. Don't touch the `dist` or `chrome-extension` folders.
+- Both the Chrome Extension and the MyEtherWallet.com are compiling from the same codebase. This code is found in the `app` folder. Don't touch the `dist` or `chrome-extension` folders.
 - We use angular and bootstrap. We used to use jQuery and Bootstrap until it was converted in April 2016. If you wonder why some things are set up funky, that's why.
 - The mercury branch is currently the active development branch. We then push the dist folder live to gh-pages, which then gets served to ClassicEtherWallet.com.
 - We use npm / gulp for compiling. There is a lot of stuff happening in the compliation.
@@ -51,7 +51,7 @@ If you want to help contribute, here's what you need to know to get it up and ru
     * `cx-wallet.html` is the main page for the Chrome Extension.
     * `embedded.html` is for https://ethereumproject.github.io/etherwallet/embedded.html.
 
-- You can control what shows up on ClassicEtherWallet.com vs the Chrome Extension by using: `@@if (site === 'cx' )  {  ...  }` and `@@if (site === 'mew' ) { ... }`. Check out `sendTransaction.tpl` to see it in action. The former will only compile to the Chrome Extension. The latter only to ClassicEtherWallet.com.
+- You can control what shows up on MyEtherWallet.com vs the Chrome Extension by using: `@@if (site === 'cx' )  {  ...  }` and `@@if (site === 'mew' ) { ... }`. Check out `sendTransaction.tpl` to see it in action. The former will only compile to the Chrome Extension. The latter only to MyEtherWallet.com.
 - `embedded.html` is for embedding the wallet generation into third-party sites. [Read more about it and how to listen for the address generated here.](https://www.reddit.com/r/ethereum/comments/4gn37o/embeddable_myetherwallet_super_simple_wallet/)
 - The wallet decrypt directives are at `scripts/directives/walletDecryptDrtv.js`. These show up on a lot of pages.
 - The navigation is in `scripts/services/globalServices.js`. Again, we control which navigation items show up in which version of the site in this single file.

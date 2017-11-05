@@ -1,11 +1,22 @@
 'use strict';
-var viewWalletCtrl = function($scope, walletService) {
+var viewWalletCtrl = function($scope, $rootScope, walletService) {
     $scope.usdBalance = "loading";
     $scope.gbpBalance = "loading";
     $scope.eurBalance = "loading";
     $scope.btcBalance = "loading";
     $scope.etherBalance = "loading";
     $scope.tokenVisibility = "hidden";
+    $scope.networks = {
+         ETH: "eth_ethscan",
+         ETC: "etc_epool",
+         UBQ: "ubq",
+         EXP: "exp",
+    }
+var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
+     if (network) {
+         $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
+     }
+
     $scope.pkeyVisible = false;
 
     walletService.wallet = null;

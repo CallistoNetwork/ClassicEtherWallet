@@ -36,6 +36,30 @@ nodes.customNodeObj = {
     'service': 'Custom',
     'lib': null
 };
+
+nodes.alternativeBalance = {
+        ETH: {
+          balance: "Loading",
+          node: "eth_ethscan",
+          symbol: "ETH"
+        },
+        ETC: {
+          balance: "Loading",
+          node: "etc_epool",
+          symbol: "ETC"
+        },
+        UBQ: {
+          balance: "Loading",
+          node: "ubq",
+          symbol: "UBQ"
+        },
+        EXP: {
+          balance: "Loading",
+          node: "exp",
+          symbol: "EXP"
+        }
+    };
+
 nodes.nodeList = {
     'etc_epool': {
         'name': 'ETC',

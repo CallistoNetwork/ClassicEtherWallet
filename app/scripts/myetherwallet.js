@@ -25,12 +25,12 @@ Wallet.prototype.setTokens = function() {
     this.tokenObjs = [];
     var tokens = Token.popTokens;
     for (var i = 0; i < tokens.length; i++) {
-        this.tokenObjs.push(new Token(tokens[i].address, this.getAddressString(), tokens[i].symbol, tokens[i].decimal, tokens[i].type));
+        this.tokenObjs.push(new Token(tokens[i].address, this.getAddressString(), tokens[i].symbol, tokens[i].decimal, tokens[i].type, tokens[i].network));
         this.tokenObjs[this.tokenObjs.length - 1].setBalance();
     }
     var storedTokens = globalFuncs.localStorage.getItem("localTokens", null) != null ? JSON.parse(globalFuncs.localStorage.getItem("localTokens")) : [];
     for (var i = 0; i < storedTokens.length; i++) {
-        this.tokenObjs.push(new Token(storedTokens[i].contractAddress, this.getAddressString(), globalFuncs.stripTags(storedTokens[i].symbol), storedTokens[i].decimal, storedTokens[i].type));
+        this.tokenObjs.push(new Token(storedTokens[i].contractAddress, this.getAddressString(), globalFuncs.stripTags(storedTokens[i].symbol), storedTokens[i].decimal, storedTokens[i].type, storedTokens[i].network));
         this.tokenObjs[this.tokenObjs.length - 1].setBalance();
     }
 }

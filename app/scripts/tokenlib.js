@@ -1,12 +1,16 @@
 'use strict';
-var Token = function(contractAddress, userAddress, symbol, decimal, type) {
+var Token = function(contractAddress, userAddress, symbol, decimal, type, network) {
     this.contractAddress = contractAddress;
     this.userAddress = userAddress;
     this.symbol = symbol;
     this.decimal = decimal;
     this.type = type;
     this.balance = "loading";
+    this.network = network;
 };
+
+var nodes = require('./nodes.js');
+
 Token.balanceHex = "0x70a08231";
 Token.transferHex = "0xa9059cbb";
 Token.popTokens = [];
@@ -34,18 +38,33 @@ Token.prototype.getBalanceBN = function() {
 Token.prototype.setBalance = function(callback) {
     var balanceCall = ethFuncs.getDataObj(this.contractAddress, Token.balanceHex, [ethFuncs.getNakedAddress(this.userAddress)]);
     var parentObj = this;
-    ajaxReq.getEthCall(balanceCall, function(data) {
-        try {
-            if (!data.error) {
-                parentObj.balance = new BigNumber(data.data).div(new BigNumber(10).pow(parentObj.getDecimal())).toString();
-                parentObj.balanceBN = new BigNumber(data.data).toString();
-                if(callback) callback();
+    if(this.network != null) {
+        nodes.nodeList[nodes.alternativeBalance[this.network].node].lib.getEthCall(balanceCall, function(data) {
+            try {
+                if (!data.error) {
+                    parentObj.balance = new BigNumber(data.data).div(new BigNumber(10).pow(parentObj.getDecimal())).toString();
+                    parentObj.balanceBN = new BigNumber(data.data).toString();
+                    if(callback) callback();
+                }
+            } catch (e) {
+                parentObj.balance = globalFuncs.errorMsgs[20];
+                parentObj.balanceBN = '0';
             }
-        } catch (e) {
-            parentObj.balance = globalFuncs.errorMsgs[20];
-            parentObj.balanceBN = '0';
-        }
-    });
+        });
+    } else {
+        ajaxReq.getEthCall(balanceCall, function(data) {
+            try {
+                if (!data.error) {
+                    parentObj.balance = new BigNumber(data.data).div(new BigNumber(10).pow(parentObj.getDecimal())).toString();
+                    parentObj.balanceBN = new BigNumber(data.data).toString();
+                    if(callback) callback();
+                }
+            } catch (e) {
+                parentObj.balance = globalFuncs.errorMsgs[20];
+                parentObj.balanceBN = '0';
+            }
+        });
+    }
 };
 Token.getTokenByAddress = function(toAdd) {
     toAdd = ethFuncs.sanitizeHex(toAdd);

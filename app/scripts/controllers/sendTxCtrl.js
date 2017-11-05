@@ -57,10 +57,10 @@ var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('n
         $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
     }
 
-    $scope.setSendMode = function(sendMode, tokenId = '', tokensymbol = '') {
+$scope.setSendMode = function (sendMode, tokenId = '', tokensymbol = '') {
         $scope.tx.sendMode = sendMode;
         $scope.unitReadable = '';
-        if ( globalFuncs.urlGet('tokensymbol') != null ) {
+        if (globalFuncs.urlGet('tokensymbol') != null) {
             $scope.unitReadable = $scope.tx.tokensymbol;
             $scope.tx.sendMode = 'token';
         } else if (sendMode == 'ether') {
@@ -69,8 +69,21 @@ var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('n
             $scope.unitReadable = tokensymbol;
             $scope.tokenTx.id = tokenId;
         }
+        //console.log($scope.tx.sendMode);
+        if ($scope.tx.sendMode == 'token') {
+            for (var i = 0; i < $scope.wallet.tokenObjs.length; i++) {
+                if ($scope.wallet.tokenObjs[i].symbol.toLowerCase().indexOf(tokensymbol.toLowerCase()) !== -1) {
+                    //console.log($scope.wallet.tokenObjs[i].network);
+                    if($scope.wallet.tokenObjs[i].network && $scope.wallet.tokenObjs[i].network != ajaxReq.type) {
+                            console.log(ajaxReq.type);
+                            $scope.notifier.warning('WARNING! You are trying to send ' + $scope.wallet.tokenObjs[i].symbol + ' token, but this is a token of $' + $scope.wallet.tokenObjs[i].network + ' network! Switch to $' + $scope.wallet.tokenObjs[i].network + ' node first.', 0);
+                        }
+                    break;
+                }
+            }
+        }
         $scope.dropdownAmount = false;
-    }
+    };
     $scope.setTokenSendMode = function() {
         if ($scope.tx.sendMode == 'token' && !$scope.tx.tokensymbol) {
             $scope.tx.tokensymbol = $scope.wallet.tokenObjs[0].symbol;
@@ -80,6 +93,7 @@ var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('n
             for (var i = 0; i < $scope.wallet.tokenObjs.length; i++) {
                 if ($scope.wallet.tokenObjs[i].symbol.toLowerCase().indexOf($scope.tx.tokensymbol.toLowerCase()) !== -1) {
                     $scope.wallet.tokenObjs[i].type = "custom";
+                    //$scope.ChangeNode
                     $scope.setSendMode('token', i, $scope.wallet.tokenObjs[i].symbol);
                     break;
                 } else $scope.tokenTx.id = -1;

@@ -51,8 +51,67 @@ var addressFieldDrtv = function($compile) {
                         }
                     });
                 } else {
-                    setValue('');
-                    scope.addressDrtv.showDerivedAddress = false;
+                    //setValue('');
+                    //scope.addressDrtv.showDerivedAddress = false;
+
+                    // Consider it's DEXNS name.
+
+                    var DEXNSnetwork = 'ETC'; // DexNS network is always ETC!
+                    var DexNSABI = {
+                        "name": "DexNS State storage",
+                        "address": "0x429611c633806a03447391026a538a022e1e2731",
+                        "abi": '[{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"name_assignation","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"unassignName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_address","type":"address"}],"name":"updateName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"name_assignation","outputs":[{"name":"_assignee","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_value","type":"string"}],"name":"appendNameMetadata","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"assignName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_value","type":"string"}],"name":"updateName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_addr","type":"address"},{"name":"_value","type":"string"}],"name":"updateName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_newOwner","type":"address"}],"name":"change_Owner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_assignee","type":"address"}],"name":"assignation","outputs":[{"name":"_name","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_name","type":"string"}],"name":"registerName","outputs":[{"name":"_ok","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_owner","type":"address"},{"name":"_destination","type":"address"},{"name":"_metadata","type":"string"},{"name":"_hideOwner","type":"bool"}],"name":"registerAndUpdateName","outputs":[{"name":"_ok","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_hide","type":"bool"}],"name":"hideNameOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"name","outputs":[{"name":"_hash","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"frontend_contract","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"getName","outputs":[{"name":"_owner","type":"address"},{"name":"_associatedAddress","type":"address"},{"name":"_value","type":"string"},{"name":"_signature","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"ownerOf","outputs":[{"name":"_owner","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_newOwner","type":"address"}],"name":"changeNameOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"signatureOf","outputs":[{"name":"_sig","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"addressOf","outputs":[{"name":"_addr","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"metadataOf","outputs":[{"name":"_value","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"resolution","outputs":[{"name":"owner","type":"address"},{"name":"addr","type":"address"},{"name":"metadata","type":"string"},{"name":"hideOwner","type":"bool"},{"name":"signature","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_newFrontEnd","type":"address"}],"name":"change_FrontEnd_Address","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"","type":"bytes32"}],"name":"Error","type":"event"}]'
+                    };
+                    var DEXNSAddress = DexNSABI.address;
+                    DexNSABI = JSON.parse('[{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"name_assignation","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"unassignName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_address","type":"address"}],"name":"updateName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"name_assignation","outputs":[{"name":"_assignee","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_value","type":"string"}],"name":"appendNameMetadata","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"assignName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_value","type":"string"}],"name":"updateName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_addr","type":"address"},{"name":"_value","type":"string"}],"name":"updateName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_newOwner","type":"address"}],"name":"change_Owner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_assignee","type":"address"}],"name":"assignation","outputs":[{"name":"_name","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_name","type":"string"}],"name":"registerName","outputs":[{"name":"_ok","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_owner","type":"address"},{"name":"_destination","type":"address"},{"name":"_metadata","type":"string"},{"name":"_hideOwner","type":"bool"}],"name":"registerAndUpdateName","outputs":[{"name":"_ok","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_hide","type":"bool"}],"name":"hideNameOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"name","outputs":[{"name":"_hash","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"frontend_contract","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"getName","outputs":[{"name":"_owner","type":"address"},{"name":"_associatedAddress","type":"address"},{"name":"_value","type":"string"},{"name":"_signature","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"ownerOf","outputs":[{"name":"_owner","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_newOwner","type":"address"}],"name":"changeNameOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"signatureOf","outputs":[{"name":"_sig","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"addressOf","outputs":[{"name":"_addr","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"metadataOf","outputs":[{"name":"_value","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"resolution","outputs":[{"name":"owner","type":"address"},{"name":"addr","type":"address"},{"name":"metadata","type":"string"},{"name":"hideOwner","type":"bool"},{"name":"signature","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_newFrontEnd","type":"address"}],"name":"change_FrontEnd_Address","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"","type":"bytes32"}],"name":"Error","type":"event"}]');
+                    //console.log(DexNSABI);
+                    var DexNSNode = new nodes.customNode('https://mewapi.epool.io', '');
+
+                    // TODO
+
+                    var DexNSContract = {
+                        functions: [],
+                    };
+                    for (var i in DexNSABI) {
+                        if (DexNSABI[i].type == "function") {
+                            DexNSABI[i].inputs.map(function(i) { i.value = ''; });
+                            DexNSContract.functions.push(DexNSABI[i]);
+                        }
+                    }
+                    var curFunc = DexNSContract.functions[20];
+                    var fullFuncName = ethUtil.solidityUtils.transformToFullName(curFunc);
+                    var funcSig = ethFuncs.getFunctionSignature(fullFuncName);
+                    var typeName = ethUtil.solidityUtils.extractTypeName(fullFuncName);
+                    var types = typeName.split(',');
+                    types = types[0] == "" ? [] : types;
+                    var values = [];
+                    curFunc.inputs[0].value = scope.addressDrtv.ensAddressField;
+                    for (var i in curFunc.inputs) {
+                        if (curFunc.inputs[i].value) {
+                            if (curFunc.inputs[i].type.indexOf('[') !== -1 && curFunc.inputs[i].type.indexOf(']') !== -1) values.push(curFunc.inputs[i].value.split(','));
+                            else values.push(curFunc.inputs[i].value);
+                        } else values.push('');
+                    }
+                    var DexNSData = '0x' + funcSig + ethUtil.solidityCoder.encodeParams(types, values);
+
+
+
+                    DexNSNode.getEthCall({ to: DEXNSAddress, data: DexNSData }, function(data) {
+                        var outTypes = curFunc.outputs.map(function(i) {
+                            return i.type;
+                        });
+                        data.data = ethUtil.solidityCoder.decodeParams(outTypes, data.data.replace('0x', ''))[0];
+                        if (data.error) uiFuncs.notifier.danger(data.msg);
+                        else if (data.data == '0x0000000000000000000000000000000000000000' || data.data == '0x') {
+                            setValue('0x0000000000000000000000000000000000000000');
+                            scope.addressDrtv.derivedAddress = '0x0000000000000000000000000000000000000000';
+                            scope.addressDrtv.showDerivedAddress = false;
+                        } else {
+                            setValue(data.data);
+                            scope.addressDrtv.derivedAddress = ethUtil.toChecksumAddress(data.data);
+                            scope.addressDrtv.showDerivedAddress = true;
+                        }
+                    });
                 }
             });
             $compile(element.contents())(scope);

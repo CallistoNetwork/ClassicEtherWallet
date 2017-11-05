@@ -196,7 +196,8 @@ globalFuncs.saveTokenToLocal = function(localToken, callback) {
             contractAddress: localToken.contractAdd,
             symbol: localToken.symbol,
             decimal: parseInt(localToken.decimals),
-            type: "custom"
+            type: "custom",
+            network: localToken.network
         });
         globalFuncs.localStorage.setItem("localTokens", JSON.stringify(storedTokens));
         callback({

@@ -157,12 +157,13 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
 
     $scope.$watch(function() { return $scope.customTokenSymbol; }, function (newSymbol, oldSymbol) {
         if (!newSymbol) return;
-        if (newSymbol.length < 3) return;
+        //if (newSymbol.length < 3) return;
 
         var getNameFunction = $scope.contract.functions[$scope.erc20Indexes.DEXNSFunction];
         getNameFunction.inputs[0].value = newSymbol;
 
-        ajaxReq.getEthCall({ to: $scope.DEXNSAddress, data: $scope.getTxData($scope.erc20Indexes.DEXNSFunction) }, function(data) {
+		var DEXNSnetwork = 'ETC'; // DexNS network is always ETC!
+        $scope.nodeList[$scope.alternativeBalance[DEXNSnetwork].node].lib.getEthCall({ to: $scope.DEXNSAddress, data: $scope.getTxData($scope.erc20Indexes.DEXNSFunction) }, function(data) {
             if (data.error && data.data === '0x') {
                 $scope.notifier.danger('Ops, we\'d had an error communicating with DexNS.');
             }

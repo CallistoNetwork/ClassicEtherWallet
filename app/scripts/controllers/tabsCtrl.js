@@ -30,6 +30,7 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
         }, 200);
     }
     $scope.setArrowVisibility();
+    var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
 
     var gasPriceKey = "gasPrice";
     $scope.gasChanged = function() {
@@ -124,8 +125,11 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
             for (var i = 0; i < localNodes.length; i++) $scope.addCustomNodeToList(localNodes[i]);
         }
     }
-    $scope.getCustomNodesFromStorage();
-    $scope.setCurNodeFromStorage();
+
+    if (!network) {
+        $scope.getCustomNodesFromStorage();
+        $scope.setCurNodeFromStorage();
+    }
 
     $scope.saveCustomNode = function() {
         try {

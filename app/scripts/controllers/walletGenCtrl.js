@@ -7,10 +7,7 @@ var walletGenCtrl = function($rootScope, $scope) {
          UBQ: "ubq",
          EXP: "exp",
     }
-var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
-     if (network) {
-         $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
-     }
+
     $scope.wallet = null;
     $scope.showWallet = false;
     $scope.blob = $scope.blobEnc = "";

@@ -8,10 +8,10 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
          UBQ: "ubq",
          EXP: "exp",
     }
-var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
-     if (network) {
-         $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
-     }
+    var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
+    if (network) {
+       $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
+    }
 
     $scope.unitReadable = ajaxReq.type;
     $scope.sendTxModal = new Modal(document.getElementById('sendTransaction'));
@@ -52,12 +52,7 @@ var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('n
         tokensymbol: globalFuncs.urlGet('tokensymbol') == null ? false : globalFuncs.urlGet('tokensymbol')
     }
 
-    var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
-    if (network) {
-        $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
-    }
-
-$scope.setSendMode = function (sendMode, tokenId = '', tokensymbol = '') {
+    $scope.setSendMode = function (sendMode, tokenId = '', tokensymbol = '') {
         $scope.tx.sendMode = sendMode;
         $scope.unitReadable = '';
         if (globalFuncs.urlGet('tokensymbol') != null) {

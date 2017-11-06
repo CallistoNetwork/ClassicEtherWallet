@@ -1,16 +1,17 @@
 'use strict';
 var bulkGenCtrl = function($scope) {
-	$scope.showWallets = false;
+	  $scope.showWallets = false;
     $scope.networks = {
          ETH: "eth_ethscan",
          ETC: "etc_epool",
          UBQ: "ubq",
          EXP: "exp",
     }
-var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
-     if (network) {
-         $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
-     }
+
+		var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
+    if (network) {
+       $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
+    }
 
     $scope.genWallets = function(){
         if($scope.amount==''||$scope.amount != parseInt($scope.amount, 10)) alert(globalFuncs.errorMsgs[0]);

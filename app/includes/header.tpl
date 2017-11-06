@@ -29,7 +29,7 @@
   @@if (site === 'cew' ) {
     <div class="small announcement">
       <div class="container">
-        	⚠ ClassicEtherWallet is an open source project and it is running directly from source code on github in your local machine, without any servers. You can transparently check the source code here at the any time: 
+        	⚠ ClassicEtherWallet is an open source project and it is running directly from source code on github in your local machine, without any servers. You can transparently check the source code here at the any time:
         <a href="https://github.com/ethereumproject/etherwallet/tree/gh-pages" target="_blank" rel="noopener">ethereumproject/etherwallet</a>.
         <br />
       </div>
@@ -97,7 +97,7 @@
           <ul class="dropdown-menu" ng-show="dropdownGasPrice">
             <div class="header--gas">
               <span translate="OFFLINE_Step2_Label_3">Gas Price</span>: {{gas.value}} Gwei
-              <input type="range" ng-model="gas.value" min="{{gas.min}}" max="{{gas.max}}" steps="1" ng-change="gasChanged()"/>
+              <input type="range" ng-model="gas.value" min="{{gas.min}}" max="{{gas.max}}" step="{{gas.step}}" ng-change="gasChanged()"/>
               <p class="small col-xs-4 text-left">Not So Fast</p>
               <p class="small col-xs-4 text-center">Fast</p>
               <p class="small col-xs-4 text-right">Fast AF</p>

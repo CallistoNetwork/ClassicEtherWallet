@@ -13,6 +13,7 @@ nodes.nodeTypes = {
     RSK: "RSK",
     EXP: "EXP",
     UBQ: "UBQ",
+    PIRL: "PIRL",
     Custom: "CUSTOM ETH"
 };
 nodes.tldTypes = {
@@ -231,6 +232,19 @@ nodes.nodeList = {
         'estimateGas': true,
         'service': 'ubiqscan.io',
         'lib': new nodes.customNode('https://rpc1.ubiqscan.io', '')
+    },
+    'pirl': {
+        'name': 'PIRL',
+        'blockExplorerTX': 'https://pirl.site/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://pirl.site/addr/[[address]]',
+        'type': nodes.nodeTypes.PIRL,
+        'eip155': true,
+        'chainId': 3125659152,
+        'tokenList': require('./tokens/pirlTokens.json'),
+        'abiList': require('./abiDefinitions/pirlAbi.json'),
+        'estimateGas': true,
+        'service': 'pirl.io',
+        'lib': new nodes.customNode('https://wallrpc.pirl.io', '')
     }
 };
 

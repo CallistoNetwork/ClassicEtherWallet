@@ -13,6 +13,7 @@ nodes.nodeTypes = {
     RSK: "RSK",
     EXP: "EXP",
     UBQ: "UBQ",
+    PIRL: "PIRL",
     Custom: "CUSTOM ETH"
 };
 nodes.tldTypes = {

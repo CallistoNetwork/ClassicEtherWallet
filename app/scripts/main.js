@@ -83,6 +83,7 @@ var swapCtrl                 = require('./controllers/swapCtrl');
 var signMsgCtrl              = require('./controllers/signMsgCtrl');
 var contractsCtrl            = require('./controllers/contractsCtrl');
 var ensCtrl                  = require('./controllers/ensCtrl');
+var dexnsCtrl                = require('./controllers/dexnsCtrl');
 var footerCtrl               = require('./controllers/footerCtrl');
 var offlineTxCtrl            = require('./controllers/offlineTxCtrl');
 var walletBalanceCtrl        = require('./controllers/walletBalanceCtrl');
@@ -135,6 +136,7 @@ app.controller('swapCtrl', ['$scope', '$sce', '$rootScope', 'walletService', swa
 app.controller('signMsgCtrl', ['$scope', '$sce', 'walletService', signMsgCtrl]);
 app.controller('contractsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', contractsCtrl]);
 app.controller('ensCtrl', ['$scope', '$sce','$rootScope', 'walletService', ensCtrl]);
+app.controller('dexnsCtrl', ['$scope', '$sce','$rootScope', 'walletService', dexnsCtrl]);
 app.controller('footerCtrl', ['$scope', 'globalService', footerCtrl]);
 app.controller('offlineTxCtrl', ['$scope', '$sce', '$rootScope', 'walletService', offlineTxCtrl]);
 app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', walletBalanceCtrl]);

@@ -4,6 +4,11 @@ var fr = function() {}
 fr.code = 'fr';
 fr.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 /* New Generics */
 x_CancelReplaceTx           : 'Annuler ou remplacer la transaction',
 x_CancelTx                  : 'Annuler la transaction',
@@ -97,7 +102,7 @@ x_Keystore                  : 'Fichier Keystore (UTC / JSON · Recommandé · Ch
 x_Keystore2                 : 'Fichier Keystore (UTC / JSON) ',
 x_KeystoreDesc              : 'Ce fichier Keystore utilise le même format que celui que Mist, vous pouvez donc facilement l\'importer plus tard dans ces logiciels. C\'est le fichier que nous vous recommandons de télécharger et sauvegarder. ',
 x_Ledger                    : 'Ledger Wallet ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Phrase mnémonique ',
 x_ParityPhrase              : 'Phrase Parity ',
 x_Password                  : 'Mot de passe ',

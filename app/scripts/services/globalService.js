@@ -62,10 +62,10 @@ var tabs = {
     mew: true,
     cx: true
   },
-  txStatus: {
+  dexns: {
     id: 8,
-    name: "NAV_CheckTxStatus",
-    url: "check-tx-status",
+    name: "NAV_DexNS",
+    url: "dexns",
     mew: true,
     cx: true
   },

@@ -5,6 +5,11 @@ var sk = function() {}
 sk.code = 'sk';
 sk.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 HELP_2a_Title               : 'How do I save/backup my wallet? ',
 
 /* New Generics */
@@ -101,7 +106,7 @@ x_JsonDesc                  : 'Toto je nezašifrovaný JSON format vášho sukro
 x_Keystore                  : 'Keystore Súbor (UTC / JSON · Odporúčané · Šifrované) ',
 x_Keystore2                 : 'Keystore Súbor (UTC / JSON) ',
 x_KeystoreDesc              : 'Tento Keystore súbor je rovnakého formatu ako  Mist takže ho budete môcť jednoducho importovať. Tento subor odporúčame stiahnuť a zálohovať. ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Mnemonic Phrase (MetaMask / Jaxx ) ',
 x_ParityPhrase              : 'Parity Phrase ',
 x_Password                  : 'Heslo ',

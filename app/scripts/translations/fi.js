@@ -4,6 +4,12 @@ var fi = function() {}
 fi.code = 'fi';
 fi.data = {
 
+
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 HELP_2a_Title               : 'How do I save/backup my wallet? ',
 
 /* New Generics */
@@ -100,7 +106,7 @@ x_JsonDesc                  : 'Tämä on salaamaton JSON tiedosto yksityisestä 
 x_Keystore                  : 'Avainsäilö Tiedosto (UTC / JSON · Suositeltu · Salattu) ',
 x_Keystore2                 : 'Avainsäilö Tiedosto (UTC / JSON) ',
 x_KeystoreDesc              : 'Tämä Avainsäilö tiedosto vastaa sitä tiedostoformaattia jota Mist käyttävät, joten voit helposti importata sen tulevaisuudessa. Se on suositeltu tiedostomuoto ladata ja varmuuskopioida. ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Mnemonic Phrase ',
 x_ParityPhrase              : 'Parity Phrase ',
 x_Password                  : 'Salasana ',

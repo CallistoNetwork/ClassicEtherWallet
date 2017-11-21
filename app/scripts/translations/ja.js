@@ -4,6 +4,11 @@ var ja = function() {}
 ja.code = 'ja';
 ja.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 HELP_2a_Title               : 'お財布の保管やバックアップの方法は？ ',
 
 /* New Generics */
@@ -102,7 +107,7 @@ x_Keystore                  : 'Keystore ファイル (UTC / JSON · 推奨 · �
 x_Keystore2                 : 'Keystore ファイル (UTC / JSON) ',
 x_KeystoreDesc              : 'この Keystore / JSON ファイルは、後で容易にインポートするため、Mistで使われているフォーマットと一致させる必要があります。ダウンロードしてバックアップを取ることをおすすめします。 ',
 x_Ledger                    : 'Ledger Wallet ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'ニーモニック文節 ',
 x_ParityPhrase              : 'パリティ文節 ',
 x_Password                  : 'パスワード ',

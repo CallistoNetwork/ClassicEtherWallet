@@ -3,6 +3,10 @@
 var tr = function() {}
 tr.code = 'tr';
 tr.data = {
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
 
 HELP_2a_Title               : 'How do I save/backup my wallet? ',
 
@@ -100,7 +104,7 @@ x_JsonDesc                  : 'Bu özel anahtarinin sifresiz, JSON formatidir. D
 x_Keystore                  : 'Keystore dosya (UTC / JSON · Tavsiye edilen · şifrelenmiş) ',
 x_Keystore2                 : 'Keystore dosya (UTC / JSON) ',
 x_KeystoreDesc              : 'This Keystore file matches the format used by Mist so you can easily import it in the future. It is the recommended file to download and back up. ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Mnemonic Phrase ',
 x_ParityPhrase              : 'Parity Phrase ',
 x_Password                  : 'Parola ',

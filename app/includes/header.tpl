@@ -29,7 +29,7 @@
   @@if (site === 'cew' ) {
     <div class="small announcement">
       <div class="container">
-        	⚠ ClassicEtherWallet is an open source project and it is running directly from source code on github in your local machine, without any servers. You can transparently check the source code here at the any time:
+        	⚠ ClassicEtherWallet is an open source project and it is running directly from source code on github in your local machine, without any servers. You can transparently check the source code here:
         <a href="https://github.com/ethereumproject/etherwallet/tree/gh-pages" target="_blank" rel="noopener">ethereumproject/etherwallet</a>.
         <br />
       </div>

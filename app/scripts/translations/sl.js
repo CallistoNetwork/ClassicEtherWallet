@@ -4,6 +4,11 @@ var sl = function() {}
 sl.code = 'sl';
 sl.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 HELP_2a_Title               : 'How do I save/backup my wallet? ',
 
 /* New Generics */
@@ -100,7 +105,7 @@ x_JsonDesc                  : 'To je nekriptirana, JSON datoteka vašega osebneg
 x_Keystore                  : 'Datoteka za Shrambo ključa Keystore (UTC / JSON · Priporočeno · Kriptirano) ',
 x_Keystore2                 : 'Datoteka za Shrambo ključa Keystore (UTC / JSON) ',
 x_KeystoreDesc              : 'Ta datoteka za shrambo osebnega ključa Keystore se ujema s formatom datoteke, ki jo uporabljata programa Mist, kar pomeni da ga lahko v prihodnosti enostavno izvozite iz te internetne strani in uvozite v Mist ali Geth. Priporočamo vam da to datoteko prenesete na vaš računalnik in jo shranite na varnem mestu. Za dodatno varnost priporočamo, da datoteko shranite na večih napravah. ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Mnemonic Phrase ',
 x_ParityPhrase              : 'Parity Phrase ',
 x_Password                  : 'Geslo ',

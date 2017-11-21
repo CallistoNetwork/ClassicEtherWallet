@@ -4,6 +4,11 @@ var hu = function() {}
 hu.code = 'hu';
 hu.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 /* New Generics */
 x_CancelReplaceTx           : 'Cancel or Replace Transaction',
 x_CancelTx                  : 'Cancel Transaction',
@@ -96,7 +101,7 @@ x_JsonDesc                  : 'Ez a titkosítotatlan, JSON formátumú változat
 x_Keystore                  : 'Keystore Fájl (UTC / JSON · Ajánlott · Titkosított) ',
 x_Keystore2                 : 'Keystore Fájl (UTC / JSON) ',
 x_KeystoreDesc              : 'Ez a Keystore fájl ugyanolyan formátumú, amit a Mist használ, tehát könnyedén importálhatod a későbbiekben. Leginkább ezt a fájlt ajánlott letölteni és elmenteni. ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Mnemonikus frázis ',
 x_ParityPhrase              : 'Parity Phrase ',
 x_Password                  : 'Jelszó ',

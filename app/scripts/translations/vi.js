@@ -4,6 +4,11 @@ var vi = function() {}
 vi.code = 'vi';
 vi.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 /* New Generics */
 x_CancelReplaceTx           : 'Cancel or Replace Transaction',
 x_CancelTx                  : 'Cancel Transaction',
@@ -97,7 +102,7 @@ x_JsonDesc                  : 'Định Dạng JSON là một tập tin chứa d�
 x_Keystore                  : 'Định Dạng Keystore (UTC / JSON) (Đã mã hoá. Định Dạng này sử dụng cho Mist) ',
 x_Keystore2                 : 'Định Dạng Keystore (UTC / JSON) ',
 x_KeystoreDesc              : 'Định dạng Keystore là tập một tin chứa dữ liệu ví đã được mã hoá của Private Key và sử dụng cho Mist. Do đó bạn có thể dễ dàng bỏ nó vào bên trong Mist và tiếp tục sử dụng ví của bạn. Đây là một tập tin được đề xuất nhằm sao lưu dữ liệu ví cá nhân. ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Cụm từ dễ nhớ ',
 x_ParityPhrase              : 'Parity Phrase ',
 x_Password                  : 'Mật Khẩu ',

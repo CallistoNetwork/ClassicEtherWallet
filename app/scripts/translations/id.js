@@ -4,6 +4,11 @@ var id = function() {}
 id.code = 'id';
 id.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 HELP_2a_Title               : 'How do I save/backup my wallet? ',
 
 
@@ -101,7 +106,7 @@ x_Keystore                  : 'File Keystore (UTC / JSON · Format yang direkome
 x_Keystore2                 : 'File Keystore (UTC / JSON) ',
 x_KeystoreDesc              : 'File Keystore ini sesuai dengan format yang dipakai Mist sehingga memudahkan untuk diimpor di kemudian hari. File ini yang disarankan untuk di unduh dan di backup. ',
 x_Ledger                    : 'Ledger Wallet ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : '"Mnemonic Phrase" ',
 x_ParityPhrase              : 'Parity Phrase ',
 x_Password                  : 'Password ',

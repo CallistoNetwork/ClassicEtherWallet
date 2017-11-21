@@ -4,6 +4,11 @@ var de = function() {}
 de.code = 'de';
 de.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 /* New Generics */
 x_CancelReplaceTx           : 'Transaktion ersetzen oder zurückziehen',
 x_CancelTx                  : 'Transaktion zurückziehen',
@@ -97,7 +102,7 @@ x_JsonDesc                  : 'Dies ist die unverschlüsselte Version deines pri
 x_Keystore                  : 'Keystore File (UTC / JSON · Empfohlen · Verschlüsselt) ',
 x_Keystore2                 : 'Keystore File (UTC / JSON) ',
 x_KeystoreDesc              : 'Diese Keystore-Datei passt zu dem Format, das von Mist verwendet wird, sodass du diese Datei dort zukünftig einfach importieren kannst. Es ist empfehlenswert, diese Datei herunterzuladen und zu sichern. ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Mnemonic Phrase ',
 x_ParityPhrase              : 'Parity Phrase ',
 x_Password                  : 'Passwort ',

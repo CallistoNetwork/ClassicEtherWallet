@@ -4,6 +4,11 @@ var no = function() {}
 no.code = 'no';
 no.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 /* New Generics */
 x_CancelReplaceTx           : 'Kanseller eller erstatt transaksjon',
 x_CancelTx                  : 'Kanseller transaksjon',
@@ -97,7 +102,7 @@ x_JsonDesc                  : 'Dette er det ukrypterte JSON-formatet av din priv
 x_Keystore                  : 'Keystore-fil (UTC / JSON · Anbefalt · Kryptert) ',
 x_Keystore2                 : 'Keystore-fil (UTC / JSON) ',
 x_KeystoreDesc              : 'Denne Keystore-filen samsvarer med formatet som brukes av Mist, så du enkelt kan importere den i fremtiden. Det er den anbefalte filen å laste ned og sikkerhetskopiere. ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Mnemonisk Frase ',
 x_ParityPhrase              : 'Parity-frase ',
 x_Password                  : 'Passord ',

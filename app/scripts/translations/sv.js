@@ -4,6 +4,11 @@ var sv = function() {}
 sv.code = 'sv';
 sv.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 HELP_2a_Title               : 'How do I save/backup my wallet? ',
 
 /* New Generics */
@@ -100,7 +105,7 @@ x_JsonDesc                  : 'Det här är din okrypterade privata nyckel i JSO
 x_Keystore                  : 'Keystore Fil (UTC / JSON · Rekomenderad · Krypterad) ',
 x_Keystore2                 : 'Keystore Fil (UTC / JSON) ',
 x_KeystoreDesc              : 'Den här Keystore filen matchar formatet som används av Mist så du kan enkelt importera det i framtiden. Det är det rekommenderade format att hämta för backup. ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Mnemonic Phrase ',
 x_Password                  : 'Lösenord ',
 x_Print                     : 'Skriv Ut Pappers Plånbok ',

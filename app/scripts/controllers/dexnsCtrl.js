@@ -226,9 +226,9 @@ var dexnsCtrl = function($scope, $sce, $rootScope, walletService) {
         uiFuncs.sendTx(signedTx, function(resp) {
             if (!resp.isError) {
                 var linkStatus = "http://gastracker.io/tx/" + resp.data;
-                console.log(linkStatus);
-                $scope.sendTxStatus = globalFuncs.successMsgs[2] + '<a target="_self" href="{{linkStatus}}" target="_blank"> ' + resp.data + ' </a>';
-                console.log("http://gastracker.io/tx/" + resp.data + "#");
+                //console.log(linkStatus);
+                $scope.sendTxStatus = globalFuncs.successMsgs[2] + '<a target="_self" href="{{linkStatus}}" target="_blank"> http://gastracker.io/tx/' + resp.data + ' </a>';
+               // console.log("http://gastracker.io/tx/" + resp.data + "#");
                 $scope.notifier.info($scope.sendTxStatus, 0);
                 if ($scope.generatedDexNSTxs.length) $scope.sendTx();
                 else $scope.sendTxStatus = ''

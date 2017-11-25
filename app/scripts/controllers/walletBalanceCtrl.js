@@ -22,6 +22,7 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
     };
     $scope.slide = 2;
     $scope.customTokenSymbol = '';
+    $scope.customTokenInterval = null;
     walletService.wallet = null;
     $scope.wallet = null;
     $scope.nodeList = nodes.nodeList;
@@ -139,27 +140,33 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
         if (!newSymbol) return;
         //if (newSymbol.length < 3) return;
 
-        var getNameFunction = $scope.contract.functions[$scope.erc20Indexes.DEXNSFunction];
-        getNameFunction.inputs[0].value = newSymbol;
+        if ($scope.customTokenInterval) {
+            clearTimeout($scope.customTokenInterval);
+        }
 
-		var DEXNSnetwork = 'ETC'; // DexNS network is always ETC!
-        $scope.nodeList[$scope.alternativeBalance[DEXNSnetwork].node].lib.getEthCall({ to: $scope.DEXNSAddress, data: $scope.getTxData($scope.erc20Indexes.DEXNSFunction) }, function(data) {
-            if (data.error && data.data === '0x') {
-                $scope.notifier.danger('Ops, we\'d had an error communicating with DexNS.');
-            }
+        $scope.customTokenInterval = setTimeout(function() {
+            var getNameFunction = $scope.contract.functions[$scope.erc20Indexes.DEXNSFunction];
+            getNameFunction.inputs[0].value = newSymbol;
 
-            var outputs = $scope.readData($scope.erc20Indexes.DEXNSFunction, data).outputs;
-            var contractAddress = outputs[1].value;
-            var contractInfo = outputs[2].value.split('-');
+            var DEXNSnetwork = 'ETC'; // DexNS network is always ETC!
+            $scope.nodeList[$scope.alternativeBalance[DEXNSnetwork].node].lib.getEthCall({ to: $scope.DEXNSAddress, data: $scope.getTxData($scope.erc20Indexes.DEXNSFunction) }, function(data) {
+                if (data.error && data.data === '0x') {
+                    $scope.notifier.danger('Ops, we\'d had an error communicating with DexNS.');
+                }
 
-            if(contractAddress === "0x0000000000000000000000000000000000000000") {
-                $scope.resetLocalToken();
-                $scope.notifier.danger('Symbol not found.');
-                return;
-            }
+                var outputs = $scope.readData($scope.erc20Indexes.DEXNSFunction, data).outputs;
+                var contractAddress = outputs[1].value;
+                var contractInfo = outputs[2].value.split('-');
 
-            $scope.getTokenInfo(contractAddress, contractInfo[1], newSymbol);
-        });
+                if(contractAddress === "0x0000000000000000000000000000000000000000") {
+                    $scope.resetLocalToken();
+                    $scope.notifier.danger('Symbol not found.');
+                    return;
+                }
+
+                $scope.getTokenInfo(contractAddress, contractInfo[1], newSymbol);
+            });
+        }, 3000);
     });
 
 

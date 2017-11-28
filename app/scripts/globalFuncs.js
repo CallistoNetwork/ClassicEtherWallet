@@ -181,17 +181,32 @@ globalFuncs.hexToAscii = function(hex) {
     }).join('');
 };
 globalFuncs.isAlphaNumeric = function(value) {
-    return !/[^a-zA-Z0-9]/.test(value);
+    return !/[^a-zA-Z0-9/-]/.test(value);
 };
 globalFuncs.getRandomBytes = function(num) {
     return ethUtil.crypto.randomBytes(num);
 };
+globalFuncs.checkIfTokenExists = function(storedTokens, localToken) {
+    for (let token of storedTokens) {
+        if (token.contractAddress === localToken.contractAdd && token.symbol === localToken.symbol) {
+            return true;
+        }
+    }
+    return false;
+}
 globalFuncs.saveTokenToLocal = function(localToken, callback) {
     try {
         if (!ethFuncs.validateEtherAddress(localToken.contractAdd)) throw globalFuncs.errorMsgs[5];
         else if (!globalFuncs.isNumeric(localToken.decimals) || parseFloat(localToken.decimals) < 0) throw globalFuncs.errorMsgs[7];
         else if (!globalFuncs.isAlphaNumeric(localToken.symbol) || localToken.symbol == "") throw globalFuncs.errorMsgs[19];
         var storedTokens = globalFuncs.localStorage.getItem("localTokens", null) != null ? JSON.parse(globalFuncs.localStorage.getItem("localTokens")) : [];
+        if (globalFuncs.checkIfTokenExists(storedTokens, localToken)) {
+            callback({
+                error: true,
+                msg: 'Token already exists.'
+            })
+            return;
+        }
         storedTokens.push({
             contractAddress: localToken.contractAdd,
             symbol: localToken.symbol,
@@ -205,7 +220,7 @@ globalFuncs.saveTokenToLocal = function(localToken, callback) {
         });
     } catch (e) {
         callback({
-            error: false,
+            error: true,
             msg: e
         });
     }

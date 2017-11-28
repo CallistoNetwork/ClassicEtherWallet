@@ -169,6 +169,16 @@
              ng-model="customTokenSymbol"
              ng-minlength="3"
              ng-class="customTokenSymbol!='' ? 'is-valid' : 'is-invalid'" />
+
+      <div ng-hide="localToken.symbol">
+        <div ng-if="!customTokenSymbol">
+          <p><strong>Type a token symbol.<strong></p>
+        </div>
+        <div ng-if="customTokenSymbol">
+          <p><strong>Looking for {{ customTokenSymbol }} token...<strong></p>
+        </div>
+      </div>
+
       <div ng-show="localToken.symbol">
         <p><strong>You are adding {{ localToken.symbol }} token</strong></p>
         <p>Information: </p>

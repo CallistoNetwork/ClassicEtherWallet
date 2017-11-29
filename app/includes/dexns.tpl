@@ -21,7 +21,6 @@
 
       <br />
 
-      <!-- IF ENS CHAIN: Check Status of Name -->
       <article class="row" ng-show="(dexns_status==0)">
         <section class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
           <button class="btn btn-default" ng-click="openRegisterName()">   I am a user and I want to register a Name for my address   </button>
@@ -32,7 +31,6 @@
 
         </section>
       </article>
-      <!-- / IF ENS CHAIN: Check Status of Name -->
 
 
 

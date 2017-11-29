@@ -4,6 +4,11 @@ var ar = function() {}
 ar.code = 'ar';
 ar.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 /* New Generics */
 x_CancelReplaceTx           : 'إلغاء العملية أو استبدالها',
 x_CancelTx                  : 'إلغاء العملية',
@@ -96,7 +101,7 @@ x_JsonDesc                  : 'This is the unencrypted, JSON format of your priv
 x_Keystore                  : 'Keystore File (UTC / JSON · Recommended · Encrypted) ',
 x_Keystore2                 : 'Keystore File (UTC / JSON) ',
 x_KeystoreDesc              : 'This Keystore file matches the format used by Mist so you can easily import it in the future. It is the recommended file to download and back up. ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Mnemonic Phrase ',
 x_ParityPhrase              : 'Parity Phrase ',
 x_Password                  : 'Password ',

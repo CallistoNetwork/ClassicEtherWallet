@@ -50,7 +50,7 @@ var addressFieldDrtv = function($compile) {
                             scope.addressDrtv.showDerivedAddress = true;
                         }
                     });
-                } else {
+                } else if (scope.addressDrtv.ensAddressField != "") {
                     //setValue('');
                     //scope.addressDrtv.showDerivedAddress = false;
 

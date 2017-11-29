@@ -4,6 +4,11 @@ var pl = function() {}
 pl.code = 'pl';
 pl.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 /* New Generics */
 x_CancelReplaceTx           : 'Cancel or Replace Transaction',
 x_CancelTx                  : 'Cancel Transaction',
@@ -97,7 +102,7 @@ x_JsonDesc                  : 'Nieszyfrowany klucz prywatny, plik w formacie JSO
 x_Keystore                  : 'Plik Keystore (UTC / JSON · Zalecany · Szyfrowany) ',
 x_Keystore2                 : 'Plik Keystore (UTC / JSON) ',
 x_KeystoreDesc              : 'Ten plik Keystore odpowiada formatowi stosowanemu przez Mist, więc może być w prosty sposób zaimportowany w przyszłości. Jest to zalecana forma pliku do pobrania i przechowywania jako kopii zapasowej. ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Mnemonik ',
 x_ParityPhrase              : 'Fraza Parity ',
 x_Password                  : 'Hasło ',

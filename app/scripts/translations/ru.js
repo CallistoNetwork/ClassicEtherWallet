@@ -4,6 +4,11 @@ var ru = function() {}
 ru.code = 'ru';
 ru.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 HELP_2a_Title               : 'How do I save/backup my wallet? ',
 
 /* New Generics */
@@ -100,7 +105,7 @@ x_JsonDesc                  : 'Это Ваш незашифрованный за
 x_Keystore                  : 'Файл Keystore (UTC / JSON · рекомендуется · зашифрован) ',
 x_Keystore2                 : 'Файл Keystore (UTC / JSON) ',
 x_KeystoreDesc              : 'Этот файл Keystore использует формат совместимый с Mist. Вы сможете в будущем импортировать его. Рекомендуется скачать этот файл и сделать резервную копию. ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Кодовая фраза ',
 x_ParityPhrase              : 'Parity Phrase ',
 x_Password                  : 'Пароль ',

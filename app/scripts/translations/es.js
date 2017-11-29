@@ -4,6 +4,11 @@ var es = function() {}
 es.code = 'es';
 es.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 /* New Generics */
 x_CancelReplaceTx           : 'Cancel or Replace Transaction',
 x_CancelTx                  : 'Cancel Transaction',
@@ -97,7 +102,7 @@ x_JsonDesc                  : 'Esta es tu clave privada sin encriptar en formato
 x_Keystore                  : 'Archivo Keystore (UTC / JSON · Recomendado · Encriptado) ',
 x_Keystore2                 : 'Archivo Keystore (UTC / JSON) ',
 x_KeystoreDesc              : 'Este archivo Keystore/JSON concuerda con el formato usado por Mist para una fácil importación en el futuro. Es el archivo recomendado para descargar y guardar como copia de seguridad. ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Mnemonic Phrase ',
 x_ParityPhrase              : 'Parity Phrase ',
 x_Password                  : 'Contraseña ',

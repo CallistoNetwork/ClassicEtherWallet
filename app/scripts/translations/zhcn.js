@@ -4,6 +4,11 @@ var zhcn = function() {}
 zhcn.code = 'zhcn';
 zhcn.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 HELP_2a_Title               : 'How do I save/backup my wallet? ',
 
 /* New Generics */
@@ -100,7 +105,7 @@ x_JsonDesc                  : '这是你的未加密JSON格式的私钥文件。
 x_Keystore                  : 'Keystore File (UTC / JSON · 推荐加密的) ',
 x_Keystore2                 : 'Keystore File (UTC / JSON) ',
 x_KeystoreDesc              : '这个Keystore/JSON文件和Mist、Geth使用的钱包文件是一样的，所以将来你可以非常容易地导入。 It is the recommended file to download and back up.推荐下载和备份这个文件。 ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Mnemonic Phrase ',
 x_ParityPhrase              : 'Parity Phrase ',
 x_Password                  : '密码 ',

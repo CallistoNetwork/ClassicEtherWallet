@@ -3,6 +3,11 @@
 var zhtw = function() {}
 zhtw.code = 'zhtw';
 zhtw.data = {
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 
 HELP_2a_Title               : '我要怎麼儲存/備份錢包? ',
 
@@ -100,7 +105,7 @@ x_JsonDesc                  : '這是未加密的JSON格式私鑰檔。這表示
 x_Keystore                  : 'Keystore 檔 (UTC / JSON · 推薦 · 經過加密) ',
 x_Keystore2                 : 'Keystore 檔 (UTC / JSON) ',
 x_KeystoreDesc              : '此Keystore檔和Mist錢包相容，因此你可以輕鬆地匯入錢包。我們推薦你下載並備份此檔案。 ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : '助憶口令 ',
 x_ParityPhrase              : 'Parity口令 ',
 x_Password                  : '密碼 ',

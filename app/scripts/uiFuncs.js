@@ -169,7 +169,7 @@ uiFuncs.generateTx = function(txData, callback) {
               rawTx.rawTx = JSON.stringify(rawTx);
               rawTx.signedTx = JSON.stringify(txParams);
               rawTx.isError = false;
-              callback(rawTx)
+              callback(rawTx);
             } else if ((typeof txData.hwType != "undefined") && (txData.hwType == "digitalBitbox")) {
                 uiFuncs.signTxDigitalBitbox(eTx, rawTx, txData, callback);
             } else {

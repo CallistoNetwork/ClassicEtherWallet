@@ -31,7 +31,7 @@ var signMsgCtrl = function($scope, $sce, walletService) {
                 var signingAddr = web3.eth.accounts[0]
                 var params = [msg, signingAddr]
                 var method = 'personal_sign'
-                $scope.notifier.info("Sent message for signing via MetaMask / Mist.")
+                $scope.notifier.info("Sent message for signing via ClassicMask / MetaMask / Mist.")
 
                 web3.currentProvider.sendAsync({
                     method,

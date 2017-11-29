@@ -4,6 +4,11 @@ var el = function() {}
 el.code = 'el';
 el.data = {
 
+/* DexNS tabs */
+
+NAV_DexNS                   : 'DexNS',
+NAV_Decentralized_Naming_Service : 'Decentralized Naming Service',
+
 HELP_2a_Title               : 'Πώς αποθηκεύω/παίρνω αντίγραφο ασφαλείας του πορτοφολιού μου; ',
 
 /* New Generics */
@@ -100,7 +105,7 @@ x_JsonDesc                  : 'Αυτή είναι η μη κρυπτογραφ�
 x_Keystore                  : 'Αρχείο Keystore (UTC / JSON · Συνιστάται · Κρυπτογραφημένο) ',
 x_Keystore2                 : 'Αρχείο Keystore (UTC / JSON) ',
 x_KeystoreDesc              : 'Αυτό το αρχείο Keystore έχει την ίδια μορφή που χρησιμοποιείται από το Mist ώστε να μπορείτε εύκολα να το εισάγετε στο μέλλον. Είναι το συνιστώμενο αρχείο για λήψη και δημιουργία αντιγράφου ασφαλείας. ',
-x_MetaMask                  : 'Metamask / Mist ',
+x_MetaMask                  : 'ClassicMask / MetaMask / Mist ',
 x_Mnemonic                  : 'Μνημονικό ',
 x_ParityPhrase              : 'Parity Phrase ',
 x_Password                  : 'Συνθηματικό ',

@@ -22,7 +22,6 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
     };
     $scope.slide = 2;
     $scope.customTokenSymbol = '';
-    $scope.customTokenInterval = null;
     walletService.wallet = null;
     $scope.wallet = null;
     $scope.nodeList = nodes.nodeList;
@@ -111,6 +110,7 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
     };
 
     $scope.$watch(function() { return $scope.addressDrtv.ensAddressField; }, function (newAddress, oldAddress) {
+        console.log("The desired WATCH is executed!");
         if (!$scope.Validator) return;
         if ($scope.Validator.isValidAddress(newAddress)) {
             // TODO: Refactor to use getTokenInfo
@@ -139,33 +139,27 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
         if (!newSymbol) return;
         //if (newSymbol.length < 3) return;
 
-        if ($scope.customTokenInterval) {
-            clearTimeout($scope.customTokenInterval);
-        }
+        var getNameFunction = $scope.contract.functions[$scope.erc20Indexes.DEXNSFunction];
+        getNameFunction.inputs[0].value = newSymbol;
 
-        $scope.customTokenInterval = setTimeout(function() {
-            var getNameFunction = $scope.contract.functions[$scope.erc20Indexes.DEXNSFunction];
-            getNameFunction.inputs[0].value = newSymbol;
+		var DEXNSnetwork = 'ETC'; // DexNS network is always ETC!
+        $scope.nodeList[$scope.alternativeBalance[DEXNSnetwork].node].lib.getEthCall({ to: $scope.DEXNSAddress, data: $scope.getTxData($scope.erc20Indexes.DEXNSFunction) }, function(data) {
+            if (data.error && data.data === '0x') {
+                $scope.notifier.danger('Ops, we\'d had an error communicating with DexNS.');
+            }
 
-            var DEXNSnetwork = 'ETC'; // DexNS network is always ETC!
-            $scope.nodeList[$scope.alternativeBalance[DEXNSnetwork].node].lib.getEthCall({ to: $scope.DEXNSAddress, data: $scope.getTxData($scope.erc20Indexes.DEXNSFunction) }, function(data) {
-                if (data.error && data.data === '0x') {
-                    $scope.notifier.danger('Ops, we\'d had an error communicating with DexNS.');
-                }
+            var outputs = $scope.readData($scope.erc20Indexes.DEXNSFunction, data).outputs;
+            var contractAddress = outputs[1].value;
+            var contractInfo = outputs[2].value.split('-');
 
-                var outputs = $scope.readData($scope.erc20Indexes.DEXNSFunction, data).outputs;
-                var contractAddress = outputs[1].value;
-                var contractInfo = outputs[2].value.split('-');
+            if(contractAddress === "0x0000000000000000000000000000000000000000") {
+                $scope.resetLocalToken();
+                $scope.notifier.danger('Symbol not found.');
+                return;
+            }
 
-                if(contractAddress === "0x0000000000000000000000000000000000000000") {
-                    $scope.resetLocalToken();
-                    $scope.notifier.danger('Symbol not found.');
-                    return;
-                }
-
-                $scope.getTokenInfo(contractAddress, contractInfo[1], newSymbol);
-            });
-        }, 3000);
+            $scope.getTokenInfo(contractAddress, contractInfo[1], newSymbol);
+        });
     });
 
 
@@ -173,7 +167,6 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
     $scope.$watch('wallet', function() {
         if ($scope.wallet) $scope.reverseLookup();
     });
-
     $scope.reverseLookup = function() {
         var _ens = new ens();
         _ens.getName($scope.wallet.getAddressString().substring(2) + '.addr.reverse', function(data) {
@@ -238,6 +231,7 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
             network = 'ETC'; // defaults to ETC
         }
         network = network.trim();
+        //    console.log(network.length);
         try{
             $scope.localToken.contractAdd = address;
             $scope.localToken.network = network;

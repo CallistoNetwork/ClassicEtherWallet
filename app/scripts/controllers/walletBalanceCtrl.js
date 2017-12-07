@@ -111,7 +111,6 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
     };
 
     $scope.$watch(function() { return $scope.addressDrtv.ensAddressField; }, function (newAddress, oldAddress) {
-        console.log("The desired WATCH is executed!");
         if (!$scope.Validator) return;
         if ($scope.Validator.isValidAddress(newAddress)) {
             // TODO: Refactor to use getTokenInfo
@@ -239,7 +238,6 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
             network = 'ETC'; // defaults to ETC
         }
         network = network.trim();
-        //    console.log(network.length);
         try{
             $scope.localToken.contractAdd = address;
             $scope.localToken.network = network;

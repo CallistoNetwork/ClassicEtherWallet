@@ -492,6 +492,12 @@
     "type":"default"
   },
   {
+    "address":"0xec18f898b4076a3e18f1089d33376cc380bde61d",
+    "symbol":"PETRO",
+    "decimal":18,
+    "type":"default"
+  },
+  {
     "address":"0x226bb599a12C826476e3A771454697EA52E9E220",
     "symbol":"PRO",
     "decimal":8,

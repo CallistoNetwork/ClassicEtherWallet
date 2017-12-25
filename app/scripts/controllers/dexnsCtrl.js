@@ -46,13 +46,18 @@ var dexnsCtrl = function($scope, $sce, $rootScope, walletService) {
     var DEXNSnetwork = 'ETC'; // DexNS network is always ETC!
     var DexNSFrontendABI = require('../abiDefinitions/etcAbi.json')[4];
     var DexNSABI = require('../abiDefinitions/etcAbi.json')[5];
+
+    // 16 => endtimeOf
+    // 19 => namePrice
+    // 1  => registerName
+    // 22 => registerAndUpdate
+
     var DEXNSFrontendAddress = DexNSFrontendABI.address;
     var DEXNSAddress = DexNSABI.address;
     var namePrice;
 
     DexNSABI = JSON.parse(DexNSABI.abi);
     DexNSFrontendABI = JSON.parse(DexNSFrontendABI.abi);
-                    //console.log(DexNSABI);
     var DexNSNode = new nodes.customNode('https://mewapi.epool.io', '');
 
                     // TODO
@@ -87,9 +92,7 @@ var dexnsCtrl = function($scope, $sce, $rootScope, walletService) {
             }
         }
 
-    //    console.log(DexNSABI[18]); << endtimeOf
-
-    var namePriceFunc = DexNSFrontendContract.functions[22];
+    var namePriceFunc = DexNSFrontendContract.functions[19];
     var fullPriceFuncName = ethUtil.solidityUtils.transformToFullName(namePriceFunc);
     var priceSig = ethFuncs.getFunctionSignature(fullPriceFuncName);
 
@@ -112,8 +115,7 @@ var dexnsCtrl = function($scope, $sce, $rootScope, walletService) {
     }
 
     $scope.checkDexNSName = function() {
-
-        var checkFunc = DexNSFrontendContract.functions[18];
+        var checkFunc = DexNSFrontendContract.functions[16];
         var fullcheckFunc = ethUtil.solidityUtils.transformToFullName(checkFunc);
         var checkSig = ethFuncs.getFunctionSignature(fullcheckFunc);
         var _typeName = ethUtil.solidityUtils.extractTypeName(fullcheckFunc);
@@ -140,21 +142,12 @@ var dexnsCtrl = function($scope, $sce, $rootScope, walletService) {
                 if (data.error) uiFuncs.notifier.danger(data.msg);
                 else {
                     var _time = new Date().getTime();
-                    //console.log("NOW: " + _time);
-
-                    //console.log(data.data);
-                    //console.log(data.data.toString());
                     var _renderedTime = new BigNumber(_time);
-                    //console.log(_renderedTime);
-                    //console.log(data.data);
-
                     if(ajaxReq.type!="ETC") {
-                        $scope.notifier.danger("DexNS accepts only $ETC as gas payments! You should switch to ETC node first to register your name.");
+                        $scope.notifier.danger("DexNS accepts only $ETC for gas payments! You should switch to ETC node first to register your name.");
                     }
                     else if(_renderedTime > data.data) {
-                        //console.log("SUCCESS");
                         $scope.dexns_status = 6;
-                        //console.log($scope.dexns_status);
                         $scope.notifier.info("This name is available for registration.");
                     }
                     else {
@@ -191,16 +184,10 @@ var dexnsCtrl = function($scope, $sce, $rootScope, walletService) {
                 values.push(func.inputs[0].value);
 
                 $scope.tx.data = '0x' + funcSig + ethUtil.solidityCoder.encodeParams(types, values);
-                console.log($scope.tx.data);
 
                 var txData = uiFuncs.getTxData($scope);
                 txData.gasPrice = data.gasprice;
                 txData.nonce = data.nonce;
-                console.log(txData.nonce);
-                console.log(txData.gasPrice);
-                console.log(txData.to);
-                console.log(txData.value);
-                console.log(txData.data);
 
                 uiFuncs.generateTx(txData, function(rawTx) {
                    if (!rawTx.isError) {
@@ -222,7 +209,6 @@ var dexnsCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.sendTx = function() {
         $scope.dexnsConfirmModalModal.close();
         var signedTx = $scope.generatedDexNSTxs.shift();
-        console.log("SIGNED " + signedTx);
         uiFuncs.sendTx(signedTx, function(resp) {
             if (!resp.isError) {
                 var linkStatus = "http://gastracker.io/tx/" + resp.data;

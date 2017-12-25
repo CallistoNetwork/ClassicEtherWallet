@@ -97,6 +97,7 @@ var dexnsCtrl = function($scope, $sce, $rootScope, walletService) {
     var priceSig = ethFuncs.getFunctionSignature(fullPriceFuncName);
 
     $scope.getDexNSPrice = function() {
+        /*
         DexNSNode.getEthCall({ to: DEXNSAddress, data: '0x' + priceSig }, function(data) {
             var outTypes = namePriceFunc.outputs.map(function(i) {
                  return i.type;
@@ -104,10 +105,17 @@ var dexnsCtrl = function($scope, $sce, $rootScope, walletService) {
             data.data = ethUtil.solidityCoder.decodeParams(outTypes, data.data.replace('0x', ''))[0];
             if (data.error) uiFuncs.notifier.danger(data.msg);
             else {
+                console.log(data.data);
                 namePrice = data.data;
                 $scope.priceDEXNS = (etherUnits.toEther(data.data, 'wei')) + " ETC";
             }
         });
+        */
+
+        // TODO: Replace hardcoded values with a contract call return of price
+
+        namePrice = 0.1;
+        $scope.priceDEXNS = ("0.1 ETC");
     }
 
     $scope.openRegisterName = function() {

@@ -31,7 +31,7 @@ Version 2 expands on this vision to offer:
 
 If you want to help contribute, here's what you need to know to get it up and running and compiling.
 
-- Both the Chrome Extension and the MyEtherWallet.com are compiling from the same codebase. This code is found in the `app` folder. Don't touch the `dist` or `chrome-extension` folders.
+- Both the Chrome Extension and the ClassicEtherWallet.com are compiling from the same codebase. This code is found in the `app` folder. Don't touch the `dist` or `chrome-extension` folders.
 - We use angular and bootstrap. We used to use jQuery and Bootstrap until it was converted in April 2016. If you wonder why some things are set up funky, that's why.
 - The mercury branch is currently the active development branch. We then push the dist folder live to gh-pages, which then gets served to ClassicEtherWallet.com.
 - We use npm / gulp for compiling. There is a lot of stuff happening in the compliation.

@@ -4,6 +4,8 @@ nodes.customNode = require('./nodeHelpers/customNode');
 nodes.infuraNode = require('./nodeHelpers/infura');
 nodes.metamaskNode = require('./nodeHelpers/metamask');
 nodes.nodeTypes = {
+    CLO: "CLO",
+    CLOT: "Testnet CLO",
     ETH: "ETH",
     ETC: "ETC",
     MUS: "MUSIC",
@@ -73,6 +75,18 @@ nodes.nodeList = {
         'abiList': require('./abiDefinitions/etcAbi.json'),
         'service': 'Epool.io',
         'lib': new nodes.customNode('https://mewapi.epool.io', '')
+    },
+    'clo_testnet': {
+        'name': 'CLO Testnet',
+        'blockExplorerTX': 'https://gastracker.io/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://gastracker.io/addr/[[address]]',
+        'type': nodes.nodeTypes.CLOT,
+        'eip155': true,
+        'chainId': 7919,
+        'tokenList': require('./tokens/etcTokens.json'),
+        'abiList': require('./abiDefinitions/etcAbi.json'),
+        'service': 'Callisto.network',
+        'lib': new nodes.customNode('https://testnet.callisto.network', '')
     },
     'eth_mew': {
         'name': 'ETH',

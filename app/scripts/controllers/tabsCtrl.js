@@ -20,6 +20,7 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
     $scope.nodeService = $scope.ajaxReq.service
     $scope.$watch('ajaxReq.type', function() { $scope.nodeType = $scope.ajaxReq.type })
     $scope.$watch('ajaxReq.service', function() { $scope.nodeService = $scope.ajaxReq.service })
+
     $scope.setArrowVisibility = function() {
         setTimeout(function() {
             if (document.querySelectorAll('.nav-inner')[0] && document.querySelectorAll('.nav-scroll')[0]) {
@@ -29,14 +30,23 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
             }
         }, 200);
     }
+    
     $scope.setArrowVisibility();
+
     var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
 
     var gasPriceKey = "gasPrice";
+
     $scope.gasChanged = function() {
-        globalFuncs.localStorage.setItem(gasPriceKey, $scope.gas.value);
+        let newGasPriceKey = gasPriceKey;
+        let node = JSON.parse($scope.keyNode);
+        if (node.key === "clo_testnet") {
+            newGasPriceKey += "-CLO"
+        }
+        globalFuncs.localStorage.setItem(newGasPriceKey, $scope.gas.value);
         ethFuncs.gasAdjustment = $scope.gas.value;
     }
+
     var setGasValues = function() {
         $scope.gas = {
             curVal: 21,
@@ -47,9 +57,38 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
         }
         ethFuncs.gasAdjustment = $scope.gas.value;
     }
-    setGasValues();
-    $scope.gasChanged();
 
+    var setCallistoGasValues = function() {
+        let newGasPriceKey = gasPriceKey + "-CLO";
+        $scope.gas = {
+            curVal: 2000,
+            value: globalFuncs.localStorage.getItem(newGasPriceKey, null) ? parseInt(globalFuncs.localStorage.getItem(newGasPriceKey)) : 2000,
+            max: 3600,
+            min: 1800,
+            step: 50
+        }
+        ethFuncs.gasAdjustment = $scope.gas.value;
+    }
+
+    $scope.setGasPrice = function() {
+        $scope.keyNode = globalFuncs.localStorage.getItem('curNode', null);
+        if ($scope.keyNode == null) {
+            return;
+        }
+        let keyNode = JSON.parse($scope.keyNode);
+        if (keyNode.key === "clo_testnet") {
+            setCallistoGasValues();
+        } else {
+            setGasValues();
+        }
+        $scope.gasChanged();
+    }
+
+    $scope.$watch('keyNode', function() {
+        $scope.setGasPrice();
+    })
+
+    $scope.setGasPrice();
 
     $scope.changeNode = function(key) {
         if ($scope.nodeList[key]) {
@@ -67,6 +106,7 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
         globalFuncs.localStorage.setItem('curNode', JSON.stringify({
             key: key
         }));
+        $scope.keyNode = globalFuncs.localStorage.getItem('curNode', null);
         if (nodes.ensNodeTypes.indexOf($scope.curNode.type) == -1) $scope.tabNames.ens.cx = $scope.tabNames.ens.mew = false;
         else $scope.tabNames.ens.cx = $scope.tabNames.ens.mew = true;
         ajaxReq.getCurrentBlock(function(data) {
@@ -78,6 +118,7 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
                 $scope.notifier.info( globalFuncs.successMsgs[5] + '— Now, check the URL: <strong>' + window.location.href + '.</strong> <br /> Network: <strong>' + $scope.nodeType + ' </strong> provided by <strong>' + $scope.nodeService + '.</strong>', 5000)
             }
         });
+
     }
     $scope.checkNodeUrl = function(nodeUrl) {
         return $scope.Validator.isValidURL(nodeUrl);

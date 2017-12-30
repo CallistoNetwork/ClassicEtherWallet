@@ -34,11 +34,18 @@ var addressFieldDrtv = function($compile) {
                 </div>');
             scope.$watch('addressDrtv.ensAddressField', function() {
                 var _ens = new ens();
-                if (Validator.isValidAddress(scope.addressDrtv.ensAddressField)) {
-                    setValue(scope.addressDrtv.ensAddressField);
-                    if (!Validator.isChecksumAddress(scope.addressDrtv.ensAddressField)) {
-                        scope.notifier.info(globalFuncs.errorMsgs[35]);
+                    if (scope.DexNSInterval) {
+                        clearTimeout(scope.DexNSInterval);
                     }
+                scope.addressDrtv.showDerivedAddress = false;
+                if(scope.addressDrtv.ensAddressField.length == 42 && scope.addressDrtv.ensAddressField[0] == "0" && scope.addressDrtv.ensAddressField[1] == "x") {
+                    console.log("GRC!");
+                	if (Validator.isValidAddress(scope.addressDrtv.ensAddressField)) {
+                    	setValue(scope.addressDrtv.ensAddressField);
+                    	if (!Validator.isChecksumAddress(scope.addressDrtv.ensAddressField)) {
+                        	scope.notifier.info(globalFuncs.errorMsgs[35]);
+                    	}
+                	}
                 } else if (Validator.isValidENSAddress(scope.addressDrtv.ensAddressField)) {
                     _ens.getAddress(scope.addressDrtv.ensAddressField, function(data) {
                         if (data.error) uiFuncs.notifier.danger(data.msg);
@@ -52,7 +59,7 @@ var addressFieldDrtv = function($compile) {
                             scope.addressDrtv.showDerivedAddress = true;
                         }
                     });
-                } else if (scope.addressDrtv.ensAddressField != "") {
+                } else if (scope.addressDrtv.ensAddressField != "" && !(scope.addressDrtv.ensAddressField == 42 && scope.addressDrtv.ensAddressField[0] == "0" && scope.addressDrtv.ensAddressField[1] == "x")) {
                     //setValue('');
                     //scope.addressDrtv.showDerivedAddress = false;
 
@@ -73,11 +80,8 @@ var addressFieldDrtv = function($compile) {
                     };*/
 
                     var DexNSABI = require('../abiDefinitions/etcAbi.json')[5];
-                    console.log(DexNSABI);
                     var DEXNSAddress = DexNSABI.address;
-                    console.log(DEXNSAddress);
                     DexNSABI = JSON.parse(DexNSABI.abi);
-                    console.log(DexNSABI);
                     var DexNSNode = new nodes.customNode('https://mewapi.epool.io', '');
 
                     // TODO
@@ -119,7 +123,7 @@ var addressFieldDrtv = function($compile) {
                         else if (data.data == '0x0000000000000000000000000000000000000000' || data.data == '0x') {
                             setValue('null');
                             scope.addressDrtv.derivedAddress = '    ⊘ ERROR: DexNS Name is not found!';
-                            //scope.addressDrtv.showDerivedAddress = false;
+                            scope.addressDrtv.showDerivedAddress = true;
                         } else {
                             setValue(data.data);
                             scope.addressDrtv.derivedAddress = ethUtil.toChecksumAddress(data.data);

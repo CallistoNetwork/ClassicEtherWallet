@@ -62,4 +62,8 @@ If you want to help contribute, here's what you need to know to get it up and ru
 
 
 ### Contact
-If you can think of any other features or run into bugs, let us know. 
+If you can think of any other features or run into bugs, let us know:
+
+Submin an issue [here](https://github.com/EthereumCommonwealth/Roadmap).
+
+Write a e-mail: dexaran@ethereumclassic.org

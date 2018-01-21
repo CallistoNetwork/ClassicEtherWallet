@@ -144,6 +144,16 @@ globalFuncs.getEthNodeMsg = function(str) {
     else
         return this.getParityMsg(str);
 };
+
+globalFuncs.getCurNode = function() {
+  let keyNode = globalFuncs.localStorage.getItem('curNode', null);
+  if (keyNode == null) {
+      return;
+  }
+  keyNode = JSON.parse(keyNode);
+  return keyNode.key;
+}
+
 globalFuncs.scrypt = {
     n: 1024
 };

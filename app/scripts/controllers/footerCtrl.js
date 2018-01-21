@@ -1,6 +1,5 @@
 'use strict';
 var footerCtrl = function($scope, globalService) {
-    var gasPriceKey = "gasPrice";
     $scope.footerModal = new Modal(document.getElementById('disclaimerModal'));
     $scope.ethBlockNumber = "loading";
     $scope.etcBlockNumber = "loading";

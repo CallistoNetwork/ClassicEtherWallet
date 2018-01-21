@@ -96,8 +96,10 @@
           </a>
           <ul class="dropdown-menu" ng-show="dropdownGasPrice">
             <div class="header--gas">
-              <span translate="OFFLINE_Step2_Label_3">Gas Price</span>: <input type="number" ng-model="gas.value" value="{{gas.value}}" min="{{gas.min}}" max="{{gas.max}}" step="{{gas.step}}"  ng-change="gasChanged()" /> Gwei
-              <input type="range" ng-model="gas.value" value="{{gas.value}}" min="{{gas.min}}" max="{{gas.max}}" step="{{gas.step}}" ng-change="gasChanged()"/>
+              <span translate="OFFLINE_Step2_Label_3">Gas Price</span>: <input type="number" ng-model="gas.value" value="{{gas.value}}" min="{{gas.min}}" max="{{gas.max}}" step="{{gas.step}}" ng-change="gasChanged()" /> Gwei
+              <p class="small col-xs-4 text-left"><{{recommendedGas.low}}</p>
+              <p class="small col-xs-4 text-center">{{recommendedGas.low}} - {{recommendedGas.high}}</p>
+              <p class="small col-xs-4 text-right">>{{recommendedGas.high}}</p>
               <p class="small col-xs-4 text-left">Not So Fast</p>
               <p class="small col-xs-4 text-center">Fast</p>
               <p class="small col-xs-4 text-right">Fast AF</p>

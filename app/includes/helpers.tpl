@@ -136,7 +136,7 @@
       <p>
         To: <code>0x6090a6e47849629b7245dfa1ca21d94cd15878ef</code> &nbsp;&middot;&nbsp;
         Amount: <code>[A NUMBER >= BID AMOUNT]</code> &nbsp;&middot;&nbsp;
-        Gas Limit: <code>520000</code> &nbsp;&middot;&nbsp;
+        Gas Limit: <code>570000</code> &nbsp;&middot;&nbsp;
         Data: <code>[ABOVE]</code>
       </p>
     </div>

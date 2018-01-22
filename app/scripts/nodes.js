@@ -64,7 +64,7 @@ nodes.alternativeBalance = {
     };
 
 nodes.nodeList = {
-    'etc_epool': {
+    'etc_ethereumcommonwealth_geth': {
         'name': 'ETC',
         'blockExplorerTX': 'https://gastracker.io/tx/[[txHash]]',
         'blockExplorerAddr': 'https://gastracker.io/addr/[[address]]',
@@ -73,8 +73,8 @@ nodes.nodeList = {
         'chainId': 61,
         'tokenList': require('./tokens/etcTokens.json'),
         'abiList': require('./abiDefinitions/etcAbi.json'),
-        'service': 'Epool.io',
-        'lib': new nodes.customNode('https://mewapi.epool.io', '')
+        'service': 'Ethereum Commonwealth Geth',
+        'lib': new nodes.customNode('https://etcrpc.viperid.online', '')
     },
     'clo_testnet': {
         'name': 'CLO Testnet',
@@ -87,6 +87,30 @@ nodes.nodeList = {
         'abiList': require('./abiDefinitions/etcAbi.json'),
         'service': 'Callisto.network',
         'lib': new nodes.customNode('https://testnet.callisto.network', '')
+    },
+    'etc_epool': {
+        'name': 'ETC',
+        'blockExplorerTX': 'https://gastracker.io/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://gastracker.io/addr/[[address]]',
+        'type': nodes.nodeTypes.ETC,
+        'eip155': true,
+        'chainId': 61,
+        'tokenList': require('./tokens/etcTokens.json'),
+        'abiList': require('./abiDefinitions/etcAbi.json'),
+        'service': 'Epool.io',
+        'lib': new nodes.customNode('https://mewapi.epool.io', '')
+    },
+    'etc_ethereumcommonwealth_mantis': {
+        'name': 'ETC',
+        'blockExplorerTX': 'https://gastracker.io/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://gastracker.io/addr/[[address]]',
+        'type': nodes.nodeTypes.ETC,
+        'eip155': true,
+        'chainId': 61,
+        'tokenList': require('./tokens/etcTokens.json'),
+        'abiList': require('./abiDefinitions/etcAbi.json'),
+        'service': 'Ethereum Commonwealth Mantis',
+        'lib': new nodes.customNode('https://etc-mantis.callisto.network', '')
     },
     'eth_mew': {
         'name': 'ETH',

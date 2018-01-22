@@ -50,6 +50,9 @@ var myWalletsCtrl = function ($scope, $sce, walletService) {
             }
             var storedTokens = globalFuncs.localStorage.getItem("localTokens", null) != null ? JSON.parse(globalFuncs.localStorage.getItem("localTokens")) : [];
             for (var i = 0; i < storedTokens.length; i++) {
+                // if (storedTokens[i].network !== curNode.type) {
+                //     continue;
+                // }
                 $scope[varWal][j].tokens.push(new Token(storedTokens[i].contractAddress, $scope[varWal][j].addr, globalFuncs.stripTags(storedTokens[i].symbol), storedTokens[i].decimal));
                 $scope[varWal][j].tokens[$scope[varWal][j].tokens.length - 1].setBalance();
             }

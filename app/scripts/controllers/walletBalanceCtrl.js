@@ -114,6 +114,7 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
         if (!$scope.Validator) return;
         if ($scope.Validator.isValidAddress(newAddress)) {
             // TODO: Refactor to use getTokenInfo
+            let node = $scope.nodeList[globalFuncs.getCurNode()];
             try{
                 ajaxReq.getEthCall({ to: newAddress, data: $scope.getTxData($scope.erc20Indexes.SYMBOL) }, function(data) {
                     if (!data.error && data.data !== '0x') {
@@ -130,6 +131,7 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
                         $scope.localToken.decimals = '';
                     }
                 });
+                $scope.localToken.network = node.type;
             }catch(err) {
             }
         }
@@ -165,7 +167,7 @@ var walletBalanceCtrl = function($scope, $sce, walletService) {
 
                 $scope.getTokenInfo(contractAddress, contractInfo[1], newSymbol);
             });
-        }, 3000);
+        }, 1300);
     });
 
 

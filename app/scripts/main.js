@@ -104,7 +104,7 @@ if (IS_CX) {
   var mainPopCtrl            = require('./controllers/CX/mainPopCtrl');
   var quickSendCtrl          = require('./controllers/CX/quickSendCtrl');
 }
-var app = angular.module('mewApp', ['pascalprecht.translate', 'ngSanitize','ngAnimate']);
+var app = angular.module('mewApp', ['pascalprecht.translate', 'ngSanitize', 'ngAnimate']);
 app.config(['$compileProvider', function($compileProvider) {
   $compileProvider.aHrefSanitizationWhitelist(/^\s*(|blob|https|mailto):/);
 }]);

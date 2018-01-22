@@ -30,12 +30,20 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
             }
         }, 200);
     }
-    
+
     $scope.setArrowVisibility();
 
     var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
 
     var gasPriceKey = "gasPrice";
+
+    $scope.gas = {
+      curVal: 21,
+      value: globalFuncs.localStorage.getItem(gasPriceKey, null) ? parseInt(globalFuncs.localStorage.getItem(gasPriceKey)) : 21,
+      max: 10000,
+      min: 0.1,
+      step: 0.1
+    }
 
     $scope.gasChanged = function() {
         let newGasPriceKey = gasPriceKey;
@@ -48,24 +56,30 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
     }
 
     var setGasValues = function() {
-        $scope.gas = {
-            curVal: 21,
-            value: globalFuncs.localStorage.getItem(gasPriceKey, null) ? parseInt(globalFuncs.localStorage.getItem(gasPriceKey)) : 21,
-            max: 60,
-            min: 0.1,
-            step: 0.1
+        $scope.gas.max = 10000;
+        $scope.gas.min = 0;
+        $scope.gas.value = globalFuncs.localStorage.getItem(gasPriceKey, null) ? parseInt(globalFuncs.localStorage.getItem(gasPriceKey)) : 21;
+        $scope.gas.curVal = $scope.gas.value;
+        $scope.gas.max = 60;
+        $scope.gas.min = 0.1;
+        $scope.recommendedGas = {
+          low: 10,
+          high: 20
         }
         ethFuncs.gasAdjustment = $scope.gas.value;
     }
 
     var setCallistoGasValues = function() {
         let newGasPriceKey = gasPriceKey + "-CLO";
-        $scope.gas = {
-            curVal: 2000,
-            value: globalFuncs.localStorage.getItem(newGasPriceKey, null) ? parseInt(globalFuncs.localStorage.getItem(newGasPriceKey)) : 2000,
-            max: 3600,
-            min: 1800,
-            step: 50
+        $scope.gas.max = 10000;
+        $scope.gas.min = 0;
+        $scope.gas.value = globalFuncs.localStorage.getItem(newGasPriceKey, null) ? parseInt(globalFuncs.localStorage.getItem(newGasPriceKey)) : 2000;
+        $scope.gas.curVal = $scope.gas.value;
+        $scope.gas.max = 5000;
+        $scope.gas.min = 1900;
+        $scope.recommendedGas = {
+          low: 2000,
+          high: 3000
         }
         ethFuncs.gasAdjustment = $scope.gas.value;
     }

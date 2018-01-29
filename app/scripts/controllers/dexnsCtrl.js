@@ -27,9 +27,14 @@ var dexnsCtrl = function($scope, $sce, $rootScope, walletService) {
 
     $scope.priceDEXNS = "LOADING...";
     $scope.DexNSName;
+    $scope.priceDEXNS = ("0.1 ETC");
     $scope.dexnsConfirmModalModal = new Modal(document.getElementById('dexnsConfirmModal'));
 
+
+    var namePrice = 0.1;
+
     $scope.dexns_status = 0;
+
 
     // TODO replace with enum
     /* 0 -> nothing
@@ -45,6 +50,9 @@ var dexnsCtrl = function($scope, $sce, $rootScope, walletService) {
 
     var DEXNSnetwork = 'ETC'; // DexNS network is always ETC!
     var DexNSFrontendABI = require('../abiDefinitions/etcAbi.json')[4];
+
+
+
     var DexNSABI = require('../abiDefinitions/etcAbi.json')[5];
 
     // 16 => endtimeOf
@@ -54,8 +62,6 @@ var dexnsCtrl = function($scope, $sce, $rootScope, walletService) {
 
     var DEXNSFrontendAddress = DexNSFrontendABI.address;
     var DEXNSAddress = DexNSABI.address;
-    var namePrice;
-
     DexNSABI = JSON.parse(DexNSABI.abi);
     DexNSFrontendABI = JSON.parse(DexNSFrontendABI.abi);
     var DexNSNode = new nodes.customNode('https://mewapi.epool.io', '');
@@ -91,31 +97,30 @@ var dexnsCtrl = function($scope, $sce, $rootScope, walletService) {
             DexNSFrontendContract.functions.push(DexNSFrontendABI[i]);
             }
         }
-
     var namePriceFunc = DexNSFrontendContract.functions[19];
     var fullPriceFuncName = ethUtil.solidityUtils.transformToFullName(namePriceFunc);
     var priceSig = ethFuncs.getFunctionSignature(fullPriceFuncName);
 
+
+
     $scope.getDexNSPrice = function() {
-        /*
-        DexNSNode.getEthCall({ to: DEXNSAddress, data: '0x' + priceSig }, function(data) {
-            var outTypes = namePriceFunc.outputs.map(function(i) {
-                 return i.type;
+
+            DexNSNode.getEthCall({ to: DEXNSFrontendAddress, data: '0x' + priceSig }, function(data) {
+                var outTypes = namePriceFunc.outputs.map(function(i) {
+                    return i.type;
+                });
+                data.data = ethUtil.solidityCoder.decodeParams(outTypes, data.data.replace('0x', ''))[0];
+                if (data.error) uiFuncs.notifier.danger(data.msg);
+                else {
+
+
+                    namePrice = data.data;
+                    $scope.priceDEXNS = (etherUnits.toEther(data.data, 'wei')) + " ETC";
+                }
             });
-            data.data = ethUtil.solidityCoder.decodeParams(outTypes, data.data.replace('0x', ''))[0];
-            if (data.error) uiFuncs.notifier.danger(data.msg);
-            else {
-                console.log(data.data);
-                namePrice = data.data;
-                $scope.priceDEXNS = (etherUnits.toEther(data.data, 'wei')) + " ETC";
-            }
-        });
-        */
 
-        // TODO: Replace hardcoded values with a contract call return of price
 
-        namePrice = 0.1;
-        $scope.priceDEXNS = ("0.1 ETC");
+
     }
 
     $scope.openRegisterName = function() {
@@ -145,8 +150,14 @@ var dexnsCtrl = function($scope, $sce, $rootScope, walletService) {
         var outTypes = checkFunc.outputs.map(function(i) {
                 return i.type;
             });
-                
+
                 data.data = ethUtil.solidityCoder.decodeParams(outTypes, data.data.replace('0x', ''))[0];
+
+
+                console.log('name call', data);
+                console.log('name call', data.data.toNumber());
+
+
                 if (data.error) uiFuncs.notifier.danger(data.msg);
                 else {
                     var _time = new Date().getTime();

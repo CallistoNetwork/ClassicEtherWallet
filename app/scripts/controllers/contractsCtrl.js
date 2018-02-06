@@ -79,13 +79,6 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
     $scope.$watch('contract.address', function (newValue, oldValue) {
         if ($scope.Validator.isValidAddress($scope.contract.address)) {
 
-
-            if (oldValue !== newValue) {
-
-                $scope.estimateGasLimit();
-
-            }
-
             for (var i in ajaxReq.abiList) {
                 if (ajaxReq.abiList[i].address.toLowerCase() == $scope.contract.address.toLowerCase()) {
                     $scope.contract.abi = ajaxReq.abiList[i].abi;

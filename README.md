@@ -2,7 +2,7 @@
 
 ### ClassicEtherWallet
 
-ClassicEtherWallet is an open source, javascript, client-side tool for generating Ether wallets. It was forked from  [kvhnuke](https://github.com/kvhnuke).
+ClassicEtherWallet is an open source, javascript, client-side tool for operating Ethereum Classic wallets.
 
 - Official link: https://classicetherwallet.com
 - Served from github link: https://ethereumproject.github.io/etherwallet/

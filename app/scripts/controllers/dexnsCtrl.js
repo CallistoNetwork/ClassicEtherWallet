@@ -125,8 +125,10 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService) {
             else {
 
 
-                namePrice = data.data;
+                namePrice = etherUnits.toEther(data.data, 'wei');
+				console.log(namePrice);
                 $scope.priceDEXNS = (etherUnits.toEther(data.data, 'wei')) + " ETC";
+				console.log($scope.priceDEXNS);
             }
         });
 

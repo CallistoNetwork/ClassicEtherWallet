@@ -53,25 +53,25 @@
     </ul>
   </div>
 
-  <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/protecting-yourself-and-your-funds"
+  <a href="https://changenow.io/?utm_source=Classic+Ethereum+Wallet"
      ng-show="slide==1 || ajaxReq.type!=='ETH'"
      class="block swap--hw"
      target="_blank" rel="noopener">
     <div class="col-sm-7">
 
-      <h5 class="swap__cta" ng-show="wallet.balance<=1">Learn more about protecting your funds.</h5>
+      <h5 class="swap__cta" ng-show="wallet.balance<=1">Buy ETC.</h5>
 
-      <p class="swap__subhead" ng-show="wallet.balance<50 && wallet.balance>1">Welcome back</h5>
-      <h5 class="swap__cta" ng-show="wallet.balance<50 && wallet.balance>1">Are you as secure as you can be?</h5>
+      <p class="swap__subhead" ng-show="wallet.balance<50 && wallet.balance>1">Do you know where to buy ETC?</h5>
+      <h5 class="swap__cta" ng-show="wallet.balance<50 && wallet.balance>1">ChangeNow crypto exchange - try it now.</h5>
 
-      <p class="swap__subhead" ng-show="wallet.balance>=50">Holy cow, look at you go!</p>
-      <h5 class="swap__cta" ng-show="wallet.balance>=50">Time to beef up your security?</h5>
+      <p class="swap__subhead" ng-show="wallet.balance>=50">Want to buy ETC?</p>
+      <h5 class="swap__cta" ng-show="wallet.balance>=50">Trade on ChangeNow crypto exchange.</h5>
     </div>
-    <div class="col-sm-5">
+    <!--<div class="col-sm-5">
       <img src="images/logo-ledger.svg" width="80" height="auto" class="swap__logo">
       <br />
       <img src="images/logo-trezor.svg" width="80" height="auto" class="swap__logo">
-    </div>
+    </div>-->
   </a>
 
   <a href="https://buy.coinbase.com?code=a6e1bd98-6464-5552-84dd-b27f0388ac7d&address={{wallet.getChecksumAddressString()}}&crypto_currency=ETH&currency=USD"

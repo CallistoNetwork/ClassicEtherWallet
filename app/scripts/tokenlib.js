@@ -39,7 +39,9 @@ Token.prototype.setBalance = function (callback) {
     var balanceCall = ethFuncs.getDataObj(this.contractAddress, Token.balanceHex, [ethFuncs.getNakedAddress(this.userAddress)]);
     var parentObj = this;
 
-    if (this.network && 'node' in this.network) {
+
+    // network is not set on saved token objects always defaults to ajax req
+    if (this.network && typeof this.network === 'object' && 'node' in this.network) {
         nodes.nodeList[nodes.alternativeBalance[this.network].node].lib.getEthCall(balanceCall, function (data) {
             try {
                 if (!data.error && 'data' in data) {

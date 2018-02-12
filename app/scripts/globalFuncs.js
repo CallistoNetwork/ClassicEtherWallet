@@ -197,13 +197,16 @@ globalFuncs.getRandomBytes = function(num) {
     return ethUtil.crypto.randomBytes(num);
 };
 globalFuncs.checkIfTokenExists = function(storedTokens, localToken) {
-    for (let token of storedTokens) {
-        if (token.contractAddress === localToken.contractAdd && token.symbol === localToken.symbol) {
-            return true;
-        }
-    }
-    return false;
+
+
+
+    return storedTokens.find(token =>
+
+        token.contractAddress === localToken.contractAdd && token.symbol === localToken.symbol
+    );
 }
+
+
 globalFuncs.saveTokenToLocal = function(localToken, callback) {
     try {
         if (!ethFuncs.validateEtherAddress(localToken.contractAdd)) throw globalFuncs.errorMsgs[5];
@@ -211,11 +214,10 @@ globalFuncs.saveTokenToLocal = function(localToken, callback) {
         else if (!globalFuncs.isAlphaNumeric(localToken.symbol) || localToken.symbol == "") throw globalFuncs.errorMsgs[19];
         var storedTokens = globalFuncs.localStorage.getItem("localTokens", null) != null ? JSON.parse(globalFuncs.localStorage.getItem("localTokens")) : [];
         if (globalFuncs.checkIfTokenExists(storedTokens, localToken)) {
-            callback({
+            return callback({
                 error: true,
                 msg: 'Token already exists.'
             })
-            return;
         }
         storedTokens.push({
             contractAddress: localToken.contractAdd,
@@ -225,7 +227,7 @@ globalFuncs.saveTokenToLocal = function(localToken, callback) {
             network: localToken.network
         });
         globalFuncs.localStorage.setItem("localTokens", JSON.stringify(storedTokens));
-        callback({
+        return callback({
             error: false
         });
     } catch (e) {

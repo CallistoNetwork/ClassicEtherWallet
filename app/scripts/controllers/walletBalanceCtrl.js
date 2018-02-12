@@ -9,6 +9,8 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
         SYMBOL: 3,
         DEXNSFunction: 5
     };
+
+
     $scope.tokensLoaded = true;
     $scope.localToken = {
         contractAdd: "",
@@ -53,7 +55,7 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
                 $scope.notifier.danger(data.msg);
             }
         });
-    }
+    };
 
     $scope.resetLocalToken = function () {
         $scope.localToken = {
@@ -63,7 +65,7 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
             type: "custom",
             network: ""
         };
-    }
+    };
 
     $scope.initContract = function () {
         try {
@@ -82,6 +84,12 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
             $scope.notifier.danger(e);
         }
     };
+
+    /*
+
+        @param: indexFunc int: the index of the contract method
+        @returns: encoded params
+     */
 
     $scope.getTxData = function (indexFunc) {
         var curFunc = $scope.contract.functions[indexFunc];
@@ -121,14 +129,20 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
         if (!$scope.Validator) return;
         if ($scope.Validator.isValidAddress(newAddress)) {
 
-            let node = $scope.nodeList[globalFuncs.getCurNode()];
 
-            let network = node.type;
-
-            $scope.getTokenInfo(newAddress, network);
+            $scope.getTokenInfo(newAddress);
 
 
         }
+    });
+
+
+    $scope.$watch(function () {
+
+        return $scope.nodeList[globalFuncs.getCurNode()];
+    }, function (newNode) {
+
+        $scope.resetLocalToken();
     });
 
     $scope.$watch(function () {
@@ -166,30 +180,10 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
                     return;
                 }
 
-                $scope.getTokenInfo(contractAddress, contractInfo[1], newSymbol);
+                $scope.getTokenInfo(contractAddress, newSymbol);
             });
         }, 1300);
     });
-
-
-    /*
-    $scope.$watch('wallet', function() {
-        if ($scope.wallet) $scope.reverseLookup();
-    });
-
-    $scope.reverseLookup = function() {
-        var _ens = new ens();
-        _ens.getName($scope.wallet.getAddressString().substring(2) + '.addr.reverse', function(data) {
-            if (data.error) uiFuncs.notifier.danger(data.msg);
-            else if (data.data == '0x') {
-                $scope.showens = false;
-            } else {
-                $scope.ensAddress = data.data;
-                $scope.showens = true;
-            }
-        });
-    }
-    */
 
     $scope.$watch('wallet.balance', function () {
         if ($scope.wallet !== null) {
@@ -238,48 +232,46 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
         }, true, false);
     }
 
-    $scope.getTokenInfo = function (address, network, symbol = null) {
+    $scope.getTokenInfo = function (address, symbol = null) {
 
 
-        if (network) {
-
-            network = network.trim();
-            $scope.localToken.network = network;
-        } else {
-            $scope.localToken.network = null;
-        }
-
-        try {
-            $scope.localToken.contractAdd = address;
+        let node = $scope.nodeList[globalFuncs.getCurNode()];
 
 
-            $scope.nodeList[$scope.alternativeBalance[network].node].lib.getEthCall({
-                to: address,
-                data: $scope.getTxData($scope.erc20Indexes.DECIMALS)
-            }, function (data) {
-                if (!data.error && data.data !== '0x') {
-                    $scope.localToken.decimals = $scope.readData($scope.erc20Indexes.DECIMALS, data).outputs[0].value;
-                } else {
-                    $scope.notifier.danger('This address is not a token contract.');
-                    $scope.localToken.decimals = '';
-                }
+        $scope.localToken.network = node.type;
+        $scope.localToken.contractAdd = address;
+
+        var call_ = {
+            to: address,
+            data: $scope.getTxData($scope.erc20Indexes.DECIMALS)
+        };
 
 
-            });
+        // call decimals
+        ajaxReq.getEthCall(call_, function (data) {
+
+            if (!data.error && data.data !== '0x') {
+
+                $scope.localToken.decimals = $scope.readData($scope.erc20Indexes.DECIMALS, data).outputs[0].value;
+            } else {
+                $scope.notifier.danger('Error fetching decimals');
+                $scope.localToken.decimals = '';
+            }
+
 
             if (symbol) {
 
                 $scope.localToken.symbol = symbol;
-
                 return;
 
             }
 
 
-            $scope.nodeList[$scope.alternativeBalance[network].node].lib.getEthCall({
-                to: address,
-                data: $scope.getTxData($scope.erc20Indexes.SYMBOL)
-            }, function (data) {
+            const call_symbol = Object.assign({}, call_, {data: $scope.getTxData($scope.erc20Indexes.SYMBOL)});
+
+
+            // call for symbol
+            ajaxReq.getEthCall(call_symbol, function (data) {
                 if (!data.error && data.data !== '0x') {
                     $scope.localToken.symbol = $scope.readData($scope.erc20Indexes.SYMBOL, data).outputs[0].value;
                 } else {
@@ -291,9 +283,8 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
             });
 
 
-        } catch (err) {
-            console.log(err);
-        }
+        });
+
     }
 
 };

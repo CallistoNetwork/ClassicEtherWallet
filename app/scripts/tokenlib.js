@@ -1,5 +1,5 @@
 'use strict';
-var Token = function(contractAddress, userAddress, symbol, decimal, type, network) {
+var Token = function (contractAddress, userAddress, symbol, decimal, type, network) {
     this.contractAddress = contractAddress;
     this.userAddress = userAddress;
     this.symbol = symbol;
@@ -14,50 +14,56 @@ var nodes = require('./nodes.js');
 Token.balanceHex = "0x70a08231";
 Token.transferHex = "0xa9059cbb";
 Token.popTokens = [];
-Token.prototype.getContractAddress = function() {
+Token.prototype.getContractAddress = function () {
     return this.contractAddress;
 };
-Token.prototype.getUserAddress = function() {
+Token.prototype.getUserAddress = function () {
     return this.userAddress;
 };
-Token.prototype.setUserAddress = function(address) {
+Token.prototype.setUserAddress = function (address) {
     this.userAddress = address;
 };
-Token.prototype.getSymbol = function() {
+Token.prototype.getSymbol = function () {
     return this.symbol;
 };
-Token.prototype.getDecimal = function() {
+Token.prototype.getDecimal = function () {
     return this.decimal;
 };
-Token.prototype.getBalance = function() {
+Token.prototype.getBalance = function () {
     return this.balance;
 };
-Token.prototype.getBalanceBN = function() {
+Token.prototype.getBalanceBN = function () {
     return this.balanceBN;
 };
-Token.prototype.setBalance = function(callback) {
+Token.prototype.setBalance = function (callback) {
     var balanceCall = ethFuncs.getDataObj(this.contractAddress, Token.balanceHex, [ethFuncs.getNakedAddress(this.userAddress)]);
     var parentObj = this;
-    if(this.network != null) {
-        nodes.nodeList[nodes.alternativeBalance[this.network].node].lib.getEthCall(balanceCall, function(data) {
+
+    if (this.network && 'node' in this.network) {
+        nodes.nodeList[nodes.alternativeBalance[this.network].node].lib.getEthCall(balanceCall, function (data) {
             try {
-                if (!data.error) {
+                if (!data.error && 'data' in data) {
                     parentObj.balance = new BigNumber(data.data).div(new BigNumber(10).pow(parentObj.getDecimal())).toString();
                     parentObj.balanceBN = new BigNumber(data.data).toString();
-                    if(callback) callback();
+                    if (callback) callback();
+                } else {
+
+                    parentObj.balance = globalFuncs.errorMsgs[20];
+                    parentObj.balanceBN = '0';
+
                 }
             } catch (e) {
-                parentObj.balance = globalFuncs.errorMsgs[20];
-                parentObj.balanceBN = '0';
+
             }
         });
+        // network not set, use ajax
     } else {
-        ajaxReq.getEthCall(balanceCall, function(data) {
+        ajaxReq.getEthCall(balanceCall, function (data) {
             try {
                 if (!data.error) {
                     parentObj.balance = new BigNumber(data.data).div(new BigNumber(10).pow(parentObj.getDecimal())).toString();
                     parentObj.balanceBN = new BigNumber(data.data).toString();
-                    if(callback) callback();
+                    if (callback) callback();
                 }
             } catch (e) {
                 parentObj.balance = globalFuncs.errorMsgs[20];
@@ -66,7 +72,7 @@ Token.prototype.setBalance = function(callback) {
         });
     }
 };
-Token.getTokenByAddress = function(toAdd) {
+Token.getTokenByAddress = function (toAdd) {
     toAdd = ethFuncs.sanitizeHex(toAdd);
     for (var i = 0; i < Token.popTokens.length; i++) {
         if (toAdd.toLowerCase() == Token.popTokens[i].address.toLowerCase()) return Token.popTokens[i];
@@ -78,7 +84,7 @@ Token.getTokenByAddress = function(toAdd) {
         "type": "default"
     }
 };
-Token.prototype.getData = function(toAdd, value) {
+Token.prototype.getData = function (toAdd, value) {
     try {
         if (!ethFuncs.validateEtherAddress(toAdd)) throw globalFuncs.errorMsgs[5];
         else if (!globalFuncs.isNumeric(value) || parseFloat(value) < 0) throw globalFuncs.errorMsgs[7];

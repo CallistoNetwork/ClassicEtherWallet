@@ -26,9 +26,9 @@ Wallet.prototype.setTokens = function () {
     var tokens = Token.popTokens;
     for (var i = 0; i < tokens.length; i++) {
 
-        // network is undefined
+        // network is undefined in many tokens
 
-        // Token.setBalance will call ajax since network not set
+        // node networks arent set, results to ajax request.
 
         this.tokenObjs.push(new Token(tokens[i].address, this.getAddressString(), tokens[i].symbol, tokens[i].decimal, tokens[i].type, tokens[i].network));
         this.tokenObjs[this.tokenObjs.length - 1].setBalance();
@@ -37,10 +37,6 @@ Wallet.prototype.setTokens = function () {
     for (var i = 0; i < storedTokens.length; i++) {
 
 
-
-        // network could be set here if savedToken w/ explicit network
-
-        //
         this.tokenObjs.push(new Token(storedTokens[i].contractAddress, this.getAddressString(), globalFuncs.stripTags(storedTokens[i].symbol), storedTokens[i].decimal, storedTokens[i].type, storedTokens[i].network));
         this.tokenObjs[this.tokenObjs.length - 1].setBalance();
     }

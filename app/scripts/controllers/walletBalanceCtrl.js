@@ -43,6 +43,9 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
     });
 
     $scope.saveTokenToLocal = function () {
+
+        // TODO: save localToken network correctly
+
         globalFuncs.saveTokenToLocal($scope.localToken, function (data) {
             if (!data.error) {
                 $scope.resetLocalToken();
@@ -151,7 +154,7 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
         if (!newSymbol) return;
         //if (newSymbol.length < 3) return;
 
-        // QUESTION: is node not ETC, should I fetch? I think not.
+        // TODO: QUESTION: is node not ETC, should I fetch? I think not.
 
         if ($scope.customTokenInterval) {
             clearTimeout($scope.customTokenInterval);
@@ -238,17 +241,17 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
         let node = $scope.nodeList[globalFuncs.getCurNode()];
 
 
-        $scope.localToken.network = node.type;
+        $scope.localToken.network = node;
         $scope.localToken.contractAdd = address;
 
-        var call_ = {
+        var request_ = {
             to: address,
             data: $scope.getTxData($scope.erc20Indexes.DECIMALS)
         };
 
 
         // call decimals
-        ajaxReq.getEthCall(call_, function (data) {
+        ajaxReq.getEthCall(request_, function (data) {
 
             if (!data.error && data.data !== '0x') {
 
@@ -267,11 +270,11 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
             }
 
 
-            const call_symbol = Object.assign({}, call_, {data: $scope.getTxData($scope.erc20Indexes.SYMBOL)});
+            const request_symbol = Object.assign({}, request_, {data: $scope.getTxData($scope.erc20Indexes.SYMBOL)});
 
 
             // call for symbol
-            ajaxReq.getEthCall(call_symbol, function (data) {
+            ajaxReq.getEthCall(request_symbol, function (data) {
                 if (!data.error && data.data !== '0x') {
                     $scope.localToken.symbol = $scope.readData($scope.erc20Indexes.SYMBOL, data).outputs[0].value;
                 } else {

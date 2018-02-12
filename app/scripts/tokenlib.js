@@ -1,4 +1,9 @@
 'use strict';
+
+var nodes = require('./nodes');
+
+var ethFuncs = require('./ethFuncs');
+
 var Token = function (contractAddress, userAddress, symbol, decimal, type, network) {
     this.contractAddress = contractAddress;
     this.userAddress = userAddress;
@@ -8,8 +13,6 @@ var Token = function (contractAddress, userAddress, symbol, decimal, type, netwo
     this.balance = "loading";
     this.network = network;
 };
-
-var nodes = require('./nodes.js');
 
 Token.balanceHex = "0x70a08231";
 Token.transferHex = "0xa9059cbb";
@@ -36,11 +39,15 @@ Token.prototype.getBalanceBN = function () {
     return this.balanceBN;
 };
 Token.prototype.setBalance = function (callback) {
+
     var balanceCall = ethFuncs.getDataObj(this.contractAddress, Token.balanceHex, [ethFuncs.getNakedAddress(this.userAddress)]);
+
     var parentObj = this;
 
 
-    // network is not set on saved token objects always defaults to ajax req
+    // FIXME: nodes are not set correctly, always defaults to ajax request
+    // if node is set, use
+
     if (this.network && typeof this.network === 'object' && 'node' in this.network) {
         nodes.nodeList[nodes.alternativeBalance[this.network].node].lib.getEthCall(balanceCall, function (data) {
             try {

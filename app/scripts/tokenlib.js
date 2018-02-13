@@ -40,47 +40,42 @@ Token.prototype.getBalanceBN = function () {
 };
 Token.prototype.setBalance = function (callback) {
 
-    var balanceCall = ethFuncs.getDataObj(this.contractAddress, Token.balanceHex, [ethFuncs.getNakedAddress(this.userAddress)]);
-
-    var parentObj = this;
+    const request_ = ethFuncs.getDataObj(this.contractAddress, Token.balanceHex, [ethFuncs.getNakedAddress(this.userAddress)]);
 
 
-    // FIXME: nodes are not set correctly, always defaults to ajax request
-    // if node is set, use
+    const currentNode = nodes.nodeList[this.network];
 
-    if (this.network && typeof this.network === 'object' && 'node' in this.network) {
-        nodes.nodeList[nodes.alternativeBalance[this.network].node].lib.getEthCall(balanceCall, function (data) {
-            try {
-                if (!data.error && 'data' in data) {
-                    parentObj.balance = new BigNumber(data.data).div(new BigNumber(10).pow(parentObj.getDecimal())).toString();
-                    parentObj.balanceBN = new BigNumber(data.data).toString();
-                    if (callback) callback();
-                } else {
+    // many nodes do not have getEthCall method
 
-                    parentObj.balance = globalFuncs.errorMsgs[20];
-                    parentObj.balanceBN = '0';
+    const requestObj = currentNode && currentNode.hasOwnProperty('lib') && currentNode.lib.hasOwnProperty('getEthCall') ? currentNode.lib : ajaxReq;
 
-                }
-            } catch (e) {
+    try {
+
+
+        requestObj.getEthCall(request_, (data) => {
+            if (!data.error && data.hasOwnProperty('data') && data.data !== '0x') {
+
+                this.balance = new BigNumber(data.data).div(new BigNumber(10).pow(this.getDecimal())).toString();
+                this.balanceBN = new BigNumber(data.data).toString();
+                //if (callback) callback();
+
+            } else {
+
+                this.balance = globalFuncs.errorMsgs[20];
+                this.balanceBN = '0';
 
             }
+
         });
-        // network not set, use ajax
-    } else {
-        ajaxReq.getEthCall(balanceCall, function (data) {
-            try {
-                if (!data.error) {
-                    parentObj.balance = new BigNumber(data.data).div(new BigNumber(10).pow(parentObj.getDecimal())).toString();
-                    parentObj.balanceBN = new BigNumber(data.data).toString();
-                    if (callback) callback();
-                }
-            } catch (e) {
-                parentObj.balance = globalFuncs.errorMsgs[20];
-                parentObj.balanceBN = '0';
-            }
-        });
+    } catch (e) {
+
+        this.balance = globalFuncs.errorMsgs[20];
+        this.balanceBN = '0';
+
+        console.error('error fetching token balance: ', request_);
     }
 };
+
 Token.getTokenByAddress = function (toAdd) {
     toAdd = ethFuncs.sanitizeHex(toAdd);
     for (var i = 0; i < Token.popTokens.length; i++) {

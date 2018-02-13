@@ -1,4 +1,8 @@
 'use strict';
+
+var nodes = require('./nodes');
+
+
 var globalFuncs = function() {}
 globalFuncs.lightMode = false;
 globalFuncs.getBlockie = function(address) {
@@ -200,10 +204,10 @@ globalFuncs.checkIfTokenExists = function(storedTokens, localToken) {
 
 
 
-    return storedTokens.find(token =>
+    return Boolean(storedTokens.find(token =>
 
         token.contractAddress === localToken.contractAdd && token.symbol === localToken.symbol
-    );
+    ));
 }
 
 
@@ -223,7 +227,7 @@ globalFuncs.saveTokenToLocal = function(localToken, callback) {
             contractAddress: localToken.contractAdd,
             symbol: localToken.symbol,
             decimal: parseInt(localToken.decimals),
-            type: "custom",
+            type: nodes.nodeTypes.Custom,
             network: localToken.network
         });
         globalFuncs.localStorage.setItem("localTokens", JSON.stringify(storedTokens));

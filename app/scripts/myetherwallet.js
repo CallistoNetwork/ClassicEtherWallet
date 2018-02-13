@@ -22,24 +22,24 @@ Wallet.generate = function (icapDirect) {
     }
 }
 Wallet.prototype.setTokens = function () {
-    this.tokenObjs = [];
-    var tokens = Token.popTokens;
-    for (var i = 0; i < tokens.length; i++) {
 
-        // network is undefined in many tokens
+    var popTokens = Token.popTokens;
+    var storedTokens = !!globalFuncs.localStorage.getItem("localTokens", null) ? JSON.parse(globalFuncs.localStorage.getItem("localTokens")) : [];
 
-        // node networks arent set, results to ajax request.
+    const tokens = [].concat(popTokens, storedTokens);
 
-        this.tokenObjs.push(new Token(tokens[i].address, this.getAddressString(), tokens[i].symbol, tokens[i].decimal, tokens[i].type, tokens[i].network));
-        this.tokenObjs[this.tokenObjs.length - 1].setBalance();
-    }
-    var storedTokens = globalFuncs.localStorage.getItem("localTokens", null) != null ? JSON.parse(globalFuncs.localStorage.getItem("localTokens")) : [];
-    for (var i = 0; i < storedTokens.length; i++) {
+    let curNetwork = globalFuncs.localStorage.getItem('curNode', null) ? JSON.parse(globalFuncs.localStorage.getItem('curNode', null)) : null;
+
+    this.tokenObjs = tokens.map(token => new Token(token.address, this.getAddressString(), globalFuncs.stripTags(token.symbol), token.decimal, token.type, token.network));
 
 
-        this.tokenObjs.push(new Token(storedTokens[i].contractAddress, this.getAddressString(), globalFuncs.stripTags(storedTokens[i].symbol), storedTokens[i].decimal, storedTokens[i].type, storedTokens[i].network));
-        this.tokenObjs[this.tokenObjs.length - 1].setBalance();
-    }
+    //FIXME: slow & costly, call balances async or combine into one call
+
+    Promise.all(
+        this.tokenObjs = this.tokenObjs.map(token => Object.assign(token, {balance: token.network === curNetwork.key ? token.setBalance() : '666'}))
+    )
+
+
 }
 Wallet.prototype.setBalance = function (callback) {
     var parentObj = this;

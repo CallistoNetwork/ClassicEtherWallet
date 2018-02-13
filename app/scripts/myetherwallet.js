@@ -23,24 +23,36 @@ Wallet.generate = function (icapDirect) {
 }
 Wallet.prototype.setTokens = function () {
 
-    var popTokens = Token.popTokens;
-    var storedTokens = !!globalFuncs.localStorage.getItem("localTokens", null) ? JSON.parse(globalFuncs.localStorage.getItem("localTokens")) : [];
+    const {popTokens} = Token;
+    let storedTokens = !!globalFuncs.localStorage.getItem("localTokens", null) ? JSON.parse(globalFuncs.localStorage.getItem("localTokens")) : [];
 
-    const tokens = [].concat(popTokens, storedTokens);
+    storedTokens = storedTokens.map(token => Object.assign(token, {address: token.contractAddress}));
+
+    // if no current node, set to null
 
     let curNetwork = globalFuncs.localStorage.getItem('curNode', null) ? JSON.parse(globalFuncs.localStorage.getItem('curNode', null)) : null;
 
-    this.tokenObjs = tokens.map(token => new Token(token.address, this.getAddressString(), globalFuncs.stripTags(token.symbol), token.decimal, token.type, token.network));
+    const tokens = [].concat(popTokens, storedTokens).map(token =>
+
+        new Token(token.address, this.getAddressString(), globalFuncs.stripTags(token.symbol), token.decimal, token.type, token.network)
+    );
 
 
-    //FIXME: slow & costly, call balances async or combine into one call
+    this.tokenObjs = tokens.map(token => {
+        if (token.network === curNetwork.key) {
+            token.fetchBalance();
+        } else {
 
-    Promise.all(
-        this.tokenObjs = this.tokenObjs.map(token => Object.assign(token, {balance: token.network === curNetwork.key ? token.setBalance() : '666'}))
-    )
+            token.setBalance('SWITCH NETWORK');
+        }
+
+        return token;
+    });
 
 
-}
+};
+
+
 Wallet.prototype.setBalance = function (callback) {
     var parentObj = this;
     this.balance = this.usdBalance = this.eurBalance = this.btcBalance = this.chfBalance = this.repBalance = this.gbpBalance = 'loading';

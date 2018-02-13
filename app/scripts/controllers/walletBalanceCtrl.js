@@ -171,7 +171,7 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
     }, function (newNode) {
 
 
-        console.log('new node', newNode);
+        // console.log('new node', newNode);
 
         $scope.resetLocalToken();
 
@@ -230,7 +230,6 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
     $scope.setAllBalance = function () {
 
 
-        //TODO: handle update network
         if (!$scope.nodeList) return;
         var setBalance = function (currency) {
             return function (data) {
@@ -291,8 +290,6 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
 
 
         $scope.localToken.contractAdd = address;
-
-        console.log('$scope.nodeList[globalFuncs.getCurNode()].name', $scope.nodeList[globalFuncs.getCurNode()].name, $scope.nodeList[globalFuncs.getCurNode()]);
 
         $scope.localToken.network = globalFuncs.getCurNode();
 

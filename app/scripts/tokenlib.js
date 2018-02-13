@@ -38,16 +38,24 @@ Token.prototype.getBalance = function () {
 Token.prototype.getBalanceBN = function () {
     return this.balanceBN;
 };
-Token.prototype.setBalance = function (callback) {
+
+Token.prototype.setBalance = function (balance) {
+
+    this.balance = balance;
+}
+
+Token.prototype.fetchBalance = function () {
 
     const request_ = ethFuncs.getDataObj(this.contractAddress, Token.balanceHex, [ethFuncs.getNakedAddress(this.userAddress)]);
 
 
     const currentNode = nodes.nodeList[this.network];
 
-    // many nodes do not have getEthCall method
+    // several nodes do not have getEthCall method
 
     const requestObj = currentNode && currentNode.hasOwnProperty('lib') && currentNode.lib.hasOwnProperty('getEthCall') ? currentNode.lib : ajaxReq;
+
+    this.setBalance('loading...');
 
     try {
 
@@ -55,13 +63,13 @@ Token.prototype.setBalance = function (callback) {
         requestObj.getEthCall(request_, (data) => {
             if (!data.error && data.hasOwnProperty('data') && data.data !== '0x') {
 
-                this.balance = new BigNumber(data.data).div(new BigNumber(10).pow(this.getDecimal())).toString();
+                this.setBalance(new BigNumber(data.data).div(new BigNumber(10).pow(this.getDecimal())).toString());
                 this.balanceBN = new BigNumber(data.data).toString();
                 //if (callback) callback();
 
             } else {
 
-                this.balance = globalFuncs.errorMsgs[20];
+                this.setBalance(globalFuncs.errorMsgs[20]);
                 this.balanceBN = '0';
 
             }
@@ -69,10 +77,10 @@ Token.prototype.setBalance = function (callback) {
         });
     } catch (e) {
 
-        this.balance = globalFuncs.errorMsgs[20];
+        this.setBalance('0'); //globalFuncs.errorMsgs[20];
         this.balanceBN = '0';
 
-        console.error('error fetching token balance: ', request_);
+        // console.error('error fetching token balance: ', request_);
     }
 };
 

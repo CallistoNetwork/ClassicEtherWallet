@@ -1,21 +1,26 @@
 'use strict';
-var globalFuncs = function() {}
+
+var nodes = require('./nodes');
+
+
+var globalFuncs = function () {
+}
 globalFuncs.lightMode = false;
-globalFuncs.getBlockie = function(address) {
+globalFuncs.getBlockie = function (address) {
     return blockies.create({
         seed: address.toLowerCase(),
         size: 8,
         scale: 16
     }).toDataURL();
 };
-globalFuncs.printPaperWallets = function(strJson) {
+globalFuncs.printPaperWallets = function (strJson) {
     var win = window.open("about:blank", "_blank");
     var data = "<html>\r\n\r\n<head>\r\n <link rel=\"stylesheet\" href=\"css\/etherwallet-master.min.css\" \/>\r\n <script type=\"text\/javascript\" src=\"js\/jquery-1.12.3.min.js\"><\/script>\r\n <script type=\"text\/javascript\" src=\"js\/etherwallet-static.min.js\"><\/script>\r\n <script type=\"text\/javascript\">\r\n function getBlockie(address) {\r\n return blockies.create({\r\n seed: address.toLowerCase(),\r\n size: 8,\r\n scale: 16\r\n }).toDataURL();\r\n    }\r\n    function generateWallets() {\r\n var json = JSON.parse($(\"#printwalletjson\").html());\r\n for (var i = 0; i < json.length; i++) {\r\n var walletTemplate = $(\'<div\/>\').append($(\"#print-container\").clone());\r\n new QRCode($(walletTemplate).find(\"#paperwalletaddqr\")[0], {\r\n text: json[i][\'address\'],\r\n colorDark: \"#000000\",\r\n colorLight: \"#ffffff\",\r\n correctLevel: QRCode.CorrectLevel.H\r\n });\r\n new QRCode($(walletTemplate).find(\"#paperwalletprivqr\")[0], {\r\n text: json[i][\'private\'],\r\n colorDark: \"#000000\",\r\n colorLight: \"#ffffff\",\r\n correctLevel: QRCode.CorrectLevel.H\r\n });\r\n $(walletTemplate).find(\"#paperwalletadd\").html(json[i][\'address\']);\r\n $(walletTemplate).find(\"#paperwalletpriv\").html(json[i][\'private\']);\r\n $(walletTemplate).find(\"#identicon\").css(\'background-image\',\'url(\' + getBlockie(json[i][\'address\']) +\')\');\r\n walletTemplate = $(walletTemplate).find(\"#print-container\").show();\r\n $(\"body\").append(walletTemplate);\r\n }\r\n setTimeout(function() {\r\n window.print();\r\n }, 2000);\r\n    }\r\n    <\/script>\r\n<\/head>\r\n\r\n<body><span id=\"printwalletjson\" style=\"display: none;\">{{WALLETJSON}}<\/span>\r\n    <div class=\"print-container\" style=\"display: none; margin-bottom: 50px;\" id=\"print-container\"><img src=\"images\/logo-ethereum-1.png\" class=\"ether-logo-1\" height=\"100%\" width=\"auto\" \/> <div id=\"identicon\" class=\"addressIdenticon med float\"><\/div>\r\n <img src=\"images\/print-sidebar.png\" height=\"100%\" width=\"auto\" class=\"print-title\" \/>\r\n <div class=\"print-qr-code-1\">\r\n <div id=\"paperwalletaddqr\"><\/div>\r\n <p class=\"print-text\" style=\"padding-top: 25px;\">YOUR ADDRESS<\/p>\r\n <\/div>\r\n <div class=\"print-notes\"><img src=\"images\/notes-bg.png\" width=\"90%;\" height=\"auto\" class=\"pull-left\" \/>\r\n <p class=\"print-text\">AMOUNT \/ NOTES<\/p>\r\n <\/div>\r\n <div class=\"print-qr-code-2\">\r\n <div id=\"paperwalletprivqr\"><\/div>\r\n <p class=\"print-text\" style=\"padding-top: 30px;\">YOUR PRIVATE KEY<\/p>\r\n <\/div>\r\n <div class=\"print-address-container\">\r\n <p><strong>Your Address:<\/strong>\r\n <br \/><span id=\"paperwalletadd\"><\/span><\/p>\r\n <p><strong>Your Private Key:<\/strong>\r\n <br \/><span id=\"paperwalletpriv\"><\/span><\/p>\r\n <\/div>\r\n    <\/div>\r\n<\/body>\r\n\r\n<\/html>\r\n";
     data = data.replace("{{WALLETJSON}}", strJson);
     win.document.write(data);
     win.document.write("<script>generateWallets();</script>");
 };
-globalFuncs.getBlob = function(mime, str) {
+globalFuncs.getBlob = function (mime, str) {
     var str = (typeof str === 'object') ? JSON.stringify(str) : str;
     if (str == null) return '';
     var blob = new Blob([str], {
@@ -23,10 +28,10 @@ globalFuncs.getBlob = function(mime, str) {
     });
     return window.URL.createObjectURL(blob);
 };
-globalFuncs.getSuccessText = function(str) {
+globalFuncs.getSuccessText = function (str) {
     return '<p class="text-center text-success"><strong> ' + str + '</strong></p>'
 };
-globalFuncs.getDangerText = function(str) {
+globalFuncs.getDangerText = function (str) {
     return '<p class="text-center text-danger"><strong> ' + str + '</strong></p>'
 };
 
@@ -97,7 +102,7 @@ globalFuncs.gethErrors = {
 };
 
 globalFuncs.gethErrorMsgs = {};
-globalFuncs.getGethMsg = function(str) {
+globalFuncs.getGethMsg = function (str) {
     if (str in this.gethErrors) {
         var key = this.gethErrors[str];
         if (key in this.gethErrorMsgs) {
@@ -119,39 +124,39 @@ globalFuncs.parityErrors = {
     "Supplied gas is beyond limit\\.": "PARITY_InvalidGasLimit"
 };
 globalFuncs.parityErrorMsgs = {};
-globalFuncs.getParityMsg = function(str) {
+globalFuncs.getParityMsg = function (str) {
     for (var reg in this.parityErrors) {
         if (this.parityErrors.hasOwnProperty(reg)) {
             let args = str.match("^" + reg + "$");
-        if (args) {
+            if (args) {
                 let key = this.parityErrors[reg];
-            if (key in this.parityErrorMsgs) {
-                args[0] = this.parityErrorMsgs[key];
-                return format.apply(this, args);
+                if (key in this.parityErrorMsgs) {
+                    args[0] = this.parityErrorMsgs[key];
+                    return format.apply(this, args);
+                }
             }
-         }
-      }
+        }
     }
     return str;
 };
-globalFuncs.getEthNodeName = function() {
+globalFuncs.getEthNodeName = function () {
     //  return "geth";
     return "parity";
 };
-globalFuncs.getEthNodeMsg = function(str) {
+globalFuncs.getEthNodeMsg = function (str) {
     var ethNode = this.getEthNodeName();
     if (ethNode == "geth") return this.getGethMsg(str);
     else
         return this.getParityMsg(str);
 };
 
-globalFuncs.getCurNode = function() {
-  let keyNode = globalFuncs.localStorage.getItem('curNode', null);
-  if (keyNode == null) {
-      return;
-  }
-  keyNode = JSON.parse(keyNode);
-  return keyNode.key;
+globalFuncs.getCurNode = function () {
+    let keyNode = globalFuncs.localStorage.getItem('curNode', null);
+    if (keyNode == null) {
+        return;
+    }
+    keyNode = JSON.parse(keyNode);
+    return keyNode.key;
 }
 
 globalFuncs.scrypt = {
@@ -162,70 +167,71 @@ globalFuncs.kdf = "scrypt";
 globalFuncs.defaultTxGasLimit = 21000;
 globalFuncs.defaultTokenGasLimit = 200000;
 globalFuncs.donateAddress = "0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8";
-globalFuncs.isNumeric = function(n) {
+globalFuncs.isNumeric = function (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
-globalFuncs.urlGet = function(name) {
+globalFuncs.urlGet = function (name) {
     name = name.toLowerCase();
     if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search.toLowerCase())) return this.stripTags(decodeURIComponent(name[1]));
 };
-globalFuncs.stripTags = function(str) {
+globalFuncs.stripTags = function (str) {
     var SCRIPT_REGEX = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
     while (SCRIPT_REGEX.test(str)) {
         str = str.replace(SCRIPT_REGEX, "");
     }
     return str;
 };
-globalFuncs.checkAndRedirectHTTPS = function() {
+globalFuncs.checkAndRedirectHTTPS = function () {
     var host = "myetherwallet.com";
     var hostw = "https://www.myetherwallet.com";
     var path = window.location.pathname;
     if (host == window.location.host) window.location = hostw + path;
 };
-globalFuncs.isStrongPass = function(password) {
+globalFuncs.isStrongPass = function (password) {
     return password.length > 8;
 };
-globalFuncs.hexToAscii = function(hex) {
-    return hex.match(/.{1,2}/g).map(function(v) {
+globalFuncs.hexToAscii = function (hex) {
+    return hex.match(/.{1,2}/g).map(function (v) {
         return String.fromCharCode(parseInt(v, 16));
     }).join('');
 };
-globalFuncs.isAlphaNumeric = function(value) {
+globalFuncs.isAlphaNumeric = function (value) {
     return !/[^a-zA-Z0-9/-]/.test(value);
 };
-globalFuncs.getRandomBytes = function(num) {
+globalFuncs.getRandomBytes = function (num) {
     return ethUtil.crypto.randomBytes(num);
 };
-globalFuncs.checkIfTokenExists = function(storedTokens, localToken) {
-    for (let token of storedTokens) {
-        if (token.contractAddress === localToken.contractAdd && token.symbol === localToken.symbol) {
-            return true;
-        }
-    }
-    return false;
+globalFuncs.checkIfTokenExists = function (storedTokens, localToken) {
+
+
+    return Boolean(storedTokens.find(token =>
+
+        token.contractAddress === localToken.contractAdd && token.symbol === localToken.symbol
+    ));
 }
-globalFuncs.saveTokenToLocal = function(localToken, callback) {
+
+
+globalFuncs.saveTokenToLocal = function (localToken, callback) {
     try {
         if (!ethFuncs.validateEtherAddress(localToken.contractAdd)) throw globalFuncs.errorMsgs[5];
         else if (!globalFuncs.isNumeric(localToken.decimals) || parseFloat(localToken.decimals) < 0) throw globalFuncs.errorMsgs[7];
         else if (!globalFuncs.isAlphaNumeric(localToken.symbol) || localToken.symbol == "") throw globalFuncs.errorMsgs[19];
         var storedTokens = globalFuncs.localStorage.getItem("localTokens", null) != null ? JSON.parse(globalFuncs.localStorage.getItem("localTokens")) : [];
         if (globalFuncs.checkIfTokenExists(storedTokens, localToken)) {
-            callback({
+            return callback({
                 error: true,
                 msg: 'Token already exists.'
             })
-            return;
         }
         storedTokens.push({
             contractAddress: localToken.contractAdd,
             symbol: localToken.symbol,
             decimal: parseInt(localToken.decimals),
-            type: "custom",
+            type: nodes.nodeTypes.Custom,
             network: localToken.network
         });
         globalFuncs.localStorage.setItem("localTokens", JSON.stringify(storedTokens));
-        callback({
+        return callback({
             error: false
         });
     } catch (e) {
@@ -235,7 +241,7 @@ globalFuncs.saveTokenToLocal = function(localToken, callback) {
         });
     }
 };
-globalFuncs.removeTokenFromLocal = function(symbol, tokenObj) {
+globalFuncs.removeTokenFromLocal = function (symbol, tokenObj) {
     var storedTokens = globalFuncs.localStorage.getItem("localTokens", null) != null ? JSON.parse(globalFuncs.localStorage.getItem("localTokens", null)) : [];
     // remove from localstorage so it doesn't show up on refresh
     for (var i = 0; i < storedTokens.length; i++)
@@ -255,28 +261,28 @@ globalFuncs.removeTokenFromLocal = function(symbol, tokenObj) {
 
 
 globalFuncs.localStorage = {
-        isAvailable: function() {
-            // return typeof localStorage != "undefined";
-            // return globalFuncs.storageAvailable('localStorage');
+    isAvailable: function () {
+        // return typeof localStorage != "undefined";
+        // return globalFuncs.storageAvailable('localStorage');
 
-            // Polyfilled if not available/accessible
-            return true;
-        },
-        setItem: function(key, value) {
-            if (this.isAvailable()) {
-                localStorage.setItem(key, value);
-            } else {
-                // console.log("localStorage is available? " + this.isAvailable());
-            }
-        },
-        getItem: function(key, dValue = "") {
-            if (this.isAvailable()) {
-                return localStorage.getItem(key);
-            } else {
-                return dValue;
-            }
+        // Polyfilled if not available/accessible
+        return true;
+    },
+    setItem: function (key, value) {
+        if (this.isAvailable()) {
+            localStorage.setItem(key, value);
+        } else {
+            // console.log("localStorage is available? " + this.isAvailable());
+        }
+    },
+    getItem: function (key, dValue = "") {
+        if (this.isAvailable()) {
+            return localStorage.getItem(key);
+        } else {
+            return dValue;
         }
     }
+}
 
 
 /* Check for 'localStorage' or 'sessionStorage' */
@@ -307,16 +313,16 @@ globalFuncs.storageAvailable = function(type) {
 }
 */
 
-    // globalFuncs.getUrlParameter = function getUrlParameter(url) {
-    //   // get query string from url (optional) or window
-    //   var queryString = url ? url.split('=')[1] : window.location.search.slice(1);
-    //   return queryString;
-    // }
-    // globalFuncs.setUrlParameter = function setUrlParameter(value) {
-    //   //In case url contains already a parameter remove parameter
-    //   if(window.location.href.indexOf('=') != -1) {
-    //       location.href = location.href.substr(0,window.location.href.indexOf('='));
-    //   }
-    //   location.href = location.href + "=" + value
-    // }
+// globalFuncs.getUrlParameter = function getUrlParameter(url) {
+//   // get query string from url (optional) or window
+//   var queryString = url ? url.split('=')[1] : window.location.search.slice(1);
+//   return queryString;
+// }
+// globalFuncs.setUrlParameter = function setUrlParameter(value) {
+//   //In case url contains already a parameter remove parameter
+//   if(window.location.href.indexOf('=') != -1) {
+//       location.href = location.href.substr(0,window.location.href.indexOf('='));
+//   }
+//   location.href = location.href + "=" + value
+// }
 module.exports = globalFuncs;

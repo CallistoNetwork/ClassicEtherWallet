@@ -126,6 +126,9 @@ var addressFieldDrtv = function($compile) {
                             scope.addressDrtv.showDerivedAddress = true;
                         } else {
                             setValue(data.data);
+                            // found dexns registed name, set address, and symbol and decimals will be called.
+                            scope.addressDrtv.ensAddressField = ethUtil.toChecksumAddress(data.data);
+
                             scope.addressDrtv.derivedAddress = ethUtil.toChecksumAddress(data.data);
                             scope.addressDrtv.showDerivedAddress = true;
                         }

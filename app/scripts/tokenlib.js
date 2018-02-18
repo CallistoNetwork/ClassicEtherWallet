@@ -1,5 +1,10 @@
 'use strict';
-var Token = function(contractAddress, userAddress, symbol, decimal, type, network) {
+
+var nodes = require('./nodes');
+
+var ethFuncs = require('./ethFuncs');
+
+var Token = function (contractAddress, userAddress, symbol, decimal, type, network) {
     this.contractAddress = contractAddress;
     this.userAddress = userAddress;
     this.symbol = symbol;
@@ -9,64 +14,77 @@ var Token = function(contractAddress, userAddress, symbol, decimal, type, networ
     this.network = network;
 };
 
-var nodes = require('./nodes.js');
-
 Token.balanceHex = "0x70a08231";
 Token.transferHex = "0xa9059cbb";
 Token.popTokens = [];
-Token.prototype.getContractAddress = function() {
+Token.prototype.getContractAddress = function () {
     return this.contractAddress;
 };
-Token.prototype.getUserAddress = function() {
+Token.prototype.getUserAddress = function () {
     return this.userAddress;
 };
-Token.prototype.setUserAddress = function(address) {
+Token.prototype.setUserAddress = function (address) {
     this.userAddress = address;
 };
-Token.prototype.getSymbol = function() {
+Token.prototype.getSymbol = function () {
     return this.symbol;
 };
-Token.prototype.getDecimal = function() {
+Token.prototype.getDecimal = function () {
     return this.decimal;
 };
-Token.prototype.getBalance = function() {
+Token.prototype.getBalance = function () {
     return this.balance;
 };
-Token.prototype.getBalanceBN = function() {
+Token.prototype.getBalanceBN = function () {
     return this.balanceBN;
 };
-Token.prototype.setBalance = function(callback) {
-    var balanceCall = ethFuncs.getDataObj(this.contractAddress, Token.balanceHex, [ethFuncs.getNakedAddress(this.userAddress)]);
-    var parentObj = this;
-    if(this.network != null) {
-        nodes.nodeList[nodes.alternativeBalance[this.network].node].lib.getEthCall(balanceCall, function(data) {
-            try {
-                if (!data.error) {
-                    parentObj.balance = new BigNumber(data.data).div(new BigNumber(10).pow(parentObj.getDecimal())).toString();
-                    parentObj.balanceBN = new BigNumber(data.data).toString();
-                    if(callback) callback();
-                }
-            } catch (e) {
-                parentObj.balance = globalFuncs.errorMsgs[20];
-                parentObj.balanceBN = '0';
+
+Token.prototype.setBalance = function (balance) {
+
+    this.balance = balance;
+}
+
+Token.prototype.fetchBalance = function () {
+
+    const request_ = ethFuncs.getDataObj(this.contractAddress, Token.balanceHex, [ethFuncs.getNakedAddress(this.userAddress)]);
+
+
+    const currentNode = nodes.nodeList[this.network];
+
+    // several nodes do not have getEthCall method
+
+    const requestObj = currentNode && currentNode.hasOwnProperty('lib') && currentNode.lib.hasOwnProperty('getEthCall') ? currentNode.lib : ajaxReq;
+
+    this.setBalance('loading...');
+
+    try {
+
+
+        requestObj.getEthCall(request_, (data) => {
+            if (!data.error && data.hasOwnProperty('data') && data.data !== '0x') {
+
+                this.setBalance(new BigNumber(data.data).div(new BigNumber(10).pow(this.getDecimal())).toString());
+                this.balanceBN = new BigNumber(data.data).toString();
+                //if (callback) callback();
+
+            } else {
+
+                this.setBalance(globalFuncs.errorMsgs[20]);
+                this.balanceBN = '0';
+
             }
+
         });
-    } else {
-        ajaxReq.getEthCall(balanceCall, function(data) {
-            try {
-                if (!data.error) {
-                    parentObj.balance = new BigNumber(data.data).div(new BigNumber(10).pow(parentObj.getDecimal())).toString();
-                    parentObj.balanceBN = new BigNumber(data.data).toString();
-                    if(callback) callback();
-                }
-            } catch (e) {
-                parentObj.balance = globalFuncs.errorMsgs[20];
-                parentObj.balanceBN = '0';
-            }
-        });
+    } catch (e) {
+
+        this.setBalance('0'); //globalFuncs.errorMsgs[20];
+        this.balanceBN = '0';
+
+        // console.error('error fetching token balance: ', request_);
     }
 };
-Token.getTokenByAddress = function(toAdd) {
+
+Token.getTokenByAddress = function (toAdd) {
     toAdd = ethFuncs.sanitizeHex(toAdd);
     for (var i = 0; i < Token.popTokens.length; i++) {
         if (toAdd.toLowerCase() == Token.popTokens[i].address.toLowerCase()) return Token.popTokens[i];
@@ -78,7 +96,7 @@ Token.getTokenByAddress = function(toAdd) {
         "type": "default"
     }
 };
-Token.prototype.getData = function(toAdd, value) {
+Token.prototype.getData = function (toAdd, value) {
     try {
         if (!ethFuncs.validateEtherAddress(toAdd)) throw globalFuncs.errorMsgs[5];
         else if (!globalFuncs.isNumeric(value) || parseFloat(value) < 0) throw globalFuncs.errorMsgs[7];

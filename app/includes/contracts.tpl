@@ -58,7 +58,7 @@
       <span translate="CONTRACT_Read"> READ</span>
     </button>
 
-    <button class="btn btn-primary btn-block" ng-click="generateContractTx()" ng-show="!contract.functions[contract.selectedFunc.index].constant">
+    <button class="btn btn-primary btn-block" ng-click="writeToContract()" ng-show="!contract.functions[contract.selectedFunc.index].constant">
       <span translate="CONTRACT_Write"> WRITE</span>
     </button>
 

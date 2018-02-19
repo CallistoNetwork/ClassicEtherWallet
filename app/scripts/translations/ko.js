@@ -339,7 +339,7 @@ MSG_info2                   : '타인이 사용하지 못하도록 당신의 닉
 MSG_info3                   : '다른 용도로 사용되는 것을 막으려면 세부적인 내용을 메시지에 포함해주세요. ',
 
 /* View Wallet Details */
-VIEWWALLET_Subtitle         : '다른 버전의 개인 키를 다운로드하거나 종이 지갑 정보를 다시 인쇄할 수 있습니다. [계좌를 Geth/Mist로 가져오기](http://ethereum.stackexchange.com/questions/465/how-to-import-a-plain-private-key-into-geth/)를 진행할 때 필요합니다. 잔액을 확인하려면 [etherscan.io](http://etherscan.io/)과 같은 블록체인 조회 서비스를 사용하는 것을 권장합니다. ',
+VIEWWALLET_Subtitle         : '다른 버전의 개인 키를 다운로드하거나 종이 지갑 정보를 다시 인쇄할 수 있습니다. [계좌를 Geth/Mist로 가져오기](http://ethereum.stackexchange.com/questions/465/how-to-import-a-plain-private-key-into-geth/)를 진행할 때 필요합니다. 잔액을 확인하려면 [gastracker.io](https://gastracker.io/) (ETC) / [etherscan.io](https://etherscan.io/) (ETH)과 같은 블록체인 조회 서비스를 사용하는 것을 권장합니다. ',
 VIEWWALLET_Subtitle_Short   : '다른 버전의 개인 키를 다운로드하거나 종이 지갑 정보를 다시 인쇄 할 수 있습니다. ',
 VIEWWALLET_SuccessMsg       : '성공했습니다! 지갑의 세부사항은 다음과 같습니다. ',
 VIEWWALLET_ShowPrivKey      : '(보기) ',

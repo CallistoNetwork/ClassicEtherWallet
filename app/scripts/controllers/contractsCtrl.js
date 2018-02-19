@@ -7,8 +7,10 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         ETC: "etc_epool",
         UBQ: "ubq",
         EXP: "exp",
-    }
-    var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
+    };
+
+
+    var network = globalFuncs.urlGet('network') || null;
 
     if (network) {
         $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
@@ -30,10 +32,13 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
     $scope.contract = {
         address: globalFuncs.urlGet('address') != null && $scope.Validator.isValidAddress(globalFuncs.urlGet('address')) ? globalFuncs.urlGet('address') : '',
-        abi: '',
+        abi: [],
         functions: [],
-        selectedFunc: null
-    }
+        selectedFunc: null,
+        applyConstructorParams: true,
+        constructorParams: [],
+    };
+
     $scope.selectedAbi = ajaxReq.abiList[0];
     $scope.showRaw = false;
     $scope.$watch(function () {
@@ -80,7 +85,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         if ($scope.Validator.isValidAddress($scope.contract.address)) {
 
             for (var i in ajaxReq.abiList) {
-                if (ajaxReq.abiList[i].address.toLowerCase() == $scope.contract.address.toLowerCase()) {
+                if (ajaxReq.abiList[i].address.toLowerCase() === $scope.contract.address.toLowerCase()) {
                     $scope.contract.abi = ajaxReq.abiList[i].abi;
                     break;
                 }
@@ -131,19 +136,58 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
             $scope.tx.gasLimit = data.data;
         });
-    }
+    };
+
+
+    /*
+
+
+    //FIXME: gasLimit display
+
+     */
     $scope.generateTx = function () {
+
+        const {applyConstructorParams, abi, constructorParams} = $scope.contract;
+        let {data, gasLimit} = $scope.tx;
+
+        console.log('gaslimit', gasLimit);
+
+
         try {
             if ($scope.wallet == null) throw globalFuncs.errorMsgs[3];
-            else if (!ethFuncs.validateHexString($scope.tx.data)) throw globalFuncs.errorMsgs[9];
-            else if (!globalFuncs.isNumeric($scope.tx.gasLimit) || parseFloat($scope.tx.gasLimit) <= 0) throw globalFuncs.errorMsgs[8];
-            $scope.tx.data = ethFuncs.sanitizeHex($scope.tx.data);
+            else if (!ethFuncs.validateHexString(data)) throw globalFuncs.errorMsgs[9];
+            else if (!globalFuncs.isNumeric(gasLimit) || parseFloat(gasLimit) <= 0) throw globalFuncs.errorMsgs[8];
+
+
+            //FIXME: if previously signed transaction, and params added, we need to remove params and attach again
+            if (applyConstructorParams && abi) {
+
+
+                data += ethUtil.solidityCoder.encodeParams(
+                    constructorParams.inputs.map(i => i.type),
+                    constructorParams.inputs.map(i => i.value)
+                )
+
+
+            }
+
+
+            $scope.tx.data = ethFuncs.sanitizeHex(data);
+
+
             ajaxReq.getTransactionData($scope.wallet.getAddressString(), function (data) {
                 if (data.error) $scope.notifier.danger(data.msg);
+
                 data = data.data;
-                $scope.tx.to = $scope.tx.to == '' ? '0xCONTRACT' : $scope.tx.to;
-                $scope.tx.contractAddr = $scope.tx.to == '0xCONTRACT' ? ethFuncs.getDeteministicContractAddress($scope.wallet.getAddressString(), data.nonce) : '';
+
+                console.log('get trans data ajaz', data);
+
+                $scope.tx.to = $scope.tx.to || '0xCONTRACT';
+                $scope.tx.contractAddr = $scope.tx.to === '0xCONTRACT' ? ethFuncs.getDeteministicContractAddress($scope.wallet.getAddressString(), data.nonce) : '';
+
                 var txData = uiFuncs.getTxData($scope);
+
+
                 uiFuncs.generateTx(txData, function (rawTx) {
                     if (!rawTx.isError) {
                         $scope.rawTx = rawTx.rawTx;
@@ -160,7 +204,9 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         } catch (e) {
             $scope.notifier.danger(e);
         }
-    }
+    };
+
+
     $scope.sendTx = function () {
         $scope.sendTxModal.close();
         $scope.sendContractModal.close();
@@ -184,9 +230,21 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
             $scope.showRead = false;
         } else $scope.showRead = true;
         $scope.dropdownContracts = !$scope.dropdownContracts;
-    }
-    $scope.getTxData = function () {
-        var curFunc = $scope.contract.functions[$scope.contract.selectedFunc.index];
+    };
+
+
+    /*
+
+        Gather contract information
+
+     */
+
+    $scope.getContractData = function () {
+
+
+        const {functions, selectedFunc} = $scope.contract;
+
+        var curFunc = functions[selectedFunc.index];
         var fullFuncName = ethUtil.solidityUtils.transformToFullName(curFunc);
         var funcSig = ethFuncs.getFunctionSignature(fullFuncName);
         var typeName = ethUtil.solidityUtils.extractTypeName(fullFuncName);
@@ -199,10 +257,39 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
                 else values.push(curFunc.inputs[i].value);
             } else values.push('');
         }
+
+
         return '0x' + funcSig + ethUtil.solidityCoder.encodeParams(types, values);
-    }
+
+    };
+
+
+    /*
+
+      Write to a contract
+   */
+
+    $scope.writeToContract = function () {
+        if (!$scope.wd) {
+            $scope.notifier.danger(globalFuncs.errorMsgs[3]);
+            return;
+        }
+        $scope.tx.data = $scope.getContractData();
+        $scope.tx.to = $scope.contract.address;
+        $scope.sendContractModal.open();
+    };
+
+
+    $scope.toggleContractParams = function () {
+
+
+        $scope.contract.applyConstructorParams = !$scope.contract.applyConstructorParams;
+
+    };
+
+
     $scope.readFromContract = function () {
-        ajaxReq.getEthCall({to: $scope.contract.address, data: $scope.getTxData()}, function (data) {
+        ajaxReq.getEthCall({to: $scope.contract.address, data: $scope.getContractData()}, function (data) {
             if (!data.error) {
                 var curFunc = $scope.contract.functions[$scope.contract.selectedFunc.index];
                 var outTypes = curFunc.outputs.map(function (i) {
@@ -216,7 +303,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
             } else throw data.msg;
 
         });
-    }
+    };
     $scope.initContract = function () {
         try {
             if (!$scope.Validator.isValidAddress($scope.contract.address)) throw globalFuncs.errorMsgs[5];
@@ -235,15 +322,66 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         } catch (e) {
             $scope.notifier.danger(e);
         }
-    }
-    $scope.generateContractTx = function () {
-        if (!$scope.wd) {
-            $scope.notifier.danger(globalFuncs.errorMsgs[3]);
-            return;
+    };
+
+
+    $scope.$watch('contract.abi', function handleAbiUpdate(newVal, oldVal) {
+
+
+        if (newVal && newVal !== oldVal) {
+
+            // console.log('abi change');
+
+            const constructor = $scope.initConstructorParamsFrom(newVal);
+
+            if (constructor &&
+                constructor.hasOwnProperty('inputs') &&
+                Array.isArray(constructor.inputs) &&
+                constructor.inputs.length > 0
+            ) {
+
+                $scope.contract.abi = newVal;
+
+                $scope.contract.constructorParams = constructor;
+
+            } else {
+
+                // TODO: no constructor found, notifiy user
+            }
+
+
+            // console.log($scope.contract.constructorParams);
+
         }
-        $scope.tx.data = $scope.getTxData();
-        $scope.tx.to = $scope.contract.address;
-        $scope.sendContractModal.open();
+
+
+    });
+
+    $scope.initConstructorParamsFrom = function (abi) {
+
+
+        try {
+
+            abi = JSON.parse(abi);
+
+        } catch (e) {
+
+
+            console.error('error parsing abi', abi);
+
+            return [];
+        }
+
+
+        const constructor = abi.find(i => i.type === 'constructor');
+
+        if (!constructor) return [];
+
+        constructor.inputs.forEach(input => input.value = '');
+
+        return constructor;
+
+
     }
 }
 module.exports = contractsCtrl;

@@ -1,3 +1,13 @@
+/*
+
+       glad we don't have to compile contracts
+       I was able to compile contract and deploy successfully,
+       but with generic contract, not sure about compiling more
+       advanced.
+
+   */
+
+
 //var greeterContracts = 'pragma solidity ^0.4.9; contract greeter { string greeting; function greeter(string _greeting) public { greeting = _greeting; } function greet() constant returns (string) { return greeting; } } ';
 var greeterContracts = 'pragma solidity ^0.4.9; contract greeter { string public greeting; function greeter(string _greeting) public { greeting = _greeting; } } ';
 
@@ -289,16 +299,6 @@ describe('solidity', function () {
     });
 
     describe('solidarity compiler', function () {
-
-
-        /*
-
-            glad we don't have to compile contracts
-            I was able to compile contract and deploy successfully,
-            but with generic contract, not sure about compiling more
-            advanced.
-
-        */
 
 
         function compileExampleContract() {

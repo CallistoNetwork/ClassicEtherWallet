@@ -64,7 +64,6 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
      */
     $scope.$watch('visibility', function () {
 
-        console.log('new vis');
         $scope.tx = initTrans;
         $scope.contract = initContract;
 
@@ -293,11 +292,6 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
         $scope.contract.applyConstructorParams = !$scope.contract.applyConstructorParams;
 
-        if (!$scope.contract.applyConstructorParams) {
-
-
-
-        }
 
     };
 

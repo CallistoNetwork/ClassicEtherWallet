@@ -168,10 +168,10 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         // do we have way to send contract a value
 
 
-        if (value !== 0) {
+        //if (value !== 0) {
 
             estObj.value =  ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(value, unit)));
-        }
+       // }
 
 
         ethFuncs.estimateGas(estObj, function (data) {

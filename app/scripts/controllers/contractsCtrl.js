@@ -41,6 +41,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         selectedFunc: null,
         applyConstructorParams: false,
         constructorParams: [],
+        bytecode: '',
     };
 
     $scope.contract = initContract;
@@ -64,6 +65,8 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
      */
     $scope.$watch('visibility', function () {
 
+
+        console.log('switch vis');
         $scope.tx = initTrans;
         $scope.contract = initContract;
 
@@ -96,6 +99,14 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
     };
 
 
+    $scope.$watch('contract.bytecode', function (newVal, oldVal) {
+
+
+        $scope.tx.data = handleContractData();
+
+    });
+
+
     /*
 
 
@@ -104,14 +115,13 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
     function handleContractData() {
 
-        const {applyConstructorParams, abi, constructorParams} = $scope.contract;
+        const {applyConstructorParams, abi, constructorParams, bytecode} = $scope.contract;
 
-        const {data} = $scope.tx;
 
         if (applyConstructorParams && abi) {
 
 
-            return ethFuncs.sanitizeHex(data + ethUtil.solidityCoder.encodeParams(
+            return handleSanitize(bytecode + ethUtil.solidityCoder.encodeParams(
                 constructorParams.inputs.map(i => i.type),
                 constructorParams.inputs.map(i => i.value)
             ))
@@ -119,7 +129,13 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         }
 
 
+        return handleSanitize(bytecode);
+    }
+
+    function handleSanitize(data) {
+
         return ethFuncs.sanitizeHex(data);
+
     }
 
     $scope.estimateGasLimit = function () {
@@ -137,7 +153,6 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         var estObj = {
 
             from: $scope.wallet && $scope.wallet.getAddressString() ? $scope.wallet.getAddressString() : globalFuncs.donateAddress,
-            value: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(value, unit))),
             data: handleContractData(),
 
         };
@@ -145,6 +160,17 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         if (to && to !== '0xCONTRACT') {
 
             estObj.to = to;
+        }
+
+
+        // FIXME: etherscan.io ribenky fails if sending value of 0 to contract, other nodes seem to be ok
+
+        // do we have way to send contract a value
+
+
+        if (value !== 0) {
+
+            estObj.value =  ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(value, unit)));
         }
 
 
@@ -350,6 +376,10 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
         } else {
 
+
+            //if (!$scope.Validator.isJSON($scope.contract.abi)) throw globalFuncs.errorMsgs[26];
+
+
             // TODO: no constructor found, notifiy user
         }
 
@@ -361,13 +391,14 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
     $scope.initConstructorParamsFrom = function (abi) {
 
-
         try {
 
             abi = JSON.parse(abi);
 
         } catch (e) {
 
+
+            console.error('error parsing abi', abi);
 
             return [];
         }

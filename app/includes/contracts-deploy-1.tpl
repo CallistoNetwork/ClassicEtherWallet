@@ -6,8 +6,8 @@
     <textarea
       class="form-control"
       rows="8"
-      ng-model="tx.data"
-      ng-class="Validator.isValidHex(tx.data)&&tx.data!='' ? 'is-valid' : 'is-invalid'"></textarea>
+      ng-model="contract.bytecode"
+      ng-class="Validator.isValidHex(contract.bytecode) && contract.bytecode != '' ? 'is-valid' : 'is-invalid'"></textarea>
   </div>
 
   <a ng-click="toggleContractParams()" ng-show="true" class="">

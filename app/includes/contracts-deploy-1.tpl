@@ -64,11 +64,20 @@
   <!-- Gas -->
   <div class="form-group">
     <h4 translate="TRANS_gas"> Gas: </h4>
+  <div class="input-group">
     <input class="form-control"
-           type="text"
-           placeholder="300000"
-           ng-model="tx.gasLimit"
-           ng-class="Validator.isPositiveNumber(tx.gasLimit) ? 'is-valid' : 'is-invalid'"/>
+             type="text"
+             placeholder="300000"
+             ng-model="tx.gasLimit"
+             ng-class="Validator.isPositiveNumber(tx.gasLimit) ? 'is-valid' : 'is-invalid'"/>
+
+      <div class="input-group-btn">
+                <button style="min-width: 170px"
+                class="btn btn-default"
+                ng-click="estimateGasLimit()"
+                >  Estimate gasLimit </button>
+              </div>
+          </div>
   </div>
 
   <!-- Sign TX Button (once wallet has been unlocked) -->

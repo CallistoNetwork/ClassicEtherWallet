@@ -198,7 +198,6 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
             else if (!globalFuncs.isNumeric(gasLimit) || parseFloat(gasLimit) <= 0) throw globalFuncs.errorMsgs[8];
 
 
-            //FIXME: if previously signed transaction, and params added, we need to remove params and attach again
 
             $scope.tx.data = handleContractData();
 

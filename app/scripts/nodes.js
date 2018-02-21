@@ -43,7 +43,8 @@ nodes.customNodeObj = {
 nodes.alternativeBalance = {
         ETH: {
           balance: "Loading",
-          node: "eth_ethscan",
+            // eth_ethscan node issues
+          node: "eth_infura",
           symbol: "ETH"
         },
         ETC: {

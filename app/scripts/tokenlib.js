@@ -4,7 +4,7 @@ var nodes = require('./nodes');
 
 var ethFuncs = require('./ethFuncs');
 
-var Token = function (contractAddress, userAddress, symbol, decimal, type, network) {
+var Token = function (contractAddress, userAddress, symbol, decimal, type, network, node) {
     this.contractAddress = contractAddress;
     this.userAddress = userAddress;
     this.symbol = symbol;
@@ -12,6 +12,7 @@ var Token = function (contractAddress, userAddress, symbol, decimal, type, netwo
     this.type = type;
     this.balance = "loading";
     this.network = network;
+    this.node = node;
 };
 
 Token.balanceHex = "0x70a08231";
@@ -49,11 +50,12 @@ Token.prototype.fetchBalance = function () {
     const request_ = ethFuncs.getDataObj(this.contractAddress, Token.balanceHex, [ethFuncs.getNakedAddress(this.userAddress)]);
 
 
-    const currentNode = nodes.nodeList[this.network];
 
     // several nodes do not have getEthCall method
 
-    const requestObj = currentNode && currentNode.hasOwnProperty('lib') && currentNode.lib.hasOwnProperty('getEthCall') ? currentNode.lib : ajaxReq;
+    const node_ = nodes.nodeList[this.node];
+
+    const requestObj = node_ && node_.hasOwnProperty('lib') && node_.lib.hasOwnProperty('getEthCall') ? node_.lib : ajaxReq;
 
     this.setBalance('loading...');
 
@@ -87,7 +89,7 @@ Token.prototype.fetchBalance = function () {
 Token.getTokenByAddress = function (toAdd) {
     toAdd = ethFuncs.sanitizeHex(toAdd);
     for (var i = 0; i < Token.popTokens.length; i++) {
-        if (toAdd.toLowerCase() == Token.popTokens[i].address.toLowerCase()) return Token.popTokens[i];
+        if (toAdd.toLowerCase() === Token.popTokens[i].address.toLowerCase()) return Token.popTokens[i];
     }
     return {
         "address": toAdd,

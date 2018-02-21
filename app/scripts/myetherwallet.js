@@ -28,22 +28,23 @@ Wallet.prototype.setTokens = function () {
 
     storedTokens = storedTokens.map(token => Object.assign(token, {address: token.contractAddress}));
 
-    // if no current node, set to null
 
-    let curNetwork = globalFuncs.localStorage.getItem('curNode', null) ? JSON.parse(globalFuncs.localStorage.getItem('curNode', null)) : null;
+    let node_ = globalFuncs.getCurNode();
+
+    let network = nodes.nodeList[node_];
 
     const tokens = [].concat(popTokens, storedTokens).map(token =>
 
-        new Token(token.address, this.getAddressString(), globalFuncs.stripTags(token.symbol), token.decimal, token.type, token.network)
+        new Token(token.address, this.getAddressString(), globalFuncs.stripTags(token.symbol), token.decimal, token.type, token.network, token.node)
     );
 
 
     this.tokenObjs = tokens.map(token => {
-        if (token.network === curNetwork.key) {
+        if (token.network === network.name) {
             token.fetchBalance();
         } else {
 
-            token.setBalance('SWITCH NETWORK');
+            token.setBalance(`SWITCH TO ${token.network} NETWORK`);
         }
 
         return token;

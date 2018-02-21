@@ -1,9 +1,5 @@
 'use strict';
 
-var nodes = require('./nodes');
-
-var ethFuncs = require('./ethFuncs');
-
 var Token = function (contractAddress, userAddress, symbol, decimal, type, network, node) {
     this.contractAddress = contractAddress;
     this.userAddress = userAddress;
@@ -11,8 +7,8 @@ var Token = function (contractAddress, userAddress, symbol, decimal, type, netwo
     this.decimal = decimal;
     this.type = type;
     this.balance = "loading";
-    this.network = network;
-    this.node = node;
+    this.network = network; // str
+    this.node = node; // str
 };
 
 Token.balanceHex = "0x70a08231";
@@ -51,10 +47,10 @@ Token.prototype.fetchBalance = function () {
 
 
 
-    // several nodes do not have getEthCall method
 
     const node_ = nodes.nodeList[this.node];
 
+    // check that node has proper getEthCall method or resort to ajax Req
     const requestObj = node_ && node_.hasOwnProperty('lib') && node_.lib.hasOwnProperty('getEthCall') ? node_.lib : ajaxReq;
 
     this.setBalance('loading...');

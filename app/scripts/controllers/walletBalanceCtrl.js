@@ -241,9 +241,16 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
         for (var currency in $scope.alternativeBalance) {
 
 
-            $scope.nodeList[$scope.alternativeBalance[currency].node].lib.getBalance(
-                $scope.wallet.getAddressString(), setBalance(currency),
-            )
+             try {
+
+                 $scope.nodeList[$scope.alternativeBalance[currency].node].lib.getBalance(
+                     $scope.wallet.getAddressString(), setBalance(currency),
+                 )
+             } catch (e) {
+
+                 console.error('error w/ fetching bal',  currency)
+                 console.error('error w/ fetching bal',  $scope.nodeList[$scope.alternativeBalance[currency].node])
+             }
         }
     }
 
@@ -310,6 +317,7 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
 
             }
 
+            //FIXME: if token symbol from DEXns how to ensure proper network??
             $scope.localToken.network = nodes.nodeList[globalFuncs.getCurNode()].name;
 
             $scope.localToken.decimals = $scope.readData($scope.erc20Indexes.DECIMALS, data).outputs[0].value;

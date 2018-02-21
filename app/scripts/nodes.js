@@ -1,5 +1,6 @@
 'use strict';
-var nodes = function() {}
+var nodes = function () {
+}
 nodes.customNode = require('./nodeHelpers/customNode');
 nodes.infuraNode = require('./nodeHelpers/infura');
 nodes.metamaskNode = require('./nodeHelpers/metamask');
@@ -37,32 +38,32 @@ nodes.customNodeObj = {
     'tokenList': [],
     'abiList': [],
     'service': 'Custom',
-    'lib': null
+    'lib': null,
 };
 
 nodes.alternativeBalance = {
-        ETH: {
-          balance: "Loading",
-            // eth_ethscan node issues
-          node: "eth_infura",
-          symbol: "ETH"
-        },
-        ETC: {
-          balance: "Loading",
-          node: "etc_epool",
-          symbol: "ETC"
-        },
-        UBQ: {
-          balance: "Loading",
-          node: "ubq",
-          symbol: "UBQ"
-        },
-        EXP: {
-          balance: "Loading",
-          node: "exp",
-          symbol: "EXP"
-        }
-    };
+    ETH: {
+        balance: "Loading",
+        // eth_ethscan node issues distinguishing b/w eth and testnet balance
+        node: "eth_ethscan",
+        symbol: "ETH"
+    },
+    ETC: {
+        balance: "Loading",
+        node: "etc_epool",
+        symbol: "ETC"
+    },
+    UBQ: {
+        balance: "Loading",
+        node: "ubq",
+        symbol: "UBQ"
+    },
+    EXP: {
+        balance: "Loading",
+        node: "exp",
+        symbol: "EXP"
+    }
+};
 
 nodes.nodeList = {
     'etc_ethereumcommonwealth_geth': {

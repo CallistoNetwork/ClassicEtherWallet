@@ -214,6 +214,9 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
                     return;
                 }
 
+
+                // FIXME: if not connected to correct network, info not loaded and correct network not saved
+
                 $scope.getTokenInfo(contractAddress, newSymbol);
             });
         }, 1300);
@@ -241,16 +244,16 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
         for (var currency in $scope.alternativeBalance) {
 
 
-             try {
+            try {
 
-                 $scope.nodeList[$scope.alternativeBalance[currency].node].lib.getBalance(
-                     $scope.wallet.getAddressString(), setBalance(currency),
-                 )
-             } catch (e) {
+                $scope.nodeList[$scope.alternativeBalance[currency].node].lib.getBalance(
+                    $scope.wallet.getAddressString(), setBalance(currency),
+                )
+            } catch (e) {
 
-                 console.error('error w/ fetching bal',  currency)
-                 console.error('error w/ fetching bal',  $scope.nodeList[$scope.alternativeBalance[currency].node])
-             }
+                console.error('error w/ fetching bal', currency)
+                console.error('error w/ fetching bal', $scope.nodeList[$scope.alternativeBalance[currency].node])
+            }
         }
     }
 
@@ -297,6 +300,7 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
 
 
         $scope.localToken.contractAdd = address;
+        $scope.localToken.network = nodes.nodeList[globalFuncs.getCurNode()].name;
 
 
         var request_ = {
@@ -317,8 +321,6 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
 
             }
 
-            //FIXME: if token symbol from DEXns how to ensure proper network??
-            $scope.localToken.network = nodes.nodeList[globalFuncs.getCurNode()].name;
 
             $scope.localToken.decimals = $scope.readData($scope.erc20Indexes.DECIMALS, data).outputs[0].value;
 

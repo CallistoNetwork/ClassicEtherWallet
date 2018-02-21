@@ -44,7 +44,7 @@ nodes.customNodeObj = {
 nodes.alternativeBalance = {
     ETH: {
         balance: "Loading",
-        // eth_ethscan node issues distinguishing b/w eth and testnet balance
+        // eth_ethscan node rate limiting issue??
         node: "eth_ethscan",
         symbol: "ETH"
     },

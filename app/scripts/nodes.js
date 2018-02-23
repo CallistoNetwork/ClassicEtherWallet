@@ -38,7 +38,20 @@ nodes.customNodeObj = {
     'tokenList': [],
     'abiList': [],
     'service': 'Custom',
-    'lib': null,
+    'lib': {
+        "SERVERURL": null,
+        "pendingPosts": null,
+        "config": null,
+        "getCurrentBlock": null,
+        "getBalance": null,
+        "getTransaction": null,
+        "getTransactionData": null,
+        "sendRawTx": null,
+        "getEstimatedGas": null,
+        "getEthCall": null,
+        "queuePost": null,
+        "post": null
+    },
 };
 
 nodes.alternativeBalance = {

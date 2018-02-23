@@ -53,6 +53,7 @@ Token.prototype.fetchBalance = function () {
     // check that node has proper getEthCall method or resort to ajax Req
     const requestObj = node_ && node_.hasOwnProperty('lib') && node_.lib.hasOwnProperty('getEthCall') ? node_.lib : ajaxReq;
 
+    // FIXME: translate
     this.setBalance('loading...');
 
     try {

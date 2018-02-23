@@ -262,6 +262,7 @@ TRANS_data                  : 'Data ',
 TRANS_gas                   : 'Gas Limit ',
 TRANS_sendInfo              : 'A standard transaction using 21000 gas will cost 0.000441 ETH. We use a slightly-above-minimum gas price of 0.000000021 ETH to ensure it gets mined quickly. We do not take a transaction fee. ',
 TRANS_params                : '+Advanced: Apply Params',
+TRANS_params_remove         : '-Advanced: Remove Params',
 /* Offline Transaction */
 OFFLINE_Title               : 'Generate & Send Offline Transaction ',
 OFFLINE_Desc                : 'Generating offline transactions can be done in three steps. You will complete steps 1 and 3 on an online computer, and step 2 on an offline/airgapped computer. This ensures your private keys do not touch an internet-connected device. ',

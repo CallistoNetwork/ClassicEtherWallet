@@ -63,7 +63,7 @@ nodes.alternativeBalance = {
     },
     ETC: {
         balance: "Loading",
-        node: "etc_epool",
+        node: "etc_ethereumcommonwealth_geth",
         symbol: "ETC"
     },
     UBQ: {

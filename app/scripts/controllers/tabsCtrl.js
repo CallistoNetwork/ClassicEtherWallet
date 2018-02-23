@@ -112,7 +112,7 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
         }
         $scope.dropdownNode = false;
 
-        Token.popTokens = $scope.curNode.tokenList.map(token => Object.assign(token, {network: key}));
+        Token.popTokens = $scope.curNode.tokenList.map(token => Object.assign(token, {node: key, network: $scope.curNode.name}));
 
 
         ajaxReq['key'] = key;

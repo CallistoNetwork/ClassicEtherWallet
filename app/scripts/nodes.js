@@ -1,5 +1,6 @@
 'use strict';
-var nodes = function() {}
+var nodes = function () {
+}
 nodes.customNode = require('./nodeHelpers/customNode');
 nodes.infuraNode = require('./nodeHelpers/infura');
 nodes.metamaskNode = require('./nodeHelpers/metamask');
@@ -37,31 +38,45 @@ nodes.customNodeObj = {
     'tokenList': [],
     'abiList': [],
     'service': 'Custom',
-    'lib': null
+    'lib': {
+        "SERVERURL": null,
+        "pendingPosts": null,
+        "config": null,
+        "getCurrentBlock": null,
+        "getBalance": null,
+        "getTransaction": null,
+        "getTransactionData": null,
+        "sendRawTx": null,
+        "getEstimatedGas": null,
+        "getEthCall": null,
+        "queuePost": null,
+        "post": null
+    },
 };
 
 nodes.alternativeBalance = {
-        ETH: {
-          balance: "Loading",
-          node: "eth_ethscan",
-          symbol: "ETH"
-        },
-        ETC: {
-          balance: "Loading",
-          node: "etc_epool",
-          symbol: "ETC"
-        },
-        UBQ: {
-          balance: "Loading",
-          node: "ubq",
-          symbol: "UBQ"
-        },
-        EXP: {
-          balance: "Loading",
-          node: "exp",
-          symbol: "EXP"
-        }
-    };
+    ETH: {
+        balance: "Loading",
+        // eth_ethscan node rate limiting issue??
+        node: "eth_ethscan",
+        symbol: "ETH"
+    },
+    ETC: {
+        balance: "Loading",
+        node: "etc_epool",
+        symbol: "ETC"
+    },
+    UBQ: {
+        balance: "Loading",
+        node: "ubq",
+        symbol: "UBQ"
+    },
+    EXP: {
+        balance: "Loading",
+        node: "exp",
+        symbol: "EXP"
+    }
+};
 
 nodes.nodeList = {
     'etc_ethereumcommonwealth_geth': {

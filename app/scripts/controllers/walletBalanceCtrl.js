@@ -55,8 +55,6 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
     $scope.saveTokenToLocal = function () {
 
 
-
-
         globalFuncs.saveTokenToLocal($scope.localToken, function (data) {
             if (!data.error) {
                 $scope.resetLocalToken();
@@ -122,7 +120,7 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
                 else values.push(curFunc.inputs[i].value);
             } else values.push('');
         }
-        return '0x' + funcSig + ethUtil.solidityCoder.encodeParams(types, values);
+        return ethFuncs.sanitizeHex(funcSig + ethUtil.solidityCoder.encodeParams(types, values));
     };
 
     $scope.readData = function (indexFunc, data) {
@@ -216,6 +214,9 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
                     return;
                 }
 
+
+                // FIXME: if not connected to correct network, info not loaded and correct network not saved
+
                 $scope.getTokenInfo(contractAddress, newSymbol);
             });
         }, 1300);
@@ -241,9 +242,18 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
             };
         };
         for (var currency in $scope.alternativeBalance) {
-            $scope.nodeList[$scope.alternativeBalance[currency].node].lib.getBalance(
-                $scope.wallet.getAddressString(), setBalance(currency),
-            )
+
+
+            try {
+
+                $scope.nodeList[$scope.alternativeBalance[currency].node].lib.getBalance(
+                    $scope.wallet.getAddressString(), setBalance(currency),
+                )
+            } catch (e) {
+
+                console.error('error w/ fetching bal', currency)
+                console.error('error w/ fetching bal', $scope.nodeList[$scope.alternativeBalance[currency].node])
+            }
         }
     }
 
@@ -290,8 +300,8 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
 
 
         $scope.localToken.contractAdd = address;
+        $scope.localToken.network = nodes.nodeList[globalFuncs.getCurNode()].name;
 
-        $scope.localToken.network = globalFuncs.getCurNode();
 
         var request_ = {
             to: address,
@@ -311,11 +321,11 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
 
             }
 
+
             $scope.localToken.decimals = $scope.readData($scope.erc20Indexes.DECIMALS, data).outputs[0].value;
 
 
         });
-
 
 
         if (symbol) {

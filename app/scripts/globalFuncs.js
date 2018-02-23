@@ -223,12 +223,18 @@ globalFuncs.saveTokenToLocal = function (localToken, callback) {
                 msg: 'Token already exists.'
             })
         }
+
+        const node = globalFuncs.getCurNode();
+
         storedTokens.push({
             contractAddress: localToken.contractAdd,
+            address: localToken.contractAdd,
             symbol: localToken.symbol,
             decimal: parseInt(localToken.decimals),
+            decimals: parseInt(localToken.decimals),
             type: nodes.nodeTypes.Custom,
-            network: localToken.network
+            network: nodes.nodeList[node].name,
+            node
         });
         globalFuncs.localStorage.setItem("localTokens", JSON.stringify(storedTokens));
         return callback({

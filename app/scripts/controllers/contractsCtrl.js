@@ -65,10 +65,8 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
      */
     $scope.$watch('visibility', function () {
 
-
-        // console.log('switch vis');
-        $scope.tx = initTrans;
-        $scope.contract = initContract;
+        $scope.tx = Object.assign({}, $scope.tx, initTrans);
+        $scope.contract = Object.assign({}, $scope.contract, initContract);
 
     });
 
@@ -121,7 +119,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         if (applyConstructorParams && abi) {
 
 
-            return handleSanitize(bytecode + ethUtil.solidityCoder.encodeParams(
+            return ethFuncs.sanitizeHex(bytecode + ethUtil.solidityCoder.encodeParams(
                 constructorParams.inputs.map(i => i.type),
                 constructorParams.inputs.map(i => i.value)
             ))
@@ -129,14 +127,9 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         }
 
 
-        return handleSanitize(bytecode);
+        return ethFuncs.sanitizeHex(bytecode);
     }
 
-    function handleSanitize(data) {
-
-        return ethFuncs.sanitizeHex(data);
-
-    }
 
     $scope.estimateGasLimit = function () {
 
@@ -144,7 +137,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         const {value, unit, to, data} = $scope.tx;
 
         if (!data) {
-
+          
             $scope.tx.gasLimit = '';
             return;
         }
@@ -200,7 +193,6 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
             else if (!globalFuncs.isNumeric(gasLimit) || parseFloat(gasLimit) <= 0) throw globalFuncs.errorMsgs[8];
 
 
-            //FIXME: if previously signed transaction, and params added, we need to remove params and attach again
 
             $scope.tx.data = handleContractData();
 
@@ -382,6 +374,11 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
     $scope.initConstructorParamsFrom = function (abi) {
 
         try {
+
+            if (Array.isArray(abi) && abi.length === 0) {
+
+                return abi;
+            }
 
             abi = JSON.parse(abi);
 

@@ -11,7 +11,8 @@
   </div>
 
   <a ng-click="toggleContractParams()" ng-show="true" class="">
-        <p class="strong ng-scope" translate="TRANS_params">+Advanced: Add Params</p>
+        <p class="strong ng-scope" ng-show="!contract.applyConstructorParams" translate="TRANS_params">+Advanced: Add Params</p>
+        <p class="strong ng-scope" ng-show="contract.applyConstructorParams" translate="TRANS_params_remove">-Advanced: Remove Params</p>
       </a>
 
   <section class="col-xs-12 clearfix"

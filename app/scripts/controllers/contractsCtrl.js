@@ -65,7 +65,6 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
      */
     $scope.$watch('visibility', function () {
 
-
         $scope.tx = Object.assign({}, $scope.tx, initTrans);
         $scope.contract = Object.assign({}, $scope.contract, initContract);
 
@@ -138,8 +137,8 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         const {value, unit, to, data} = $scope.tx;
 
         if (!data) {
-
-            $scope.tx.gasLimit =  '';
+          
+            $scope.tx.gasLimit = '';
             return;
         }
 
@@ -164,8 +163,8 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
         //if (value !== 0) {
 
-            estObj.value =  ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(value, unit)));
-       // }
+        estObj.value = ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(value, unit)));
+        // }
 
 
         ethFuncs.estimateGas(estObj, function (data) {
@@ -173,7 +172,9 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
             if (data.error) {
 
-                $scope.tx.gasLimit = 0;
+                $scope.tx.gasLimit = '';
+
+                $scope.notifier.danger(data.msg);
                 return;
             }
 
@@ -245,7 +246,6 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
     $scope.setVisibility = function (str) {
         $scope.visibility = str;
-
 
 
     };
@@ -367,18 +367,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
             $scope.contract.constructorParams = constructor;
 
-        } else {
-
-
-            //if (!$scope.Validator.isJSON($scope.contract.abi)) throw globalFuncs.errorMsgs[26];
-
-
-            // TODO: no constructor found, notifiy user
         }
-
-
-        // console.log($scope.contract.constructorParams);
-
 
     });
 
@@ -404,7 +393,13 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
         const constructor = abi.find(i => i.type === 'constructor');
 
-        if (!constructor) return [];
+        if (!constructor) {
+
+
+
+            $scope.notifier.danger('No constructor found in abi');
+            return [];
+        }
 
         constructor.inputs.forEach(input => input.value = '');
 

@@ -3,6 +3,7 @@ var nodes = function () {
 }
 nodes.customNode = require('./nodeHelpers/customNode');
 nodes.infuraNode = require('./nodeHelpers/infura');
+nodes.etherscanNode = require('./nodeHelpers/etherscan');
 nodes.metamaskNode = require('./nodeHelpers/metamask');
 nodes.nodeTypes = {
     CLO: "CLO",
@@ -161,7 +162,7 @@ nodes.nodeList = {
         'tokenList': require('./tokens/ethTokens.json'),
         'abiList': require('./abiDefinitions/ethAbi.json'),
         'service': 'Etherscan.io',
-        'lib': require('./nodeHelpers/etherscan')
+        'lib': new nodes.etherscanNode('api')
     },
     'eth_infura': {
         'name': 'ETH',
@@ -209,7 +210,7 @@ nodes.nodeList = {
         'tokenList': require('./tokens/kovanTokens.json'),
         'abiList': require('./abiDefinitions/kovanAbi.json'),
         'service': 'Etherscan.io',
-        'lib': require('./nodeHelpers/etherscanKov')
+        'lib': new nodes.etherscanNode('kovan')
     },
     'rin_ethscan': {
         'name': 'Rinkeby',
@@ -221,7 +222,7 @@ nodes.nodeList = {
         'tokenList': require('./tokens/rinkebyTokens.json'),
         'abiList': require('./abiDefinitions/rinkebyAbi.json'),
         'service': 'Etherscan.io',
-        'lib': require('./nodeHelpers/etherscanRin')
+        'lib': new nodes.etherscanNode('rinkeby')
     },
     'rin_infura': {
         'name': 'Rinkeby',

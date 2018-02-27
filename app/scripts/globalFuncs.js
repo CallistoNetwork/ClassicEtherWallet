@@ -2,9 +2,42 @@
 
 var nodes = require('./nodes');
 
+const NETWORKS = {
+    ETH: "eth_ethscan",
+    ETC: "etc_epool",
+    UBQ: "ubq",
+    EXP: "exp",
+};
 
 var globalFuncs = function () {
+};
+
+
+globalFuncs.networks = NETWORKS;
+
+/*
+    node: str -> eth_ethscan
+
+ */
+globalFuncs.updateNetwork = function (node) {
+
+
+    const foundNetwork = Object.keys(NETWORKS).filter(key => {
+
+        return NETWORKS[key] === node;
+    });
+
+    if (!foundNetwork) {
+
+        console.error('not found network', node);
+
+        return false;
+    }
+
+    return foundNetwork;
+
 }
+
 globalFuncs.lightMode = false;
 globalFuncs.getBlockie = function (address) {
     return blockies.create({
@@ -34,6 +67,7 @@ globalFuncs.getSuccessText = function (str) {
 globalFuncs.getDangerText = function (str) {
     return '<p class="text-center text-danger"><strong> ' + str + '</strong></p>'
 };
+
 
 // These are translated in the translation files
 globalFuncs.errorMsgs = [

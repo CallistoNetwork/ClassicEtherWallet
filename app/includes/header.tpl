@@ -29,8 +29,8 @@
   @@if (site === 'cew' ) {
     <div class="small announcement">
       <div class="container">
-        	⚠ ClassicEtherWallet is an open source project and it is running directly from source code on github in your local machine, without any servers. You can transparently check the source code here:
-        <a href="https://github.com/ethereumproject/etherwallet/tree/gh-pages" target="_blank" rel="noopener">ethereumproject/etherwallet</a>.
+        	<big>⚠ SECURITY ALERT!<br>There is a security vulnerability in <a href="https://github.com/ethereum/EIPs/issues/20">ERC20 token standard</a>. ERC20 tokens are <a href="https://gist.github.com/Dexaran/ddb3e89fe64bf2e06ed15fbd5679bd20">insecure</a>!<br>Use ERC20 tokens at your own risk. ClassicEtherWallet is not responsible for the consequences of using tokens of this standard.</big><br>
+        Do not transfer ERC20 tokens into any smart-contract using the <code>transfer</code> function. This will result in the loss of your tokens.
         <br />
       </div>
     </div>

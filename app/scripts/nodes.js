@@ -18,6 +18,9 @@ nodes.nodeTypes = {
     EXP: "EXP",
     UBQ: "UBQ",
     PIRL: "PIRL",
+    POA: "POA",
+    TOMO: "TOMO",
+    ELLA: "ELLA",
     Custom: "CUSTOM ETH"
 };
 nodes.tldTypes = {
@@ -27,7 +30,8 @@ nodes.tldTypes = {
     Kovan: ".eth",
     Rinkeby: ".eth",
     RSK: ".rsk"
-}
+};
+
 nodes.ensNodeTypes = [nodes.nodeTypes.ETH, nodes.nodeTypes.Ropsten, nodes.nodeTypes.ETC];
 nodes.customNodeObj = {
     'name': 'CUS',
@@ -311,6 +315,45 @@ nodes.nodeList = {
         'estimateGas': true,
         'service': 'pirl.io',
         'lib': new nodes.customNode('https://wallrpc.pirl.io', '')
+    },
+    'poa': {
+        'name': 'POA',
+        'blockExplorerTX': 'https://core-explorer.poa.network/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://core-explorer.poa.network/account/[[address]]',
+        'type': nodes.nodeTypes.POA,
+        'eip155': true,
+        'chainId': 99,
+        'tokenList': [],
+        'abiList': [],
+        'estimateGas': true,
+        'service': 'core.poa.network',
+        'lib': new nodes.customNode('https://core.poa.network', '')
+    },
+    'tomo': {
+        'name': 'TOMO',
+        'blockExplorerTX': 'https://explorer.tomocoin.io/#/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://explorer.tomocoin.io/#/address/[[address]]',
+        'type': nodes.nodeTypes.TOMO,
+        'eip155': true,
+        'chainId': 40686,
+        'tokenList': [],
+        'abiList': [],
+        'estimateGas': true,
+        'service': 'core.tomocoin.io',
+        'lib': new nodes.customNode('https://core.tomocoin.io', '')
+    },
+    'ella': {
+        'name': 'ELLA',
+        'blockExplorerTX': 'https://explorer.ellaism.org/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://explorer.ellaism.org/addr/[[address]]',
+        'type': nodes.nodeTypes.ELLA,
+        'eip155': true,
+        'chainId': 64,
+        'tokenList': [],
+        'abiList': [],
+        'estimateGas': true,
+        'service': 'ellaism.org',
+        'lib': new nodes.customNode('https://jsonrpc.ellaism.org', '')
     }
 };
 

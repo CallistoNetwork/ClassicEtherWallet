@@ -44,7 +44,8 @@
         <span translate="GEN_Help_2">to access your account.</span>
       </li></ul>
 
-      <h2 translate="GEN_Help_4">Guides &amp; FAQ</h2>
+      <!-- Commented out due to broken links
+	  <h2 translate="GEN_Help_4">Guides &amp; FAQ</h2>
       <ul>
         <li><strong>
           <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/how-do-i-create-a-new-wallet" target="_blank" rel="noopener" translate="GEN_Help_5">
@@ -55,7 +56,7 @@
           <a href="https://myetherwallet.groovehq.com/knowledge_base/categories/getting-started-443" target="_blank" rel="noopener" translate="GEN_Help_6">
             Getting Started
           </a></strong></li>
-      </ul>
+      </ul> -->
     </section>
 
   </article>

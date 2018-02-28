@@ -23,14 +23,14 @@
       <p> &copy; 2017 ClassicEtherWallet, LLC </p>
     </section>
     <section class="footer--cent">
-        <h5> <i aria-hidden="true">ðŸ‘«</i> You can support us by supporting our blockchain-family.</h5>
-        <p>Consider using our affiliate links to...</p>
+		<h5><i aria-hidden="true">👫</i> Donations are always appreciated!</h5>
+        <p>ETH or ETC donation address: <span class="mono wrap"><a href="http://gastracker.io/addr/0x2ca1377dfa03577ce5bbb815c98eda1ac7632e7d">0x2ca1377dfa03577ce5bbb815c98eda1ac7632e7d</a></small></span></p>
+        
+        <h5> <i aria-hidden="true">👫</i> You can support us by supporting our blockchain-family.</h5>
         <p><a aria-label="Swap Ether or Bitcoin via Bity.com" href="https://bity.com/af/jshkb37v" target="_blank" rel="noopener">Swap ETH/BTC/EUR/CHF via Bity.com</a></p>
         <p><a href="https://www.ledgerwallet.com/r/fa4b?path=/products/" target="_blank" rel="noopener">Buy a Ledger Wallet</a></p>
         <p><a href="https://trezor.io/?a=myetherwallet.com" target="_blank" rel="noopener">Buy a TREZOR</a></p>
         <p><a href="https://digitalbitbox.com/?ref=mew" target="_blank" rel="noopener">Buy a Digital Bitbox</a></p>
-        <h5><i aria-hidden="true">👫</i> Donations are always appreciated!</h5>
-        <p>ETH, ETC, UBQ and EXP donation address: <span class="mono wrap">0x52823e725a34d42e14a1b66fb67299c30c4d8edf</small></span></p>
         <!--
         <p>MYD: <span class="mono wrap">mewsupport.eth <small>0xf7e983781609012307f2514f63D526D83D24F466</small></span></p>
         -->

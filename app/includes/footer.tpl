@@ -29,12 +29,12 @@
         <p><a href="https://www.ledgerwallet.com/r/fa4b?path=/products/" target="_blank" rel="noopener">Buy a Ledger Wallet</a></p>
         <p><a href="https://trezor.io/?a=myetherwallet.com" target="_blank" rel="noopener">Buy a TREZOR</a></p>
         <p><a href="https://digitalbitbox.com/?ref=mew" target="_blank" rel="noopener">Buy a Digital Bitbox</a></p>
-        <h5><i aria-hidden="true">ðŸ’</i> Donations are always appreciated!</h5>
+        <h5><i aria-hidden="true">👫</i> Donations are always appreciated!</h5>
         <p>ETH, ETC, UBQ and EXP donation address: <span class="mono wrap">0x52823e725a34d42e14a1b66fb67299c30c4d8edf</small></span></p>
         <!--
         <p>MYD: <span class="mono wrap">mewsupport.eth <small>0xf7e983781609012307f2514f63D526D83D24F466</small></span></p>
         -->
-        <h5 ng-hide="curLang=='en'"> <i>ðŸ…</i> <span translate="Translator_Desc"> Thank you to our translators </span></h5>
+        <h5 ng-hide="curLang=='en'"> <i>💝</i> <span translate="Translator_Desc"> Thank you to our translators </span></h5>
         <p ng-hide="curLang=='en'">
           <span translate="TranslatorName_1"></span>
           <span translate="TranslatorName_2"></span>

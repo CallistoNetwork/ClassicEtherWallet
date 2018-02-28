@@ -54,7 +54,7 @@
         Github: Current ClassicEtherWallet Site &amp; CX
       </a></p>
       <p><a aria-label="our organization on github" href="https://github.com/EthereumCommonwealth/etherwallet/releases/latest" target="_blank" rel="noopener" role="link" tabindex="0">
-        Github: Ether wallet releases
+        Github: Ether wallet releases (downloadable version)
       </a></p>
       <!-- Commented out due to incompatibility
 	  <p><a aria-label="my ether wallet chrome extension" href="https://chrome.google.com/webstore/detail/classicetherwallet-cx/opggclcfcbfbchcienjdaohghcamjfhf" target="_blank" rel="noopener" role="link" tabindex="0">

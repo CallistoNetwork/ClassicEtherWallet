@@ -35,6 +35,7 @@ globalFuncs.getDangerText = function (str) {
     return '<p class="text-center text-danger"><strong> ' + str + '</strong></p>'
 };
 
+
 // These are translated in the translation files
 globalFuncs.errorMsgs = [
     'Please enter a valid amount.', // 0

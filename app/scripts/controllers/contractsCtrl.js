@@ -137,7 +137,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         const {value, unit, to, data} = $scope.tx;
 
         if (!data) {
-          
+
             $scope.tx.gasLimit = '';
             return;
         }
@@ -355,19 +355,27 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
     $scope.$watch('contract.abi', function handleAbiUpdate(newVal) {
 
 
-        const constructor = $scope.initConstructorParamsFrom(newVal);
+        if ($scope.visibility === 'deployView') {
 
-        if (constructor &&
-            constructor.hasOwnProperty('inputs') &&
-            Array.isArray(constructor.inputs) &&
-            constructor.inputs.length > 0
-        ) {
 
-            $scope.contract.abi = newVal;
+            const constructor = $scope.initConstructorParamsFrom(newVal);
 
-            $scope.contract.constructorParams = constructor;
+            if (constructor &&
+                constructor.hasOwnProperty('inputs') &&
+                Array.isArray(constructor.inputs) &&
+                constructor.inputs.length > 0
+            ) {
+
+                $scope.contract.abi = newVal;
+
+                $scope.contract.constructorParams = constructor;
+
+            }
+
 
         }
+
+
 
     });
 

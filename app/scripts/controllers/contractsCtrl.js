@@ -156,15 +156,10 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         }
 
 
-        // FIXME: etherscan.io ribenky fails if sending value of 0 to contract, other nodes seem to be ok
+        // TODO: send contract a value
 
-        // do we have way to send contract a value
-
-
-        //if (value !== 0) {
 
         estObj.value = ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(value, unit)));
-        // }
 
 
         ethFuncs.estimateGas(estObj, function (data) {

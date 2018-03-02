@@ -1,4 +1,8 @@
 'use strict';
+
+// TODO: add ability to send contract a value on deployment
+
+
 var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
     $scope.ajaxReq = ajaxReq;
     walletService.wallet = null;
@@ -113,10 +117,21 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
     function handleContractData() {
 
-        const {applyConstructorParams, abi, constructorParams, bytecode} = $scope.contract;
+        const {applyConstructorParams, abi, constructorParams, bytecode, selectedFunc} = $scope.contract;
 
 
-        if (applyConstructorParams && abi) {
+        if ($scope.visibility === 'interactView') {
+
+
+            if (selectedFunc === null) {
+
+                return '';
+            }
+
+            return $scope.getContractData();
+        }
+
+        else if (applyConstructorParams && abi) {
 
 
             return ethFuncs.sanitizeHex(bytecode + ethUtil.solidityCoder.encodeParams(
@@ -139,7 +154,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         if (!data) {
 
             $scope.tx.gasLimit = '';
-            return;
+            return false;
         }
 
 
@@ -156,10 +171,10 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         }
 
 
-        // TODO: send contract a value
-
-
         estObj.value = ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(value, unit)));
+
+
+        $scope.tx.gasLimit = 'loading...';
 
 
         ethFuncs.estimateGas(estObj, function (data) {
@@ -170,10 +185,12 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
                 $scope.tx.gasLimit = '';
 
                 $scope.notifier.danger(data.msg);
-                return;
+
             }
 
+
             $scope.tx.gasLimit = data.data;
+
         });
     };
 
@@ -186,7 +203,6 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
             if ($scope.wallet == null) throw globalFuncs.errorMsgs[3];
             else if (!ethFuncs.validateHexString(data)) throw globalFuncs.errorMsgs[9];
             else if (!globalFuncs.isNumeric(gasLimit) || parseFloat(gasLimit) <= 0) throw globalFuncs.errorMsgs[8];
-
 
 
             $scope.tx.data = handleContractData();
@@ -271,7 +287,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         var funcSig = ethFuncs.getFunctionSignature(fullFuncName);
         var typeName = ethUtil.solidityUtils.extractTypeName(fullFuncName);
         var types = typeName.split(',');
-        types = types[0] == "" ? [] : types;
+        types = types[0] === "" ? [] : types;
         var values = [];
         for (var i in curFunc.inputs) {
             if (curFunc.inputs[i].value) {
@@ -295,9 +311,16 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
             $scope.notifier.danger(globalFuncs.errorMsgs[3]);
             return;
         }
-        $scope.tx.data = $scope.getContractData();
+
         $scope.tx.to = $scope.contract.address;
+        $scope.tx.data = $scope.getContractData();
+
+        $scope.estimateGasLimit();
+
+
         $scope.sendContractModal.open();
+
+
     };
 
 
@@ -371,7 +394,6 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         }
 
 
-
     });
 
     $scope.initConstructorParamsFrom = function (abi) {
@@ -397,7 +419,6 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         const constructor = abi.find(i => i.type === 'constructor');
 
         if (!constructor) {
-
 
 
             $scope.notifier.danger('No constructor found in abi');

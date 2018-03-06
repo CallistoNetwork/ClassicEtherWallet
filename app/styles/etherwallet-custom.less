@@ -481,6 +481,58 @@ label small {
   color: @gray;
 }
 
+
+
+
+ .messagesList {
+
+   .dot {
+     width: 6px;
+     height: 6px;
+     background: #cdcdcd;
+     border-radius: 100%;
+     display: inline-block;
+     position: relative;
+     top: -1px;
+     z-index: -0;
+     left: 3px;
+   }
+
+   .dot-success {
+
+     background: green;
+   }
+
+
+
+
+   .dot-info {
+
+     background: blue;
+   }
+   .from {
+     font-size: 1.1rem;
+     line-height: 47px;
+   }
+
+   .message_text {
+
+     font-size: 1.3rem;
+   }
+
+   .justify_row {
+
+     display: flex;
+     justify-content: flex-start;
+     align-content: center;
+     margin-bottom: 1rem;
+   }
+ }
+
+ .pointer {
+   cursor: pointer !important;
+ }
+
 // color code the nodes
 @brand-eth: @brand-primary;
 @brand-eth-dark: #025b76;
@@ -559,7 +611,7 @@ header.ETH {
   & + .container .modal-content          { border: 0.25rem solid @brand-eth;                  }
   & + .container .alert-info             { background-color:@brand-eth;                       }
   & + .container .btn-primary            { background:@brand-eth; border-color:@brand-eth     }
-  & + .container .btn-info               { background:@brand-eth-dark; border-color:@brand-eth-dark;    } 
+  & + .container .btn-info               { background:@brand-eth-dark; border-color:@brand-eth-dark;    }
   .header-branding                       { background:@brand-eth;                             }
 }
 
@@ -569,7 +621,7 @@ header.ETC {
   & + .container .modal-content          { border: 0.25rem solid @brand-etc;                    }
   & + .container .alert-info             { background-color:@brand-etc;                         }
   & + .container .btn-primary            { background:@brand-etc; border-color:@brand-etc       }
-  & + .container .btn-info               { background:@brand-etc-dark; border-color:@brand-etc-dark;    } 
+  & + .container .btn-info               { background:@brand-etc-dark; border-color:@brand-etc-dark;    }
   .header-branding                       { background:@brand-etc;                               }
 }
 
@@ -579,7 +631,7 @@ header.Ropsten {
   & + .container .modal-content          { border: 0.25rem solid @brand-test;                   }
   & + .container .alert-info             { background-color:@brand-test;                        }
   & + .container .btn-primary            { background:@brand-test; border-color:@brand-test;    }
-  & + .container .btn-info               { background:@brand-test-dark; border-color:@brand-test-dark;    } 
+  & + .container .btn-info               { background:@brand-test-dark; border-color:@brand-test-dark;    }
   .header-branding                       { background:@brand-test;                              }
 }
 
@@ -589,7 +641,7 @@ header.Kovan {
   & + .container .modal-content          { border: 0.25rem solid @brand-test;                   }
   & + .container .alert-info             { background-color:@brand-test;                        }
   & + .container .btn-primary            { background:@brand-test; border-color:@brand-test;    }
-  & + .container .btn-info               { background:@brand-test-dark; border-color:@brand-test-dark;    } 
+  & + .container .btn-info               { background:@brand-test-dark; border-color:@brand-test-dark;    }
   .header-branding                       { background:@brand-test;                              }
 }
 
@@ -599,7 +651,7 @@ header.Rinkeby {
   & + .container .modal-content          { border: 0.25rem solid @brand-test;                   }
   & + .container .alert-info             { background-color:@brand-test;                        }
   & + .container .btn-primary            { background:@brand-test; border-color:@brand-test;    }
-  & + .container .btn-info               { background:@brand-test-dark; border-color:@brand-test-dark;    } 
+  & + .container .btn-info               { background:@brand-test-dark; border-color:@brand-test-dark;    }
   .header-branding                       { background:@brand-test;                              }
 }
 
@@ -609,7 +661,7 @@ header.RSK {
   & + .container .modal-content          { border: 0.25rem solid @brand-rsk;                    }
   & + .container .alert-info             { background-color: @brand-rsk;                        }
   & + .container .btn-primary            { background:@brand-rsk; border-color:@brand-rsk;      }
-  & + .container .btn-info               { background:@brand-rsk-dark; border-color:@brand-rsk-dark;    } 
+  & + .container .btn-info               { background:@brand-rsk-dark; border-color:@brand-rsk-dark;    }
   .header-branding                       { background:@brand-rsk;                               }
 }
 
@@ -619,7 +671,7 @@ header.Custom {
   & + .container .modal-content          { border: 0.25rem solid @brand-cust;                   }
   & + .container .alert-info             { background-color:@brand-cust;                        }
   & + .container .btn-primary            { background:@brand-cust; border-color:@brand-cust;    }
-  & + .container .btn-info               { background:@brand-cust-dark; border-color:@brand-cust-dark;    } 
+  & + .container .btn-info               { background:@brand-cust-dark; border-color:@brand-cust-dark;    }
   .header-branding                       { background:@brand-cust;                              }
 }
 
@@ -629,7 +681,7 @@ header.EXP {
   & + .container .modal-content          { border: 0.25rem solid @brand-exp;                    }
   & + .container .alert-info             { background-color:@brand-exp;                         }
   & + .container .btn-primary            { background:@brand-exp; border-color:@brand-exp;      }
-  & + .container .btn-info               { background:@brand-exp-dark; border-color:@brand-exp-dark;    } 
+  & + .container .btn-info               { background:@brand-exp-dark; border-color:@brand-exp-dark;    }
   .header-branding                       { background:@brand-exp;                               }
 }
 
@@ -639,7 +691,7 @@ header.UBQ {
   & + .container .modal-content          { border: 0.25rem solid @brand-ubq;                    }
   & + .container .alert-info             { background-color:@brand-ubq;                         }
   & + .container .btn-primary            { background:@brand-ubq; border-color:@brand-ubq;      }
-  & + .container .btn-info               { background:@brand-ubq-dark; border-color:@brand-ubq-dark;    } 
+  & + .container .btn-info               { background:@brand-ubq-dark; border-color:@brand-ubq-dark;    }
   .header-branding                       { background:@brand-ubq;                               }
 }
 
@@ -649,6 +701,6 @@ header.MUSIC {
   & + .container .modal-content          { border: 0.25rem solid @brand-music;                            }
   & + .container .alert-info             { background-color:@brand-music;                                 }
   & + .container .btn-primary            { background:@brand-music; border-color:@brand-music;            }
-  & + .container .btn-info               { background:@brand-music-dark; border-color:@brand-music-dark;    } 
+  & + .container .btn-info               { background:@brand-music-dark; border-color:@brand-music-dark;    }
   .header-branding                       { background:@brand-music;                                       }
 }

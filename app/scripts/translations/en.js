@@ -88,7 +88,9 @@ NAV_SignMsg                 : 'Sign Message ',
 NAV_Swap                    : 'Swap ',
 NAV_ViewWallet              : 'View Wallet Info ',
 NAV_YourWallets             : 'Your Wallets ',
-
+NAV_Messages                : 'Messages',
+    NAV_LIST                : 'List',
+    NAV_NEW_MESSAGE         : 'New Message',
 /* General */
 x_Access                    : 'Access ',
 x_AddessDesc                : 'Your Address can also be known as you `Account #` or your `Public Key`. It is what you share with people so they can send you Ether or Tokens. Find the colorful address icon. Make sure it matches your paper wallet & whenever you enter your address somewhere.',

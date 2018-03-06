@@ -36,7 +36,6 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         nonce: null,
         gasPrice: null
     };
-    $scope.tx = initTrans;
 
     const initContract = {
         address: globalFuncs.urlGet('address') != null && $scope.Validator.isValidAddress(globalFuncs.urlGet('address')) ? globalFuncs.urlGet('address') : '',
@@ -48,10 +47,20 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         bytecode: '',
     };
 
+
+    $scope.tx = initTrans;
+
+    $scope.rawTx = null;
+
+    $scope.signedTx = null;
+
     $scope.contract = initContract;
 
     $scope.selectedAbi = ajaxReq.abiList[0];
+
     $scope.showRaw = false;
+
+
     $scope.$watch(function () {
         if (walletService.wallet == null) return null;
         return walletService.wallet.getAddressString();
@@ -71,6 +80,10 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
         $scope.tx = Object.assign({}, $scope.tx, initTrans);
         $scope.contract = Object.assign({}, $scope.contract, initContract);
+
+
+        $scope.rawTx = null;
+        $scope.signedTx = null;
 
     });
 
@@ -146,7 +159,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
     }
 
 
-    $scope.estimateGasLimit = function () {
+    $scope.estimateGasLimit = function (callback = null) {
 
 
         const {value, unit, to, data} = $scope.tx;
@@ -186,16 +199,21 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
                 $scope.notifier.danger(data.msg);
 
+            } else {
+
+                $scope.tx.gasLimit = data.data;
             }
 
+            if (callback) {
 
-            $scope.tx.gasLimit = data.data;
+                callback();
+            }
 
         });
     };
 
 
-    $scope.generateTx = function () {
+    $scope.generateTx = function (callback = null) {
 
         let {data, gasLimit} = $scope.tx;
 
@@ -211,7 +229,10 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
 
             ajaxReq.getTransactionData(walletString, function (data) {
-                if (data.error) $scope.notifier.danger(data.msg);
+
+                if (data.error) {
+                    $scope.notifier.danger(data.msg);
+                }
 
 
                 $scope.tx.to = $scope.tx.to || '0xCONTRACT';
@@ -237,6 +258,12 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
             });
         } catch (e) {
             $scope.notifier.danger(e);
+        } finally {
+
+            if (callback) {
+
+                $scope.sendContractModal.open();
+            }
         }
     };
 
@@ -315,10 +342,9 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         $scope.tx.to = $scope.contract.address;
         $scope.tx.data = $scope.getContractData();
 
-        $scope.estimateGasLimit();
+        // estimate gas limit via ajax request, generate tx data, open sendTransactionModal
 
-
-        $scope.sendContractModal.open();
+        $scope.estimateGasLimit($scope.generateTx.bind(this, true));
 
 
     };

@@ -69,7 +69,9 @@ textarea {
 
 .address-identicon-container-right {
   text-align: right;
-  .addressIdenticon { float: right; }
+  .addressIdenticon {
+    float: right;
+  }
 }
 
 .address-identicon-container-offline {
@@ -92,6 +94,7 @@ textarea {
   height: 3rem;
   padding: 0;
 }
+
 .addressIdenticon.small {
   width: 2rem;
   height: 2rem;
@@ -166,9 +169,7 @@ textarea {
   }
 }
 
-
-
-@media screen and (max-width:767px) {
+@media screen and (max-width: 767px) {
   .account-help-icon li,
   .account-help-icon img,
   .account-help-icon p {
@@ -236,7 +237,7 @@ textarea {
   }
 }
 
-input[type="text"]+.eye {
+input[type="text"] + .eye {
   cursor: pointer;
   &:before {
     content: "";
@@ -250,7 +251,7 @@ input[type="text"]+.eye {
   }
 }
 
-input[type="password"]+.eye {
+input[type="password"] + .eye {
   cursor: pointer;
   &:before {
     content: "";
@@ -263,7 +264,6 @@ input[type="password"]+.eye {
     background: url("../images/icon-eye-closed.svg");
   }
 }
-
 
 // collapsable containers
 .collapse-container {
@@ -280,7 +280,6 @@ input[type="password"]+.eye {
     line-height: 1.6;
   }
 }
-
 
 // help collapsable containers
 .help .collapse-container {
@@ -332,7 +331,6 @@ h2 a.isActive {
   }
 }
 
-
 .item {
   margin: 6px 0;
 }
@@ -366,7 +364,6 @@ label small {
   display: block;
 }
 
-
 .decrypt-drtv {
   padding: @space 0;
   label.radio {
@@ -377,13 +374,6 @@ label small {
     margin-top: 0;
   }
 }
-
-
-
-
-
-
-
 
 .qr-code {
   max-width: 17rem;
@@ -423,7 +413,9 @@ label small {
     left: auto;
     right: 0;
     min-width: 37rem;
-    small { float: right; }
+    small {
+      float: right;
+    }
   }
 }
 
@@ -431,17 +423,22 @@ label small {
   h5 {
     margin-bottom: @space-xs;
   }
-  a.isActive { color: @text-color; }
+  a.isActive {
+    color: @text-color;
+  }
 }
+
 #selectedTypeLedger ol {
   padding-left: 1rem;
 }
 
-
 .loading-wrap {
   position: fixed;
-  top:0;left:0;right:0;bottom:0;
-  background-color: fadeOut(black,30%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: fadeOut(black, 30%);
   z-index: 999;
   text-align: center;
 
@@ -450,7 +447,7 @@ label small {
     text-align: center;
     top: 40%;
     left: 50%;
-    transform: translate(-50%,-60%);
+    transform: translate(-50%, -60%);
   }
   img {
     border-radius: 50%;
@@ -481,57 +478,57 @@ label small {
   color: @gray;
 }
 
+.messagesConversation, .messagesList {
+  li {
+    list-style-type: none !important;
+  }
+}
 
+.messagesList {
 
+  .dot {
+    width: 6px;
+    height: 6px;
+    background: #cdcdcd;
+    border-radius: 100%;
+    display: inline-block;
+    position: relative;
+    top: -1px;
+    z-index: -0;
+    left: 3px;
+  }
 
- .messagesList {
+  .dot-success {
 
-   .dot {
-     width: 6px;
-     height: 6px;
-     background: #cdcdcd;
-     border-radius: 100%;
-     display: inline-block;
-     position: relative;
-     top: -1px;
-     z-index: -0;
-     left: 3px;
-   }
+    background: green;
+  }
 
-   .dot-success {
+  .dot-info {
 
-     background: green;
-   }
+    background: blue;
+  }
+  .from {
+    font-size: 1.1rem;
+    line-height: 47px;
+  }
 
+  .message_text {
 
+    font-size: 1.3rem;
+  }
 
+  .justify_row {
 
-   .dot-info {
+    display: flex;
+    justify-content: flex-start;
+    align-content: center;
+    margin-bottom: 1rem;
+  }
+}
 
-     background: blue;
-   }
-   .from {
-     font-size: 1.1rem;
-     line-height: 47px;
-   }
-
-   .message_text {
-
-     font-size: 1.3rem;
-   }
-
-   .justify_row {
-
-     display: flex;
-     justify-content: flex-start;
-     align-content: center;
-     margin-bottom: 1rem;
-   }
- }
-
- .pointer {
-   cursor: pointer !important;
- }
+.pointer {
+  cursor: pointer !important;
+}
 
 // color code the nodes
 @brand-eth: @brand-primary;
@@ -550,7 +547,6 @@ label small {
 @brand-ubq-dark: #0e7a61;
 @brand-cust: #b50085;
 @brand-cust-dark: #66054c;
-
 
 .dropdown-node .dropdown-menu {
   li {
@@ -605,102 +601,243 @@ label small {
 header {
   margin-bottom: 1em;
 }
+
 header.ETH {
   border-top: 0.25rem solid @brand-eth;
-  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-eth;              }
-  & + .container .modal-content          { border: 0.25rem solid @brand-eth;                  }
-  & + .container .alert-info             { background-color:@brand-eth;                       }
-  & + .container .btn-primary            { background:@brand-eth; border-color:@brand-eth     }
-  & + .container .btn-info               { background:@brand-eth-dark; border-color:@brand-eth-dark;    }
-  .header-branding                       { background:@brand-eth;                             }
+  & + .container + .pre-footer + .footer {
+    border-top: 0.25rem solid @brand-eth;
+  }
+  & + .container .modal-content {
+    border: 0.25rem solid @brand-eth;
+  }
+  & + .container .alert-info {
+    background-color: @brand-eth;
+  }
+  & + .container .btn-primary {
+    background: @brand-eth;
+    border-color: @brand-eth
+  }
+  & + .container .btn-info {
+    background: @brand-eth-dark;
+    border-color: @brand-eth-dark;
+  }
+  .header-branding {
+    background: @brand-eth;
+  }
 }
 
 header.ETC {
   border-top: 0.25rem solid @brand-etc;
-  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-etc;                }
-  & + .container .modal-content          { border: 0.25rem solid @brand-etc;                    }
-  & + .container .alert-info             { background-color:@brand-etc;                         }
-  & + .container .btn-primary            { background:@brand-etc; border-color:@brand-etc       }
-  & + .container .btn-info               { background:@brand-etc-dark; border-color:@brand-etc-dark;    }
-  .header-branding                       { background:@brand-etc;                               }
+  & + .container + .pre-footer + .footer {
+    border-top: 0.25rem solid @brand-etc;
+  }
+  & + .container .modal-content {
+    border: 0.25rem solid @brand-etc;
+  }
+  & + .container .alert-info {
+    background-color: @brand-etc;
+  }
+  & + .container .btn-primary {
+    background: @brand-etc;
+    border-color: @brand-etc
+  }
+  & + .container .btn-info {
+    background: @brand-etc-dark;
+    border-color: @brand-etc-dark;
+  }
+  .header-branding {
+    background: @brand-etc;
+  }
 }
 
 header.Ropsten {
   border-top: 0.25rem solid @brand-test;
-  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-test;               }
-  & + .container .modal-content          { border: 0.25rem solid @brand-test;                   }
-  & + .container .alert-info             { background-color:@brand-test;                        }
-  & + .container .btn-primary            { background:@brand-test; border-color:@brand-test;    }
-  & + .container .btn-info               { background:@brand-test-dark; border-color:@brand-test-dark;    }
-  .header-branding                       { background:@brand-test;                              }
+  & + .container + .pre-footer + .footer {
+    border-top: 0.25rem solid @brand-test;
+  }
+  & + .container .modal-content {
+    border: 0.25rem solid @brand-test;
+  }
+  & + .container .alert-info {
+    background-color: @brand-test;
+  }
+  & + .container .btn-primary {
+    background: @brand-test;
+    border-color: @brand-test;
+  }
+  & + .container .btn-info {
+    background: @brand-test-dark;
+    border-color: @brand-test-dark;
+  }
+  .header-branding {
+    background: @brand-test;
+  }
 }
 
 header.Kovan {
   border-top: 0.25rem solid @brand-test;
-  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-test;               }
-  & + .container .modal-content          { border: 0.25rem solid @brand-test;                   }
-  & + .container .alert-info             { background-color:@brand-test;                        }
-  & + .container .btn-primary            { background:@brand-test; border-color:@brand-test;    }
-  & + .container .btn-info               { background:@brand-test-dark; border-color:@brand-test-dark;    }
-  .header-branding                       { background:@brand-test;                              }
+  & + .container + .pre-footer + .footer {
+    border-top: 0.25rem solid @brand-test;
+  }
+  & + .container .modal-content {
+    border: 0.25rem solid @brand-test;
+  }
+  & + .container .alert-info {
+    background-color: @brand-test;
+  }
+  & + .container .btn-primary {
+    background: @brand-test;
+    border-color: @brand-test;
+  }
+  & + .container .btn-info {
+    background: @brand-test-dark;
+    border-color: @brand-test-dark;
+  }
+  .header-branding {
+    background: @brand-test;
+  }
 }
 
 header.Rinkeby {
   border-top: 0.25rem solid @brand-test;
-  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-test;               }
-  & + .container .modal-content          { border: 0.25rem solid @brand-test;                   }
-  & + .container .alert-info             { background-color:@brand-test;                        }
-  & + .container .btn-primary            { background:@brand-test; border-color:@brand-test;    }
-  & + .container .btn-info               { background:@brand-test-dark; border-color:@brand-test-dark;    }
-  .header-branding                       { background:@brand-test;                              }
+  & + .container + .pre-footer + .footer {
+    border-top: 0.25rem solid @brand-test;
+  }
+  & + .container .modal-content {
+    border: 0.25rem solid @brand-test;
+  }
+  & + .container .alert-info {
+    background-color: @brand-test;
+  }
+  & + .container .btn-primary {
+    background: @brand-test;
+    border-color: @brand-test;
+  }
+  & + .container .btn-info {
+    background: @brand-test-dark;
+    border-color: @brand-test-dark;
+  }
+  .header-branding {
+    background: @brand-test;
+  }
 }
 
 header.RSK {
   border-top: 0.25rem solid @brand-rsk;
-  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-rsk;                }
-  & + .container .modal-content          { border: 0.25rem solid @brand-rsk;                    }
-  & + .container .alert-info             { background-color: @brand-rsk;                        }
-  & + .container .btn-primary            { background:@brand-rsk; border-color:@brand-rsk;      }
-  & + .container .btn-info               { background:@brand-rsk-dark; border-color:@brand-rsk-dark;    }
-  .header-branding                       { background:@brand-rsk;                               }
+  & + .container + .pre-footer + .footer {
+    border-top: 0.25rem solid @brand-rsk;
+  }
+  & + .container .modal-content {
+    border: 0.25rem solid @brand-rsk;
+  }
+  & + .container .alert-info {
+    background-color: @brand-rsk;
+  }
+  & + .container .btn-primary {
+    background: @brand-rsk;
+    border-color: @brand-rsk;
+  }
+  & + .container .btn-info {
+    background: @brand-rsk-dark;
+    border-color: @brand-rsk-dark;
+  }
+  .header-branding {
+    background: @brand-rsk;
+  }
 }
 
 header.Custom {
   border-top: 0.25rem solid @brand-cust;
-  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-cust;               }
-  & + .container .modal-content          { border: 0.25rem solid @brand-cust;                   }
-  & + .container .alert-info             { background-color:@brand-cust;                        }
-  & + .container .btn-primary            { background:@brand-cust; border-color:@brand-cust;    }
-  & + .container .btn-info               { background:@brand-cust-dark; border-color:@brand-cust-dark;    }
-  .header-branding                       { background:@brand-cust;                              }
+  & + .container + .pre-footer + .footer {
+    border-top: 0.25rem solid @brand-cust;
+  }
+  & + .container .modal-content {
+    border: 0.25rem solid @brand-cust;
+  }
+  & + .container .alert-info {
+    background-color: @brand-cust;
+  }
+  & + .container .btn-primary {
+    background: @brand-cust;
+    border-color: @brand-cust;
+  }
+  & + .container .btn-info {
+    background: @brand-cust-dark;
+    border-color: @brand-cust-dark;
+  }
+  .header-branding {
+    background: @brand-cust;
+  }
 }
 
 header.EXP {
   border-top: 0.25rem solid @brand-exp;
-  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-exp;                }
-  & + .container .modal-content          { border: 0.25rem solid @brand-exp;                    }
-  & + .container .alert-info             { background-color:@brand-exp;                         }
-  & + .container .btn-primary            { background:@brand-exp; border-color:@brand-exp;      }
-  & + .container .btn-info               { background:@brand-exp-dark; border-color:@brand-exp-dark;    }
-  .header-branding                       { background:@brand-exp;                               }
+  & + .container + .pre-footer + .footer {
+    border-top: 0.25rem solid @brand-exp;
+  }
+  & + .container .modal-content {
+    border: 0.25rem solid @brand-exp;
+  }
+  & + .container .alert-info {
+    background-color: @brand-exp;
+  }
+  & + .container .btn-primary {
+    background: @brand-exp;
+    border-color: @brand-exp;
+  }
+  & + .container .btn-info {
+    background: @brand-exp-dark;
+    border-color: @brand-exp-dark;
+  }
+  .header-branding {
+    background: @brand-exp;
+  }
 }
 
 header.UBQ {
   border-top: 0.25rem solid @brand-ubq;
-  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-ubq;                }
-  & + .container .modal-content          { border: 0.25rem solid @brand-ubq;                    }
-  & + .container .alert-info             { background-color:@brand-ubq;                         }
-  & + .container .btn-primary            { background:@brand-ubq; border-color:@brand-ubq;      }
-  & + .container .btn-info               { background:@brand-ubq-dark; border-color:@brand-ubq-dark;    }
-  .header-branding                       { background:@brand-ubq;                               }
+  & + .container + .pre-footer + .footer {
+    border-top: 0.25rem solid @brand-ubq;
+  }
+  & + .container .modal-content {
+    border: 0.25rem solid @brand-ubq;
+  }
+  & + .container .alert-info {
+    background-color: @brand-ubq;
+  }
+  & + .container .btn-primary {
+    background: @brand-ubq;
+    border-color: @brand-ubq;
+  }
+  & + .container .btn-info {
+    background: @brand-ubq-dark;
+    border-color: @brand-ubq-dark;
+  }
+  .header-branding {
+    background: @brand-ubq;
+  }
 }
 
 header.MUSIC {
   border-top: 0.25rem solid @brand-music;
-  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-music;                        }
-  & + .container .modal-content          { border: 0.25rem solid @brand-music;                            }
-  & + .container .alert-info             { background-color:@brand-music;                                 }
-  & + .container .btn-primary            { background:@brand-music; border-color:@brand-music;            }
-  & + .container .btn-info               { background:@brand-music-dark; border-color:@brand-music-dark;    }
-  .header-branding                       { background:@brand-music;                                       }
+  & + .container + .pre-footer + .footer {
+    border-top: 0.25rem solid @brand-music;
+  }
+  & + .container .modal-content {
+    border: 0.25rem solid @brand-music;
+  }
+  & + .container .alert-info {
+    background-color: @brand-music;
+  }
+  & + .container .btn-primary {
+    background: @brand-music;
+    border-color: @brand-music;
+  }
+  & + .container .btn-info {
+    background: @brand-music-dark;
+    border-color: @brand-music-dark;
+  }
+  .header-branding {
+    background: @brand-music;
+  }
 }

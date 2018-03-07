@@ -10,21 +10,34 @@
         >
             <div class="row">
                 <div class="col-sm-9 row justify_row">
-                    <div class="addressIdenticon med float" title="Address Indenticon"
-                         blockie-address="{{message[0].from}}"></div>
+                    <div class="address-identicon-container">
+
+                        <div class="addressIdenticon med float" title="Address Indenticon"
+                             blockie-address="{{message[0].from}}"></div>
+                    </div>
                     <span class="from">{{message[0].from}}</span>
 
 
                     </span>
                 </div>
                 <div class="col-sm-3">
-            <span
+                    <div class="row">
+                        <span
 
 
-            >{{message[0].time | date: 'yyyy-MM-dd HH:mm:ss Z'}}</span>
-                    <span
-                            ng-class="message[0].time >= messageDateThreshold ? 'dot dot-success' : 'dot dot-info'"
-                    ></span>
+                        >{{message[0].time | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
+                    </div>
+                    <div class="row">
+                        <b>New Messages: </b>
+                        <b
+                                ng-class="numberOfNewMessages(message[0].from) > 0 ? 'text-success' : 'text-gray'"
+                        >
+
+                            {{numberOfNewMessages(message[0].from)}}
+                        </b>
+                    </div>
+                    <div>
+                    </div>
                 </div>
 
             </div>

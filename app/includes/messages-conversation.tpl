@@ -1,4 +1,4 @@
-<div>
+<div class="messagesConversation">
     <h2>{{messagesConversation[0].from}}</h2>
     <div class="addressIdenticon med float" title="Address Indenticon"
          blockie-address="{{messagesConversation[0].from}}"></div>

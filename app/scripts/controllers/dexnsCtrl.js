@@ -101,17 +101,17 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService) {
             DexNSFrontendContract.functions.push(DexNSFrontendABI[i]);
         }
     }
-    for (var i in DexNSABI) {
-        if (DexNSFrontendABI[i].type == "function") {
-            DexNSFrontendABI[i].inputs.map(function (i) {
-                i.value = '';
-            });
-            DexNSFrontendContract.functions.push(DexNSFrontendABI[i]);
+        for (var i in DexNSABI) {
+            if (DexNSFrontendABI[i].type == "function") {
+                DexNSFrontendABI[i].inputs.map(function (i) {
+                    i.value = '';
+                });
+                DexNSFrontendContract.functions.push(DexNSFrontendABI[i]);
+            }
         }
-    }
-    var namePriceFunc = DexNSFrontendContract.functions[19];
-    var fullPriceFuncName = ethUtil.solidityUtils.transformToFullName(namePriceFunc);
-    var priceSig = ethFuncs.getFunctionSignature(fullPriceFuncName);
+        var namePriceFunc = DexNSFrontendContract.functions[19];
+        var fullPriceFuncName = ethUtil.solidityUtils.transformToFullName(namePriceFunc);
+        var priceSig = ethFuncs.getFunctionSignature(fullPriceFuncName);
 
 
     $scope.getDexNSPrice = function () {

@@ -7,9 +7,9 @@
     <ul class="list-group">
         <li
                 class="list-group-item"
-                ng-repeat="message in messagesConversation track by $index">
+                ng-repeat="message in messagesConversation | orderBy: '+time': reverse track by $index">
             <div class="row">
-                {{message.time | date: 'yyyy-MM-dd HH:mm:ss Z'}}
+                {{message.time | date: 'yyyy-MM-dd HH:mm:ss'}}
             </div>
             <p class="message_text">{{message.text}}</p>
             <hr/>

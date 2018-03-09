@@ -1,13 +1,15 @@
 'use strict';
 
-var throttle = require('lodash').throttle;
-
 var messagesCtrl = function ($scope, $rootScope, walletService) {
     $scope.ajaxReq = ajaxReq;
     $scope.Validator = Validator;
     walletService.wallet = null;
 
     const KEY = '@messages@';
+
+    const config = {
+        fetchMessageInterval: 10 // seconds
+    };
 
     const DATE = new Date();
 
@@ -20,7 +22,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     };
 
     const testContract = {
-        address: '0x440fd2c0ee33b6b6e241da7f7e7a1c28a1539386',
+        address: '0x8F7a526C9693572baD2586895605e89B8D753068',//'0x440fd2c0ee33b6b6e241da7f7e7a1c28a1539386',
         abi: [
             {
                 "constant": true,
@@ -364,6 +366,43 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     });
 
 
+    const messageSet = messages => Array.from(new Set(messages.map(JSON.stringify))).map(JSON.parse);
+
+
+    var network = globalFuncs.urlGet('network') || null;
+
+    if (network) {
+        // $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
+        //$rootScope.$broadcast('ChangeNode', $scope.networks.rop_mew || 0);
+    }
+
+
+    const MESSAGE = {
+        from: '0x1234',
+        text: 'TEST',
+        time: DATE.getTime(),
+    };
+
+    // LIST of all messages, stored locally
+
+
+    $scope.messages = handleGetLocalMessages();
+
+
+    // messages grouped by addr
+
+    $scope.messagesList = {};
+
+
+    $scope.messagesConversation = null;
+
+
+    $scope.newMessage = {
+        to: '',
+        text: '',
+    };
+
+
     function encodeInputs(inputs) {
 
 
@@ -439,7 +478,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
     }
 
-    const functionNames = ["lastIndex", "newMessage", "messages", "message_staling_period", "last_msg_index", "getLastMessage", "keys", "getPublicKey", "getMessageByIndex", "setPublicKey", "sendMessage"];
+    const FUNCTION_NAMES = ["lastIndex", "newMessage", "messages", "message_staling_period", "last_msg_index", "getLastMessage", "keys", "getPublicKey", "getMessageByIndex", "setPublicKey", "sendMessage"];
 
     function getMessageStalingPeriod() {
 
@@ -473,9 +512,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
     function initMessages(addr) {
 
-        let messages = handleGetLocalMessages();
-
-        $scope.messages = messages;
+        const messages = $scope.messages.slice();
 
 
         getLastMsgIndex(addr, function (result) {
@@ -501,17 +538,9 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
                     queue.forEach(index_ => getMessageByIndex(addr, index_, function (result) {
 
 
-                        if (result.error) {
+                        if (!result.error && result.hasOwnProperty('data')) {
 
-                            console.error('error');
-
-                            return null;
-                        }
-                        if (result.hasOwnProperty('data')) {
-
-                            const outTypes = findFunctionBy('getMessageByIndex').outputs.map(function (i) {
-                                return i.type;
-                            });
+                            const outTypes = findFunctionBy('getMessageByIndex').outputs.map(i => i.type);
 
                             const dater = ethUtil.solidityCoder.decodeParams(outTypes, result.data.replace('0x', ''));
 
@@ -522,10 +551,18 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
 
                             $scope.messages.push(MESSAGE);
+                            mapMessagesToMessageList();
 
 
-                            return MESSAGE
+                        }
+                        // if last item in array
+                        if (index_ === messages.length + 1) {
 
+
+                            $scope.saveMessages();
+
+
+                            // uiFuncs.notifier.info('new messages!');
                         }
 
 
@@ -534,9 +571,8 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
                 }
 
-                // else console.log('messages loaded from local storage')
-
-                mapMessagesToMessageList();
+                else mapMessagesToMessageList();
+                // else uiFuncs.notifier.info('messages loaded from local storage');
 
 
             }
@@ -561,7 +597,9 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
         try {
 
-            messages = JSON.parse(globalFuncs.localStorage.getItem(KEY));
+            const messages_ = JSON.parse(globalFuncs.localStorage.getItem(KEY));
+
+            messages = messageSet(messages_);
 
         } catch (e) {
 
@@ -571,7 +609,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
             if (!(messages && Array.isArray(messages) && messages.every(validMessage))) {
 
-                messages = [];
+                messages = messages.filter(validMessage);
             }
 
 
@@ -583,49 +621,16 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     $scope.saveMessages = function saveMessages() {
 
 
-        let messages = handleGetLocalMessages().concat($scope.messages);
+        let messages = $scope.messages;
 
 
-        const messageSet = Array.from(new Set(messages.map(JSON.stringify))).map(JSON.parse);
+        let messageSet_ = messageSet(messages);
 
-        globalFuncs.localStorage.setItem(KEY, JSON.stringify(messageSet));
+        globalFuncs.localStorage.setItem(KEY, JSON.stringify(messageSet_));
+
+        return messageSet_;
 
     }
-
-
-    var network = globalFuncs.urlGet('network') || null;
-
-    if (network) {
-        // $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
-        $rootScope.$broadcast('ChangeNode', $scope.networks.rop_mew || 0);
-    }
-
-
-    const MESSAGE = {
-        from: '0x1234',
-        text: 'TEST',
-        time: DATE.getTime(),
-    };
-
-    // LIST of all messages, stored locally
-
-
-
-    $scope.messages = handleGetLocalMessages();
-
-
-    // messages grouped by addr
-
-    $scope.messagesList = {};
-
-
-    $scope.messagesConversation = null;
-
-
-    $scope.newMessage = {
-        to: '',
-        text: '',
-    };
 
 
     $scope.viewMessagesConversation = function (addr) {
@@ -652,26 +657,6 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     };
 
 
-    function generateTestMessages() {
-
-
-        const addrs_ = ["0x186f9a221197e3c5791c3a75b25558f9aa5a94c8", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0xd547750d9a3993a988e4a6ace72423f67c095480", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4"]
-
-        const addrs = Array.from(new Set(addrs_));
-
-        const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-
-
-        addrs.forEach((addr, i) => {
-
-
-            $scope.messages.push(mapToMessage(addr, lorem, new Date(2016, i + 9, 1).getTime()));
-            $scope.messages.push(mapToMessage(addr, lorem, new Date(2018, i + 2, 1).getTime()));
-        })
-
-    }
-
-
     function mapToMessage(from, text, time) {
 
         return Object.assign({}, MESSAGE, {from, text, time});
@@ -685,7 +670,10 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     function mapMessagesToMessageList() {
 
 
-        const sorted = $scope.messages.slice().sort((a, b) => b.time - a.time);
+        // console.log($scope.messages);
+
+
+        const sorted = $scope.messages.sort((a, b) => b.time - a.time);
 
 
         $scope.messagesList = sorted.reduce((accum_, message) => {
@@ -695,7 +683,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
                 accum_[message.from] = [message];
             }
 
-            accum_[message.from].push(message);
+            else accum_[message.from].push(message);
 
             return accum_;
 
@@ -703,18 +691,15 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     }
 
 
-    $scope.$watch('messages', (val, oldVal) => {
-
-
-        console.log($scope.messages);
-
-
-        if (val !== [] && val !== oldVal) {
-            $scope.saveMessages();
-        }
-
-        console.log($scope.messages);
-    });
+    // $scope.$watch('messages', (val, oldVal) => {
+    //
+    //
+    //     if (Array.isArray(val) && val.length > 0) {
+    //         $scope.saveMessages();
+    //     }
+    //
+    //     console.log($scope.messages);
+    // });
 
 
     $scope.$watch(function () {
@@ -756,10 +741,39 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
         return Validator.isValidENSorEtherAddress($scope.newMessage.to);
     };
 
+    function generateTestMessages() {
+
+
+        const addrs_ = ["0x186f9a221197e3c5791c3a75b25558f9aa5a94c8", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0xd547750d9a3993a988e4a6ace72423f67c095480", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4"]
+
+        const addrs = Array.from(new Set(addrs_));
+
+        const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+
+        addrs.forEach((addr, i) => {
+
+
+            $scope.messages.push(mapToMessage(addr, lorem, new Date(2016, i + 9, 1).getTime()));
+            $scope.messages.push(mapToMessage(addr, lorem, new Date(2018, i + 2, 1).getTime()));
+        })
+
+    }
+
 
     getMessageStalingPeriod();
     const testAddrTo = '0x1234';
     initMessages(testAddrTo);
+
+
+    setInterval(() => {
+
+        console.log(new Date().toLocaleTimeString());
+
+        initMessages(testAddrTo);
+
+
+    }, 1000 * config.fetchMessageInterval);
 
 
 }

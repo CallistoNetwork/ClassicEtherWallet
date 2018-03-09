@@ -90,7 +90,7 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
             return;
         }
         let keyNode = JSON.parse($scope.keyNode);
-        if (keyNode.key === "clo_testnet") {
+        if (keyNode.key === "clo_testnet" || keyNode.key === "clo_testnet2") {
             setCallistoGasValues();
         } else {
             setGasValues();

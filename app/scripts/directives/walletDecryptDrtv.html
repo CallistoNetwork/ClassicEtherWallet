@@ -4,6 +4,11 @@
   <section class="col-md-4 col-sm-6">
     <h4 translate="decrypt_Access" style="margin-top:0;"> Select the format of your private key: </h4>
 
+    <label aria-flowto="aria7" class="radio" ng-hide="globalService.currentTab!==globalService.tabs.viewWalletInfo.id">
+      <input aria-flowto="aria8" aria-label="address" type="radio" ng-model="walletType" value="addressOnly" />
+      View with Address Only
+    </label>
+
     <label class="radio">
       <input aria-flowto="aria3" type="radio" aria-label="MetaMask / ClassicMask / Mist" ng-model="walletType" value="metamask" />
       <span translate="x_MetaMask">MetaMask / ClassicMask / Mist</span>
@@ -42,11 +47,6 @@
     <label class="radio">
       <input aria-flowto="aria5" aria-label="private key" type="radio" ng-model="walletType" value="pasteprivkey" />
       <span translate="x_PrivKey2">Private Key</span>
-    </label>
-
-    <label aria-flowto="aria7" class="radio" ng-hide="globalService.currentTab!==globalService.tabs.viewWalletInfo.id">
-      <input aria-flowto="aria8" aria-label="address" type="radio" ng-model="walletType" value="addressOnly" />
-      View with Address Only
     </label>
 
   </section>

@@ -1,5 +1,6 @@
 'use strict';
 
+var throttle = require('lodash').throttle;
 
 var messagesCtrl = function ($scope, $rootScope, walletService) {
     $scope.ajaxReq = ajaxReq;
@@ -7,6 +8,8 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     walletService.wallet = null;
 
     const KEY = '@messages@';
+
+    const DATE = new Date();
 
 
     $scope.VISIBILITY = {
@@ -16,7 +19,306 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
     };
 
-    const testAddr = '0xeefe16d657d5119ff824d45a4b1d74bf419fb518';
+    const testContract = {
+        address: '0x440fd2c0ee33b6b6e241da7f7e7a1c28a1539386',
+        abi: [
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_owner",
+                        "type": "address"
+                    }
+                ],
+                "name": "lastIndex",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_who",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_index",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "newMessage",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "",
+                        "type": "address"
+                    },
+                    {
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "messages",
+                "outputs": [
+                    {
+                        "name": "from",
+                        "type": "address"
+                    },
+                    {
+                        "name": "text",
+                        "type": "string"
+                    },
+                    {
+                        "name": "time",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "message_staling_period",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "last_msg_index",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_who",
+                        "type": "address"
+                    }
+                ],
+                "name": "getLastMessage",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "address"
+                    },
+                    {
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "keys",
+                "outputs": [
+                    {
+                        "name": "key",
+                        "type": "string"
+                    },
+                    {
+                        "name": "key_type",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_who",
+                        "type": "address"
+                    }
+                ],
+                "name": "getPublicKey",
+                "outputs": [
+                    {
+                        "name": "_key",
+                        "type": "string"
+                    },
+                    {
+                        "name": "_key_type",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_who",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_index",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "getMessageByIndex",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "address"
+                    },
+                    {
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "name": "_sender",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": true,
+                        "name": "_receiver",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "_time",
+                        "type": "uint256"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "message",
+                        "type": "string"
+                    }
+                ],
+                "name": "Message",
+                "type": "event"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_key",
+                        "type": "string"
+                    },
+                    {
+                        "name": "_type",
+                        "type": "string"
+                    }
+                ],
+                "name": "setPublicKey",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "name": "_sender",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "_key",
+                        "type": "string"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "_keytype",
+                        "type": "string"
+                    }
+                ],
+                "name": "PublicKeyUpdated",
+                "type": "event"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_to",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_text",
+                        "type": "string"
+                    }
+                ],
+                "name": "sendMessage",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }
+        ]
+    };
 
     $scope.visibility = $scope.VISIBILITY.LIST;
 
@@ -36,302 +338,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     };
 
 
-    const testAbi = [
-        {
-            "constant": true,
-            "inputs": [
-                {
-                    "name": "_owner",
-                    "type": "address"
-                }
-            ],
-            "name": "lastIndex",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [
-                {
-                    "name": "_who",
-                    "type": "address"
-                },
-                {
-                    "name": "_index",
-                    "type": "uint256"
-                }
-            ],
-            "name": "newMessage",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [
-                {
-                    "name": "",
-                    "type": "address"
-                },
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "name": "messages",
-            "outputs": [
-                {
-                    "name": "from",
-                    "type": "address"
-                },
-                {
-                    "name": "text",
-                    "type": "string"
-                },
-                {
-                    "name": "time",
-                    "type": "uint256"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [],
-            "name": "message_staling_period",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [
-                {
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "name": "last_msg_index",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [
-                {
-                    "name": "_who",
-                    "type": "address"
-                }
-            ],
-            "name": "getLastMessage",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "address"
-                },
-                {
-                    "name": "",
-                    "type": "string"
-                },
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [
-                {
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "name": "keys",
-            "outputs": [
-                {
-                    "name": "key",
-                    "type": "string"
-                },
-                {
-                    "name": "key_type",
-                    "type": "string"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [
-                {
-                    "name": "_who",
-                    "type": "address"
-                }
-            ],
-            "name": "getPublicKey",
-            "outputs": [
-                {
-                    "name": "_key",
-                    "type": "string"
-                },
-                {
-                    "name": "_key_type",
-                    "type": "string"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [
-                {
-                    "name": "_who",
-                    "type": "address"
-                },
-                {
-                    "name": "_index",
-                    "type": "uint256"
-                }
-            ],
-            "name": "getMessageByIndex",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "address"
-                },
-                {
-                    "name": "",
-                    "type": "string"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "name": "_sender",
-                    "type": "address"
-                },
-                {
-                    "indexed": true,
-                    "name": "_receiver",
-                    "type": "address"
-                },
-                {
-                    "indexed": false,
-                    "name": "_time",
-                    "type": "uint256"
-                },
-                {
-                    "indexed": false,
-                    "name": "message",
-                    "type": "string"
-                }
-            ],
-            "name": "Message",
-            "type": "event"
-        },
-        {
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "_key",
-                    "type": "string"
-                },
-                {
-                    "name": "_type",
-                    "type": "string"
-                }
-            ],
-            "name": "setPublicKey",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "name": "_sender",
-                    "type": "address"
-                },
-                {
-                    "indexed": false,
-                    "name": "_key",
-                    "type": "string"
-                },
-                {
-                    "indexed": false,
-                    "name": "_keytype",
-                    "type": "string"
-                }
-            ],
-            "name": "PublicKeyUpdated",
-            "type": "event"
-        },
-        {
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "_to",
-                    "type": "address"
-                },
-                {
-                    "name": "_text",
-                    "type": "string"
-                }
-            ],
-            "name": "sendMessage",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        }
-    ];
-
-
-    const foundContract = {abi: JSON.stringify(testAbi), address: testAddr};
+    const foundContract = Object.assign({}, testContract, {abi: JSON.stringify(testContract.abi)});
 
     //const foundContract = node.abiList.find(contract => contract.address === messageContract.address);
 
@@ -355,9 +362,6 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
         }
 
     });
-
-
-    getMessageStalingPeriod();
 
 
     function encodeInputs(inputs) {
@@ -446,7 +450,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
                 $scope.MESSAGE_STALING_PERIOD = Number(ethFuncs.hexToDecimal(result.data));
             }
-            $scope.message_staling_period = new Date().getTime() + $scope.MESSAGE_STALING_PERIOD;
+            $scope.message_staling_period = DATE.getTime() + $scope.MESSAGE_STALING_PERIOD;
         });
 
 
@@ -469,9 +473,9 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
     function initMessages(addr) {
 
-        const {messages} = $scope;
+        let messages = handleGetLocalMessages();
 
-
+        $scope.messages = messages;
 
 
         getLastMsgIndex(addr, function (result) {
@@ -492,9 +496,9 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
                         curIndex--;
 
                     }
-                    const messages_ = queue.map(index_ => getMessageByIndex(addr, index_ - 1, function (result) {
 
-                        console.log(result);
+
+                    queue.forEach(index_ => getMessageByIndex(addr, index_, function (result) {
 
 
                         if (result.error) {
@@ -511,22 +515,28 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
                             const dater = ethUtil.solidityCoder.decodeParams(outTypes, result.data.replace('0x', ''));
 
-                            console.log(dater);
-                            const [from, text] = dater;
+                            const [from, text, time] = dater;
 
-                            return {from, text};
+
+                            const MESSAGE = mapToMessage(from, text, Number(time.toString()) * 1000);
+
+
+                            $scope.messages.push(MESSAGE);
+
+
+                            return MESSAGE
 
                         }
 
 
-                    })).filter(i => i);
-
-                    saveMessages(messages_);
-
-                    mapMessagesToMessageList();
+                    }));
 
 
                 }
+
+                // else console.log('messages loaded from local storage')
+
+                mapMessagesToMessageList();
 
 
             }
@@ -535,18 +545,51 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     }
 
 
-    function saveMessages(messages_) {
+    function handleGetLocalMessages() {
 
 
-        let messages = globalFuncs.localStorage.getItem(KEY);
+        function validMessage(obj_) {
 
-        if (!(messages && Array.isArray(messages))) {
-            messages = [];
+            return Object.keys(MESSAGE).every(key => {
+
+
+                return obj_.hasOwnProperty(key)
+            })
         }
 
-        const messageSet = Array.from(new Set(messages.concat(messages_)));
+        let messages = [];
 
-        globalFuncs.localStorage.setItem(KEY, messageSet);
+        try {
+
+            messages = JSON.parse(globalFuncs.localStorage.getItem(KEY));
+
+        } catch (e) {
+
+            messages = [];
+
+        } finally {
+
+            if (!(messages && Array.isArray(messages) && messages.every(validMessage))) {
+
+                messages = [];
+            }
+
+
+        }
+        return messages;
+    }
+
+
+    $scope.saveMessages = function saveMessages() {
+
+
+        let messages = handleGetLocalMessages().concat($scope.messages);
+
+
+        const messageSet = Array.from(new Set(messages.map(JSON.stringify))).map(JSON.parse);
+
+        globalFuncs.localStorage.setItem(KEY, JSON.stringify(messageSet));
+
     }
 
 
@@ -561,19 +604,14 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     const MESSAGE = {
         from: '0x1234',
         text: 'TEST',
-        time: new Date().getTime(),
+        time: DATE.getTime(),
     };
 
     // LIST of all messages, stored locally
 
-    let MESSAGES = globalFuncs.localStorage.getItem(KEY);
 
-    if (!(MESSAGES && Array.isArray(MESSAGES))) {
 
-        MESSAGES = [];
-    }
-
-    $scope.messages = MESSAGES;
+    $scope.messages = handleGetLocalMessages();
 
 
     // messages grouped by addr
@@ -604,13 +642,10 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
         const newMessages = $scope.messagesList[address].filter(message => {
 
-            // console.log(message.time, $scope.message_staling_period, message.time >= $scope.message_staling_period);
 
-            return message.time >= $scope.message_staling_period;
+            return message.time + $scope.message_staling_period > DATE.getTime();
         });
 
-
-        // console.log(address, $scope.message_staling_period, newMessages.length);
 
         return newMessages.length;
 
@@ -668,6 +703,20 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     }
 
 
+    $scope.$watch('messages', (val, oldVal) => {
+
+
+        console.log($scope.messages);
+
+
+        if (val !== [] && val !== oldVal) {
+            $scope.saveMessages();
+        }
+
+        console.log($scope.messages);
+    });
+
+
     $scope.$watch(function () {
         if (walletService.wallet == null) return null;
         return walletService.wallet.getAddressString();
@@ -707,10 +756,10 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
         return Validator.isValidENSorEtherAddress($scope.newMessage.to);
     };
 
-    const testAddrFrom = '0x1234';
 
-
-    initMessages(testAddrFrom);
+    getMessageStalingPeriod();
+    const testAddrTo = '0x1234';
+    initMessages(testAddrTo);
 
 
 }

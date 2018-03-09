@@ -8,10 +8,10 @@
     <!-- Title -->
     <div class="block text-center">
         <h1>
-            <a translate="NAV_LIST" ng-class="{'isActive': visibility == VISIBILITY.LIST}"
+            <a translate="NAV_LIST" ng-class="{'isActive': visibility === VISIBILITY.LIST}"
                ng-click="setVisibility(VISIBILITY.LIST)"> List </a>
             or
-            <a translate="NAV_NEW_MESSAGE" ng-class="{'isActive': visibility == VISIBILITY.NEW}"
+            <a translate="NAV_NEW_MESSAGE" ng-class="{'isActive': visibility === VISIBILITY.NEW}"
                ng-click="setVisibility(VISIBILITY.NEW)"> New Message </a>
         </h1>
     </div>

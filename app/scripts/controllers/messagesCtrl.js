@@ -337,19 +337,13 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
                         }
 
-                        if (index_ <= messages.length + 1) {
-
-                            $scope.loadingMessages = false;
-
-                        }
-
-
                     }));
 
 
                 }
 
                 else mapMessagesToMessageList();
+
                 $scope.loadingMessages = false;
                 // else uiFuncs.notifier.info('messages loaded from local storage');
 

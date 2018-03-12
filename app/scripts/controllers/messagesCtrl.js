@@ -5,13 +5,43 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     $scope.Validator = Validator;
     walletService.wallet = null;
 
+    const useTestData = false;
+
+    const DATE = new Date();
     const KEY = '@messages@';
+
+    const sendMessageModal = new Modal(document.getElementById('sendMessageModal'));
 
     const config = {
         fetchMessageInterval: 10 // seconds
     };
 
-    const DATE = new Date();
+
+    const MESSAGE = {
+        from: '0x1234',
+        to: '', // adding param locally so can switch b/w accounts easier
+        text: 'TEST',
+        time: DATE.getTime(),
+    };
+
+
+    const messageSet = messages => Array.from(new Set(messages.map(JSON.stringify))).map(JSON.parse);
+
+
+    $scope.msgCheckTime = null;
+
+    // messages grouped by addr
+
+    $scope.messagesList = {};
+
+
+    $scope.messagesConversation = null;
+
+
+    $scope.newMessage = {
+        to: '',
+        text: '',
+    };
 
 
     $scope.unlockWallet = false;
@@ -31,338 +61,40 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
     };
 
-    const testContract = {
-        address: '0x8F7a526C9693572baD2586895605e89B8D753068',//'0x440fd2c0ee33b6b6e241da7f7e7a1c28a1539386',
-        abi: [
-            {
-                "constant": true,
-                "inputs": [
-                    {
-                        "name": "_owner",
-                        "type": "address"
-                    }
-                ],
-                "name": "lastIndex",
-                "outputs": [
-                    {
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "constant": true,
-                "inputs": [
-                    {
-                        "name": "_who",
-                        "type": "address"
-                    },
-                    {
-                        "name": "_index",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "newMessage",
-                "outputs": [
-                    {
-                        "name": "",
-                        "type": "bool"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "constant": true,
-                "inputs": [
-                    {
-                        "name": "",
-                        "type": "address"
-                    },
-                    {
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "messages",
-                "outputs": [
-                    {
-                        "name": "from",
-                        "type": "address"
-                    },
-                    {
-                        "name": "text",
-                        "type": "string"
-                    },
-                    {
-                        "name": "time",
-                        "type": "uint256"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "constant": true,
-                "inputs": [],
-                "name": "message_staling_period",
-                "outputs": [
-                    {
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "constant": true,
-                "inputs": [
-                    {
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "name": "last_msg_index",
-                "outputs": [
-                    {
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "constant": true,
-                "inputs": [
-                    {
-                        "name": "_who",
-                        "type": "address"
-                    }
-                ],
-                "name": "getLastMessage",
-                "outputs": [
-                    {
-                        "name": "",
-                        "type": "address"
-                    },
-                    {
-                        "name": "",
-                        "type": "string"
-                    },
-                    {
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "constant": true,
-                "inputs": [
-                    {
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "name": "keys",
-                "outputs": [
-                    {
-                        "name": "key",
-                        "type": "string"
-                    },
-                    {
-                        "name": "key_type",
-                        "type": "string"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "constant": true,
-                "inputs": [
-                    {
-                        "name": "_who",
-                        "type": "address"
-                    }
-                ],
-                "name": "getPublicKey",
-                "outputs": [
-                    {
-                        "name": "_key",
-                        "type": "string"
-                    },
-                    {
-                        "name": "_key_type",
-                        "type": "string"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "constant": true,
-                "inputs": [
-                    {
-                        "name": "_who",
-                        "type": "address"
-                    },
-                    {
-                        "name": "_index",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "getMessageByIndex",
-                "outputs": [
-                    {
-                        "name": "",
-                        "type": "address"
-                    },
-                    {
-                        "name": "",
-                        "type": "string"
-                    },
-                    {
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": true,
-                        "name": "_sender",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": true,
-                        "name": "_receiver",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": false,
-                        "name": "_time",
-                        "type": "uint256"
-                    },
-                    {
-                        "indexed": false,
-                        "name": "message",
-                        "type": "string"
-                    }
-                ],
-                "name": "Message",
-                "type": "event"
-            },
-            {
-                "constant": false,
-                "inputs": [
-                    {
-                        "name": "_key",
-                        "type": "string"
-                    },
-                    {
-                        "name": "_type",
-                        "type": "string"
-                    }
-                ],
-                "name": "setPublicKey",
-                "outputs": [],
-                "payable": false,
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": true,
-                        "name": "_sender",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": false,
-                        "name": "_key",
-                        "type": "string"
-                    },
-                    {
-                        "indexed": false,
-                        "name": "_keytype",
-                        "type": "string"
-                    }
-                ],
-                "name": "PublicKeyUpdated",
-                "type": "event"
-            },
-            {
-                "constant": false,
-                "inputs": [
-                    {
-                        "name": "_to",
-                        "type": "address"
-                    },
-                    {
-                        "name": "_text",
-                        "type": "string"
-                    }
-                ],
-                "name": "sendMessage",
-                "outputs": [],
-                "payable": false,
-                "stateMutability": "nonpayable",
-                "type": "function"
-            }
-        ]
-    };
 
     $scope.visibility = $scope.VISIBILITY.LIST;
 
+    $scope.loadingMessages = false;
 
-    const node = nodes.nodeList.rop_mew;  //  .etc_epool;
 
     $scope.MESSAGE_STALING_PERIOD = 2160000;
 
     $scope.message_staling_period = DATE.getTime() + $scope.MESSAGE_STALING_PERIOD;
 
+    // INIT
+
+
+    let node = nodes.nodeList.etc_epool;
+
+    let CONTRACT_ADDRESS = '0x6A77417FFeef35ae6fe2E9d6562992bABA47a676'; // '0x8F7a526C9693572baD2586895605e89B8D753068';
+
+    const CONTRACT = node.abiList.find(abi => abi.address.toLowerCase() === CONTRACT_ADDRESS.toLowerCase());
+
+    if (!CONTRACT) {
+
+        console.error('ERROR FINDING CONTRACT', CONTRACT_ADDRESS, node);
+    }
+
+
+    const {name, address, abi} = CONTRACT;
 
     const messageContract = {
         functions: [],
-        abi: null,
-        name: null,
-        address: '0x6A77417FFeef35ae6fe2E9d6562992bABA47a676'
+        abi: JSON.parse(abi),
+        name,
+        address
     };
 
-
-    const foundContract = Object.assign({}, testContract, {abi: JSON.stringify(testContract.abi)});
-
-    //const foundContract = node.abiList.find(contract => contract.address === messageContract.address);
-
-
-    if (foundContract) {
-
-        Object.assign(messageContract, foundContract, {
-
-            abi: JSON.parse(foundContract.abi)
-        });
-
-    }
 
     messageContract.abi.forEach((item) => {
 
@@ -376,42 +108,70 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     });
 
 
-    const messageSet = messages => Array.from(new Set(messages.map(JSON.stringify))).map(JSON.parse);
+    if (useTestData) {
 
 
-    var network = globalFuncs.urlGet('network') || null;
+        console.log('use test data');
 
-    if (network) {
-        // $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
-        //$rootScope.$broadcast('ChangeNode', $scope.networks.rop_mew || 0);
+        node = nodes.nodeList.rop_mew;
+
+
+        $rootScope.$broadcast('ChangeNode', 'rop_mew');
+        CONTRACT_ADDRESS = '0x8F7a526C9693572baD2586895605e89B8D753068';
+
+        messageContract.address = CONTRACT_ADDRESS;
+
+
+        function generateTestMessages() {
+
+
+            const addrs_ = ["0x186f9a221197e3c5791c3a75b25558f9aa5a94c8", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0xd547750d9a3993a988e4a6ace72423f67c095480", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4"]
+
+            const addrs = Array.from(new Set(addrs_));
+
+            const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+
+            addrs.forEach((addr, i) => {
+
+
+                $scope.messages.push(mapToMessage(addr, addr, lorem, new Date(2016, i + 9, 1).getTime()));
+                $scope.messages.push(mapToMessage(addr, addr, lorem, new Date(2018, i + 2, 1).getTime()));
+            })
+
+        }
+
+
+        // $scope.messages = generateTestMessages();
+        // mapMessagesToMessageList();
+
+        //initMessages('0x1234')
     }
 
 
-    const MESSAGE = {
-        from: '0x1234',
-        text: 'TEST',
-        time: DATE.getTime(),
-    };
-
     // LIST of all messages, stored locally
+
+    $rootScope.$broadcast('ChangeNode', 'etc_epool');
+
+
+    $scope.interval = setInterval(() => {
+
+        $scope.msgCheckTime = new Date().toLocaleTimeString();
+        console.log('check messages', $scope.msgCheckTime);
+
+
+        if ($scope.unlockWallet && $scope.wallet) {
+
+            initMessages($scope.wallet.getAddressString());
+        }
+
+
+    }, 1000 * config.fetchMessageInterval);
 
 
     $scope.messages = handleGetLocalMessages();
 
-
-    // messages grouped by addr
-
-    $scope.messagesList = {};
-
-
-    $scope.messagesConversation = null;
-
-
-    $scope.newMessage = {
-        to: '',
-        text: '',
-    };
-
+    getMessageStalingPeriod();
 
     function encodeInputs(inputs) {
 
@@ -522,14 +282,18 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
     function initMessages(addr) {
 
-        const messages = $scope.messages.slice();
+
+        $scope.loadingMessages = true;
+
+        // filter messages by address in wallet
+        const messages = $scope.messages.slice().filter(validMessage).filter(message => message.to === addr);
 
 
         getLastMsgIndex(addr, function (result) {
 
             if (result && result.hasOwnProperty('data')) {
 
-                const lastMsgIndex = Number(ethFuncs.hexToDecimal(result.data));
+                const lastMsgIndex = parseInt(ethFuncs.hexToDecimal(result.data));
 
 
                 if (lastMsgIndex > messages.length) {
@@ -557,22 +321,26 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
                             const [from, text, time] = dater;
 
 
-                            const MESSAGE = mapToMessage(from, text, Number(time.toString()) * 1000);
+                            const MESSAGE = mapToMessage(from, addr, text, Number(time.toString()) * 1000);
 
 
                             $scope.messages.push(MESSAGE);
+                            $scope.saveMessages();
                             mapMessagesToMessageList();
 
+                            if ($scope.visibility === $scope.VISIBILITY.CONVERSATION) {
+
+                                // update if sending msg to same addr
+
+                                $scope.messagesConversation = $scope.messages.filter(m => m.to === addr);
+                            }
 
                         }
-                        // if last item in array
+
                         if (index_ <= messages.length + 1) {
 
+                            $scope.loadingMessages = false;
 
-                            $scope.saveMessages();
-
-
-                            // uiFuncs.notifier.info('new messages!');
                         }
 
 
@@ -582,6 +350,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
                 }
 
                 else mapMessagesToMessageList();
+                $scope.loadingMessages = false;
                 // else uiFuncs.notifier.info('messages loaded from local storage');
 
 
@@ -590,18 +359,17 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
         })
     }
 
+    function validMessage(obj_) {
+
+        return Object.keys(MESSAGE).every(key => {
+
+
+            return obj_.hasOwnProperty(key)
+        })
+    }
 
     function handleGetLocalMessages() {
 
-
-        function validMessage(obj_) {
-
-            return Object.keys(MESSAGE).every(key => {
-
-
-                return obj_.hasOwnProperty(key)
-            })
-        }
 
         let messages = [];
 
@@ -631,10 +399,12 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     $scope.saveMessages = function saveMessages() {
 
 
-        let messages = $scope.messages;
+        let messages = $scope.messages.slice().filter(validMessage);
 
 
         let messageSet_ = messageSet(messages);
+
+        console.log(messageSet_, messageSet_.length);
 
         globalFuncs.localStorage.setItem(KEY, JSON.stringify(messageSet_));
 
@@ -645,10 +415,10 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
     $scope.viewMessagesConversation = function (addr) {
 
+        $scope.visibility = $scope.VISIBILITY.CONVERSATION;
         $scope.messagesConversation = $scope.messagesList[addr];
 
 
-        $scope.visibility = $scope.VISIBILITY.CONVERSATION;
     };
 
 
@@ -667,14 +437,11 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     };
 
 
-    function mapToMessage(from, text, time) {
+    function mapToMessage(from, to, text, time) {
 
-        return Object.assign({}, MESSAGE, {from, text, time});
+        return Object.assign({}, MESSAGE, {from, to, text, time});
     }
 
-
-    // generateTestMessages();
-    // mapMessagesToMessageList();
 
     /*
 
@@ -688,7 +455,9 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
         // console.log($scope.messages);
 
 
-        const sorted = $scope.messages.sort((a, b) => b.time - a.time);
+        const addr = $scope.wallet.getAddressString();
+
+        const sorted = $scope.messages.filter(message => message.to === addr).sort((a, b) => b.time - a.time);
 
 
         $scope.messagesList = sorted.reduce((accum_, message) => {
@@ -703,6 +472,8 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
             return accum_;
 
         }, {});
+
+
     }
 
 
@@ -718,6 +489,9 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
         $scope.wallet = walletService.wallet;
         $scope.unlockWallet = true;
 
+        initMessages(walletService.wallet.getAddressString());
+
+
     });
 
 
@@ -725,7 +499,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
         $event.preventDefault();
 
-        console.log($event);
+        // console.log($event);
 
         const [TO, TEXT] = $event.target;
 
@@ -739,7 +513,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     $scope.setVisibility = function setVisibility(str) {
 
 
-        $scope.visibility = $scope.VISIBILITY[str];
+        $scope.visibility = str;
 
         $scope.newMessage = Object.assign({}, {text: '', to: ''});
 
@@ -753,40 +527,6 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
         return Validator.isValidENSorEtherAddress($scope.newMessage.to);
     };
 
-    function generateTestMessages() {
-
-
-        const addrs_ = ["0x186f9a221197e3c5791c3a75b25558f9aa5a94c8", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0xd547750d9a3993a988e4a6ace72423f67c095480", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4"]
-
-        const addrs = Array.from(new Set(addrs_));
-
-        const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-
-
-        addrs.forEach((addr, i) => {
-
-
-            $scope.messages.push(mapToMessage(addr, lorem, new Date(2016, i + 9, 1).getTime()));
-            $scope.messages.push(mapToMessage(addr, lorem, new Date(2018, i + 2, 1).getTime()));
-        })
-
-    }
-
-
-    getMessageStalingPeriod();
-    const testAddrTo = '0x1234';
-    initMessages(testAddrTo);
-
-
-    setInterval(() => {
-
-        console.log(new Date().toLocaleTimeString());
-
-        initMessages(testAddrTo);
-
-
-    }, 1000 * config.fetchMessageInterval);
-
 
     function sendMessage(to, text) {
 
@@ -795,7 +535,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
         if (!sendMsgAbi) {
 
-            alert('error');
+            console.error('error');
 
             return;
         }
@@ -843,7 +583,6 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
                     Object.assign($scope.tx, {
                         gasLimit: data.data,
                         gasPrice,
-                        gasprice: gasPrice,
                         from,
                         nonce,
                         to: messageContract.address,
@@ -852,14 +591,13 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
                     const txData = uiFuncs.getTxData($scope);
 
-                    txData.gasprice = gasPrice;
                     txData.gasPrice = gasPrice;
                     txData.nonce = nonce;
 
                     uiFuncs.generateTx(txData, function (rawTx) {
 
 
-                        console.log(Object.keys(rawTx), rawTx);
+                        // console.log(Object.keys(rawTx), rawTx);
 
                         const {signedTx, isError} = rawTx;
 
@@ -869,15 +607,12 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
                             return false;
                         }
 
-                        uiFuncs.sendTx(signedTx, function (resp) {
-                            if (!resp.isError) {
-                                var bExStr = $scope.ajaxReq.type !== nodes.nodeTypes.Custom ? "<a href='" + $scope.ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
-                                var contractAddr = $scope.tx.contractAddr ? " & Contract Address <a href='" + ajaxReq.blockExplorerAddr.replace('[[address]]', $scope.tx.contractAddr) + "' target='_blank' rel='noopener'>" + $scope.tx.contractAddr + "</a>" : '';
-                                $scope.notifier.success(globalFuncs.successMsgs[2] + "<br />" + resp.data + "<br />" + bExStr + contractAddr);
-                            } else {
-                                $scope.notifier.danger(resp.error);
-                            }
-                        });
+
+                        $scope.rawTx = rawTx;
+
+                        $scope.signedTx = signedTx;
+
+                        sendMessageModal.open();
 
 
                     })
@@ -888,7 +623,31 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
         })
 
 
+    };
+
+
+    $scope.confirmSendMessage = function () {
+        sendMessageModal.close();
+
+        uiFuncs.sendTx($scope.signedTx, function (resp) {
+            if (!resp.isError) {
+
+
+                var bExStr = $scope.ajaxReq.type !== nodes.nodeTypes.Custom ? "<a href='" + $scope.ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
+                var contractAddr = $scope.tx.contractAddr ? " & Contract Address <a href='" + ajaxReq.blockExplorerAddr.replace('[[address]]', $scope.tx.contractAddr) + "' target='_blank' rel='noopener'>" + $scope.tx.contractAddr + "</a>" : '';
+                $scope.notifier.success(globalFuncs.successMsgs[2] + "<br />" + resp.data + "<br />" + bExStr + contractAddr);
+            } else {
+                $scope.notifier.danger(resp.error);
+            }
+        });
     }
+
+
+    $scope.empty = function () {
+
+        return Object.keys($scope.messagesList).length === 0;
+    };
+
 
 }
 module.exports = messagesCtrl;

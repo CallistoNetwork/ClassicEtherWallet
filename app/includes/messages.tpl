@@ -6,14 +6,13 @@
 
 
     <div ng-if="!unlockWallet">
-        @@if (site === 'cx' ) {
-        <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>
-        }
-        @@if (site === 'cew' ) {
-        <wallet-decrypt-drtv></wallet-decrypt-drtv>
-        }
+        @@if (site === 'cx' ) {<cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>}
+        @@if (site === 'cew' ) {<wallet-decrypt-drtv></wallet-decrypt-drtv>}
     </div>
 
+
+    @@if (site === 'cew' ) { @@include( '../includes/sendMessageModal.tpl', { "site": "cew" } ) }
+    @@if (site === 'cx' ) { @@include( '../includes/sendMessageModal.tpl', { "site": "cx" } ) }
 
     <div ng-if="unlockWallet">
 
@@ -55,6 +54,9 @@
             @@if (site === 'cx' ) { @@include( '../includes/messages-new.tpl', { "site": "cx" } ) }
 
         </article>
+
+
+
 
     </div>
 

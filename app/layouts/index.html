@@ -1,47 +1,55 @@
-
 @@include( '../includes/header.tpl', { "site": "cew" } )
 
 <section class="container" style="min-height: 50%" ng-controller='viewCtrl'>
 
-  <div class="tab-content" >
-
-    @@include( '../includes/generateWallet.tpl',     { "site": "cew" } )
-
-    @@include( '../includes/sendTx.tpl',             { "site": "cew" } )
-
-    @@include( '../includes/swap.tpl',               { "site": "cew" } )
-
-    @@include( '../includes/offlineTx.tpl',          { "site": "cew" } )
-
-    @@include( '../includes/contracts.tpl',          { "site": "cew" } )
-
-    @@include( '../includes/ens.tpl',                { "site": "cew" } )
-
-    @@include( '../includes/dexns.tpl',              { "site": "cew" } )
-
-    @@include( '../includes/viewWalletInfo.tpl',     { "site": "cew" } )
-
-    @@include( '../includes/txStatus.tpl',           { "site": "cew" } )
-
-    @@include( '../includes/bulkGenerate.tpl',       { "site": "cew" } )
-
-    @@include( '../includes/bulkGenerate.tpl',       { "site": "cew" } )
-
-    @@include( '../includes/print.tpl',              { "site": "cew" } )
-
-  </div>
+    <div class="tab-content">
 
 
-  @@include('../includes/alerts.tpl')
+
+        @@include( '../includes/messages.tpl', { "site": "cew" } )
 
 
-  <!--
-  <section class="loading-wrap" ng-hide="1==1">
-    <div class="loading">
-      <img src="images/loading.gif" />
-      <h1> Loading... </h1>
-  </section>
-  -->
+        @@include( '../includes/generateWallet.tpl', { "site": "cew" } )
+
+        @@include( '../includes/sendTx.tpl', { "site": "cew" } )
+
+        @@include( '../includes/swap.tpl', { "site": "cew" } )
+
+        @@include( '../includes/offlineTx.tpl', { "site": "cew" } )
+
+        @@include( '../includes/contracts.tpl', { "site": "cew" } )
+
+        @@include( '../includes/ens.tpl', { "site": "cew" } )
+
+        @@include( '../includes/dexns.tpl', { "site": "cew" } )
+
+        @@include( '../includes/viewWalletInfo.tpl', { "site": "cew" } )
+
+        @@include( '../includes/txStatus.tpl', { "site": "cew" } )
+
+        @@include( '../includes/bulkGenerate.tpl', { "site": "cew" } )
+
+        @@include( '../includes/bulkGenerate.tpl', { "site": "cew" } )
+
+        @@include( '../includes/print.tpl', { "site": "cew" } )
+
+
+
+
+
+    </div>
+
+
+    @@include('../includes/alerts.tpl')
+
+
+    <!--
+    <section class="loading-wrap" ng-hide="1==1">
+      <div class="loading">
+        <img src="images/loading.gif" />
+        <h1> Loading... </h1>
+    </section>
+    -->
 
 </section>
 

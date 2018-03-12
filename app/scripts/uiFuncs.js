@@ -12,15 +12,21 @@ uiFuncs.getTxData = function ($scope) {
         privKey: $scope.wallet.privKey ? $scope.wallet.getPrivateKeyString() : '',
         path: $scope.wallet.getPath(),
         hwType: $scope.wallet.getHWType(),
-        hwTransport: $scope.wallet.getHWTransport()
+        hwTransport: $scope.wallet.getHWTransport(),
+        //gasPrice: $scope.tx.gasPrice || $scope.tx.gasprice || '',
     };
-}
+};
+
+
+
+
 uiFuncs.isTxDataValid = function (txData) {
     if (txData.to != "0xCONTRACT" && !ethFuncs.validateEtherAddress(txData.to)) throw globalFuncs.errorMsgs[5];
     else if (!globalFuncs.isNumeric(txData.value) || parseFloat(txData.value) < 0) throw globalFuncs.errorMsgs[0];
     else if (!globalFuncs.isNumeric(txData.gasLimit) || parseFloat(txData.gasLimit) <= 0) throw globalFuncs.errorMsgs[8];
     else if (!ethFuncs.validateHexString(txData.data)) throw globalFuncs.errorMsgs[9];
     if (txData.to == "0xCONTRACT") txData.to = '';
+
 }
 uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
     var localCallback = function (result) {
@@ -128,7 +134,8 @@ uiFuncs.generateTx = function (txData, callback) {
         var genTxWithInfo = function (data) {
             var rawTx = {
                 nonce: ethFuncs.sanitizeHex(data.nonce),
-                gasPrice: data.isOffline ? ethFuncs.sanitizeHex(data.gasprice) : ethFuncs.sanitizeHex(ethFuncs.addTinyMoreToGas(data.gasprice)),
+                // gasPrice: data.isOffline ? ethFuncs.sanitizeHex(data.gasprice) : ethFuncs.sanitizeHex(ethFuncs.addTinyMoreToGas(data.gasprice)),
+                gasPrice: ethFuncs.sanitizeHex(data.gasprice),
                 gasLimit: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(txData.gasLimit)),
                 to: ethFuncs.sanitizeHex(txData.to),
                 value: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(txData.value, txData.unit))),

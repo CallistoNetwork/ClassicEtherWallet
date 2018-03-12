@@ -14,6 +14,16 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     const DATE = new Date();
 
 
+    $scope.unlockWallet = false;
+
+    $scope.tx = {
+        data: '',
+        to: '',
+        gasLimit: '',
+        from: '',
+    };
+
+
     $scope.VISIBILITY = {
         LIST: 'list',
         NEW: 'new',
@@ -329,7 +339,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
     $scope.MESSAGE_STALING_PERIOD = 2160000;
 
-    $scope.message_staling_period = null;
+    $scope.message_staling_period = DATE.getTime() + $scope.MESSAGE_STALING_PERIOD;
 
 
     const messageContract = {
@@ -556,7 +566,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
                         }
                         // if last item in array
-                        if (index_ === messages.length + 1) {
+                        if (index_ <= messages.length + 1) {
 
 
                             $scope.saveMessages();
@@ -666,6 +676,11 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     // generateTestMessages();
     // mapMessagesToMessageList();
 
+    /*
+
+        messages are grouped by addr and sorted
+     */
+
 
     function mapMessagesToMessageList() {
 
@@ -691,24 +706,17 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     }
 
 
-    // $scope.$watch('messages', (val, oldVal) => {
-    //
-    //
-    //     if (Array.isArray(val) && val.length > 0) {
-    //         $scope.saveMessages();
-    //     }
-    //
-    //     console.log($scope.messages);
-    // });
-
-
     $scope.$watch(function () {
         if (walletService.wallet == null) return null;
         return walletService.wallet.getAddressString();
     }, function () {
-        if (walletService.wallet == null) return;
+        if (walletService.wallet == null) {
+
+            $scope.unlockWallet = false;
+            return;
+        }
         $scope.wallet = walletService.wallet;
-        $scope.wd = true;
+        $scope.unlockWallet = true;
 
     });
 
@@ -717,21 +725,25 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
         $event.preventDefault();
 
-        console.log($scope.newMessage);
+        console.log($event);
 
-        //TODO: write to contract
+        const [TO, TEXT] = $event.target;
 
+        const to = TO.value;
+        const text = TEXT.value;
+        sendMessage(to, text);
 
-    }
+    };
 
 
     $scope.setVisibility = function setVisibility(str) {
 
 
-        $scope.visibility = str;
+        $scope.visibility = $scope.VISIBILITY[str];
 
-        $scope.newMessage.text = '';
+        $scope.newMessage = Object.assign({}, {text: '', to: ''});
 
+        $scope.tx = {};
 
     };
 
@@ -775,6 +787,108 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
     }, 1000 * config.fetchMessageInterval);
 
+
+    function sendMessage(to, text) {
+
+
+        const sendMsgAbi = messageContract.abi.find(a => a.name === 'sendMessage');
+
+        if (!sendMsgAbi) {
+
+            alert('error');
+
+            return;
+        }
+
+
+        var fullFuncName = ethUtil.solidityUtils.transformToFullName(sendMsgAbi);
+        var funcSig = ethFuncs.getFunctionSignature(fullFuncName);
+        $scope.tx.data = ethFuncs.sanitizeHex(funcSig + ethUtil.solidityCoder.encodeParams(
+            sendMsgAbi.inputs.map(i => i.type),
+            [to, text],
+        ));
+
+
+        // FIXME: ETC!!!!
+
+        ajaxReq.getTransactionData($scope.wallet.getAddressString(), function (data) {
+
+            if (data.error) $scope.notifier.danger(data.msg);
+
+            data = data.data;
+
+            const {address: from, gasprice: gasPrice, nonce} = data;
+
+            const estObj = {
+                //gasPrice,
+                from,
+                to: messageContract.address,
+                data: $scope.tx.data,
+                value: "0x00"
+            };
+
+
+            ethFuncs.estimateGas(estObj, function (data) {
+
+                if (data.error) {
+
+                    $scope.tx.gasLimit = '';
+
+                    $scope.notifier.danger(data.msg);
+
+                    return false;
+
+                } else {
+
+                    Object.assign($scope.tx, {
+                        gasLimit: data.data,
+                        gasPrice,
+                        gasprice: gasPrice,
+                        from,
+                        nonce,
+                        to: messageContract.address,
+                        value: '0x00',
+                    });
+
+                    const txData = uiFuncs.getTxData($scope);
+
+                    txData.gasprice = gasPrice;
+                    txData.gasPrice = gasPrice;
+                    txData.nonce = nonce;
+
+                    uiFuncs.generateTx(txData, function (rawTx) {
+
+
+                        console.log(Object.keys(rawTx), rawTx);
+
+                        const {signedTx, isError} = rawTx;
+
+                        if (isError) {
+
+
+                            return false;
+                        }
+
+                        uiFuncs.sendTx(signedTx, function (resp) {
+                            if (!resp.isError) {
+                                var bExStr = $scope.ajaxReq.type !== nodes.nodeTypes.Custom ? "<a href='" + $scope.ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
+                                var contractAddr = $scope.tx.contractAddr ? " & Contract Address <a href='" + ajaxReq.blockExplorerAddr.replace('[[address]]', $scope.tx.contractAddr) + "' target='_blank' rel='noopener'>" + $scope.tx.contractAddr + "</a>" : '';
+                                $scope.notifier.success(globalFuncs.successMsgs[2] + "<br />" + resp.data + "<br />" + bExStr + contractAddr);
+                            } else {
+                                $scope.notifier.danger(resp.error);
+                            }
+                        });
+
+
+                    })
+
+                }
+
+            });
+        })
+
+
+    }
 
 }
 module.exports = messagesCtrl;

@@ -1,16 +1,23 @@
 'use strict';
 
-var messagesCtrl = function ($scope, $rootScope, walletService) {
+var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
     $scope.ajaxReq = ajaxReq;
     $scope.Validator = Validator;
-    walletService.wallet = null;
 
+    // load contract deployed to ropsten network
     const useTestData = false;
 
     const DATE = new Date();
+
+    // localStorage key
     const KEY = '@messages@';
 
-    const sendMessageModal = new Modal(document.getElementById('sendMessageModal'));
+    let sendMessageModal;
+
+    if (globalService.currentTab === globalService.tabs.messages.id) {
+
+        sendMessageModal = new Modal(document.getElementById('sendMessageModal'));
+    }
 
     const config = {
         fetchMessageInterval: 10 // seconds
@@ -71,6 +78,9 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
     $scope.message_staling_period = DATE.getTime() + $scope.MESSAGE_STALING_PERIOD;
 
+    $scope.NUMBER_OF_MESSAGES = -1;
+    $scope.NUMBER_OF_NEW_MESSAGES = -1;
+
     // INIT
 
 
@@ -106,6 +116,11 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
         }
 
     });
+
+    if (ajaxReq.type.toUpperCase() !== 'ETC') {
+
+        $rootScope.$broadcast('ChangeNode', 'etc_epool');
+    }
 
 
     if (useTestData) {
@@ -147,11 +162,6 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
         //initMessages('0x1234')
     }
-
-
-    // LIST of all messages, stored locally
-
-    $rootScope.$broadcast('ChangeNode', 'etc_epool');
 
 
     $scope.interval = setInterval(() => {
@@ -286,7 +296,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
         $scope.loadingMessages = true;
 
         // filter messages by address in wallet
-        const messages = $scope.messages.slice().filter(validMessage).filter(message => message.to === addr);
+        const messages = $scope.messages.slice().filter(message => validMessage(message) && message.to === addr);
 
 
         getLastMsgIndex(addr, function (result) {
@@ -398,7 +408,7 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
         let messageSet_ = messageSet(messages);
 
-        console.log(messageSet_, messageSet_.length);
+        // console.log(messageSet_, messageSet_.length);
 
         globalFuncs.localStorage.setItem(KEY, JSON.stringify(messageSet_));
 
@@ -419,14 +429,25 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
     $scope.numberOfNewMessages = function numberOfNewMessages(address) {
 
 
-        const newMessages = $scope.messagesList[address].filter(message => {
+        return $scope.messages.filter(message =>
+
+            validMessage(message) &&
+            message.to === address &&
+            message.time + $scope.message_staling_period > DATE.getTime()
+        ).length
+
+    };
+
+    $scope.numberOfNewMessagesFrom = function numberOfNewMessages(from, address) {
 
 
-            return message.time + $scope.message_staling_period > DATE.getTime();
-        });
+        return $scope.messages.filter(message =>
 
-
-        return newMessages.length;
+            validMessage(message) &&
+            message.to === address &&
+            message.from === from &&
+            message.time + $scope.message_staling_period > DATE.getTime()
+        ).length
 
     };
 
@@ -468,6 +489,10 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
         }, {});
 
 
+        $scope.NUMBER_OF_MESSAGES = sorted.length;
+        $scope.NUMBER_OF_NEW_MESSAGES = $scope.numberOfNewMessages(addr);
+
+
     }
 
 
@@ -493,13 +518,18 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
 
         $event.preventDefault();
 
-        // console.log($event);
-
         const [TO, TEXT] = $event.target;
 
         const to = TO.value;
         const text = TEXT.value;
-        sendMessage(to, text);
+
+        if (nodes.nodeList[globalFuncs.getCurNode()].name.toUpperCase() !== 'ETC') {
+
+            $scope.notifier.danger('Wrong chain! You need to switch to $ETC network to send messages');
+
+
+        }
+        else sendMessage(to, text);
 
     };
 
@@ -542,8 +572,6 @@ var messagesCtrl = function ($scope, $rootScope, walletService) {
             [to, text],
         ));
 
-
-        // FIXME: ETC!!!!
 
         ajaxReq.getTransactionData($scope.wallet.getAddressString(), function (data) {
 

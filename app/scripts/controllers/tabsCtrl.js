@@ -65,8 +65,6 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
     }
 
     var setGasValues = function() {
-        $scope.gas.max = 10000;
-        $scope.gas.min = 0;
         $scope.gas.value = parseInt(globalFuncs.localStorage.getItem(gasPriceKey)) || 21;
         $scope.gas.curVal = $scope.gas.value;
         $scope.gas.max = 100;

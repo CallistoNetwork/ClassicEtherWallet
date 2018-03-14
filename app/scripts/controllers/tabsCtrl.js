@@ -60,7 +60,7 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
         $scope.gas.min = 0;
         $scope.gas.value = parseInt(globalFuncs.localStorage.getItem(gasPriceKey)) || 21;
         $scope.gas.curVal = $scope.gas.value;
-        $scope.gas.max = 60;
+        $scope.gas.max = 100;
         $scope.gas.min = 0.1;
         $scope.recommendedGas = {
           low: 10,
@@ -91,7 +91,8 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
         }
         let keyNode = JSON.parse($scope.keyNode);
         if (keyNode.key === "clo_testnet" || keyNode.key === "clo_testnet2") {
-            setCallistoGasValues();
+            //setCallistoGasValues();
+            setGasValues();
         } else {
             setGasValues();
         }

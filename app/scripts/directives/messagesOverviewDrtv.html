@@ -1,0 +1,26 @@
+<div class="row"
+     ng-if="wallet"
+     ng-controller='messagesCtrl as $ctrl'>
+
+    <div class="col-xs-6">You have:</div>
+    <div class="col-xs-6">Total:</div>
+    <a ng-click="globalService.currentTab = globalService.tabs.messages.id">
+        <div class="col-xs-6">
+
+            <span ng-if="loadingMessages">
+                LOADING...
+            </span>
+            <span ng-if="!loadingMessages">
+                {{NUMBER_OF_NEW_MESSAGES}} Recent messages
+            </span>
+        </div>
+    </a>
+    <div class="col-xs-6">
+        <span ng-if="loadingMessages">
+                LOADING...
+            </span>
+        <span ng-if="!loadingMessages">
+            {{NUMBER_OF_MESSAGES}} messages
+       </span>
+    </div>
+</div>

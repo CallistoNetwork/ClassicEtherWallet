@@ -41,10 +41,10 @@
                     <div class="row">
                         <b>New Messages: </b>
                         <b
-                                ng-class="numberOfNewMessages(message[0].from) > 0 ? 'text-success' : 'text-gray'"
+                                ng-class="numberOfNewMessagesFrom(message[0].from, message[0].to) > 0 ? 'text-success' : 'text-gray'"
                         >
 
-                            {{numberOfNewMessages(message[0].from)}}
+                            {{numberOfNewMessagesFrom(message[0].from, message[0].to)}}
                         </b>
                     </div>
                     <div>

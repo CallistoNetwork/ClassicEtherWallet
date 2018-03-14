@@ -2,6 +2,10 @@
 <section class="col-sm-8">
     <div class="block">
 
+    <!-- To Address -->
+    <div class="row form-group">
+      <address-field placeholder="0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8" var-name="tx.to"></address-field>
+    </div>
 
         <!-- Amount to Send -->
         <label translate="SEND_amount">Amount to Send:</label>

@@ -39,7 +39,7 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
 
     $scope.gas = {
       curVal: 21,
-      value: globalFuncs.localStorage.getItem(gasPriceKey, null) ? parseInt(globalFuncs.localStorage.getItem(gasPriceKey)) : 21,
+      value:  parseInt(globalFuncs.localStorage.getItem(gasPriceKey)) || 21,
       max: 10000,
       min: 0.1,
       step: 0.1
@@ -58,7 +58,7 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
     var setGasValues = function() {
         $scope.gas.max = 10000;
         $scope.gas.min = 0;
-        $scope.gas.value = globalFuncs.localStorage.getItem(gasPriceKey, null) ? parseInt(globalFuncs.localStorage.getItem(gasPriceKey)) : 21;
+        $scope.gas.value = parseInt(globalFuncs.localStorage.getItem(gasPriceKey)) || 21;
         $scope.gas.curVal = $scope.gas.value;
         $scope.gas.max = 60;
         $scope.gas.min = 0.1;
@@ -73,7 +73,7 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
         let newGasPriceKey = gasPriceKey + "-CLO";
         $scope.gas.max = 10000;
         $scope.gas.min = 0;
-        $scope.gas.value = globalFuncs.localStorage.getItem(newGasPriceKey, null) ? parseInt(globalFuncs.localStorage.getItem(newGasPriceKey)) : 2000;
+        $scope.gas.value = parseInt(globalFuncs.localStorage.getItem(newGasPriceKey)) || 2000;
         $scope.gas.curVal = $scope.gas.value;
         $scope.gas.max = 5000;
         $scope.gas.min = 1900;

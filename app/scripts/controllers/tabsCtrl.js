@@ -1,5 +1,5 @@
 'use strict';
-var tabsCtrl = function ($scope, globalService, $translate, $sce) {
+var tabsCtrl = function($scope, globalService, $translate, $sce) {
     $scope.gService = globalService;
     $scope.tabNames = $scope.gService.tabs;
     $scope.curLang = 'English';
@@ -7,7 +7,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
     $scope.Validator = Validator;
     $scope.nodeList = nodes.nodeList;
     $scope.defaultNodeKey = 'etc_epool';
-    $scope.customNode = {options: 'eth', name: '', url: '', port: '', httpBasicAuth: null, eip155: false, chainId: ''};
+    $scope.customNode = { options: 'eth', name: '', url: '', port: '', httpBasicAuth: null, eip155: false, chainId: '' };
     $scope.customNodeCount = 0;
     $scope.nodeIsConnected = true;
     $scope.browserProtocol = window.location.protocol;
@@ -18,15 +18,11 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
     $scope.ajaxReq = ajaxReq;
     $scope.nodeType = $scope.ajaxReq.type
     $scope.nodeService = $scope.ajaxReq.service
-    $scope.$watch('ajaxReq.type', function () {
-        $scope.nodeType = $scope.ajaxReq.type
-    })
-    $scope.$watch('ajaxReq.service', function () {
-        $scope.nodeService = $scope.ajaxReq.service
-    })
+    $scope.$watch('ajaxReq.type', function() { $scope.nodeType = $scope.ajaxReq.type })
+    $scope.$watch('ajaxReq.service', function() { $scope.nodeService = $scope.ajaxReq.service })
 
-    $scope.setArrowVisibility = function () {
-        setTimeout(function () {
+    $scope.setArrowVisibility = function() {
+        setTimeout(function() {
             if (document.querySelectorAll('.nav-inner')[0] && document.querySelectorAll('.nav-scroll')[0]) {
                 $scope.showLeftArrow = false;
                 $scope.showRightArrow = !(document.querySelectorAll('.nav-inner')[0].clientWidth <= document.querySelectorAll('.nav-scroll')[0].clientWidth);
@@ -41,56 +37,82 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
 
     var gasPriceKey = "gasPrice";
 
-    const DEFAULT_GAS_PRICE = 21; //GWei
+    $scope.gas = {
+      curVal: 21,
+      value:  parseInt(globalFuncs.localStorage.getItem(gasPriceKey)) || 21,
+      max: 100,
+      min: 0.1,
+      step: 0.1
+    }
 
+    $scope.gasChanged = function() {
+		if(!($scope.gas.value <= 100 && $scope.gas.value >= 0.1))
+		{
+			$scope.notifier.danger("Invalid gas price! Min gasPrice is 0.1 GWei. Max gasPrice is 100 GWei. GasPrice is resetted to 21GWei default value!");
+			$scope.gas.value = 21;
+			console.log($scope.gas.value);
+		}
+		else
+		{
+			let newGasPriceKey = gasPriceKey;
+			let node = JSON.parse($scope.keyNode);
+			if (node.key === "clo_testnet") {
+				newGasPriceKey += "-CLO"
+			}
+			globalFuncs.localStorage.setItem(newGasPriceKey, $scope.gas.value);
+			ethFuncs.gasAdjustment = $scope.gas.value;
+		}
+    }
 
-    const DEFAULT_GAS_OBJ = {
-        curVal: DEFAULT_GAS_PRICE,
-        value: DEFAULT_GAS_PRICE,
-        max: 100,
-        min: 0.1,
-        step: 0.1
-    };
-
-    $scope.gas = DEFAULT_GAS_OBJ;
-
-    $scope.gasChanged = function () {
-
-        globalFuncs.localStorage.setItem(gasPriceKey, $scope.gas.value);
-        ethFuncs.gasAdjustment = $scope.gas.value;
-    };
-
-    var setGasValues = function () {
-
-        $scope.gas = Object.assign($scope.gas, DEFAULT_GAS_OBJ);
-
+    var setGasValues = function() {
+        $scope.gas.value = parseInt(globalFuncs.localStorage.getItem(gasPriceKey)) || 21;
+        $scope.gas.curVal = $scope.gas.value;
+        $scope.gas.max = 100;
+        $scope.gas.min = 0.1;
         $scope.recommendedGas = {
-            low: 10,
-            high: 20
-        };
+          low: 10,
+          high: 20
+        }
+        ethFuncs.gasAdjustment = $scope.gas.value;
+    }
 
-        ethFuncs.gasAdjustment = DEFAULT_GAS_PRICE;
-    };
+    var setCallistoGasValues = function() {
+        let newGasPriceKey = gasPriceKey + "-CLO";
+        $scope.gas.max = 10000;
+        $scope.gas.min = 0;
+        $scope.gas.value = parseInt(globalFuncs.localStorage.getItem(newGasPriceKey)) || 2000;
+        $scope.gas.curVal = $scope.gas.value;
+        $scope.gas.max = 5000;
+        $scope.gas.min = 1900;
+        $scope.recommendedGas = {
+          low: 2000,
+          high: 3000
+        }
+        ethFuncs.gasAdjustment = $scope.gas.value;
+    }
 
-    $scope.setGasPrice = function () {
-
-
+    $scope.setGasPrice = function() {
         $scope.keyNode = globalFuncs.localStorage.getItem('curNode', null);
         if ($scope.keyNode == null) {
             return;
         }
-
-
-        setGasValues();
-
+        let keyNode = JSON.parse($scope.keyNode);
+        if (keyNode.key === "clo_testnet" || keyNode.key === "clo_testnet2") {
+            //setCallistoGasValues();
+            setGasValues();
+        } else {
+            setGasValues();
+        }
         $scope.gasChanged();
-    };
+    }
 
-    $scope.$watch('keyNode', function () {
+    $scope.$watch('keyNode', function() {
         $scope.setGasPrice();
     })
 
-    $scope.changeNode = function (key) {
+    $scope.setGasPrice();
+
+    $scope.changeNode = function(key) {
         if ($scope.nodeList[key]) {
             $scope.curNode = $scope.nodeList[key];
         } else {
@@ -98,10 +120,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
         }
         $scope.dropdownNode = false;
 
-        Token.popTokens = $scope.curNode.tokenList.map(token => Object.assign(token, {
-            node: key,
-            network: $scope.curNode.name
-        }));
+        Token.popTokens = $scope.curNode.tokenList.map(token => Object.assign(token, {node: key, network: $scope.curNode.name}));
 
 
         ajaxReq['key'] = key;
@@ -115,26 +134,26 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
         $scope.keyNode = globalFuncs.localStorage.getItem('curNode', null);
         if (nodes.ensNodeTypes.indexOf($scope.curNode.type) == -1) $scope.tabNames.ens.cx = $scope.tabNames.ens.mew = false;
         else $scope.tabNames.ens.cx = $scope.tabNames.ens.mew = true;
-        ajaxReq.getCurrentBlock(function (data) {
+        ajaxReq.getCurrentBlock(function(data) {
             if (data.error) {
                 $scope.nodeIsConnected = false;
                 $scope.notifier.danger(globalFuncs.errorMsgs[32]);
             } else {
                 $scope.nodeIsConnected = true;
-                $scope.notifier.info(globalFuncs.successMsgs[5] + '— Now, check the URL: <strong>' + window.location.href + '.</strong> <br /> Network: <strong>' + $scope.nodeType + ' </strong> provided by <strong>' + $scope.nodeService + '.</strong>', 5000)
+                $scope.notifier.info( globalFuncs.successMsgs[5] + '— Now, check the URL: <strong>' + window.location.href + '.</strong> <br /> Network: <strong>' + $scope.nodeType + ' </strong> provided by <strong>' + $scope.nodeService + '.</strong>', 5000)
             }
         });
 
     }
-    $scope.checkNodeUrl = function (nodeUrl) {
+    $scope.checkNodeUrl = function(nodeUrl) {
         return $scope.Validator.isValidURL(nodeUrl);
     }
-    $scope.setCurNodeFromStorage = function () {
+    $scope.setCurNodeFromStorage = function() {
         var node = globalFuncs.localStorage.getItem('curNode', null);
-        if (node === JSON.stringify({"key": "eth_metamask"})) {
-            node = JSON.stringify({"key": "eth_infura"})
+        if (node === JSON.stringify({"key":"eth_metamask"})) {
+          node = JSON.stringify({"key":"eth_infura"})
         }
-        if (node == null) {
+       if (node == null) {
             $scope.changeNode($scope.defaultNodeKey);
         } else {
             node = JSON.parse(node);
@@ -142,7 +161,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
             $scope.changeNode(key);
         }
     }
-    $scope.addCustomNodeToList = function (nodeInfo) {
+    $scope.addCustomNodeToList = function(nodeInfo) {
         var tempObj = null;
         if (nodeInfo.options == 'etc') tempObj = JSON.parse(JSON.stringify(nodes.nodeList.etc_epool));
         else if (nodeInfo.options == 'eth') tempObj = JSON.parse(JSON.stringify(nodes.nodeList.eth_ethscan));
@@ -162,7 +181,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
             $scope.customNodeCount++;
         }
     }
-    $scope.getCustomNodesFromStorage = function () {
+    $scope.getCustomNodesFromStorage = function() {
         for (var key in $scope.nodeList) {
             if (key.indexOf("cus_") != -1) delete $scope.nodeList[key];
         }
@@ -178,7 +197,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
         $scope.setCurNodeFromStorage();
     }
 
-    $scope.saveCustomNode = function () {
+    $scope.saveCustomNode = function() {
         try {
             if (!$scope.Validator.isAlphaNumericSpace($scope.customNode.name)) throw globalFuncs.errorMsgs[22];
             else if (!$scope.checkNodeUrl($scope.customNode.url)) throw globalFuncs.errorMsgs[23];
@@ -197,18 +216,10 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
         $scope.changeNode('cus_' + customNode.options + '_' + ($scope.customNodeCount - 1));
         globalFuncs.localStorage.setItem("localNodes", JSON.stringify(localNodes));
         $scope.customNodeModal.close();
-        $scope.customNode = {
-            options: 'eth',
-            name: '',
-            url: '',
-            port: '',
-            httpBasicAuth: null,
-            eip155: false,
-            chainId: ''
-        };
+        $scope.customNode = { options: 'eth', name: '', url: '', port: '', httpBasicAuth: null, eip155: false, chainId: '' };
     }
 
-    $scope.removeNodeFromLocal = function (localNodeName) {
+    $scope.removeNodeFromLocal = function(localNodeName) {
         var localNodes = globalFuncs.localStorage.getItem('localNodes', null);
         localNodes = !localNodes ? [] : JSON.parse(localNodes);
         for (var i = 0; i < localNodes.length; i++) {
@@ -219,7 +230,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
         $scope.setCurNodeFromStorage();
     }
 
-    $scope.setTab = function (hval) {
+    $scope.setTab = function(hval) {
         if (hval != '') {
             hval = hval.replace('#', '');
             //          //Check if URL contains Parameters
@@ -240,27 +251,27 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
     }
     $scope.setTab(hval);
 
-    $scope.tabClick = function (id) {
+    $scope.tabClick = function(id) {
         $scope.activeTab = globalService.currentTab = id;
         for (var key in $scope.tabNames) {
             if ($scope.tabNames[key].id == id) location.hash = $scope.tabNames[key].url;
         }
     }
 
-    $scope.setLanguageVal = function (id, varName, pos) {
-        $translate(id).then(function (paragraph) {
+    $scope.setLanguageVal = function(id, varName, pos) {
+        $translate(id).then(function(paragraph) {
             globalFuncs[varName][pos] = paragraph;
-        }, function (translationId) {
+        }, function(translationId) {
             globalFuncs[varName][pos] = translationId;
         });
     }
 
-    $scope.setErrorMsgLanguage = function () {
+    $scope.setErrorMsgLanguage = function() {
         for (var i = 0; i < globalFuncs.errorMsgs.length; i++) $scope.setLanguageVal('ERROR_' + i, 'errorMsgs', i);
         for (var i = 0; i < globalFuncs.successMsgs.length; i++) $scope.setLanguageVal('SUCCESS_' + (i + 1), 'successMsgs', i);
     }
 
-    $scope.setGethErrMsgLanguage = function () {
+    $scope.setGethErrMsgLanguage = function() {
         globalFuncs.gethErrorMsgs = {};
         for (var s in globalFuncs.gethErrors) {
             var key = globalFuncs.gethErrors[s];
@@ -270,7 +281,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
         }
     }
 
-    $scope.setParityErrMsgLanguage = function () {
+    $scope.setParityErrMsgLanguage = function() {
         globalFuncs.parityErrorMsgs = {};
         for (var s in globalFuncs.parityErrors) {
             var key = globalFuncs.parityErrors[s];
@@ -280,7 +291,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
         }
     }
 
-    $scope.changeLanguage = function (key, value) {
+    $scope.changeLanguage = function(key, value) {
         $translate.use(key);
         $scope.setErrorMsgLanguage();
         if (globalFuncs.getEthNodeName() == 'geth')
@@ -296,7 +307,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
         }));
         globalFuncs.curLang = key;
     }
-    $scope.setLanguageFromStorage = function () {
+    $scope.setLanguageFromStorage = function() {
         var lang = globalFuncs.localStorage.getItem('language', null);
         if (lang == null) lang = "{\"key\":\"en\",\"value\":\"English\"}";
         lang = JSON.parse(lang);
@@ -306,42 +317,42 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
     }
     $scope.setLanguageFromStorage();
 
-    $scope.setHash = function (hash) {
+    $scope.setHash = function(hash) {
         location.hash = hash;
         $scope.setTab(hash);
         $scope.$apply();
     }
 
-    $scope.scrollHoverIn = function (isLeft, val) {
+    $scope.scrollHoverIn = function(isLeft, val) {
         clearInterval($scope.sHoverTimer);
-        $scope.sHoverTimer = setInterval(function () {
+        $scope.sHoverTimer = setInterval(function() {
             if (isLeft) $scope.scrollLeft(val);
             else $scope.scrollRight(val);
         }, 20);
     }
 
-    $scope.scrollHoverOut = function () {
+    $scope.scrollHoverOut = function() {
         clearInterval($scope.sHoverTimer);
     }
 
-    $scope.setOnScrollArrows = function () {
+    $scope.setOnScrollArrows = function() {
         var ele = document.querySelectorAll('.nav-scroll')[0];
         $scope.showLeftArrow = ele.scrollLeft > 0;
         $scope.showRightArrow = document.querySelectorAll('.nav-inner')[0].clientWidth > (ele.clientWidth + ele.scrollLeft);
         $scope.$apply();
     }
 
-    $scope.scrollLeft = function (val) {
+    $scope.scrollLeft = function(val) {
         var ele = document.querySelectorAll('.nav-scroll')[0];
         ele.scrollLeft -= val;
     }
 
-    $scope.scrollRight = function (val) {
+    $scope.scrollRight = function(val) {
         var ele = document.querySelectorAll('.nav-scroll')[0];
         ele.scrollLeft += val;
     }
 
-    $scope.$on('ChangeNode', function (event, nodeId) {
+    $scope.$on('ChangeNode', function(event, nodeId) {
         $scope.changeNode(nodeId);
     });
 

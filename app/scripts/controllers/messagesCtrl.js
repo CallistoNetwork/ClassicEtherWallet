@@ -164,19 +164,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
     }
 
 
-    $scope.interval = setInterval(() => {
-
-        $scope.msgCheckTime = new Date().toLocaleTimeString();
-        console.log('check messages', $scope.msgCheckTime);
-
-
-        if ($scope.unlockWallet && $scope.wallet) {
-
-            initMessages($scope.wallet.getAddressString());
-        }
-
-
-    }, 1000 * config.fetchMessageInterval);
+    $scope.interval = null;
 
 
     $scope.messages = handleGetLocalMessages();
@@ -495,11 +483,25 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
 
     }
 
+    function messageInterval() {
+
+        $scope.msgCheckTime = new Date().toLocaleTimeString();
+        console.log('check messages', $scope.msgCheckTime);
+
+
+        if ($scope.unlockWallet && $scope.wallet) {
+
+            initMessages($scope.wallet.getAddressString());
+        }
+
+
+    }
+
 
     $scope.$watch(function () {
         if (walletService.wallet == null) return null;
         return walletService.wallet.getAddressString();
-    }, function () {
+    }, function (val1, val2) {
         if (walletService.wallet == null) {
 
             $scope.unlockWallet = false;
@@ -508,8 +510,15 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
         $scope.wallet = walletService.wallet;
         $scope.unlockWallet = true;
 
+        clearInterval($scope.interval);
+
+        $scope.interval = null;
+
+
         initMessages(walletService.wallet.getAddressString());
 
+
+        $scope.interval = setInterval(() => messageInterval(), 1000 * config.fetchMessageInterval);
 
     });
 

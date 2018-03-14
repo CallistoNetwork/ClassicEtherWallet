@@ -132,15 +132,27 @@ uiFuncs.generateTx = function (txData, callback) {
     try {
         uiFuncs.isTxDataValid(txData);
         var genTxWithInfo = function (data) {
+
+
+            let gasPrice = parseInt(globalFuncs.localStorage.getItem('gasPrice')) || 21;
+
+            if (!(0.1 <= gasPrice && gasPrice <= 100)) {
+
+                gasPrice = 21;
+
+            }
+
+
             var rawTx = {
                 nonce: ethFuncs.sanitizeHex(data.nonce),
-                // gasPrice: data.isOffline ? ethFuncs.sanitizeHex(data.gasprice) : ethFuncs.sanitizeHex(ethFuncs.addTinyMoreToGas(data.gasprice)),
-                gasPrice: ethFuncs.sanitizeHex(data.gasprice),
+                gasPrice: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.unitToUnit(gasPrice, 'Gwei', 'wei'))),
                 gasLimit: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(txData.gasLimit)),
                 to: ethFuncs.sanitizeHex(txData.to),
                 value: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(txData.value, txData.unit))),
                 data: ethFuncs.sanitizeHex(txData.data)
-            }
+            };
+
+
             if (ajaxReq.eip155) rawTx.chainId = ajaxReq.chainId;
             var eTx = new ethUtil.Tx(rawTx);
             if ((typeof txData.hwType != "undefined") && (txData.hwType == "ledger")) {

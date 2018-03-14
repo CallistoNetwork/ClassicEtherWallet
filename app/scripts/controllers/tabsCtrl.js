@@ -46,13 +46,22 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
     }
 
     $scope.gasChanged = function() {
-        let newGasPriceKey = gasPriceKey;
-        let node = JSON.parse($scope.keyNode);
-        if (node.key === "clo_testnet") {
-            newGasPriceKey += "-CLO"
-        }
-        globalFuncs.localStorage.setItem(newGasPriceKey, $scope.gas.value);
-        ethFuncs.gasAdjustment = $scope.gas.value;
+		if(!($scope.gas.value <= 100 && $scope.gas.value >= 0.1))
+		{
+			$scope.notifier.danger("Invalid gas price! Min gasPrice is 0.1 GWei. Max gasPrice is 100 GWei. GasPrice is resetted to 21GWei default value!");
+			$scope.gas.value = 21;
+			console.log($scope.gas.value);
+		}
+		else
+		{
+			let newGasPriceKey = gasPriceKey;
+			let node = JSON.parse($scope.keyNode);
+			if (node.key === "clo_testnet") {
+				newGasPriceKey += "-CLO"
+			}
+			globalFuncs.localStorage.setItem(newGasPriceKey, $scope.gas.value);
+			ethFuncs.gasAdjustment = $scope.gas.value;
+		}
     }
 
     var setGasValues = function() {

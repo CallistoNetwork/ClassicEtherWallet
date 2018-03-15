@@ -37,11 +37,14 @@
             <h1>
                 <a translate="NAV_LIST" ng-class="{'isActive': visibility === VISIBILITY.LIST}"
                    ng-click="setVisibility(VISIBILITY.LIST)"> List </a>
+                <span ng-if="wallet.type !== 'addressOnly'">
                 or
                 <a
-                        translate="NAV_NEW_MESSAGE"
+                        translate=" NAV_NEW_MESSAGE"
                         ng-class="{'isActive': visibility === VISIBILITY.NEW, 'disabled': wallet.type === 'addressOnly'}"
                         ng-click="wallet.type !== 'addressOnly' && setVisibility(VISIBILITY.NEW)"> New Message </a>
+
+                </span>
             </h1>
         </div>
         <!-- / Title -->

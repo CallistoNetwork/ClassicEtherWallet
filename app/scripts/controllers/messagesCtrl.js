@@ -508,8 +508,6 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
     }
 
 
-
-
     $scope.$watch(function () {
 
         if (!walletService.wallet) {
@@ -553,6 +551,10 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
 
             $scope.notifier.danger('Wrong chain! You need to switch to $ETC network to send messages');
 
+
+        } else if (!Validator.isValidAddress(to)) {
+
+            $scope.notifier.danger(globalFuncs.errorMsgs[5]);
 
         }
         else sendMessage(to, text);

@@ -37,6 +37,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         gasPrice: null
     };
 
+
     const initContract = {
         address: globalFuncs.urlGet('address') != null && $scope.Validator.isValidAddress(globalFuncs.urlGet('address')) ? globalFuncs.urlGet('address') : '',
         abi: [],
@@ -149,7 +150,17 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
             return ethFuncs.sanitizeHex(bytecode + ethUtil.solidityCoder.encodeParams(
                 constructorParams.inputs.map(i => i.type),
-                constructorParams.inputs.map(i => i.value)
+                constructorParams.inputs.map(i => {
+
+                    // if array split values
+
+                    if (i.type.slice(-2) === '[]') {
+
+                        return i.value.split(',');
+                    }
+
+                    return i.value;
+                })
             ))
 
         }

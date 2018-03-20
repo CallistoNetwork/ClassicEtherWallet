@@ -369,7 +369,7 @@ ERROR_13                    : 'A wallet with this nickname already exists. ', //
 ERROR_14                    : 'Wallet not found. ', // 14
 ERROR_15                    : 'Whoops. It doesn\'t look like a proposal with this ID exists yet or there is an error reading this proposal. ', // 15 - NOT USED
 ERROR_16                    : 'A wallet with this address already exists in storage. Please check your wallets page. ', // 16
-ERROR_17                    : 'Account you are sending from does not have enough funds. If sending tokens, you must have 0.01 ETH in your account to cover the cost of gas. ', // 17
+ERROR_17                    : 'Account you are sending from does not have enough funds. If sending tokens, you must have 0.01 {} in your account to cover the cost of gas. ', // 17
 ERROR_18                    : 'All gas would be used on this transaction. This means you have already voted on this proposal or the debate period has ended.', // 18
 ERROR_19                    : 'Please enter a valid symbol', // 19
 ERROR_20                    : 'Not a valid ERC-20 token', // 20

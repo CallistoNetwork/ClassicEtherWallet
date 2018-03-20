@@ -33,6 +33,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
         to: '', // adding param locally so can switch b/w accounts easier
         text: 'TEST',
         time: DATE.getTime(),
+        index: 0,
     };
 
 
@@ -120,12 +121,6 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
         }
 
     });
-
-    if (ajaxReq.type.toUpperCase() !== 'ETC') {
-
-        $rootScope.$broadcast('ChangeNode', 'etc_epool');
-    }
-
 
     if (useTestData) {
 
@@ -250,8 +245,6 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
 
     }
 
-    const FUNCTION_NAMES = ["lastIndex", "newMessage", "messages", "message_staling_period", "last_msg_index", "getLastMessage", "keys", "getPublicKey", "getMessageByIndex", "setPublicKey", "sendMessage"];
-
     function getMessageStalingPeriod() {
 
         handleContractCall('message_staling_period', null, function (result) {
@@ -287,7 +280,8 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
 
 
         // filter messages by address in wallet
-        const messages = $scope.messages.slice().filter(message => validMessage(message) && message.to === addr);
+        const messages = $scope.messages.slice().filter(message => validMessage(message) && message.to === addr).sort((a, b) => b.index - a.index);
+
 
         mapMessagesToMessageList();
 
@@ -300,13 +294,16 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
                 const lastMsgIndex = parseInt(ethFuncs.hexToDecimal(result.data));
 
 
-                if (lastMsgIndex > messages.length) {
+                if (lastMsgIndex > 0) {
 
                     const queue = [];
                     let curIndex = lastMsgIndex;
-                    while (curIndex > messages.length) {
+                    while (curIndex) {
 
-                        queue.push(curIndex);
+                        if (!messages.find(message => message.index === curIndex)) {
+                            queue.push(curIndex);
+
+                        }
 
                         curIndex--;
 
@@ -319,12 +316,9 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
 
                             const outTypes = findFunctionBy('getMessageByIndex').outputs.map(i => i.type);
 
-                            const dater = ethUtil.solidityCoder.decodeParams(outTypes, result.data.replace('0x', ''));
+                            const [from, text, time] = ethUtil.solidityCoder.decodeParams(outTypes, result.data.replace('0x', ''));
 
-                            const [from, text, time] = dater;
-
-
-                            const MESSAGE = mapToMessage(from, addr, text, Number(time.toString()) * 1000);
+                            const MESSAGE = mapToMessage(from, addr, text, Number(time.toString()) * 1000, index_);
 
 
                             $scope.messages.push(MESSAGE);
@@ -366,8 +360,8 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
         return Object.keys(MESSAGE).every(key => {
 
 
-            return obj_.hasOwnProperty(key)
-        })
+            return obj_.hasOwnProperty(key);
+        });
     }
 
     function handleGetLocalMessages() {
@@ -450,9 +444,9 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
     };
 
 
-    function mapToMessage(from, to, text, time) {
+    function mapToMessage(from, to, text, time, index) {
 
-        return Object.assign({}, MESSAGE, {from, to, text, time});
+        return Object.assign({}, MESSAGE, {from, to, text, time, index});
     }
 
 

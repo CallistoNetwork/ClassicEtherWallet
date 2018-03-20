@@ -109,7 +109,7 @@ nodes.nodeList = {
         'lib': new nodes.customNode('https://etc-parity.0xinfra.com/', '')
     },
     'clo_testnet2': {
-        'name': 'CLO Testnet 2.0',
+        'name': 'CLO Testnet 2.0 (outdated)',
         'blockExplorerTX': 'https://explorer.callisto.network/tx/[[txHash]]',
         'blockExplorerAddr': 'https://explorer.callisto.network/addr/[[address]]',
         'type': nodes.nodeTypes.CLOT,
@@ -119,6 +119,18 @@ nodes.nodeList = {
         'abiList': require('./abiDefinitions/etcAbi.json'),
         'service': 'Callisto.network',
         'lib': new nodes.customNode('https://clo-testnet.0xinfra.com/', '')
+    },
+    'clo_testnet3': {
+        'name': 'CLO Testnet 3.0',
+        'blockExplorerTX': 'https://explorer.callisto.network/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://explorer.callisto.network/addr/[[address]]',
+        'type': nodes.nodeTypes.CLOT,
+        'eip155': true,
+        'chainId': 7919,
+        'tokenList': require('./tokens/etcTokens.json'),
+        'abiList': require('./abiDefinitions/etcAbi.json'),
+        'service': 'Callisto.network',
+        'lib': new nodes.customNode('https://clo-testnet3.0xinfra.com/', '')
     },
     'etc_epool': {
         'name': 'ETC',

@@ -121,12 +121,6 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
 
     });
 
-    if (ajaxReq.type.toUpperCase() !== 'ETC') {
-
-        $rootScope.$broadcast('ChangeNode', 'etc_epool');
-    }
-
-
     if (useTestData) {
 
 

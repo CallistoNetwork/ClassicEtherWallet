@@ -4,6 +4,9 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
     $scope.ajaxReq = ajaxReq;
     $scope.Validator = Validator;
 
+    $scope.wallet = walletService.wallet;
+
+
     // load contract deployed to ropsten network
     const useTestData = false;
 
@@ -17,6 +20,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
     if (globalService.currentTab === globalService.tabs.messages.id) {
 
         sendMessageModal = new Modal(document.getElementById('sendMessageModal'));
+
     }
 
     const config = {
@@ -164,19 +168,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
     }
 
 
-    $scope.interval = setInterval(() => {
-
-        $scope.msgCheckTime = new Date().toLocaleTimeString();
-        console.log('check messages', $scope.msgCheckTime);
-
-
-        if ($scope.unlockWallet && $scope.wallet) {
-
-            initMessages($scope.wallet.getAddressString());
-        }
-
-
-    }, 1000 * config.fetchMessageInterval);
+    $scope.interval = null;
 
 
     $scope.messages = handleGetLocalMessages();
@@ -293,12 +285,14 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
     function initMessages(addr) {
 
 
-        $scope.loadingMessages = true;
 
         // filter messages by address in wallet
         const messages = $scope.messages.slice().filter(message => validMessage(message) && message.to === addr);
 
+        mapMessagesToMessageList();
 
+
+        $scope.loadingMessages = true;
         getLastMsgIndex(addr, function (result) {
 
             if (result && result.hasOwnProperty('data')) {
@@ -318,7 +312,6 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
 
                     }
 
-
                     queue.forEach(index_ => getMessageByIndex(addr, index_, function (result) {
 
 
@@ -335,8 +328,11 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
 
 
                             $scope.messages.push(MESSAGE);
+
                             $scope.saveMessages();
                             mapMessagesToMessageList();
+                            $scope.loadingMessages = false;
+
 
                             if ($scope.visibility === $scope.VISIBILITY.CONVERSATION) {
 
@@ -350,14 +346,16 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
                     }));
 
 
+                } else {
+
+                    $scope.loadingMessages = false;
                 }
 
-                else mapMessagesToMessageList();
+
+            } else {
 
                 $scope.loadingMessages = false;
-                // else uiFuncs.notifier.info('messages loaded from local storage');
-
-
+                $scope.notifier.danger('Error locating lastMsgIndex');
             }
 
         })
@@ -495,21 +493,47 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
 
     }
 
+    function messageInterval() {
+
+        $scope.msgCheckTime = new Date().toLocaleTimeString();
+        // console.log('check messages', $scope.msgCheckTime);
+
+
+        if ($scope.unlockWallet && $scope.wallet) {
+
+            initMessages($scope.wallet.getAddressString());
+        }
+
+
+    }
+
 
     $scope.$watch(function () {
-        if (walletService.wallet == null) return null;
+
+        if (!walletService.wallet) {
+            return null;
+        }
         return walletService.wallet.getAddressString();
-    }, function () {
-        if (walletService.wallet == null) {
+
+    }, function (address, oldAddress) {
+        if (!address) {
 
             $scope.unlockWallet = false;
+            clearInterval($scope.interval);
             return;
         }
-        $scope.wallet = walletService.wallet;
         $scope.unlockWallet = true;
+
+        $scope.wallet = walletService.wallet;
+
+        clearInterval($scope.interval);
+        $scope.interval = null;
+
+        $scope.messagesList = {};
 
         initMessages(walletService.wallet.getAddressString());
 
+        $scope.interval = setInterval(() => messageInterval(), 1000 * config.fetchMessageInterval);
 
     });
 
@@ -527,6 +551,10 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
 
             $scope.notifier.danger('Wrong chain! You need to switch to $ETC network to send messages');
 
+
+        } else if (!Validator.isValidAddress(to)) {
+
+            $scope.notifier.danger(globalFuncs.errorMsgs[5]);
 
         }
         else sendMessage(to, text);

@@ -288,7 +288,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
                 var contractAddr = $scope.tx.contractAddr ? " & Contract Address <a href='" + ajaxReq.blockExplorerAddr.replace('[[address]]', $scope.tx.contractAddr) + "' target='_blank' rel='noopener'>" + $scope.tx.contractAddr + "</a>" : '';
                 $scope.notifier.success(globalFuncs.successMsgs[2] + "<br />" + resp.data + "<br />" + bExStr + contractAddr);
             } else {
-                $scope.notifier.danger(resp.error);
+                $scope.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
             }
         });
     };

@@ -275,7 +275,7 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
                 $scope.wallet.setBalance(applyScope);
                 if ($scope.tx.sendMode == 'token') $scope.wallet.tokenObjs[$scope.tokenTx.id].setBalance();
             } else {
-                $scope.notifier.danger(resp.error);
+                $scope.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
             }
         });
     }

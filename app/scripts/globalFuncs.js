@@ -55,7 +55,7 @@ globalFuncs.errorMsgs = [
     'Wallet not found. ', // 14
     'Whoops. It doesn\'t look like a proposal with this ID exists yet or there is an error reading this proposal. ', // 15 - NOT USED
     'A wallet with this address already exists in storage. Please check your wallets page. ', // 16
-    'Insufficient funds. Account you try to send transaction from does not have enough funds. Required {} wei and got: {} wei. If sending tokens, you must have 0.01 ETH in your account to cover the cost of gas. ', // 17
+    'Insufficient funds. Account you try to send transaction from does not have enough funds. Required {} wei and got: {} wei. If sending tokens, you must have 0.01 {} in your account to cover the cost of gas. ', // 17
     'All gas would be used on this transaction. This means you have already voted on this proposal or the debate period has ended.', // 18
     'Please enter a valid symbol', // 19
     'Not a valid ERC-20 token', // 20

@@ -246,7 +246,7 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService) {
                 if ($scope.generatedDexNSTxs.length) $scope.sendTx();
                 else $scope.sendTxStatus = ''
             } else {
-                $scope.notifier.danger(resp.error);
+                $scope.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
             }
         });
     }

@@ -1,5 +1,7 @@
 'use strict';
 
+const _uniqueBy = require('lodash/uniqBy');
+
 var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
     $scope.ajaxReq = ajaxReq;
     $scope.Validator = Validator;
@@ -37,7 +39,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
     };
 
 
-    const messageSet = messages => Array.from(new Set(messages.map(JSON.stringify))).map(JSON.parse);
+    const messageSet = messages => _uniqueBy(messages, message => message.to + message.index);
 
 
     $scope.msgCheckTime = null;
@@ -280,7 +282,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
 
 
         // filter messages by address in wallet
-        const messages = $scope.messages.slice().filter(message => validMessage(message) && message.to === addr).sort((a, b) => b.index - a.index);
+        const messages = $scope.messages.slice().filter(message => message.to === addr);
 
 
         mapMessagesToMessageList();
@@ -298,6 +300,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
 
                     const queue = [];
                     let curIndex = lastMsgIndex;
+
                     while (curIndex) {
 
                         if (!messages.find(message => message.index === curIndex)) {

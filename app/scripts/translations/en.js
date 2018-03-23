@@ -224,6 +224,8 @@ GEN_SuccessMsg              : 'Success! Your wallet has been generated. ',
 GEN_Label_2                 : 'Save your `Keystore` File. ',
 GEN_Label_3                 : 'Save Your Address. ',
 GEN_Label_4                 : 'Print paper wallet or a QR code. ',
+GEN_YOUR_NEW_PASSWORD       : 'Your new password',
+
 
 /* Bulk Generate Wallets */
 BULK_Label_1                : 'Number of Wallets To Generate ',

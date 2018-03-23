@@ -303,6 +303,7 @@ DEP_signtx                  : 'Sign Transaction ',
 DEP_interface               : 'Generated Interface ',
 
 /* Node Switcher */
+NODE_BACKGROUND             : 'Background Node',
 NODE_Title                  : 'Set Up Your Custom Node',
 NODE_Subtitle               : 'To connect to a local node...',
 NODE_Warning                : 'Your node must be HTTPS in order to connect to it via MyEtherWallet.com. You can [download the MyEtherWallet repo & run it locally](https://github.com/kvhnuke/etherwallet/releases/latest) to connect to any node. Or, get free SSL certificate via [LetsEncrypt](https://letsencrypt.org/)',

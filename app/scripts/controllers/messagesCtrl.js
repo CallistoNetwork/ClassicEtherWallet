@@ -2,7 +2,7 @@
 
 const _uniqueBy = require('lodash/uniqBy');
 
-var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
+var messagesCtrl = function ($scope, $rootScope, globalService, walletService, backgroundNodeService) {
     $scope.ajaxReq = ajaxReq;
     $scope.Validator = Validator;
 
@@ -88,18 +88,15 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
     $scope.NUMBER_OF_MESSAGES = -1;
     $scope.NUMBER_OF_NEW_MESSAGES = -1;
 
-    // INIT
-
-
-    let node = nodes.nodeList.etc_epool;
 
     let CONTRACT_ADDRESS = '0x6A77417FFeef35ae6fe2E9d6562992bABA47a676'; // '0x8F7a526C9693572baD2586895605e89B8D753068';
 
-    const CONTRACT = node.abiList.find(abi => abi.address.toLowerCase() === CONTRACT_ADDRESS.toLowerCase());
+
+    const CONTRACT = nodes.nodeList.etc_ethereumcommonwealth_geth.abiList.find(contract => contract.address.toLowerCase() === CONTRACT_ADDRESS.toLowerCase());
 
     if (!CONTRACT) {
 
-        console.error('ERROR FINDING CONTRACT', CONTRACT_ADDRESS, node);
+        console.error('ERROR FINDING CONTRACT', CONTRACT_ADDRESS);
     }
 
 
@@ -129,7 +126,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
 
         console.log('use test data');
 
-        node = nodes.nodeList.rop_mew;
+        // node = nodes.nodeList.rop_mew;
 
 
         $rootScope.$broadcast('ChangeNode', 'rop_mew');
@@ -233,7 +230,10 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService) {
 
         data = ethFuncs.sanitizeHex(data);
 
-        node.lib.getEthCall({to: messageContract.address, data}, function (data) {
+        nodes.nodeList[backgroundNodeService.backgroundNode].lib.getEthCall({
+            to: messageContract.address,
+            data
+        }, function (data) {
 
             if (data.error) {
 

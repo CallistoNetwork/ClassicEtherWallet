@@ -1,5 +1,5 @@
 'use strict';
-var walletBalanceCtrl = function ($scope, $sce, walletService) {
+var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeService) {
     $scope.ajaxReq = ajaxReq;
     $scope.erc20Abi = require('../abiDefinitions/erc20abi.json');
     $scope.DEXNS = require('../abiDefinitions/etcAbi.json')[5];
@@ -194,7 +194,9 @@ var walletBalanceCtrl = function ($scope, $sce, walletService) {
             getNameFunction.inputs[0].value = newSymbol;
 
             var DEXNSnetwork = 'ETC'; // DexNS network is always ETC!
-            $scope.nodeList[$scope.alternativeBalance[DEXNSnetwork].node].lib.getEthCall({
+
+
+            $scope.nodeList[backgroundNodeService.backgroundNode].lib.getEthCall({
                 to: $scope.DEXNSAddress,
                 data: $scope.getTxData($scope.erc20Indexes.DEXNSFunction)
             }, function (data) {

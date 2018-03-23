@@ -8,6 +8,13 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
     $scope.wallet = walletService.wallet;
 
+    $scope.networks = {
+        ETH: "eth_ethscan",
+        ETC: "etc_epool",
+        UBQ: "ubq",
+        EXP: "exp",
+    };
+
 
     // load contract deployed to ropsten network
     const useTestData = false;
@@ -25,8 +32,13 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
     }
 
+    var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
+    if (network) {
+        $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
+    }
+
     const config = {
-        fetchMessageInterval: 10 // seconds
+        fetchMessageInterval: 30 // seconds
     };
 
 
@@ -288,7 +300,6 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
         mapMessagesToMessageList();
 
 
-        $scope.loadingMessages = true;
         getLastMsgIndex(addr, function (result) {
 
             if (result && result.hasOwnProperty('data')) {
@@ -312,6 +323,12 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
                     }
 
+                    if (queue.length === 0) {
+
+                        $scope.loadingMessages = false;
+
+                    }
+
                     queue.forEach(index_ => getMessageByIndex(addr, index_, function (result) {
 
 
@@ -328,7 +345,6 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
                             $scope.saveMessages();
                             mapMessagesToMessageList();
-                            $scope.loadingMessages = false;
 
 
                             if ($scope.visibility === $scope.VISIBILITY.CONVERSATION) {
@@ -340,20 +356,25 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
                         }
 
+                        $scope.loadingMessages = false;
+
                     }));
 
 
                 } else {
 
                     $scope.loadingMessages = false;
+
                 }
 
 
             } else {
 
                 $scope.loadingMessages = false;
+
                 $scope.notifier.danger('Error locating lastMsgIndex');
             }
+
 
         })
     }
@@ -527,6 +548,8 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
         $scope.interval = null;
 
         $scope.messagesList = {};
+
+        $scope.loadingMessages = true;
 
         initMessages(walletService.wallet.getAddressString());
 

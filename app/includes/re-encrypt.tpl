@@ -1,9 +1,13 @@
 <main class="tab-pane active"
       ng-if="[globalService.tabs.reEncrypt.id].includes(globalService.currentTab)"
-      ng-controller='encryptCtrl'
+      ng-controller='encryptCtrl as $ctrl'
       ng-cloak
 >
 
+
+    <div class="block text-center">
+        <h1 translate="NAV_Encrypt">Encrypt</h1>
+    </div>
 
     <div ng-show="!unlockWallet">
         @@if (site === 'cx' ) {
@@ -17,21 +21,23 @@
 
     <div ng-show="unlockWallet">
 
+
         <div ng-if="loading">
             LOADING...
         </div>
         <div ng-if="!loading && !newWallet">
-            <form ng-submit="reEncrypt($event)"
+            <form ng-submit="reEncrypt($event, $ctrl.input.newPassword)"
             >
 
                 <div class="input-group">
                     <input
                             name="newPassword"
+                            id="newPassword"
                             class="form-control"
                             type="{{showPass && 'password' || 'text'}}"
                             placeholder="{{'GEN_Placeholder_1' | translate }}"
-                            ng-model="newPassword"
-                            ng-class="isStrongPass() ? 'is-valid' : 'is-invalid'"
+                            ng-model="$ctrl.input.newPassword"
+                            ng-class="$ctrl.input.newPassword.length > 8 ? 'is-valid' : 'is-invalid'"
                             aria-label="{{'GEN_Label_1' |translate}}"
                     />
                     <span tabindex="0" aria-label="make password visible"
@@ -44,6 +50,8 @@
             </form>
         </div>
 
+        <!--  SAVE WALLET INFO -->
+
 
         <div ng-if="!loading && newWallet">
             <section class="block__main gen__2--inner">
@@ -52,8 +60,8 @@
 
                 <a tabindex="0" role="button"
                    class="btn btn-primary"
-                   href="{{newWallet_.blob}}"
-                   download="{{newWallet_.fileName}}"
+                   href="{{newWalletDetails.blob}}"
+                   download="{{newWalletDetails.fileName}}"
                    aria-label="{{'x_Download'|translate}} {{'x_Keystore'|translate}}"
                    aria-describedby="x_KeystoreDesc"
                    ng-click="downloaded()"
@@ -71,7 +79,7 @@
 
                 <p>
                     <a tabindex="0" role="button" class="btn btn-danger"
-                       ng-class="newWallet_.downloaded ? '' : 'disabled' " ng-click="continueToPaper()"
+                       ng-class="newWalletDetails.downloaded ? '' : 'disabled' " ng-click="continueToPaper()"
                        translate="GET_ConfButton">
                         I understand. Continue.
                     </a>
@@ -79,6 +87,8 @@
 
             </section>
         </div>
+
+        <!-- PAPER WALLET -->
 
         <article role="main" class="block__wrap gen__3" ng-show="showPaperWallet">
 
@@ -150,6 +160,9 @@
             </section>
 
         </article>
+
+        <!-- /PAPER WALLET -->
+
     </div>
 
 

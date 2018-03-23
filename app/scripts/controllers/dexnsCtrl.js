@@ -1,5 +1,5 @@
 'use strict';
-var dexnsCtrl = function ($scope, $sce, $rootScope, walletService) {
+var dexnsCtrl = function ($scope, $sce, $rootScope, walletService, backgroundNodeService) {
     $scope.ajaxReq = ajaxReq;
     $scope.hideEnsInfoPanel = false;
     $scope.networks = {
@@ -72,7 +72,8 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService) {
     var DEXNSAddress = DexNSABI.address;
     DexNSABI = JSON.parse(DexNSABI.abi);
     DexNSFrontendABI = JSON.parse(DexNSFrontendABI.abi);
-    var DexNSNode = new nodes.customNode('https://mewapi.epool.io', '');
+
+
 
     // TODO
     $scope.$watch(function () {
@@ -116,7 +117,7 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
     $scope.getDexNSPrice = function () {
 
-        DexNSNode.getEthCall({to: DEXNSFrontendAddress, data: '0x' + priceSig}, function (data) {
+        nodes.nodeList[backgroundNodeService.backgroundNode].lib.getEthCall({to: DEXNSFrontendAddress, data: '0x' + priceSig}, function (data) {
             var outTypes = namePriceFunc.outputs.map(function (i) {
                 return i.type;
             });
@@ -158,7 +159,7 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
         var _DexNSData = '0x' + checkSig + ethUtil.solidityCoder.encodeParams(types, values);
 
-        DexNSNode.getEthCall({to: DEXNSFrontendAddress, data: _DexNSData}, function (data) {
+        nodes.nodeList[backgroundNodeService.backgroundNode].lib.getEthCall({to: DEXNSFrontendAddress, data: _DexNSData}, function (data) {
             var outTypes = checkFunc.outputs.map(function (i) {
                 return i.type;
             });

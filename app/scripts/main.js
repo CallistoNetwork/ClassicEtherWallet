@@ -87,11 +87,13 @@ var dexnsCtrl = require('./controllers/dexnsCtrl');
 var footerCtrl = require('./controllers/footerCtrl');
 var offlineTxCtrl = require('./controllers/offlineTxCtrl');
 var walletBalanceCtrl = require('./controllers/walletBalanceCtrl');
+var backgroundNodeCtrl = require('./controllers/backgroundNodeCtrl');
 var encryptCtrl = require('./controllers/encryptCtrl');
 var helpersCtrl = require('./controllers/helpersCtrl');
 var messagesControl = require('./controllers/messagesCtrl');
 var globalService = require('./services/globalService');
 var walletService = require('./services/walletService');
+var backgroundNodeService = require('./services/backgroundNodeService');
 var blockiesDrtv = require('./directives/blockiesDrtv');
 var addressFieldDrtv = require('./directives/addressFieldDrtv');
 var QRCodeDrtv = require('./directives/QRCodeDrtv');
@@ -120,6 +122,7 @@ app.config(['$animateProvider', function ($animateProvider) {
 }]);
 app.factory('globalService', ['$http', '$httpParamSerializerJQLike', globalService]);
 app.factory('walletService', walletService);
+app.factory('backgroundNodeService', backgroundNodeService);
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('addressField', ['$compile', addressFieldDrtv]);
 app.directive('qrCode', QRCodeDrtv);
@@ -140,20 +143,23 @@ app.controller('swapCtrl', ['$scope', '$sce', '$rootScope', 'walletService', swa
 app.controller('signMsgCtrl', ['$scope', '$sce', 'walletService', signMsgCtrl]);
 app.controller('contractsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', contractsCtrl]);
 app.controller('ensCtrl', ['$scope', '$sce', '$rootScope', 'walletService', ensCtrl]);
-app.controller('dexnsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', dexnsCtrl]);
+app.controller('dexnsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', 'backgroundNodeService', dexnsCtrl]);
 app.controller('footerCtrl', ['$scope', 'globalService', footerCtrl]);
 app.controller('offlineTxCtrl', ['$scope', '$sce', '$rootScope', 'walletService', offlineTxCtrl]);
-app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', walletBalanceCtrl]);
+app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', 'backgroundNodeService', walletBalanceCtrl]);
 app.controller('helpersCtrl', ['$scope', helpersCtrl]);
-app.controller('messagesCtrl', ['$scope', '$rootScope', 'globalService', 'walletService', messagesControl]);
+app.controller('messagesCtrl', ['$scope', '$rootScope', 'globalService', 'walletService', 'backgroundNodeService', messagesControl]);
 app.controller('encryptCtrl', ['$scope', 'walletService', encryptCtrl]);
+app.controller('backgroundNodeCtrl', ['$scope', 'backgroundNodeService', backgroundNodeCtrl]);
 
 if (IS_CX) {
+    app.controller('dexnsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', 'backgroundNodeService', dexnsCtrl]);
     app.controller('addWalletCtrl', ['$scope', '$sce', addWalletCtrl]);
     app.controller('myWalletsCtrl', ['$scope', '$sce', 'walletService', myWalletsCtrl]);
     app.controller('mainPopCtrl', ['$scope', '$sce', mainPopCtrl]);
     app.controller('quickSendCtrl', ['$scope', '$sce', quickSendCtrl]);
     app.controller('cxDecryptWalletCtrl', ['$scope', '$sce', 'walletService', cxDecryptWalletCtrl]);
-    app.controller('messagesCtrl', ['$scope', '$rootScope', 'globalService', 'walletService', messagesControl]);
+    app.controller('messagesCtrl', ['$scope', '$rootScope', 'globalService', 'walletService', 'backgroundNodeService', messagesControl]);
     app.controller('encryptCtrl', ['$scope', 'walletService', encryptCtrl]);
+    app.controller('backgroundNodeCtrl', ['$scope', 'backgroundNodeService', backgroundNodeCtrl]);
 }

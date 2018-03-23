@@ -5,6 +5,7 @@
 var backgroundNodeService = function () {
 
 
+
     return {
         backgroundNode: null,
         availableNodes: [],

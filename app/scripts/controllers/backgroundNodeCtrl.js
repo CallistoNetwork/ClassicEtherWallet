@@ -41,8 +41,7 @@ var backgroundNodeCtrl = function ($scope, backgroundNodeService) {
 
     }, function (curNode) {
 
-
-        const {backgroundNode} = $scope;
+        const {backgroundNode, availableNodes} = backgroundNodeService;
 
         if (backgroundNode === curNode) {
 

@@ -10,36 +10,42 @@
             View with Address Only
         </label>
 
-        <label class="radio">
-            <input aria-flowto="aria3" type="radio" aria-label="MetaMask / ClassicMask / Mist" ng-model="walletType"
-                   value="metamask"/>
-            <span translate="x_MetaMask">MetaMask / ClassicMask / Mist</span>
-        </label>
 
-        <label class="radio">
-            <input aria-flowto="aria7" type="radio" aria-label="Digital Bitbox hardware wallet" ng-model="walletType"
-                   value="digitalBitbox"/>
-            Digital Bitbox
-        </label>
+        <div ng-show="![globalService.tabs.reEncrypt.id].includes(globalService.currentTab)">
 
-        <label class="radio">
-            <input aria-flowto="aria2" type="radio" aria-label="Ledger Wallet hardware wallet" ng-model="walletType"
-                   value="ledger"/>
-            <span>Ledger Wallet</span>
-        </label>
+            <label class="radio"
+            >
+                <input aria-flowto="aria3" type="radio" aria-label="MetaMask / ClassicMask / Mist" ng-model="walletType"
+                       value="metamask"/>
+                <span translate="x_MetaMask">MetaMask / ClassicMask / Mist</span>
+            </label>
 
-        <label class="radio">
-            <input aria-flowto="aria6" type="radio" aria-label="Trezor hardware wallet" ng-model="walletType"
-                   value="trezor"/>
-            TREZOR
-        </label>
+            <label class="radio">
+                <input aria-flowto="aria7" type="radio" aria-label="Digital Bitbox hardware wallet"
+                       ng-model="walletType"
+                       value="digitalBitbox"/>
+                Digital Bitbox
+            </label>
 
-        <label class="radio" style="display: none;" id="showMeTheMoney">
-            <input aria-flowto="aria8" aria-label="parity phrase" type="radio" ng-model="walletType"
-                   value="parityBWallet"/>
-            <span translate="x_ParityPhrase">Parity Phrase</span>
-        </label>
+            <label class="radio">
+                <input aria-flowto="aria2" type="radio" aria-label="Ledger Wallet hardware wallet" ng-model="walletType"
+                       value="ledger"/>
+                <span>Ledger Wallet</span>
+            </label>
 
+            <label class="radio">
+                <input aria-flowto="aria6" type="radio" aria-label="Trezor hardware wallet" ng-model="walletType"
+                       value="trezor"/>
+                TREZOR
+            </label>
+
+            <label class="radio" style="display: none;" id="showMeTheMoney">
+                <input aria-flowto="aria8" aria-label="parity phrase" type="radio" ng-model="walletType"
+                       value="parityBWallet"/>
+                <span translate="x_ParityPhrase">Parity Phrase</span>
+            </label>
+
+        </div>
         <label class="radio">
             <input aria-flowto="aria1" aria-label="Keystore JSON file" type="radio" ng-model="walletType"
                    value="fileupload"/>
@@ -92,18 +98,18 @@
         <!-- if selected type ledger-->
         <div id="selectedTypeLedger" ng-if="walletType=='ledger'">
             <ol>
-                <li id="aria2" tabinex="0" translate="ADD_Ledger_0a" class="text-danger" ng-hide="isSSL">
+                <li id="aria2" tabindex="0" translate="ADD_Ledger_0a" class="text-danger" ng-hide="isSSL">
                     You must access ClassicEtherWallet via a secure(SSL / HTTPS) connection to connect to your Ledger
                     device.
                 </li>
-                <li tabinex="0">
+                <li tabindex="0">
                     <span translate="ADD_Ledger_1">Connect your Ledger Wallet</span> &amp;
                     <span translate="ADD_Ledger_2">Open the Ethereum application (or a contract application)</span>
                 </li>
-                <li tabinex="0" translate="ADD_Ledger_3">
+                <li tabindex="0" translate="ADD_Ledger_3">
                     Verify that Browser Support is enabled in Settings
                 </li>
-                <li tabinex="0" translate="ADD_Ledger_4">
+                <li tabindex="0" translate="ADD_Ledger_4">
                     If no Browser Support is found in settings, verify that you have Firmware >1.2
                 </li>
             </ol>
@@ -133,7 +139,7 @@
         <!-- if selected type MetaMask-->
         <br/>
         <div id="selectedTypeMetamask" ng-if="walletType=='metamask'">
-            <p id="aria2" tabinex="0" translate="ADD_Ledger_0a" class="text-danger" ng-hide="isSSL">
+            <p id="aria2" tabindex="0" translate="ADD_Ledger_0a" class="text-danger" ng-hide="isSSL">
                 You must access ClassicEtherWallet via a secure(SSL / HTTPS) connection to connect.
             </p>
             <div class="form-group">
@@ -270,10 +276,10 @@
                    aria-describedby="selectedTypeDigitalBitbox" type="password" placeholder="Digital Bitbox password"
                    spellcheck="false" value="" ng-model="HDWallet.digitalBitboxSecret"/>
             <ol>
-                <li id="aria7" tabinex="0" translate="ADD_DigitalBitbox_0a" class="text-danger" ng-hide="isSSL">
+                <li id="aria7" tabindex="0" translate="ADD_DigitalBitbox_0a" class="text-danger" ng-hide="isSSL">
                     Re-open ClassicEtherWallet on a secure (SSL) connection
                 </li>
-                <li tabinex="0" translate="ADD_DigitalBitbox_0b" class="text-danger" ng-hide="isChrome">
+                <li tabindex="0" translate="ADD_DigitalBitbox_0b" class="text-danger" ng-hide="isChrome">
                     Re-open ClassicEtherWallet using Google Chrome or Opera
                 </li>
             </ol>

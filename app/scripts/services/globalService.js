@@ -96,7 +96,14 @@ var globalService = function ($http, $httpParamSerializerJQLike) {
             url: "messages",
             mew: true,
             cx: true,
-        }
+        },
+        reEncrypt: {
+            id: 13,
+            name: "NAV_Encrypt",
+            url: "encrypt-wallet",
+            mew: true,
+            cx: false
+        },
     };
     var currentTab = 0;
     if (typeof chrome != 'undefined')

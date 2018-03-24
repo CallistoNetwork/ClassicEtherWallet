@@ -35,7 +35,7 @@
                             id="newPassword"
                             class="form-control"
                             type="{{showPass && 'password' || 'text'}}"
-                            placeholder="{{'GEN_Placeholder_1' | translate }}"
+                            placeholder="{{'GEN_YOUR_NEW_PASSWORD' | translate }}"
                             ng-model="$ctrl.input.newPassword"
                             ng-class="$ctrl.input.newPassword.length > 8 ? 'is-valid' : 'is-invalid'"
                             aria-label="{{'GEN_Label_1' |translate}}"

@@ -17,9 +17,6 @@
       <p><a href="https://ethereumproject.github.io/etherwallet/helpers.html" target="_blank" rel="noopener" role="link" tabindex="0">
         Helpers &amp; ENS Debugging
       </a></p>
-      <p><a href="https://ethereumproject.github.io/etherwallet/signmsg.html" target="_blank" rel="noopener" role="link" tabindex="0">
-        Sign Message
-      </a></p>
       <p><a data-target="#disclaimerModal" data-toggle="modal" target="_blank" rel="noopener" role="link" tabindex="0"  translate="FOOTER_4"> Disclaimer </a></p>
       <p> &copy; 2017 ClassicEtherWallet, LLC </p>
     </section>

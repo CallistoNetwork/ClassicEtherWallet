@@ -81,11 +81,6 @@ nodes.alternativeBalance = {
         balance: "Loading",
         node: "exp",
         symbol: "EXP"
-    },
-    ETSC: {
-        balance: "Loading",
-        node: "etsc",
-        symbol: "ETSC"
     }
 };
 

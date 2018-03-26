@@ -69,7 +69,7 @@
             }
             <div class="tagline">
 
-                <span>3.11.0.0</span>
+                <!--<span>3.11.0.0</span>-->
 
                 <span class="dropdown dropdown-lang" ng-cloak>
           <a tabindex="0" aria-haspopup="true" aria-expanded="false"

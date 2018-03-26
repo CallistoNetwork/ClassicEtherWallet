@@ -7,6 +7,7 @@
 <footer class="footer" role="content" aria-label="footer" ng-controller='footerCtrl' >
   <article class="block__wrap" style="max-width: 1780px; margin: auto;">
     <section class="footer--left">
+	<span>Version: 3.11.1</span>
       <a href="/"><img src="images/logo-myetherwallet.png" height="45px" width="auto" alt="Ether Wallet" class="footer--logo"/></a>
       <p><span translate="FOOTER_1">Free, open-source, client-side interface for generating Ethereum Classic wallets &amp; more. Interact with the Ethereum-compatible blockchains such are ETH, ETC, UBQ and EXP easily &amp; securely. Double-check the URL ( https://ethereumproject.github.io/etherwallet/ ) before unlocking your wallet.</span></p>
       <!-- Commented out due to stale link
@@ -16,17 +17,14 @@
       <p><a href="https://ethereumproject.github.io/etherwallet/helpers.html" target="_blank" rel="noopener" role="link" tabindex="0">
         Helpers &amp; ENS Debugging
       </a></p>
-      <p><a href="https://ethereumproject.github.io/etherwallet/signmsg.html" target="_blank" rel="noopener" role="link" tabindex="0">
-        Sign Message
-      </a></p>
       <p><a data-target="#disclaimerModal" data-toggle="modal" target="_blank" rel="noopener" role="link" tabindex="0"  translate="FOOTER_4"> Disclaimer </a></p>
-      <p> &copy; 2017 ClassicEtherWallet, LLC </p>
+      <p> &copy; 2018 ClassicEtherWallet, LLC </p>
     </section>
     <section class="footer--cent">
-		<h5><i aria-hidden="true">ðŸ‘«</i> Donations are always appreciated!</h5>
+		<h5><i aria-hidden="true">💝</i> Donations are always appreciated!</h5>
         <p>ETH or ETC donation address: <span class="mono wrap"><big><a href="http://gastracker.io/addr/0x2ca1377dfa03577ce5bbb815c98eda1ac7632e7d">0x2ca1377dfa03577ce5bbb815c98eda1ac7632e7d</a></big></span></p>
-        
-        <h5> <i aria-hidden="true">ðŸ‘«</i> You can support us by supporting our blockchain-family.</h5>
+
+        <h5> <i aria-hidden="true">👫</i> You can support us by supporting our blockchain-family.</h5>
         <p><a aria-label="Swap Ether or Bitcoin via Bity.com" href="https://bity.com/af/jshkb37v" target="_blank" rel="noopener">Swap ETH/BTC/EUR/CHF via Bity.com</a></p>
         <p><a href="https://www.ledgerwallet.com/r/fa4b?path=/products/" target="_blank" rel="noopener">Buy a Ledger Wallet</a></p>
         <p><a href="https://trezor.io/?a=myetherwallet.com" target="_blank" rel="noopener">Buy a TREZOR</a></p>
@@ -34,7 +32,7 @@
         <!--
         <p>MYD: <span class="mono wrap">mewsupport.eth <small>0xf7e983781609012307f2514f63D526D83D24F466</small></span></p>
         -->
-        <h5 ng-hide="curLang=='en'"> <i>ðŸ’</i> <span translate="Translator_Desc"> Thank you to our translators </span></h5>
+        <h5 ng-hide="curLang=='en'"> <i>🏅</i> <span translate="Translator_Desc"> Thank you to our translators </span></h5>
         <p ng-hide="curLang=='en'">
           <span translate="TranslatorName_1"></span>
           <span translate="TranslatorName_2"></span>

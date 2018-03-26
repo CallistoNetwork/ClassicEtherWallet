@@ -545,7 +545,7 @@ label small {
 @brand-music-dark: #849205;
 @brand-ubq: #00ad85;
 @brand-ubq-dark: #0e7a61;
-@brand-pirl : #8bc34a;
+@brand-pirl: #8bc34a;
 @brand-poa: #4568bb;
 @brand-tomo: #6a488d;
 @brand-ella: #046111;
@@ -676,6 +676,10 @@ header.ETC {
   }
   .header-branding {
     background: @brand-etc;
+  }
+  & + .btn-primary {
+    background: @brand-etc;
+    border-color: @brand-etc;
   }
 }
 
@@ -990,3 +994,4 @@ header.Custom {
     background: @brand-cust;
   }
 }
+

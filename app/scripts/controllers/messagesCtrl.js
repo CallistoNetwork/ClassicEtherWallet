@@ -32,7 +32,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
     }
 
-    var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
+    var network = globalFuncs.urlGet('network');
     if (network) {
         $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
     }

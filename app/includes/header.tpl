@@ -159,27 +159,7 @@
           </ul>
         </span>
 
-                <span class="dropdown dropdown-background-node" ng-cloak>
 
-
-           <a tabindex="0" aria-haspopup="true"
-              aria-label="change node. current node {{nodeList[backgroundNodeService.backgroundNode].name}} node by {{nodeList[backgroundNodeService.backgroundNode].service}}"
-              class="dropdown-toggle  btn btn-white" ng-click="dropdownNodeBackground = !dropdownNodeBackground">
-
-            <span translate="NODE_BACKGROUND"></span>
-             {{nodeList[backgroundNodeService.backgroundNode].name}} <small>({{nodeList[backgroundNodeService.backgroundNode].service}})</small>
-            <i class="caret"></i>
-          </a>
-          <ul class="dropdown-menu" ng-show="dropdownNodeBackground">
-            <li ng-repeat="node in backgroundNodeService.availableNodes"><a
-                    ng-class="{true:'active'}[backgroundNodeService.backgroundNode == node]"
-                    ng-click="setBackgroundNode(node)">
-
-                {{nodeList[node].name}}
-              <small> ({{nodeList[node].service}}) </small>
-            </a></li>
-          </ul>
-        </span>
 
             </div>
         </section>

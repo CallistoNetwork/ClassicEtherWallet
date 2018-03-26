@@ -13,13 +13,15 @@
 
 .block {
   background-color: white;
-  box-shadow: 16px 16px 47px 2px rgba(0,0,0,.07);
+  box-shadow: 16px 16px 47px 2px rgba(0, 0, 0, .07);
   padding: @space-lg @space-xl;
   min-height: @space-lg;
   margin: @space auto;
   position: relative;
   .clearfix();
-  @media screen and (max-width: @screen-xs) { padding: 1.25rem; }
+  @media screen and (max-width: @screen-xs) {
+    padding: 1.25rem;
+  }
   & > *:first-child {
     margin-top: 0;
   }
@@ -29,10 +31,16 @@
 }
 
 .block--text-white {
-  * { color: white }
-  a { color: white }
+  * {
+    color: white
+  }
+  a {
+    color: white
+  }
   a:hover,
-  a:focus { color: rgba(255,255,255,.9) }
+  a:focus {
+    color: rgba(255, 255, 255, .9)
+  }
 }
 
 .block--danger {
@@ -93,7 +101,7 @@
     color: #ff5722;
   }
   a:hover {
-    color: darken(#ff5722,5%);
+    color: darken(#ff5722, 5%);
   }
   > *:first-child {
     margin-top: 0;
@@ -101,7 +109,7 @@
   ul {
     list-style: circle;
   }
-  ul,ol {
+  ul, ol {
     padding-left: @space;
   }
   h2 {
@@ -111,7 +119,7 @@
 }
 
 .equal-space {
-    > * {
+  > * {
     margin-top: @space;
     margin-bottom: @space;
   }
@@ -131,10 +139,18 @@
 
 .gen__1--inner {
   text-align: center;
-  h1   {  margin: @space   auto @space*2  }
-  h4   {  margin: @space*3 auto @space    }
-  p    {  margin: 0        0    @space*2  }
-  .btn {  margin: 0        auto @space*3  }
+  h1 {
+    margin: @space auto @space*2
+  }
+  h4 {
+    margin: @space*3 auto @space
+  }
+  p {
+    margin: 0 0    @space*2
+  }
+  .btn {
+    margin: 0 auto @space*3
+  }
 }
 
 .gen__2 {
@@ -142,22 +158,32 @@
 
 .gen__2--inner {
   text-align: center;
-  h1     {  margin: @space   auto   }
-  > .btn {  margin: @space   auto  @space*2 }
-  .warn  {  margin: @space*2 auto   }
+  h1 {
+    margin: @space auto
+  }
+  > .btn {
+    margin: @space auto  @space*2
+  }
+  .warn {
+    margin: @space*2 auto
+  }
 }
 
 .gen__3--inner {
   text-align: center;
-  h1     {  margin: @space*2   auto  @space }
+  h1 {
+    margin: @space*2   auto @space
+  }
   > .btn,
-  > .form-control { margin: 0 auto @space*3 }
+  > .form-control {
+    margin: 0 auto @space*3
+  }
 }
 
 // footer
 .pre-footer {
   padding: 1rem;
-  box-shadow: 16px 16px 47px 0px rgba(0,0,0,.07);
+  box-shadow: 16px 16px 47px 0px rgba(0, 0, 0, .07);
   margin-top: 5rem;
   background-color: white;
   text-align: center;
@@ -166,12 +192,11 @@
   }
 }
 
-
 .footer {
   background-color: @ether-navy;
   color: white;
   font-size: .8rem;
-  h5{
+  h5 {
     font-size: .95rem;
     margin: .25em 0 0;
     i {
@@ -206,6 +231,11 @@
   small {
     font-size: .6rem;
   }
+
+  .background-node {
+    color: #163151;
+  }
+
 }
 
 .footer--logo {
@@ -241,12 +271,16 @@
   max-width: 22rem;
   flex-grow: 1;
 }
+
 .footer--cent {
   .footer--col();
   max-width: 34rem;
   flex-grow: 2;
-  ul, li:last-child { margin-bottom: 0; }
+  ul, li:last-child {
+    margin-bottom: 0;
+  }
 }
+
 .footer--righ {
   .footer--col();
   max-width: 28rem;
@@ -263,7 +297,7 @@
 .swap--usd,
 .swap--btc,
 .swap--hw {
-  text-align:center;
+  text-align: center;
   display: flex;
   padding: 1rem .15rem;
   .col-sm-7 {
@@ -281,6 +315,7 @@
     background-color: lighten(saturate(#2B71B1, 7%), 8%);
   }
 }
+
 .swap--btc {
   .block--text-white();
   background-color: #006e79;

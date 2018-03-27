@@ -133,7 +133,6 @@ app.directive('walletDecryptDrtv', walletDecryptDrtv);
 app.directive('cxWalletDecryptDrtv', cxWalletDecryptDrtv);
 app.directive('messagesOverviewDrtv', messagesOverviewDrtv);
 app.directive('arrayInputDrtv', arrayInputDrtv);
-app.directive('arrayFieldDrtv', arrayFieldDrtv);
 app.controller('tabsCtrl', ['$scope', 'globalService', '$translate', '$sce', 'backgroundNodeService', tabsCtrl]);
 app.controller('viewCtrl', ['$scope', 'globalService', '$sce', viewCtrl]);
 app.controller('walletGenCtrl', ['$rootScope', '$scope', walletGenCtrl]);

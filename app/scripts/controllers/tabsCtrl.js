@@ -68,10 +68,16 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
 
     $scope.validateGasPrice = function validateGasPrice() {
 
-        if (!($scope.gas.value <= 100 && $scope.gas.value >= 0.1)) {
+        if (!(0.1 <= $scope.gas.value && $scope.gas.value <= 100)) {
             $scope.notifier.danger("Invalid gas price! Min gasPrice is 0.1 GWei. Max gasPrice is 100 GWei. GasPrice is resetted to 21GWei default value!");
             $scope.gas.value = 21;
-            console.log($scope.gas.value);
+            let newGasPriceKey = gasPriceKey;
+            let node = JSON.parse($scope.keyNode);
+            if (node.key === "clo_testnet") {
+                newGasPriceKey += "-CLO"
+            }
+            globalFuncs.localStorage.setItem(newGasPriceKey, 21);
+            console.log($scope.gas.value, globalFuncs.localStorage.getItem(newGasPriceKey));
         }
     }
 

@@ -25,6 +25,7 @@
     <script type='application/ld+json'>{"@context":"http://schema.org","@type":"Organization","@id":"#organization","url":"https://www.myetherwallet.com/","name":"MyEtherWallet",
 "logo":"https://myetherwallet.com/images/myetherwallet-logo-banner.png","description": "MyEtherWallet.com is a free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URL ( .com ) before unlocking your wallet.","sameAs":["https://www.myetherwallet.com/","https://chrome.google.com/webstore/detail/myetherwallet-cx/nlbmnnijcnlegkjjpcfjclmcfggfefdm","https://www.facebook.com/MyEtherWallet/","https://twitter.com/myetherwallet","https://medium.com/@myetherwallet_96408","https://myetherwallet.groovehq.com/help_center","https://github.com/kvhnuke/etherwallet","https://github.com/MyEtherWallet","https://kvhnuke.github.io/etherwallet/","https://github.com/kvhnuke/etherwallet/releases/latest","https://github.com/409H/EtherAddressLookup","https://myetherwallet.slack.com/","https://myetherwallet.herokuapp.com/","https://www.reddit.com/r/MyEtherWallet/","https://www.reddit.com/user/insomniasexx/","https://www.reddit.com/user/kvhnuke/","https://www.reddit.com/user/myetherwallet"]}
 
+
     </script>
 </head>
 <body>
@@ -120,9 +121,13 @@
           </a>
           <ul class="dropdown-menu" ng-show="dropdownGasPrice">
             <div class="header--gas">
-              <span translate="OFFLINE_Step2_Label_3">Gas Price</span>: <input type="number" ng-model="gas.value"
-                                                                               value="{{gas.value}}" min="{{gas.min}}"
-                                                                               max="{{gas.max}}" step="{{gas.step}}"
+              <span translate="OFFLINE_Step2_Label_3">Gas Price</span>: <input type="number"
+                                                                               ng-model="gas.value"
+                                                                               value="{{gas.value}}"
+                                                                               min="{{gas.min}}"
+                                                                               max="{{gas.max}}"
+                                                                               step="{{gas.step}}"
+                                                                               ng-blur="gasLimitCheck()"
                                                                                ng-change="gasChanged()"/> Gwei
               <p class="small col-xs-4 text-left"><{{recommendedGas.low}}</p>
               <p class="small col-xs-4 text-center">{{recommendedGas.low}} - {{recommendedGas.high}}</p>
@@ -158,7 +163,6 @@
             <li><a ng-click="customNodeModal.open(); dropdownNode = !dropdownNode;"> Add Custom Node </a></li>
           </ul>
         </span>
-
 
 
             </div>

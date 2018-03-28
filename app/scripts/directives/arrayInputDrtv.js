@@ -63,8 +63,6 @@ var arrayInputDrtv = function () {
 
             // TODO: validate fields
 
-            // TODO: filter invalid fields?????
-
             const {type} = attr;
 
             $scope.inputs = [
@@ -114,6 +112,10 @@ var arrayInputDrtv = function () {
 
 
                 $scope.inputs[$scope.activeInput].text = newVal;
+
+                //FIXME: blank values appended to input value
+
+                // I am filtering values in contractsCtrl when gathering Data
 
 
                 $scope.$parent.input.value = $scope.inputs.map(item => item.text).join(',');

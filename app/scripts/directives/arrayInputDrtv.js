@@ -4,10 +4,28 @@
 var arrayInputDrtv = function () {
 
 
+    function defaultVal(type = 'string') {
+
+
+        if (type.includes('string')) {
+
+            return '';
+        } else if (type.includes('uint')) {
+
+            return 0;
+        } else if (type.includes('bool')) {
+
+            return false;
+        }
+
+        return '';
+    }
+
+
     return {
         restrict: "E",
 
-        // link is not working???? must use template
+
         template: `<div>
                     <div class="row">
                      <label> {{input.name}} <small> {{input.type}} </small> </label>
@@ -40,27 +58,30 @@ var arrayInputDrtv = function () {
                           </div>
                 </div>`,
 
-        link: function ($scope) {
+
+        link: function ($scope, element, attr) {
 
             // TODO: validate fields
 
             // TODO: filter invalid fields?????
 
+            const {type} = attr;
 
             $scope.inputs = [
                 {
-                    text: '',
+                    text: defaultVal(type),
                 }
             ];
 
             $scope.activeInput = 0;
+
 
             $scope.updateInputs = function updateInputs(value) {
 
 
                 while ($scope.inputs.length <= value) {
 
-                    $scope.inputs.push({text: ''});
+                    $scope.inputs.push({text: defaultVal(type)});
 
                     value--;
 
@@ -72,7 +93,7 @@ var arrayInputDrtv = function () {
 
                 $scope.inputs = $scope.inputs.filter((input, idx) => idx !== number);
 
-                if ($scope.activeInput >= $scope.inputs.length) {
+                if ($scope.inputs.length <= $scope.activeInput) {
 
                     $scope.activeInput = $scope.inputs.length - 1;
                 }

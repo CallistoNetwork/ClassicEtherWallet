@@ -671,7 +671,9 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
                     if (i.type.slice(-2) === '[]') {
 
-                        return i.value.split(',');
+                        // filter blank values
+
+                        return i.value.replace(/,/g, '').split(',');
                     }
 
                     return i.value;

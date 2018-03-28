@@ -59,64 +59,48 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
     var gasPriceKey = "gasPrice";
 
     $scope.gas = {
+        defaultValue: 21,
         curVal: 21,
-        value: parseFloat(globalFuncs.localStorage.getItem(gasPriceKey)) || 21,
+        value: parseFloat(globalFuncs.localStorage.getItem(gasPriceKey)) || $scope.gas.defaultValue,
         max: 100,
         min: 0.1,
-        step: 0.1
+        step: 0.1,
+        recommendedGas: {
+            low: 10,
+            high: 20
+        }
     };
 
     $scope.validateGasPrice = function validateGasPrice() {
 
         if (!(0.1 <= $scope.gas.value && $scope.gas.value <= 100)) {
+
+
+            // $scope.notifier.danger(globalFuncs.errorMsgs[38]);
             $scope.notifier.danger("Invalid gas price! Min gasPrice is 0.1 GWei. Max gasPrice is 100 GWei. GasPrice is resetted to 21GWei default value!");
-            $scope.gas.value = 21;
-            let newGasPriceKey = gasPriceKey;
-            let node = JSON.parse($scope.keyNode);
-            if (node.key === "clo_testnet") {
-                newGasPriceKey += "-CLO"
-            }
-            globalFuncs.localStorage.setItem(newGasPriceKey, 21);
-            console.log($scope.gas.value, globalFuncs.localStorage.getItem(newGasPriceKey));
+            $scope.gas.value = $scope.gas.defaultValue;
+            globalFuncs.localStorage.setItem(gasPriceKey, $scope.gas.defaultValue);
         }
+        // console.log($scope.gas.value, globalFuncs.localStorage.getItem(gasPriceKey), $scope.gas.curVal);
     }
 
     $scope.gasChanged = function () {
 
-        let newGasPriceKey = gasPriceKey;
-        let node = JSON.parse($scope.keyNode);
-        if (node.key === "clo_testnet") {
-            newGasPriceKey += "-CLO"
-        }
-        globalFuncs.localStorage.setItem(newGasPriceKey, $scope.gas.value);
-        ethFuncs.gasAdjustment = $scope.gas.value;
-    }
 
-    var setGasValues = function () {
+        const gasPrice = parseFloat($scope.gas.value) || $scope.gas.defaultValue;
+        globalFuncs.localStorage.setItem(gasPriceKey, gasPrice);
+        ethFuncs.gasAdjustment = gasPrice;
 
-        $scope.gas.value = parseFloat(globalFuncs.localStorage.getItem(gasPriceKey)) || 21;
-        $scope.gas.curVal = $scope.gas.value;
-        $scope.gas.max = 100;
-        $scope.gas.min = 0.1;
-        $scope.recommendedGas = {
-            low: 10,
-            high: 20
-        };
-        ethFuncs.gasAdjustment = $scope.gas.value;
-    }
+    };
 
     $scope.setGasPrice = function () {
+
+
         $scope.keyNode = globalFuncs.localStorage.getItem('curNode', null);
         if ($scope.keyNode == null) {
             return;
         }
-        let keyNode = JSON.parse($scope.keyNode);
-        if (keyNode.key === "clo_testnet" || keyNode.key === "clo_testnet2") {
-            //setCallistoGasValues();
-            setGasValues();
-        } else {
-            setGasValues();
-        }
+
         $scope.gasChanged();
     }
 

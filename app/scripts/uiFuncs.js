@@ -18,8 +18,6 @@ uiFuncs.getTxData = function ($scope) {
 };
 
 
-
-
 uiFuncs.isTxDataValid = function (txData) {
     if (txData.to != "0xCONTRACT" && !ethFuncs.validateEtherAddress(txData.to)) throw globalFuncs.errorMsgs[5];
     else if (!globalFuncs.isNumeric(txData.value) || parseFloat(txData.value) < 0) throw globalFuncs.errorMsgs[0];
@@ -133,19 +131,11 @@ uiFuncs.generateTx = function (txData, callback) {
         uiFuncs.isTxDataValid(txData);
         var genTxWithInfo = function (data) {
 
-
-            let gasPrice = parseInt(globalFuncs.localStorage.getItem('gasPrice')) || 21;
-
-            if (!(0.1 <= gasPrice && gasPrice <= 100)) {
-
-                gasPrice = 21;
-
-            }
-
-
             var rawTx = {
                 nonce: ethFuncs.sanitizeHex(data.nonce),
-                gasPrice: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.unitToUnit(gasPrice, 'Gwei', 'wei'))),
+
+                gasPrice: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.unitToUnit(globalFuncs.localStorage.getItem('gasPrice'), 'Gwei', 'wei'))),
+
                 gasLimit: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(txData.gasLimit)),
                 to: ethFuncs.sanitizeHex(txData.to),
                 value: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(txData.value, txData.unit))),

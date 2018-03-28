@@ -60,7 +60,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
 
     $scope.gas = {
         curVal: 21,
-        value: parseInt(globalFuncs.localStorage.getItem(gasPriceKey)) || 21,
+        value: parseFloat(globalFuncs.localStorage.getItem(gasPriceKey)) || 21,
         max: 100,
         min: 0.1,
         step: 0.1
@@ -94,7 +94,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
 
     var setGasValues = function () {
 
-        $scope.gas.value = parseInt(globalFuncs.localStorage.getItem(gasPriceKey)) || 21;
+        $scope.gas.value = parseFloat(globalFuncs.localStorage.getItem(gasPriceKey)) || 21;
         $scope.gas.curVal = $scope.gas.value;
         $scope.gas.max = 100;
         $scope.gas.min = 0.1;
@@ -102,21 +102,6 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
             low: 10,
             high: 20
         };
-        ethFuncs.gasAdjustment = $scope.gas.value;
-    }
-
-    var setCallistoGasValues = function () {
-        let newGasPriceKey = gasPriceKey + "-CLO";
-        $scope.gas.max = 10000;
-        $scope.gas.min = 0;
-        $scope.gas.value = parseInt(globalFuncs.localStorage.getItem(newGasPriceKey)) || 2000;
-        $scope.gas.curVal = $scope.gas.value;
-        $scope.gas.max = 5000;
-        $scope.gas.min = 1900;
-        $scope.recommendedGas = {
-            low: 2000,
-            high: 3000
-        }
         ethFuncs.gasAdjustment = $scope.gas.value;
     }
 

@@ -123,7 +123,9 @@
               <span translate="OFFLINE_Step2_Label_3">Gas Price</span>: <input type="number" ng-model="gas.value"
                                                                                value="{{gas.value}}" min="{{gas.min}}"
                                                                                max="{{gas.max}}" step="{{gas.step}}"
-                                                                               ng-change="gasChanged()"/> Gwei
+                                                                               ng-change="gasChanged()"
+                                                                               ng-blur="validateGasPrice()"
+            /> Gwei
               <p class="small col-xs-4 text-left"><{{recommendedGas.low}}</p>
               <p class="small col-xs-4 text-center">{{recommendedGas.low}} - {{recommendedGas.high}}</p>
               <p class="small col-xs-4 text-right">>{{recommendedGas.high}}</p>

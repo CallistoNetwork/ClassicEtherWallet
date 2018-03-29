@@ -131,10 +131,13 @@ uiFuncs.generateTx = function (txData, callback) {
         uiFuncs.isTxDataValid(txData);
         var genTxWithInfo = function (data) {
 
+
+            const gasPrice = parseFloat(globalFuncs.localStorage.getItem('gasPrice')) || 21;
+
             var rawTx = {
                 nonce: ethFuncs.sanitizeHex(data.nonce),
 
-                gasPrice: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.unitToUnit(globalFuncs.localStorage.getItem('gasPrice'), 'Gwei', 'wei'))),
+                gasPrice: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.unitToUnit(gasPrice, 'Gwei', 'wei'))),
 
                 gasLimit: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(txData.gasLimit)),
                 to: ethFuncs.sanitizeHex(txData.to),

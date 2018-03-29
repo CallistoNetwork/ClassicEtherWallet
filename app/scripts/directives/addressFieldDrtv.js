@@ -1,5 +1,5 @@
 'use strict';
-var addressFieldDrtv = function ($compile) {
+var addressFieldDrtv = function ($compile, backgroundNodeService) {
     return {
         restrict: "E",
         link: function (scope, element, attrs) {
@@ -21,7 +21,8 @@ var addressFieldDrtv = function ($compile) {
                 ensAddressField: globalFuncs.urlGet('to') == null ? "" : globalFuncs.urlGet('to'),
                 derivedAddress: '',
                 readOnly: false
-            }
+            };
+
             scope.DexNSInterval = null;
 
             element.html('<div class=\"col-xs-11\">\n \

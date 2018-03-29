@@ -194,7 +194,7 @@ var arrayInputDrtv = function () {
                 // I am filtering values in contractsCtrl when gathering Data
 
 
-                $scope.$parent.input.value = $scope.inputs.map(item => item.text).join(',');
+                $scope.$parent.input.value = $scope.inputs.map(item => item.text);
             });
 
 

@@ -40,7 +40,7 @@
               <!--<wallet-decrypt-drtv></wallet-decrypt-drtv>-->
               <!--<address-field>-->
 
-              <array-input-drtv type="{{input.type}}"></array-input-drtv>
+              <array-input-drtv name="{{input.name}}" type="{{input.type}}"></array-input-drtv>
           </div>
         <div ng-if="input.type.slice(-2) !== '[]'" ng-switch on="input.type">
             <div class="item write-address" ng-switch-when="address">

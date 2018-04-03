@@ -5,12 +5,12 @@ var encryptCtrl = function ($scope, walletService) {
     $scope.ajaxReq = ajaxReq;
 
 
-    //FIXME: ng-model not working???
     $scope.input = {};
 
 
     walletService.wallet = null;
 
+    $scope.wallet = null; // walletService.wallet;
 
     $scope.showPass = true;
 
@@ -25,7 +25,6 @@ var encryptCtrl = function ($scope, walletService) {
     };
     $scope.loading = false;
     $scope.showPaperWallet = false;
-    $scope.wallet = null;
 
 
     // We can customize if we like
@@ -68,14 +67,17 @@ var encryptCtrl = function ($scope, walletService) {
         if ($scope.isStrongPass(password)) {
 
             var wallet_ = $scope.wallet.toV3(password, $scope.options);
+            // update wallet password
+
+            walletService.password = password;
 
             $scope.newWallet = true;
 
             $scope.newWalletDetails = {
-                //blob: globalFuncs.getBlob("text/json;charset=UTF-8", $scope.wallet.toJSON()),
                 blob: globalFuncs.getBlob("text/json;charset=UTF-8", wallet_),
                 fileName: $scope.wallet.getV3Filename()
-            }
+            };
+
 
         } else {
             $scope.notifier.danger(globalFuncs.errorMsgs[1]);
@@ -87,6 +89,7 @@ var encryptCtrl = function ($scope, walletService) {
 
 
     // FIXME: cannot call in html template
+    // checking valid password via length
 
     $scope.isStrongPass = function (password) {
 

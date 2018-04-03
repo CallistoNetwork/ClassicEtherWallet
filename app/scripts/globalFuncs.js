@@ -75,7 +75,8 @@ globalFuncs.errorMsgs = [
     'The name you are attempting to reveal does not match the name you have entered. ', // 34
     'Input address is not checksummed. <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/not-checksummed-shows-when-i-enter-an-address" target="_blank" rel="noopener"> More info</a>', // 35
     'Enter valid TX hash', // 36
-    'Enter valid hex string (0-9, a-f)' // 37
+    'Enter valid hex string (0-9, a-f)', // 37,
+    "Invalid gas price! Min gasPrice is 0.1 GWei. Max gasPrice is 100 GWei. GasPrice is resetted to 21GWei default value!"
 ];
 
 // These are translated in the translation files

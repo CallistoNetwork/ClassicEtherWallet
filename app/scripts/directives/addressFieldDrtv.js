@@ -1,5 +1,5 @@
 'use strict';
-var addressFieldDrtv = function ($compile) {
+var addressFieldDrtv = function ($compile, backgroundNodeService) {
     return {
         restrict: "E",
         link: function (scope, element, attrs) {
@@ -21,7 +21,8 @@ var addressFieldDrtv = function ($compile) {
                 ensAddressField: globalFuncs.urlGet('to') == null ? "" : globalFuncs.urlGet('to'),
                 derivedAddress: '',
                 readOnly: false
-            }
+            };
+
             scope.DexNSInterval = null;
 
             element.html('<div class=\"col-xs-11\">\n \
@@ -75,19 +76,11 @@ var addressFieldDrtv = function ($compile) {
                         scope.addressDrtv.derivedAddress = "DexNS is looking for " + scope.addressDrtv.ensAddressField + " Name ...";
                         scope.addressDrtv.showDerivedAddress = true;
 
-                        var DEXNSnetwork = 'ETC'; // DexNS network is always ETC!
-                        /*var DexNSABI = {
-                        "name": "DexNS State storage",
-                        "address": "0x28fc417c046d409c14456cec0fc6f9cde46cc9f3",
-                        "abi": '[{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"name_assignation","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"unassignName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_address","type":"address"}],"name":"updateName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"name_assignation","outputs":[{"name":"_assignee","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_value","type":"string"}],"name":"appendNameMetadata","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"assignName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_value","type":"string"}],"name":"updateName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_addr","type":"address"},{"name":"_value","type":"string"}],"name":"updateName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_newOwner","type":"address"}],"name":"change_Owner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_assignee","type":"address"}],"name":"assignation","outputs":[{"name":"_name","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_name","type":"string"}],"name":"registerName","outputs":[{"name":"_ok","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_owner","type":"address"},{"name":"_destination","type":"address"},{"name":"_metadata","type":"string"},{"name":"_hideOwner","type":"bool"}],"name":"registerAndUpdateName","outputs":[{"name":"_ok","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_hide","type":"bool"}],"name":"hideNameOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"name","outputs":[{"name":"_hash","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"frontend_contract","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"getName","outputs":[{"name":"_owner","type":"address"},{"name":"_associatedAddress","type":"address"},{"name":"_value","type":"string"},{"name":"_signature","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"ownerOf","outputs":[{"name":"_owner","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_newOwner","type":"address"}],"name":"changeNameOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"signatureOf","outputs":[{"name":"_sig","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"addressOf","outputs":[{"name":"_addr","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_name","type":"string"}],"name":"metadataOf","outputs":[{"name":"_value","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"resolution","outputs":[{"name":"owner","type":"address"},{"name":"addr","type":"address"},{"name":"metadata","type":"string"},{"name":"hideOwner","type":"bool"},{"name":"signature","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_newFrontEnd","type":"address"}],"name":"change_FrontEnd_Address","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"","type":"bytes32"}],"name":"Error","type":"event"}]'
-                    };*/
 
                         var DexNSABI = require('../abiDefinitions/etcAbi.json')[5];
                         var DEXNSAddress = DexNSABI.address;
                         DexNSABI = JSON.parse(DexNSABI.abi);
-                        var DexNSNode = new nodes.customNode('https://mewapi.epool.io', '');
 
-                        // TODO
 
                         var DexNSContract = {
                             functions: [],
@@ -100,7 +93,6 @@ var addressFieldDrtv = function ($compile) {
                                 DexNSContract.functions.push(DexNSABI[i]);
                             }
                         }
-                        //console.log(DexNSContract.functions[20]);
                         var curFunc = DexNSContract.functions[19];
                         var fullFuncName = ethUtil.solidityUtils.transformToFullName(curFunc);
                         var funcSig = ethFuncs.getFunctionSignature(fullFuncName);
@@ -118,7 +110,10 @@ var addressFieldDrtv = function ($compile) {
                         var DexNSData = '0x' + funcSig + ethUtil.solidityCoder.encodeParams(types, values);
 
 
-                        DexNSNode.getEthCall({to: DEXNSAddress, data: DexNSData}, function (data) {
+                        nodes.nodeList[backgroundNodeService.backgroundNode].lib.getEthCall({
+                            to: DEXNSAddress,
+                            data: DexNSData
+                        }, function (data) {
                             var outTypes = curFunc.outputs.map(function (i) {
                                 return i.type;
                             });

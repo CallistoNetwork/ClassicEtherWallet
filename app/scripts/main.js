@@ -125,7 +125,7 @@ app.factory('globalService', ['$http', '$httpParamSerializerJQLike', globalServi
 app.factory('walletService', walletService);
 app.factory('backgroundNodeService', backgroundNodeService);
 app.directive('blockieAddress', blockiesDrtv);
-app.directive('addressField', ['$compile', addressFieldDrtv]);
+app.directive('addressField', ['$compile', 'backgroundNodeService', addressFieldDrtv]);
 app.directive('qrCode', QRCodeDrtv);
 app.directive('onReadFile', fileReaderDrtv);
 app.directive('walletBalanceDrtv', balanceDrtv);

@@ -4,6 +4,7 @@ var en = function() {}
 en.code = 'en';
 en.data = {
 
+    DELETE                      : 'Delete',
     /* DexNS tabs */
 
     NAV_DexNS                   : 'DexNS',

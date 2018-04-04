@@ -167,8 +167,6 @@ var arrayInputDrtv = function () {
 
                 $scope.inputs[$scope.input.activeInput].text = newVal;
 
-                //FIXME: blank values appended to input value
-
                 // I am filtering values in contractsCtrl when gathering Data
 
 

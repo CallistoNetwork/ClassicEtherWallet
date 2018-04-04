@@ -771,21 +771,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
             return ethFuncs.sanitizeHex(bytecode + ethUtil.solidityCoder.encodeParams(
                 constructorParams.inputs.map(i => i.type),
-                constructorParams.inputs.map(i => {
-
-                    // if array split values
-
-                    if (i.type.slice(-2) === '[]') {
-
-                        // filter blank values
-
-                        // TODO: update UI
-
-                        return i.value.filter(item => item !== "");
-                    }
-
-                    return i.value;
-                })
+                constructorParams.inputs.map(i => i.value)
             ))
 
         }
@@ -954,9 +940,10 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
         var values = [];
         for (var i in curFunc.inputs) {
             if (curFunc.inputs[i].value) {
-                if (curFunc.inputs[i].type.indexOf('[') !== -1 && curFunc.inputs[i].type.indexOf(']') !== -1) values.push(curFunc.inputs[i].value.split(','));
-                else values.push(curFunc.inputs[i].value);
-            } else values.push('');
+
+                values.push(curFunc.inputs[i].value);
+            }
+            else values.push('');
         }
 
         return ethFuncs.sanitizeHex(funcSig + ethUtil.solidityCoder.encodeParams(types, values));
@@ -975,16 +962,54 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
             return;
         }
 
-        $scope.tx.to = $scope.contract.address;
+        const {functions, selectedFunc, address} = $scope.contract;
+
+        $scope.tx.to = address;
         $scope.tx.data = $scope.getContractData();
+
+
+        function validData() {
+
+            let check = true;
+
+
+            functions[selectedFunc.index].inputs.forEach(i => {
+
+
+                const isArray = i.type.slice(-2) === '[]';
+
+                if (isArray) {
+
+                    const type = i.type.replace('[]', '');
+
+                    if (type === 'string') {
+
+                        return i.value;
+                    }
+                    const invalidValues = i.value.filter(item => item === "");
+
+                    if (invalidValues.length > 0) {
+
+                        $scope.notifier.danger(globalFuncs.errorMsgs[39]);
+
+                        check = false;
+                    }
+                }
+
+            });
+
+            return check;
+
+        }
 
         // estimate gas limit via ajax request, generate tx data, open sendTransactionModal
 
-        $scope.estimateGasLimit($scope.generateTx.bind(this, true));
+        if (validData()) {
 
+            $scope.estimateGasLimit($scope.generateTx.bind(this, true));
+        }
 
     };
-
 
     $scope.toggleContractParams = function () {
 

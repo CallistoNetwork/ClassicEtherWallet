@@ -362,7 +362,7 @@ nodes.nodeList = {
         'blockExplorerAddr': 'https://explorer.ethereumsocial.kr/addr/[[address]]',
         'type': nodes.nodeTypes.ETSC,
         'eip155': true,
-        'chainId': 214,
+        'chainId': 28,
         'tokenList': require('./tokens/etscTokens.json'),
         'abiList': require('./abiDefinitions/etscAbi.json'),
         'estimateGas': true,

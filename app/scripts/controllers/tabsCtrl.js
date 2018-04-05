@@ -58,10 +58,14 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
 
     var gasPriceKey = "gasPrice";
 
+    const defaultValue = 21;
+
+    const gasValue = parseFloat(globalFuncs.localStorage.getItem(gasPriceKey)) || defaultValue;
+
     $scope.gas = {
-        defaultValue: 21,
-        curVal: 21,
-        value: parseFloat(globalFuncs.localStorage.getItem(gasPriceKey)) || $scope.gas.defaultValue,
+        defaultValue,
+        curVal: gasValue,
+        value: gasValue,
         max: 100,
         min: 0.1,
         step: 0.1,

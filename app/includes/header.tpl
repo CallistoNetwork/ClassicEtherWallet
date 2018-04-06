@@ -29,7 +29,7 @@
 </head>
 <body>
 <header class="{{curNode.name}} {{curNode.service}} {{curNode.service}} nav-index-{{gService.currentTab}}"
-        aria-label="header" ng-controller='tabsCtrl'>
+        aria-label="header">
 
     @@if (site === 'cew' ) {
     <div class="small announcement">

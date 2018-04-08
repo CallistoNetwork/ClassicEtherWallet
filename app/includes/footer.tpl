@@ -55,7 +55,7 @@
         </section>
         <section class="footer--righ">
 
-            <div class="footer-branding" ng-cloak ng-controller='tabsCtrl'>
+            <div class="footer-branding">
 
       <span
 

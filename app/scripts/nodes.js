@@ -72,6 +72,11 @@ nodes.alternativeBalance = {
         node: "etc_ethereumcommonwealth_geth",
         symbol: "ETC"
     },
+    CLO: {
+        balance: "Loading",
+        node: "clo_mainnet",
+        symbol: "CLO"
+    },
     UBQ: {
         balance: "Loading",
         node: "ubq",

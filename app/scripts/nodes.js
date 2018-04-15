@@ -109,17 +109,17 @@ nodes.nodeList = {
         'service': 'Ethereum Commonwealth Parity',
         'lib': new nodes.customNode('https://etc-parity.0xinfra.com/', '')
     },
-    'clo_testnet2': {
-        'name': 'CLO Testnet 2.0 (outdated)',
+    'clo_mainnet': {
+        'name': 'CLO',
         'blockExplorerTX': 'https://explorer.callisto.network/tx/[[txHash]]',
         'blockExplorerAddr': 'https://explorer.callisto.network/addr/[[address]]',
-        'type': nodes.nodeTypes.CLOT,
+        'type': nodes.nodeTypes.CLO,
         'eip155': true,
-        'chainId': 7919,
+        'chainId': 820,
         'tokenList': require('./tokens/etcTokens.json'),
         'abiList': require('./abiDefinitions/etcAbi.json'),
         'service': 'Callisto.network',
-        'lib': new nodes.customNode('https://clo-testnet.0xinfra.com/', '')
+        'lib': new nodes.customNode('https://clo-geth.0xinfra.com/', '')
     },
     'clo_testnet3': {
         'name': 'CLO Testnet 3.0',

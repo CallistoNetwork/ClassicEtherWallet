@@ -72,6 +72,11 @@ nodes.alternativeBalance = {
         node: "etc_ethereumcommonwealth_geth",
         symbol: "ETC"
     },
+    CLO: {
+        balance: "Loading",
+        node: "clo_mainnet",
+        symbol: "CLO"
+    },
     UBQ: {
         balance: "Loading",
         node: "ubq",
@@ -109,17 +114,29 @@ nodes.nodeList = {
         'service': 'Ethereum Commonwealth Parity',
         'lib': new nodes.customNode('https://etc-parity.0xinfra.com/', '')
     },
-    'clo_testnet2': {
-        'name': 'CLO Testnet 2.0 (outdated)',
+    'clo_mainnet': {
+        'name': 'CLO',
         'blockExplorerTX': 'https://explorer.callisto.network/tx/[[txHash]]',
         'blockExplorerAddr': 'https://explorer.callisto.network/addr/[[address]]',
-        'type': nodes.nodeTypes.CLOT,
+        'type': nodes.nodeTypes.CLO,
         'eip155': true,
-        'chainId': 7919,
-        'tokenList': require('./tokens/etcTokens.json'),
-        'abiList': require('./abiDefinitions/etcAbi.json'),
+        'chainId': 820,
+        'tokenList': [],
+        'abiList': [],
         'service': 'Callisto.network',
-        'lib': new nodes.customNode('https://clo-testnet.0xinfra.com/', '')
+        'lib': new nodes.customNode('https://clo-geth.0xinfra.com/', '')
+    },
+    'clo_pool': {
+        'name': 'CLO',
+        'blockExplorerTX': 'https://cloexplorer.org/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://cloexplorer.org/addr/[[address]]',
+        'type': nodes.nodeTypes.CLO,
+        'eip155': true,
+        'chainId': 820,
+        'tokenList': [],
+        'abiList': [],
+        'service': 'clopool.net',
+        'lib': new nodes.customNode('https://node.clopool.net', '')
     },
     'clo_testnet3': {
         'name': 'CLO Testnet 3.0',
@@ -128,8 +145,8 @@ nodes.nodeList = {
         'type': nodes.nodeTypes.CLOT,
         'eip155': true,
         'chainId': 7919,
-        'tokenList': require('./tokens/etcTokens.json'),
-        'abiList': require('./abiDefinitions/etcAbi.json'),
+        'tokenList': [],
+        'abiList': [],
         'service': 'Callisto.network',
         'lib': new nodes.customNode('https://clo-testnet3.0xinfra.com/', '')
     },

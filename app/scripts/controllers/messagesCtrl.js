@@ -533,7 +533,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
         }
         return walletService.wallet.getAddressString();
 
-    }, function (address, oldAddress) {
+    }, function (address) {
         if (!address) {
 
             $scope.unlockWallet = false;
@@ -576,6 +576,10 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
             $scope.notifier.danger(globalFuncs.errorMsgs[5]);
 
+        } else if (angular.equals($scope.wallet.type, 'addressOnly')) {
+
+
+            throw globalFuncs.errorMsgs[9];
         }
         else sendMessage(to, text);
 

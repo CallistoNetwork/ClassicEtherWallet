@@ -28,14 +28,16 @@ uiFuncs.isTxDataValid = function (txData) {
 }
 
 /*
+    there are errors w/ passing 820 as chainId w/ trezor, and signing tx w/ null chainId is ok.
+
+
 
     @param chainId: int. the chainId of tx 1 eth, 8 ubq, 61 etc, 820 clo
     @returns int || null
 
-    there are errors w/ passing 820 as chainId w/ trezor.
 
  */
-const handleTxChainId = (chainId) => parseInt(chainId) === 820 ? null : chainId;
+const removeChainIdIfCLO = (chainId) => parseInt(chainId) === 820 ? null : chainId;
 
 
 uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
@@ -61,7 +63,7 @@ uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
     }
 
 
-    const chainId = handleTxChainId(rawTx.chainId);
+    const chainId = removeChainIdIfCLO(rawTx.chainId);
 
 
     TrezorConnect.signEthereumTx(
@@ -81,7 +83,7 @@ uiFuncs.signTxLedger = function (app, eTx, rawTx, txData, old, callback) {
 
 
     // todo: test functionality w/ ledger. tested w/ trezor
-    const chainId = handleTxChainId(rawTx.chainId);
+    const chainId = removeChainIdIfCLO(rawTx.chainId);
 
     eTx.raw[6] = Buffer.from([chainId]);
 

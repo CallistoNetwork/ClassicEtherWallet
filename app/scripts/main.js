@@ -102,6 +102,7 @@ var messagesOverviewDrtv = require('./directives/messagesOverviewDrtv');
 var cxWalletDecryptDrtv = require('./directives/cxWalletDecryptDrtv');
 var fileReaderDrtv = require('./directives/fileReaderDrtv');
 var balanceDrtv = require('./directives/balanceDrtv');
+var arrayInputDrtv = require('./directives/arrayInputDrtv');
 if (IS_CX) {
     var addWalletCtrl = require('./controllers/CX/addWalletCtrl');
     var cxDecryptWalletCtrl = require('./controllers/CX/cxDecryptWalletCtrl');
@@ -131,6 +132,7 @@ app.directive('walletBalanceDrtv', balanceDrtv);
 app.directive('walletDecryptDrtv', walletDecryptDrtv);
 app.directive('cxWalletDecryptDrtv', cxWalletDecryptDrtv);
 app.directive('messagesOverviewDrtv', messagesOverviewDrtv);
+app.directive('arrayInputDrtv', arrayInputDrtv);
 app.controller('tabsCtrl', ['$scope', 'globalService', '$translate', '$sce', 'backgroundNodeService', tabsCtrl]);
 app.controller('viewCtrl', ['$scope', 'globalService', '$sce', viewCtrl]);
 app.controller('walletGenCtrl', ['$rootScope', '$scope', walletGenCtrl]);

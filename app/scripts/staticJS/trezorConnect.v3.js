@@ -1,15 +1,15 @@
-
-
-
+'use strict';
 /**
  * (C) 2017 SatoshiLabs
  *
  * GPLv3
  */
-var TREZOR_CONNECT_VERSION = 4;
+
+
+var VERSION = 3;
 
 if (!Array.isArray) {
-    Array.isArray = function (arg) {
+    Array.isArray = function(arg) {
         return Object.prototype.toString.call(arg) === '[object Array]';
     };
 }
@@ -24,7 +24,8 @@ function _fwStrFix(obj, fw) {
     return obj;
 }
 
-'use strict';
+
+
 
 var chrome = window.chrome;
 var IS_CHROME_APP = chrome && chrome.app && chrome.app.window;
@@ -37,22 +38,28 @@ var ERR_CHROME_NOT_CONNECTED = 'Internal Chrome popup is not responding.';
 
 var DISABLE_LOGIN_BUTTONS = window.TREZOR_DISABLE_LOGIN_BUTTONS || false;
 var CHROME_URL = window.TREZOR_CHROME_URL || './chrome/wrapper.html';
+var POPUP_URL = window.TREZOR_POPUP_URL || 'https://connect.trezor.io/' + VERSION + '/popup/popup.html';
+var POPUP_PATH = window.TREZOR_POPUP_PATH || 'https://connect.trezor.io/' + VERSION;
 var POPUP_ORIGIN = window.TREZOR_POPUP_ORIGIN || 'https://connect.trezor.io';
-var POPUP_PATH = window.TREZOR_POPUP_PATH || POPUP_ORIGIN + '/' + TREZOR_CONNECT_VERSION;
-var POPUP_URL = window.TREZOR_POPUP_URL || POPUP_PATH + '/popup/popup.html?v=' + new Date().getTime();
+
+var INSIGHT_URLS = window.TREZOR_INSIGHT_URLS ||
+    [
+        'https://btc-bitcore1.trezor.io/api/',
+        'https://btc-bitcore3.trezor.io/api/',
+    ];
 
 var POPUP_INIT_TIMEOUT = 15000;
 
 /**
- * Public API.
- */
+  * Public API.
+  */
 function TrezorConnect() {
 
     var manager = new PopupManager();
 
     /**
-     * Popup errors.
-     */
+      * Popup errors.
+      */
     this.ERR_TIMED_OUT = ERR_TIMED_OUT;
     this.ERR_WINDOW_CLOSED = ERR_WINDOW_CLOSED;
     this.ERR_WINDOW_BLOCKED = ERR_WINDOW_BLOCKED;
@@ -60,11 +67,11 @@ function TrezorConnect() {
     this.ERR_CHROME_NOT_CONNECTED = ERR_CHROME_NOT_CONNECTED;
 
     /**
-     * Open the popup for further communication. All API functions open the
-     * popup automatically, but if you need to generate some parameters
-     * asynchronously, use `open` first to avoid popup blockers.
-     * @param {function(?Error)} callback
-     */
+      * Open the popup for further communication. All API functions open the
+      * popup automatically, but if you need to generate some parameters
+      * asynchronously, use `open` first to avoid popup blockers.
+      * @param {function(?Error)} callback
+      */
     this.open = function (callback) {
         var onchannel = function (result) {
             if (result instanceof Error) {
@@ -77,67 +84,31 @@ function TrezorConnect() {
     };
 
     /**
-     * Close the opened popup, if any.
-     */
-    this.close = function () {
-        manager.close();
-    };
+      * Close the opened popup, if any.
+      */
+    this.close = function () { manager.close(); };
 
     /**
-     * Enable or disable closing the opened popup after a successful call.
-     * @param {boolean} value
-     */
-    this.closeAfterSuccess = function (value) {
-        manager.closeAfterSuccess = value;
-    };
+      * Enable or disable closing the opened popup after a successful call.
+      * @param {boolean} value
+      */
+    this.closeAfterSuccess = function (value) { manager.closeAfterSuccess = value; };
 
     /**
-     * Enable or disable closing the opened popup after a failed call.
-     * @param {boolean} value
-     */
-    this.closeAfterFailure = function (value) {
-        manager.closeAfterFailure = value;
-    };
+      * Enable or disable closing the opened popup after a failed call.
+      * @param {boolean} value
+      */
+    this.closeAfterFailure = function (value) { manager.closeAfterFailure = value; };
 
     /**
      * Set bitcore server
      * @param {string|Array<string>} value
      */
-    this.setBitcoreURLS = function (value) {
+    this.setBitcoreURLS = function(value) {
         if (typeof value === 'string') {
-            manager.bitcoreURLS = [value];
-        } else if (value instanceof Array) {
+            manager.bitcoreURLS = [ value ];
+        }else if (value instanceof Array) {
             manager.bitcoreURLS = value;
-        }
-    }
-
-    /**
-     * Set currency. Human readable coin name
-     * @param {string|Array<string>} value
-     */
-    this.setCurrency = function (value) {
-        if (typeof value === 'string') {
-            manager.currency = value;
-        }
-    }
-
-    /**
-     * Set currency units (mBTC, BTC)
-     * @param {string|Array<string>} value
-     */
-    this.setCurrencyUnits = function (value) {
-        if (typeof value === 'string') {
-            manager.currencyUnits = value;
-        }
-    }
-
-    /**
-     * Set coin info json url
-     * @param {string|Array<string>} value
-     */
-    this.setCoinInfoURL = function (value) {
-        if (typeof value === 'string') {
-            manager.coinInfoURL = value;
         }
     }
 
@@ -145,8 +116,8 @@ function TrezorConnect() {
      * Set max. limit for account discovery
      * @param {number} value
      */
-    this.setAccountDiscoveryLimit = function (value) {
-        if (!isNaN(value))
+    this.setAccountDiscoveryLimit = function(value) {
+        if(!isNaN(value))
             manager.accountDiscoveryLimit = value;
     }
 
@@ -154,8 +125,8 @@ function TrezorConnect() {
      * Set max. gap for account discovery
      * @param {number} value
      */
-    this.setAccountDiscoveryGapLength = function (value) {
-        if (!isNaN(value))
+    this.setAccountDiscoveryGapLength = function(value) {
+        if(!isNaN(value))
             manager.accountDiscoveryGapLength = value;
     }
 
@@ -163,31 +134,31 @@ function TrezorConnect() {
      * Set discovery BIP44 coin type
      * @param {number} value
      */
-    this.setAccountDiscoveryBip44CoinType = function (value) {
-        if (!isNaN(value))
+    this.setAccountDiscoveryBip44CoinType = function(value) {
+        if(!isNaN(value))
             manager.accountDiscoveryBip44CoinType = value;
     }
 
     /**
-     * @typedef XPubKeyResult
-     * @param {boolean} success
-     * @param {?string} error
-     * @param {?string} xpubkey  serialized extended public key
-     * @param {?string} path     BIP32 serializd path of the key
-     */
+      * @typedef XPubKeyResult
+      * @param {boolean} success
+      * @param {?string} error
+      * @param {?string} xpubkey  serialized extended public key
+      * @param {?string} path     BIP32 serializd path of the key
+      */
 
     /**
-     * Load BIP32 extended public key by path.
-     *
-     * Path can be specified either in the string form ("m/44'/1/0") or as
-     * raw integer array. In case you omit the path, user is asked to select
-     * a BIP32 account to export, and the result contains m/44'/0'/x' node
-     * of the account.
-     *
-     * @param {?(string|array<number>)} path
-     * @param {function(XPubKeyResult)} callback
-     * @param {?(string|array<number>)} requiredFirmware
-     */
+      * Load BIP32 extended public key by path.
+      *
+      * Path can be specified either in the string form ("m/44'/1/0") or as
+      * raw integer array. In case you omit the path, user is asked to select
+      * a BIP32 account to export, and the result contains m/44'/0'/x' node
+      * of the account.
+      *
+      * @param {?(string|array<number>)} path
+      * @param {function(XPubKeyResult)} callback
+      * @param {?(string|array<number>)} requiredFirmware
+      */
     this.getXPubKey = function (path, callback, requiredFirmware) {
         if (typeof path === 'string') {
             path = parseHDPath(path);
@@ -214,22 +185,23 @@ function TrezorConnect() {
 
     this.getAccountInfo = function (input, callback, requiredFirmware) {
         try {
+            var description = parseAccountInfoInput(input);
             manager.sendWithChannel(_fwStrFix({
                 type: 'accountinfo',
-                description: input
+                description: description
             }, requiredFirmware), callback);
-        } catch (e) {
+        } catch(e) {
             callback({success: false, error: e});
         }
     }
 
-    this.getAllAccountsInfo = function (callback, requiredFirmware) {
+    this.getAllAccountsInfo = function(callback, requiredFirmware){
         try {
             manager.sendWithChannel(_fwStrFix({
                 type: 'allaccountsinfo',
                 description: 'all'
             }, requiredFirmware), callback);
-        } catch (e) {
+        } catch(e) {
             callback({success: false, error: e});
         }
     }
@@ -241,24 +213,24 @@ function TrezorConnect() {
     }
 
     /**
-     * @typedef SignTxResult
-     * @param {boolean} success
-     * @param {?string} error
-     * @param {?string} serialized_tx      serialized tx, in hex, including signatures
-     * @param {?array<string>} signatures  array of input signatures, in hex
-     */
+      * @typedef SignTxResult
+      * @param {boolean} success
+      * @param {?string} error
+      * @param {?string} serialized_tx      serialized tx, in hex, including signatures
+      * @param {?array<string>} signatures  array of input signatures, in hex
+      */
 
     /**
-     * Sign a transaction in the device and return both serialized
-     * transaction and the signatures.
-     *
-     * @param {array<TxInputType>} inputs
-     * @param {array<TxOutputType>} outputs
-     * @param {function(SignTxResult)} callback
-     * @param {?(string|array<number>)} requiredFirmware
-     *
-     * @see https://github.com/trezor/trezor-common/blob/master/protob/types.proto
-     */
+      * Sign a transaction in the device and return both serialized
+      * transaction and the signatures.
+      *
+      * @param {array<TxInputType>} inputs
+      * @param {array<TxOutputType>} outputs
+      * @param {function(SignTxResult)} callback
+      * @param {?(string|array<number>)} requiredFirmware
+      *
+      * @see https://github.com/trezor/trezor-common/blob/master/protob/types.proto
+      */
     this.signTx = function (inputs, outputs, callback, requiredFirmware, coin) {
         manager.sendWithChannel(_fwStrFix({
             type: 'signtx',
@@ -269,21 +241,23 @@ function TrezorConnect() {
     };
 
     // new implementation with ethereum at beginnig
-    this.ethereumSignTx = function () {
+    this.ethereumSignTx = function() {
         this.signEthereumTx.apply(this, arguments);
     }
 
     // old fallback
-    this.signEthereumTx = function (address_n,
-                                    nonce,
-                                    gas_price,
-                                    gas_limit,
-                                    to,
-                                    value,
-                                    data,
-                                    chain_id,
-                                    callback,
-                                    requiredFirmware) {
+    this.signEthereumTx = function (
+        address_n,
+        nonce,
+        gas_price,
+        gas_limit,
+        to,
+        value,
+        data,
+        chain_id,
+        callback,
+        requiredFirmware
+    ) {
         if (requiredFirmware == null) {
             requiredFirmware = '1.4.0'; // first firmware that supports ethereum
         }
@@ -304,21 +278,21 @@ function TrezorConnect() {
     };
 
     /**
-     * @typedef TxRecipient
-     * @param {number} amount   the amount to send, in satoshis
-     * @param {string} address  the address of the recipient
-     */
+      * @typedef TxRecipient
+      * @param {number} amount   the amount to send, in satoshis
+      * @param {string} address  the address of the recipient
+      */
 
     /**
-     * Compose a transaction by doing BIP-0044 discovery, letting the user
-     * select an account, and picking UTXO by internal preferences.
-     * Transaction is then signed and returned in the same format as
-     * `signTx`.  Only supports BIP-0044 accounts (single-signature).
-     *
-     * @param {array<TxRecipient>} recipients
-     * @param {function(SignTxResult)} callback
-     * @param {?(string|array<number>)} requiredFirmware
-     */
+      * Compose a transaction by doing BIP-0044 discovery, letting the user
+      * select an account, and picking UTXO by internal preferences.
+      * Transaction is then signed and returned in the same format as
+      * `signTx`.  Only supports BIP-0044 accounts (single-signature).
+      *
+      * @param {array<TxRecipient>} recipients
+      * @param {function(SignTxResult)} callback
+      * @param {?(string|array<number>)} requiredFirmware
+      */
     this.composeAndSignTx = function (recipients, callback, requiredFirmware) {
         manager.sendWithChannel(_fwStrFix({
             type: 'composetx',
@@ -327,29 +301,31 @@ function TrezorConnect() {
     };
 
     /**
-     * @typedef RequestLoginResult
-     * @param {boolean} success
-     * @param {?string} error
-     * @param {?string} public_key  public key used for signing, in hex
-     * @param {?string} signature   signature, in hex
-     */
+      * @typedef RequestLoginResult
+      * @param {boolean} success
+      * @param {?string} error
+      * @param {?string} public_key  public key used for signing, in hex
+      * @param {?string} signature   signature, in hex
+      */
 
     /**
-     * Sign a login challenge for active origin.
-     *
-     * @param {?string} hosticon
-     * @param {string} challenge_hidden
-     * @param {string} challenge_visual
-     * @param {string|function(RequestLoginResult)} callback
-     * @param {?(string|array<number>)} requiredFirmware
-     *
-     * @see https://github.com/trezor/trezor-common/blob/master/protob/messages.proto
-     */
-    this.requestLogin = function (hosticon,
-                                  challenge_hidden,
-                                  challenge_visual,
-                                  callback,
-                                  requiredFirmware) {
+      * Sign a login challenge for active origin.
+      *
+      * @param {?string} hosticon
+      * @param {string} challenge_hidden
+      * @param {string} challenge_visual
+      * @param {string|function(RequestLoginResult)} callback
+      * @param {?(string|array<number>)} requiredFirmware
+      *
+      * @see https://github.com/trezor/trezor-common/blob/master/protob/messages.proto
+      */
+    this.requestLogin = function (
+        hosticon,
+        challenge_hidden,
+        challenge_visual,
+        callback,
+        requiredFirmware
+    ) {
         if (typeof callback === 'string') {
             // special case for a login through <trezor:login> button.
             // `callback` is name of global var
@@ -367,28 +343,30 @@ function TrezorConnect() {
     };
 
     /**
-     * @typedef SignMessageResult
-     * @param {boolean} success
-     * @param {?string} error
-     * @param {?string} address address (in base58check)
-     * @param {?string} signature   signature, in base64
-     */
+      * @typedef SignMessageResult
+      * @param {boolean} success
+      * @param {?string} error
+      * @param {?string} address address (in base58check)
+      * @param {?string} signature   signature, in base64
+      */
 
     /**
-     * Sign a message
-     *
-     * @param {string|array} path
-     * @param {string} message to sign (ascii)
-     * @param {string|function(SignMessageResult)} callback
-     * @param {?string} opt_coin - (optional) name of coin (default Bitcoin)
-     * @param {?(string|array<number>)} requiredFirmware
-     *
-     */
-    this.signMessage = function (path,
-                                 message,
-                                 callback,
-                                 opt_coin,
-                                 requiredFirmware) {
+      * Sign a message
+      *
+      * @param {string|array} path
+      * @param {string} message to sign (ascii)
+      * @param {string|function(SignMessageResult)} callback
+      * @param {?string} opt_coin - (optional) name of coin (default Bitcoin)
+      * @param {?(string|array<number>)} requiredFirmware
+      *
+      */
+    this.signMessage = function (
+        path,
+        message,
+        callback,
+        opt_coin,
+        requiredFirmware
+    ) {
         if (typeof path === 'string') {
             path = parseHDPath(path);
         }
@@ -402,7 +380,7 @@ function TrezorConnect() {
             type: 'signmsg',
             path: path,
             message: message,
-            coin: opt_coin,
+            coin: {coin_name: opt_coin},
         }, requiredFirmware), callback);
     };
 
@@ -415,10 +393,12 @@ function TrezorConnect() {
      * @param {?(string|array<number>)} requiredFirmware
      *
      */
-    this.ethereumSignMessage = function (path,
-                                         message,
-                                         callback,
-                                         requiredFirmware) {
+    this.ethereumSignMessage = function (
+        path,
+        message,
+        callback,
+        requiredFirmware
+    ) {
         if (typeof path === 'string') {
             path = parseHDPath(path);
         }
@@ -433,22 +413,24 @@ function TrezorConnect() {
     };
 
     /**
-     * Verify message
-     *
-     * @param {string} address
-     * @param {string} signature (base64)
-     * @param {string} message (string)
-     * @param {string|function()} callback
-     * @param {?string} opt_coin - (optional) name of coin (default Bitcoin)
-     * @param {?(string|array<number>)} requiredFirmware
-     *
-     */
-    this.verifyMessage = function (address,
-                                   signature,
-                                   message,
-                                   callback,
-                                   opt_coin,
-                                   requiredFirmware) {
+      * Verify message
+      *
+      * @param {string} address
+      * @param {string} signature (base64)
+      * @param {string} message (string)
+      * @param {string|function()} callback
+      * @param {?string} opt_coin - (optional) name of coin (default Bitcoin)
+      * @param {?(string|array<number>)} requiredFirmware
+      *
+      */
+    this.verifyMessage = function (
+        address,
+        signature,
+        message,
+        callback,
+        opt_coin,
+        requiredFirmware
+    ) {
         if (!opt_coin) {
             opt_coin = 'Bitcoin';
         }
@@ -474,11 +456,13 @@ function TrezorConnect() {
      * @param {?(string|array<number>)} requiredFirmware
      *
      */
-    this.ethereumVerifyMessage = function (address,
-                                           signature,
-                                           message,
-                                           callback,
-                                           requiredFirmware) {
+    this.ethereumVerifyMessage = function (
+        address,
+        signature,
+        message,
+        callback,
+        requiredFirmware
+    ) {
         if (!callback) {
             throw new TypeError('TrezorConnect: callback not found');
         }
@@ -491,26 +475,28 @@ function TrezorConnect() {
     };
 
     /**
-     * Symmetric key-value encryption
-     *
-     * @param {string|array} path
-     * @param {string} key to show on device display
-     * @param {string} value hexadecimal value, length a multiple of 16 bytes
-     * @param {boolean} encrypt / decrypt direction
-     * @param {boolean} ask_on_encrypt (should user confirm on encrypt?)
-     * @param {boolean} ask_on_decrypt (should user confirm on decrypt?)
-     * @param {string|function()} callback
-     * @param {?(string|array<number>)} requiredFirmware
-     *
-     */
-    this.cipherKeyValue = function (path,
-                                    key,
-                                    value,
-                                    encrypt,
-                                    ask_on_encrypt,
-                                    ask_on_decrypt,
-                                    callback,
-                                    requiredFirmware) {
+      * Symmetric key-value encryption
+      *
+      * @param {string|array} path
+      * @param {string} key to show on device display
+      * @param {string} value hexadecimal value, length a multiple of 16 bytes
+      * @param {boolean} encrypt / decrypt direction
+      * @param {boolean} ask_on_encrypt (should user confirm on encrypt?)
+      * @param {boolean} ask_on_decrypt (should user confirm on decrypt?)
+      * @param {string|function()} callback
+      * @param {?(string|array<number>)} requiredFirmware
+      *
+      */
+    this.cipherKeyValue = function (
+        path,
+        key,
+        value,
+        encrypt,
+        ask_on_encrypt,
+        ask_on_decrypt,
+        callback,
+        requiredFirmware
+    ) {
         if (typeof path === 'string') {
             path = parseHDPath(path);
         }
@@ -538,42 +524,10 @@ function TrezorConnect() {
         }, requiredFirmware), callback);
     };
 
-    this.nemGetAddress = function (address_n,
-                                   network,
-                                   callback,
-                                   requiredFirmware) {
-        if (requiredFirmware == null) {
-            requiredFirmware = '1.6.0'; // first firmware that supports NEM
-        }
-        if (typeof address_n === 'string') {
-            address_n = parseHDPath(address_n);
-        }
-        manager.sendWithChannel(_fwStrFix({
-            type: 'nemGetAddress',
-            address_n: address_n,
-            network: network,
-        }, requiredFirmware), callback);
-    }
-
-    this.nemSignTx = function (address_n,
-                               transaction,
-                               callback,
-                               requiredFirmware) {
-        if (requiredFirmware == null) {
-            requiredFirmware = '1.6.0'; // first firmware that supports NEM
-        }
-        if (typeof address_n === 'string') {
-            address_n = parseHDPath(address_n);
-        }
-        manager.sendWithChannel(_fwStrFix({
-            type: 'nemSignTx',
-            address_n: address_n,
-            transaction: transaction
-        }, requiredFirmware), callback);
-    }
-
-    this.pushTransaction = function (rawTx,
-                                     callback) {
+    this.pushTransaction = function (
+      rawTx,
+      callback
+    ) {
         if (!(/^[0-9A-Fa-f]*$/.test(rawTx))) {
             throw new TypeError('TrezorConnect: Transaction must be hexadecimal');
         }
@@ -581,21 +535,46 @@ function TrezorConnect() {
             throw new TypeError('TrezorConnect: callback not found');
         }
 
-        manager.sendWithChannel({
-            type: 'pushtx',
-            rawTx: rawTx,
-        }, callback);
+        var tryUrl = function(i) {
+            var insight_url = INSIGHT_URLS[i];
+            var xhr = new XMLHttpRequest();
+            var method = 'POST';
+            var url = insight_url + '/tx/send';
+            var data = {
+                rawtx: rawTx
+            };
+
+            xhr.open(method, url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var txid = JSON.parse(xhr.responseText).txid;
+                        callback({success: true, txid: txid});
+                    } else {
+                        if (i === INSIGHT_URLS.length - 1) {
+                            callback({error: new Error(xhr.responseText)});
+                        } else {
+                            tryUrl(i + 1);
+                        }
+                    }
+                }
+            };
+            xhr.send(JSON.stringify(data));
+        }
+
+        tryUrl(0);
     }
 
     /**
-     * Display address on device
-     *
-     * @param {array} address
-     * @param {string} coin
-     * @param {boolean} segwit
-     * @param {?(string|array<number>)} requiredFirmware
-     *
-     */
+      * Display address on device
+      *
+      * @param {array} address
+      * @param {string} coin
+      * @param {boolean} segwit
+      * @param {?(string|array<number>)} requiredFirmware
+      *
+      */
     this.getAddress = function (address, coin, segwit, callback, requiredFirmware) {
 
         if (typeof address === 'string') {
@@ -611,12 +590,12 @@ function TrezorConnect() {
     }
 
     /**
-     * Display ethereum address on device
-     *
-     * @param {array} address
-     * @param {?(string|array<number>)} requiredFirmware
-     *
-     */
+      * Display ethereum address on device
+      *
+      * @param {array} address
+      * @param {?(string|array<number>)} requiredFirmware
+      *
+      */
     this.ethereumGetAddress = function (address, callback, requiredFirmware) {
 
         if (typeof address === 'string') {
@@ -650,10 +629,10 @@ function TrezorConnect() {
         + '</div>';
 
     /**
-     * Find <trezor:login> elements and replace them with login buttons.
-     * It's not required to use these special elements, feel free to call
-     * `TrezorConnect.requestLogin` directly.
-     */
+      * Find <trezor:login> elements and replace them with login buttons.
+      * It's not required to use these special elements, feel free to call
+      * `TrezorConnect.requestLogin` directly.
+      */
     this.renderLoginButtons = function () {
         var elements = document.getElementsByTagName('trezor:login');
 
@@ -670,27 +649,25 @@ function TrezorConnect() {
             text = text.replace('TREZOR', '<strong>TREZOR</strong>');
             e.outerHTML =
                 (LOGIN_CSS + LOGIN_HTML)
-                    .replace('@text@', text)
-                    .replace('@callback@', callback)
-                    .replace('@hosticon@', hosticon)
-                    .replace('@challenge_hidden@', challenge_hidden)
-                    .replace('@challenge_visual@', challenge_visual)
-                    .replace('@connect_path@', POPUP_PATH);
+                .replace('@text@', text)
+                .replace('@callback@', callback)
+                .replace('@hosticon@', hosticon)
+                .replace('@challenge_hidden@', challenge_hidden)
+                .replace('@challenge_visual@', challenge_visual)
+                .replace('@connect_path@', POPUP_PATH);
         }
     };
 }
 
 /*
- * `getXPubKey()`
- */
+  * `getXPubKey()`
+  */
 
 function parseHDPath(string) {
     return string
         .toLowerCase()
         .split('/')
-        .filter(function (p) {
-            return p !== 'm';
-        })
+        .filter(function (p) { return p !== 'm'; })
         .map(function (p) {
             var hardened = false;
             if (p[p.length - 1] === "'") {
@@ -708,9 +685,47 @@ function parseHDPath(string) {
         });
 }
 
+
+function getIdFromPath(path) {
+    if (path.length !== 3) {
+        throw new Error();
+    }
+    if ((path[0] >>> 0) !== ((44 | HD_HARDENED) >>> 0)) {
+        throw new Error();
+    }
+    if ((path[1] >>> 0) !== ((0 | HD_HARDENED) >>> 0)) {
+        throw new Error();
+    }
+    return ((path[2] & ~HD_HARDENED) >>> 0);
+}
+
+// parses first argument from getAccountInfo
+function parseAccountInfoInput(input) {
+    if (input == null) {
+        return null;
+    }
+
+    if (typeof input === 'string') {
+        if (input.substr(0, 4) === 'xpub') {
+            return input;
+        }
+        if (isNaN(input)) {
+            var parsedPath = parseHDPath(input);
+            return getIdFromPath(parsedPath);
+        } else {
+            return parseInt(input);
+        }
+    } else if (Array.isArray(input)) {
+        return getIdFromPath(input);
+    } else if (typeof input === 'number') {
+        return input;
+    }
+    throw new Error('Unknown input format.');
+}
+
 /*
- * Popup management
- */
+  * Popup management
+  */
 
 function ChromePopup(url, name, width, height) {
     var left = (screen.width - width) / 2;
@@ -831,10 +846,7 @@ function Channel(popup, waiting) {
     };
 
     var receive = function (event) {
-        var org1 = event.origin.match(/^.+\:\/\/[^\‌​/]+/)[0];
-        var org2 = popup.origin.match(/^.+\:\/\/[^\‌​/]+/)[0];
-        //if (event.source === popup.window && event.origin === popup.origin) {
-        if (event.source === popup.window && org1 === org2) {
+        if (event.source === popup.window && event.origin === popup.origin) {
             respond(event.data);
         }
     };
@@ -958,9 +970,6 @@ function PopupManager() {
 
     this.sendWithChannel = function (message, callback) {
         message.bitcoreURLS = this.bitcoreURLS || null;
-        message.currency = this.currency || null;
-        message.currencyUnits = this.currencyUnits || null;
-        message.coinInfoURL = this.coinInfoURL || null;
         message.accountDiscoveryLimit = this.accountDiscoveryLimit || null;
         message.accountDiscoveryGapLength = this.accountDiscoveryGapLength || null;
         message.accountDiscoveryBip44CoinType = this.accountDiscoveryBip44CoinType || null;
@@ -977,7 +986,7 @@ function PopupManager() {
         var onresponse = function (response) {
             if (response instanceof Error) {
                 var error = response;
-                respond({success: false, error: error.message});
+                respond({ success: false, error: error.message });
             } else {
                 respond(response);
             }
@@ -986,7 +995,7 @@ function PopupManager() {
         var onchannel = function (channel) {
             if (channel instanceof Error) {
                 var error = channel;
-                respond({success: false, error: error.message});
+                respond({ success: false, error: error.message });
             } else {
                 channel.send(message, onresponse);
             }
@@ -997,9 +1006,5 @@ function PopupManager() {
 }
 
 var connect = new TrezorConnect();
-
-if (!IS_CHROME_APP && !DISABLE_LOGIN_BUTTONS) {
-    connect.renderLoginButtons();
-}
 
 module.exports = {TrezorConnect: connect};

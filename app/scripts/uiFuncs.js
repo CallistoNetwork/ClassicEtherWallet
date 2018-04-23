@@ -48,6 +48,21 @@ uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
         if (callback !== undefined) callback(rawTx);
     }
 
+
+    const rawTx_ = Object.assign({}, rawTx);
+
+    // we need to register callisto coin
+    if (rawTx.chainId === 820) {
+
+
+        // chainId is not needed to sign tx, but will show unknown coin to user
+        //Object.assign(rawTx_, {chainId: 8}); UBQ works
+        Object.assign(rawTx_, {chainId: null});
+
+
+    }
+
+
     TrezorConnect.signEthereumTx(
         txData.path,
         ethFuncs.getNakedAddress(rawTx.nonce),
@@ -56,7 +71,7 @@ uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
         ethFuncs.getNakedAddress(rawTx.to),
         ethFuncs.getNakedAddress(rawTx.value),
         ethFuncs.getNakedAddress(rawTx.data),
-        rawTx.chainId,
+        rawTx_.chainId, // chain id for EIP-155 - is only used in fw 1.4.2 and newer, older will ignore it
         localCallback
     );
 }
@@ -146,7 +161,12 @@ uiFuncs.generateTx = function (txData, callback) {
             };
 
 
+            // chainId differs than
+
+
             if (ajaxReq.eip155) rawTx.chainId = ajaxReq.chainId;
+
+
             var eTx = new ethUtil.Tx(rawTx);
             if ((typeof txData.hwType != "undefined") && (txData.hwType == "ledger")) {
                 var app = new ledgerEth(txData.hwTransport);
@@ -171,6 +191,12 @@ uiFuncs.generateTx = function (txData, callback) {
                 }
                 app.getAppConfiguration(localCallback);
             } else if ((typeof txData.hwType != "undefined") && (txData.hwType == "trezor")) {
+
+                // https://github.com/trezor/connect/blob/v4/examples/signtx-ethereum.html
+
+                // https://github.com/trezor
+
+
                 uiFuncs.signTxTrezor(rawTx, txData, callback);
             } else if ((typeof txData.hwType != "undefined") && (txData.hwType == "web3")) {
                 // for web3, we dont actually sign it here

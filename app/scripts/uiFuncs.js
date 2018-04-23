@@ -19,11 +19,13 @@ uiFuncs.getTxData = function ($scope) {
 
 
 uiFuncs.isTxDataValid = function (txData) {
-    if (txData.to != "0xCONTRACT" && !ethFuncs.validateEtherAddress(txData.to)) throw globalFuncs.errorMsgs[5];
+    if (txData.to !== "0xCONTRACT" && !ethFuncs.validateEtherAddress(txData.to)) throw globalFuncs.errorMsgs[5];
+    if (txData.to === "0xCONTRACT") txData.to = '';
     else if (!globalFuncs.isNumeric(txData.value) || parseFloat(txData.value) < 0) throw globalFuncs.errorMsgs[0];
     else if (!globalFuncs.isNumeric(txData.gasLimit) || parseFloat(txData.gasLimit) <= 0) throw globalFuncs.errorMsgs[8];
     else if (!ethFuncs.validateHexString(txData.data)) throw globalFuncs.errorMsgs[9];
-    if (txData.to == "0xCONTRACT") txData.to = '';
+
+    return txData;
 
 }
 
@@ -150,122 +152,111 @@ uiFuncs.trezorUnlockCallback = function (txData, callback) {
 }
 uiFuncs.generateTx = function (txData, callback) {
 
-    try {
 
-        uiFuncs.isTxDataValid(txData);
+    txData = uiFuncs.isTxDataValid(txData);
 
-        var genTxWithInfo = function (data) {
-
-
-            const gasPrice = parseFloat(globalFuncs.localStorage.getItem('gasPrice')) || 21;
-
-            var rawTx = {
-                nonce: ethFuncs.sanitizeHex(data.nonce),
-
-                gasPrice: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(gasPrice, 'gwei'))),
-
-                gasLimit: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(txData.gasLimit)),
-                to: ethFuncs.sanitizeHex(txData.to),
-                value: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(txData.value, txData.unit))),
-                data: ethFuncs.sanitizeHex(txData.data)
-            };
+    var genTxWithInfo = function (data) {
 
 
-            // chainId differs than
+        const gasPrice = parseFloat(globalFuncs.localStorage.getItem('gasPrice')) || 21;
+
+        var rawTx = {
+            nonce: ethFuncs.sanitizeHex(data.nonce),
+            gasPrice: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(gasPrice, 'gwei'))),
+            gasLimit: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(txData.gasLimit)),
+            to: ethFuncs.sanitizeHex(txData.to),
+            value: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(txData.value, txData.unit))),
+            data: ethFuncs.sanitizeHex(txData.data)
+        };
 
 
-            if (ajaxReq.eip155) rawTx.chainId = ajaxReq.chainId;
+        if (ajaxReq.eip155) rawTx.chainId = ajaxReq.chainId;
 
 
-            var eTx = new ethUtil.Tx(rawTx);
+        var eTx = new ethUtil.Tx(rawTx);
 
 
-            if (txData.hwType === "ledger") {
+        if (txData.hwType === "ledger") {
 
 
-                if (!txData.trezorUnlocked) {
+            if (!txData.trezorUnlocked) {
 
-                    uiFuncs.trezorUnlockCallback(txData, callback);
+                uiFuncs.trezorUnlockCallback(txData, callback);
+                return;
+            }
+
+            var app = new ledgerEth(txData.hwTransport);
+            var EIP155Supported = false;
+            var localCallback = function (result, error) {
+                if (typeof error != "undefined") {
+                    if (callback !== undefined) callback({
+                        isError: true,
+                        error: error
+                    });
                     return;
                 }
-
-                var app = new ledgerEth(txData.hwTransport);
-                var EIP155Supported = false;
-                var localCallback = function (result, error) {
-                    if (typeof error != "undefined") {
-                        if (callback !== undefined) callback({
-                            isError: true,
-                            error: error
-                        });
-                        return;
-                    }
-                    var splitVersion = result['version'].split('.');
-                    if (parseInt(splitVersion[0]) > 1) {
-                        EIP155Supported = true;
-                    } else if (parseInt(splitVersion[1]) > 0) {
-                        EIP155Supported = true;
-                    } else if (parseInt(splitVersion[2]) > 2) {
-                        EIP155Supported = true;
-                    }
-
-
-                    uiFuncs.signTxLedger(app, eTx, rawTx, txData, !EIP155Supported, callback);
+                var splitVersion = result['version'].split('.');
+                if (parseInt(splitVersion[0]) > 1) {
+                    EIP155Supported = true;
+                } else if (parseInt(splitVersion[1]) > 0) {
+                    EIP155Supported = true;
+                } else if (parseInt(splitVersion[2]) > 2) {
+                    EIP155Supported = true;
                 }
-                app.getAppConfiguration(localCallback);
-            } else if (txData.hwType === "trezor") {
-
-                // https://github.com/trezor/connect/blob/v4/examples/signtx-ethereum.html
-
-                // https://github.com/trezor
 
 
-                uiFuncs.signTxTrezor(rawTx, txData, callback);
-            } else if ((txData.hwType === "web3")) {
-                // for web3, we dont actually sign it here
-                // instead we put the final params in the "signedTx" field and
-                // wait for the confirmation dialogue / sendTx method
-                var txParams = Object.assign({from: txData.from}, rawTx)
-                rawTx.rawTx = JSON.stringify(rawTx);
-                rawTx.signedTx = JSON.stringify(txParams);
-                rawTx.isError = false;
-                callback(rawTx);
-            } else if (txData.hwType === "digitalBitbox") {
-                uiFuncs.signTxDigitalBitbox(eTx, rawTx, txData, callback);
-            } else {
-                eTx.sign(new Buffer(txData.privKey, 'hex'));
-                rawTx.rawTx = JSON.stringify(rawTx);
-                rawTx.signedTx = '0x' + eTx.serialize().toString('hex');
-                rawTx.isError = false;
-                if (callback !== undefined) callback(rawTx);
+                uiFuncs.signTxLedger(app, eTx, rawTx, txData, !EIP155Supported, callback);
             }
-        }
-        if (txData.nonce || txData.gasPrice) {
-            var data = {
-                nonce: txData.nonce,
-                gasprice: txData.gasPrice
-            }
-            data.isOffline = txData.isOffline ? txData.isOffline : false;
-            genTxWithInfo(data);
+            app.getAppConfiguration(localCallback);
+        } else if (txData.hwType === "trezor") {
+
+            // https://github.com/trezor/connect/blob/v4/examples/signtx-ethereum.html
+
+            // https://github.com/trezor
+
+
+            uiFuncs.signTxTrezor(rawTx, txData, callback);
+        } else if (txData.hwType === "web3") {
+            // for web3, we dont actually sign it here
+            // instead we put the final params in the "signedTx" field and
+            // wait for the confirmation dialogue / sendTx method
+            var txParams = Object.assign({from: txData.from}, rawTx)
+            rawTx.rawTx = JSON.stringify(rawTx);
+            rawTx.signedTx = JSON.stringify(txParams);
+            rawTx.isError = false;
+            callback(rawTx);
+        } else if (txData.hwType === "digitalBitbox") {
+            uiFuncs.signTxDigitalBitbox(eTx, rawTx, txData, callback);
         } else {
-            ajaxReq.getTransactionData(txData.from, function (data) {
-                if (data.error && callback !== undefined) {
-                    callback({
-                        isError: true,
-                        error: e
-                    });
-                } else {
-                    data = data.data;
-                    data.isOffline = txData.isOffline ? txData.isOffline : false;
-                    genTxWithInfo(data);
-                }
-            });
+            eTx.sign(new Buffer(txData.privKey, 'hex'));
+            rawTx.rawTx = JSON.stringify(rawTx);
+            rawTx.signedTx = '0x' + eTx.serialize().toString('hex');
+            rawTx.isError = false;
+            if (callback !== undefined) callback(rawTx);
         }
-    } catch (e) {
-        if (callback !== undefined) callback({
-            isError: true,
-            error: e
+    }
+    if (txData.nonce || txData.gasPrice) {
+        var data = {
+            nonce: txData.nonce,
+            gasprice: txData.gasPrice
+        }
+        data.isOffline = txData.isOffline ? txData.isOffline : false;
+        genTxWithInfo(data);
+    } else {
+        ajaxReq.getTransactionData(txData.from, function (data) {
+            if (data.error && callback !== undefined) {
+                callback({
+                    isError: true,
+                    error: e
+                });
+            } else {
+                data = data.data;
+                data.isOffline = txData.isOffline ? txData.isOffline : false;
+                genTxWithInfo(data);
+            }
         });
     }
+
 }
 
 
@@ -289,28 +280,28 @@ uiFuncs.sendTx = function (signedTx, callback) {
     if (signedTx.slice(0, 2) !== '0x') {
 
 
+        let transaction;
+
+
         try {
 
-            const transaction = mapTransToWeb3Trans(JSON.parse(signedTx));
-
-
-            web3.eth.sendTransaction(transaction, function (err, txHash) {
-                if (err) {
-
-                    handleErr(err);
-                } else {
-
-                    callback({data: txHash})
-                }
-            });
-
+            transaction = mapTransToWeb3Trans(JSON.parse(signedTx));
 
         } catch (e) {
 
             handleErr(e);
-
-
         }
+
+
+        web3.eth.sendTransaction(transaction, function (err, txHash) {
+            if (err) {
+
+                handleErr(err);
+            } else {
+
+                callback({data: txHash})
+            }
+        });
 
 
     } else {

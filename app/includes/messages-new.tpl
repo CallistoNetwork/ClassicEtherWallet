@@ -65,18 +65,11 @@
 
         </textarea>
 
-    <button
-            ng-if="wallet.type === 'addressOnly'"
-            class="btn btn-primary" type="submit"
 
-            disabled
-    >
-        Send
-    </button>
     <button
-            ng-if="wallet.type !== 'addressOnly'"
-            class="btn btn-primary" type="submit"
-            
+            ng-disabled="!wallet.hwType"
+            class="btn btn-primary"
+            type="submit"
     >
         Send
     </button>

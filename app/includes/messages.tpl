@@ -37,6 +37,7 @@
             <span>
                 or
                 <a
+
                         translate="NAV_NEW_MESSAGE"
                         ng-class="{'text-info': visibility === VISIBILITY.NEW}"
                         ng-click="setVisibility(VISIBILITY.NEW)"> New Message </a>

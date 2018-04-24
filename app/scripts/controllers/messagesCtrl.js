@@ -576,10 +576,10 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
             $scope.notifier.danger(globalFuncs.errorMsgs[5]);
 
-        } else if (angular.equals($scope.wallet.type, 'addressOnly')) {
+        } else if (!$scope.wallet.hwType) {
 
 
-            throw globalFuncs.errorMsgs[9];
+            $scope.notifier.danger(globalFuncs.errorMsgs[9]);
         }
         else sendMessage(to, text);
 
@@ -609,95 +609,71 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
         const sendMsgAbi = messageContract.abi.find(a => a.name === 'sendMessage');
 
-        if (!sendMsgAbi) {
-
-            console.error('error');
-
-            return;
-        }
-
 
         var fullFuncName = ethUtil.solidityUtils.transformToFullName(sendMsgAbi);
         var funcSig = ethFuncs.getFunctionSignature(fullFuncName);
+
         $scope.tx.data = ethFuncs.sanitizeHex(funcSig + ethUtil.solidityCoder.encodeParams(
             sendMsgAbi.inputs.map(i => i.type),
             [to, text],
         ));
 
 
-        ajaxReq.getTransactionData($scope.wallet.getAddressString(), function (data) {
-
-            if (data.error) $scope.notifier.danger(data.msg);
-
-            data = data.data;
-
-            const {address: from, gasprice: gasPrice, nonce} = data;
-
-            const estObj = {
-                //gasPrice,
-                from,
-                to: messageContract.address,
-                data: $scope.tx.data,
-                value: "0x00"
-            };
+        const estObj = {
+            from: $scope.wallet.getAddressString(),
+            to: messageContract.address,
+            data: $scope.tx.data,
+            value: "0x00"
+        };
 
 
-            ethFuncs.estimateGas(estObj, function (data) {
+        ethFuncs.estimateGas(estObj, function (data) {
 
-                if (data.error) {
+            if (data.error) {
 
-                    $scope.tx.gasLimit = '';
+                $scope.tx.gasLimit = '';
 
-                    $scope.notifier.danger(data.msg);
-
-                    return false;
-
-                } else {
-
-                    Object.assign($scope.tx, {
-                        gasLimit: data.data,
-                        gasPrice,
-                        from,
-                        nonce,
-                        to: messageContract.address,
-                        value: '0x00',
-                    });
-
-                    const txData = uiFuncs.getTxData($scope);
-
-                    txData.gasPrice = gasPrice;
-                    txData.nonce = nonce;
-
-                    uiFuncs.generateTx(txData, function (rawTx) {
+                $scope.notifier.danger(data.msg);
 
 
-                        // console.log(Object.keys(rawTx), rawTx);
+            } else if (parseInt(data.data) === -1) {
 
-                        const {signedTx, isError} = rawTx;
-
-                        if (isError) {
+                $scope.notifier.danger('Gas estimation error');
 
 
-                            return false;
-                        }
+            } else {
 
+                Object.assign($scope.tx, estObj, {gasLimit: data.data});
+
+                const txData = uiFuncs.getTxData($scope);
+
+                uiFuncs.generateTx(txData, function (rawTx) {
+
+
+                    const {signedTx, isError} = rawTx;
+
+                    if (isError) {
+
+
+                        $scope.notifier.danger(rawTx.error);
+
+                    } else {
 
                         $scope.rawTx = rawTx;
 
                         $scope.signedTx = signedTx;
 
                         sendMessageModal.open();
+                    }
 
 
-                    })
+                })
 
-                }
+            }
 
-            });
-        })
+        });
 
-
-    };
+    }
 
 
     $scope.confirmSendMessage = function () {

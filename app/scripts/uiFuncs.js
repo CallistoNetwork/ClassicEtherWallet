@@ -149,7 +149,9 @@ uiFuncs.trezorUnlockCallback = function (txData, callback) {
             uiFuncs.generateTx(txData, callback);
         }
     });
-}
+};
+
+
 uiFuncs.generateTx = function (txData, callback) {
 
 
@@ -204,12 +206,6 @@ uiFuncs.generateTx = function (txData, callback) {
         if (txData.hwType === "ledger") {
 
 
-            if (!txData.trezorUnlocked) {
-
-                uiFuncs.trezorUnlockCallback(txData, callback);
-                return;
-            }
-
             var app = new ledgerEth(txData.hwTransport);
             var EIP155Supported = false;
             var localCallback = function (result, error) {
@@ -237,10 +233,16 @@ uiFuncs.generateTx = function (txData, callback) {
 
             // https://github.com/trezor/connect/blob/v4/examples/signtx-ethereum.html
 
-            // https://github.com/trezor
+            if (!txData.trezorUnlocked) {
+
+                uiFuncs.trezorUnlockCallback(txData, callback);
+
+            } else {
 
 
-            uiFuncs.signTxTrezor(rawTx, txData, callback);
+                uiFuncs.signTxTrezor(rawTx, txData, callback);
+            }
+
         } else if (txData.hwType === "web3") {
             // for web3, we dont actually sign it here
             // instead we put the final params in the "signedTx" field and

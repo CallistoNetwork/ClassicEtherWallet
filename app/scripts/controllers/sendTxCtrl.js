@@ -10,7 +10,9 @@ var sendTxCtrl = function ($scope, $sce, $rootScope, walletService) {
 
         //Object.assign($scope.tx, {gasPrice: ethFuncs.decimalToHex(gasPrice)});
 
-        globalFuncs.localStorage.setItem(gasPriceKey, gasPrice);
+        // globalFuncs.localStorage.setItem(gasPriceKey, gasPrice);
+
+        $rootScope.$broadcast('ChangeGas', gasPrice);
 
 
     }

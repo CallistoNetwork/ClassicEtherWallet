@@ -567,7 +567,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
         const to = TO.value;
         const text = TEXT.value;
 
-        if (nodes.nodeList[globalFuncs.getCurNode()].name.toUpperCase() !== 'ETC') {
+        if (nodes.nodeList[globalFuncs.getCurNode()].type.toUpperCase() !== 'ETC') {
 
             $scope.notifier.danger('Wrong chain! You need to switch to $ETC network to send messages');
 
@@ -633,7 +633,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
                 $scope.tx.gasLimit = '';
 
-                $scope.notifier.danger(data.msg);
+                $scope.notifier.danger('Gas estimation error');
 
 
             } else if (parseInt(data.data) === -1) {

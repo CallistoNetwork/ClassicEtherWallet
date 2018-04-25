@@ -62,11 +62,18 @@ customNode.prototype.getTransactionData = function (addr, callback) {
     this.rawPost(reqObj, function (data) {
 
 
-        // epool failing requests and user not notified
-        //
-        // returning object {error: true, msg: 'connection error'}
+        // rawPost returns ({error: true, msg: "connection error", data: ""} on error
 
-        if (data.hasOwnProperty('error') && data.hasOwnProperty('data') && data.hasOwnProperty('msg') && data.error) {
+        if (data.hasOwnProperty('error') &&
+            data.hasOwnProperty('data') &&
+            data.hasOwnProperty('msg') &&
+            data.error &&
+            data.msg === "connection error" &&
+            data.data === ''
+        ) {
+
+
+            // uiFuncs.generateTx expects error to have message property not msg
 
             return callback(Object.assign({}, data, {error: {message: data.msg}}));
 

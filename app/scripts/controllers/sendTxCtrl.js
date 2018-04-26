@@ -10,6 +10,7 @@ var sendTxCtrl = function ($scope, $sce, $rootScope, walletService) {
 
     }
 
+    $scope.networks = globalFuncs.networks;
     var network = globalFuncs.urlGet('network');
     if (network) {
 
@@ -18,8 +19,6 @@ var sendTxCtrl = function ($scope, $sce, $rootScope, walletService) {
 
 
     $scope.ajaxReq = ajaxReq;
-
-    $scope.networks = globalFuncs.networks;
 
 
     $scope.unitReadable = ajaxReq.type;

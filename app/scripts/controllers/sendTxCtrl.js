@@ -6,28 +6,21 @@ var sendTxCtrl = function ($scope, $sce, $rootScope, walletService) {
 
     if (gasPrice) {
 
-
         $rootScope.$broadcast('ChangeGas', gasPrice);
 
-
     }
-
-
-    $scope.tx = {};
-    $scope.ajaxReq = ajaxReq;
-    $scope.networks = {
-        ETH: "eth_ethscan",
-        ETC: "etc_ethereumcommonwealth_parity",
-        UBQ: "ubq",
-        EXP: "exp",
-        ROP: 'rop_mew'
-    };
-
 
     var network = globalFuncs.urlGet('network');
     if (network) {
+
         $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
     }
+
+
+    $scope.ajaxReq = ajaxReq;
+
+    $scope.networks = globalFuncs.networks;
+
 
     $scope.unitReadable = ajaxReq.type;
     $scope.sendTxModal = new Modal(document.getElementById('sendTransaction'));
@@ -37,7 +30,6 @@ var sendTxCtrl = function ($scope, $sce, $rootScope, walletService) {
     $scope.dropdownEnabled = true;
     $scope.Validator = Validator;
     $scope.gasLimitChanged = false;
-    $scope.tx.readOnly = globalFuncs.urlGet('readOnly') == null ? false : true;
     $scope.tokenVisibility = "hidden";
     $scope.tokenTx = {
         to: '',
@@ -58,8 +50,9 @@ var sendTxCtrl = function ($scope, $sce, $rootScope, walletService) {
         value: globalFuncs.urlGet('value') || "",
         nonce: null,
         donate: false,
-        tokensymbol: globalFuncs.urlGet('tokensymbol') || ""
-    }
+        tokensymbol: globalFuncs.urlGet('tokensymbol') || globalFuncs.urlGet('tokenSymbol') || ""
+    };
+    $scope.tx.readOnly = globalFuncs.urlGet('readOnly') === null;
 
 
     $scope.setSendMode = function (sendMode, tokenId = '', tokensymbol = '') {
@@ -280,7 +273,12 @@ var sendTxCtrl = function ($scope, $sce, $rootScope, walletService) {
                 $scope.wallet.setBalance(applyScope);
                 if ($scope.tx.sendMode == 'token') $scope.wallet.tokenObjs[$scope.tokenTx.id].setBalance();
             } else {
-                $scope.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+
+                if (resp.error && typeof resp.error === 'string') {
+                    $scope.notifier.danger(resp.error);
+
+                }
+                else $scope.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
             }
         });
     }

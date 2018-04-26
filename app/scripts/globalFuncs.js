@@ -6,6 +6,18 @@ var nodes = require('./nodes');
 var globalFuncs = function () {
 }
 globalFuncs.lightMode = false;
+
+
+// default nodes to connect to
+globalFuncs.networks = {
+    ETH: "eth_ethscan",
+    ETC: "etc_ethereumcommonwealth_parity",
+    UBQ: "ubq",
+    EXP: "exp",
+    ROP: 'rop_mew',
+    CLO: 'clo_pool'
+};
+
 globalFuncs.getBlockie = function (address) {
     return blockies.create({
         seed: address.toLowerCase(),

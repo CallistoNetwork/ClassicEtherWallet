@@ -14,6 +14,9 @@ var footerCtrl = function ($scope) {
 
     $scope.showBlocks = window.location.protocol === "https:";
 
+
+
+
     $scope.setBlockNumbers = function () {
         if (!$scope.showBlocks) return;
         ajaxReq.getCurrentBlock(function (data) {

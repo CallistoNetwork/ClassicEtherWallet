@@ -146,13 +146,13 @@ app.controller('signMsgCtrl', ['$scope', '$sce', 'walletService', signMsgCtrl]);
 app.controller('contractsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', contractsCtrl]);
 app.controller('ensCtrl', ['$scope', '$sce', '$rootScope', 'walletService', ensCtrl]);
 app.controller('dexnsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', 'backgroundNodeService', dexnsCtrl]);
-app.controller('footerCtrl', ['$scope', 'globalService', footerCtrl]);
+app.controller('footerCtrl', ['$scope', 'backgroundNodeService', footerCtrl]);
 app.controller('offlineTxCtrl', ['$scope', '$sce', '$rootScope', 'walletService', offlineTxCtrl]);
 app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', 'backgroundNodeService', walletBalanceCtrl]);
 app.controller('helpersCtrl', ['$scope', helpersCtrl]);
 app.controller('messagesCtrl', ['$scope', '$rootScope', 'globalService', 'walletService', 'backgroundNodeService', messagesControl]);
 app.controller('encryptCtrl', ['$scope', 'walletService', encryptCtrl]);
-app.controller('backgroundNodeCtrl', ['$scope', 'backgroundNodeService', backgroundNodeCtrl]);
+app.controller('backgroundNodeCtrl', ['$scope', 'backgroundNodeService', '$timeout', '$interval', backgroundNodeCtrl]);
 
 if (IS_CX) {
     app.controller('dexnsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', 'backgroundNodeService', dexnsCtrl]);

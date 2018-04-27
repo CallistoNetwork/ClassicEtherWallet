@@ -60,6 +60,7 @@
       <span
 
 
+              ng-controller="backgroundNodeCtrl"
               class="dropdown dropdown-background-node">
 
 

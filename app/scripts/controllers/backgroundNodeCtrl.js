@@ -4,7 +4,7 @@
 var _sample = require('lodash/sample');
 
 
-var backgroundNodeCtrl = function ($scope, backgroundNodeService, $timeout, $interval) {
+var backgroundNodeCtrl = function ($scope, backgroundNodeService, $interval) {
 
 
     const availableNodes = Object.keys(nodes.nodeList).filter(nodeName =>
@@ -36,9 +36,6 @@ var backgroundNodeCtrl = function ($scope, backgroundNodeService, $timeout, $int
     };
 
 
-
-
-
     $scope.setBackgroundNode = (backgroundNode) => {
 
 
@@ -68,9 +65,6 @@ var backgroundNodeCtrl = function ($scope, backgroundNodeService, $timeout, $int
     });
 
 
-    var interval = $interval(urlExists, 1000 * 30);
-
-
 
 
     function urlExists() {
@@ -91,7 +85,8 @@ var backgroundNodeCtrl = function ($scope, backgroundNodeService, $timeout, $int
     }
 
 
-    $timeout(urlExists, 10);
+    urlExists();
+    var interval = $interval(urlExists, 1000 * 30);
 }
 
 

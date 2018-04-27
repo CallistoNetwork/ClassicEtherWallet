@@ -1,17 +1,12 @@
 'use strict';
-var offlineTxCtrl = function($scope, $sce, $rootScope, walletService) {
+var offlineTxCtrl = function ($scope, $sce, $rootScope, walletService) {
     $scope.ajaxReq = ajaxReq;
     walletService.wallet = null;
-    $scope.networks = {
-         ETH: "eth_ethscan",
-         ETC: "etc_epool",
-         UBQ: "ubq",
-         EXP: "exp",
+    $scope.networks = globalFuncs.networks;
+    var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
+    if (network) {
+        $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
     }
-var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
-     if (network) {
-         $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
-     }
 
     walletService.password = '';
     $scope.unitReadable = ajaxReq.type;
@@ -47,14 +42,14 @@ var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('n
         decimals: "",
         type: "custom",
     };
-    $scope.$watch(function() {
+    $scope.$watch(function () {
         if (walletService.wallet == null) return null;
         return walletService.wallet.getAddressString();
-    }, function() {
+    }, function () {
         if (walletService.wallet == null) return;
         $scope.wallet = walletService.wallet;
     });
-    $scope.setTokens = function() {
+    $scope.setTokens = function () {
         $scope.tokenObjs = [];
         for (var i = 0; i < $scope.tokens.length; i++) {
             $scope.tokenObjs.push(new Token($scope.tokens[i].address, '', $scope.tokens[i].symbol, $scope.tokens[i].decimal, $scope.tokens[i].type));
@@ -65,9 +60,9 @@ var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('n
         }
     }
     $scope.setTokens();
-    $scope.getWalletInfo = function() {
+    $scope.getWalletInfo = function () {
         if (ethFuncs.validateEtherAddress($scope.tx.from)) {
-            ajaxReq.getTransactionData($scope.tx.from, function(data) {
+            ajaxReq.getTransactionData($scope.tx.from, function (data) {
                 if (data.error) throw data.msg;
                 data = data.data;
                 $scope.gasPriceDec = ethFuncs.hexToDecimal(ethFuncs.sanitizeHex(ethFuncs.addTinyMoreToGas(data.gasprice)));
@@ -76,18 +71,18 @@ var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('n
             });
         }
     }
-    $scope.$watch('tx', function() {
+    $scope.$watch('tx', function () {
         $scope.showRaw = false;
 
     }, true);
-    $scope.$watch('tokenTx.id', function() {
+    $scope.$watch('tokenTx.id', function () {
         if ($scope.tokenTx.id != 'ether') {
             $scope.tx.gasLimit = 150000;
         } else {
             $scope.tx.gasLimit = globalFuncs.defaultTxGasLimit;
         }
     });
-    $scope.$watch('[tx.to]', function() {
+    $scope.$watch('[tx.to]', function () {
         // if golem crowdfund address
         if ($scope.tx.to == "0xa74476443119A942dE498590Fe1f2454d7D4aC0d") {
             $scope.setSendMode('ether')
@@ -98,7 +93,7 @@ var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('n
             $scope.dropdownEnabled = true
         }
     }, true);
-    $scope.setSendMode = function(index, tokensymbol = '') {
+    $scope.setSendMode = function (index, tokensymbol = '') {
         $scope.tokenTx.id = index;
         if (index == 'ether') {
             $scope.unitReadable = ajaxReq.type;
@@ -107,7 +102,7 @@ var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('n
         }
         $scope.dropdownAmount = false;
     }
-    $scope.validateAddress = function(address, status) {
+    $scope.validateAddress = function (address, status) {
         $scope.customGasMsg = ''
         if (ethFuncs.validateEtherAddress(address)) {
             for (var i in CustomGasMessages) {
@@ -117,10 +112,10 @@ var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('n
             }
             return true;
         } else {
-          return false;
+            return false;
         }
     }
-    $scope.generateTx = function() {
+    $scope.generateTx = function () {
         if (!ethFuncs.validateEtherAddress($scope.tx.to)) {
             $scope.notifier.danger(globalFuncs.errorMsgs[5]);
             return;
@@ -134,7 +129,7 @@ var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('n
             txData.to = $scope.tokenObjs[$scope.tokenTx.id].getContractAddress();
             txData.value = '0x00';
         }
-        uiFuncs.generateTx(txData, function(rawTx) {
+        uiFuncs.generateTx(txData, function (rawTx) {
             if (!rawTx.isError) {
                 $scope.rawTx = rawTx.rawTx;
                 $scope.signedTx = rawTx.signedTx;
@@ -146,7 +141,7 @@ var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('n
             if (!$scope.$$phase) $scope.$apply();
         });
     }
-    $scope.confirmSendTx = function() {
+    $scope.confirmSendTx = function () {
         try {
             if ($scope.signedTx == "" || !ethFuncs.validateHexString($scope.signedTx)) throw globalFuncs.errorMsgs[12];
             var eTx = new ethUtil.Tx($scope.signedTx);
@@ -170,9 +165,9 @@ var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('n
             $scope.notifier.danger(e);
         }
     }
-    $scope.sendTx = function() {
+    $scope.sendTx = function () {
         new Modal(document.getElementById('sendTransactionOffline')).close();
-        ajaxReq.sendRawTx($scope.signedTx, function(data) {
+        ajaxReq.sendRawTx($scope.signedTx, function (data) {
             if (data.error) {
                 $scope.notifier.danger(data.msg);
             } else {

@@ -8,13 +8,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
     $scope.wallet = walletService.wallet;
 
-    $scope.networks = {
-        ETH: "eth_ethscan",
-        ETC: "etc_epool",
-        UBQ: "ubq",
-        EXP: "exp",
-    };
-
+    $scope.networks = globalFuncs.networks;
 
     // load contract deployed to ropsten network
     const useTestData = false;

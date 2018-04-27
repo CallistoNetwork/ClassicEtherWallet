@@ -6,12 +6,7 @@ var viewWalletCtrl = function($scope, $rootScope, walletService) {
     $scope.btcBalance = "loading";
     $scope.etherBalance = "loading";
     $scope.tokenVisibility = "hidden";
-    $scope.networks = {
-         ETH: "eth_ethscan",
-         ETC: "etc_epool",
-         UBQ: "ubq",
-         EXP: "exp",
-    }
+    $scope.networks = globalFuncs.networks;
 var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
      if (network) {
          $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);

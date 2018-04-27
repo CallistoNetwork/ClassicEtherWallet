@@ -2,12 +2,7 @@
 var ensCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.ajaxReq = ajaxReq;
     $scope.hideEnsInfoPanel = false;
-    $scope.networks = {
-         ETH: "eth_ethscan",
-         ETC: "etc_epool",
-         UBQ: "ubq",
-         EXP: "exp",
-    }
+    $scope.networks = globalFuncs.networks;
 
     var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
     if (network) {

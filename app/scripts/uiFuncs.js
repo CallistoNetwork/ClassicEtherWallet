@@ -157,7 +157,32 @@ uiFuncs.generateTx = function (txData, callback) {
 
     txData = uiFuncs.isTxDataValid(txData);
 
-    var genTxWithInfo = function (data) {
+
+    if (txData.nonce) {
+
+        return genTxWithInfo({
+            nonce: txData.nonce,
+            isOffline: Boolean(txData.isOffline)
+        });
+
+    }
+
+
+    ajaxReq.getTransactionData(txData.from, function (data) {
+        if (data.error) {
+            return callback({
+                isError: true,
+                error: data.error
+            });
+        }
+        data = data.data;
+        data.isOffline = Boolean(data.isOffline);
+        genTxWithInfo(data);
+
+    });
+
+
+    function genTxWithInfo(data) {
 
 
         const gasPrice = parseFloat(globalFuncs.localStorage.getItem('gasPrice')) || 21;
@@ -237,27 +262,7 @@ uiFuncs.generateTx = function (txData, callback) {
             if (callback !== undefined) callback(rawTx);
         }
     }
-    if (txData.nonce || txData.gasPrice) {
-        var data = {
-            nonce: txData.nonce,
-            gasprice: txData.gasPrice
-        }
-        data.isOffline = txData.isOffline ? txData.isOffline : false;
-        genTxWithInfo(data);
-    } else {
-        ajaxReq.getTransactionData(txData.from, function (data) {
-            if (data.error && callback !== undefined) {
-                callback({
-                    isError: true,
-                    error: e
-                });
-            } else {
-                data = data.data;
-                data.isOffline = txData.isOffline ? txData.isOffline : false;
-                genTxWithInfo(data);
-            }
-        });
-    }
+
 
 }
 

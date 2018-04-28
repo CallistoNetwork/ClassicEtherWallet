@@ -2,12 +2,7 @@
 var dexnsCtrl = function ($scope, $sce, $rootScope, walletService, backgroundNodeService) {
     $scope.ajaxReq = ajaxReq;
     $scope.hideEnsInfoPanel = false;
-    $scope.networks = {
-        ETH: "eth_ethscan",
-        ETC: "etc_epool",
-        UBQ: "ubq",
-        EXP: "exp",
-    }
+    $scope.networks = globalFuncs.networks;
 
     $scope.tx = {
         gasLimit: '200000',

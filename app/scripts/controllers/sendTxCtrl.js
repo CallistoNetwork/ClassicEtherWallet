@@ -1,17 +1,25 @@
 'use strict';
-var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
-    $scope.tx = {};
-    $scope.ajaxReq = ajaxReq;
-    $scope.networks = {
-         ETH: "eth_ethscan",
-         ETC: "etc_epool",
-         UBQ: "ubq",
-         EXP: "exp",
+var sendTxCtrl = function ($scope, $sce, $rootScope, walletService) {
+
+
+    const gasPrice = parseFloat(globalFuncs.urlGet('gasprice') || globalFuncs.urlGet('gasPrice') || "");
+
+    if (gasPrice) {
+
+        $rootScope.$broadcast('ChangeGas', gasPrice);
+
     }
-    var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
+
+    $scope.networks = globalFuncs.networks;
+    var network = globalFuncs.urlGet('network');
     if (network) {
-       $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
+
+        $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
     }
+
+
+    $scope.ajaxReq = ajaxReq;
+
 
     $scope.unitReadable = ajaxReq.type;
     $scope.sendTxModal = new Modal(document.getElementById('sendTransaction'));
@@ -21,9 +29,6 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.dropdownEnabled = true;
     $scope.Validator = Validator;
     $scope.gasLimitChanged = false;
-    $scope.tx.readOnly = globalFuncs.urlGet('readOnly') == null ? false : true;
-    var currentTab = $scope.globalService.currentTab;
-    var tabs = $scope.globalService.tabs;
     $scope.tokenVisibility = "hidden";
     $scope.tokenTx = {
         to: '',
@@ -33,24 +38,21 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.customGasMsg = '';
 
     $scope.customGas = CustomGasMessages;
-    $scope.networks = {
-        ETH: "eth_ethscan",
-        ETC: "etc_epool",
-        UBQ: "ubq",
-        EXP: "exp",
-    }
+
+
     $scope.tx = {
         // if there is no gasLimit or gas key in the URI, use the default value. Otherwise use value of gas or gasLimit. gasLimit wins over gas if both present
-        gasLimit: globalFuncs.urlGet('gaslimit') != null || globalFuncs.urlGet('gas') != null ? globalFuncs.urlGet('gaslimit') != null ? globalFuncs.urlGet('gaslimit') : globalFuncs.urlGet('gas') : globalFuncs.defaultTxGasLimit,
-        data: globalFuncs.urlGet('data') == null ? "" : globalFuncs.urlGet('data'),
-        to: globalFuncs.urlGet('to') == null ? "" : globalFuncs.urlGet('to'),
+        gasLimit: globalFuncs.urlGet('gaslimit') || globalFuncs.urlGet('gas') || globalFuncs.urlGet('gasLimit') || globalFuncs.defaultTxGasLimit,
+        data: globalFuncs.urlGet('data') || "",
+        to: globalFuncs.urlGet('to') || "",
         unit: "ether",
-        value: globalFuncs.urlGet('value') == null ? "" : globalFuncs.urlGet('value'),
+        value: globalFuncs.urlGet('value') || "",
         nonce: null,
-        gasPrice: globalFuncs.urlGet('gasprice') == null ? null : globalFuncs.urlGet('gasprice'),
         donate: false,
-        tokensymbol: globalFuncs.urlGet('tokensymbol') == null ? false : globalFuncs.urlGet('tokensymbol')
-    }
+        tokensymbol: globalFuncs.urlGet('tokensymbol') || globalFuncs.urlGet('tokenSymbol') || ""
+    };
+    $scope.tx.readOnly = globalFuncs.urlGet('readOnly') === null;
+
 
     $scope.setSendMode = function (sendMode, tokenId = '', tokensymbol = '') {
         $scope.tx.sendMode = sendMode;
@@ -69,17 +71,17 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
             for (var i = 0; i < $scope.wallet.tokenObjs.length; i++) {
                 if ($scope.wallet.tokenObjs[i].symbol.toLowerCase().indexOf(tokensymbol.toLowerCase()) !== -1) {
                     //console.log($scope.wallet.tokenObjs[i].network);
-                    if($scope.wallet.tokenObjs[i].network && $scope.wallet.tokenObjs[i].network != ajaxReq.type) {
-                            console.log(ajaxReq.type);
-                            $scope.notifier.warning('WARNING! You are trying to send ' + $scope.wallet.tokenObjs[i].symbol + ' token, but this is a token of $' + $scope.wallet.tokenObjs[i].network + ' network! Switch to $' + $scope.wallet.tokenObjs[i].network + ' node first.', 0);
-                        }
+                    if ($scope.wallet.tokenObjs[i].network && $scope.wallet.tokenObjs[i].network != ajaxReq.type) {
+                        console.log(ajaxReq.type);
+                        $scope.notifier.warning('WARNING! You are trying to send ' + $scope.wallet.tokenObjs[i].symbol + ' token, but this is a token of $' + $scope.wallet.tokenObjs[i].network + ' network! Switch to $' + $scope.wallet.tokenObjs[i].network + ' node first.', 0);
+                    }
                     break;
                 }
             }
         }
         $scope.dropdownAmount = false;
     };
-    $scope.setTokenSendMode = function() {
+    $scope.setTokenSendMode = function () {
         if ($scope.tx.sendMode == 'token' && !$scope.tx.tokensymbol) {
             $scope.tx.tokensymbol = $scope.wallet.tokenObjs[0].symbol;
             $scope.wallet.tokenObjs[0].type = "custom";
@@ -96,26 +98,26 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
         }
         if ($scope.tx.sendMode != 'token') $scope.tokenTx.id = -1;
     }
-    var applyScope = function() {
+    var applyScope = function () {
         if (!$scope.$$phase) $scope.$apply();
     }
-    var defaultInit = function() {
+    var defaultInit = function () {
         globalFuncs.urlGet('sendMode') == null ? $scope.setSendMode('ether') : $scope.setSendMode(globalFuncs.urlGet('sendMode'));
         $scope.gasLimitChanged = globalFuncs.urlGet('gaslimit') != null ? true : false;
         $scope.showAdvance = globalFuncs.urlGet('gaslimit') != null || globalFuncs.urlGet('gas') != null || globalFuncs.urlGet('data') != null;
         if (globalFuncs.urlGet('data') || globalFuncs.urlGet('value') || globalFuncs.urlGet('to') || globalFuncs.urlGet('gaslimit') || globalFuncs.urlGet('sendMode') || globalFuncs.urlGet('gas') || globalFuncs.urlGet('tokensymbol')) $scope.hasQueryString = true // if there is a query string, show an warning at top of page
     }
-    $scope.$watch(function() {
+    $scope.$watch(function () {
         if (walletService.wallet == null) return null;
         return walletService.wallet.getAddressString();
-    }, function() {
+    }, function () {
         if (walletService.wallet == null) return;
         $scope.wallet = walletService.wallet;
         $scope.wd = true;
         $scope.wallet.setBalance(applyScope);
         $scope.wallet.setTokens();
         if ($scope.parentTxConfig) {
-            var setTxObj = function() {
+            var setTxObj = function () {
                 $scope.addressDrtv.ensAddressField = $scope.parentTxConfig.to;
                 $scope.tx.value = $scope.parentTxConfig.value;
                 $scope.tx.sendMode = $scope.parentTxConfig.sendMode ? $scope.parentTxConfig.sendMode : 'ether';
@@ -129,48 +131,43 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
                     $scope.gasLimitChanged = true;
                 }
             }
-            $scope.$watch('parentTxConfig', function() {
+            $scope.$watch('parentTxConfig', function () {
                 setTxObj();
             }, true);
         }
         $scope.setTokenSendMode();
         defaultInit();
     });
-    $scope.$watch('ajaxReq.key', function() {
+    $scope.$watch('ajaxReq.key', function () {
         if ($scope.wallet) {
             $scope.setSendMode('ether');
             $scope.wallet.setBalance(applyScope);
             $scope.wallet.setTokens();
         }
     });
-    $scope.$watch('tokenTx', function() {
+    $scope.$watch('tokenTx', function () {
         if ($scope.wallet && $scope.wallet.tokenObjs !== undefined && $scope.wallet.tokenObjs[$scope.tokenTx.id] !== undefined && $scope.Validator.isValidAddress($scope.tokenTx.to) && $scope.Validator.isPositiveNumber($scope.tokenTx.value)) {
             if ($scope.estimateTimer) clearTimeout($scope.estimateTimer);
-            $scope.estimateTimer = setTimeout(function() {
+            $scope.estimateTimer = setTimeout(function () {
                 $scope.estimateGasLimit();
             }, 500);
         }
     }, true);
-    $scope.$watch('tx', function(newValue, oldValue) {
+    $scope.$watch('tx', function (newValue, oldValue) {
         $scope.showRaw = false;
-        if (oldValue.sendMode && oldValue.sendMode != newValue.sendMode && newValue.sendMode == 'ether') {
+        if (oldValue.sendMode && oldValue.sendMode != newValue.sendMode && newValue.sendMode === 'ether') {
             $scope.tx.data = globalFuncs.urlGet('data') == null ? "" : globalFuncs.urlGet('data');
             $scope.tx.gasLimit = globalFuncs.defaultTxGasLimit;
         }
-        if (newValue.gasLimit == oldValue.gasLimit && $scope.wallet && $scope.Validator.isValidAddress($scope.tx.to) && $scope.Validator.isPositiveNumber($scope.tx.value) && $scope.Validator.isValidHex($scope.tx.data) && $scope.tx.sendMode != 'token') {
-            if ($scope.estimateTimer) clearTimeout($scope.estimateTimer);
-            $scope.estimateTimer = setTimeout(function() {
-                $scope.estimateGasLimit();
-            }, 500);
-        }
-        if ($scope.tx.sendMode == 'token') {
+
+        if ($scope.tx.sendMode === 'token') {
             $scope.tokenTx.to = $scope.tx.to;
             $scope.tokenTx.value = $scope.tx.value;
         }
         if (newValue.to !== oldValue.to) {
             for (var i in $scope.customGas) {
-                if ($scope.tx.to.toLowerCase() == $scope.customGas[i].to.toLowerCase()) {
-                    $scope.customGasMsg = $scope.customGas[i].msg != '' ? $scope.customGas[i].msg : ''
+                if ($scope.tx.to.toLowerCase() === $scope.customGas[i].to.toLowerCase()) {
+                    $scope.customGasMsg = $scope.customGas[i].msg !== '' ? $scope.customGas[i].msg : ''
                     return;
                 }
             }
@@ -178,7 +175,7 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
             $scope.customGasMsg = ''
         }
     }, true);
-    $scope.estimateGasLimit = function() {
+    $scope.estimateGasLimit = function () {
         $scope.customGasMsg = ''
         if ($scope.gasLimitChanged) return;
         for (var i in $scope.customGas) {
@@ -199,13 +196,13 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
             from: $scope.wallet.getAddressString(),
             value: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei($scope.tx.value, $scope.tx.unit)))
         }
-        if ($scope.tx.data != "") estObj.data = ethFuncs.sanitizeHex($scope.tx.data);
-        if ($scope.tx.sendMode == 'token') {
+        if ($scope.tx.data !== "") estObj.data = ethFuncs.sanitizeHex($scope.tx.data);
+        if ($scope.tx.sendMode === 'token') {
             estObj.to = $scope.wallet.tokenObjs[$scope.tokenTx.id].getContractAddress();
             estObj.data = $scope.wallet.tokenObjs[$scope.tokenTx.id].getData($scope.tokenTx.to, $scope.tokenTx.value).data;
             estObj.value = '0x00';
         }
-        ethFuncs.estimateGas(estObj, function(data) {
+        ethFuncs.estimateGas(estObj, function (data) {
 
             if (!data.error) {
                 if (data.data == '-1') $scope.notifier.danger(globalFuncs.errorMsgs[21]);
@@ -213,19 +210,19 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
             } else $scope.notifier.danger(data.msg);
         });
     }
-    var isEnough = function(valA, valB) {
+    var isEnough = function (valA, valB) {
         return new BigNumber(valA).lte(new BigNumber(valB));
     }
-    $scope.hasEnoughBalance = function() {
-        if ($scope.wallet.balance == 'loading') return false;
+    $scope.hasEnoughBalance = function () {
+        if ($scope.wallet.balance === 'loading') return false;
         return isEnough($scope.tx.value, $scope.wallet.balance);
     }
-    $scope.onDonateClick = function() {
+    $scope.onDonateClick = function () {
         $scope.addressDrtv.ensAddressField = globalFuncs.donateAddress;
         $scope.tx.value = "1";
         $scope.tx.donate = true;
     }
-    $scope.generateTx = function() {
+    $scope.generateTx = function () {
         if (!$scope.Validator.isValidAddress($scope.tx.to)) {
             $scope.notifier.danger(globalFuncs.errorMsgs[5]);
             return;
@@ -250,7 +247,7 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
             txData.data = $scope.wallet.tokenObjs[$scope.tokenTx.id].getData($scope.tokenTx.to, $scope.tokenTx.value).data;
             txData.value = '0x00';
         }
-        uiFuncs.generateTx(txData, function(rawTx) {
+        uiFuncs.generateTx(txData, function (rawTx) {
             if (!rawTx.isError) {
                 $scope.rawTx = rawTx.rawTx;
                 $scope.signedTx = rawTx.signedTx;
@@ -262,26 +259,34 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
             if (!$scope.$$phase) $scope.$apply();
         });
     }
-    $scope.sendTx = function() {
+    $scope.sendTx = function () {
         $scope.sendTxModal.close();
-        uiFuncs.sendTx($scope.signedTx, function(resp) {
+        uiFuncs.sendTx($scope.signedTx, function (resp) {
             if (!resp.isError) {
                 var txHashLink = $scope.ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data);
-                var emailBody = 'I%20was%20trying%20to..............%0A%0A%0A%0ABut%20I%27m%20confused%20because...............%0A%0A%0A%0A%0A%0ATo%20Address%3A%20https%3A%2F%2Fetherscan.io%2Faddress%2F' + $scope.tx.to + '%0AFrom%20Address%3A%20https%3A%2F%2Fetherscan.io%2Faddress%2F' + $scope.wallet.getAddressString() + '%0ATX%20Hash%3A%20https%3A%2F%2Fetherscan.io%2Ftx%2F' + resp.data + '%0AAmount%3A%20' + $scope.tx.value + '%20' + $scope.unitReadable + '%0ANode%3A%20' + $scope.ajaxReq.type + '%0AToken%20To%20Addr%3A%20' + $scope.tokenTx.to + '%0AToken%20Amount%3A%20' + $scope.tokenTx.value + '%20' + $scope.unitReadable + '%0AData%3A%20' + $scope.tx.data + '%0AGas%20Limit%3A%20' + $scope.tx.gasLimit + '%0AGas%20Price%3A%20' + $scope.tx.gasPrice;
-                var verifyTxBtn = $scope.ajaxReq.type != nodes.nodeTypes.Custom ? '<a class="btn btn-xs btn-info" href="' + txHashLink + '" class="strong" target="_blank" rel="noopener">Verify Transaction</a>' : '';
-                var emailBtn = '<a class="btn btn-xs btn-info " href="mailto:support@myetherwallet.com?Subject=Issue%20regarding%20my%20TX%20&Body=' + emailBody + '" target="_blank" rel="noopener">Confused? Email Us.</a>';
+                var verifyTxBtn = $scope.ajaxReq.type !== nodes.nodeTypes.Custom ? '<a class="btn btn-xs btn-info strong" href="' + txHashLink + '" target="_blank" rel="noopener noreferrer">Verify Transaction</a>' : '';
                 var completeMsg = '<p>' + globalFuncs.successMsgs[2] + '<strong>' + resp.data + '</strong></p>' + verifyTxBtn;
                 $scope.notifier.success(completeMsg, 0);
                 $scope.wallet.setBalance(applyScope);
-                if ($scope.tx.sendMode == 'token') $scope.wallet.tokenObjs[$scope.tokenTx.id].setBalance();
+                if ($scope.tx.sendMode === 'token') $scope.wallet.tokenObjs[$scope.tokenTx.id].setBalance();
             } else {
-                $scope.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+
+
+                if (resp.error.includes('insufficient funds')) {
+
+                    $scope.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+                }
+                else {
+
+                    $scope.notifier.danger(resp.error || globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+                }
+
             }
         });
     }
-    $scope.transferAllBalance = function() {
+    $scope.transferAllBalance = function () {
         if ($scope.tx.sendMode != 'token') {
-            uiFuncs.transferAllBalance($scope.wallet.getAddressString(), $scope.tx.gasLimit, function(resp) {
+            uiFuncs.transferAllBalance($scope.wallet.getAddressString(), $scope.tx.gasLimit, function (resp) {
                 if (!resp.isError) {
                     $scope.tx.unit = resp.unit;
                     $scope.tx.value = resp.value;

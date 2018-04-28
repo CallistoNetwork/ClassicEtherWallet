@@ -63,9 +63,11 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
         }
     };
 
+    const isValidPrice = price => 0.1 <= price && price <= 100;
+
     $scope.validateGasPrice = function validateGasPrice() {
 
-        if (!(0.1 <= $scope.gas.value && $scope.gas.value <= 100)) {
+        if (!isValidPrice($scope.gas.value)) {
 
 
             // $scope.notifier.danger(globalFuncs.errorMsgs[38]);
@@ -74,7 +76,10 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
             globalFuncs.localStorage.setItem(gasPriceKey, $scope.gas.defaultValue);
         }
         // console.log($scope.gas.value, globalFuncs.localStorage.getItem(gasPriceKey), $scope.gas.curVal);
-    }
+    };
+
+
+
 
     $scope.gasChanged = function () {
 
@@ -355,6 +360,15 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
 
     $scope.$on('ChangeNode', function (event, nodeId) {
         $scope.changeNode(nodeId);
+    });
+
+
+    $scope.$on('ChangeGas', function ($event, gasPrice) {
+
+
+        $scope.gas.value = gasPrice;
+        $scope.validateGasPrice();
+
     });
 
     angular.element(document.querySelectorAll('.nav-scroll')[0]).bind('scroll', $scope.setOnScrollArrows);

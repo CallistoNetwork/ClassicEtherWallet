@@ -33,12 +33,7 @@ var encryptCtrl = function ($scope, walletService) {
         n: globalFuncs.scrypt.n
     };
 
-    $scope.networks = {
-        ETH: "eth_ethscan",
-        ETC: "etc_epool",
-        UBQ: "ubq",
-        EXP: "exp",
-    };
+    $scope.networks = globalFuncs.networks;
 
 
     var network = globalFuncs.urlGet('network') || null;

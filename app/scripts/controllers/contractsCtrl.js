@@ -6,12 +6,7 @@
 var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
     $scope.ajaxReq = ajaxReq;
     walletService.wallet = null;
-    $scope.networks = {
-        ETH: "eth_ethscan",
-        ETC: "etc_epool",
-        UBQ: "ubq",
-        EXP: "exp",
-    };
+    $scope.networks = globalFuncs.networks;
 
 
     var network = globalFuncs.urlGet('network') || null;

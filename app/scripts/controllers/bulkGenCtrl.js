@@ -1,12 +1,7 @@
 'use strict';
 var bulkGenCtrl = function($scope) {
 	  $scope.showWallets = false;
-    $scope.networks = {
-         ETH: "eth_ethscan",
-         ETC: "etc_epool",
-         UBQ: "ubq",
-         EXP: "exp",
-    }
+    $scope.networks = globalFuncs.networks;
 
 		var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
     if (network) {

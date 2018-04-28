@@ -20,19 +20,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
     $scope.nodeService = $scope.ajaxReq.service;
 
 
-    $scope.dropdownNodeBackground = false;
 
-    $scope.backgroundNodeService = backgroundNodeService;
-
-    $scope.setBackgroundNode = (backgroundNode) => {
-
-
-        Object.assign(backgroundNodeService, {backgroundNode});
-
-        $scope.dropdownNodeBackground = false;
-
-
-    };
 
 
     $scope.$watch('ajaxReq.type', function () {

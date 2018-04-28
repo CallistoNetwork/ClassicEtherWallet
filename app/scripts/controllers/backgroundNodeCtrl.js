@@ -4,18 +4,21 @@
 var _sample = require('lodash/sample');
 
 
-var backgroundNodeCtrl = function ($scope, backgroundNodeService) {
+var backgroundNodeCtrl = function ($scope, backgroundNodeService, $interval) {
 
 
     const availableNodes = Object.keys(nodes.nodeList).filter(nodeName =>
-        nodes.nodeList[nodeName].name.toUpperCase() === 'ETC');
+        nodes.nodeList[nodeName].type.toUpperCase() === 'ETC');
 
     var backgroundNode = _sample(availableNodes);
 
-    $scope.backgroundNode = backgroundNode;
 
     Object.assign(backgroundNodeService, {backgroundNode, availableNodes});
 
+    $scope.backgroundNodeService = backgroundNodeService;
+
+    $scope.nodeList = nodes.nodeList;
+    $scope.dropdownNodeBackground = false;
 
     const changeBackgroundNode = () => {
 
@@ -27,10 +30,19 @@ var backgroundNodeCtrl = function ($scope, backgroundNodeService) {
 
         const sampleNode = _sample(availableNodes_);
 
-        $scope.backgroundNode = sampleNode;
-
-
         Object.assign(backgroundNodeService, {backgroundNode: sampleNode});
+
+
+    };
+
+
+    $scope.setBackgroundNode = (backgroundNode) => {
+
+
+        Object.assign(backgroundNodeService, {backgroundNode});
+
+
+        $scope.dropdownNodeBackground = false;
 
 
     };
@@ -41,7 +53,7 @@ var backgroundNodeCtrl = function ($scope, backgroundNodeService) {
 
     }, function (curNode) {
 
-        const {backgroundNode, availableNodes} = backgroundNodeService;
+        const {backgroundNode} = backgroundNodeService;
 
         if (backgroundNode === curNode) {
 
@@ -50,7 +62,31 @@ var backgroundNodeCtrl = function ($scope, backgroundNodeService) {
 
         }
 
-    })
+    });
+
+
+
+
+    function urlExists() {
+
+        const {lib} = nodes.nodeList[backgroundNodeService.backgroundNode];
+
+        lib.getCurrentBlock(function (result) {
+
+
+            if (result.error) {
+
+
+                changeBackgroundNode();
+            }
+        });
+
+
+    }
+
+
+    urlExists();
+    var interval = $interval(urlExists, 1000 * 30);
 }
 
 

@@ -155,13 +155,9 @@ app.controller('encryptCtrl', ['$scope', 'walletService', encryptCtrl]);
 app.controller('backgroundNodeCtrl', ['$scope', 'backgroundNodeService', '$interval', backgroundNodeCtrl]);
 
 if (IS_CX) {
-    app.controller('dexnsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', 'backgroundNodeService', dexnsCtrl]);
     app.controller('addWalletCtrl', ['$scope', '$sce', addWalletCtrl]);
     app.controller('myWalletsCtrl', ['$scope', '$sce', 'walletService', myWalletsCtrl]);
     app.controller('mainPopCtrl', ['$scope', '$sce', mainPopCtrl]);
     app.controller('quickSendCtrl', ['$scope', '$sce', quickSendCtrl]);
     app.controller('cxDecryptWalletCtrl', ['$scope', '$sce', 'walletService', cxDecryptWalletCtrl]);
-    app.controller('messagesCtrl', ['$scope', '$rootScope', 'globalService', 'walletService', 'backgroundNodeService', messagesControl]);
-    app.controller('encryptCtrl', ['$scope', 'walletService', encryptCtrl]);
-    app.controller('backgroundNodeCtrl', ['$scope', 'backgroundNodeService', backgroundNodeCtrl]);
 }

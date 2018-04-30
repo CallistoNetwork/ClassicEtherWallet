@@ -126,7 +126,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
         $scope.keyNode = globalFuncs.localStorage.getItem('curNode', null);
         if (nodes.ensNodeTypes.indexOf($scope.curNode.type) == -1) $scope.tabNames.ens.cx = $scope.tabNames.ens.mew = false;
         else $scope.tabNames.ens.cx = $scope.tabNames.ens.mew = true;
-        $scope.curNode.lib.getCurrentBlock(function (data) {
+        ajaxReq.getCurrentBlock(function (data) {
             if (data.error) {
                 $scope.nodeIsConnected = false;
                 $scope.notifier.danger(globalFuncs.errorMsgs[32]);

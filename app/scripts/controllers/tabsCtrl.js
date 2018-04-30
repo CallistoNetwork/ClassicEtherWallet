@@ -1,12 +1,12 @@
 'use strict';
-var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNodeService) {
+var tabsCtrl = function ($scope, globalService, $translate, $sce) {
     $scope.gService = globalService;
     $scope.tabNames = $scope.gService.tabs;
     $scope.curLang = 'English';
     $scope.customNodeModal = document.getElementById('customNodeModal') ? new Modal(document.getElementById('customNodeModal')) : null;
     $scope.Validator = Validator;
     $scope.nodeList = nodes.nodeList;
-    $scope.defaultNodeKey = 'etc_epool';
+    $scope.defaultNodeKey = 'etc_ethereumcommonwealth_parity';
     $scope.customNode = {options: 'eth', name: '', url: '', port: '', httpBasicAuth: null, eip155: false, chainId: ''};
     $scope.customNodeCount = 0;
     $scope.nodeIsConnected = true;
@@ -18,9 +18,6 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
     $scope.ajaxReq = ajaxReq;
     $scope.nodeType = $scope.ajaxReq.type
     $scope.nodeService = $scope.ajaxReq.service;
-
-
-
 
 
     $scope.$watch('ajaxReq.type', function () {
@@ -40,9 +37,8 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
         }, 200);
     }
 
-    $scope.setArrowVisibility();
 
-    var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
+    var network = globalFuncs.urlGet('network', "");
 
     var gasPriceKey = "gasPrice";
 
@@ -77,8 +73,6 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
         }
         // console.log($scope.gas.value, globalFuncs.localStorage.getItem(gasPriceKey), $scope.gas.curVal);
     };
-
-
 
 
     $scope.gasChanged = function () {
@@ -132,7 +126,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
         $scope.keyNode = globalFuncs.localStorage.getItem('curNode', null);
         if (nodes.ensNodeTypes.indexOf($scope.curNode.type) == -1) $scope.tabNames.ens.cx = $scope.tabNames.ens.mew = false;
         else $scope.tabNames.ens.cx = $scope.tabNames.ens.mew = true;
-        ajaxReq.getCurrentBlock(function (data) {
+        $scope.curNode.lib.getCurrentBlock(function (data) {
             if (data.error) {
                 $scope.nodeIsConnected = false;
                 $scope.notifier.danger(globalFuncs.errorMsgs[32]);
@@ -190,10 +184,6 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
         }
     }
 
-    if (!network) {
-        $scope.getCustomNodesFromStorage();
-        $scope.setCurNodeFromStorage();
-    }
 
     $scope.saveCustomNode = function () {
         try {
@@ -255,7 +245,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
             $scope.activeTab = globalService.currentTab;
         }
     }
-    $scope.setTab(hval);
+
 
     $scope.tabClick = function (id) {
         $scope.activeTab = globalService.currentTab = id;
@@ -371,6 +361,19 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce, backgroundNode
 
     });
 
+
+    $scope.setArrowVisibility();
+
+    if (!network) {
+        $scope.getCustomNodesFromStorage();
+        $scope.setCurNodeFromStorage();
+    } else {
+
+
+        $scope.changeNode(globalFuncs.networks[network.toUpperCase()] || 0);
+    }
+
+    $scope.setTab(hval);
     angular.element(document.querySelectorAll('.nav-scroll')[0]).bind('scroll', $scope.setOnScrollArrows);
     globalFuncs.changeHash = $scope.setHash;
 

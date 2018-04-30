@@ -15,11 +15,6 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService, backgroundNod
 
     walletService.wallet = null;
 
-    var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
-    if (network) {
-        $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
-    }
-
     $scope.priceDEXNS = "LOADING...";
     $scope.DexNSName;
     $scope.dexnsConfirmModalModal = new Modal(document.getElementById('dexnsConfirmModal'));

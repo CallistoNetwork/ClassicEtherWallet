@@ -4,10 +4,7 @@ var ensCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.hideEnsInfoPanel = false;
     $scope.networks = globalFuncs.networks;
 
-    var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
-    if (network) {
-       $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
-    }
+
 
     walletService.wallet = null;
     $scope.ensConfirmModalModal = new Modal(document.getElementById('ensConfirmModal'));

@@ -1,7 +1,5 @@
 'use strict';
 
-var nodes = require('./nodes');
-
 
 var globalFuncs = function () {
 }

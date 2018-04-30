@@ -11,12 +11,6 @@ var sendTxCtrl = function ($scope, $sce, $rootScope, walletService) {
     }
 
     $scope.networks = globalFuncs.networks;
-    var network = globalFuncs.urlGet('network');
-    if (network) {
-
-        $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
-    }
-
 
     $scope.ajaxReq = ajaxReq;
 

@@ -4,9 +4,6 @@ var bulkGenCtrl = function($scope) {
     $scope.networks = globalFuncs.networks;
 
 		var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
-    if (network) {
-       $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
-    }
 
     $scope.genWallets = function(){
         if($scope.amount==''||$scope.amount != parseInt($scope.amount, 10)) alert(globalFuncs.errorMsgs[0]);

@@ -26,10 +26,6 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
     }
 
-    var network = globalFuncs.urlGet('network');
-    if (network) {
-        $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
-    }
 
     const config = {
         fetchMessageInterval: 30 // seconds

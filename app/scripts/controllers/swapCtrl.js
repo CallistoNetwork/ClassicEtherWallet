@@ -3,10 +3,6 @@ var swapCtrl = function($scope, $sce, $rootScope, walletService) {
     var lStorageKey = "swapOrder";
     $scope.ajaxReq = ajaxReq;
     $scope.networks = globalFuncs.networks;
-var network = globalFuncs.urlGet('network') == null ? "" : globalFuncs.urlGet('network');
-     if (network) {
-         $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
-     }
 
     $scope.showedMinMaxError = false;
     $scope.Validator = Validator;

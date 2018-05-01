@@ -36,11 +36,7 @@ var encryptCtrl = function ($scope, walletService) {
     $scope.networks = globalFuncs.networks;
 
 
-    var network = globalFuncs.urlGet('network') || null;
 
-    if (network) {
-        $rootScope.$broadcast('ChangeNode', $scope.networks[network.toUpperCase()] || 0);
-    }
 
 
     $scope.$watch(function () {

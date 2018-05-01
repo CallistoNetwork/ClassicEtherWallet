@@ -1,4 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="mewApp">
+@@include('../includes/head.tpl')
+
+<body>
+
+<div ng-controller="switchNetworkCtrl"></div>
+<div ng-controller="backgroundNodeCtrl">
+</div>
+
 <div ng-controller="tabsCtrl">
+
 
     @@include( '../includes/header.tpl', { "site": "cew" } )
 
@@ -9,7 +20,6 @@
             @@include( '../includes/messages.tpl', { "site": "cew" } )
 
             @@include( '../includes/re-encrypt.tpl', { "site": "cew" } )
-
 
             @@include( '../includes/generateWallet.tpl', { "site": "cew" } )
 
@@ -43,9 +53,12 @@
 
     </section>
 
+
     @@include( '../includes/footer.tpl', { "site": "cew" } )
-
 </div>
-<div ng-controller="switchNetworkCtrl"></div>
 
+</body>
+
+
+</html>
 

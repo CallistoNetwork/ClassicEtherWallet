@@ -2,103 +2,22 @@
 
 const _uniqueBy = require('lodash/uniqBy');
 
-var messagesCtrl = function ($scope, $rootScope, globalService, walletService, backgroundNodeService) {
-    $scope.ajaxReq = ajaxReq;
-    $scope.Validator = Validator;
+var messagesCtrl = function ($scope, $rootScope, $interval, globalService, walletService, backgroundNodeService) {
 
-    $scope.wallet = walletService.wallet;
-
-    $scope.networks = globalFuncs.networks;
-
-    // load contract deployed to ropsten network
-    const useTestData = false;
 
     const DATE = new Date();
 
     // localStorage key
     const KEY = '@messages@';
 
-    let sendMessageModal;
 
-    if (globalService.currentTab === globalService.tabs.messages.id) {
-
-        sendMessageModal = new Modal(document.getElementById('sendMessageModal'));
-
-    }
-
-
-    const config = {
-        fetchMessageInterval: 30 // seconds
-    };
-
-
-    const MESSAGE = {
-        from: '0x1234',
-        to: '', // adding param locally so can switch b/w accounts easier
-        text: 'TEST',
-        time: DATE.getTime(),
-        index: 0,
-    };
-
-
-    const messageSet = messages => _uniqueBy(messages, message => message.to + message.index);
-
-
-    $scope.msgCheckTime = null;
-
-    // messages grouped by addr
-
-    $scope.messagesList = {};
-
-
-    $scope.messagesConversation = null;
-
-
-    $scope.newMessage = {
-        to: '',
-        text: '',
-    };
-
-
-    $scope.unlockWallet = false;
-
-    $scope.tx = {
-        data: '',
-        to: '',
-        gasLimit: '',
-        from: '',
-    };
-
-
-    $scope.VISIBILITY = {
-        LIST: 'list',
-        NEW: 'new',
-        CONVERSATION: 'conversation',
-
-    };
-
-
-    $scope.visibility = $scope.VISIBILITY.LIST;
-
-    $scope.loadingMessages = false;
-
-
-    $scope.MESSAGE_STALING_PERIOD = 2160000;
-
-    $scope.message_staling_period = DATE.getTime() + $scope.MESSAGE_STALING_PERIOD;
-
-    $scope.NUMBER_OF_MESSAGES = -1;
-    $scope.NUMBER_OF_NEW_MESSAGES = -1;
-
-
-    let CONTRACT_ADDRESS = '0x6A77417FFeef35ae6fe2E9d6562992bABA47a676'; // '0x8F7a526C9693572baD2586895605e89B8D753068';
-
+    let CONTRACT_ADDRESS = '0x6A77417FFeef35ae6fe2E9d6562992bABA47a676';
 
     const CONTRACT = nodes.nodeList.etc_ethereumcommonwealth_geth.abiList.find(contract => contract.address.toLowerCase() === CONTRACT_ADDRESS.toLowerCase());
 
     if (!CONTRACT) {
 
-        console.error('ERROR FINDING CONTRACT', CONTRACT_ADDRESS);
+        throw new Error('ERROR FINDING CONTRACT: ' + CONTRACT_ADDRESS);
     }
 
 
@@ -123,51 +42,69 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
     });
 
-    if (useTestData) {
+
+    const sendMessageModal = new Modal(document.getElementById('sendMessageModal'));
+    const newMessagesModal = new Modal(document.getElementById('newMessagesModal'));
 
 
-        console.log('use test data');
-
-        // node = nodes.nodeList.rop_mew;
-
-
-        $rootScope.$broadcast('ChangeNode', 'rop_mew');
-        CONTRACT_ADDRESS = '0x8F7a526C9693572baD2586895605e89B8D753068';
-
-        messageContract.address = CONTRACT_ADDRESS;
+    const config = {
+        fetchMessageInterval: 30 // seconds
+    };
 
 
-        function generateTestMessages() {
+    const MESSAGE = {
+        from: '0x1234',
+        to: '', // adding param locally so can switch b/w accounts easier
+        text: 'TEST',
+        time: DATE.getTime(),
+        index: 0,
+    };
 
 
-            const addrs_ = ["0x186f9a221197e3c5791c3a75b25558f9aa5a94c8", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0xd547750d9a3993a988e4a6ace72423f67c095480", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4", "0x1c0fa194a9d3b44313dcd849f3c6be6ad270a0a4"]
-
-            const addrs = Array.from(new Set(addrs_));
-
-            const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    const messageSet = messages => _uniqueBy(messages, message => message.to + message.index);
 
 
-            addrs.forEach((addr, i) => {
+    const MESSAGE_STALING_PERIOD = 2160000;
+
+    const VISIBILITY = {
+        LIST: 'list',
+        NEW: 'new',
+        CONVERSATION: 'conversation',
+
+    };
 
 
-                $scope.messages.push(mapToMessage(addr, addr, lorem, new Date(2016, i + 9, 1).getTime()));
-                $scope.messages.push(mapToMessage(addr, addr, lorem, new Date(2018, i + 2, 1).getTime()));
-            })
+    Object.assign($scope, {
+        ajaxReq: ajaxReq,
+        Validator: Validator,
+        wallet: walletService.wallet,
+        rawTx: null,
+        signedTx: null,
+        msgCheckTime: null,
+        messagesList: {},
+        messagesConversation: null,
+        unlockWallet: false,
+        loadingMessages: false,
+        MESSAGE_STALING_PERIOD,
+        message_staling_period: DATE.getTime() + MESSAGE_STALING_PERIOD,
+        NUMBER_OF_MESSAGES: 0,
+        NUMBER_OF_NEW_MESSAGES: 0,
+        newMessage: {
+            to: '',
+            text: '',
+        },
+        visibility: 'list',
+        VISIBILITY,
+        tx: {
+            data: '',
+            to: '',
+            gasLimit: '',
+            from: '',
+        },
+        interval: null,
+        messages: handleGetLocalMessages(),
+    });
 
-        }
-
-
-        // $scope.messages = generateTestMessages();
-        // mapMessagesToMessageList();
-
-        //initMessages('0x1234')
-    }
-
-
-    $scope.interval = null;
-
-
-    $scope.messages = handleGetLocalMessages();
 
     getMessageStalingPeriod();
 
@@ -283,6 +220,8 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
 
 
+
+
         // filter messages by address in wallet
         const messages = $scope.messages.slice().filter(message => message.to === addr);
 
@@ -362,11 +301,14 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
                 $scope.loadingMessages = false;
 
-                $scope.notifier.danger('Error locating lastMsgIndex');
+                //$scope.notifier.danger('Error locating lastMsgIndex');
+                console.error('Error locating lastMsgIndex');
             }
 
 
-        })
+        });
+
+
     }
 
     function validMessage(obj_) {
@@ -439,7 +381,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
             validMessage(message) &&
             message.to === address &&
-            message.time + $scope.message_staling_period > DATE.getTime()
+            message.time < $scope.message_staling_period
         ).length
 
     };
@@ -452,7 +394,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
             validMessage(message) &&
             message.to === address &&
             message.from === from &&
-            message.time + $scope.message_staling_period > DATE.getTime()
+            message.time < $scope.message_staling_period
         ).length
 
     };
@@ -527,24 +469,44 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
         if (!address) {
 
             $scope.unlockWallet = false;
-            clearInterval($scope.interval);
+            $interval.cancel($scope.interval);
             return;
         }
         $scope.unlockWallet = true;
 
         $scope.wallet = walletService.wallet;
 
-        clearInterval($scope.interval);
+        $interval.cancel($scope.interval);
         $scope.interval = null;
 
         $scope.messagesList = {};
 
         $scope.loadingMessages = true;
 
+        $scope.openedModal = false;
+
+
         initMessages(walletService.wallet.getAddressString());
 
-        $scope.interval = setInterval(() => messageInterval(), 1000 * config.fetchMessageInterval);
 
+        $scope.interval = $interval(messageInterval, 1000 * config.fetchMessageInterval);
+
+
+    });
+
+
+    $scope.$watch('NUMBER_OF_NEW_MESSAGES', (val) => {
+
+        const {tabs: {sendTransaction: {id}}} = globalService;
+
+        if (0 < val && !$scope.openedModal && globalService.currentTab === id) {
+
+
+            newMessagesModal.open();
+
+            $scope.openedModal = true;
+
+        }
     });
 
 
@@ -619,14 +581,9 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
         ethFuncs.estimateGas(estObj, function (data) {
 
-            if (data.error) {
+            if (data.error || parseInt(data.data) === -1) {
 
                 $scope.tx.gasLimit = '';
-
-                $scope.notifier.danger('Gas estimation error');
-
-
-            } else if (parseInt(data.data) === -1) {
 
                 $scope.notifier.danger('Gas estimation error');
 
@@ -649,9 +606,10 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
 
                     } else {
 
-                        $scope.rawTx = rawTx;
 
+                        $scope.rawTx = rawTx;
                         $scope.signedTx = signedTx;
+
 
                         sendMessageModal.open();
                     }
@@ -679,7 +637,7 @@ var messagesCtrl = function ($scope, $rootScope, globalService, walletService, b
             } else {
 
 
-                $scope.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+                $scope.notifier.danger(typeof resp.error === 'string' && resp.error || globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
             }
         });
     }

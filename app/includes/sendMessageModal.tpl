@@ -5,28 +5,26 @@
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-                <div ng-show="unlockWallet">
 
-                    <h2 class="modal-title text-danger" translate="SENDModal_Title">Warning!</h2>
+                <h2 class="modal-title text-danger" translate="SENDModal_Title">Warning!</h2>
 
-                    <p>You are about to <strong>send a message </strong>
-                    </p>
+                <p>You are about to <strong>send a message </strong>
+                </p>
 
-                    <!-- Data -->
-                    <section class="row">
-                        <!-- Raw TX -->
-                        <div class="form-group col-sm-6">
-                            <h4 translate="SEND_raw"> Raw Transaction </h4>
-                            <textarea class="form-control" rows="3" readonly>{{rawTx}}</textarea>
-                        </div>
-                        <!-- Singed TX -->
-                        <div class="form-group col-sm-6">
-                            <h4 translate="SEND_signed"> Signed Transaction </h4>
-                            <textarea class="form-control" rows="3" readonly>{{signedTx}}</textarea>
-                        </div>
-                    </section>
+                <!-- Data -->
+                <section class="row">
+                    <!-- Raw TX -->
+                    <div class="form-group col-sm-6">
+                        <h4 translate="SEND_raw"> Raw Transaction </h4>
+                        <textarea class="form-control" rows="3" readonly>{{rawTx}}</textarea>
+                    </div>
+                    <!-- Singed TX -->
+                    <div class="form-group col-sm-6">
+                        <h4 translate="SEND_signed"> Signed Transaction </h4>
+                        <textarea class="form-control" rows="3" readonly>{{signedTx}}</textarea>
+                    </div>
+                </section>
 
-                </div>
             </div>
 
 

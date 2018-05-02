@@ -2,7 +2,12 @@
 
 const _uniqueBy = require('lodash/uniqBy');
 
-var messagesCtrl = function ($scope, $rootScope, $interval, globalService, walletService, backgroundNodeService) {
+var messagesCtrl = function ($scope,
+                             $rootScope,
+                             $interval,
+                             globalService,
+                             newMessageService,
+                             walletService, backgroundNodeService) {
 
 
     const DATE = new Date();
@@ -483,8 +488,6 @@ var messagesCtrl = function ($scope, $rootScope, $interval, globalService, walle
 
         $scope.loadingMessages = true;
 
-        $scope.openedModal = false;
-
 
         initMessages(walletService.wallet.getAddressString());
 
@@ -499,12 +502,14 @@ var messagesCtrl = function ($scope, $rootScope, $interval, globalService, walle
 
         const {tabs: {sendTransaction: {id}}} = globalService;
 
-        if (0 < val && !$scope.openedModal && globalService.currentTab === id) {
+        if (0 < val &&
+            !newMessageService.openedModals.includes($scope.wallet.getAddressString()) &&
+            globalService.currentTab === id) {
 
 
             newMessagesModal.open();
 
-            $scope.openedModal = true;
+            newMessageService.openedModals.push($scope.wallet.getAddressString());
 
         }
     });

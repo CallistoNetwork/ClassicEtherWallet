@@ -16,11 +16,11 @@ var newMessagesDrtv = function (globalService) {
             
                             <h2 class="modal-title">
             
-                                You have {{NUMBER_OF_NEW_MESSAGES}} recent messages!
+                                You have {{NUMBER_OF_NEW_MESSAGES}} recent message{{NUMBER_OF_NEW_MESSAGES > 1 ? 's' : null}}!
                             </p>
                         </div>
             
-                        <div class="modal-footer text-center">
+                        <div class="modal-footer">
                             <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
                                  No, get me out of here!
                             </button>

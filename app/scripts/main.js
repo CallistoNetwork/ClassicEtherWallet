@@ -94,6 +94,7 @@ var messagesControl = require('./controllers/messagesCtrl');
 var switchNetworkCtrl = require('./controllers/switchNetworkCtrl');
 var globalService = require('./services/globalService');
 var walletService = require('./services/walletService');
+var newMessageService = require('./services/newMessageService');
 var backgroundNodeService = require('./services/backgroundNodeService');
 var blockiesDrtv = require('./directives/blockiesDrtv');
 var addressFieldDrtv = require('./directives/addressFieldDrtv');
@@ -104,6 +105,7 @@ var cxWalletDecryptDrtv = require('./directives/cxWalletDecryptDrtv');
 var fileReaderDrtv = require('./directives/fileReaderDrtv');
 var balanceDrtv = require('./directives/balanceDrtv');
 var arrayInputDrtv = require('./directives/arrayInputDrtv');
+var newMessagesDrtv = require('./directives/newMessagesDrtv');
 if (IS_CX) {
     var addWalletCtrl = require('./controllers/CX/addWalletCtrl');
     var cxDecryptWalletCtrl = require('./controllers/CX/cxDecryptWalletCtrl');
@@ -125,6 +127,8 @@ app.config(['$animateProvider', function ($animateProvider) {
 app.factory('globalService', ['$http', '$httpParamSerializerJQLike', globalService]);
 app.factory('walletService', walletService);
 app.factory('backgroundNodeService', backgroundNodeService);
+
+app.factory('newMessageService', newMessageService);
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('addressField', ['$compile', 'backgroundNodeService', addressFieldDrtv]);
 app.directive('qrCode', QRCodeDrtv);
@@ -134,6 +138,7 @@ app.directive('walletDecryptDrtv', walletDecryptDrtv);
 app.directive('cxWalletDecryptDrtv', cxWalletDecryptDrtv);
 app.directive('messagesOverviewDrtv', messagesOverviewDrtv);
 app.directive('arrayInputDrtv', arrayInputDrtv);
+app.directive('newMessagesDrtv', ['globalService', newMessagesDrtv]);
 app.controller('tabsCtrl', ['$scope', 'globalService', '$translate', '$sce', 'backgroundNodeService', tabsCtrl]);
 app.controller('switchNetworkCtrl', ['$scope', '$rootScope', 'globalService', switchNetworkCtrl]);
 app.controller('viewCtrl', ['$scope', 'globalService', '$sce', viewCtrl]);
@@ -152,7 +157,7 @@ app.controller('footerCtrl', ['$scope', footerCtrl]);
 app.controller('offlineTxCtrl', ['$scope', '$sce', '$rootScope', 'walletService', offlineTxCtrl]);
 app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', 'backgroundNodeService', walletBalanceCtrl]);
 app.controller('helpersCtrl', ['$scope', helpersCtrl]);
-app.controller('messagesCtrl', ['$scope', '$rootScope', 'globalService', 'walletService', 'backgroundNodeService', messagesControl]);
+app.controller('messagesCtrl', ['$scope', '$rootScope', '$interval', 'globalService', 'newMessageService', 'walletService', 'backgroundNodeService', messagesControl]);
 app.controller('encryptCtrl', ['$scope', 'walletService', encryptCtrl]);
 app.controller('backgroundNodeCtrl', ['$scope', 'backgroundNodeService', '$interval', backgroundNodeCtrl]);
 

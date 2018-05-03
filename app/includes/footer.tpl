@@ -128,12 +128,7 @@
             <p ng-show="showBlocks">Latest Block#: {{currentBlockNumber}} </p>
         </section>
     </article>
-    </div>
 </footer>
 
 @@if (site === 'cew' ) { @@include( './footer-disclaimer-modal.tpl',   { "site": "cew" } ) }
 @@if (site === 'cx'  ) { @@include( './footer-disclaimer-modal.tpl',   { "site": "cx"  } ) }
-
-</main>
-</body>
-</html>

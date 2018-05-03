@@ -17,13 +17,16 @@
 
         <div class="tab-content">
 
-            @@include( '../includes/messages.tpl', { "site": "cew" } )
+            <div ng-controller="messagesCtrl">
+
+                @@include( '../includes/messages.tpl', { "site": "cew" } )
+                @@include( '../includes/sendTx.tpl', { "site": "cew" } )
+            </div>
 
             @@include( '../includes/re-encrypt.tpl', { "site": "cew" } )
 
             @@include( '../includes/generateWallet.tpl', { "site": "cew" } )
 
-            @@include( '../includes/sendTx.tpl', { "site": "cew" } )
 
             @@include( '../includes/swap.tpl', { "site": "cew" } )
 

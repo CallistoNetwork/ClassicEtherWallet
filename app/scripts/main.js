@@ -136,7 +136,7 @@ app.directive('onReadFile', fileReaderDrtv);
 app.directive('walletBalanceDrtv', balanceDrtv);
 app.directive('walletDecryptDrtv', walletDecryptDrtv);
 app.directive('cxWalletDecryptDrtv', cxWalletDecryptDrtv);
-app.directive('messagesOverviewDrtv', messagesOverviewDrtv);
+app.directive('messagesOverviewDrtv', ['globalService', messagesOverviewDrtv]);
 app.directive('arrayInputDrtv', arrayInputDrtv);
 app.directive('newMessagesDrtv', ['globalService', newMessagesDrtv]);
 app.controller('tabsCtrl', ['$scope', 'globalService', '$translate', '$sce', 'backgroundNodeService', tabsCtrl]);

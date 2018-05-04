@@ -83,14 +83,12 @@ uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
 uiFuncs.signTxLedger = function (app, eTx, rawTx, txData, old, callback) {
 
 
-
-    // todo: test functionality w/ ledger. tested w/ trezor
-    const chainId = removeChainIdIfCLO(rawTx.chainId);
-
-    eTx.raw[6] = Buffer.from([chainId]);
+    eTx.raw[6] = Buffer.from([rawTx.chainId]);
 
 
     eTx.raw[7] = eTx.raw[8] = 0;
+
+
     var toHash = old ? eTx.raw.slice(0, 6) : eTx.raw;
     var txToSign = ethUtil.rlp.encode(toHash);
     var localCallback = function (result, error) {
@@ -209,20 +207,29 @@ uiFuncs.generateTx = function (txData, callback) {
             var app = new ledgerEth(txData.hwTransport);
             var EIP155Supported = false;
             var localCallback = function (result, error) {
-                if (typeof error != "undefined") {
-                    if (callback !== undefined) callback({
+                if (error) {
+                    if (callback) return callback({
                         isError: true,
                         error: error
                     });
-                    return;
-                }
-                var splitVersion = result['version'].split('.');
-                if (parseInt(splitVersion[0]) > 1) {
-                    EIP155Supported = true;
-                } else if (parseInt(splitVersion[1]) > 0) {
-                    EIP155Supported = true;
-                } else if (parseInt(splitVersion[2]) > 2) {
-                    EIP155Supported = true;
+
+                } else if (rawTx.chainId === 820) {
+
+                    EIP155Supported = false;
+
+                } else {
+
+                    var splitVersion = result['version'].split('.');
+
+
+                    if (parseInt(splitVersion[0]) > 1) {
+                        EIP155Supported = true;
+                    } else if (parseInt(splitVersion[1]) > 0) {
+                        EIP155Supported = true;
+                    } else if (parseInt(splitVersion[2]) > 2) {
+                        EIP155Supported = true;
+                    }
+
                 }
 
 

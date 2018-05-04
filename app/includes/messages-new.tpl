@@ -11,7 +11,7 @@
                     <p class="account-help-text" translate="x_AddessDesc">You may know this as your "Account #" or
                         your "Public Key". It's what you send people so they can send you ETH. That icon is an easy
                         way to recognize your address.</p>
-                    <h5 translate="Address">Address:</h5>
+                    <h5 translate="SEND_addr">To Address:</h5>
                 </div>
                 <div class="col-xs-11">
                     <input ng-class="validateAddress() ? 'form-control is-valid' : 'form-control is-invalid'"
@@ -67,7 +67,6 @@
 
 
     <button
-            ng-disabled="!wallet.hwType"
             class="btn btn-primary"
             type="submit"
     >

@@ -1,5 +1,5 @@
 'use strict';
-var decryptWalletCtrl = function($scope, $sce, walletService) {
+var decryptWalletCtrl = function ($scope, $sce, walletService) {
     $scope.walletType = "";
     $scope.requireFPass = $scope.requirePPass = $scope.showFDecrypt = $scope.showPDecrypt = $scope.showAOnly = $scope.showParityDecrypt = false;
     $scope.filePassword = "";
@@ -27,14 +27,14 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
     };
     $scope.HDWallet.dPath = $scope.HDWallet.defaultDPath;
     $scope.mnemonicModel = new Modal(document.getElementById('mnemonicModel'));
-    $scope.$watch('ajaxReq.type', function() {
+    $scope.$watch('ajaxReq.type', function () {
         $scope.nodeType = $scope.ajaxReq.type;
         $scope.setdPath();
     });
-    $scope.$watch('walletType', function() {
+    $scope.$watch('walletType', function () {
         $scope.setdPath();
     });
-    $scope.setdPath = function() {
+    $scope.setdPath = function () {
         if ($scope.walletType == "ledger") {
             switch ($scope.nodeType) {
                 case nodes.nodeTypes.ETH:
@@ -76,7 +76,7 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
             $scope.HDWallet.dPath = $scope.HDWallet.defaultDPath;
         }
     }
-    $scope.onHDDPathChange = function(password = $scope.mnemonicPassword) {
+    $scope.onHDDPathChange = function (password = $scope.mnemonicPassword) {
         $scope.HDWallet.numWallets = 0;
         if ($scope.walletType == 'pastemnemonic') {
             $scope.HDWallet.hdk = hd.HDKey.fromMasterSeed(hd.bip39.mnemonicToSeed($scope.manualmnemonic.trim(), password));
@@ -89,11 +89,13 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
             $scope.scanDigitalBitbox();
         }
     }
-    $scope.onCustomHDDPathChange = function() {
+
+
+    $scope.onCustomHDDPathChange = function () {
         $scope.HDWallet.dPath = $scope.HDWallet.customDPath;
         $scope.onHDDPathChange();
     }
-    $scope.showContent = function($fileContent) {
+    $scope.showContent = function ($fileContent) {
         $scope.notifier.info(globalFuncs.successMsgs[4] + document.getElementById('fselector').files[0].name);
         try {
             $scope.requireFPass = Wallet.walletRequirePass($fileContent);
@@ -103,32 +105,33 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
             $scope.notifier.danger(e);
         }
     };
-    $scope.openFileDialog = function($fileContent) {
+
+    $scope.openFileDialog = function ($fileContent) {
         document.getElementById('fselector').click();
     };
-    $scope.onFilePassChange = function() {
+    $scope.onFilePassChange = function () {
         $scope.showFDecrypt = $scope.filePassword.length >= 0;
     };
-    $scope.onPrivKeyChange = function() {
+    $scope.onPrivKeyChange = function () {
         const manualprivkey = fixPkey($scope.manualprivkey);
 
         $scope.requirePPass = manualprivkey.length == 128 || manualprivkey.length == 132;
         $scope.showPDecrypt = manualprivkey.length == 64;
     };
-    $scope.onPrivKeyPassChange = function() {
+    $scope.onPrivKeyPassChange = function () {
         $scope.showPDecrypt = $scope.privPassword.length > 0;
     };
-    $scope.onMnemonicChange = function() {
+    $scope.onMnemonicChange = function () {
         $scope.showMDecrypt = hd.bip39.validateMnemonic($scope.manualmnemonic);
     };
-    $scope.onParityPhraseChange = function() {
+    $scope.onParityPhraseChange = function () {
         if ($scope.parityPhrase) $scope.showParityDecrypt = true;
         else $scope.showParityDecrypt = false;
     };
-    $scope.onAddressChange = function() {
+    $scope.onAddressChange = function () {
         $scope.showAOnly = $scope.Validator.isValidAddress($scope.addressOnly);
     };
-    $scope.setHDAddresses = function(start, limit) {
+    $scope.setHDAddresses = function (start, limit) {
         $scope.HDWallet.wallets = [];
         for (var i = start; i < start + limit; i++) {
             $scope.HDWallet.wallets.push(new Wallet($scope.HDWallet.hdk.derive($scope.HDWallet.dPath + "/" + i)._privateKey));
@@ -137,7 +140,7 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
         $scope.HDWallet.id = 0;
         $scope.HDWallet.numWallets = start + limit;
     }
-    $scope.setHDAddressesHWWallet = function(start, limit, ledger) {
+    $scope.setHDAddressesHWWallet = function (start, limit, ledger) {
         $scope.HDWallet.wallets = [];
         for (var i = start; i < start + limit; i++) {
             var derivedKey = $scope.HDWallet.hdk.derive("m/" + i);
@@ -154,7 +157,7 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
         $scope.HDWallet.id = 0;
         $scope.HDWallet.numWallets = start + limit;
     }
-    $scope.AddRemoveHDAddresses = function(isAdd) {
+    $scope.AddRemoveHDAddresses = function (isAdd) {
         if ($scope.walletType == "ledger" || $scope.walletType == "trezor" || $scope.walletType == "digitalBitbox") {
             if (isAdd) $scope.setHDAddressesHWWallet($scope.HDWallet.numWallets, $scope.HDWallet.walletsPerDialog);
             else $scope.setHDAddressesHWWallet($scope.HDWallet.numWallets - 2 * $scope.HDWallet.walletsPerDialog, $scope.HDWallet.walletsPerDialog);
@@ -163,12 +166,12 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
             else $scope.setHDAddresses($scope.HDWallet.numWallets - 2 * $scope.HDWallet.walletsPerDialog, $scope.HDWallet.walletsPerDialog);
         }
     }
-    $scope.setHDWallet = function() {
+    $scope.setHDWallet = function () {
         walletService.wallet = $scope.wallet = $scope.HDWallet.wallets[$scope.HDWallet.id];
         $scope.mnemonicModel.close();
         $scope.notifier.info(globalFuncs.successMsgs[1]);
     }
-    $scope.decryptWallet = function() {
+    $scope.decryptWallet = function () {
         $scope.wallet = null;
         try {
             if ($scope.showPDecrypt && $scope.requirePPass) {
@@ -197,16 +200,16 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
         }
         if ($scope.wallet != null) $scope.notifier.info(globalFuncs.successMsgs[1]);
     };
-    $scope.decryptAddressOnly = function() {
+    $scope.decryptAddressOnly = function () {
         if ($scope.Validator.isValidAddress($scope.addressOnly)) {
             var tempWallet = new Wallet();
             $scope.wallet = {
                 type: "addressOnly",
                 address: $scope.addressOnly,
-                getAddressString: function() {
+                getAddressString: function () {
                     return this.address;
                 },
-                getChecksumAddressString: function() {
+                getChecksumAddressString: function () {
                     return ethUtil.toChecksumAddress(this.getAddressString());
                 },
                 setBalance: tempWallet.setBalance,
@@ -216,7 +219,7 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
             walletService.wallet = $scope.wallet;
         }
     }
-    $scope.HWWalletCreate = function(publicKey, chainCode, walletType, path) {
+    $scope.HWWalletCreate = function (publicKey, chainCode, walletType, path) {
         $scope.mnemonicModel = new Modal(document.getElementById('mnemonicModel'));
         $scope.mnemonicModel.open();
         $scope.HDWallet.hdk = new hd.HDKey();
@@ -227,9 +230,9 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
         $scope.setHDAddressesHWWallet($scope.HDWallet.numWallets, $scope.HDWallet.walletsPerDialog, walletType);
         walletService.wallet = null;
     }
-    $scope.ledgerCallback = function(result, error) {
-        if (typeof result != "undefined") {
-            $scope.HWWalletCreate(result['publicKey'], result['chainCode'], "ledger", $scope.HDWallet.ledgerPath);
+    $scope.ledgerCallback = function (result, error) {
+        if (result) {
+            $scope.HWWalletCreate(result['publicKey'], result['chainCode'], "ledger", $scope.getLedgerPath());
         }
         else {
             $scope.ledgerError = true;
@@ -237,7 +240,7 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
             $scope.$apply();
         }
     }
-    $scope.trezorCallback = function(response) {
+    $scope.trezorCallback = function (response) {
         if (response.success) {
             $scope.HWWalletCreate(response.publicKey, response.chainCode, "trezor", $scope.getTrezorPath());
         } else {
@@ -246,7 +249,7 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
             $scope.$apply();
         }
     }
-    $scope.digitalBitboxCallback = function(result, error) {
+    $scope.digitalBitboxCallback = function (result, error) {
         $scope.HDWallet.digitalBitboxSecret = '';
         if (typeof result != "undefined") {
             $scope.HWWalletCreate(result['publicKey'], result['chainCode'], "digitalBitbox", $scope.HDWallet.dPath);
@@ -254,40 +257,45 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
         } else
             $scope.notifier.danger(error);
     }
-    $scope.scanLedger = function() {
+    $scope.scanLedger = function () {
         $scope.ledger = new Ledger3("w0w");
         var app = new ledgerEth($scope.ledger);
+
+
         var path = $scope.getLedgerPath();
+
+        console.log('path', path);
+
         app.getAddress(path, $scope.ledgerCallback, false, true);
     };
-    $scope.scanDigitalBitbox = function() {
+    $scope.scanDigitalBitbox = function () {
         $scope.digitalBitbox = new DigitalBitboxUsb();
         var app = new DigitalBitboxEth($scope.digitalBitbox, $scope.HDWallet.digitalBitboxSecret);
         var path = $scope.HDWallet.dPath;
         app.getAddress(path, $scope.digitalBitboxCallback);
     };
-    $scope.scanTrezor = function() {
+    $scope.scanTrezor = function () {
         // trezor is using the path without change level id
         var path = $scope.getTrezorPath();
         TrezorConnect.getXPubKey(path, $scope.trezorCallback, '1.4.0');
     };
-    $scope.getLedgerPath = function() {
+
+
+    $scope.getLedgerPath = $scope.getTrezorPath = function () {
         return $scope.HDWallet.dPath;
     }
-    $scope.getTrezorPath = function() {
-        return $scope.HDWallet.dPath;
-    };
-    $scope.scanMetamask = function() {
+
+    $scope.scanMetamask = function () {
         window.web3.eth.getAccounts(function (err, accounts) {
-          if (err) $scope.notifier.danger(err + '. Are you sure you are on a secure (SSL / HTTPS) connection?')
-          var address = accounts[0]
-          var addressBuffer = Buffer.from(address.slice(2), 'hex');
-          var wallet = new Web3Wallet(addressBuffer);
-          wallet.setBalance(false);
-          // set wallet
-          $scope.wallet = wallet
-          walletService.wallet = wallet
-          $scope.notifier.info(globalFuncs.successMsgs[6])
+            if (err) $scope.notifier.danger(err + '. Are you sure you are on a secure (SSL / HTTPS) connection?')
+            var address = accounts[0]
+            var addressBuffer = Buffer.from(address.slice(2), 'hex');
+            var wallet = new Web3Wallet(addressBuffer);
+            wallet.setBalance(false);
+            // set wallet
+            $scope.wallet = wallet
+            walletService.wallet = wallet
+            $scope.notifier.info(globalFuncs.successMsgs[6])
         });
     };
 

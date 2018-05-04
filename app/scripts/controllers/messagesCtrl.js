@@ -533,12 +533,7 @@ var messagesCtrl = function ($scope,
 
             $scope.notifier.danger(globalFuncs.errorMsgs[5]);
 
-        } else if (!$scope.wallet.hwType) {
-
-
-            $scope.notifier.danger(globalFuncs.errorMsgs[9]);
-        }
-        else sendMessage(to, text);
+        } else sendMessage(to, text);
 
     };
 
@@ -641,8 +636,19 @@ var messagesCtrl = function ($scope,
                 $scope.notifier.success(globalFuncs.successMsgs[2] + "<br />" + resp.data + "<br />" + bExStr + contractAddr);
             } else {
 
+                let response = resp.error;
 
-                $scope.notifier.danger(typeof resp.error === 'string' && resp.error || globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+                if (resp.error.includes('Insufficient funds')) {
+
+
+                    response = globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type);
+
+
+                }
+
+                $scope.notifier.danger(response);
+
+
             }
         });
     }

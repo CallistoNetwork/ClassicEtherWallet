@@ -150,18 +150,6 @@ nodes.nodeList = {
         'service': 'Callisto.network',
         'lib': new nodes.customNode('https://clo-testnet3.0xinfra.com/', '')
     },
-    'etc_epool': {
-        'name': 'ETC',
-        'blockExplorerTX': 'https://gastracker.io/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://gastracker.io/addr/[[address]]',
-        'type': nodes.nodeTypes.ETC,
-        'eip155': true,
-        'chainId': 61,
-        'tokenList': require('./tokens/etcTokens.json'),
-        'abiList': require('./abiDefinitions/etcAbi.json'),
-        'service': 'Epool.io',
-        'lib': new nodes.customNode('https://mew.epool.io/', '')
-    },
     'eth_mew': {
         'name': 'ETH',
         'blockExplorerTX': 'https://etherscan.io/tx/[[txHash]]',

@@ -75,7 +75,7 @@
 
 
     <!-- Swap CTA ETH -->
-    <article class="row" ng-show="showStage3Eth && currentOrder.progress.status.toUpperCase() === 'OPEN'">
+    <article class="row" ng-show="currentOrder.progress.status.toUpperCase() === 'OPEN'">
         <section class="clearfix collapse-container">
             <div class="text-center" ng-click="wd = !wd">
                 <a class="collapse-button"><span ng-show="wd">+</span><span ng-show="!wd">-</span></a>
@@ -91,11 +91,11 @@
             </div>
         </section>
 
-        <div class="alert alert-danger" ng-show="ajaxReq.type!=='ETH'">
-            <strong>Warning! You are not connected to an ETH node.</strong> <br/>
-            Please use the node switcher in the top-right corner to switch to an ETH node. We <strong>do not</strong>
-            support swapping ETC or Testnet ETH.
-        </div>
+        <!--<div class="alert alert-danger" ng-show="ajaxReq.type!=='ETH'">-->
+            <!--<strong>Warning! You are not connected to an ETH node.</strong> <br/>-->
+            <!--Please use the node switcher in the top-right corner to switch to an ETH node. We <strong>do not</strong>-->
+            <!--support swapping ETC or Testnet ETH.-->
+        <!--</div>-->
 
         <section class="row" ng-show="wallet!=null" ng-controller='sendTxCtrl'>
             @@if (site === 'cew' ) { @@include( './sendTx-content.tpl', { "site": "cew" } ) }

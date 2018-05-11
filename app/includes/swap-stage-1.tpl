@@ -54,7 +54,7 @@
     <span class="dropdown">
     <a class="btn btn-default dropdown-toggle" ng-click="dropdownFrom = !dropdownFrom">{{swapOrder.fromCoin.toUpperCase()}}<i
             class="caret"></i></a>
-    <ul class="dropdown-menu dropdown-menu-right list-group" ng-show="dropdownFrom">
+    <ul class="dropdown-menu dropdown-menu-right list-group" ng-show="dropdownFrom" style="max-height: 300px; overflow-y: scroll;">
       <li class="list-group-item" ng-repeat="coin in availableCoins track by $index">
         <a ng-class="{true:'active'}[coin.ticker.toUpperCase() === swapOrder.fromCoin.toUpperCase()]"
            ng-click="setOrderCoin(true, coin.ticker)">
@@ -92,7 +92,7 @@
     <div class="dropdown">
         <a class="btn btn-default dropdown-toggle" ng-click="dropdownTo = !dropdownTo">{{swapOrder.toCoin.toUpperCase()}}<i
                 class="caret"></i></a>
-        <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownTo">
+        <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownTo" style="max-height: 300px; overflow-y: scroll;">
             <li class="list-group-item" ng-repeat="coin in availableCoins track by $index">
                 <a ng-class="{true:'active'}[coin.ticker.toUpperCase() === swapOrder.fromCoin.toUpperCase()]"
                    ng-click="setOrderCoin(false, coin.ticker)">

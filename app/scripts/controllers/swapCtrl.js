@@ -397,7 +397,6 @@ var swapCtrl = function ($scope) {
                             //var bExStr = "<a href='" + url + "' target='_blank' rel='noopener'> View your transaction </a>";
                             $scope.notifier.success(globalFuncs.successMsgs[2] + data.output.reference + "<br />" + '');
                             clearInterval(progressCheck);
-                            clearInterval(timeRem);
                         } else if ([statuses.failed, statuses.refunded, statuses.expired].includes(status)) {
                             orderResult.progress.status = "CANC";
                             orderResult.progress.bar = getProgressBarArr(-1, 5);

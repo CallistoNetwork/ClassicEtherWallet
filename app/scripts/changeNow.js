@@ -141,24 +141,6 @@ var ChangeNow = function ChangeNow() {
     }
 
 
-    this.handleTransactionStatus = function (tx) {
-
-
-        const statuses = {
-            new: 'new',
-            waiting: 'waiting',
-            confirming: 'confirming',
-            exchanging: 'exchanging',
-            sending: 'sending',
-            finished: 'finished',
-            failed: 'failed',
-            refunded: 'refunded',
-            expired: 'expired',
-        }
-
-    }
-
-
 }
 
 

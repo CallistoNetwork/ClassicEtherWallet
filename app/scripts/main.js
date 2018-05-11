@@ -47,8 +47,11 @@ var ethFuncs = require('./ethFuncs');
 window.ethFuncs = ethFuncs;
 var Validator = require('./validator');
 window.Validator = Validator;
-var bity = require('./bity');
-window.bity = bity;
+
+var changeNow = require('./changeNow');
+
+window.changeNow = changeNow;
+
 var ens = require('./ens');
 window.ens = ens;
 var translate = require('./translations/translate.js');
@@ -127,6 +130,8 @@ app.config(['$animateProvider', function ($animateProvider) {
 app.factory('globalService', ['$http', '$httpParamSerializerJQLike', globalService]);
 app.factory('walletService', walletService);
 app.factory('backgroundNodeService', backgroundNodeService);
+
+app.factory('changeNowService', changeNow);
 
 app.factory('newMessageService', newMessageService);
 app.directive('blockieAddress', blockiesDrtv);

@@ -69,7 +69,7 @@ var messagesCtrl = function ($scope,
     const messageSet = messages => _uniqueBy(messages, message => message.to + message.index);
 
 
-    const MESSAGE_STALING_PERIOD = 2160000;
+    const MESSAGE_STALING_PERIOD = 2160000; // 25 days
 
     const VISIBILITY = {
         LIST: 'list',
@@ -91,7 +91,7 @@ var messagesCtrl = function ($scope,
         unlockWallet: false,
         loadingMessages: false,
         MESSAGE_STALING_PERIOD,
-        message_staling_period: DATE.getTime() + MESSAGE_STALING_PERIOD,
+        message_staling_period: new Date(DATE.getTime() - (MESSAGE_STALING_PERIOD * 1000)).getTime(),
         NUMBER_OF_MESSAGES: 0,
         NUMBER_OF_NEW_MESSAGES: 0,
         newMessage: {
@@ -198,9 +198,9 @@ var messagesCtrl = function ($scope,
 
             if (result && 'data' in result) {
 
-                $scope.MESSAGE_STALING_PERIOD = Number(ethFuncs.hexToDecimal(result.data));
+                $scope.MESSAGE_STALING_PERIOD = parseInt(ethFuncs.hexToDecimal(result.data));
             }
-            $scope.message_staling_period = DATE.getTime() + $scope.MESSAGE_STALING_PERIOD;
+            $scope.message_staling_period = new Date(DATE.getTime() - (MESSAGE_STALING_PERIOD * 1000)).getTime()
         });
 
 
@@ -382,11 +382,13 @@ var messagesCtrl = function ($scope,
     $scope.numberOfNewMessages = function numberOfNewMessages(address) {
 
 
+        console.log('new messages', new Date($scope.message_staling_period));
+
         return $scope.messages.filter(message =>
 
             validMessage(message) &&
             message.to === address &&
-            message.time < $scope.message_staling_period
+            $scope.message_staling_period < message.time
         ).length
 
     };
@@ -399,7 +401,7 @@ var messagesCtrl = function ($scope,
             validMessage(message) &&
             message.to === address &&
             message.from === from &&
-            message.time < $scope.message_staling_period
+            $scope.message_staling_period < message.time
         ).length
 
     };

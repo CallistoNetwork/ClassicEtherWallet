@@ -1,5 +1,5 @@
 <!-- Swap Rates Panel -->
-<article class="swap-rates" ng-show="showStage1">
+<article class="swap-rates">
 
     <!-- Title -->
     <section class="row">
@@ -24,7 +24,7 @@
 
 
         <a class="link bity-logo" href={{changeNow.affiliateLink}} target="_blank" rel="noopener">
-            <h1>Change Now!</h1>
+            Change Now
 
         </a>
     </section>
@@ -35,7 +35,7 @@
 
 
 <!-- Swap Init Panel -->
-<article class="swap-panel block clearfix" ng-show="showStage1">
+<article class="swap-panel block clearfix">
 
     <h1 translate="SWAP_init_1"> I want to swap my </h1>
 
@@ -52,12 +52,18 @@
 
 
     <span class="dropdown">
-    <a class="btn btn-default dropdown-toggle" ng-click="dropdownFrom = !dropdownFrom">{{swapOrder.fromCoin.toUpperCase()}}<i
+    <a class="btn btn-default dropdown-toggle" ng-click="dropdownFrom = !dropdownFrom">
+
+        {{swapOrder.fromCoin.toUpperCase()}}<i
             class="caret"></i></a>
-    <ul class="dropdown-menu dropdown-menu-right list-group" ng-show="dropdownFrom" style="max-height: 300px; overflow-y: scroll;">
+    <ul class="dropdown-menu dropdown-menu-right list-group"
+        ng-show="dropdownFrom"
+        style="max-height: 300px; overflow-y: scroll;"
+    >
       <li class="list-group-item" ng-repeat="coin in availableCoins track by $index">
-        <a ng-class="{true:'active'}[coin.ticker.toUpperCase() === swapOrder.fromCoin.toUpperCase()]"
-           ng-click="setOrderCoin(true, coin.ticker)">
+        <a
+                ng-click="setOrderCoin(true, coin.ticker)"
+        >
 
             <div class="row" style="
     display: flex;
@@ -84,7 +90,7 @@
            type="text"
            placeholder="{{ 'SEND_amount_short' | translate }}"
            ng-change="updateEstimate(false)"
-           ng-model-options="{ debounce: 200 }"
+           ng-model-options="{ debounce: 50 }"
            ng-model="swapOrder.toVal"
            ng-click="showedMinMaxError = false"
            ng-class="Validator.isPositiveNumber(swapOrder.toVal) ? 'is-valid' : 'is-invalid'"/>
@@ -92,7 +98,8 @@
     <div class="dropdown">
         <a class="btn btn-default dropdown-toggle" ng-click="dropdownTo = !dropdownTo">{{swapOrder.toCoin.toUpperCase()}}<i
                 class="caret"></i></a>
-        <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownTo" style="max-height: 300px; overflow-y: scroll;">
+        <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownTo"
+            style="max-height: 300px; overflow-y: scroll;">
             <li class="list-group-item" ng-repeat="coin in availableCoins track by $index">
                 <a ng-class="{true:'active'}[coin.ticker.toUpperCase() === swapOrder.fromCoin.toUpperCase()]"
                    ng-click="setOrderCoin(false, coin.ticker)">
@@ -118,6 +125,7 @@
 
     <div class="col-xs-12 clearfix text-center">
         <a ng-click="setFinalPrices()" class="btn btn-info btn-primary">
+
             <span translate="SWAP_init_CTA"> Let's do this! </span>
         </a>
     </div>

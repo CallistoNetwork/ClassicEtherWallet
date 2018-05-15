@@ -1,12 +1,13 @@
 'use strict';
 
-var uri_base = 'https://change-now.herokuapp.com/swap';
 
-var ChangeNow = function ChangeNow() {
+const ChangeNow = function () {
 
 
-    this.affiliateLink = 'https://changenow.io?link_id=ace83609250351';
+    this.uri_base = 'https://change-now.herokuapp.com/swap';
+    this.linkId = 'ace83609250351';
 
+    this.affiliateLink = `https://changenow.io/&link_id=${this.linkId}`;
     this.availableCoins = [];
 
     this.priceTicker = null;
@@ -14,7 +15,7 @@ var ChangeNow = function ChangeNow() {
 
     this.getCurrencies = async function () {
 
-        const result = await ajaxReq.http.get(uri_base + '/currencies');
+        const result = await ajaxReq.http.get(this.uri_base + '/currencies');
 
         if (result.statusText.toUpperCase() === 'OK') {
 
@@ -27,7 +28,7 @@ var ChangeNow = function ChangeNow() {
         return false;
 
 
-    }
+    };
 
 
     this.estimateConversion = async function (to = 'etc', from = 'btc', amount = 1) {
@@ -42,7 +43,7 @@ var ChangeNow = function ChangeNow() {
 
         return false
 
-    }
+    };
 
 
     this.exchangeAmount = async function (amount, from, to) {
@@ -53,7 +54,7 @@ var ChangeNow = function ChangeNow() {
         if (!amount) return false;
 
 
-        const result = await ajaxReq.http.get(uri_base + `/exchange-amount/${amount}/${from.toLowerCase()}/${to.toLowerCase()}`);
+        const result = await ajaxReq.http.get(this.uri_base + `/exchange-amount/${amount}/${from.toLowerCase()}/${to.toLowerCase()}`);
 
         if (result.statusText.toUpperCase() === 'OK') {
 
@@ -78,13 +79,13 @@ var ChangeNow = function ChangeNow() {
         return false;
 
 
-    }
+    };
 
 
     this.minAmount = async function (from, to) {
 
 
-        const result = await ajaxReq.http.get(uri_base + `/min-amount/${from}/${to}`);
+        const result = await ajaxReq.http.get(this.uri_base + `/min-amount/${from}/${to}`);
 
 
         if (result.statusText === 'OK') {
@@ -93,7 +94,7 @@ var ChangeNow = function ChangeNow() {
         }
 
         return false;
-    }
+    };
 
     this.openOrder = async function (order) {
 
@@ -105,7 +106,7 @@ var ChangeNow = function ChangeNow() {
         amount (Required): Amount you want to exchnage
         extraId (Optional): Extra Id for currencies that require it
          */
-        const result = await ajaxReq.http.post(uri_base + `/transactions`, JSON.stringify(order));
+        const result = await ajaxReq.http.post(this.uri_base + `/transactions`, JSON.stringify(order));
 
 
         if (result.statusText === 'OK') {
@@ -126,19 +127,19 @@ var ChangeNow = function ChangeNow() {
         }
 
         return false;
-    }
+    };
 
 
     this.transactionStatus = async function (id) {
 
-        const result = await ajaxReq.http.get(uri_base + `/transactions/${id}`);
+        const result = await ajaxReq.http.get(this.uri_base + `/transactions/${id}`);
 
         if (result.statusText === 'OK') {
 
             return result.data;
         }
         return false;
-    }
+    };
 
 
 }

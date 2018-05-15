@@ -1,9 +1,25 @@
 'use strict';
-var swapCtrl = function ($scope) {
+
+
+var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
+
+    //$scope.walletService = walletService;
+
+
+    const bitcoinExplorer = `https://blockchain.info/tx/[[txHash]]`;
+
     const lStorageKey = "swapOrder";
 
 
+    // sort swapOrder coins
+    const popularCoins = ['ETC', 'CLO', 'BTC', 'XMR', 'ZEC'];
+
+    const ethCoins = ['ETC', 'ETH', 'UBQ', 'CLO'];
+
+
+    // priceTicker in page header
     const priceTickers = ['ETC'];
+
 
     let priceTicker = {};
 
@@ -15,18 +31,36 @@ var swapCtrl = function ($scope) {
     });
 
 
-    //$scope.priceTicker = {ETCBTC: 1, BTCETC: 1, ETHBTC: 1, ETHREP: 1, BTCREP: 1, BTCETH: 1, REPBTC: 1, REPETH: 1};
+    const verifyToAddress = function (coin) {
+
+        if ($scope.swapOrder.toCoin.toUpperCase() === 'BTC') {
+
+            return Validator.isValidBTCAddress($scope.swapOrder.toCoin)
+
+        } else if (ethCoins.includes($scope.swapOrder.toCoin)) {
+
+
+            return Validator.isValidAddress($scope.swapOrder.toCoin);
+        }
+        else {
+
+            return true;
+        }
+    };
+
 
     Object.assign($scope, {
-        ajaxReq,
+        errorCount: 0,
+        ethCoins,
         availableCoins: [],
-        networks: globalFuncs.networks,
+        parentTxConfig: {},
         showedMinMaxError: false,
-        Validator: Validator,
         changeNow: new changeNow(),
-        //priceTicker: {ETCBTC: 1, BTCETC: 1}
         priceTicker,
-    })
+        stage: 1,
+        orderResult: null,
+        progressCheck: null,
+    });
 
     $scope.initChangeNow = async function () {
 
@@ -36,7 +70,7 @@ var swapCtrl = function ($scope) {
         if (currencies) {
 
 
-            $scope.availableCoins = currencies;
+            $scope.availableCoins = currencies.sort($scope.coinOrder);
 
 
             await Promise.all(priceTickers.map(async (ticker) => {
@@ -59,102 +93,39 @@ var swapCtrl = function ($scope) {
     }
 
 
-    function test() {
-
-        $scope.showStage1 = false;
-        $scope.showStage2 = false;
-        $scope.showStage3Eth = true;
-        $scope.showStage3Btc = false;
-        $scope.orderResult = {
-            "status": "waiting",
-            "payinAddress": "0xDe4d2977D23b6f0eFedb3D48a00581860D2c787d",
-            "payoutAddress": "0xE82862a5aFdC00Abf953E50E94E562f844588c56",
-            "fromCurrency": "etc",
-            "toCurrency": "eth",
-            "id": "c1ebc63a44b39b",
-            "updatedAt": "2018-05-10T15:42:55.987Z",
-            "expectedSendAmount": 50,
-            "expectedReceiveAmount": 1.4027197998
-        };
+    const initValues = function () {
 
 
-        $scope.currentOrder = {
-            rawInput: $scope.orderResult,
-            output: {
-                amount: 1.4,
-                currency: 'eth',
+        Object.assign($scope, {
+            stage: 1,
+            orderResult: {
+                "status": null,
+                "payinAddress": null,
+                "payoutAddress": null,
+                "fromCurrency": null,
+                "toCurrency": null,
+                "id": null,
+                "updatedAt": null,
+                "expectedSendAmount": null,
+                "expectedReceiveAmount": null,
+                progress: {
+                    status: null,
+                    bar: null//getProgressBarArr(4, 5),
+                }
             },
-            input: {
-                amount: 50,
-                currency: 'etc',
-            },
-            progress: {
-                status: 'open',
-                bar: getProgressBarArr(-1, 5),
+            swapOrder: {
+                fromCoin: 'etc',
+                toCoin: 'btc',
+                isFrom: false,
+                fromVal: null,
+                toVal: 1,
+                toAddress: null,
+                swapRate: null,
+                swapPair: null,
             }
-        };
 
-
-        $scope.swapOrder = {
-            fromCoin: "ETC",
-            toCoin: "eth",
-            isFrom: true,
-            fromVal: 50,
-            toVal: 1.4027197998,
-            toAddress: '0xE82862a5aFdC00Abf953E50E94E562f844588c56',
-            swapRate: 1,
-            swapPair: ''
-        }
-
+        });
     }
-
-
-    var initValues = function () {
-        $scope.showStage1 = true;
-        $scope.showStage2 = false;
-        $scope.showStage3Eth = false;
-        $scope.showStage3Btc = false;
-        $scope.orderResult = {
-            "status": null,
-            "payinAddress": null,
-            "payoutAddress": null,
-            "fromCurrency": null,
-            "toCurrency": null,
-            "id": null,
-            "updatedAt": null,
-            "expectedSendAmount": null,
-            "expectedReceiveAmount": null,
-        };
-
-
-        $scope.currentOrder = {
-            rawInput: $scope.orderResult,
-            output: {
-                amount: null,
-                currency: null,
-            },
-            input: {
-                amount: null,
-                currency: null,
-            },
-            progress: {
-                status: null,
-                bar: null//getProgressBarArr(4, 5),
-            }
-        };
-
-
-        $scope.swapOrder = {
-            fromCoin: 'etc',
-            toCoin: 'btc',
-            isFrom: false,
-            fromVal: null,
-            toVal: 1,
-            toAddress: null,
-            swapRate: null,
-            swapPair: null,
-        }
-    };
 
 
     $scope.verifyMinMaxValues = function () {
@@ -168,22 +139,22 @@ var swapCtrl = function ($scope) {
     };
 
 
-    $scope.setOrderCoin = function (isFrom, coin) {
+    $scope.setOrderCoin = async function (isFrom, coin) {
         if (isFrom) $scope.swapOrder.fromCoin = coin;
         else $scope.swapOrder.toCoin = coin;
-        if ($scope.swapOrder.fromCoin == $scope.swapOrder.toCoin)
+        if ($scope.swapOrder.fromCoin === $scope.swapOrder.toCoin)
             for (var i in $scope.availableCoins)
-                if ($scope.availableCoins[i] != $scope.swapOrder.fromCoin) {
+                if ($scope.availableCoins[i] !== $scope.swapOrder.fromCoin) {
                     $scope.swapOrder.toCoin = $scope.availableCoins[i];
                     break;
                 }
         $scope.swapOrder.swapPair = $scope.swapOrder.fromCoin + "/" + $scope.swapOrder.toCoin;
 
         $scope.dropdownFrom = $scope.dropdownTo = false;
-        $scope.updateEstimate(isFrom);
+        await $scope.updateEstimate(isFrom);
 
     }
-    $scope.updateEstimate = function (isFrom) {
+    $scope.updateEstimate = async function (isFrom) {
 
 
         let amount = isFrom ? parseFloat($scope.swapOrder.fromVal) : parseFloat($scope.swapOrder.toVal);
@@ -203,7 +174,7 @@ var swapCtrl = function ($scope) {
         if (isFrom) {
 
 
-            if (!$scope.showStage2) {
+            if ($scope.stage === 1) {
 
                 $scope.swapOrder.toVal = '...';
             }
@@ -214,7 +185,7 @@ var swapCtrl = function ($scope) {
 
         } else {
 
-            if (!$scope.showStage2) {
+            if ($scope.stage === 1) {
 
                 $scope.swapOrder.fromVal = '...';
 
@@ -225,30 +196,29 @@ var swapCtrl = function ($scope) {
             fromCoin = $scope.swapOrder.toCoin;
         }
 
-        $scope.changeNow.exchangeAmount(amount, fromCoin, toCoin)
-            .then(result => {
+        const result = await $scope.changeNow.exchangeAmount(amount, fromCoin, toCoin);
 
 
-                if (result) {
+        if (result) {
 
 
-                    if (isFrom) {
+            if (isFrom) {
 
-                        $scope.swapOrder.toVal = result.estimatedAmount;
-                        $scope.swapOrder.fromVal = amount;
+                $scope.swapOrder.toVal = result.estimatedAmount;
+                $scope.swapOrder.fromVal = amount;
 
-                    } else {
-
-
-                        $scope.swapOrder.toVal = amount;
-                        $scope.swapOrder.fromVal = result.estimatedAmount;
+            } else {
 
 
-                    }
-                }
-            }).catch(err => {
+                $scope.swapOrder.toVal = amount;
+                $scope.swapOrder.fromVal = result.estimatedAmount;
 
-            $scope.notifier.danger('error swap curr');
+
+            }
+        } else {
+
+
+            $scope.notifier.danger('error connecting to server');
 
             Object.assign($scope, {
                 swapOrder: {
@@ -257,222 +227,313 @@ var swapCtrl = function ($scope) {
                 }
             });
 
-        })
+        }
 
 
-    }
+    };
 
     $scope.setFinalPrices = function () {
         $scope.showedMinMaxError = false;
-        try {
 
-            if (!$scope.Validator.isPositiveNumber($scope.swapOrder.fromVal) || !$scope.Validator.isPositiveNumber($scope.swapOrder.toVal)) throw globalFuncs.errorMsgs[0];
-            $scope.showStage1 = false;
-            $scope.showStage2 = true;
-            $scope.updateEstimate($scope.swapOrder.isFrom);
-        } catch (e) {
-            $scope.notifier.danger(e);
-        }
+        if (!Validator.isPositiveNumber($scope.swapOrder.fromVal) ||
+            !Validator.isPositiveNumber($scope.swapOrder.toVal)) throw globalFuncs.errorMsgs[0];
 
-    }
+        $scope.stage = 2;
+        $scope.updateEstimate($scope.swapOrder.isFrom);
+
+    };
 
 
-    var getProgressBarArr = function (index, len) {
+    const getProgressBarArr = function (index, len) {
+
+
         var tempArr = [];
         for (var i = 0; i < len; i++) {
             if (i < index) tempArr.push('progress-true');
-            else if (i == index) tempArr.push('progress-active');
+            else if (i === index) tempArr.push('progress-active');
             else tempArr.push('');
         }
         return tempArr;
     }
     var isStorageOrderExists = function () {
         var order = globalFuncs.localStorage.getItem(lStorageKey, null);
-        return order && $scope.Validator.isJSON(order);
+        return order && Validator.isJSON(order);
     }
     var setOrderFromStorage = function () {
-        var order = JSON.parse(globalFuncs.localStorage.getItem(lStorageKey, null));
+        const order = JSON.parse(globalFuncs.localStorage.getItem(lStorageKey, null));
         $scope.orderResult = order;
-        $scope.swapOrder = order.swapOrder;
-        processOrder();
-    }
-    var saveOrderToStorage = function (order) {
 
-        // fixme: attach id
-        globalFuncs.localStorage.setItem(lStorageKey, JSON.stringify(order));
+    }
+    $scope.saveOrderToStorage = function (order) {
+
+        globalFuncs.localStorage.setItem(lStorageKey, JSON.stringify(order))
     }
 
-    /*
-       {
-             "payinAddress": "0xC3bFD8E9C4961d2366f1851F5F1ee602035A7794",
-             "payoutAddress": "0xE82862a5aFdC00Abf953E50E94E562f844588c56",
-             "fromCurrency": "etc",
-             "toCurrency": "eth",
-             "id": "d6ece24311b1eb"
-}
-        */
-    var processOrder = function () {
-        var orderResult = $scope.orderResult;
-        orderResult.progress = {
-            status: "OPEN",
-            bar: getProgressBarArr(1, 5),
-            pendingStatusReq: false,
+    $scope.processOrder = async function () {
+
+        if (['new', 'waiting'].includes($scope.orderResult.status.toLowerCase())) {
+
+
+            if (Validator.isValidAddress($scope.orderResult.payinAddress)) {
+
+
+
+                //TODO: only switch if different
+
+                //const node = globalFuncs.getCurNode();
+
+                // if (nodes.nodeList[node].type.toUpperCase() !== $scope.orderResult.fromCurrency.toUpperCase()) {
+
+                $rootScope.$broadcast('ChangeNode', $scope.orderResult.fromCurrency.toUpperCase());
+
+                //}
+
+
+                const {orderResult: {payinAddress, expectedSendAmount}} = $scope;
+
+                Object.assign($scope.parentTxConfig, {
+                    to: ethUtil.toChecksumAddress(payinAddress),
+                    value: expectedSendAmount,
+                    sendMode: 'ether'
+                });
+
+
+            }
+        }
+
+
+        const statuses = {
+            new: 'new',
+            waiting: 'waiting',
+            confirming: 'confirming',
+            exchanging: 'exchanging',
+            sending: 'sending',
+            finished: 'finished',
+            failed: 'failed',
+            refunded: 'refunded',
+            expired: 'expired',
         };
 
-        var progressCheck = setInterval(function () {
-            if (!orderResult) clearInterval(progressCheck);
-            if (!orderResult.progress.pendingStatusReq) {
-                orderResult.progress.pendingStatusReq = true;
-                $scope.changeNow.getTransaction(orderResult.id).then(function (data) {
+
+        $scope.progressCheck = $interval(async () => await handleProgressCheck(), 1000 * 15);
 
 
-                    if (!data) $scope.notifier.danger('error');
+        await handleProgressCheck();
 
-                    /*
+        async function handleProgressCheck() {
 
-                    {
-                      id: "b712390255",
-                      status: "finished",
-                      payinConfirmations: 12,
-                      hash: "transactionhash",
-                      payinHash: "58eccbfb713d430004aa438a",
-                      payoutHash: "58eccbfb713d430004aa438a",
-                      payinAddress: "58eccbfb713d430004aa438a",
-                      payoutAddress: "0x9d8032972eED3e1590BeC5e9E4ea3487fF9Cf120",
-                      payinExtraId: "123456",
-                      payoutExtraId: "123456",
-                      fromCurrency: "btc",
-                      toCurrency: "eth",
-                      amountSend: "1.000001",
-                      amountReceive: "20.000001",
-                      networkFee: "0.000001",
-                      updatedAt: "2017-11-29T19:17:55.130Z"
+            // https://changenow.io/exchange/txs/b3c25544d5a034
+
+
+            const data = await $scope.changeNow.transactionStatus($scope.orderResult.id);
+
+
+            if (!data) {
+
+                $scope.notifier.danger('error checking tx');
+
+            }
+
+            /*
+
+            {
+              id: "b712390255",
+              status: "finished",
+              payinConfirmations: 12,
+              hash: "transactionhash",
+              payinHash: "58eccbfb713d430004aa438a",
+              payoutHash: "58eccbfb713d430004aa438a",
+              payinAddress: "58eccbfb713d430004aa438a",
+              payoutAddress: "0x9d8032972eED3e1590BeC5e9E4ea3487fF9Cf120",
+              payinExtraId: "123456",
+              payoutExtraId: "123456",
+              fromCurrency: "btc",
+              toCurrency: "eth",
+              amountSend: "1.000001",
+              amountReceive: "20.000001",
+              networkFee: "0.000001",
+              updatedAt: "2017-11-29T19:17:55.130Z"
+            }
+
+             */
+            else {
+
+                const {status} = data;
+
+                Object.assign($scope.orderResult, data);
+
+                if (statuses.new === status) {
+
+                    $scope.orderResult.progress.bar = getProgressBarArr(1, 5);
+
+                } else if (statuses.waiting === status) {
+
+                    $scope.orderResult.progress.bar = getProgressBarArr(2, 5);
+
+
+                } else if (statuses.confirming === status) {
+
+                    $scope.orderResult.progress.bar = getProgressBarArr(3, 5);
+
+                } else if (statuses.exchanging === status) {
+
+                    $scope.orderResult.progress.bar = getProgressBarArr(3, 5);
+                } else if (statuses.sending === status) {
+
+                    $scope.orderResult.progress.bar = getProgressBarArr(4, 5);
+
+                } else if (statuses.finished === status) {
+
+                    $interval.cancel($scope.progressCheck);
+                    $scope.orderResult.progress.bar = getProgressBarArr(5, 5);
+
+
+                    let url = `tx hash: ${$scope.orderResult.hash}`;
+
+
+                    if (ethCoins.includes($scope.orderResult.toCurrency.toUpperCase())) {
+
+                        url = ajaxReq.blockExplorerTX.replace("[[txHash]]", $scope.orderResult.hash);
+
+                    } else if ($scope.orderResult.toCurrency.toUpperCase() === 'BTC') {
+
+
+                        url = bitcoinExplorer.replace('[[txHash]]', $scope.orderResult.hash);
                     }
 
-                     */
-                    else {
 
-                        const {status, id, payinAddress} = data;
-
-                        const statuses = {
-                            new: 'new',
-                            waiting: 'waiting',
-                            confirming: 'confirming',
-                            exchanging: 'exchanging',
-                            sending: 'sending',
-                            finished: 'finished',
-                            failed: 'failed',
-                            refunded: 'refunded',
-                            expired: 'expired',
-                        }
+                    const bExStr = "<a href='" + url + "' target='_blank' rel='noopener'> View your transaction </a>";
 
 
-                        if ([statuses.new, statuses.waiting].includes(status)) {
-
-                            orderResult.progress.status = "OPEN";
-                            orderResult.progress.bar = getProgressBarArr(1, 5);
-
-                            orderResult.reference = id;
-
-                            orderResult.payment_address = payinAddress;
+                    $scope.notifier.success(globalFuncs.successMsgs[2] + $scope.orderResult.hash + "<br />" + bExStr);
 
 
-                        } else if ([statuses.confirming].includes(status)) {
+                } else if ([statuses.failed, statuses.refunded, statuses.expired].includes(status)) {
+                    $interval.cancel($scope.progressCheck);
+                    $scope.orderResult.progress.bar = getProgressBarArr(-1, 5);
+                    $scope.notifier.danger('Order Status:' + '<br />' + status, 0);
+                }
 
-                            orderResult.progress.bar = getProgressBarArr(2, 5);
-                            orderResult.progress.status = "RCVE";
-                        } else if ([statuses.exchanging].includes(status)) {
-                            orderResult.progress.status = "RCVE";
-                            orderResult.progress.bar = getProgressBarArr(3, 5);
-                        } else if ([statuses.sending].includes(status)) {
+                $scope.saveOrderToStorage($scope.orderResult);
 
-                            orderResult.progress.status = "RCVE";
-                            orderResult.progress.bar = getProgressBarArr(4, 5);
-                        } else if ([statuses.finished].includes(status)) {
-
-                            orderResult.progress.status = "FILL";
-                            orderResult.progress.bar = getProgressBarArr(5, 5);
-                            orderResult.progress.showTimeRem = false;
-                            //var url = orderResult.output.currency === 'BTC' ? bity.btcExplorer.replace("[[txHash]]", data.output.reference) : bity.ethExplorer.replace("[[txHash]]", data.output.reference)
-                            //var bExStr = "<a href='" + url + "' target='_blank' rel='noopener'> View your transaction </a>";
-                            $scope.notifier.success(globalFuncs.successMsgs[2] + data.output.reference + "<br />" + '');
-                            clearInterval(progressCheck);
-                        } else if ([statuses.failed, statuses.refunded, statuses.expired].includes(status)) {
-                            orderResult.progress.status = "CANC";
-                            orderResult.progress.bar = getProgressBarArr(-1, 5);
-                            $scope.notifier.danger('Order Status:', status);
-                            clearInterval(progressCheck);
-                        }
-                        if (!$scope.$$phase) $scope.$apply();
-                    }
-                    orderResult.progress.pendingStatusReq = false;
-                });
             }
-        }, 1000 * 60);
-        $scope.showStage2 = false;
-        if ($scope.orderResult.input.currency === 'BTC') $scope.showStage3Btc = true;
-        else {
-            $scope.parentTxConfig = {
-                to: ethUtil.toChecksumAddress($scope.orderResult.payment_address),
-                value: $scope.orderResult.input.amount,
-                sendMode: $scope.orderResult.input.currency === 'ETH' ? 'ether' : 'token',
-                tokensymbol: $scope.orderResult.input.currency === 'ETH' ? '' : $scope.orderResult.input.currency,
-                readOnly: true
-            }
-            new Modal(document.getElementById('sendTransaction'));
-            $scope.showStage3Eth = true;
+
         }
+
+
     }
+
+
+    $scope.coinOrder = function coinOrder(a, b) {
+
+
+        function weight(coin) {
+
+            if (popularCoins.indexOf(coin.ticker.toUpperCase()) > -1) {
+
+
+                coin.weight = 100 - popularCoins.indexOf(coin.ticker.toUpperCase());
+
+
+            } else {
+
+                coin.weight = 0;
+            }
+
+            return coin;
+        }
+
+        a = weight(a);
+
+        b = weight(b);
+
+        return b.weight - a.weight;
+
+
+    }
+
     $scope.openOrder = async function () {
 
-        if (($scope.swapOrder.toCoin !== 'BTC' && $scope.Validator.isValidAddress($scope.swapOrder.toAddress)) || ($scope.swapOrder.toCoin == 'BTC' && $scope.Validator.isValidBTCAddress($scope.swapOrder.toAddress))) {
-            var order = {
-                amount: $scope.swapOrder.isFrom ? $scope.swapOrder.fromVal : $scope.swapOrder.toVal,
-                from: $scope.swapOrder.isFrom ? $scope.swapOrder.fromCoin : $scope.swapOrder.toCoin,
-                to: $scope.swapOrder.isFrom ? $scope.swapOrder.toCoin : $scope.swapOrder.fromCoin,
+
+        if (verifyToAddress()) {
+
+
+            const order = {
+                amount: $scope.swapOrder.fromVal,
+                from: $scope.swapOrder.fromCoin,
+                to: $scope.swapOrder.toCoin,
                 address: $scope.swapOrder.toAddress
+            };
+
+
+            const orderResult = await $scope.changeNow.openOrder(order);
+
+
+            if (orderResult) {
+
+                $scope.stage = 3;
+
+                Object.assign($scope.orderResult, {
+                    status: 'new',
+                    fromCurrency: order.from,
+                    toCurrency: order.to,
+                    expectedSendAmount: order.amount,
+                    progress: {
+                        status: 'new',
+                        bar: getProgressBarArr(0, 5),
+                    }
+                }, orderResult);
+
+                await $scope.processOrder();
+            } else {
+
+                $scope.notifier.danger('Error opening order');
             }
-
-
-            const data = await $scope.changeNow.openOrder(order);
-            if (!data.error) {
-                $scope.orderResult = data;
-                $scope.orderResult.swapOrder = $scope.swapOrder;
-                saveOrderToStorage($scope.orderResult);
-                processOrder();
-            } else $scope.notifier.danger(data.msg);
-            if (!$scope.$$phase) $scope.$apply();
-        } else {
-            $scope.notifier.danger(globalFuncs.errorMsgs[5]);
         }
-    }
+    };
 
 
     $scope.newSwap = function () {
-        globalFuncs.localStorage.setItem(lStorageKey, '');
+
+        $interval.clear($scope.progressCheck);
+
+        $scope.saveOrderToStorage('');
+
         initValues();
+
+
+        $scope.initChangeNow().then(() => {
+
+            return $scope.setOrderCoin(false, 'btc');
+        });
+
     }
 
 
-    function main() {
+    async function main() {
 
-
-        initValues();
-
-        test();
 
         if (isStorageOrderExists()) {
-            $scope.showStage1 = false;
+
+            $scope.stage = 3;
             setOrderFromStorage();
+            await $scope.processOrder();
+
+
+        } else {
+
+            initValues();
+            await $scope.initChangeNow();
+
+            const isFrom = false;
+            await $scope.setOrderCoin(isFrom, 'btc');
         }
 
 
-        $scope.initChangeNow()
-            .then(() => $scope.setOrderCoin(false, 'btc'));
-
-
     }
 
-    main();
+    main().finally(() => {
+
+    });
 };
 module.exports = swapCtrl;

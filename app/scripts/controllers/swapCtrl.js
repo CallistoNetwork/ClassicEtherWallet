@@ -495,7 +495,7 @@ var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
 
     $scope.newSwap = function () {
 
-        $interval.clear($scope.progressCheck);
+        $interval.cancel($scope.progressCheck);
 
         $scope.saveOrderToStorage('');
 

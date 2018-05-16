@@ -47,8 +47,11 @@ var ethFuncs = require('./ethFuncs');
 window.ethFuncs = ethFuncs;
 var Validator = require('./validator');
 window.Validator = Validator;
-var bity = require('./bity');
-window.bity = bity;
+
+var changeNow = require('./changeNow');
+
+window.changeNow = changeNow;
+
 var ens = require('./ens');
 window.ens = ens;
 var translate = require('./translations/translate.js');
@@ -128,6 +131,8 @@ app.factory('globalService', ['$http', '$httpParamSerializerJQLike', globalServi
 app.factory('walletService', walletService);
 app.factory('backgroundNodeService', backgroundNodeService);
 
+app.factory('changeNowService', changeNow);
+
 app.factory('newMessageService', newMessageService);
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('addressField', ['$compile', 'backgroundNodeService', addressFieldDrtv]);
@@ -148,7 +153,7 @@ app.controller('decryptWalletCtrl', ['$scope', '$sce', 'walletService', decryptW
 app.controller('viewWalletCtrl', ['$scope', '$rootScope', 'walletService', viewWalletCtrl]);
 app.controller('txStatusCtrl', ['$scope', '$rootScope', txStatusCtrl]);
 app.controller('sendTxCtrl', ['$scope', '$sce', '$rootScope', 'walletService', sendTxCtrl]);
-app.controller('swapCtrl', ['$scope', '$sce', '$rootScope', 'walletService', swapCtrl]);
+app.controller('swapCtrl', ['$scope', '$rootScope', '$interval', 'walletService', swapCtrl]);
 app.controller('signMsgCtrl', ['$scope', '$sce', 'walletService', signMsgCtrl]);
 app.controller('contractsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', contractsCtrl]);
 app.controller('ensCtrl', ['$scope', '$sce', '$rootScope', 'walletService', ensCtrl]);

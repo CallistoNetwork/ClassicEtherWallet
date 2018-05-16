@@ -82,7 +82,7 @@
 ">
                 <div class="col-xs-4 text-center" style="padding: 5px;">
 
-            <img src="{{coin.image}}" alt="" style="width: 36px; height: 36px;" suppress-error/>
+            <img src="{{coin.image}}" alt="" style="width: 36px; height: 36px;"/>
             </div>
             <div class="col-xs-8">
 
@@ -126,7 +126,7 @@
 ">
                         <div class="col-xs-4 text-center" style="padding: 5px;">
 
-                            <img ng-src="{{coin.image}}" alt="" style="width: 36px; height: 36px;" suppress-error/>
+                            <img ng-src="{{coin.image}}" alt="" style="width: 36px; height: 36px;"/>
                         </div>
                         <div class="col-xs-8">
 

@@ -512,7 +512,12 @@ var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
     $scope.filterCoins = function (coin) {
 
 
-        return $scope.availableCoins.filter(item => item.ticker.match(new RegExp(coin, 'gi')));
+        const regex = new RegExp(coin, 'gi');
+
+        return $scope.availableCoins.filter(item =>
+            item.ticker.match(regex) ||
+            item.name.match(regex)
+        );
 
     }
 

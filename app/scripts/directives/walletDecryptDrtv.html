@@ -453,6 +453,18 @@
 
                         <div class="col-sm-4">
                             <label class="radio small">
+                                <input aria-describedby="Path: TREZOR (ETSC) {{HDWallet.trezorSocialPath}}"
+                                       ng-change="onHDDPathChange()"
+                                       ng-model="HDWallet.dPath"
+                                       type="radio"
+                                       value="{{HDWallet.trezorSocialPath}}"/>
+                                <span ng-bind="HDWallet.trezorSocialPath"></span>
+                                <p class="small">TREZOR (ETSC)</p>
+                            </label>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label class="radio small">
                                 <input aria-describedby="Path: TREZOR - TESTNET - {{HDWallet.trezorTestnetPath}}"
                                        ng-change="onHDDPathChange()"
                                        ng-model="HDWallet.dPath"

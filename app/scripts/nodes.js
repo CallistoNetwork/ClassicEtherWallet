@@ -114,6 +114,18 @@ nodes.nodeList = {
         'service': 'Ethereum Commonwealth Parity',
         'lib': new nodes.customNode('https://etc-parity.0xinfra.com/', '')
     },
+    'etc_chainkorea': {
+        'name': 'ETC',
+        'blockExplorerTX': 'https://classicexplorer.org/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://classicexplorer.org/addr/[[address]]',
+        'type': nodes.nodeTypes.ETC,
+        'eip155': true,
+        'chainId': 61,
+        'tokenList': require('./tokens/etcTokens.json'),
+        'abiList': require('./abiDefinitions/etcAbi.json'),
+        'service': 'Chainkorea',
+        'lib': new nodes.customNode('https://node.classicexplorer.org/', '')
+    },
     'clo_mainnet': {
         'name': 'CLO',
         'blockExplorerTX': 'https://explorer.callisto.network/tx/[[txHash]]',
@@ -371,7 +383,7 @@ nodes.nodeList = {
         'tokenList': require('./tokens/etscTokens.json'),
         'abiList': require('./abiDefinitions/etscAbi.json'),
         'estimateGas': true,
-        'service': 'gazua.tv',
+        'service': 'ethereumsocial.kr',
         'lib': new nodes.customNode('https://node.ethereumsocial.kr', '')
     }
 };

@@ -9,24 +9,28 @@
 
     <!-- Colored Columns -->
     <section class="row order-panel">
-        <div class="col-sm-6 order-info">
+        <div class="col-sm-4 order-info">
             <p class="mono">
-                <input class="form-control input-sm" ng-value="priceTicker.ETCBTC | number: 6"/>
+                <input class="form-control input-sm" ng-value="priceTicker.ETCBTC | number: 6" style="padding: 0;"/>
                 <span>ETC = 1 BTC</span>
             </p>
         </div>
-        <div class="col-sm-6 order-info">
+        <div class="col-sm-4 order-info">
+            <a class="link"
+               href="{{changeNow.exchangeLink(swapOrder.fromCoin, swapOrder.toCoin, swapOrder.fromVal)}}"
+               target="_blank"
+               rel="noopener">
+                <img src="https://changenow.io/images/embeds/button.svg" alt="ChangeNOW button">
+            </a>
+        </div>
+        <div class="col-sm-4 order-info">
             <p class="mono">
-                <input class="form-control input-sm" ng-value="priceTicker.BTCETC | number:6"/>
+                <input class="form-control input-sm" ng-value="priceTicker.BTCETC | number:6" style="padding: 0;"/>
                 <span>BTC = 1 ETC</span>
             </p>
         </div>
 
 
-        <a class="link bity-logo" href={{changeNow.affiliateLink}} target="_blank" rel="noopener">
-            Change Now
-
-        </a>
     </section>
     <!-- / Colored Columns -->
 
@@ -60,9 +64,15 @@
         ng-show="dropdownFrom"
         style="max-height: 300px; overflow-y: scroll;"
     >
-      <li class="list-group-item" ng-repeat="coin in availableCoins track by $index">
+         <li class="list-group-item">
+                <input
+                        class="form-control-sm"
+                        ng-model="input.fromCoin"
+                        placeholder="type a currency"/>
+            </li>
+      <li class="list-group-item" ng-repeat="coin in filterCoins(input.fromCoin) track by $index">
         <a
-                ng-click="setOrderCoin(true, coin.ticker)"
+                ng-click=" setOrderCoin(true, coin.ticker)"
         >
 
             <div class="row" style="
@@ -100,8 +110,13 @@
                 class="caret"></i></a>
         <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownTo"
             style="max-height: 300px; overflow-y: scroll;">
-            <li class="list-group-item" ng-repeat="coin in availableCoins track by $index">
-                <a ng-class="{true:'active'}[coin.ticker.toUpperCase() === swapOrder.fromCoin.toUpperCase()]"
+            <li class="list-group-item">
+                <input
+                        class="form-control-sm"
+                        ng-model="input.toCoin" placeholder="type a currency"/>
+            </li>
+            <li class="list-group-item" ng-repeat="coin in filterCoins(input.toCoin) track by $index">
+                <a ng-class="{true:'active'}[coin.ticker.toUpperCase() === swapOrder.toCoin.toUpperCase()]"
                    ng-click="setOrderCoin(false, coin.ticker)">
 
                     <div class="row" style="
@@ -111,7 +126,7 @@
 ">
                         <div class="col-xs-4 text-center" style="padding: 5px;">
 
-                            <img src="{{coin.image}}" alt="" style="width: 36px; height: 36px;"/>
+                            <img ng-src="{{coin.image}}" alt="" style="width: 36px; height: 36px;"/>
                         </div>
                         <div class="col-xs-8">
 

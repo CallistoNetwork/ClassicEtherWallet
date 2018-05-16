@@ -49,6 +49,19 @@ var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
     };
 
 
+    $scope.mailHref = () => `mailto:support@changenow.io,support@classicetherwallet.com?
+    Subject=${$scope.orderResult.reference} - Issue regarding my Swap via classicetherwallet.com 
+    &Body=${encodeURIComponent(`
+            Please include the below if this issue is regarding your order. 
+            REF ID: ${$scope.orderResult.reference} 
+            Amount to send: ${$scope.orderResult.expectedSendAmount || $scope.swapOrder.fromVal}  ${$scope.orderResult.fromCurrency || $scope.swapOrder.fromCoin} 
+            Amount to receive: ${$scope.orderResult.expectedReceiveAmount || $scope.swapOrder.toVal}  ${$scope.orderResult.toCurrency || $scope.swapOrder.toCoin} 
+            Payment Address: ${$scope.orderResult.payinAddress}
+            Payout Address: ${$scope.orderResult.payoutAddress}
+        `)}
+    `;
+
+
     Object.assign($scope, {
         errorCount: 0,
         ethCoins,
@@ -60,6 +73,10 @@ var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
         stage: 1,
         orderResult: null,
         progressCheck: null,
+        input: {
+            toCoin: '',
+            fromCoin: '',
+        }
     });
 
     $scope.initChangeNow = async function () {
@@ -491,6 +508,18 @@ var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
             }
         }
     };
+
+    $scope.filterCoins = function (coin) {
+
+
+        const regex = new RegExp(coin, 'gi');
+
+        return $scope.availableCoins.filter(item =>
+            item.ticker.match(regex) ||
+            item.name.match(regex)
+        );
+
+    }
 
 
     $scope.newSwap = function () {

@@ -8,6 +8,10 @@ const ChangeNow = function () {
     this.linkId = 'ace83609250351';
 
     this.affiliateLink = `https://changenow.io/&link_id=${this.linkId}`;
+
+
+    this.exchangeLink = (from = 'btc', to = 'etc', amount = 1) =>
+        `https://changenow.io/exchange?amount=${amount}&from=${from}&link_id=${this.linkId}&to=${to}`;
     this.availableCoins = [];
 
     this.priceTicker = null;
@@ -52,6 +56,8 @@ const ChangeNow = function () {
 
 
         if (!amount) return false;
+
+        else if (from.toLowerCase() === to.toLowerCase()) return false;
 
 
         const result = await ajaxReq.http.get(this.uri_base + `/exchange-amount/${amount}/${from.toLowerCase()}/${to.toLowerCase()}`);

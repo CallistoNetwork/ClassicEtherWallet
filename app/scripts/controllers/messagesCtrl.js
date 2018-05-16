@@ -382,7 +382,7 @@ var messagesCtrl = function ($scope,
     $scope.numberOfNewMessages = function numberOfNewMessages(address) {
 
 
-        console.log('new messages', new Date($scope.message_staling_period));
+        //console.log('new messages', new Date($scope.message_staling_period));
 
         return $scope.messages.filter(message =>
 

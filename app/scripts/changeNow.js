@@ -14,6 +14,8 @@ const ChangeNow = function () {
         `https://changenow.io/exchange?amount=${amount}&from=${from}&link_id=${this.linkId}&to=${to}`;
     this.availableCoins = [];
 
+    this.conversionRatios = {};
+
     this.priceTicker = null;
 
 
@@ -37,15 +39,36 @@ const ChangeNow = function () {
 
     this.estimateConversion = async function (to = 'etc', from = 'btc', amount = 1) {
 
+        from = from.toLowerCase();
 
-        const result = await this.exchangeAmount(amount, from, to);
+        to = to.toLowerCase();
 
-        if (result) {
 
-            return this.availableCoins.find(coin => coin.ticker.toUpperCase() === to.toUpperCase()).converstionRatio;
+        if (this.conversionRatios.hasOwnProperty(from + '/' + to)) {
+
+            const itm = this.conversionRatios[from + '/' + to];
+
+
+            return Object.assign({}, itm, {
+                estimatedAmount: (itm.estimatedAmount / itm.amount) * amount
+            });
+
+        } else if (this.conversionRatios.hasOwnProperty(to + '/' + from)) {
+
+            const itm = this.conversionRatios[to + '/' + from];
+
+            return Object.assign({}, itm, {
+                estimatedAmount: (itm.amount / itm.estimatedAmount) * amount,
+            })
+        } else {
+
+            const result = await this.exchangeAmount(amount, from, to);
+
+            return result && this.availableCoins.find(coin => coin.ticker.toLowerCase() === to);
+
+
         }
 
-        return false
 
     };
 
@@ -54,25 +77,36 @@ const ChangeNow = function () {
 
         amount = parseFloat(amount);
 
+        from = from.toLowerCase();
 
-        if (!amount) return false;
-
-        else if (from.toLowerCase() === to.toLowerCase()) return false;
+        to = to.toLowerCase();
 
 
-        const result = await ajaxReq.http.get(this.uri_base + `/exchange-amount/${amount}/${from.toLowerCase()}/${to.toLowerCase()}`);
+        if (!(amount && from && to && from !== to)) return false;
+
+        const result = await ajaxReq.http.get(this.uri_base + `/exchange-amount/${amount}/${from}/${to}`);
 
         if (result.statusText.toUpperCase() === 'OK') {
 
 
-            const idx = this.availableCoins.findIndex(coin => coin.ticker.toUpperCase() === to.toUpperCase());
+            const idx = this.availableCoins.findIndex(coin => coin.ticker.toLowerCase() === to);
 
 
             if (idx > -1) {
 
+
+                this.conversionRatios[from + '/' + to] = {
+                    from,
+                    to,
+                    amount,
+                    estimatedAmount: result.data.estimatedAmount,
+                    conversionRatio: amount / result.data.estimatedAmount,
+                };
+
                 return Object.assign(this.availableCoins[idx], result.data, {
                     amount,
-                    converstionRatio: amount / result.data.estimatedAmount
+                    conversionRatio: amount / result.data.estimatedAmount,
+                    conversionTo: to,
                 });
 
 

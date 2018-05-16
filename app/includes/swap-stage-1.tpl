@@ -72,7 +72,7 @@
             </li>
       <li class="list-group-item" ng-repeat="coin in filterCoins(input.fromCoin) track by $index">
         <a
-                ng-click=" setOrderCoin(true, coin.ticker)"
+                ng-click="setOrderCoin(true, coin.ticker)"
         >
 
             <div class="row" style="
@@ -100,7 +100,7 @@
            type="text"
            placeholder="{{ 'SEND_amount_short' | translate }}"
            ng-change="updateEstimate(false)"
-           ng-model-options="{ debounce: 50 }"
+           ng-model-options="{ debounce: 200 }"
            ng-model="swapOrder.toVal"
            ng-click="showedMinMaxError = false"
            ng-class="Validator.isPositiveNumber(swapOrder.toVal) ? 'is-valid' : 'is-invalid'"/>
@@ -126,7 +126,7 @@
 ">
                         <div class="col-xs-4 text-center" style="padding: 5px;">
 
-                            <img ng-src="{{coin.image}}" alt="" style="width: 36px; height: 36px;"/>
+                            <img src="{{coin.image}}" alt="" style="width: 36px; height: 36px;"/>
                         </div>
                         <div class="col-xs-8">
 

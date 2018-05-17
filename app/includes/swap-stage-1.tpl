@@ -47,6 +47,7 @@
 
     <input class="form-control"
            type="text"
+           ng-change="updateEstimate(true)"
            placeholder="{{ 'SEND_amount_short' | translate }}"
            ng-model="swapOrder.fromVal"
            ng-model-options="{ debounce: 200 }"

@@ -4,8 +4,8 @@
 
     <!-- Title -->
     <section class="row">
-        <h5 class="col-xs-6 col-xs-offset-3" translate="SWAP_information">Your Information</h5>
-        <div class="col-xs-3">
+        <h5 class="col-sm-6 col-sm-offset-3" translate="SWAP_information">Your Information</h5>
+        <div class="col-sm-3">
 
             <a href="{{changeNow.exchangeLink(swapOrder.fromCoin, swapOrder.toCoin, swapOrder.fromVal)}}"
                rel="noopener"

@@ -138,7 +138,6 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
                 toVal: 1,
                 toAddress: null,
                 swapRate: null,
-                swapPair: null,
             }
 
         });
@@ -158,22 +157,53 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
 
     $scope.setOrderCoin = function (isFrom, coin) {
 
-
-        if (isFrom) $scope.swapOrder.fromCoin = coin;
-        else $scope.swapOrder.toCoin = coin;
-        if ($scope.swapOrder.fromCoin === $scope.swapOrder.toCoin)
-            for (var i in $scope.availableCoins)
-                if ($scope.availableCoins[i] !== $scope.swapOrder.fromCoin) {
-                    $scope.swapOrder.toCoin = $scope.availableCoins[i];
-                    break;
-                }
-
-
-        $scope.swapOrder.swapPair = $scope.swapOrder.fromCoin + "/" + $scope.swapOrder.toCoin;
+        isFrom ? $scope.swapOrder.fromCoin = coin : $scope.swapOrder.toCoin = coin;
 
         $scope.dropdownFrom = $scope.dropdownTo = false;
+
         $scope.updateEstimate(isFrom);
 
+    }
+
+    $scope.toggleDropdown = function (isFrom) {
+
+        //fixme: issue focusing element
+
+        //const coin = document.getElementById(isFrom ? 'fromCoin' : 'toCoin');
+
+        let open = false;
+        if (isFrom) {
+
+            $scope.dropdownFrom = !$scope.dropdownFrom;
+
+            if ($scope.dropdownFrom) open = true;
+
+        } else {
+            $scope.dropdownTo = !$scope.dropdownTo;
+            if ($scope.dropdownTo) open = true;
+        }
+
+        // if (open) {
+        //
+        //     coin.focus();
+        //
+        //     coin.select();
+        // }
+
+
+    }
+
+    $scope.handleSubmit = function (isFrom) {
+
+        const coins = $scope.filterCoins(isFrom ? $scope.input.fromCoin : $scope.input.toCoin);
+
+
+        if (coins.length > 0) {
+
+            $scope.setOrderCoin(isFrom, coins[0].ticker);
+
+            $scope.updateEstimate(isFrom);
+        }
     }
 
 

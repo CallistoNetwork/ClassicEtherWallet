@@ -22,7 +22,7 @@
         position: absolute;
         left: 50%;
         top: 50%;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%, -50%);
       }
       @media screen and (max-width: @screen-sm) {
         padding-top: 1rem;
@@ -31,6 +31,7 @@
           text-align: left;
           padding: 0 0 0 22%;
         }
+
         .bity-logo {
           left: -1rem;
           top: 40%;
@@ -52,7 +53,9 @@
     }
     p {
       margin: 0;
-      span { opacity: .9; }
+      span {
+        opacity: .9;
+      }
     }
     .order-info {
       &:nth-child(4n+1),
@@ -96,7 +99,9 @@
 
   .swap-order {
     text-align: left;
-    .order-info-wrap { margin-bottom: 0; }
+    .order-info-wrap {
+      margin-bottom: 0;
+    }
     h1 {
       margin-top: @space*3;
       margin-bottom: @space*3;
@@ -105,18 +110,19 @@
 }
 
 .swap-tab, .ens-tab {
-.collapse-container {
-  h4, h5 {  display: inline-block;  }
-  .collapse-button {
-    float: none;
-    margin: 0;
+  .collapse-container {
+    h4, h5 {
+      display: inline-block;
+    }
+    .collapse-button {
+      float: none;
+      margin: 0;
+    }
   }
-}
 }
 
 .order-info-wrap {
   margin-bottom: @space*3;
-  display: flex;
   .order-info {
     padding: @space 0;
   }
@@ -131,16 +137,22 @@
   text-align: center;
   padding: @space/2 0;
   color: white;
-  h3,h4,p {  margin: 0;  }
-  &:nth-child(4n+1) { background-color: #175575;  }
-  &:nth-child(4n+2) { background-color: #1e92ba;  }
-  &:nth-child(4n+3) { background-color: #143955;  }
-  &:nth-child(4n+4) { background-color: #19b3ae;  }
+  h3, h4, p {
+    margin: 0;
+  }
+  &:nth-child(4n+1) {
+    background-color: #175575;
+  }
+  &:nth-child(4n+2) {
+    background-color: #1e92ba;
+  }
+  &:nth-child(4n+3) {
+    background-color: #143955;
+  }
+  &:nth-child(4n+4) {
+    background-color: #19b3ae;
+  }
 }
-
-
-
-
 
 @circle-width: 4rem;
 @circle-width-phone: 3rem;
@@ -166,12 +178,26 @@
     float: left;
     text-align: center;
     margin: .25rem 0;
-    @media screen and (max-width: @progress-breakpoint) { width: 100%; }
-    &:nth-child(4n+1) .progress-circle { border-color: fadeout(#1e92ba, 60%); color:fadeout(#1e92ba, 60%); }
-    &:nth-child(4n+2) .progress-circle { border-color: fadeout(#175575, 60%); color:fadeout(#175575, 60%); }
-    &:nth-child(4n+3) .progress-circle { border-color: fadeout(#19b3ae, 60%); color:fadeout(#19b3ae, 60%); }
-    &:nth-child(4n+4) .progress-circle { border-color: fadeout(#143955, 60%); color:fadeout(#143955, 60%); }
-   .progress-circle {
+    @media screen and (max-width: @progress-breakpoint) {
+      width: 100%;
+    }
+    &:nth-child(4n+1) .progress-circle {
+      border-color: fadeout(#1e92ba, 60%);
+      color: fadeout(#1e92ba, 60%);
+    }
+    &:nth-child(4n+2) .progress-circle {
+      border-color: fadeout(#175575, 60%);
+      color: fadeout(#175575, 60%);
+    }
+    &:nth-child(4n+3) .progress-circle {
+      border-color: fadeout(#19b3ae, 60%);
+      color: fadeout(#19b3ae, 60%);
+    }
+    &:nth-child(4n+4) .progress-circle {
+      border-color: fadeout(#143955, 60%);
+      color: fadeout(#143955, 60%);
+    }
+    .progress-circle {
       border-radius: 50%;
       border-width: @space-xs;
       border-style: solid;
@@ -206,7 +232,6 @@
       }
     }
 
-
     p {
       font-size: @font-size-small;
       font-weight: 600;
@@ -224,15 +249,27 @@
       }
     }
 
-
     &.progress-active {
-      p { color: lighten(@gray, 10%); }
+      p {
+        color: lighten(@gray, 10%);
+      }
     }
-    &.progress-active:nth-child(4n+1) .progress-circle { border-color: #1e92ba; color:#1e92ba; }
-    &.progress-active:nth-child(4n+2) .progress-circle { border-color: #175575; color:#175575; }
-    &.progress-active:nth-child(4n+3) .progress-circle { border-color: #19b3ae; color:#19b3ae; }
-    &.progress-active:nth-child(4n+4) .progress-circle { border-color: #143955; color:#143955; }
-
+    &.progress-active:nth-child(4n+1) .progress-circle {
+      border-color: #1e92ba;
+      color: #1e92ba;
+    }
+    &.progress-active:nth-child(4n+2) .progress-circle {
+      border-color: #175575;
+      color: #175575;
+    }
+    &.progress-active:nth-child(4n+3) .progress-circle {
+      border-color: #19b3ae;
+      color: #19b3ae;
+    }
+    &.progress-active:nth-child(4n+4) .progress-circle {
+      border-color: #143955;
+      color: #143955;
+    }
 
     &.progress-true {
       .progress-circle {
@@ -247,19 +284,19 @@
           font-size: 0;
         }
       }
-      p { color: @brand-success; }
+      p {
+        color: @brand-success;
+      }
     }
   }
 }
-
-
 
 .ens-tab {
   .order-info-wrap {
     margin-top: @space;
     margin-bottom: @space;
   }
-  h5+p {
+  h5 + p {
     margin-top: -.5em;
   }
 }

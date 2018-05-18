@@ -292,6 +292,25 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
         $scope.stage = 2;
         $scope.updateEstimate($scope.swapOrder.isFrom);
 
+        $scope.changeNow.minAmount($scope.swapOrder.fromCoin, $scope.swapOrder.toCoin).then(result => {
+
+            if (result) {
+
+                const {minAmount} = result;
+
+
+                if ($scope.swapOrder.fromVal < minAmount) {
+
+                    $scope.notifier.danger(`Minimum transfer amount: ${minAmount}`);
+
+                    Object.assign($scope.swapOrder, {fromVal: minAmount});
+
+                    $scope.updateEstimate(true);
+                }
+
+            }
+        })
+
     };
 
 
@@ -545,10 +564,7 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
 
         const regex = new RegExp(coin, 'gi');
 
-        return $scope.availableCoins.filter(item =>
-            item.ticker.match(regex) ||
-            item.name.match(regex)
-        );
+        return $scope.availableCoins.filter(item => item.ticker.match(regex));
 
     }
 

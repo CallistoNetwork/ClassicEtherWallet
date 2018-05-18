@@ -121,11 +121,17 @@ const ChangeNow = function () {
 
     };
 
+    /*
+
+        @param string from
+        @param string to
+        @returns {minAmount:number}
+     */
 
     this.minAmount = async function (from, to) {
 
 
-        const result = await ajaxReq.http.get(this.uri_base + `/min-amount/${from}/${to}`);
+        const result = await ajaxReq.http.get(this.uri_base + `/min-amount/${from.toLowerCase()}/${to.toLowerCase()}`);
 
 
         if (result.statusText === 'OK') {

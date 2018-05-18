@@ -7,7 +7,7 @@
         <h5 class="col-xs-6" translate="SWAP_information">Your Information</h5>
         <div class="col-xs-3">
 
-            <a href="{{changeNow.exchangeLink(swapOrder.fromCoin, swapOrder.toCoin, swapOrder.fromVal)}}" target="_blank">
+            <a href="{{'https://changenow.io/exchange/txs/' + orderResult.id}}" target="_blank">
                 <img src="https://changenow.io/images/embeds/button.svg" alt="ChangeNOW button">
             </a>
         </div>

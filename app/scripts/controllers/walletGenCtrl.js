@@ -1,12 +1,7 @@
 'use strict';
 var walletGenCtrl = function($rootScope, $scope) {
     $scope.password = "";
-    $scope.networks = {
-         ETH: "eth_ethscan",
-         ETC: "etc_epool",
-         UBQ: "ubq",
-         EXP: "exp",
-    }
+    $scope.networks = globalFuncs.networks;
 
     $scope.wallet = null;
     $scope.showWallet = false;

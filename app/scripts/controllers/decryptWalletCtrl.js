@@ -23,7 +23,7 @@ var decryptWalletCtrl = function ($scope, $sce, walletService) {
         trezorTestnetPath: "m/44'/1'/0'/0", // first address: m/44'/1'/0'/0/0
         trezorClassicPath: "m/44'/61'/0'/0", // first address: m/44'/61'/0'/0/0
         trezorPath: "m/44'/60'/0'/0", // first address: m/44'/60'/0'/0/0
-        hwExpansePath: "m/44'/40'/0'/0" // first address : m/44'/40'/0'/0/0
+        hwExpansePath: "m/44'/40'/0'/0", // first address : m/44'/40'/0'/0/0
         hwSocialPath: "m/44'/1128'/0'/0", // first address: m/44'/1128'/0'/0/0
     };
     $scope.HDWallet.dPath = $scope.HDWallet.defaultDPath;

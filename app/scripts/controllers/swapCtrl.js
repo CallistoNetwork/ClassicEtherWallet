@@ -30,20 +30,21 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
     });
 
 
-    const verifyToAddress = function (coin) {
-
-        if ($scope.swapOrder.toCoin.toUpperCase() === 'BTC') {
-
-            return Validator.isValidBTCAddress($scope.swapOrder.toCoin)
-
-        } else if (ethCoins.includes($scope.swapOrder.toCoin)) {
+    const verifyAddress = function (coin, address) {
 
 
-            return Validator.isValidAddress($scope.swapOrder.toCoin);
+        if (coin.toUpperCase() === 'BTC') {
+
+            return Validator.isValidBTCAddress(address)
+
+        } else if (ethCoins.includes(coin.toUpperCase())) {
+
+
+            return Validator.isValidAddress(address);
         }
         else {
 
-            return true;
+            return address.length > 0;
         }
     };
 
@@ -54,7 +55,7 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
             Please include the below if this issue is regarding your order. 
             REF ID: ${$scope.orderResult.reference} 
             Amount to send: ${$scope.orderResult.expectedSendAmount || $scope.swapOrder.fromVal}  ${$scope.orderResult.fromCurrency || $scope.swapOrder.fromCoin} 
-            Amount to receive: ${$scope.orderResult.expectedReceiveAmount || $scope.swapOrder.toVal}  ${$scope.orderResult.toCurrency || $scope.swapOrder.toCoin} 
+            Amount to receive: ${$scope.orderResult.expectedReceiveAmount || $scope.swapOrder.toVal}  ${$scope.orderResult.toCurrency || $scope.swapOrder.coin} 
             Payment Address: ${$scope.orderResult.payinAddress}
             Payout Address: ${$scope.orderResult.payoutAddress}
         `)}
@@ -521,41 +522,50 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
 
     $scope.openOrder = async function () {
 
+        const {swapOrder: {toCoin, fromCoin, toAddress}} = $scope;
 
-        if (verifyToAddress()) {
+        if (verifyAddress(toCoin, toAddress)) {
 
 
             const order = {
                 amount: $scope.swapOrder.fromVal,
-                from: $scope.swapOrder.fromCoin,
-                to: $scope.swapOrder.toCoin,
-                address: $scope.swapOrder.toAddress
+                from: fromCoin,
+                to: toCoin,
+                address: toAddress
             };
 
 
             const orderResult = await $scope.changeNow.openOrder(order);
 
 
-            if (orderResult) {
+            if (orderResult && orderResult.payoutAddress === order.address) {
 
-                $scope.stage = 3;
 
-                Object.assign($scope.orderResult, {
-                    status: 'new',
-                    fromCurrency: order.from,
-                    toCurrency: order.to,
-                    expectedSendAmount: order.amount,
-                    progress: {
+                $scope.$apply(function () {
+
+                    $scope.stage = 3;
+
+                    Object.assign($scope.orderResult, {
                         status: 'new',
-                        bar: getProgressBarArr(0, 5),
-                    }
-                }, orderResult);
+                        expectedSendAmount: order.amount,
+                        progress: {
+                            status: 'new',
+                            bar: getProgressBarArr(0, 5),
+                        }
+                    }, orderResult);
+                });
+
 
                 await $scope.processOrder();
+
             } else {
 
                 $scope.notifier.danger('Error opening order');
             }
+        } else {
+
+            $scope.notifier.danger(globalFuncs.errorMsgs[5]);
+
         }
     };
 

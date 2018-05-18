@@ -50,7 +50,7 @@
            ng-change="updateEstimate(true)"
            placeholder="{{ 'SEND_amount_short' | translate }}"
            ng-model="swapOrder.fromVal"
-           ng-model-options="{ debounce: 200 }"
+           ng-model-options="{ debounce: 500 }"
            ng-class="Validator.isPositiveNumber(swapOrder.fromVal) ? 'is-valid' : 'is-invalid'"
     />
 
@@ -75,6 +75,7 @@
          <input hidden type="submit"/>
 
     </form>
+
             </li>
       <li class="list-group-item" ng-repeat="coin in filterCoins(input.fromCoin) track by coin.ticker">
         <a
@@ -106,7 +107,7 @@
     <input class="form-control"
            placeholder="{{ 'SEND_amount_short' | translate }}"
            ng-change="updateEstimate(false)"
-           ng-model-options="{ debounce: 200 }"
+           ng-model-options="{ debounce: 500 }"
            ng-model="swapOrder.toVal"
            ng-class="Validator.isPositiveNumber(swapOrder.toVal) ? 'is-valid' : 'is-invalid'"
     />

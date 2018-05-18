@@ -38,56 +38,59 @@
 
     <!-- Your Address -->
     <section class='swap-address block'>
-        <section class="row">
-            <div class="col-sm-8 col-sm-offset-2 col-xs-12">
+        <form ng-submit="openOrder();">
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
 
 
-                <label><span translate="SWAP_rec_add">Your Receiving Address</span>
-                    <strong>({{swapOrder.toCoin}})</strong></label>
+                    <label><span translate="SWAP_rec_add">Your Receiving Address</span>
+                        <strong>({{swapOrder.toCoin}})</strong></label>
 
 
-                <div ng-switch="ethCoins.includes(swapOrder.toCoin.toUpperCase())">
+                    <div ng-switch="ethCoins.includes(swapOrder.toCoin.toUpperCase())">
 
-                    <div class="form-group" ng-switch-when="true">
-                        <address-field placeholder="0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8"
-                                       var-name="swapOrder.toAddress"></address-field>
-                    </div>
-
-
-                    <div ng-switch-default>
-
-
-                        <div ng-switch="swapOrder.toCoin.toUpperCase() === 'BTC'">
-
-                            <input class="form-control"
-                                   ng-switch-when="true"
-                                   type="text"
-                                   placeholder="1MEWT2SGbqtz6mPCgFcnea8XmWV5Z4Wc6"
-                                   ng-model="swapOrder.toAddress"
-                                   ng-class="Validator.isValidBTCAddress(swapOrder.toAddress) ? 'is-valid' : 'is-invalid'"
-                            />
-
-
-                            <input class="form-control"
-                                   type="text"
-                                   ng-switch-default
-                                   placeholder="1MEWT2SGbqtz6mPCgFcnea8XmWV5Z4Wc6"
-                                   ng-model="swapOrder.toAddress"
-                            />
-
+                        <div class="form-group" ng-switch-when="true">
+                            <address-field placeholder="0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8"
+                                           var-name="swapOrder.toAddress"></address-field>
                         </div>
+
+
+                        <div ng-switch-default>
+
+
+                            <div ng-switch="swapOrder.toCoin.toUpperCase() === 'BTC'">
+
+                                <input class="form-control"
+                                       ng-switch-when="true"
+                                       type="text"
+                                       placeholder="1MEWT2SGbqtz6mPCgFcnea8XmWV5Z4Wc6"
+                                       ng-model="swapOrder.toAddress"
+                                       ng-class="Validator.isValidBTCAddress(swapOrder.toAddress) ? 'is-valid' : 'is-invalid'"
+                                />
+
+
+                                <input class="form-control"
+                                       type="text"
+                                       ng-switch-default
+                                       placeholder="1MEWT2SGbqtz6mPCgFcnea8XmWV5Z4Wc6"
+                                       ng-model="swapOrder.toAddress"
+                                />
+
+                            </div>
+                        </div>
+
+
                     </div>
-
-
                 </div>
             </div>
-        </section>
-        <!-- /Your Address -->
-        <!-- CTA -->
-        <section class="row text-center">
-            <a ng-click="openOrder()" class="btn btn-primary btn-lg"><span
-                    translate="SWAP_start_CTA"> Start Swap </span></a>
-        </section>
+            <!-- /Your Address -->
+            <!-- CTA -->
+            <div class="row text-center">
+                <button type="submit" class="btn btn-primary btn-lg"><span
+                        translate="SWAP_start_CTA"> Start Swap </span></button>
+            </div>
+        </form>
         <!-- / CTA -->
     </section>
 

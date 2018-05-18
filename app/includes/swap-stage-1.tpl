@@ -47,16 +47,16 @@
 
     <input class="form-control"
            type="text"
-           placeholder="{{ 'SEND_amount_short' | translate }}"
            ng-change="updateEstimate(true)"
+           placeholder="{{ 'SEND_amount_short' | translate }}"
            ng-model="swapOrder.fromVal"
            ng-model-options="{ debounce: 200 }"
-           ng-click="showedMinMaxError = false"
-           ng-class="Validator.isPositiveNumber(swapOrder.fromVal) ? 'is-valid' : 'is-invalid'"/>
+           ng-class="Validator.isPositiveNumber(swapOrder.fromVal) ? 'is-valid' : 'is-invalid'"
+    />
 
 
     <span class="dropdown">
-    <a class="btn btn-default dropdown-toggle" ng-click="dropdownFrom = !dropdownFrom">
+    <a class="btn btn-default dropdown-toggle" ng-click="toggleDropdown(true)">
 
         {{swapOrder.fromCoin.toUpperCase()}}<i
             class="caret"></i></a>
@@ -65,14 +65,20 @@
         style="max-height: 300px; overflow-y: scroll;"
     >
          <li class="list-group-item">
+    <form ng-submit="handleSubmit(true)">
                 <input
+                        autofocus
+                        id="fromCoin"
                         class="form-control-sm"
                         ng-model="input.fromCoin"
                         placeholder="type a currency"/>
+         <input hidden type="submit"/>
+
+    </form>
             </li>
-      <li class="list-group-item" ng-repeat="coin in filterCoins(input.fromCoin) track by $index">
+      <li class="list-group-item" ng-repeat="coin in filterCoins(input.fromCoin) track by coin.ticker">
         <a
-                ng-click=" setOrderCoin(true, coin.ticker)"
+                ng-click="setOrderCoin(true, coin.ticker)"
         >
 
             <div class="row" style="
@@ -96,28 +102,39 @@
 
     <h1 translate="SWAP_init_2"> for </h1>
 
+
     <input class="form-control"
-           type="text"
            placeholder="{{ 'SEND_amount_short' | translate }}"
            ng-change="updateEstimate(false)"
-           ng-model-options="{ debounce: 50 }"
+           ng-model-options="{ debounce: 200 }"
            ng-model="swapOrder.toVal"
-           ng-click="showedMinMaxError = false"
-           ng-class="Validator.isPositiveNumber(swapOrder.toVal) ? 'is-valid' : 'is-invalid'"/>
+           ng-class="Validator.isPositiveNumber(swapOrder.toVal) ? 'is-valid' : 'is-invalid'"
+    />
+
 
     <div class="dropdown">
-        <a class="btn btn-default dropdown-toggle" ng-click="dropdownTo = !dropdownTo">{{swapOrder.toCoin.toUpperCase()}}<i
+        <a class="btn btn-default dropdown-toggle" ng-click="toggleDropdown(false)">{{swapOrder.toCoin.toUpperCase()}}<i
                 class="caret"></i></a>
+
+
         <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownTo"
             style="max-height: 300px; overflow-y: scroll;">
             <li class="list-group-item">
-                <input
-                        class="form-control-sm"
-                        ng-model="input.toCoin" placeholder="type a currency"/>
+                <form ng-submit="handleSubmit(false)">
+                    <input
+                            class="form-control-sm"
+                            id="toCoin"
+                            autofocus
+                            ng-model="input.toCoin" placeholder="type a currency"/>
+                    <input type="submit" hidden/>
+                </form>
             </li>
-            <li class="list-group-item" ng-repeat="coin in filterCoins(input.toCoin) track by $index">
-                <a ng-class="{true:'active'}[coin.ticker.toUpperCase() === swapOrder.toCoin.toUpperCase()]"
-                   ng-click="setOrderCoin(false, coin.ticker)">
+
+            <li class="list-group-item" ng-repeat="coin in filterCoins(input.toCoin) track by coin.ticker">
+                <a
+                        ng-class="{true:'active'}[coin.ticker.toUpperCase() === swapOrder.toCoin.toUpperCase()]"
+                        ng-click="setOrderCoin(false, coin.ticker);"
+                >
 
                     <div class="row" style="
     display: flex;
@@ -126,7 +143,7 @@
 ">
                         <div class="col-xs-4 text-center" style="padding: 5px;">
 
-                            <img ng-src="{{coin.image}}" alt="" style="width: 36px; height: 36px;"/>
+                            <img src="{{coin.image}}" alt="" style="width: 36px; height: 36px;"/>
                         </div>
                         <div class="col-xs-8">
 
@@ -136,6 +153,8 @@
                 </a>
             </li>
         </ul>
+
+
     </div>
 
     <div class="col-xs-12 clearfix text-center">

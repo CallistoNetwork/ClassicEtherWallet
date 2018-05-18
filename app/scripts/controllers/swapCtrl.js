@@ -1,9 +1,7 @@
 'use strict';
 
 
-var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
-
-    //$scope.walletService = walletService;
+var swapCtrl = function ($scope, $rootScope, $interval) {
 
 
     const bitcoinExplorer = `https://blockchain.info/tx/[[txHash]]`;
@@ -14,6 +12,7 @@ var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
     // sort swapOrder coins
     const popularCoins = ['ETC', 'CLO', 'BTC', 'XMR', 'ZEC'];
 
+    //fixme
     const ethCoins = ['ETC', 'ETH', 'UBQ', 'CLO'];
 
 
@@ -62,23 +61,6 @@ var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
     `;
 
 
-    Object.assign($scope, {
-        errorCount: 0,
-        ethCoins,
-        availableCoins: [],
-        parentTxConfig: {},
-        showedMinMaxError: false,
-        changeNow: new changeNow(),
-        priceTicker,
-        stage: 1,
-        orderResult: null,
-        progressCheck: null,
-        input: {
-            toCoin: '',
-            fromCoin: '',
-        }
-    });
-
     $scope.initChangeNow = async function () {
 
 
@@ -90,19 +72,37 @@ var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
             $scope.availableCoins = currencies.sort($scope.coinOrder);
 
 
-            await Promise.all(priceTickers.map(async (ticker) => {
+            // get price ticker values
 
-                const conversionRatio = await $scope.changeNow.estimateConversion(ticker.toUpperCase());
+            return Promise.all(priceTickers.map(async (ticker) => {
 
-                if (conversionRatio) {
+                const result = await $scope.changeNow.exchangeAmount(1, 'btc', ticker);
 
+                if (result) {
 
-                    Object.assign($scope, {
-                        priceTicker: {
-                            [ticker + 'BTC']: 1 / conversionRatio,
-                            ['BTC' + ticker]: conversionRatio
-                        }
+                    const {conversionRatio, amount, estimatedAmount} = result;
+
+                    Object.assign($scope.priceTicker, {
+                        [ticker + 'BTC']: 1 / conversionRatio,
+                        ['BTC' + ticker]: conversionRatio
                     });
+
+                    // Initialize conversion ratio for etc
+
+                    if (ticker.toUpperCase() === 'ETC') {
+
+
+                        $scope.$apply(function () {
+
+
+                            Object.assign($scope.swapOrder, {
+                                fromVal: estimatedAmount,
+                                toVal: amount,
+                                toCoin: 'BTC',
+                                fromCoin: 'ETC',
+                            })
+                        });
+                    }
                 }
 
             }));
@@ -138,7 +138,6 @@ var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
                 toVal: 1,
                 toAddress: null,
                 swapRate: null,
-                swapPair: null,
             }
 
         });
@@ -156,95 +155,130 @@ var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
     };
 
 
-    $scope.setOrderCoin = async function (isFrom, coin) {
-        if (isFrom) $scope.swapOrder.fromCoin = coin;
-        else $scope.swapOrder.toCoin = coin;
-        if ($scope.swapOrder.fromCoin === $scope.swapOrder.toCoin)
-            for (var i in $scope.availableCoins)
-                if ($scope.availableCoins[i] !== $scope.swapOrder.fromCoin) {
-                    $scope.swapOrder.toCoin = $scope.availableCoins[i];
-                    break;
-                }
-        $scope.swapOrder.swapPair = $scope.swapOrder.fromCoin + "/" + $scope.swapOrder.toCoin;
+    $scope.setOrderCoin = function (isFrom, coin) {
+
+        isFrom ? $scope.swapOrder.fromCoin = coin : $scope.swapOrder.toCoin = coin;
 
         $scope.dropdownFrom = $scope.dropdownTo = false;
-        await $scope.updateEstimate(isFrom);
+
+        $scope.updateEstimate(isFrom);
 
     }
-    $scope.updateEstimate = async function (isFrom) {
+
+    $scope.toggleDropdown = function (isFrom) {
+
+        //fixme: issue focusing element
+
+        //const coin = document.getElementById(isFrom ? 'fromCoin' : 'toCoin');
+
+        let open = false;
+        if (isFrom) {
+
+            $scope.dropdownFrom = !$scope.dropdownFrom;
+
+            if ($scope.dropdownFrom) open = true;
+
+        } else {
+            $scope.dropdownTo = !$scope.dropdownTo;
+            if ($scope.dropdownTo) open = true;
+        }
+
+        // if (open) {
+        //
+        //     coin.focus();
+        //
+        //     coin.select();
+        // }
+
+
+    }
+
+    $scope.handleSubmit = function (isFrom) {
+
+        const coins = $scope.filterCoins(isFrom ? $scope.input.fromCoin : $scope.input.toCoin);
+
+
+        if (coins.length > 0) {
+
+            $scope.setOrderCoin(isFrom, coins[0].ticker);
+
+            $scope.updateEstimate(isFrom);
+        }
+    }
+
+
+    $scope.updateEstimate = function (isFrom) {
 
 
         let amount = isFrom ? parseFloat($scope.swapOrder.fromVal) : parseFloat($scope.swapOrder.toVal);
-
-
-        if (!Validator.isPositiveNumber(amount)) {
-
-            return false;
-
-        }
-
 
         let fromCoin, toCoin;
 
 
         $scope.swapOrder.isFrom = isFrom;
+
         if (isFrom) {
 
-
-            if ($scope.stage === 1) {
-
-                $scope.swapOrder.toVal = '...';
-            }
 
             fromCoin = $scope.swapOrder.fromCoin;
             toCoin = $scope.swapOrder.toCoin;
 
 
-        } else {
-
             if ($scope.stage === 1) {
 
-                $scope.swapOrder.fromVal = '...';
 
+                $scope.swapOrder.toVal = '';
             }
+
+
+        } else {
+
 
             toCoin = $scope.swapOrder.fromCoin;
 
             fromCoin = $scope.swapOrder.toCoin;
+
+            if ($scope.stage === 1) {
+
+
+                $scope.swapOrder.fromVal = '';
+            }
         }
 
-        const result = await $scope.changeNow.exchangeAmount(amount, fromCoin, toCoin);
+
+        const handleEstimate = $scope.stage === 1 ?
+            $scope.changeNow.estimateConversion(toCoin, fromCoin, amount) :
+            $scope.changeNow.exchangeAmount(amount, fromCoin, toCoin);
+
+        return handleEstimate.then(result => {
 
 
-        if (result) {
+            if (result) {
 
+                $scope.$apply(function () {
 
-            if (isFrom) {
+                    Object.assign($scope.swapOrder, {
+                        toVal: isFrom ? result.estimatedAmount : amount,
+                        fromVal: isFrom ? amount : result.estimatedAmount,
+                    });
 
-                $scope.swapOrder.toVal = result.estimatedAmount;
-                $scope.swapOrder.fromVal = amount;
+                });
 
             } else {
 
 
-                $scope.swapOrder.toVal = amount;
-                $scope.swapOrder.fromVal = result.estimatedAmount;
+                $scope.notifier.danger('error connecting to server');
 
+
+                Object.assign($scope, {
+                    swapOrder: {
+                        toVal: '',
+                        fromVal: '',
+                    }
+                });
 
             }
-        } else {
-
-
-            $scope.notifier.danger('error connecting to server');
-
-            Object.assign($scope, {
-                swapOrder: {
-                    toVal: '',
-                    fromVal: '',
-                }
-            });
-
-        }
+        });
 
 
     };
@@ -338,9 +372,6 @@ var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
         await handleProgressCheck();
 
         async function handleProgressCheck() {
-
-            // https://changenow.io/exchange/txs/b3c25544d5a034
-
 
             const data = await $scope.changeNow.transactionStatus($scope.orderResult.id);
 
@@ -542,6 +573,24 @@ var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
     async function main() {
 
 
+        Object.assign($scope, {
+            errorCount: 0,
+            ethCoins,
+            availableCoins: [],
+            parentTxConfig: {},
+            showedMinMaxError: false,
+            changeNow: new changeNow(),
+            priceTicker,
+            stage: 1,
+            orderResult: null,
+            progressCheck: null,
+            input: {
+                toCoin: '',
+                fromCoin: '',
+            }
+        });
+
+
         if (isStorageOrderExists()) {
 
             $scope.stage = 3;
@@ -554,8 +603,6 @@ var swapCtrl = function ($scope, $rootScope, $interval, walletService) {
             initValues();
             await $scope.initChangeNow();
 
-            const isFrom = false;
-            await $scope.setOrderCoin(isFrom, 'btc');
         }
 
 

@@ -46,7 +46,7 @@ function onSuccess(msg) {
     return {
         message: msg + " Complete! ",
         //sound:     "Pop",
-        icon: app + "images/icons/icon48.png",
+        icon: app + "images/logo-etc.png",
         onLast: true
     }
 }
@@ -83,16 +83,7 @@ let less_destFileMin = 'etherwallet-master.min.css';
 gulp.task('styles', function () {
 
 
-    function compileCryptoIcons() {
 
-        gulp.src(path.join(__dirname, 'node_modules', 'crypto-icons/**'))
-            .pipe(gulp.dest(path.join(less_destFolder, 'crypto-icons')))
-            .pipe(gulp.dest(path.join(less_destFolder_CX, 'crypto-icons')))
-
-
-    }
-
-    compileCryptoIcons();
 
 
     return gulp.src(less_srcFile)
@@ -100,8 +91,6 @@ gulp.task('styles', function () {
         .pipe(less({compress: false}))
         .pipe(autoprefixer({browsers: ['last 4 versions', 'iOS > 7'], remove: false}))
         .pipe(rename(less_destFile))
-        //.pipe( gulp.dest   (  less_destFolder                                         )) // unminified css
-        //.pipe( gulp.dest   (  less_destFolder_CX                                      )) // unminified css
         .pipe(cssnano({autoprefixer: false, safe: true}))
         .pipe(rename(less_destFileMin))
         .pipe(gulp.dest(less_destFolder))
@@ -214,6 +203,11 @@ gulp.task('copy', ['staticJS'], function () {
 
     gulp.src(bin)
         .pipe(gulp.dest(dist + 'bin'));
+
+    gulp.src(path.join(__dirname, 'node_modules', 'crypto-icons', '**'))
+        .pipe(gulp.dest(path.join(dist, 'css', 'crypto-icons')))
+        .pipe(gulp.dest(path.join(dist_CX, 'css', 'crypto-icons')))
+
 
     return gulp.src(cxSrcFiles)
         .pipe(gulp.dest(dist_CX + 'browser_action'))
@@ -392,6 +386,9 @@ gulp.task('pushlive', ['getVersion'], function () {
 // gulp commit
 // git push --tags
 // gulp pushlive ( git subtree push --prefix dist origin gh-pages )
+
+
+
 
 gulp.task('watchJS', function () {
     gulp.watch(js_watchFolder, ['js'])

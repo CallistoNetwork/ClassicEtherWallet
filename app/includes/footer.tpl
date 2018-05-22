@@ -34,15 +34,15 @@
             </p>
 
             <h5><i aria-hidden="true">👫</i> You can support us by supporting our blockchain-family.</h5>
-            <p><a aria-label="Swap Ether or Bitcoin via Bity.com" href="https://bity.com/af/jshkb37v" target="_blank"
-                  rel="noopener">Swap ETH/BTC/EUR/CHF via Bity.com</a></p>
+            <p><a
+                    aria-label="Swap Ether or Bitcoin via Change Now.com"
+                    href="{{changeNow.affiliateLink}}" target="_blank"
+                    rel="noopener">Swap via Change Now.com</a>
+            </p>
             <p><a href="https://www.ledgerwallet.com/r/fa4b?path=/products/" target="_blank" rel="noopener">Buy a Ledger
                 Wallet</a></p>
             <p><a href="https://trezor.io/?a=myetherwallet.com" target="_blank" rel="noopener">Buy a TREZOR</a></p>
             <p><a href="https://digitalbitbox.com/?ref=mew" target="_blank" rel="noopener">Buy a Digital Bitbox</a></p>
-            <!--
-            <p>MYD: <span class="mono wrap">mewsupport.eth <small>0xf7e983781609012307f2514f63D526D83D24F466</small></span></p>
-            -->
             <h5 ng-hide="curLang=='en'"><i>🏅</i> <span
                     translate="Translator_Desc"> Thank you to our translators </span></h5>
             <p ng-hide="curLang=='en'">

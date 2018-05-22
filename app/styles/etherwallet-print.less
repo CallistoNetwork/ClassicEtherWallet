@@ -1,9 +1,20 @@
 /* Print Etherwallet Page */
+
+.brand-etc {
+
+  color: @brand-etc;
+}
+
 .print-container {
+  a {
+
+    color: @brand-etc;
+  }
+
   width: 680px;
   height: 280px;
   border: 1px solid gray;
-  margin-bottom: 50px;
+  margin: 50px auto;
   position: relative;
   #identicon {
     -webkit-print-color-adjust: exact;
@@ -22,11 +33,18 @@
   }
 }
 
+@media all and (max-width: 476px) {
+
+  .print-container {
+
+    margin: 25px auto;
+  }
+}
+
 .print-title {
   float: left;
   height: 100%;
 }
-
 
 .print-text {
   color: darken(@brand-etc, 10%);

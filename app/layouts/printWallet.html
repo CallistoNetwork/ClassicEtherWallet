@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>classicetherwallet.com</title>
+    <link rel="shortcut icon" href="images/fav/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="ClassicEtherWallet">
+    <meta name="application-name" content="ClassicEtherWallet">
+    <meta name="theme-color" content="#1d6986">
+    <link rel="stylesheet" href="css/etherwallet-master.min.css"/>
+
+    <link rel="stylesheet" href="css/crypto-icons/font.css">
+    <link rel="stylesheet" href="css/crypto-icons/styles.css">
+
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/etherwallet-static.min.js"></script>
+
+</head>
+<body class="container">
+
+
+<span id="printwalletjson" style="display: none;">{{WALLETJSON}}</span>
+
+
+<div class="print-container" style="display: none;" id="print-container">
+    <img src="images/logo-ethereum-1.png" class="ether-logo-1" height="100%" width="auto"/>
+    <div id="identicon" class="addressIdenticon med float"></div>
+    <img src="images/print-sidebar.png" height="100%" width="auto" class="print-title"/>
+    <div class="print-qr-code-1">
+        <div id="paperwalletaddqr"></div>
+        <p class="print-text" style="padding-top: 25px;">YOUR ADDRESS
+        </p>
+    </div>
+    <div class="print-notes"><img src="images/notes-bg.png" width="90%" height="auto" class="pull-left"/>
+        <p class="print-text">AMOUNT / NOTES
+        </p>
+    </div>
+    <div class="print-qr-code-2">
+        <div id="paperwalletprivqr"></div>
+        <p class="print-text" style="padding-top: 30px;">YOUR PRIVATE KEY
+        </p>
+    </div>
+    <div class="print-address-container"><p><strong >Your Address:</strong> <br/><span
+            id="paperwalletadd"></span>
+    </p>
+        <p><strong class="text-danger">Your Private Key:</strong> <br/><span id="paperwalletpriv"></span>
+        </p>
+    </div>
+</div>
+
+<script type="text/javascript"> function getBlockie(address) {
+    return blockies.create({seed: address.toLowerCase(), size: 8, scale: 16}).toDataURL();
+}
+
+function generateWallets() {
+    var json = JSON.parse($("#printwalletjson").html());
+    for (var i = 0; i < json.length; i++) {
+        var walletTemplate = $('<section/>').append($("#print-container").clone());
+        new QRCode($(walletTemplate).find("#paperwalletaddqr")[0], {
+            text: json[i]['address'],
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        new QRCode($(walletTemplate).find("#paperwalletprivqr")[0], {
+            text: json[i]['private'],
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        $(walletTemplate).find("#paperwalletadd").html(json[i]['address']);
+        $(walletTemplate).find("#paperwalletpriv").html(json[i]['private']);
+        $(walletTemplate).find("#identicon").css('background-image', 'url(' + getBlockie(json[i]['address']) + ')');
+        walletTemplate = $(walletTemplate).find("#print-container").show();
+
+
+        const section = document.createElement('section');
+
+        section.id = 'cew_wallet_section';
+
+        section.className = 'block';
+
+        $('body').append(section);
+
+        $('#cew_wallet_section').append(walletTemplate);
+
+        //$("body").append(walletTemplate);
+    }
+
+
+    generateText();
+
+    setTimeout(function () {
+        window.print();
+    }, 2000);
+
+
+}
+
+
+function generateText() {
+
+    const text = `
+    <section class="block">
+            <ol class="list-group">
+            <h4>Directions:</h4>
+            <li class="list-group-item">
+
+
+                Open <a href="https://classicetherwallet.com">https://classicetherwallet.com</a>
+                and  navigate to <a href="https://classicetherwallet.com/#send-transaction">
+                Send Ether & Tokens
+                </a>
+            </li>
+
+            <li class="list-group-item">
+
+                Unlock Wallet Via:
+                <ul>
+                <li>
+                Keystore file:
+                </li>
+                <li>
+                Private key
+                </li>
+                </ul>
+
+            </li>
+            <li class="list-group-item">
+                Send or Recieve from Ethereum Addresses
+                <ul>
+                <b>Note:</b>
+                Your Ethereum ERC-20 compatible wallet address can recieve
+                <span class="icon icon-etc">ETC</span>,
+                <span class="icon icon-clo">CLO</span>,
+             <span class="icon icon-etc">ETH</span>
+
+             or interact with ERC-20 tokens and other contracts i.e.
+             <span class="icon icon-etc">EOS</span>
+</ul>
+
+            </li>
+        </ol>
+            <img src="images/logo-ethereum-1.png" class="ether-logo-1" height="100%" width="auto"/>
+            <h4>Wallet Description:</h4>
+
+            <p>
+                An Ethereum wallet is as simple as a single pairing of a Ethereum address with its corresponding
+                Ethereum
+                private
+                key.
+
+                 Your Address can also be known as you Account # or your Public Key. It is what you share with people so they can send you Ether or Tokens. Find the colorful address icon. Make sure it matches your paper wallet & whenever you enter your address somewhere.
+
+
+            </p>
+
+            <p>
+                To safeguard this wallet, we have generated a password protected file. It is important to make
+                a backup copy of the private key and store it in a safe location. This site does not have knowledge of
+                your
+                private
+                key.
+            </p>
+
+
+            <p>
+                If you leave/refresh the site or Generate new Address then a new private key will be generated and the previously displayed private key will
+                not be
+                retrievable. Your Ethereum private key should be kept a secret. Whomever you share the private key with
+                has
+                access
+                to
+                spend all the ethers associated with that address. If you print your wallet then store it in a zip
+                lock bag to
+                keep it
+                safe from water. Treat a paper wallet like cash.
+            </p>
+
+            <p>Add funds to this wallet by instructing others to send ether or tokens to your Ethereum address.
+             </p>
+
+            <p>Check your balance by going to <a target="_blank" rel="noopener noreferrer" href='https://classicetherwallet.com'>https://classicetherwallet.com</a> and enter your Ethereum address.</p>
+
+            <p>
+                Spend your ether or tokens by going to <a target="_blank" rel="noopener noreferrer" href='https://classicetherwallet.com'>https://classicetherwallet.com</a>
+                their website. You can also spend your funds by downloading one of the popular ethereum p2p clients and
+                importing
+                your
+                private key to the p2p client wallet.
+            </p>
+
+            <p>
+                Keep in mind when you import your single key to a ethereum p2p client and spend
+                funds your key will be bundled with other private keys in the p2p client wallet. When you perform a
+                transaction
+                your
+                change will be sent to another ethereum address within the p2p client wallet. You must then backup the
+                p2p client
+                wallet
+                and keep it safe as your remaining ether or tokens will be stored there.
+            </p>
+    </section>`;
+
+
+    $("body").append(text);
+
+
+}
+
+
+</script>
+</body>
+</html>

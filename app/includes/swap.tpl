@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    <section class="bity-contact text-center">
+    <section class="changenow-contact text-center">
         <p><a class="btn-warning btn-sm"
               href={{mailHref()}}
               target="_blank" rel="noopener"> Issue with your Swap? Contact support</a></p>

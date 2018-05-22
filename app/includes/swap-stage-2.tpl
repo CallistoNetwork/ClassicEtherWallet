@@ -44,8 +44,13 @@
                 <div class="col-sm-8 col-sm-offset-2">
 
 
-                    <label><span translate="SWAP_rec_add">Your Receiving Address</span>
-                        <strong>({{swapOrder.toCoin}})</strong></label>
+                    <label>
+                        <span translate="SWAP_rec_add">Your Receiving Address</span>
+                        <strong>
+                            (<span class="{{'icon icon-' + swapOrder.toCoin.toLowerCase()}}"></span>
+                            {{swapOrder.toCoin.toUpperCase()}})
+                        </strong>
+                    </label>
 
 
                     <div ng-switch="ethCoins.includes(swapOrder.toCoin.toUpperCase())">
@@ -72,8 +77,9 @@
 
                                 <input class="form-control"
                                        type="text"
+                                       required
                                        ng-switch-default
-                                       placeholder="1MEWT2SGbqtz6mPCgFcnea8XmWV5Z4Wc6"
+                                       placeholder="{{'type ' + swapOrder.toCoin + ' address'}}"
                                        ng-model="swapOrder.toAddress"
                                 />
 

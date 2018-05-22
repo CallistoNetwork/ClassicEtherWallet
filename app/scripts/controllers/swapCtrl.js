@@ -13,11 +13,11 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
     const popularCoins = ['ETC', 'CLO', 'BTC', 'XMR', 'ZEC'];
 
     //fixme
-    const ethCoins = ['ETC', 'ETH', 'UBQ', 'CLO'];
 
+    const ethCoins = Object.keys(nodes.alternativeBalance).concat('CLO');
 
     // priceTicker in page header
-    const priceTickers = ['ETC'];
+    const priceTickers = ['ETC', 'CLO', 'ETH'];
 
 
     let priceTicker = {};

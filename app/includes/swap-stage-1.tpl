@@ -11,7 +11,8 @@
     <section class="row order-panel">
         <div class="col-sm-4 order-info">
             <p class="mono">
-                <input class="form-control input-sm" ng-value="priceTicker.ETCBTC | number: 6" style="padding: 0;"/>
+                <input class="form-control input-sm" ng-value="priceTicker.ETCBTC | number: 6"
+                       style="min-width: 100px; padding: 0;"/>
                 <span>ETC = 1 BTC</span>
             </p>
         </div>
@@ -25,7 +26,8 @@
         </div>
         <div class="col-sm-4 order-info">
             <p class="mono">
-                <input class="form-control input-sm" ng-value="priceTicker.BTCETC | number:6" style="padding: 0;"/>
+                <input class="form-control input-sm" ng-value="priceTicker.BTCETC | number:6"
+                       style="min-width: 100px; padding: 0;"/>
                 <span>BTC = 1 ETC</span>
             </p>
         </div>
@@ -50,7 +52,7 @@
            ng-change="updateEstimate(true)"
            placeholder="{{ 'SEND_amount_short' | translate }}"
            ng-model="swapOrder.fromVal"
-           ng-model-options="{ debounce: 500 }"
+           ng-model-options="{ debounce: 750 }"
            ng-class="Validator.isPositiveNumber(swapOrder.fromVal) ? 'is-valid' : 'is-invalid'"
     />
 
@@ -58,8 +60,10 @@
     <span class="dropdown">
     <a class="btn btn-default dropdown-toggle" ng-click="toggleDropdown(true)">
 
-        {{swapOrder.fromCoin.toUpperCase()}}<i
-            class="caret"></i></a>
+    <span class="{{'icon icon-'  + swapOrder.fromCoin.toLowerCase()}}"></span>
+        {{swapOrder.fromCoin.toUpperCase()}}
+        <i class="caret"></i>
+    </a>
     <ul class="dropdown-menu dropdown-menu-right list-group"
         ng-show="dropdownFrom"
         style="max-height: 300px; overflow-y: scroll;"
@@ -68,10 +72,12 @@
     <form ng-submit="handleSubmit(true)">
                 <input
                         autofocus
+                        autocomplete="off"
                         id="fromCoin"
                         class="form-control-sm"
                         ng-model="input.fromCoin"
-                        placeholder="type a currency"/>
+                        placeholder="type a currency"
+                />
          <input hidden type="submit"/>
 
     </form>
@@ -87,11 +93,12 @@
     justify-content: center;
     align-items: center;
 ">
-                <div class="col-xs-4 text-center" style="padding: 5px;">
+               <div class="{{'col-xs-4 col-sm-6 text-center icon icon-' + coin.ticker.toLowerCase()}}"
+                    style="padding: 5px;"
 
-            <img src="{{coin.image}}" alt="" style="width: 36px; height: 36px;"/>
-            </div>
-            <div class="col-xs-8">
+               >
+               </div>
+            <div class="col-xs-8 col-sm-6" style="padding: 5px;">
 
             {{coin.ticker.toUpperCase()}}
             </div>
@@ -107,15 +114,23 @@
     <input class="form-control"
            placeholder="{{ 'SEND_amount_short' | translate }}"
            ng-change="updateEstimate(false)"
-           ng-model-options="{ debounce: 500 }"
+           ng-model-options="{ debounce: 750 }"
            ng-model="swapOrder.toVal"
            ng-class="Validator.isPositiveNumber(swapOrder.toVal) ? 'is-valid' : 'is-invalid'"
     />
 
 
     <div class="dropdown">
-        <a class="btn btn-default dropdown-toggle" ng-click="toggleDropdown(false)">{{swapOrder.toCoin.toUpperCase()}}<i
-                class="caret"></i></a>
+        <a class="btn btn-default dropdown-toggle" ng-click="toggleDropdown(false)">
+
+
+            <span class="{{'icon icon-'  + swapOrder.toCoin.toLowerCase()}}"></span>
+
+            {{swapOrder.toCoin.toUpperCase()}}
+
+            <i class="caret"></i>
+
+        </a>
 
 
         <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownTo"
@@ -125,6 +140,7 @@
                     <input
                             class="form-control-sm"
                             id="toCoin"
+                            autocomplete="off"
                             autofocus
                             ng-model="input.toCoin" placeholder="type a currency"/>
                     <input type="submit" hidden/>
@@ -142,9 +158,8 @@
     justify-content: center;
     align-items: center;
 ">
-                        <div class="col-xs-4 text-center" style="padding: 5px;">
-
-                            <img src="{{coin.image}}" alt="" style="width: 36px; height: 36px;"/>
+                        <div class="{{'col-xs-4 text-center icon icon-' + coin.ticker.toLowerCase()}}"
+                             style="padding: 5px;">
                         </div>
                         <div class="col-xs-8">
 

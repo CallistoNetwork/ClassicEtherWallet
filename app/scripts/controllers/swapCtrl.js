@@ -13,11 +13,11 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
     const popularCoins = ['ETC', 'CLO', 'BTC', 'XMR', 'ZEC'];
 
     //fixme
-    const ethCoins = ['ETC', 'ETH', 'UBQ', 'CLO'];
 
+    const ethCoins = Object.keys(nodes.alternativeBalance).concat('CLO');
 
     // priceTicker in page header
-    const priceTickers = ['ETC'];
+    const priceTickers = ['ETC', 'CLO', 'ETH'];
 
 
     let priceTicker = {};
@@ -49,16 +49,19 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
     };
 
 
-    $scope.mailHref = () => `mailto:support@changenow.io,support@classicetherwallet.com?
-    Subject=${$scope.orderResult.reference} - Issue regarding my Swap via classicetherwallet.com 
-    &Body=${encodeURIComponent(`
-            Please include the below if this issue is regarding your order. 
+    $scope.TEXT = () => `
+            Please include the below if this issue is regarding your order:\n
+            
             REF ID: ${$scope.orderResult.reference} 
             Amount to send: ${$scope.orderResult.expectedSendAmount || $scope.swapOrder.fromVal}  ${$scope.orderResult.fromCurrency || $scope.swapOrder.fromCoin} 
-            Amount to receive: ${$scope.orderResult.expectedReceiveAmount || $scope.swapOrder.toVal}  ${$scope.orderResult.toCurrency || $scope.swapOrder.coin} 
+            Amount to receive: ${$scope.orderResult.expectedReceiveAmount || $scope.swapOrder.toVal}  ${$scope.orderResult.toCurrency || $scope.swapOrder.toCoin} 
             Payment Address: ${$scope.orderResult.payinAddress}
             Payout Address: ${$scope.orderResult.payoutAddress}
-        `)}
+        `;
+
+    $scope.mailHref = () => `mailto:support@changenow.io,support@classicetherwallet.com?
+    Subject=${$scope.orderResult.reference} - Issue regarding my Swap via classicetherwallet.com 
+    &Body=${encodeURIComponent($scope.TEXT())}
     `;
 
 
@@ -116,16 +119,29 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
 
         Object.assign($scope, {
             stage: 1,
+            swapIssue: false,
+            ethCoins,
+            availableCoins: [],
+            parentTxConfig: {},
+            showedMinMaxError: false,
+            changeNow: new changeNow(),
+            priceTicker,
+            progressCheck: null,
+            input: {
+                toCoin: '',
+                fromCoin: '',
+            },
             orderResult: {
-                "status": null,
-                "payinAddress": null,
-                "payoutAddress": null,
-                "fromCurrency": null,
-                "toCurrency": null,
-                "id": null,
-                "updatedAt": null,
-                "expectedSendAmount": null,
-                "expectedReceiveAmount": null,
+                status: null,
+                payinAddress: null,
+                payoutAddress: null,
+                fromCurrency: null,
+                reference: null,
+                toCurrency: null,
+                id: null,
+                updatedAt: null,
+                expectedSendAmount: null,
+                expectedReceiveAmount: null,
                 progress: {
                     status: null,
                     bar: null//getProgressBarArr(4, 5),
@@ -538,7 +554,7 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
             const orderResult = await $scope.changeNow.openOrder(order);
 
 
-            if (orderResult && orderResult.payoutAddress === order.address) {
+            if (orderResult) {
 
 
                 $scope.$apply(function () {
@@ -598,35 +614,17 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
 
     async function main() {
 
-
-        Object.assign($scope, {
-            errorCount: 0,
-            ethCoins,
-            availableCoins: [],
-            parentTxConfig: {},
-            showedMinMaxError: false,
-            changeNow: new changeNow(),
-            priceTicker,
-            stage: 1,
-            orderResult: null,
-            progressCheck: null,
-            input: {
-                toCoin: '',
-                fromCoin: '',
-            }
-        });
-
+        initValues();
 
         if (isStorageOrderExists()) {
 
-            $scope.stage = 3;
             setOrderFromStorage();
+            $scope.stage = 3;
             await $scope.processOrder();
 
 
         } else {
 
-            initValues();
             await $scope.initChangeNow();
 
         }
@@ -634,8 +632,6 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
 
     }
 
-    main().finally(() => {
-
-    });
+    main();
 };
 module.exports = swapCtrl;

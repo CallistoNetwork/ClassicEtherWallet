@@ -26,7 +26,7 @@ globalFuncs.getBlockie = function (address) {
 globalFuncs.printPaperWallets = function (strJson, encFileName) {
 
 
-    var walletWindow = window.open("wallet", "_blank", "innerHeight = 320, innerWidth = 760, status = 1, resizable = 1");
+    var walletWindow = window.open("wallet", "_blank", "innerHeight = 360, innerWidth = 760, status = 1, resizable = 1");
     let data = require('../layouts/printWallet.html')
         .replace("{{WALLETJSON}}", strJson);
 

@@ -7,7 +7,7 @@
         </p>
     </div>
 </section>
-<footer class="footer" role="content" aria-label="footer" ng-controller='footerCtrl'>
+<footer class="footer {{curNode.type}}" role="content" aria-label="footer" ng-controller='footerCtrl'>
     <article class="block__wrap" style="max-width: 1780px; margin: auto;">
         <section class="footer--left">
             <span>Version: 3.11.4</span>
@@ -53,7 +53,7 @@
                 <span translate="TranslatorName_5"></span>
             </p>
         </section>
-        <section class="footer--righ">
+        <section class="footer--righ brand-primary">
 
             <div class="footer-branding">
 

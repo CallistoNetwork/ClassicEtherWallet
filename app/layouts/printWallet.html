@@ -40,7 +40,7 @@
         <p class="print-text" style="padding-top: 30px;">YOUR PRIVATE KEY
         </p>
     </div>
-    <div class="print-address-container"><p><strong >Your Address:</strong> <br/><span
+    <div class="print-address-container"><p><strong>Your Address:</strong> <br/><span
             id="paperwalletadd"></span>
     </p>
         <p><strong class="text-danger">Your Private Key:</strong> <br/><span id="paperwalletpriv"></span>
@@ -78,21 +78,14 @@ function generateWallets() {
 
         section.id = 'cew_wallet_section';
 
-        section.className = 'block';
+        section.className = 'border_section';
+
 
         $('body').append(section);
 
         $('#cew_wallet_section').append(walletTemplate);
 
-        //$("body").append(walletTemplate);
     }
-
-
-    generateText();
-
-    setTimeout(function () {
-        window.print();
-    }, 2000);
 
 
 }
@@ -101,111 +94,87 @@ function generateWallets() {
 function generateText() {
 
     const text = `
-    <section class="block">
+
+
+           <b>Send Ether and Tokens from ERC-20 Compatible Wallet:</b>
             <ol class="list-group">
-            <h4>Directions:</h4>
-            <li class="list-group-item">
-
-
+                <li class="list-group-item">
                 Open <a href="https://classicetherwallet.com">https://classicetherwallet.com</a>
-                and  navigate to <a href="https://classicetherwallet.com/#send-transaction">
-                Send Ether & Tokens
-                </a>
-            </li>
-
-            <li class="list-group-item">
-
-                Unlock Wallet Via:
-                <ul>
-                <li>
-                Keystore file:
+                and  navigate to <a href="https://classicetherwallet.com/#send-transaction">Send Ether &amp; Tokens</a>
                 </li>
-                <li>
-                Private key
-                </li>
-                </ul>
+                <li class="list-group-item">Unlock Wallet via keyfile and password or private key</li>
+            </ol>
 
-            </li>
-            <li class="list-group-item">
-                Send or Recieve from Ethereum Addresses
-                <ul>
-                <b>Note:</b>
-                Your Ethereum ERC-20 compatible wallet address can recieve
-                <span class="icon icon-etc">ETC</span>,
-                <span class="icon icon-clo">CLO</span>,
-             <span class="icon icon-etc">ETH</span>
-
-             or interact with ERC-20 tokens and other contracts i.e.
-             <span class="icon icon-etc">EOS</span>
-</ul>
-
-            </li>
-        </ol>
+            <b>Wallet Description:</b>
             <img src="images/logo-ethereum-1.png" class="ether-logo-1" height="100%" width="auto"/>
-            <h4>Wallet Description:</h4>
 
-            <p>
-                An Ethereum wallet is as simple as a single pairing of a Ethereum address with its corresponding
-                Ethereum
-                private
-                key.
+            <div>
+            <style>
+                .flexer {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-around;
+                    font-size: 1.3rem;
+                    padding: 15px 0;
+                }
+            </style>
 
-                 Your Address can also be known as you Account # or your Public Key. It is what you share with people so they can send you Ether or Tokens. Find the colorful address icon. Make sure it matches your paper wallet & whenever you enter your address somewhere.
+            <p>An Ethereum wallet is as simple as a single pairing of a Ethereum address with its corresponding Ethereum private
+                key.</p>
+            <p>Your <b>Address</b> (Account # or your Public Key) is what you share to receive transactions.
+                Find the colorful address icon. Make sure it matches your paper wallet whenever you enter
+                your address somewhere.</p>
+            <p>Your address is valid on all networks that share the same account generation algorithm<strong>(including but not limited to):</strong></p>
+            <div class="flexer">
 
+                <span class="icon icon-etc">ETC</span>
 
+                <span class="icon icon-clo">CLO</span>
+
+                <span class="icon icon-eth">ETH</span>
+
+                <span class="icon icon-exp">EXP</span>
+
+                <span class="icon icon-ubq">UBQ</span>
+
+                <span class="icon icon-etz">ETZ</span>
+
+                <span class="icon icon-etsc">ETSC</span>
+            </div>
+
+            <p>Keep your <b>Private Key </b>(keyfile, wallet file, UTC file) and password safe. If someone gets hold of your private
+                key they have access to all the assets on all networks that share
+                the same algorithm</p>
+
+            <p>An encrypted, password protected JSON file was generated and downloaded. Please ensure it is stored safely.
+                If you lose your private key or file / password, the account cannot be recovered.
             </p>
 
-            <p>
-                To safeguard this wallet, we have generated a password protected file. It is important to make
-                a backup copy of the private key and store it in a safe location. This site does not have knowledge of
-                your
-                private
-                key.
-            </p>
+            <p>This site does not have knowledge of your private key.
+                If you leave / refresh the site or generate a New Wallet, then a new private key will be generated and the
+                previously
+                displayed private key will not be retrievable.
+                Store paper wallet it in a zip lock bag to keep it safe from water, treat a paper wallet like cash!</p>
 
 
-            <p>
-                If you leave/refresh the site or Generate new Address then a new private key will be generated and the previously displayed private key will
-                not be
-                retrievable. Your Ethereum private key should be kept a secret. Whomever you share the private key with
-                has
-                access
-                to
-                spend all the ethers associated with that address. If you print your wallet then store it in a zip
-                lock bag to
-                keep it
-                safe from water. Treat a paper wallet like cash.
-            </p>
-
-            <p>Add funds to this wallet by instructing others to send ether or tokens to your Ethereum address.
-             </p>
-
-            <p>Check your balance by going to <a target="_blank" rel="noopener noreferrer" href='https://classicetherwallet.com'>https://classicetherwallet.com</a> and enter your Ethereum address.</p>
-
-            <p>
-                Spend your ether or tokens by going to <a target="_blank" rel="noopener noreferrer" href='https://classicetherwallet.com'>https://classicetherwallet.com</a>
-                their website. You can also spend your funds by downloading one of the popular ethereum p2p clients and
-                importing
-                your
-                private key to the p2p client wallet.
-            </p>
-
-            <p>
-                Keep in mind when you import your single key to a ethereum p2p client and spend
-                funds your key will be bundled with other private keys in the p2p client wallet. When you perform a
-                transaction
-                your
-                change will be sent to another ethereum address within the p2p client wallet. You must then backup the
-                p2p client
-                wallet
-                and keep it safe as your remaining ether or tokens will be stored there.
-            </p>
-    </section>`;
+</div>
+`;
 
 
     $("body").append(text);
 
 
+}
+
+
+function main() {
+    generateWallets();
+
+    generateText();
+
+    setTimeout(function () {
+        window.print();
+    }, 2000);
 }
 
 

@@ -24,14 +24,15 @@ globalFuncs.getBlockie = function (address) {
     }).toDataURL();
 };
 globalFuncs.printPaperWallets = function (strJson, encFileName) {
-    var win = window.open("about:blank", "_blank");
 
+
+    var walletWindow = window.open("wallet", "_blank", "innerHeight = 320, innerWidth = 760, status = 1, resizable = 1");
     let data = require('../layouts/printWallet.html')
-        .replace("{{WALLETJSON}}", strJson)
-        .replace(new RegExp('{{encFileName}}', 'g'), encFileName)
+        .replace("{{WALLETJSON}}", strJson);
 
-    win.document.write(data);
-    win.document.write("<script>generateWallets();</script>");
+    walletWindow.document.write(data);
+
+    walletWindow.document.write('<script type="text/javascript">main();</script>');
 };
 globalFuncs.getBlob = function (mime, str) {
     var str = (typeof str === 'object') ? JSON.stringify(str) : str;

@@ -61,42 +61,6 @@
         <h5>Messages:</h5>
         <messages-overview-drtv></messages-overview-drtv>
 
-
-        <!--<a href="{{changeNow.affiliateLink}}"-->
-        <!--ng-switch-default-->
-        <!--class="block swap&#45;&#45;btc ad-wrapper"-->
-        <!--target="_blank" rel="noopener">-->
-        <!--<div class="col-sm-7">-->
-
-
-        <!--<h6 class="swap__cta" ng-show="wallet.balance<=1">Buy ETC at ChangeNow anonymous exchange</h6>-->
-
-        <!--<p class="swap__subhead" ng-show="wallet.balance<50 && wallet.balance>1">Do you know where to buy-->
-        <!--ETC?</p>-->
-        <!--<h6 class="swap__cta" ng-show="wallet.balance<50 && wallet.balance>1">ChangeNow crypto exchange - -->
-        <!--try it-->
-        <!--now.</h6>-->
-
-        <!--<p class="swap__subhead" ng-show="wallet.balance>=50">Want to buy ETC?</p>-->
-        <!--<h6 class="swap__cta" ng-show="wallet.balance>=50">Trade on ChangeNow crypto exchange.</h6>-->
-        <!--</div>-->
-
-        <!--<div class="col-sm-5">-->
-        <!--<button class="btn exchange-now-green btn-sm">change <br/>NOW</button>-->
-        <!--</div>-->
-        <!--</a>-->
-        <a ng-show="slide === 2" class="block swap--hw ad-wrapper">
-            <div class="col-sm-7">
-                <h6>Learn more about protecting your funds.</h6>
-            </div>
-            <div class="col-sm-5">
-                <img src="images/logo-ledger.svg" width="80" height="auto" class="swap__logo">
-                <br/>
-                <img src="images/logo-trezor.svg" width="80" height="auto" class="swap__logo">
-            </div>
-        </a>
-
-
         <a
 
                 ng-click="globalService.currentTab = globalService.tabs.swap.id"
@@ -113,25 +77,38 @@
             <div class="col-sm-5">
 
 
-                <button class="btn exchange-now-green btn-sm">change <br/>NOW</button>
+                <button class="btn change-now-btn">
+
+                </button>
             </div>
 
         </a>
 
+        <a ng-show="slide === 2" class="block swap--hw ad-wrapper">
+            <div class="col-sm-7">
+                <h6>Learn more about protecting your funds.</h6>
+            </div>
+            <div class="col-sm-5">
+                <img src="images/logo-ledger.svg" width="80" height="auto" class="swap__logo">
+                <br/>
+                <img src="images/logo-trezor.svg" width="80" height="auto" class="swap__logo">
+            </div>
+        </a>
+
 
         <a href="https://buy.coinbase.com?code=a6e1bd98-6464-5552-84dd-b27f0388ac7d&address={{wallet.getChecksumAddressString()}}&crypto_currency=ETH&currency=USD"
-        ng-show="slide===3"
-        class="block swap--usd ad-wrapper"
-        target="_blank" rel="noopener">
-        <div class="col-sm-7">
-        <p class="swap__subhead" ng-show="wallet.balance<=0">Aw...you don't have any ETH</p>
-        <p class="swap__subhead" ng-show="wallet.balance>0">It's now easier to get more ETH</p>
-        <h5 class="swap__cta">Buy ETH with USD</h5>
-        </div>
-        <div class="col-sm-5">
-        <img src="images/logo-coinbase.svg" width="64" height="auto" class="swap__logo">
-        <p class="swap-flag--price">1 ETH ≈ <br/> {{wallet.usdPrice}} USD</p>
-        </div>
+           ng-show="slide===3"
+           class="block swap--usd ad-wrapper"
+           target="_blank" rel="noopener">
+            <div class="col-sm-7">
+                <p class="swap__subhead" ng-show="wallet.balance<=0">Aw...you don't have any ETH</p>
+                <p class="swap__subhead" ng-show="wallet.balance>0">It's now easier to get more ETH</p>
+                <h5 class="swap__cta">Buy ETH with USD</h5>
+            </div>
+            <div class="col-sm-5">
+                <img src="images/logo-coinbase.svg" width="64" height="auto" class="swap__logo">
+                <p class="swap-flag--price">1 ETH ≈ <br/> {{wallet.usdPrice}} USD</p>
+            </div>
         </a>
 
 

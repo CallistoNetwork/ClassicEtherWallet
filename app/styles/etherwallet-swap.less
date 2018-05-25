@@ -1,5 +1,41 @@
 .swap-tab {
 
+  .overflow-text {
+
+    text-overflow: ellipsis;
+  }
+
+  .flex-center {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .form-small-pd {
+
+    padding: 2px;
+    margin: 0;
+  }
+
+  .text-lg {
+
+    font-size: @font-size-large;
+  }
+  .swap_dropdown {
+    height: calc(50vh - 15px);
+    min-height: 100px;
+    max-height: 500px;
+    overflow-y: scroll;
+    width: calc(100vw - 30px);
+    max-width: 400px;
+    padding: 10px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+    border-radius: 4px;
+    font-size: @font-size-medium;
+  }
+
   a.link, a.link:hover {
     transition: none;
   }
@@ -16,7 +52,7 @@
   .swap-rates {
     text-align: center;
     .order-panel {
-      background: linear-gradient(150deg, @ether-blue, @ether-navy);
+      background: linear-gradient(150deg, @brand-etc, @brand-etc-dark);
       position: relative;
       .changenow-logo {
         position: absolute;
@@ -75,7 +111,7 @@
       margin: @space-lg @space-sm;
       vertical-align: middle;
     }
-    .form-control {
+    .width_10_rem {
       width: 10rem;
       margin-right: 0;
     }

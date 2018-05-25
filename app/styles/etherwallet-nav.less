@@ -2,6 +2,7 @@
 .header-branding {
   color: white;
   padding: 0;
+
   @media screen and (max-width: 900px) {
     text-align: center;
   }
@@ -68,11 +69,15 @@
       }
     }
   }
-  .dropdown-toggle { font-size: 14px; padding: .4rem 1rem; min-width: 100%; }
+  .dropdown-toggle {
+    font-size: 14px;
+    padding: .4rem 1rem;
+    min-width: 100%;
+  }
   .dropdown-gas {
     display: inline-block;
     width: 200px;
-    .dropdown-menu{
+    .dropdown-menu {
       min-width: 100%;
       padding: .5rem;
       margin: 0;
@@ -96,6 +101,10 @@
   position: relative;
   overflow-y: hidden;
 
+  background: #fff; //@navbar-default-bg;
+  transition: border .3s ease;
+  border-bottom: 1px solid @navbar-default-border;
+
   .nav-scroll {
     -ms-overflow-style: -ms-autohiding-scrollbar;
     -webkit-overflow-scrolling: touch;
@@ -118,7 +127,7 @@
         display: inline-block;
         font-size: 0;
         &.NAV_Swap a:before {
-          content:"";
+          content: "";
           display: inline-block;
           margin-top: -.1rem;
           width: 1.3rem;
@@ -144,7 +153,8 @@
           content: "";
           background: @brand-primary;
           height: 2px;
-          width: 100%; left: 0px;
+          width: 100%;
+          left: 0px;
           position: absolute;
           bottom: -1px;
           transition: all 250ms ease 0s;
@@ -184,7 +194,7 @@
   }
   .nav-arrow-right {
     right: 3%;
-    background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 47%,rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 47%, rgba(255, 255, 255, 1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     padding-right: 5px;
     text-align: right;
     @media screen and (max-width: @screen-sm) {
@@ -193,7 +203,7 @@
   }
   .nav-arrow-left {
     left: 3%;
-    background: linear-gradient(to left, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 47%,rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    background: linear-gradient(to left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 47%, rgba(255, 255, 255, 1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     padding-left: 5px;
     text-align: left;
     @media screen and (max-width: @screen-sm) {

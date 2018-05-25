@@ -61,65 +61,84 @@
         <h5>Messages:</h5>
         <messages-overview-drtv></messages-overview-drtv>
 
-        <a href="https://changenow.io/?utm_source=Classic+Ethereum+Wallet"
-           ng-show="slide==1 || ajaxReq.type!=='ETH'"
-           class="block swap--hw"
-           target="_blank" rel="noopener">
-            <div class="col-sm-7">
+        <div ng-switch="slide">
 
-                <h5 class="swap__cta" ng-show="wallet.balance<=1">Buy ETC at ChangeNow anonymous exchange</h5>
+            <a href="{{changeNow.affiliateLink}}"
+               ng-switch-default
+               class="block swap--hw ad-wrapper"
+               target="_blank" rel="noopener">
+                <div class="col-sm-7">
 
-                <p class="swap__subhead" ng-show="wallet.balance<50 && wallet.balance>1">Do you know where to buy
-                    ETC?</h5>
-                <h5 class="swap__cta" ng-show="wallet.balance<50 && wallet.balance>1">ChangeNow crypto exchange - try it
-                    now.</h5>
 
-                <p class="swap__subhead" ng-show="wallet.balance>=50">Want to buy ETC?</p>
-                <h5 class="swap__cta" ng-show="wallet.balance>=50">Trade on ChangeNow crypto exchange.</h5>
-            </div>
-            <!--<div class="col-sm-5">
-              <img src="images/logo-ledger.svg" width="80" height="auto" class="swap__logo">
-              <br />
-              <img src="images/logo-trezor.svg" width="80" height="auto" class="swap__logo">
-            </div>-->
-        </a>
+                    <h6 class="swap__cta" ng-show="wallet.balance<=1">Buy ETC at ChangeNow anonymous exchange</h6>
 
-        <a href="https://buy.coinbase.com?code=a6e1bd98-6464-5552-84dd-b27f0388ac7d&address={{wallet.getChecksumAddressString()}}&crypto_currency=ETH&currency=USD"
-           ng-show="ajaxReq.type=='ETH' && slide==2"
-           class="block swap--usd"
-           target="_blank" rel="noopener">
-            <div class="col-sm-7">
-                <p class="swap__subhead" ng-show="wallet.balance<=0">Aw...you don't have any ETH</p>
-                <p class="swap__subhead" ng-show="wallet.balance>0">It's now easier to get more ETH</p>
-                <h5 class="swap__cta">Buy ETH with USD</h5>
-            </div>
-            <div class="col-sm-5">
-                <img src="images/logo-coinbase.svg" width="64" height="auto" class="swap__logo">
-                <p class="swap-flag--price">1 ETH ≈ <br/> {{wallet.usdPrice}} USD</p>
-            </div>
-        </a>
+                    <p class="swap__subhead" ng-show="wallet.balance<50 && wallet.balance>1">Do you know where to buy
+                        ETC?</p>
+                    <h6 class="swap__cta" ng-show="wallet.balance<50 && wallet.balance>1">ChangeNow crypto exchange -
+                        try it
+                        now.</h6>
 
-        <a ng-click="globalService.currentTab=globalService.tabs.swap.id"
-           ng-show="ajaxReq.type=='ETH' && slide==3"
-           class="block swap--btc"
-           target="_blank" rel="noopener">
-            <div class="col-sm-7">
-                <p class="swap__subhead" ng-show="wallet.balance<=0">Aw...you don't have any ETH.</p>
-                <p class="swap__subhead" ng-show="wallet.balance>0&&wallet.balance<50">It's now easier to get more
-                    ETH</p>
-                <p class="swap__subhead" ng-show="wallet.balance>50">It's now easier to move between ETH &amp; BTC</p>
-                <h5 class="swap__cta">Swap BTC <-> ETH</h5>
-            </div>
-            <div class="col-sm-5">
+                    <p class="swap__subhead" ng-show="wallet.balance>=50">Want to buy ETC?</p>
+                    <h6 class="swap__cta" ng-show="wallet.balance>=50">Trade on ChangeNow crypto exchange.</h6>
+                </div>
 
-                <a href="{{changeNow.affiliateLink}}">
-                    <img src="https://changenow.io/images/embeds/button.svg" alt="ChangeNOW button" width="60">
-                </a>
-                <p class="swap-flag--price">1 ETH ≈ <br/> {{wallet.btcPrice}} BTC</p>
-            </div>
-        </a>
+                <div class="col-sm-5">
+                    <button class="btn btn-info btn-sm">change <br/>NOW</button>
+                </div>
+            </a>
+            <a ng-switch-when="2" class="block swap--hw ad-wrapper">
+                <div class="col-sm-7">
+                    <h6>Learn more about protecting your funds.</h6>
+                </div>
+                <div class="col-sm-5">
+                    <img src="images/logo-ledger.svg" width="80" height="auto" class="swap__logo">
+                    <br/>
+                    <img src="images/logo-trezor.svg" width="80" height="auto" class="swap__logo">
+                </div>
+            </a>
 
-        <div class="swap__nav" ng-show="ajaxReq.type=='ETH'">
+
+            <a
+
+                    ng-click="globalService.currentTab = globalService.tabs.swap.id"
+                    ng-switch-when="3"
+                    class="block swap--hw ad-wrapper"
+
+            >
+
+                <div class="col-sm-7">
+                    <h6>
+                        Exchange Coins & Tokens
+                    </h6>
+                </div>
+                <div class="col-sm-5">
+
+
+                    <button class="btn btn-info btn-sm">change <br/>NOW</button>
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!--<a href="https://buy.coinbase.com?code=a6e1bd98-6464-5552-84dd-b27f0388ac7d&address={{wallet.getChecksumAddressString()}}&crypto_currency=ETH&currency=USD"-->
+        <!--ng-show="ajaxReq.type=='ETH' && slide==2"-->
+        <!--class="block swap&#45;&#45;usd"-->
+        <!--target="_blank" rel="noopener">-->
+        <!--<div class="col-sm-7">-->
+        <!--<p class="swap__subhead" ng-show="wallet.balance<=0">Aw...you don't have any ETH</p>-->
+        <!--<p class="swap__subhead" ng-show="wallet.balance>0">It's now easier to get more ETH</p>-->
+        <!--<h5 class="swap__cta">Buy ETH with USD</h5>-->
+        <!--</div>-->
+        <!--<div class="col-sm-5">-->
+        <!--<img src="images/logo-coinbase.svg" width="64" height="auto" class="swap__logo">-->
+        <!--<p class="swap-flag&#45;&#45;price">1 ETH ≈ <br/> {{wallet.usdPrice}} USD</p>-->
+        <!--</div>-->
+        <!--</a>-->
+
+
+        <div class="swap__nav">
             <a ng-click="slide=1"> &bull; </a>
             <a ng-click="slide=2"> &bull; </a>
             <a ng-click="slide=3"> &bull; </a>

@@ -68,7 +68,7 @@
         ng-show="dropdownFrom"
     >
          <li class="list-group-item">
-    <form ng-submit="handleSubmit(true)">
+    <form ng-submit="handleSubmit(true); input.fromCoin = '';">
                 <input
                         autofocus
                         autocomplete="off"
@@ -131,7 +131,7 @@
 
         <ul class="dropdown-menu dropdown-menu-right swap_dropdown" ng-show="dropdownTo">
             <li class="list-group-item">
-                <form ng-submit="handleSubmit(false)">
+                <form ng-submit="handleSubmit(false); input.toCoin = '';">
                     <input
                             class="form-control form-small-pd"
                             id="toCoin"

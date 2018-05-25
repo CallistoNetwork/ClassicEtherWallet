@@ -14,7 +14,7 @@
 
   .form-small-pd {
 
-    padding: 2px;
+    padding: @space;
     margin: 0;
   }
 
@@ -27,8 +27,9 @@
     min-height: 100px;
     max-height: 500px;
     overflow-y: scroll;
-    width: calc(100vw - 30px);
-    max-width: 400px;
+    width: calc(50vw - 10px);
+    min-width: 220px;
+    max-width: 500px;
     padding: 10px;
     background: #fff;
     box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
@@ -117,6 +118,17 @@
     }
     .dropdown {
       margin-left: 0;
+    }
+  }
+
+  @media all and(max-width: @screen-sm) {
+
+    .swap-panel {
+
+      h1 {
+
+        display: block;
+      }
     }
   }
 

@@ -22,11 +22,13 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
     $scope.contract = {
         functions: [],
     };
-    $scope.slide = 2;
+    $scope.slide = 1;
     $scope.customTokenSymbol = '';
     $scope.customTokenInterval = null;
     walletService.wallet = null;
     $scope.wallet = null;
+
+
 
 
     $scope.nodeList = nodes.nodeList;

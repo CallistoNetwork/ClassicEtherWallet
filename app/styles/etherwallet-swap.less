@@ -1,5 +1,42 @@
 .swap-tab {
 
+  .overflow-text {
+
+    text-overflow: ellipsis;
+  }
+
+  .flex-center {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .form-small-pd {
+
+    padding: @space;
+    margin: 0;
+  }
+
+  .text-lg {
+
+    font-size: @font-size-large;
+  }
+  .swap_dropdown {
+    height: calc(50vh - 15px);
+    min-height: 100px;
+    max-height: 500px;
+    overflow-y: scroll;
+    width: calc(50vw - 10px);
+    min-width: 220px;
+    max-width: 500px;
+    padding: 10px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+    border-radius: 4px;
+    font-size: @font-size-medium;
+  }
+
   a.link, a.link:hover {
     transition: none;
   }
@@ -16,9 +53,11 @@
   .swap-rates {
     text-align: center;
     .order-panel {
-      background: linear-gradient(150deg, @ether-blue, @ether-navy);
+      background:  url(../images/world.svg), linear-gradient(150deg, @brand-etc, @brand-etc-dark);
+
+      color: @change-now-green;
       position: relative;
-      .bity-logo {
+      .changenow-logo {
         position: absolute;
         left: 50%;
         top: 50%;
@@ -32,7 +71,7 @@
           padding: 0 0 0 22%;
         }
 
-        .bity-logo {
+        .changenow-logo {
           left: -1rem;
           top: 40%;
           transform: rotate(-90deg);
@@ -75,12 +114,23 @@
       margin: @space-lg @space-sm;
       vertical-align: middle;
     }
-    .form-control {
+    .width_10_rem {
       width: 10rem;
       margin-right: 0;
     }
     .dropdown {
       margin-left: 0;
+    }
+  }
+
+  @media all and(max-width: @screen-sm) {
+
+    .swap-panel {
+
+      h1 {
+
+        display: block;
+      }
     }
   }
 
@@ -301,7 +351,7 @@
   }
 }
 
-.bity-contact {
+.changenow-contact {
   .row;
   margin-bottom: -5rem;
   margin-top: 9rem;

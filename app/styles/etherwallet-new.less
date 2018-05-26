@@ -294,6 +294,13 @@
   }
 }
 
+.ad-wrapper {
+
+  height: 6rem;
+  overflow: hidden;
+  align-items: center;
+}
+
 .swap--usd,
 .swap--btc,
 .swap--hw {
@@ -317,13 +324,35 @@
 }
 
 .swap--btc {
+
+  div {
+
+    padding: 0;
+  }
+
   .block--text-white();
-  background-color: #006e79;
+  background-color: @change-now-black;
+
   .swap-flag--bal,
   .swap-flag--price {
-    background-color: lighten(saturate(#02818e, 7%), 7%);
+    background-color: lighten(saturate(@change-now-black, 7%), 7%);
   }
 }
+
+
+
+.change-now-btn {
+
+  background: url(../images/changeNow.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  color: @change-now-green;
+  width: 6rem;
+  height: 4rem;
+
+}
+
+
 
 .swap--hw {
   .block--text-white();

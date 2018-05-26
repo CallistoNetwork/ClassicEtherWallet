@@ -1,5 +1,5 @@
 'use strict';
-var walletGenCtrl = function($rootScope, $scope) {
+var walletGenCtrl = function ($rootScope, $scope) {
     $scope.password = "";
     $scope.networks = globalFuncs.networks;
 
@@ -11,7 +11,7 @@ var walletGenCtrl = function($rootScope, $scope) {
     $scope.fileDownloaded = false;
     $scope.showPaperWallet = false;
     $scope.showGetAddress = false;
-    $scope.genNewWallet = function() {
+    $scope.genNewWallet = function () {
         if (!$scope.isStrongPass()) {
             $scope.notifier.danger(globalFuncs.errorMsgs[1]);
         } else if ($scope.isDone) {
@@ -27,27 +27,32 @@ var walletGenCtrl = function($rootScope, $scope) {
             }));
             $scope.encFileName = $scope.wallet.getV3Filename();
             if (parent != null)
-                parent.postMessage(JSON.stringify({ address: $scope.wallet.getAddressString(), checksumAddress: $scope.wallet.getChecksumAddressString() }), "*");
+                parent.postMessage(JSON.stringify({
+                    address: $scope.wallet.getAddressString(),
+                    checksumAddress: $scope.wallet.getChecksumAddressString()
+                }), "*");
             $scope.isDone = true;
             if (!$scope.$$phase) $scope.$apply();
         }
     }
-    $scope.printQRCode = function() {
+    $scope.printQRCode = function () {
+
+
         globalFuncs.printPaperWallets(JSON.stringify([{
             address: $scope.wallet.getChecksumAddressString(),
             private: $scope.wallet.getPrivateKeyString()
-        }]));
+        }]), $scope.encFileName);
     }
-    $scope.isStrongPass = function() {
+    $scope.isStrongPass = function () {
         return globalFuncs.isStrongPass($scope.password);
     }
-    $scope.downloaded = function() {
+    $scope.downloaded = function () {
         $scope.fileDownloaded = true;
     }
-    $scope.continueToPaper = function() {
+    $scope.continueToPaper = function () {
         $scope.showPaperWallet = true;
     }
-    $scope.getAddress = function(){
+    $scope.getAddress = function () {
         $scope.showPaperWallet = false;
         $scope.wallet = null;
         $scope.showGetAddress = true;

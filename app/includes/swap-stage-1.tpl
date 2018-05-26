@@ -47,7 +47,7 @@
 
     <br/>
 
-    <input class="form-control"
+    <input class="form-control width_10_rem"
            type="text"
            ng-change="updateEstimate(true)"
            placeholder="{{ 'SEND_amount_short' | translate }}"
@@ -64,17 +64,16 @@
         {{swapOrder.fromCoin.toUpperCase()}}
         <i class="caret"></i>
     </a>
-    <ul class="dropdown-menu dropdown-menu-right list-group"
+    <ul class="dropdown-menu dropdown-menu-right list-group swap_dropdown"
         ng-show="dropdownFrom"
-        style="max-height: 300px; overflow-y: scroll;"
     >
          <li class="list-group-item">
-    <form ng-submit="handleSubmit(true)">
+    <form ng-submit="handleSubmit(true); input.fromCoin = '';">
                 <input
                         autofocus
                         autocomplete="off"
                         id="fromCoin"
-                        class="form-control-sm"
+                        class="form-control form-small-pd"
                         ng-model="input.fromCoin"
                         placeholder="type a currency"
                 />
@@ -88,21 +87,18 @@
                 ng-click="setOrderCoin(true, coin.ticker)"
         >
 
-            <div class="row" style="
-    display: flex;
-    justify-content: center;
-    align-items: center;
-">
-               <div class="{{'col-xs-4 col-sm-6 text-center icon icon-' + coin.ticker.toLowerCase()}}"
-                    style="padding: 5px;"
+            <div class="row flex-center">
+                        <div class="{{'text-lg col-xs-4 text-center icon icon-' + coin.ticker.toLowerCase()}}"
+                             style="padding: 5px;">
+                        </div>
+                        <div class="col-xs-8 overflow-text">
 
-               >
-               </div>
-            <div class="col-xs-8 col-sm-6" style="padding: 5px;">
+                            {{coin.ticker.toUpperCase()}}
 
-            {{coin.ticker.toUpperCase()}}
-            </div>
-            </div>
+                            {{' - '}}
+                            <small>{{coin.name}}</small>
+                        </div>
+                    </div>
         </a>
       </li>
     </ul>
@@ -111,7 +107,7 @@
     <h1 translate="SWAP_init_2"> for </h1>
 
 
-    <input class="form-control"
+    <input class="form-control width_10_rem"
            placeholder="{{ 'SEND_amount_short' | translate }}"
            ng-change="updateEstimate(false)"
            ng-model-options="{ debounce: 750 }"
@@ -133,12 +129,11 @@
         </a>
 
 
-        <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownTo"
-            style="max-height: 300px; overflow-y: scroll;">
+        <ul class="dropdown-menu dropdown-menu-right swap_dropdown" ng-show="dropdownTo">
             <li class="list-group-item">
-                <form ng-submit="handleSubmit(false)">
+                <form ng-submit="handleSubmit(false); input.toCoin = '';">
                     <input
-                            class="form-control-sm"
+                            class="form-control form-small-pd"
                             id="toCoin"
                             autocomplete="off"
                             autofocus
@@ -153,17 +148,16 @@
                         ng-click="setOrderCoin(false, coin.ticker);"
                 >
 
-                    <div class="row" style="
-    display: flex;
-    justify-content: center;
-    align-items: center;
-">
-                        <div class="{{'col-xs-4 text-center icon icon-' + coin.ticker.toLowerCase()}}"
+                    <div class="row flex-center">
+                        <div class="{{'text-lg col-xs-4 text-center icon icon-' + coin.ticker.toLowerCase()}}"
                              style="padding: 5px;">
                         </div>
-                        <div class="col-xs-8">
+                        <div class="col-xs-8 overflow-text">
 
                             {{coin.ticker.toUpperCase()}}
+
+                            {{' - '}}
+                            <small>{{coin.name}}</small>
                         </div>
                     </div>
                 </a>

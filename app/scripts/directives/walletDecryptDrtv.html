@@ -425,22 +425,6 @@
 
                         <div class="col-sm-4">
                             <label class="radio small">
-                                <p class="small"><strong>Your Custom Path</strong></p>
-                                <input aria-describedby="Path: Enter your own - {{HDWallet.customDPath}}"
-                                       ng-change="onHDDPathChange()"
-                                       ng-model="HDWallet.dPath"
-                                       type="radio"
-                                       value="{{HDWallet.customDPath}}"/>
-                                <input aria-describedby="Path: Enter your own - {{HDWallet.customDPath}}"
-                                       type="text" class="form-control input-sm"
-                                       ng-model="HDWallet.customDPath"
-                                       ng-change="onCustomHDDPathChange()"
-                                       style="float: right;margin: 0 0 .5rem;"/>
-                            </label>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <label class="radio small">
                                 <input aria-describedby="Path: TREZOR (ETC) {{HDWallet.trezorClassicPath}}"
                                        ng-change="onHDDPathChange()"
                                        ng-model="HDWallet.dPath"
@@ -448,6 +432,18 @@
                                        value="{{HDWallet.trezorClassicPath}}"/>
                                 <span ng-bind="HDWallet.trezorClassicPath"></span>
                                 <p class="small">TREZOR (ETC)</p>
+                            </label>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label class="radio small">
+                                <input aria-describedby="Path: TREZOR - TESTNET - {{HDWallet.trezorTestnetPath}}"
+                                       ng-change="onHDDPathChange()"
+                                       ng-model="HDWallet.dPath"
+                                       type="radio"
+                                       value="{{HDWallet.trezorTestnetPath}}"/>
+                                <span ng-bind="HDWallet.trezorTestnetPath"></span>
+                                <p class="small">Network: Testnets</p>
                             </label>
                         </div>
 
@@ -465,6 +461,42 @@
 
                         <div class="col-sm-4">
                             <label class="radio small">
+                                <input aria-describedby="Path: TREZOR (Ubq) {{HDWallet.hwUbqPath}}"
+                                       ng-change="onHDDPathChange()"
+                                       ng-model="HDWallet.dPath"
+                                       type="radio"
+                                       value="{{HDWallet.hwUbqPath}}"/>
+                                <span ng-bind="HDWallet.hwUbqPath"></span>
+                                <p class="small">Network: Ubiq</p>
+                            </label>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label class="radio small">
+                                <input aria-describedby="Path: TREZOR (ELLA) {{HDWallet.hwEllaismPath}}"
+                                       ng-change="onHDDPathChange()"
+                                       ng-model="HDWallet.dPath"
+                                       type="radio"
+                                       value="{{HDWallet.hwEllaismPath}}"/>
+                                <span ng-bind="HDWallet.hwEllaismPath"></span>
+                                <p class="small">Network: Ellaism</p>
+                            </label>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label class="radio small">
+                                <input aria-describedby="Path: TREZOR (CLO) {{HDWallet.hwCallistoPath}}"
+                                       ng-change="onHDDPathChange()"
+                                       ng-model="HDWallet.dPath"
+                                       type="radio"
+                                       value="{{HDWallet.hwCallistoPath}}"/>
+                                <span ng-bind="HDWallet.hwCallistoPath"></span>
+                                <p class="small">Network: Callisto</p>
+                            </label>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label class="radio small">
                                 <input aria-describedby="Path: TREZOR (ETSC) {{HDWallet.hwSocialPath}}"
                                        ng-change="onHDDPathChange()"
                                        ng-model="HDWallet.dPath"
@@ -477,15 +509,31 @@
 
                         <div class="col-sm-4">
                             <label class="radio small">
-                                <input aria-describedby="Path: TREZOR - TESTNET - {{HDWallet.trezorTestnetPath}}"
+                                <input aria-describedby="Path: TREZOR (MUSIC) {{HDWallet.hwMusicoinPath}}"
                                        ng-change="onHDDPathChange()"
                                        ng-model="HDWallet.dPath"
                                        type="radio"
-                                       value="{{HDWallet.trezorTestnetPath}}"/>
-                                <span ng-bind="HDWallet.trezorTestnetPath"></span>
-                                <p class="small">TREZOR (TESTNET)</p>
+                                       value="{{HDWallet.hwMusicoinPath}}"/>
+                                <span ng-bind="HDWallet.hwMusicoinPath"></span>
+                                <p class="small">Network: Musicoin</p>
                             </label>
                         </div>
+
+                        <div class="col-sm-4">
+                            <label class="radio small">
+                                <p class="small"><strong>Your Custom Path</strong></p>
+                                <input aria-describedby="Path: Enter your own - {{HDWallet.customDPath}}"
+                                       ng-change="onHDDPathChange()"
+                                       ng-model="HDWallet.dPath"
+                                       type="radio"
+                                       value="{{HDWallet.customDPath}}"/>
+                                <input aria-describedby="Path: Enter your own - {{HDWallet.customDPath}}"
+                                       type="text" class="form-control input-sm"
+                                       ng-model="HDWallet.customDPath"
+                                       ng-change="onCustomHDDPathChange()"
+                                       style="float: right;margin: 0 0 .5rem;"/>
+                            </label>
+                        </div>    
                     </div>
 
 

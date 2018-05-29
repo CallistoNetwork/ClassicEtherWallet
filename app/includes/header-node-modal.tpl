@@ -48,18 +48,23 @@
           </div>
 
           <div class="clearfix col-xs-12 radio">
-            <label><input name="options" type="radio" ng-model="customNode.options" value="eth"> ETH </label>
             <label><input name="options" type="radio" ng-model="customNode.options" value="etc"> ETC </label>
+            <label><input name="options" type="radio" ng-model="customNode.options" value="clo"> CLO </label>
+            <label><input name="options" type="radio" ng-model="customNode.options" value="eth"> ETH </label>
             <label><input name="options" type="radio" ng-model="customNode.options" value="rop"> Ropsten </label>
             <label><input name="options" type="radio" ng-model="customNode.options" value="kov"> Kovan </label>
             <label><input name="options" type="radio" ng-model="customNode.options" value="rin"> Rinkeby </label>
             <label><input name="options" type="radio" ng-model="customNode.options" value="cus"> Custom </label>
+
+          </div>
+
+          <div class="col-sm-6">
             <label><input type="checkbox" ng-model="customNode.eip155" value="true"> Supports EIP-155 </label>
           </div>
 
-          <div class="clearfix col-sm-6 col-sm-offset-6" ng-show="customNode.eip155">
+          <div class="col-sm-6">
             <label>Chain ID</label>
-            <input class="form-control" type="text" placeholder="" ng-model="customNode.chainId" ng-class="Validator.isPositiveNumber(customNode.chainId) ? 'is-valid' : 'is-invalid'">
+            <input class="form-control-sm" type="text" placeholder="" ng-model="customNode.chainId" ng-class="Validator.isPositiveNumber(customNode.chainId) ? 'is-valid' : 'is-invalid'">
           </div>
         </section>
 

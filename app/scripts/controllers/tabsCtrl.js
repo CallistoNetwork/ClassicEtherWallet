@@ -7,7 +7,24 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
     $scope.Validator = Validator;
     $scope.nodeList = nodes.nodeList;
     $scope.defaultNodeKey = 'etc_ethereumcommonwealth_parity';
-    $scope.customNode = {options: 'eth', name: '', url: '', port: '', httpBasicAuth: null, eip155: false, chainId: ''};
+
+
+    const initNode = () => {
+
+        $scope.customNode = {
+            options: 'etc',
+            name: '',
+            url: '',
+            port: '',
+            httpBasicAuth: null,
+            eip155: true,
+            chainId: 61,
+            type: null,
+        };
+
+    };
+
+
     $scope.customNodeCount = 0;
     $scope.nodeIsConnected = true;
     $scope.browserProtocol = window.location.protocol;
@@ -18,6 +35,38 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
     $scope.ajaxReq = ajaxReq;
     $scope.nodeType = $scope.ajaxReq.type
     $scope.nodeService = $scope.ajaxReq.service;
+
+    initNode();
+
+
+    $scope.$watch('customNode.options', function (val) {
+
+
+        if (val) {
+
+
+            const node = Object.keys(nodes.nodeList).find(node =>
+                nodes.nodeList[node].name.toLowerCase() === val.toLowerCase());
+
+
+            if (node) {
+
+                const {eip155, chainId} = nodes.nodeList[node];
+
+                Object.assign($scope.customNode, {
+                    eip155,
+                    chainId,
+                });
+            } else {
+
+                Object.assign($scope.customNode, {
+                    eip155: false,
+                    chainId: '',
+                });
+
+            }
+        }
+    });
 
 
     $scope.$watch('ajaxReq.type', function () {
@@ -204,15 +253,7 @@ var tabsCtrl = function ($scope, globalService, $translate, $sce) {
         $scope.changeNode('cus_' + customNode.options + '_' + ($scope.customNodeCount - 1));
         globalFuncs.localStorage.setItem("localNodes", JSON.stringify(localNodes));
         $scope.customNodeModal.close();
-        $scope.customNode = {
-            options: 'eth',
-            name: '',
-            url: '',
-            port: '',
-            httpBasicAuth: null,
-            eip155: false,
-            chainId: ''
-        };
+        initNode();
     }
 
     $scope.removeNodeFromLocal = function (localNodeName) {

@@ -4,6 +4,7 @@ var ko = function() {}
 ko.code = 'ko';
 ko.data = {
 
+DELETE                      : '삭제',
 /* DexNS tabs */
 
 NAV_DexNS                   : 'DexNS',
@@ -88,6 +89,10 @@ NAV_SignMsg                 : '메세지 서명 ',
 NAV_Swap                    : '교환 ',
 NAV_ViewWallet              : '지갑 정보 보기 ',
 NAV_YourWallets             : '내 지갑 ',
+NAV_Messages                : '메시지',
+NAV_LIST                    : '목록',
+NAV_NEW_MESSAGE             : '새 메시지',
+NAV_Encrypt                 : '암호화',
 
 /* General */
 x_Access                    : '액세스 ',
@@ -221,6 +226,7 @@ GEN_SuccessMsg              : '성공! 당신의 지갑이 생성되었습니다
 GEN_Label_2                 : '당신의 지갑 파일을 저장해주세요. 비밀번호를 잃어버리면 안됩니다. ',
 GEN_Label_3                 : '지갑 주소를 저장해주세요 ',
 GEN_Label_4                 : '선택: 종이 지갑을 인쇄하거나 QR 코드를 저장해주세요. ',
+GEN_YOUR_NEW_PASSWORD       : '새로운 비밀번호',
 
 /* Bulk Generate Wallets */
 BULK_Label_1                : '생성할 지갑 개수 ',
@@ -232,6 +238,7 @@ SEND_addr                   : '받는 주소 ',
 SEND_amount                 : '보낼 수량 ',
 SEND_amount_short           : '보낼 수량 ',
 SEND_custom                 : '커스텀 토큰 추가 ',
+SEND_custom_dexns           : '토큰 심볼로 커스텀 토큰 추가 ',
 SEND_gas                    : '가스 ',
 SEND_TransferTotal          : '잔액 모두 전송하기 ',
 SEND_generate               : '트랜잭션 생성 ',
@@ -261,6 +268,8 @@ TRANS_advanced              : '+고급: 데이터 추가 ',
 TRANS_data                  : '데이터 ',
 TRANS_gas                   : '가스 한도 ',
 TRANS_sendInfo              : '21000 가스를 사용하는 표준 트랜잭션은 0.000441 ETH 를 사용합니다. 우리는 최소 가스 가격인 0.000000021 보다 약간 높게 책정하여 전송을 빠르게 합니다. MyEtherWallet은 트랜잭션 수수료를 얻지 않습니다. ',
+TRANS_params                : '+Advanced: Params 적용',
+TRANS_params_remove         : '-Advanced: Params 삭제',
 
 /* Offline Transaction */
 OFFLINE_Title               : '오프라인 트랜잭션 생성 & 전송하기 ',
@@ -299,6 +308,7 @@ DEP_signtx                  : '서명 트랜잭션 ',
 DEP_interface               : '생성된 인터페이스 ',
 
 /* Node Switcher */
+NODE_BACKGROUND             : '백그라운드 노드',
 NODE_Title                  : '커스텀 노드 설정하기 ',
 NODE_Subtitle               : '로컬 노드에 연결하려면... ',
 NODE_Warning                : 'MyEtherWallet.com을 통해 연결하기 위해서는 HTTPS 노드가 필요합니다. 모든 노드에 연결하려면 [MyEtherWallet 저장소를 다운로드하고 로컬로 실행] (https://github.com/kvhnuke/etherwallet/releases/latest) 할 수 있습니다. 추가로 무료 SSL 인증서를 [LetsEncrypt](https://letsencrypt.org/)에서 받으실 수 있습니다. ',
@@ -384,9 +394,11 @@ ERROR_31                    : '잘못된 비밀 문구입니다. ',
 ERROR_32                    : '노드에 연결할 수 없습니다. 새로고침 하거나 도움말을 확인해주세요. ',
 ERROR_33                    : '입찰자의 주소와 잠금 해제된 지갑이 일치하지 않습니다. ',
 ERROR_34                    : '해당 이름이 문자열의 이름과 일치하지 않습니다. ',
-ERROR_35                    : 'Input address is not checksummed. <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/not-checksummed-shows-when-i-enter-an-address" target="_blank" rel="noopener"> More info</a>', // 35
-ERROR_36                    : 'Enter valid TX hash', // 36
-ERROR_37                    : 'Enter valid hex string (0-9, a-f)', // 37
+ERROR_35                    : '입력된 주소가 체크섬되어있지 않습니다. <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/not-checksummed-shows-when-i-enter-an-address" target="_blank" rel="noopener"> 더 보기</a>', // 35
+ERROR_36                    : '유효한 TX 해시 입력', // 36
+ERROR_37                    : '유효한 hex 문자열 입력 (0-9, a-f)', // 37
+ERROR_38                    : "잘못된 가스 가격! 최소 가스 가격은 0.1 GWei이고 최대 가스가격은 100 GWei 입니다. 가스가격은 21 GWei 기본 값으로 초기화됩니다!",
+ERROR_39                    : '요소의 타입이 비어있지 않은(non-empty) 기본값 입니다',
 
 SUCCESS_1                   : '유효한 주소 ',
 SUCCESS_2                   : '지갑이 성공적으로 복호화 되었습니다. ',

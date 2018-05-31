@@ -104,6 +104,13 @@ var globalService = function ($http, $httpParamSerializerJQLike) {
             mew: true,
             cx: false
         },
+        broadcastTx: {
+            id: 14,
+            name: "NAV_Broadcast",
+            url: "broadcast-tx",
+            mew: true,
+            cx: true
+        },
     };
     var currentTab = 0;
     if (typeof chrome != 'undefined')

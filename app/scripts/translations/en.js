@@ -93,6 +93,7 @@ en.data = {
     NAV_LIST                : 'List',
     NAV_NEW_MESSAGE         : 'New Message',
     NAV_Encrypt             : 'Encrypt',
+    NAV_Broadcast: 'Broadcast Transaction',
     /* General */
     x_Access                    : 'Access ',
     x_AddessDesc                : 'Your Address can also be known as you `Account #` or your `Public Key`. It is what you share with people so they can send you Ether or Tokens. Find the colorful address icon. Make sure it matches your paper wallet & whenever you enter your address somewhere.',

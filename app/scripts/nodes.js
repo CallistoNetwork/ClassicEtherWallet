@@ -10,7 +10,6 @@ nodes.nodeTypes = {
     CLOT: "Testnet CLO",
     ETH: "ETH",
     ETC: "ETC",
-    MUS: "MUSIC",
     Ropsten: "ROPSTEN ETH",
     Kovan: "KOVAN ETH",
     Rinkeby: "RINKEBY ETH",
@@ -22,6 +21,7 @@ nodes.nodeTypes = {
     TOMO: "TOMO",
     ELLA: "ELLA",
     ETSC: "ETSC",
+    MUSIC: "MUSIC",
     Custom: "CUSTOM ETH"
 };
 nodes.tldTypes = {
@@ -128,8 +128,8 @@ nodes.nodeList = {
     },
     'clo_mainnet': {
         'name': 'CLO',
-        'blockExplorerTX': 'https://explorer.callisto.network/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://explorer.callisto.network/addr/[[address]]',
+        'blockExplorerTX': 'https://cloexplorer.org/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://cloexplorer.org/addr/[[address]]',
         'type': nodes.nodeTypes.CLO,
         'eip155': true,
         'chainId': 820,
@@ -284,29 +284,17 @@ nodes.nodeList = {
         'service': 'Expanse.tech',
         'lib': new nodes.customNode('https://node.expanse.tech/', '')
     },
-    'music_tfarm': {
+    'music': {
         'name': 'MUSIC',
-        'blockExplorerTX': 'https://orbiter.musicoin.org/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://orbiter.musicoin.org/addr/[[address]]',
-        'type': nodes.nodeTypes.MUS,
-        'eip155': false,
+        'blockExplorerTX': 'https://explorer.musicoin.org/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://explorer.musicoin.org/account/[[address]]',
+        'type': nodes.nodeTypes.MUSIC,
+        'eip155': true,
         'chainId': 7762959,
         'tokenList': require('./tokens/musicTokens.json'),
         'abiList': require('./abiDefinitions/musicAbi.json'),
-        'service': 'trustfarm.io',
+        'service': 'musicoin.org',
         'lib': new nodes.customNode('https://mcdnode.trustfarm.io/api', '')
-    },
-    'music_twmc': {
-        'name': 'MUSIC',
-        'blockExplorerTX': 'https://orbiter.musicoin.org/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://orbiter.musicoin.org/addr/[[address]]',
-        'type': nodes.nodeTypes.MUS,
-        'eip155': false,
-        'chainId': 7762959,
-        'tokenList': require('./tokens/musicTokens.json'),
-        'abiList': require('./abiDefinitions/musicAbi.json'),
-        'service': 'pool.musicoin.tw',
-        'lib': new nodes.customNode('https://mewapi.musicoin.tw', '')
     },
     'ubq': {
         'name': 'UBQ',

@@ -349,4 +349,102 @@ globalFuncs.storageAvailable = function(type) {
 //   }
 //   location.href = location.href + "=" + value
 // }
+
+
+globalFuncs.HDWallet = {
+
+
+    defaultDPath: "m/44'/60'/0'/0",       // first address: m/44'/60'/0'/0/0
+    alternativeDPath: "m/44'/60'/0'",         // first address: m/44'/60'/0/0
+    customDPath: "m/44'/60'/1'/0",       // first address: m/44'/60'/1'/0/0
+    ledgerPath: "m/44'/60'/0'",         // first address: m/44'/60'/0/0
+    ledgerClassicPath: "m/44'/60'/160720'/0'", // first address: m/44'/60'/160720'/0/0
+    trezorTestnetPath: "m/44'/1'/0'/0",        // first address: m/44'/1'/0'/0/0
+    trezorClassicPath: "m/44'/61'/0'/0",       // first address: m/44'/61'/0'/0/0
+    trezorPath: "m/44'/60'/0'/0",       // first address: m/44'/60'/0'/0/0
+    hwUbqPath: "m/44'/108'/0'/0",      // first address: m/44'/40'/0'/0/0
+    hwExpansePath: "m/44'/40'/0'/0",       // first address: m/44'/40'/0'/0/0
+    hwEllaismPath: "m/44'/163'/0'/0",      // first address: m/44'/163'/0'/0/0
+    hwCallistoPath: "m/44'/820'/0'/0",      // first address: m/44'/820'/0'/0/0
+    hwSocialPath: "m/44'/1128'/0'/0",     // first address: m/44'/1128'/0'/0/0
+    hwMusicoinPath: "m/44'/184'/0'/0",      // first address: m/44'/184'/0'/0/0
+    hwRskPath: "m/44'/137'/0'/0",      // first address : m/44'/137'/0'/0/0
+};
+
+globalFuncs.getWalletPath = function (walletType = 'trezor', nodeType = nodes.nodeTypes.CLO) {
+
+    if (walletType === "ledger") {
+        switch (nodeType) {
+            case nodes.nodeTypes.ETH:
+                return globalFuncs.HDWallet.ledgerPath;
+            case nodes.nodeTypes.ETC:
+                return globalFuncs.HDWallet.ledgerClassicPath;
+            case nodes.nodeTypes.EXP:
+                return globalFuncs.HDWallet.hwExpansePath;
+            case nodes.nodeTypes.UBQ:
+                return globalFuncs.HDWallet.hwUbqPath;
+            default:
+                return globalFuncs.HDWallet.ledgerPath;
+        }
+    } else if (walletType === "trezor") {
+        switch (nodeType) {
+            case nodes.nodeTypes.ETH:
+                return globalFuncs.HDWallet.trezorPath;
+            case nodes.nodeTypes.ETC:
+                return globalFuncs.HDWallet.trezorClassicPath;
+            case nodes.nodeTypes.Ropsten:
+                return globalFuncs.HDWallet.trezorTestnetPath;
+            case nodes.nodeTypes.Rinkeby:
+                return globalFuncs.HDWallet.trezorTestnetPath;
+            case nodes.nodeTypes.Kovan:
+                return globalFuncs.HDWallet.trezorTestnetPath;
+            case nodes.nodeTypes.EXP:
+                return globalFuncs.HDWallet.hwExpansePath;
+            case nodes.nodeTypes.UBQ:
+                return globalFuncs.HDWallet.hwUbqPath;
+            case nodes.nodeTypes.RSK:
+                return globalFuncs.HDWallet.hwRskPath;
+            case nodes.nodeTypes.ELLA:
+                return globalFuncs.HDWallet.hwEllaismPath;
+            case nodes.nodeTypes.CLO:
+                return globalFuncs.HDWallet.hwCallistoPath;
+            case nodes.nodeTypes.CLOT:
+                return globalFuncs.HDWallet.trezorTestnetPath;
+            case nodes.nodeTypes.ETSC:
+                return globalFuncs.HDWallet.hwSocialPath;
+            case nodes.nodeTypes.MUSIC:
+                return globalFuncs.HDWallet.hwMusicoinPath;
+        }
+    } else {
+        switch (nodeType) {
+            case nodes.nodeTypes.ETH:
+                return globalFuncs.HDWallet.defaultDPath;
+            case nodes.nodeTypes.ETC:
+                return globalFuncs.HDWallet.trezorClassicPath;
+            case nodes.nodeTypes.Ropsten:
+                return globalFuncs.HDWallet.trezorTestnetPath;
+            case nodes.nodeTypes.Rinkeby:
+                return globalFuncs.HDWallet.trezorTestnetPath;
+            case nodes.nodeTypes.Kovan:
+                return globalFuncs.HDWallet.trezorTestnetPath;
+            case nodes.nodeTypes.EXP:
+                return globalFuncs.HDWallet.hwExpansePath;
+            case nodes.nodeTypes.UBQ:
+                return globalFuncs.HDWallet.hwUbqPath;
+            case nodes.nodeTypes.CLO:
+                return globalFuncs.HDWallet.hwCallistoPath;
+            case nodes.nodeTypes.CLOT:
+                return globalFuncs.HDWallet.trezorTestnetPath;
+            case nodes.nodeTypes.ETSC:
+                return globalFuncs.HDWallet.hwSocialPath;
+            case nodes.nodeTypes.MUSIC:
+                return globalFuncs.HDWallet.hwMusicoinPath;
+            default:
+                return globalFuncs.HDWallet.defaultDPath;
+        }
+
+
+    }
+}
+
 module.exports = globalFuncs;

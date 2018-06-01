@@ -4,22 +4,60 @@ var broadcastTxCtrl = function ($scope) {
     function main() {
 
 
+        init();
+
+    }
+
+    function init() {
+
         $scope.input = {
-            signedTx: '',
+            signedTx: null,
+            rawTx: {
+                gasPrice: null,
+                gasLimit: null,
+                to: null,
+                value: null,
+                data: null,
+                nonce: null,
+            },
+
         }
     }
 
     $scope.handleSubmit = function () {
 
 
-        uiFuncs.sendTx(input.signedTx);
+        uiFuncs.sendTx($scope.input.signedTx, function (resp) {
+
+            if (!resp.isError) {
+                const txHashLink = ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data);
+                const verifyTxBtn = ajaxReq.type !== nodes.nodeTypes.Custom ? '<a class="btn btn-xs btn-info strong" href="' + txHashLink + '" target="_blank" rel="noopener noreferrer">Verify Transaction</a>' : '';
+                const completeMsg = '<p>' + globalFuncs.successMsgs[2] + '<strong>' + resp.data + '</strong></p>' + verifyTxBtn;
+                $scope.notifier.success(completeMsg, 0);
+
+                init();
+
+            } else {
+
+
+                if (resp.error.includes('insufficient funds')) {
+
+                    $scope.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+                }
+                else {
+
+                    $scope.notifier.danger(resp.error || globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+                }
+
+            }
+        });
 
 
         /*
 
         uiFuncs.sendTx($scope.signedTx, function (resp) {
             if (!resp.isError) {
-                var txHashLink = $scope.ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data);
+                var txHashLink = ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data);
                 var verifyTxBtn = $scope.ajaxReq.type !== nodes.nodeTypes.Custom ? '<a class="btn btn-xs btn-info strong" href="' + txHashLink + '" target="_blank" rel="noopener noreferrer">Verify Transaction</a>' : '';
                 var completeMsg = '<p>' + globalFuncs.successMsgs[2] + '<strong>' + resp.data + '</strong></p>' + verifyTxBtn;
                 $scope.notifier.success(completeMsg, 0);
@@ -42,7 +80,6 @@ var broadcastTxCtrl = function ($scope) {
          */
     }
 
-    main();
 
     $scope.validTx = function () {
 
@@ -50,6 +87,47 @@ var broadcastTxCtrl = function ($scope) {
         return $scope.input.signedTx;
     }
 
-    $scope.rawTx = '';
 
-}
+    $scope.handleDecodeTx = function () {
+
+
+        const tx = new ethUtil.Tx($scope.input.signedTx);
+
+
+        function mapToHex(param) {
+
+            return ethFuncs.sanitizeHex(param.toString('hex'));
+        }
+
+
+        $scope.input.rawTx = {
+            to: mapToHex(tx.to),
+            value: mapToHex(tx.value),
+            chainId: tx._chainId,
+            gasPrice: mapToHex(tx.gasPrice),
+            gasLimit: mapToHex(tx.gasLimit),
+            data: mapToHex(tx.data),
+            nonce: tx.nonce.toString('hex'),
+        };
+
+        $scope.input.decodedInput = Object.assign({}, $scope.input.rawTx, {
+            nonce: ethUtil.solidityCoder.decodeParam('int', $scope.input.rawTx.nonce).toNumber(),
+            gasPrice: ethUtil.solidityCoder.decodeParam('int', $scope.input.rawTx.gasPrice).toNumber(),
+            gasLimit: ethUtil.solidityCoder.decodeParam('int', $scope.input.rawTx.gasLimit).toNumber(),
+            value: ethUtil.solidityCoder.decodeParam('int256', $scope.input.rawTx.value).toNumber(),
+        });
+
+        console.log(tx);
+
+        console.log($scope.input.rawTx);
+
+    }
+
+
+    main();
+
+
+};
+
+
+module.exports = broadcastTxCtrl;

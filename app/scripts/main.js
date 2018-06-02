@@ -85,6 +85,7 @@ var sendTxCtrl = require('./controllers/sendTxCtrl');
 var swapCtrl = require('./controllers/swapCtrl');
 var signMsgCtrl = require('./controllers/signMsgCtrl');
 var contractsCtrl = require('./controllers/contractsCtrl');
+var broadcastTxCtrl = require('./controllers/broadcastTxCtrl');
 var ensCtrl = require('./controllers/ensCtrl');
 var dexnsCtrl = require('./controllers/dexnsCtrl');
 var footerCtrl = require('./controllers/footerCtrl');
@@ -165,6 +166,8 @@ app.controller('helpersCtrl', ['$scope', helpersCtrl]);
 app.controller('messagesCtrl', ['$scope', '$rootScope', '$interval', 'globalService', 'newMessageService', 'walletService', 'backgroundNodeService', messagesControl]);
 app.controller('encryptCtrl', ['$scope', 'walletService', encryptCtrl]);
 app.controller('backgroundNodeCtrl', ['$scope', 'backgroundNodeService', '$interval', backgroundNodeCtrl]);
+
+app.controller('broadcastTxCtrl', ['$scope', broadcastTxCtrl]);
 
 if (IS_CX) {
     app.controller('addWalletCtrl', ['$scope', '$sce', addWalletCtrl]);

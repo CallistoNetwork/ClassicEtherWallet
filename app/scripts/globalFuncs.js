@@ -414,6 +414,8 @@ globalFuncs.getWalletPath = function (walletType = 'trezor', nodeType = nodes.no
                 return globalFuncs.HDWallet.hwSocialPath;
             case nodes.nodeTypes.MUSIC:
                 return globalFuncs.HDWallet.hwMusicoinPath;
+            default:
+                return globalFuncs.HDWallet.defaultDPath;
         }
     } else {
         switch (nodeType) {

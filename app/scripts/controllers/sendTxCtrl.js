@@ -40,13 +40,12 @@ var sendTxCtrl = function ($scope, $sce, $rootScope, walletService) {
         data: globalFuncs.urlGet('data') || "",
         to: globalFuncs.urlGet('to') || "",
         unit: "ether",
-        value: globalFuncs.urlGet('value') || "",
+        value: globalFuncs.urlGet('value', ""),
         nonce: null,
         donate: false,
-        tokensymbol: globalFuncs.urlGet('tokensymbol') || globalFuncs.urlGet('tokenSymbol') || ""
+        tokensymbol: globalFuncs.urlGet('tokensymbol') || globalFuncs.urlGet('tokenSymbol') || "",
+        readOnly: globalFuncs.urlGet('readOnly') === null
     };
-    $scope.tx.readOnly = globalFuncs.urlGet('readOnly') === null;
-
 
     $scope.setSendMode = function (sendMode, tokenId = '', tokensymbol = '') {
         $scope.tx.sendMode = sendMode;
@@ -210,7 +209,13 @@ var sendTxCtrl = function ($scope, $sce, $rootScope, walletService) {
         return new BigNumber(valA).lte(new BigNumber(valB));
     }
     $scope.hasEnoughBalance = function () {
-        if ($scope.wallet.balance === 'loading') return false;
+        if ($scope.wallet.balance === 'loading') {
+            return true;
+
+        } else if (!$scope.tx.value) {
+
+            return true;
+        }
         return isEnough($scope.tx.value, $scope.wallet.balance);
     }
     $scope.onDonateClick = function () {

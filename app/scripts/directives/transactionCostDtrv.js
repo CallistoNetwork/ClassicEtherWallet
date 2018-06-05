@@ -4,32 +4,22 @@ var transactionCostDrtv = function () {
     return {
         //restrict: "E",
         template: require('./transactionCost.html'),
-        link: function ($scope, element, attrs) {
+        link: function ($scope) {
 
 
             function main() {
 
-                $scope.cost = null;
-                $scope.txCost = null;
+
+                Object.assign($scope, {
+                    txCostEther: null,
+                    txCostFiat: null,
+                });
+
                 getTxCost();
 
-                $scope.nodeType = nodes.nodeList[globalFuncs.getCurNode()].type;
             }
 
             main();
-
-            $scope.$watch(function () {
-
-                return nodes.nodeList[globalFuncs.getCurNode()].type;
-            }, function (val, _val) {
-
-                if (!angular.equals(val, _val)) {
-
-                    getTxCost();
-
-                    $scope.nodeType = val;
-                }
-            })
 
 
             function getTxCost() {
@@ -37,48 +27,53 @@ var transactionCostDrtv = function () {
 
                 ajaxReq.getCoinValue(function (prices) {
 
-                    const gasPrice = etherUnits.unitToUnit(globalFuncs.localStorage.getItem('gasPrice'), 'gwei', 'ether');
-
                     const {gasLimit} = $scope.tx;
 
-                    const txCost = new BigNumber(gasPrice).mul(gasLimit);
+                    $scope.gasPrice = globalFuncs.localStorage.getItem('gasPrice');
+                    const gasPriceE = etherUnits.unitToUnit($scope.gasPrice, 'gwei', 'ether');
 
-                    $scope.txCost = txCost;
+
+                    $scope.txCostEther = new BigNumber(gasPriceE).mul(gasLimit);
 
                     // fixme: add currencies based on language
 
-                    $scope.cost = txCost.mul(prices.usd);
+                    $scope.txCostFiat = $scope.txCostEther.mul(prices.usd);
+
+                    $scope.nodeType = nodes.nodeList[globalFuncs.getCurNode()].type;
 
 
                 });
 
             }
 
-
-            $scope.$watch(function () {
-
-                return globalFuncs.getCurNode();
-            }, function (val, _val) {
+            function handleTxCost(val, _val) {
 
                 if (!angular.equals(val, _val)) {
 
                     getTxCost();
+
+
                 }
 
-            });
+            }
+
+            $scope.$watch(function () {
+
+                return ajaxReq.chainId;
+            }, handleTxCost);
 
 
             $scope.$watch(function () {
 
                 return globalFuncs.localStorage.getItem('gasPrice');
-            }, function (val, _val) {
+            }, handleTxCost);
 
-                if (!angular.equals(val, _val)) {
 
-                    getTxCost();
-                }
+            $scope.$watch(function () {
 
-            })
+                return $scope.tx.gasLimit;
+
+            }, handleTxCost)
 
 
         }

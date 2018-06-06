@@ -2,10 +2,10 @@
 <section class="col-sm-8">
     <div class="block">
 
-    <!-- To Address -->
-    <div class="row form-group">
-      <address-field placeholder="0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8" var-name="tx.to"></address-field>
-    </div>
+        <!-- To Address -->
+        <div class="row form-group">
+            <address-field placeholder="0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8" var-name="tx.to"></address-field>
+        </div>
 
         <!-- Amount to Send -->
         <label translate="SEND_amount">Amount to Send:</label>
@@ -164,14 +164,7 @@
 <!-- Sidebar -->
 <section class="col-sm-4">
 
-    <div class="block block--danger"
-         ng-show="wallet!=null && globalService.currentTab==globalService.tabs.swap.id && !hasEnoughBalance()">
-        <h5>Warning! You do not have enough funds to complete this swap.</h5>
-        <p>Please add more funds to your wallet or access a different wallet.</p>
-    </div>
-
     <wallet-balance-drtv></wallet-balance-drtv>
-
 
 
     <div ng-show="checkTxPage" ng-click="checkTxReadOnly=!checkTxReadOnly" class="small text-right text-gray-lighter">

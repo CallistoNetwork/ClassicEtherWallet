@@ -18,6 +18,13 @@ uiFuncs.getTxData = function ($scope) {
 };
 
 
+uiFuncs.verifyTx = function (tx) {
+
+    return tx.hasOwnProperty('to') &&
+        tx.hasOwnProperty('from') &&
+        tx.hasOwnProperty('value')
+};
+
 uiFuncs.isTxDataValid = function (txData) {
     if (txData.to !== "0xCONTRACT" && !ethFuncs.validateEtherAddress(txData.to)) throw globalFuncs.errorMsgs[5];
     if (txData.to === "0xCONTRACT") txData.to = '';
@@ -290,16 +297,44 @@ function mapTransToWeb3Trans(trans) {
 
 
 uiFuncs.sendTx = function (signedTx, callback) {
-    // check for web3 late signed tx
-    if (signedTx.slice(0, 2) !== '0x') {
 
+    // check for web3 late signed tx
+
+    // web3 transaction can be a string that starts w/ quotes
+
+
+    if (typeof signedTx === 'string' && signedTx.slice(0, 2) === '0x') {
+
+
+        ajaxReq.sendRawTx(signedTx, function (data) {
+            var resp = {};
+            if (data.error) {
+                resp = {
+                    isError: true,
+                    error: data.msg
+                };
+            } else {
+                resp = {
+                    isError: false,
+                    data: data.data
+                };
+            }
+            if (callback !== undefined) callback(resp);
+        });
+
+
+    } else {
 
         let transaction;
 
 
         try {
 
-            transaction = mapTransToWeb3Trans(JSON.parse(signedTx));
+            // when sending tx, web3 tx comes in as string or object
+
+            const _signedTx = typeof signedTx === 'string' ? JSON.parse(signedTx) : signedTx;
+
+            transaction = mapTransToWeb3Trans(_signedTx);
 
         } catch (e) {
 
@@ -318,23 +353,6 @@ uiFuncs.sendTx = function (signedTx, callback) {
         });
 
 
-    } else {
-
-        ajaxReq.sendRawTx(signedTx, function (data) {
-            var resp = {};
-            if (data.error) {
-                resp = {
-                    isError: true,
-                    error: data.msg
-                };
-            } else {
-                resp = {
-                    isError: false,
-                    data: data.data
-                };
-            }
-            if (callback !== undefined) callback(resp);
-        });
     }
 
 

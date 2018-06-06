@@ -76,6 +76,7 @@ var CustomGasMessages = require('./customGas.js')
 window.CustomGasMessages = CustomGasMessages;
 var tabsCtrl = require('./controllers/tabsCtrl');
 var viewCtrl = require('./controllers/viewCtrl');
+var coldStakingCtrl = require('./controllers/coldStakingCtrl');
 var walletGenCtrl = require('./controllers/walletGenCtrl');
 var bulkGenCtrl = require('./controllers/bulkGenCtrl');
 var decryptWalletCtrl = require('./controllers/decryptWalletCtrl');
@@ -96,6 +97,7 @@ var encryptCtrl = require('./controllers/encryptCtrl');
 var helpersCtrl = require('./controllers/helpersCtrl');
 var messagesControl = require('./controllers/messagesCtrl');
 var switchNetworkCtrl = require('./controllers/switchNetworkCtrl');
+var openStakingCtrl = require('./controllers/openStakingCtrl');
 var globalService = require('./services/globalService');
 var walletService = require('./services/walletService');
 var newMessageService = require('./services/newMessageService');
@@ -135,6 +137,7 @@ app.factory('backgroundNodeService', backgroundNodeService);
 app.factory('changeNowService', changeNow);
 
 app.factory('newMessageService', newMessageService);
+
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('addressField', ['$compile', 'backgroundNodeService', addressFieldDrtv]);
 app.directive('qrCode', QRCodeDrtv);
@@ -167,8 +170,10 @@ app.controller('messagesCtrl', ['$scope', '$rootScope', '$interval', 'globalServ
 app.controller('encryptCtrl', ['$scope', 'walletService', encryptCtrl]);
 app.controller('backgroundNodeCtrl', ['$scope', 'backgroundNodeService', '$interval', backgroundNodeCtrl]);
 
+app.controller('openStakingCtrl', ['$scope', openStakingCtrl]);
 app.controller('broadcastTxCtrl', ['$scope', broadcastTxCtrl]);
 
+app.controller('coldStakingCtrl', ['$scope', '$rootScope', 'walletService', coldStakingCtrl]);
 if (IS_CX) {
     app.controller('addWalletCtrl', ['$scope', '$sce', addWalletCtrl]);
     app.controller('myWalletsCtrl', ['$scope', '$sce', 'walletService', myWalletsCtrl]);

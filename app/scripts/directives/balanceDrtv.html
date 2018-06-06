@@ -25,7 +25,17 @@
             </ul>
         </div>
         <h5 translate="sidebar_AccountBal">Account Balance</h5>
-        <ul class="account-info point" ng-dblclick="showLongBal=!showLongBal" title="{{wallet.balance}} (Double-Click)">
+
+        <div class="row" ng-controller="openStakingCtrl"
+             ng-show="['CLO', 'RINKEBY ETH', 'CLOT'].includes(ajaxReq.type)">
+            <button class="btn btn-primary btn-sm" ng-click="openStakingModal()">Start Staking!</button>
+            <button class="btn btn-primary btn-sm" ng-click="openWithdrawModal()">Withdraw!</button>
+            <button class="btn btn-primary btn-sm" ng-click="openClaimRewardModal()">Claim Reward!</button>
+        </div>
+
+
+        <ul class="account-info point" ng-dblclick="showLongBal = !showLongBal"
+            title="{{wallet.balance}} (Double-Click)">
             <li>
                 <span class="mono wrap" ng-show="!showLongBal">{{wallet.balance | number}}</span>
                 <span class="mono wrap" ng-show="showLongBal">{{wallet.balance}}</span> {{ajaxReq.type}}
@@ -148,7 +158,8 @@
                     <address-field
                             placeholder="mewsupport.eth"
                             var-name="localToken.contractAdd"
-                            labelTranslated="TOKEN_Addr">
+                            labelTranslated="TOKEN_Addr"
+                    >
                     </address-field>
                 </div>
 

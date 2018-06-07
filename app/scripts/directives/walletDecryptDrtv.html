@@ -521,6 +521,17 @@
 
                         <div class="col-sm-4">
                             <label class="radio small">
+                                <input aria-describedby="Path: TREZOR (ESN) {{HDWallet.hwESNetworkPath}}"
+                                       ng-change="onHDDPathChange()"
+                                       ng-model="HDWallet.dPath"
+                                       type="radio"
+                                       value="{{HDWallet.hwESNetworkPath}}"/>
+                                <span ng-bind="HDWallet.hwESNetworkPath"></span>
+                                <p class="small">Network: Ethersocial Network</p>
+                            </label>
+
+                        <div class="col-sm-4">
+                            <label class="radio small">
                                 <p class="small"><strong>Your Custom Path</strong></p>
                                 <input aria-describedby="Path: Enter your own - {{HDWallet.customDPath}}"
                                        ng-change="onHDDPathChange()"

@@ -212,15 +212,29 @@ var coldStakingService = function (walletService) {
         CLOT: '0xa45083107ae67636cd9b93ad13c15b939dbdce31',
         'RINKEBY ETH': '0xa3a278371d1569d849f93f4241c7812969e863a3',
         CLO: '0x',
+        //"ROPSTEN ETH": '0x1797a49729e1595d385484a2d48e74703bf4f150'
     };
 
 
     this.stake_balance = 0;
 
+    /*
+        Gets the reward for address
+     */
+
+    function stake_info() {
+
+
+        ethFuncs.handleContractCall('stake_info', contract, null, [walletService.wallet.getAddressString()], '0x00', data => {
+
+        })
+    }
+
     function stake_reward() {
 
+        const addr = walletService.wallet.getAddressString();
 
-        ethFuncs.handleContractCall('stake_reward', contract, [walletService.wallet.getAddressString()], data => {
+        ethFuncs.handleContractCall('stake_reward', contract, [addr], addr, '0x00', data => {
 
             console.log('stake_reward', data);
 
@@ -245,7 +259,7 @@ var coldStakingService = function (walletService) {
         // claim_and_withdraw
 
 
-        ethFuncs.handleContractCall('claim_and_withdraw', contract, null, callback);
+        ethFuncs.handleContractCall('claim_and_withdraw', contract, null, walletService.wallet.getAddressString(), '0x00', callback);
 
 
     }
@@ -256,7 +270,7 @@ var coldStakingService = function (walletService) {
         // claim
 
 
-        ethFuncs.handleContractCall('claim', contract, null, callback);
+        ethFuncs.handleContractCall('claim', contract, null, walletService.wallet.getAddressString(), '0x00', callback);
 
 
     }
@@ -283,6 +297,8 @@ var coldStakingService = function (walletService) {
         stake_reward,
         updateAddress
     }
-}
+};
+
+
 
 module.exports = coldStakingService;

@@ -112,7 +112,13 @@ ethFuncs.encodeInputs = function encodeInputs(inputs) {
 
 };
 
-ethFuncs.handleContractCall = function handleContractCall(functionName, contract, inputs_ = null, callback_) {
+ethFuncs.handleContractCall = function handleContractCall(functionName, contract, inputs_ = null, from, value = 0, callback_) {
+
+    if (!(contract.hasOwnProperty('abi') && contract.hasOwnProperty('address'))) {
+
+        return false;
+
+    }
 
     const foundFunction = contract.abi.find(itm => itm.type === 'function' && itm.name === functionName);
 
@@ -137,10 +143,30 @@ ethFuncs.handleContractCall = function handleContractCall(functionName, contract
 
     data = ethFuncs.sanitizeHex(data);
 
-    ajaxReq.getEthCall({
+
+    const tx = {
         to: contract.address,
-        data
-    }, function (data) {
+        data,
+        //from,
+        //value: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(value, 'ether'))),
+    };
+
+    // ethFuncs.estimateGas(tx, function (data) {
+    //
+    //     if (data.error || parseInt(data.data) === -1) {
+    //
+    //         console.error('error estimating gas', data);
+    //
+    //         return false;
+    //
+    //     } else {
+    //
+    //         Object.assign(tx, {gasLimit: data.data});
+    //
+    //     }
+
+
+    ajaxReq.getEthCall(tx, function (data) {
 
         // if (data.error) {
         //
@@ -150,7 +176,6 @@ ethFuncs.handleContractCall = function handleContractCall(functionName, contract
         callback_(data);
 
     })
-
 
 }
 
@@ -172,6 +197,7 @@ ethFuncs.encodeFunctionName = function encodeFunctionName(functionName, contract
     }
 
 
-}
+};
+
 
 module.exports = ethFuncs;

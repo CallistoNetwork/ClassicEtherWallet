@@ -5,8 +5,6 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
     walletService.wallet = null;
 
     $scope.visibility = "interactView";
-
-
     $scope.sendTxModal = new Modal(document.getElementById('deployContract'));
     $scope.sendContractModal = new Modal(document.getElementById('sendContract'));
     $scope.showReadWrite = false;

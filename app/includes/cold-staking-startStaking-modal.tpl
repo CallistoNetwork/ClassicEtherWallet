@@ -1,4 +1,4 @@
-<article class="modal fade" id="startStakingModal" tabindex="-1" ng-controller="coldStakingCtrl">
+<article class="modal fade" id="startStakingModal" tabindex="-1">
     <section class="modal-dialog">
         <form ng-submit="startStaking()">
             <section class="modal-content">
@@ -12,9 +12,9 @@
                     <h5>You will send {{tx.value || 0}} {{ajaxReq.type}} to the staking contract:
                         <a
                                 target="_blank"
-                                href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', staking_address)}}"
+                                href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', coldStakingService.contract.address)}}"
                         >
-                            {{staking_address}}
+                            {{coldStakingService.contract.address}}
                         </a>
 
                     </h5>
@@ -26,7 +26,7 @@
                            ng-model="tx.value"
                            class="form-control"
                            required
-                           placeholder="Amount"
+                           placeholder="Ether"
                            ng-class="Validator.isPositiveNumber(tx.value) ? 'is-valid' : 'is-invalid'"
                     >
 
@@ -49,7 +49,8 @@
                         </div>
                         <div class="col-xs-4">
                             <div class="addressIdenticon med" title="Address Indenticon"
-                                 blockie-address="{{staking_address}}" watch-var="staking_address"></div>
+                                 blockie-address="{{coldStakingService.contract.address}}"
+                                 watch-var="staking_address"></div>
                         </div>
                     </div>
 

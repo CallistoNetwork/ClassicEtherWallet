@@ -1,28 +1,12 @@
 'use strict';
 
-var openStakingCtrl = function ($scope) {
+var openStakingCtrl = function ($scope, modalService, coldStakingService, walletService) {
 
+    $scope.modalService = modalService;
+    $scope.coldStakingService = coldStakingService;
+    $scope.walletService = walletService;
 
-    const startStakingModal = new Modal(document.getElementById('startStakingModal'));
-    //const openWithdrawModal = new Modal(document.getElementById('openWithdrawlModal'));
-    //const openClaimRewardModal = new Modal(document.getElementById('openClaimRewardModal'));
-
-
-    $scope.openStakingModal = function () {
-
-        startStakingModal.open();
-
-    };
-
-    $scope.openWithdrawModal = function () {
-
-        // openWithdrawModal.open();
-    }
-
-    $scope.openClaimRewardModal = function () {
-
-        // openClaimRewardModal.open();
-    }
+    coldStakingService.stake_reward();
 
 
 };

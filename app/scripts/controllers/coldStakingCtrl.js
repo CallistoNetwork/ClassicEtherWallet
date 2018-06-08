@@ -1,62 +1,51 @@
 'use strict';
 
 
-var coldStakingCtrl = function ($scope, $rootScope, walletService) {
+var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService, coldStakingService) {
 
 
     $scope.walletService = walletService;
+    $scope.modalService = modalService;
+    $scope.coldStakingService = coldStakingService;
 
 
-    const contract = {
-        CLOT: '0xa45083107ae67636cd9b93ad13c15b939dbdce31',
-        'RINKEBY ETH': '0xa3a278371d1569d849f93f4241c7812969e863a3',
-        CLO: '0x',
+    $scope.contract = coldStakingService.contract;
 
-    };
 
     function init() {
 
 
         // FIXME: network
-        const staking_address = contract['RINKEBY ETH'];
-        $scope.staking_address = staking_address;
 
 
         $scope.tx = {
             unit: 'ether',
             value: '',
-            to: staking_address,
-            gasLimit: 3e6,
+            to: coldStakingService.contract.address,
+            gasLimit: '',
             data: '',
         };
 
     }
 
-
     $scope.$watch(function () {
 
-        return ajaxReq.type;
 
+        return ajaxReq.type;
     }, function (val, _val) {
 
-        if (!angular.equals(val, _val) && Object.keys(contract).includes(val)) {
 
-            $scope.staking_address = contract[val];
+        coldStakingService.updateAddress();
 
-        }
 
     });
 
 
-    /*
-        Cold Staking
-
-
-     */
     $scope.startStaking = function () {
 
 
         $scope.wallet = walletService.wallet;
+
 
         ethFuncs.estimateGas($scope.tx, function (data) {
 
@@ -85,9 +74,7 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService) {
                 uiFuncs.sendTx(tx_, function (resp) {
 
 
-                    const startStakingModal = new Modal(document.getElementById('startStakingModal'));
-
-                    startStakingModal.close();
+                    modalService.startStakingModal.close();
 
                     if (!resp.isError) {
                         var txHashLink = $scope.ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data);
@@ -119,23 +106,40 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService) {
     };
 
 
-    /*
+    $scope.stake_reward = function () {
 
-        Withdraw from cold Staking
-     */
 
-    $scope.withdraw = function () {
+        coldStakingService.stake_reward(function (data) {
 
+            modalService.openClaimRewardModal.close();
+            console.log('stake_reward', data);
+
+
+        });
+
+    }
+
+
+    $scope.claim_and_withdraw = function () {
+
+        coldStakingService.claim_and_withdraw(function (data) {
+
+            modalService.openWithdrawModal.close();
+            console.log('claim_and_withdraw', data);
+
+
+        });
 
     };
 
-    /*
-        Claim Reward Cold Staking
-     */
-    $scope.claimReward = function () {
+    $scope.claim = function () {
 
-    };
+        coldStakingService.claim(function (data) {
 
+            modalService.openClaimRewardModal.close();
+            console.log('claim', data);
+        })
+    }
 
     function main() {
 
@@ -152,7 +156,7 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService) {
 
         } else {
 
-            $rootScope.$broadcast('ChangeNode', globalFuncs.networks['CLO'] || 0);
+            //$rootScope.$broadcast('ChangeNode', globalFuncs.networks['CLO'] || 0);
 
         }
 

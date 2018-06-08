@@ -4,6 +4,7 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
     $scope.erc20Abi = require('../abiDefinitions/erc20abi.json');
     $scope.DEXNS = require('../abiDefinitions/etcAbi.json')[5];
     $scope.DEXNSAddress = $scope.DEXNS.address;
+
     $scope.erc20Indexes = {
         DECIMALS: 2,
         SYMBOL: 3,
@@ -25,11 +26,11 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
     $scope.slide = 1;
     $scope.customTokenSymbol = '';
     $scope.customTokenInterval = null;
+
+
     walletService.wallet = null;
+    $scope.walletService = walletService;
     $scope.wallet = null;
-
-
-
 
     $scope.nodeList = nodes.nodeList;
     $scope.alternativeBalance = nodes.alternativeBalance;
@@ -42,6 +43,8 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
     }, function () {
         if (walletService.wallet == null) return;
         $scope.wallet = walletService.wallet;
+
+
     });
 
     $scope.resetTokenField = function () {

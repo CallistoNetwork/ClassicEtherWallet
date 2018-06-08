@@ -29,7 +29,7 @@
         <div class="row">
 
 
-            <ul class="account-info point" ng-dblclick="showLongBal = !showLongBal"
+            <ul class="account-info point"
                 title="{{walletService.wallet.balance}} (Double-Click)">
                 <li>
 
@@ -37,19 +37,23 @@
                     <!--fixme: clo / rik-->
 
 
-                    <span class="mono wrap" ng-show="!showLongBal">{{walletService.wallet.balance | number}}</span>
-                    <span class="mono wrap" ng-show="showLongBal">{{walletService.wallet.balance}}</span>
-                    {{ajaxReq.type}}
+                    <div ng-dblclick="showLongBal = !showLongBal">
 
 
-                    <div ng-if="['CLO', 'RINKEBY ETH', 'CLOT'].includes(ajaxReq.type)">
+                        <span class="mono wrap" ng-show="!showLongBal">{{walletService.wallet.balance | number}}</span>
+                        <span class="mono wrap" ng-show="showLongBal">{{walletService.wallet.balance}}</span>
+                        {{ajaxReq.type}}
+
+                    </div>
+
+                    <div ng-if="['CLO', 'RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)">
                         <button class="btn btn-sm btn-primary" ng-click="modalService.startStakingModal.open();">Start
                             Staking!
                         </button>
                     </div>
                 </li>
 
-                <div ng-if="wallet && ['CLO', 'RINKEBY ETH', 'CLOT'].includes(ajaxReq.type)"
+                <div ng-if="wallet && ['CLO', 'RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
                      ng-controller="openStakingCtrl">
                     <li>
                         <b>Staking Balance: </b> {{coldStakingService.stake_balance}}

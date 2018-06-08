@@ -1,9 +1,11 @@
 'use strict';
-var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeService) {
+var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeService, modalService) {
     $scope.ajaxReq = ajaxReq;
     $scope.erc20Abi = require('../abiDefinitions/erc20abi.json');
     $scope.DEXNS = require('../abiDefinitions/etcAbi.json')[5];
     $scope.DEXNSAddress = $scope.DEXNS.address;
+
+    $scope.modalService = modalService;
 
     $scope.erc20Indexes = {
         DECIMALS: 2,

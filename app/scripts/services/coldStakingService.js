@@ -396,7 +396,7 @@ var coldStakingService = function (walletService) {
     function updateAddress() {
 
 
-        if (['CLO', 'RINKEBY ETH', 'CLOT'].includes(ajaxReq.type)) {
+        if (Object.keys(contractAddrs).includes(ajaxReq.type)) {
 
 
             Object.assign(contract, {

@@ -47,7 +47,7 @@ var coldStakingCtrl = function ($scope, $rootScope, $interval, walletService, mo
         $scope.wallet = walletService.wallet;
 
 
-        ethFuncs.estimateGas({to: $scope.tx.to}, function (data) {
+        ethFuncs.estimateGas({to: $scope.tx.to, value: $scope.tx.value}, function (data) {
 
             if (data.error) {
 

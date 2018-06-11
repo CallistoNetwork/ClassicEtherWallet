@@ -42,13 +42,13 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td title="{{walletService.wallet.balance}} (Double-Click)" class="text-left">
+                    <td title="{{walletService.wallet.balance}} (Double-Click)" class="text-left pointer">
                           <span ng-dblclick="showLongBal = !showLongBal">
 
                                 <span class="mono wrap"
                                       ng-show="!showLongBal">{{walletService.wallet.balance | number}}</span>
                                 <span class="mono wrap" ng-show="showLongBal">{{walletService.wallet.balance}}</span>
-                                {{ajaxReq.type)}}
+                                {{ajaxReq.type}}
                            </span>
                     </td>
 
@@ -86,7 +86,7 @@
                     <td>
 
                         <button class="btn btn-primary  btn-teeny text-center"
-                                ng-click="modalService.openWithdrawModal.open();">
+                                ng-click="handleOpenWithdraw();">
                             Withdraw!
                         </button>
                     </td>
@@ -94,7 +94,7 @@
                     <td>
 
                         <button class="btn btn-primary btn-teeny text-center"
-                                ng-click="modalService.openClaimRewardModal.open();">
+                                ng-click="handleOpenClaim();">
                             Claim Reward!
                         </button>
 

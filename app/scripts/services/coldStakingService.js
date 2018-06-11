@@ -1,7 +1,7 @@
 var coldStakingService = function (walletService) {
 
 
-    const contractAddrs = {
+    this.contractAddrs = {
         CLOT: '0xa45083107ae67636cd9b93ad13c15b939dbdce31',
         // fixme: testing addr
         'RINKEBY ETH': '0x64bebb2aae4e6911daac96717c37e3bd127e1832',//'0xa3a278371d1569d849f93f4241c7812969e863a3',
@@ -10,7 +10,7 @@ var coldStakingService = function (walletService) {
     };
 
 
-    const contract = {
+    this.contract = {
         "name": "Cold Staking",
         // rinkeby
         //fixme testing addr
@@ -303,32 +303,36 @@ var coldStakingService = function (walletService) {
         reward: 0
     };
 
+    this._staking_threshold = 0;
+
+    this.defaultTx = () => ({
+        inputs: null,
+        from: walletService.wallet.getAddressString(),
+        value: 0,
+        unit: 'ether',
+    });
+
 
     /*
         Gets the reward for address
      */
 
-    const zeroValue = '0x00';
 
-
-    function staker_info() {
+    this.staker_info = function () {
 
         const addr = walletService.wallet.getAddressString();
 
-        ethFuncs.handleContractCall('staker_info', contract, [addr], addr, zeroValue, data => {
+        const _tx = {inputs: [addr], from: addr, value: 0};
+
+        ethFuncs.handleContractCall('staker_info', this.contract, _tx, data => {
 
             console.log('staker_info()', data);
 
-            if (data.error) {
 
-                console.error('error getting staker info');
+            if (!data.error) {
 
 
-            } else {
-
-                const {outputs} = contract.abi.find(a => a.name === 'staker_info');
-
-                const [weight, init, stake_time, reward] = ethUtil.solidityCoder.decodeParams(outputs.map(o => o.type), data.data.replace('0x', ''));
+                const [weight, init, stake_time, reward] = data.data;
 
                 Object.assign(this._staker_info, {
                     weight: etherUnits.toEther(weight.toFixed(0), 'wei'),
@@ -337,85 +341,90 @@ var coldStakingService = function (walletService) {
                     reward: reward.toFixed(0),
                 });
 
-            }
-            return this._staker_info;
+                return this._staker_info;
 
+            }
         })
 
-    }
+    };
 
-    function stake_reward() {
+    this.staking_threshold = function () {
+
+        ethFuncs.handleContractCall('staking_threshold', this.contract, this.defaultTx(), data => {
+
+            if (!data.error) {
+
+                this._staking_threshold = data.data[0];
+            }
+        })
+    };
+
+    this.stake_reward = function () {
 
         const addr = walletService.wallet.getAddressString();
 
-        ethFuncs.handleContractCall('stake_reward', contract, [addr], addr, zeroValue, data => {
+        const _tx = {inputs: [addr], from: addr, value: 0};
+
+        ethFuncs.handleContractCall('stake_reward', this.contract, _tx, data => {
 
             console.log('stake_reward()', data);
 
-            if (data.error) {
+            if (!data.error) {
 
 
-                this._staker_info.reward = 0;
-            } else {
+                this._staker_info.reward = data.data[0].toFixed(0);
 
-
-                this._staker_info.reward = ethUtil.solidityCoder.decodeParam('uint', data.data).toFixed(0);
-
-                console.log(this._staker_info);
+                console.log('staking info', this._staker_info);
 
 
             }
 
             return this._staker_info.reward;
         })
-    }
+    };
 
 
-    function claim_and_withdraw(callback = console.log) {
+    this.claim_and_withdraw = function (callback = console.log) {
 
 
         // claim_and_withdraw
 
 
-        ethFuncs.handleContractCall('claim_and_withdraw', contract, null, walletService.wallet.getAddressString(), zeroValue, callback);
+        ethFuncs.handleContractCall('claim_and_withdraw', this.contract, this.defaultTx(), callback);
 
 
-    }
+    };
 
-    function claim(callback = console.log) {
+    this.valid_staking_tx = function (num_) {
+
+        return new BigNumber(this._staking_threshold).lte(new BigNumber(num_));
+    };
+
+    this.claim = function (callback = console.log) {
 
 
         // claim
 
 
-        ethFuncs.handleContractCall('claim', contract, null, walletService.wallet.getAddressString(), zeroValue, callback);
+        ethFuncs.handleContractCall('claim', this.contract, this.defaultTx(), callback);
 
 
-    }
+    };
 
-    function updateAddress() {
-
-
-        if (Object.keys(contractAddrs).includes(ajaxReq.type)) {
+    this.updateAddress = function () {
 
 
-            Object.assign(contract, {
-                address: contractAddrs[ajaxReq.type]
+        if (Object.keys(this.contractAddrs).includes(ajaxReq.type)) {
+
+
+            Object.assign(this.contract, {
+                address: this.contractAddrs[ajaxReq.type]
             });
         }
-    }
+    };
 
 
-    return {
-        contract,
-        contractAddrs,
-        claim,
-        claim_and_withdraw,
-        staker_info,
-        _staker_info: this._staker_info,
-        stake_reward,
-        updateAddress
-    }
+    return this;
 };
 
 

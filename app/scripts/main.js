@@ -175,7 +175,7 @@ app.controller('backgroundNodeCtrl', ['$scope', 'backgroundNodeService', '$inter
 
 app.controller('broadcastTxCtrl', ['$scope', broadcastTxCtrl]);
 
-app.controller('coldStakingCtrl', ['$scope', '$rootScope', '$interval', 'walletService', 'modalService', 'coldStakingService', coldStakingCtrl]);
+app.controller('coldStakingCtrl', ['$scope', '$rootScope', 'walletService', 'modalService', 'coldStakingService', coldStakingCtrl]);
 if (IS_CX) {
     app.controller('addWalletCtrl', ['$scope', '$sce', addWalletCtrl]);
     app.controller('myWalletsCtrl', ['$scope', '$sce', 'walletService', myWalletsCtrl]);

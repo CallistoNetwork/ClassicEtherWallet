@@ -99,7 +99,7 @@ ethFuncs.estimateGas = function (dataObj, callback) {
     });
 };
 
-ethFuncs.encodeInputs = function encodeInputs(inputs) {
+ethFuncs.encodeInputs = function encodeInputs({inputs}) {
 
 
     const types = inputs.map(i => i.type);
@@ -111,15 +111,43 @@ ethFuncs.encodeInputs = function encodeInputs(inputs) {
 
 
 };
+/*
 
-ethFuncs.handleContractCall = function (functionName, contract, inputs_ = null, from, value = 0, callback_ = console.log) {
+    Decode outputs from contract abi
+
+    @param contractFunction
+    @param data eth_call response
+
+    @returns []any | data
+
+ */
+ethFuncs.decodeOutputs = function decodeOutputs(contractFunction, data) {
+
+
+    const {outputs} = contractFunction;
+
+    return ethUtil.solidityCoder.decodeParams(outputs.map(o => o.type), data.data.replace('0x', ''));
+
+};
+
+/*
+
+    @param string functionName
+    @param Contract contract
+    @param Tx {}
+    @returns {error: bool | error, tx: Tx } if cannot estimate gas
+
+ */
+
+ethFuncs.prepContractData = function (functionName, contract, {inputs: inputs_ = null, from, value = 0, unit = 'ether'}) {
+
 
     if (!(contract.hasOwnProperty('abi') && contract.hasOwnProperty('address') && Array.isArray(contract.abi))) {
 
 
         console.error('Invalid Request');
 
-        return false;
+        return {error: true};
 
     }
 
@@ -130,61 +158,107 @@ ethFuncs.handleContractCall = function (functionName, contract, inputs_ = null, 
 
         console.error('error locating function: ', functionName, 'in', contract);
 
-        return false;
+        return {error: true};
     }
 
 
     let data = ethFuncs.encodeFunctionName(foundFunction.name, contract);
 
+    if (!data) {
+
+        return {error: true};
+
+    }
+
     if (inputs_) {
 
         foundFunction.inputs.forEach((item, i) => item.value = inputs_[i]);
 
-        data += ethFuncs.encodeInputs(foundFunction.inputs);
+        data += ethFuncs.encodeInputs(foundFunction);
     }
 
 
-    data = ethFuncs.sanitizeHex(data);
-
-
-    const tx = {
+    return {
         to: contract.address,
-        data,
+        data: ethFuncs.sanitizeHex(data),
+        value
     };
 
-    ethFuncs.estimateGas(tx, function (data) {
-
-        if (data.error || parseInt(data.data) === -1) {
-
-            console.error('error estimating gas', data);
-
-            return false;
-
-        } else {
-
-            Object.assign(tx, {
-                gasLimit: data.data,
-                value: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(value, 'ether')))
-            });
-
-            ajaxReq.getEthCall(tx, function (data) {
-
-                // if (data.error) {
-                //
-                //     uiFuncs.notifier.danger(data.msg);
-                //
-                // }
-                callback_(data);
-
-            })
-
-        }
-
-
-    });
 
 }
 
+
+/*
+
+    Given functionName, contract, and tx data, generates tx data and sends call, returns decoded outputs
+    @returns {error: bool, data: []any}
+ */
+
+ethFuncs.handleContractCall = function (functionName, contract, {inputs = null, from, value = 0, unit = 'ether'}, callback_ = console.log) {
+
+
+    const foundFunction = contract.abi.find(itm => itm.type === 'function' && itm.name === functionName);
+
+
+    if (!foundFunction) {
+
+        console.error('error locating function: ', functionName, 'in', contract);
+
+        callback_({error: true, data: null});
+    }
+
+    const transObj = ethFuncs.prepContractData(functionName, contract, {inputs, from, value});
+
+    if (transObj.error) {
+
+        callback_({error: transObj, data: null});
+
+    } else {
+
+
+        ethFuncs.estimateGas(transObj, function (data) {
+
+            if (data.error || parseInt(data.data) === -1) {
+
+                console.error('error estimating gas', data);
+
+                callback_({error: data, data: null});
+
+            } else {
+
+
+                Object.assign(transObj, {
+                    gasLimit: data.data,
+                    value: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(value, unit)))
+                });
+
+
+                ajaxReq.getEthCall(transObj, function (data) {
+
+                    callback_(Object.assign({}, data, {data: ethFuncs.decodeOutputs(foundFunction, data)}));
+
+                })
+
+            }
+
+
+        });
+
+    }
+
+}
+
+
+/*
+
+    given a function name and contract, returns function signature
+
+    @param string functionName
+
+    @param Contract contract
+
+    @returns string functionSig
+ */
 
 ethFuncs.encodeFunctionName = function (functionName, contract) {
 

@@ -1,7 +1,7 @@
 'use strict';
 
 
-var coldStakingCtrl = function ($scope, $rootScope, $interval, walletService, modalService, coldStakingService) {
+var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService, coldStakingService) {
 
 
     $scope.walletService = walletService;
@@ -20,7 +20,7 @@ var coldStakingCtrl = function ($scope, $rootScope, $interval, walletService, mo
 
         $scope.tx = {
             unit: 'ether',
-            value: '',
+            value: 0,
             to: coldStakingService.contract.address,
             gasLimit: '',
             data: '',
@@ -41,13 +41,23 @@ var coldStakingCtrl = function ($scope, $rootScope, $interval, walletService, mo
     });
 
 
+    /*
+
+        send tx to contract
+
+        fallback defaults to start_staking();
+     */
+
     $scope.startStaking = function () {
 
 
         $scope.wallet = walletService.wallet;
 
 
-        ethFuncs.estimateGas({to: $scope.tx.to, value: $scope.tx.value}, function (data) {
+        ethFuncs.estimateGas({
+            to: $scope.tx.to,
+            value: etherUnits.toWei($scope.tx.value, $scope.tx.unit)
+        }, function (data) {
 
             if (data.error) {
 
@@ -117,12 +127,16 @@ var coldStakingCtrl = function ($scope, $rootScope, $interval, walletService, mo
 
         });
 
-    }
+    };
+
 
 
     $scope.claim_and_withdraw = function () {
 
         coldStakingService.claim_and_withdraw(function (data) {
+
+
+            handleResponse();
 
             modalService.openWithdrawModal.close();
             console.log('claim_and_withdraw', data);
@@ -132,9 +146,21 @@ var coldStakingCtrl = function ($scope, $rootScope, $interval, walletService, mo
 
     };
 
+    function handleResponse(data) {
+
+        if (!data || data.error) {
+
+
+            $scope.notifier.danger(data);
+        }
+    }
+
     $scope.claim = function () {
 
         coldStakingService.claim(function (data) {
+
+            handleResponse();
+
 
             modalService.openClaimRewardModal.close();
             console.log('claim', data);
@@ -159,11 +185,6 @@ var coldStakingCtrl = function ($scope, $rootScope, $interval, walletService, mo
             //$rootScope.$broadcast('ChangeNode', globalFuncs.networks['CLO'] || 0);
 
         }
-
-
-        //$interval(coldStakingService.stake_reward, 1000 * 60);
-        //$interval(coldStakingService.staker_info, 1000 * 60);
-
 
 
     }

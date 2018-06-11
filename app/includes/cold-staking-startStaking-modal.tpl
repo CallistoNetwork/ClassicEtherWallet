@@ -26,10 +26,11 @@
                            ng-model="tx.value"
                            class="form-control"
                            required
-                           placeholder="Ether"
-                           ng-class="Validator.isPositiveNumber(tx.value) ? 'is-valid' : 'is-invalid'"
+                           placeholder="{{ajaxReq.type}}"
+                           ng-class="coldStakingService.valid_staking_tx(tx.value) ? 'is-valid' : 'is-invalid'"
                     >
 
+                    <br/>
 
                     <div class="row justify_row">
                         <div class="col-xs-4">

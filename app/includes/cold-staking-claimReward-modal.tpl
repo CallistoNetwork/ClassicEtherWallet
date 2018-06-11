@@ -24,7 +24,7 @@
                     <p>
                         <b translate="TRANS_gas"></b>
 
-                        {{tx.gasLimit}}
+                        {{tx.gasLimit || '-1'}}
                     </p>
 
                     <h5>Warning: After claiming the reward, your funds will be frozen for the next 172,800 blocks</h5>

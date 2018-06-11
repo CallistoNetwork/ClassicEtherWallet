@@ -48,12 +48,60 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
         $scope.wallet = walletService.wallet;
 
 
+        coldStakingService.staking_threshold();
         coldStakingService.staker_info();
 
         coldStakingService.stake_reward();
 
 
     });
+
+    $scope.estimateGas_ = function (name = 'claim_and_withdraw') {
+
+
+        const tx = {inputs_: null, from: walletService.wallet.getAddressString(), value: 0, unit: 'ether'};
+
+        const result = ethFuncs.prepContractData(name, coldStakingService.contract, tx);
+
+
+        if (!result.error) {
+
+            ethFuncs.estimateGas(result, function (data) {
+                if (data.error || parseInt(data.data) === -1) {
+
+                    console.error('error estimating gas', data);
+
+
+                    Object.assign($scope.tx, {
+                        gasLimit: -1,
+                    });
+
+                } else {
+
+
+                    Object.assign($scope.tx, {
+                        gasLimit: data.data,
+                    });
+                }
+            });
+        }
+    };
+
+    $scope.handleOpenWithdraw = function () {
+
+
+        modalService.openWithdrawModal.open();
+        $scope.estimateGas_('withdraw');
+
+    };
+
+    $scope.handleOpenClaim = function () {
+
+        modalService.openClaimRewardModal.open();
+
+        $scope.estimateGas_();
+    }
+
 
     $scope.resetTokenField = function () {
 

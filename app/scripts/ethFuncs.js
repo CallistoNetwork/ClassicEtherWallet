@@ -112,9 +112,12 @@ ethFuncs.encodeInputs = function encodeInputs(inputs) {
 
 };
 
-ethFuncs.handleContractCall = function handleContractCall(functionName, contract, inputs_ = null, from, value = 0, callback_) {
+ethFuncs.handleContractCall = function (functionName, contract, inputs_ = null, from, value = 0, callback_ = console.log) {
 
-    if (!(contract.hasOwnProperty('abi') && contract.hasOwnProperty('address'))) {
+    if (!(contract.hasOwnProperty('abi') && contract.hasOwnProperty('address') && Array.isArray(contract.abi))) {
+
+
+        console.error('Invalid Request');
 
         return false;
 
@@ -125,7 +128,7 @@ ethFuncs.handleContractCall = function handleContractCall(functionName, contract
 
     if (!foundFunction) {
 
-        console.error('err');
+        console.error('error locating function: ', functionName, 'in', contract);
 
         return false;
     }
@@ -147,39 +150,43 @@ ethFuncs.handleContractCall = function handleContractCall(functionName, contract
     const tx = {
         to: contract.address,
         data,
-        //from,
-        //value: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(value, 'ether'))),
     };
 
-    // ethFuncs.estimateGas(tx, function (data) {
-    //
-    //     if (data.error || parseInt(data.data) === -1) {
-    //
-    //         console.error('error estimating gas', data);
-    //
-    //         return false;
-    //
-    //     } else {
-    //
-    //         Object.assign(tx, {gasLimit: data.data});
-    //
-    //     }
+    ethFuncs.estimateGas(tx, function (data) {
+
+        if (data.error || parseInt(data.data) === -1) {
+
+            console.error('error estimating gas', data);
+
+            return false;
+
+        } else {
+
+            Object.assign(tx, {
+                gasLimit: data.data,
+                value: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(value, 'ether')))
+            });
+
+            ajaxReq.getEthCall(tx, function (data) {
+
+                // if (data.error) {
+                //
+                //     uiFuncs.notifier.danger(data.msg);
+                //
+                // }
+                callback_(data);
+
+            })
+
+        }
 
 
-    ajaxReq.getEthCall(tx, function (data) {
-
-        // if (data.error) {
-        //
-        //     uiFuncs.notifier.danger(data.msg);
-        //
-        // }
-        callback_(data);
-
-    })
+    });
 
 }
 
-ethFuncs.encodeFunctionName = function encodeFunctionName(functionName, contract) {
+
+ethFuncs.encodeFunctionName = function (functionName, contract) {
 
     const foundFunction = contract.abi.find(function_ => function_.type === 'function' && function_.name === functionName);
 
@@ -191,7 +198,7 @@ ethFuncs.encodeFunctionName = function encodeFunctionName(functionName, contract
 
     } else {
 
-        console.error('error locating', functionName);
+        console.error('error locating', functionName, 'in', contract);
 
         return false;
     }

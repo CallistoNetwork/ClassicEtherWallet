@@ -24,51 +24,78 @@
                     Ledger</a></li>
             </ul>
         </div>
-        <h5 translate="sidebar_AccountBal">Account Balance</h5>
 
         <div class="row">
 
 
-            <ul class="account-info point"
-                title="{{walletService.wallet.balance}} (Double-Click)">
-                <li>
+            <ul class="account-info point">
+                <li style="display: flex; word-break: break-word;">
 
 
-                    <!--fixme: clo / rik-->
+                    <h5 translate="sidebar_AccountBal">Account Balance</h5>
+                    <h5>Staking Balance</h5>
+                    <h5>Reward</h5>
 
+                </li>
 
-                    <div ng-dblclick="showLongBal = !showLongBal">
+                <li ng-if="['CLO', 'RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)">
+                    <div class="col-xs-4" title="{{walletService.wallet.balance}} (Double-Click)">
 
+                         <span ng-dblclick="showLongBal = !showLongBal">
 
-                        <span class="mono wrap" ng-show="!showLongBal">{{walletService.wallet.balance | number}}</span>
-                        <span class="mono wrap" ng-show="showLongBal">{{walletService.wallet.balance}}</span>
-                        {{ajaxReq.type}}
+                                <span class="mono wrap"
+                                      ng-show="!showLongBal">{{walletService.wallet.balance | number}}</span>
+                                <span class="mono wrap" ng-show="showLongBal">{{walletService.wallet.balance}}</span>
+                                {{ajaxReq.type.slice(0,3)}}
+                           </span>
+
+                    </div>
+                    <div class="col-xs-4">
+
+                        <span class="mono wrap">{{coldStakingService._staker_info.weight | number}}</span>
+
+                        {{ajaxReq.type.slice(0, 3)}}
 
                     </div>
 
-                    <div ng-if="['CLO', 'RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)">
-                        <button class="btn btn-sm btn-primary" ng-click="modalService.startStakingModal.open();">Start
-                            Staking!
-                        </button>
+                    <div class="col-xs-4">
+                        <span class="mono wrap">{{coldStakingService._staker_info.reward | number}}</span>
+
+                        {{ajaxReq.type.slice(0, 3)}}
+
                     </div>
                 </li>
 
-                <div ng-if="wallet && ['CLO', 'RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
-                     ng-controller="openStakingCtrl">
-                    <li>
-                        <b>Staking Balance: </b> {{coldStakingService.stake_balance}}
-                        <br/>
-                        <button class="btn btn-sm btn-primary" ng-click="modalService.openWithdrawModal.open();">
+                <li ng-if="wallet && ['CLO', 'RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
+                >
+                    <div class="col-xs-4">
+
+                        <button class="btn btn-primary btn-teeny pull-right"
+                                ng-click="modalService.startStakingModal.open();">Start
+                            Staking!
+                        </button>
+                    </div>
+
+                    <div class="col-xs-4">
+
+                        <button class="btn btn-primary  btn-teeny pull-right"
+                                ng-click="modalService.openWithdrawModal.open();">
                             Withdraw!
                         </button>
-                    </li>
-                    <li>
-                        <button class="btn btn-sm btn-primary" ng-click="modalService.openClaimRewardModal.open();">
+                    </div>
+
+                    <div class="col-xs-4">
+
+                        <button class="btn btn-primary  btn-teeny pull-right"
+                                ng-click="modalService.openClaimRewardModal.open();">
                             Claim
                             Reward!
                         </button>
-                    </li>
-                </div>
+
+                    </div>
+                </li>
+
+g
             </ul>
 
 
@@ -78,7 +105,7 @@
         <div ng-repeat="altBalance in alternativeBalance">
             <div ng-if="altBalance.symbol !== ajaxReq.type">
                 <ul class="account-info point" ng-dblclick="showLongBal=!showLongBal"
-                    title="{{altBalance.balance}} (Double-Click)">
+                    title="{{altBalance.balance}} (Double-Click)" style="list-style: none;">
                     <li>
                         <span class="mono wrap" ng-show="!showLongBal">{{altBalance.balance | number}}</span>
                         <span class="mono wrap" ng-show="showLongBal">{{altBalance.balance}}</span>

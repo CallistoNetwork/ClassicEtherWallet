@@ -1,11 +1,12 @@
 'use strict';
-var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeService, modalService) {
+var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeService, modalService, coldStakingService) {
     $scope.ajaxReq = ajaxReq;
     $scope.erc20Abi = require('../abiDefinitions/erc20abi.json');
     $scope.DEXNS = require('../abiDefinitions/etcAbi.json')[5];
     $scope.DEXNSAddress = $scope.DEXNS.address;
 
     $scope.modalService = modalService;
+    $scope.coldStakingService = coldStakingService;
 
     $scope.erc20Indexes = {
         DECIMALS: 2,
@@ -45,6 +46,11 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
     }, function () {
         if (walletService.wallet == null) return;
         $scope.wallet = walletService.wallet;
+
+
+        coldStakingService.staker_info();
+
+        coldStakingService.stake_reward();
 
 
     });

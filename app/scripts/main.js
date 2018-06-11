@@ -97,7 +97,6 @@ var encryptCtrl = require('./controllers/encryptCtrl');
 var helpersCtrl = require('./controllers/helpersCtrl');
 var messagesControl = require('./controllers/messagesCtrl');
 var switchNetworkCtrl = require('./controllers/switchNetworkCtrl');
-var openStakingCtrl = require('./controllers/openStakingCtrl');
 var globalService = require('./services/globalService');
 var coldStakingService = require('./services/coldStakingService');
 var modalService = require('./services/modalService');
@@ -168,7 +167,7 @@ app.controller('ensCtrl', ['$scope', '$sce', '$rootScope', 'walletService', ensC
 app.controller('dexnsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', 'backgroundNodeService', dexnsCtrl]);
 app.controller('footerCtrl', ['$scope', footerCtrl]);
 app.controller('offlineTxCtrl', ['$scope', '$sce', '$rootScope', 'walletService', offlineTxCtrl]);
-app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', 'backgroundNodeService', 'modalService', walletBalanceCtrl]);
+app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', 'backgroundNodeService', 'modalService', 'coldStakingService', walletBalanceCtrl]);
 app.controller('helpersCtrl', ['$scope', helpersCtrl]);
 app.controller('messagesCtrl', ['$scope', '$rootScope', '$interval', 'globalService', 'newMessageService', 'walletService', 'backgroundNodeService', messagesControl]);
 app.controller('encryptCtrl', ['$scope', 'walletService', encryptCtrl]);
@@ -176,8 +175,7 @@ app.controller('backgroundNodeCtrl', ['$scope', 'backgroundNodeService', '$inter
 
 app.controller('broadcastTxCtrl', ['$scope', broadcastTxCtrl]);
 
-app.controller('openStakingCtrl', ['$scope', 'modalService', 'coldStakingService', 'walletService', openStakingCtrl]);
-app.controller('coldStakingCtrl', ['$scope', '$rootScope', 'walletService', 'modalService', 'coldStakingService', coldStakingCtrl]);
+app.controller('coldStakingCtrl', ['$scope', '$rootScope', '$interval', 'walletService', 'modalService', 'coldStakingService', coldStakingCtrl]);
 if (IS_CX) {
     app.controller('addWalletCtrl', ['$scope', '$sce', addWalletCtrl]);
     app.controller('myWalletsCtrl', ['$scope', '$sce', 'walletService', myWalletsCtrl]);

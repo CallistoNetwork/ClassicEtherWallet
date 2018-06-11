@@ -1,7 +1,7 @@
 'use strict';
 
 
-var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService, coldStakingService) {
+var coldStakingCtrl = function ($scope, $rootScope, $interval, walletService, modalService, coldStakingService) {
 
 
     $scope.walletService = walletService;
@@ -47,7 +47,7 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
         $scope.wallet = walletService.wallet;
 
 
-        ethFuncs.estimateGas($scope.tx, function (data) {
+        ethFuncs.estimateGas({to: $scope.tx.to}, function (data) {
 
             if (data.error) {
 
@@ -159,6 +159,12 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
             //$rootScope.$broadcast('ChangeNode', globalFuncs.networks['CLO'] || 0);
 
         }
+
+
+        //$interval(coldStakingService.stake_reward, 1000 * 60);
+        //$interval(coldStakingService.staker_info, 1000 * 60);
+
+
 
     }
 

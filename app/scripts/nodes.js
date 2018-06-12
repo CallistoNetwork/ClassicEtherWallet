@@ -22,6 +22,7 @@ nodes.nodeTypes = {
     ELLA: "ELLA",
     ETSC: "ETSC",
     MUSIC: "MUSIC",
+    ESN: "ESN",
     Custom: "CUSTOM ETH"
 };
 nodes.tldTypes = {
@@ -373,6 +374,19 @@ nodes.nodeList = {
         'estimateGas': true,
         'service': 'ethereumsocial.kr',
         'lib': new nodes.customNode('https://node.ethereumsocial.kr', '')
+    },
+    'esn': {
+        'name': 'ESN',
+        'blockExplorerTX': 'https://ethersocial.net/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://ethersocial.net/addr/[[address]]',
+        'type': nodes.nodeTypes.ESN,
+        'eip155': true,
+        'chainId': 31102,
+        'tokenList': require('./tokens/esnTokens.json'),
+        'abiList': require('./abiDefinitions/esnAbi.json'),
+        'estimateGas': true,
+        'service': 'ethersocial.org',
+        'lib': new nodes.customNode('https://api.esn.gonspool.com', '')
     }
 };
 

@@ -369,6 +369,7 @@ globalFuncs.HDWallet = {
     hwSocialPath: "m/44'/1128'/0'/0",     // first address: m/44'/1128'/0'/0/0
     hwMusicoinPath: "m/44'/184'/0'/0",      // first address: m/44'/184'/0'/0/0
     hwRskPath: "m/44'/137'/0'/0",      // first address : m/44'/137'/0'/0/0
+    hwESNetworkPath: "m/44'/31102'/0'/0",      // first address : m/44'/31102'/0'/0/0
 };
 
 globalFuncs.getWalletPath = function (walletType = 'trezor', nodeType = nodes.nodeTypes.CLO) {
@@ -414,6 +415,10 @@ globalFuncs.getWalletPath = function (walletType = 'trezor', nodeType = nodes.no
                 return globalFuncs.HDWallet.hwSocialPath;
             case nodes.nodeTypes.MUSIC:
                 return globalFuncs.HDWallet.hwMusicoinPath;
+            case nodes.nodeTypes.ESN:
+                return globalFuncs.HDWallet.hwESNetworkPath;
+            default:
+                return globalFuncs.HDWallet.defaultDPath;
         }
     } else {
         switch (nodeType) {
@@ -439,6 +444,8 @@ globalFuncs.getWalletPath = function (walletType = 'trezor', nodeType = nodes.no
                 return globalFuncs.HDWallet.hwSocialPath;
             case nodes.nodeTypes.MUSIC:
                 return globalFuncs.HDWallet.hwMusicoinPath;
+            case nodes.nodeTypes.ESN:
+                return globalFuncs.HDWallet.hwESNetworkPath;
             default:
                 return globalFuncs.HDWallet.defaultDPath;
         }

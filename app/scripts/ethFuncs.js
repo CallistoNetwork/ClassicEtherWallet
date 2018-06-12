@@ -99,94 +99,6 @@ ethFuncs.estimateGas = function (dataObj, callback) {
     });
 };
 
-ethFuncs.encodeInputs = function encodeInputs({inputs}) {
-
-
-    const types = inputs.map(i => i.type);
-
-    const values = inputs.map(i => i.value || '');
-
-
-    return ethUtil.solidityCoder.encodeParams(types, values);
-
-
-};
-/*
-
-    Decode outputs from contract abi
-
-    @param contractFunction
-    @param data eth_call response
-
-    @returns []any | data
-
- */
-ethFuncs.decodeOutputs = function decodeOutputs(contractFunction, data) {
-
-
-    const {outputs} = contractFunction;
-
-    return ethUtil.solidityCoder.decodeParams(outputs.map(o => o.type), data.data.replace('0x', ''));
-
-};
-
-/*
-
-    @param string functionName
-    @param Contract contract
-    @param Tx {}
-    @returns {error: bool | error, tx: Tx } if cannot estimate gas
-
- */
-
-ethFuncs.prepContractData = function (functionName, contract, {inputs: inputs_ = null, from, value = 0, unit = 'ether'}) {
-
-
-    if (!(contract.hasOwnProperty('abi') && contract.hasOwnProperty('address') && Array.isArray(contract.abi))) {
-
-
-        console.error('Invalid Request');
-
-        return {error: true};
-
-    }
-
-    const foundFunction = contract.abi.find(itm => itm.type === 'function' && itm.name === functionName);
-
-
-    if (!foundFunction) {
-
-        console.error('error locating function: ', functionName, 'in', contract);
-
-        return {error: true};
-    }
-
-
-    let data = ethFuncs.encodeFunctionName(foundFunction.name, contract);
-
-    if (!data) {
-
-        return {error: true};
-
-    }
-
-    if (inputs_) {
-
-        foundFunction.inputs.forEach((item, i) => item.value = inputs_[i]);
-
-        data += ethFuncs.encodeInputs(foundFunction);
-    }
-
-
-    return {
-        to: contract.address,
-        data: ethFuncs.sanitizeHex(data),
-        value
-    };
-
-
-}
-
 
 /*
 
@@ -245,6 +157,139 @@ ethFuncs.handleContractCall = function (functionName, contract, {inputs = null, 
         });
 
     }
+
+}
+
+
+/*
+
+    Estimate gasPrice of tx to contract
+
+    @param string functionName
+    @param Contract contract
+    @param Tx transaction
+    @param callback_ function
+
+ */
+
+ethFuncs.handleContractGasEstimation = function (functionName, contract, tx, callback_) {
+
+    const result = ethFuncs.prepContractData(functionName, contract, tx);
+
+
+    if (!result.error) {
+
+        ethFuncs.estimateGas(result, function (data) {
+            if (data.error || parseInt(data.data) === -1) {
+
+                console.error('error estimating gas', data);
+
+
+                return Object.assign(data, {error: true});
+
+
+            } else {
+
+                callback_(Object.assign({}, tx, {
+                    gasLimit: data.data,
+                }))
+            }
+        });
+    } else {
+
+        callback_(result);
+    }
+}
+
+
+ethFuncs.encodeInputs = function encodeInputs({inputs}) {
+
+
+    const types = inputs.map(i => i.type);
+
+    const values = inputs.map(i => i.value || '');
+
+
+    return ethUtil.solidityCoder.encodeParams(types, values);
+
+
+};
+/*
+
+    Decode outputs from contract abi
+
+    @param contractFunction
+    @param data eth_call response
+
+    @returns []any | data
+
+ */
+ethFuncs.decodeOutputs = function decodeOutputs(contractFunction, data) {
+
+
+    const {outputs} = contractFunction;
+
+    return ethUtil.solidityCoder.decodeParams(outputs.map(o => o.type), data.data.replace('0x', ''));
+
+};
+
+/*
+
+
+    Encode inputs and tx data
+
+    @param string functionName
+    @param Contract contract
+    @param Tx {}
+    @returns {error: bool | error, tx: Tx } if cannot estimate gas
+
+ */
+
+ethFuncs.prepContractData = function (functionName, contract, {inputs: inputs_ = null, from, value = 0, unit = 'ether'}) {
+
+
+    if (!(contract.hasOwnProperty('abi') && contract.hasOwnProperty('address') && Array.isArray(contract.abi))) {
+
+
+        console.error('Invalid Request');
+
+        return {error: true};
+
+    }
+
+    const foundFunction = contract.abi.find(itm => itm.type === 'function' && itm.name === functionName);
+
+
+    if (!foundFunction) {
+
+        console.error('error locating function: ', functionName, 'in', contract);
+
+        return {error: true};
+    }
+
+
+    let data = ethFuncs.encodeFunctionName(foundFunction.name, contract);
+
+    if (!data) {
+
+        return {error: true};
+
+    }
+
+    if (inputs_) {
+
+        foundFunction.inputs.forEach((item, i) => item.value = inputs_[i]);
+
+        data += ethFuncs.encodeInputs(foundFunction);
+    }
+
+
+    return {
+        to: contract.address,
+        data: ethFuncs.sanitizeHex(data),
+        value
+    };
+
 
 }
 

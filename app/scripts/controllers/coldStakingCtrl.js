@@ -15,9 +15,6 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
     function init() {
 
 
-        // FIXME: network
-
-
         $scope.tx = {
             unit: 'ether',
             value: 0,
@@ -45,8 +42,12 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
 
         send tx to contract
 
-        fallback defaults to start_staking();
+        sendTransaction defaults to start_staking();
      */
+
+
+    // would have been easier just to call start_staking();
+
 
     $scope.startStaking = function () {
 
@@ -122,7 +123,7 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
         coldStakingService.stake_reward(function (data) {
 
             modalService.openClaimRewardModal.close();
-            console.log('stake_reward', data);
+            // console.log('stake_reward', data);
 
 
         });
@@ -139,7 +140,7 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
             handleResponse();
 
             modalService.openWithdrawModal.close();
-            console.log('claim_and_withdraw', data);
+            // console.log('claim_and_withdraw', data);
 
 
         });
@@ -163,7 +164,7 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
 
 
             modalService.openClaimRewardModal.close();
-            console.log('claim', data);
+            // console.log('claim', data);
         })
     }
 
@@ -172,19 +173,19 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
 
         init();
 
-        const testing = true;
-
-        if (testing) {
-
-
-            $rootScope.$broadcast('ChangeNode', globalFuncs.networks['RIN'] || 0);
-
-
-        } else {
-
-            //$rootScope.$broadcast('ChangeNode', globalFuncs.networks['CLO'] || 0);
-
-        }
+        // const testing = true;
+        //
+        // if (testing) {
+        //
+        //
+        //     $rootScope.$broadcast('ChangeNode', globalFuncs.networks['RIN'] || 0);
+        //
+        //
+        // } else {
+        //
+        //     //$rootScope.$broadcast('ChangeNode', globalFuncs.networks['CLO'] || 0);
+        //
+        // }
 
 
     }

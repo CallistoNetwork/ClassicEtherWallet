@@ -59,39 +59,33 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
     $scope.estimateGas_ = function (name = 'claim_and_withdraw') {
 
 
-        const tx = {inputs_: null, from: walletService.wallet.getAddressString(), value: 0, unit: 'ether'};
-
-        const result = ethFuncs.prepContractData(name, coldStakingService.contract, tx);
-
-
-        if (!result.error) {
-
-            ethFuncs.estimateGas(result, function (data) {
-                if (data.error || parseInt(data.data) === -1) {
-
-                    console.error('error estimating gas', data);
+        const tx = {
+            inputs_: null,
+            from: walletService.wallet.getAddressString(),
+            value: 0,
+            unit: 'ether'
+        };
 
 
-                    Object.assign($scope.tx, {
-                        gasLimit: -1,
-                    });
+        ethFuncs.handleContractGasEstimation(name, coldStakingService.contract, tx, function (data) {
 
-                } else {
+            if (!data.error) {
 
+                Object.assign($scope.tx, data);
+            } else {
 
-                    Object.assign($scope.tx, {
-                        gasLimit: data.data,
-                    });
-                }
-            });
-        }
+                $scope.notifier.danger(data.error);
+            }
+
+        });
+
     };
 
     $scope.handleOpenWithdraw = function () {
 
 
         modalService.openWithdrawModal.open();
-        $scope.estimateGas_('withdraw');
+        $scope.estimateGas_('claim_and_withdraw');
 
     };
 
@@ -99,7 +93,7 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
 
         modalService.openClaimRewardModal.open();
 
-        $scope.estimateGas_();
+        $scope.estimateGas_('claim');
     }
 
 

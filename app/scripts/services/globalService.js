@@ -4,7 +4,6 @@ var globalService = function ($http, $httpParamSerializerJQLike) {
     ajaxReq.http = $http;
     ajaxReq.postSerializer = $httpParamSerializerJQLike;
     ajaxReq.getCoinValue = nodes.coinPrice.getCoinValue;
-    ajaxReq.getRates = nodes.coinPrice.getRates;
     var tabs = {
         generateWallet: {
             id: 0,

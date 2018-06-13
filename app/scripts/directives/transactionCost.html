@@ -1,10 +1,15 @@
 <div class="row form-group">
     <div class="col-sm-11 clearfix">
+        <a class="account-help-icon" href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-gas"
+           target="_blank" rel="noopener">
+            <img src="images/icon-help.svg" class="help-icon"/>
+            <p class="account-help-text" translate="TXFEE_Desc"></p>
+        </a>
 
         <label>Transaction Cost</label>
-        <input class="form-control"
-               disabled
-               value="{{gasPrice * 1e9}} wei * {{tx.gasLimit}} wei = {{txCostEther}} {{nodeType}} ~= $ {{txCostFiat.toFixed(2)}}"
-        />
+        <textarea class="form-control"
+                  disabled
+        >{{gasPrice}} wei * {{tx.gasLimit}} wei = {{txCostEther}} {{nodeType}} ~= {{txCostFiat | currency}}
+        </textarea>
     </div>
 </div>

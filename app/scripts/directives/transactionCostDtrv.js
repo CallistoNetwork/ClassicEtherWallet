@@ -29,17 +29,18 @@ var transactionCostDrtv = function () {
 
                     const {gasLimit} = $scope.tx;
 
-                    $scope.gasPrice = globalFuncs.localStorage.getItem('gasPrice');
-                    const gasPriceE = etherUnits.unitToUnit($scope.gasPrice, 'gwei', 'ether');
+                    $scope.nodeType = nodes.nodeList[globalFuncs.getCurNode()].type;
 
+                    $scope.gasPrice = etherUnits.unitToUnit(globalFuncs.localStorage.getItem('gasPrice') || 20, 'gwei', 'wei');
+                    const gasPriceE = etherUnits.unitToUnit($scope.gasPrice, 'wei', 'ether');
 
                     $scope.txCostEther = new BigNumber(gasPriceE).mul(gasLimit);
 
                     // fixme: add currencies based on language
 
-                    $scope.txCostFiat = $scope.txCostEther.mul(prices.usd);
+                    $scope.txCostFiat = $scope.txCostEther.mul(prices.usd).toNumber();
 
-                    $scope.nodeType = nodes.nodeList[globalFuncs.getCurNode()].type;
+                    var j = 'hi';
 
 
                 });

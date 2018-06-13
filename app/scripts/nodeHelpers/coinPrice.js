@@ -6,15 +6,13 @@
     get coin prices
 
  */
-var BITYRATEAPI = "https://bity.com/api/v1/rate2/";
+const CCRATEAPI = (sym = 'ETC') => `https://min-api.cryptocompare.com/data/price?fsym=${sym}&tsyms=USD,EUR,GBP,BTC,CHF,REP`;
+
 
 var coinPrice = function () {
 
 
-}
-
-
-const CCRATEAPI = (sym = 'ETC') => `https://min-api.cryptocompare.com/data/price?fsym=${sym}&tsyms=USD,EUR,GBP,BTC,CHF,REP`;
+};
 
 
 coinPrice.getCoinValue = function (callback) {
@@ -35,14 +33,9 @@ coinPrice.getCoinValue = function (callback) {
             rep: parseFloat(data['REP']).toFixed(6),
             gbp: parseFloat(data['GBP']).toFixed(6),
         };
-        console.log('coin', coin);
-        console.log(priceObj);
+        // console.log('coin', coin);
+        // console.log(priceObj);
         callback(priceObj);
-    });
-}
-coinPrice.getRates = function (callback) {
-    ajaxReq.http.get(BITYRATEAPI).then(function (data) {
-        callback(data['data']['objects']);
     });
 }
 module.exports = coinPrice;

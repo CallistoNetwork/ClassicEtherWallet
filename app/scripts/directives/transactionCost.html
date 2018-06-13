@@ -6,10 +6,10 @@
             <p class="account-help-text" translate="TXFEE_Desc"></p>
         </a>
 
-        <label>Transaction Cost</label>
-        <textarea class="form-control"
-                  disabled
-        >{{gasPrice}} wei * {{tx.gasLimit}} wei = {{txCostEther}} {{nodeType}} ~= {{txCostFiat | currency}}
-        </textarea>
+        <label>Transaction Fee</label>
+        <input class="form-control"
+               disabled
+               value="{{txCostEther}} {{nodeType}} ~= {{txCostFiat | currency}}"
+        />
     </div>
 </div>

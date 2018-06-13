@@ -15,27 +15,39 @@ var coinPrice = function () {
 };
 
 
-coinPrice.getCoinValue = function (callback) {
+coinPrice.getCoinPrice = function (callback) {
 
     const coin = nodes.nodeList[globalFuncs.getCurNode()].type;
 
+    const uri = CCRATEAPI(coin);
 
-    var uri = CCRATEAPI(coin);
+    ajaxReq.http.get(uri).then(function (_data) {
 
-    ajaxReq.http.get(uri).then(function (data) {
-        data = data['data'];
 
-        var priceObj = {
-            usd: parseFloat(data['USD']).toFixed(6),
-            eur: parseFloat(data['EUR']).toFixed(6),
-            btc: parseFloat(data['BTC']).toFixed(6),
-            chf: parseFloat(data['CHF']).toFixed(6),
-            rep: parseFloat(data['REP']).toFixed(6),
-            gbp: parseFloat(data['GBP']).toFixed(6),
-        };
-        // console.log('coin', coin);
-        // console.log(priceObj);
-        callback(priceObj);
-    });
+        if (_data.hasOwnProperty('Response') && _data.Response === 'Error' ||
+            _data.hasOwnProperty('data') && _data.data.Response === 'Error') {
+
+            callback(Object.assign({}, _data, {error: true}));
+
+        } else {
+
+            const {data} = _data;
+
+            var priceObj = {
+                usd: parseFloat(data['USD']).toFixed(6),
+                eur: parseFloat(data['EUR']).toFixed(6),
+                btc: parseFloat(data['BTC']).toFixed(6),
+                chf: parseFloat(data['CHF']).toFixed(6),
+                rep: parseFloat(data['REP']).toFixed(6),
+                gbp: parseFloat(data['GBP']).toFixed(6),
+            };
+            callback(priceObj);
+
+        }
+
+    }).catch(err => {
+
+        callback(Object.assign({}, err, {error: true}));
+    })
 }
 module.exports = coinPrice;

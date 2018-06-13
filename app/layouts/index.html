@@ -23,6 +23,13 @@
                 @@include( '../includes/sendTx.tpl', { "site": "cew" } )
             </div>
 
+            <div ng-controller="coldStakingCtrl">
+
+                @@include( '../includes/cold-staking-startStaking-modal.tpl', { "site": "cew" } )
+                @@include( '../includes/cold-staking-withdraw-modal.tpl', { "site": "cew" } )
+                @@include( '../includes/cold-staking-claimReward-modal.tpl', { "site": "cew" } )
+            </div>
+
             @@include( '../includes/broadcast-tx.tpl', { "site": "cew" } )
 
             @@include( '../includes/re-encrypt.tpl', { "site": "cew" } )

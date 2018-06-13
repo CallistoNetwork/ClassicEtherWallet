@@ -1,6 +1,6 @@
 <aside ng-controller="walletBalanceCtrl">
 
-    <div class="block">
+    <li class="block" style="list-style: none;">
         <h5 translate="sidebar_AccountAddr">Account Address</h5>
         <ul class="account-info">
             <div class="addressIdenticon med float" blockie-address="{{wallet.getAddressString()}}"
@@ -24,25 +24,102 @@
                     Ledger</a></li>
             </ul>
         </div>
-        <h5 translate="sidebar_AccountBal">Account Balance</h5>
-        <ul class="account-info point" ng-dblclick="showLongBal=!showLongBal" title="{{wallet.balance}} (Double-Click)">
-            <li>
-                <span class="mono wrap" ng-show="!showLongBal">{{wallet.balance | number}}</span>
-                <span class="mono wrap" ng-show="showLongBal">{{wallet.balance}}</span> {{ajaxReq.type}}
-            </li>
-        </ul>
-        <div ng-repeat="altBalance in alternativeBalance">
-            <div ng-if="altBalance.symbol !== ajaxReq.type">
-                <ul class="account-info point" ng-dblclick="showLongBal=!showLongBal"
-                    title="{{altBalance.balance}} (Double-Click)">
-                    <li>
+
+        <div class="row">
+
+
+            <table class="table table-responsive" title="account balance">
+                <thead>
+                <th class="text-left" translate="sidebar_AccountBal">Account Balance</th>
+                <th ng-if="['CLO', 'RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)" class="text-right">
+                    <h5>Staking Balance</h5>
+
+                </th>
+                <th ng-if="['CLO', 'RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)" class="text-right">
+                    <h5>Reward</h5>
+
+                </th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td title="{{walletService.wallet.balance}} (Double-Click)" class="text-left pointer">
+                          <span ng-dblclick="showLongBal = !showLongBal">
+
+                                <span class="mono wrap"
+                                      ng-show="!showLongBal">{{walletService.wallet.balance | number}}</span>
+                                <span class="mono wrap" ng-show="showLongBal">{{walletService.wallet.balance}}</span>
+                                {{ajaxReq.type}}
+                           </span>
+                    </td>
+
+
+                    <td class="text-right" ng-if="['CLO', 'RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)">
+
+
+                        <span class="mono wrap">{{coldStakingService._staker_info.weight | number}}</span>
+
+                        {{ajaxReq.type}}
+
+
+                    </td>
+
+
+                    <td class="text-right" title="{{coldStakingService._staker_info.reward}}"
+                        ng-if="['CLO', 'RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)">
+
+                        <span class="mono wrap">{{coldStakingService._staker_info.reward}}</span>
+
+                        {{ajaxReq.type}}
+                    </td>
+
+                </tr>
+                <tr ng-if="['CLO', 'RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)">
+
+                    <td>
+                        <button class="btn btn-primary btn-teeny text-center"
+                                ng-click="modalService.startStakingModal.open();">Start
+                            Staking!
+                        </button>
+                    </td>
+
+
+                    <td>
+
+                        <button class="btn btn-primary  btn-teeny text-center"
+                                ng-click="handleOpenWithdraw();">
+                            Withdraw!
+                        </button>
+                    </td>
+
+                    <td>
+
+                        <button class="btn btn-primary btn-teeny text-center"
+                                ng-click="handleOpenClaim();">
+                            Claim Reward!
+                        </button>
+
+                    </td>
+                </tr>
+
+                <tr ng-repeat="altBalance in alternativeBalance">
+                    <td ng-if="altBalance.symbol !== ajaxReq.type" class="account-info point"
+                        ng-dblclick="showLongBal=!showLongBal"
+                        title="{{altBalance.balance}} (Double-Click)"
+                        colspan="{{['CLO', 'RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type) ? 3 : 1}}"
+                    >
                         <span class="mono wrap" ng-show="!showLongBal">{{altBalance.balance | number}}</span>
                         <span class="mono wrap" ng-show="showLongBal">{{altBalance.balance}}</span>
                         {{altBalance.symbol}}
-                    </li>
-                </ul>
-            </div>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+
         </div>
+
+
         <h5 translate="sidebar_TransHistory"> Transaction History</h5>
         <ul class="account-info">
             <li ng-show="ajaxReq.type != 'CUS'">
@@ -148,7 +225,8 @@
                     <address-field
                             placeholder="mewsupport.eth"
                             var-name="localToken.contractAdd"
-                            labelTranslated="TOKEN_Addr">
+                            labelTranslated="TOKEN_Addr"
+                    >
                     </address-field>
                 </div>
 

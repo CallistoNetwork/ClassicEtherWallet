@@ -13,7 +13,9 @@ globalFuncs.networks = {
     UBQ: "ubq",
     EXP: "exp",
     ROP: 'rop_mew',
-    CLO: 'clo_pool'
+    CLO: 'clo_mainnet',
+    RIN: 'rin_ethscan',
+    CLOT: 'clo_testnet3'
 };
 
 globalFuncs.getBlockie = function (address) {

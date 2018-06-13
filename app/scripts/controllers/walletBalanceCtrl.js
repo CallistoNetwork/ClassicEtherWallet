@@ -1,9 +1,13 @@
 'use strict';
-var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeService) {
+var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeService, modalService, coldStakingService) {
     $scope.ajaxReq = ajaxReq;
     $scope.erc20Abi = require('../abiDefinitions/erc20abi.json');
     $scope.DEXNS = require('../abiDefinitions/etcAbi.json')[5];
     $scope.DEXNSAddress = $scope.DEXNS.address;
+
+    $scope.modalService = modalService;
+    $scope.coldStakingService = coldStakingService;
+
     $scope.erc20Indexes = {
         DECIMALS: 2,
         SYMBOL: 3,
@@ -25,11 +29,11 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
     $scope.slide = 1;
     $scope.customTokenSymbol = '';
     $scope.customTokenInterval = null;
+
+
     walletService.wallet = null;
+    $scope.walletService = walletService;
     $scope.wallet = null;
-
-
-
 
     $scope.nodeList = nodes.nodeList;
     $scope.alternativeBalance = nodes.alternativeBalance;
@@ -42,7 +46,56 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
     }, function () {
         if (walletService.wallet == null) return;
         $scope.wallet = walletService.wallet;
+
+
+        coldStakingService.staking_threshold();
+        coldStakingService.staker_info();
+
+        coldStakingService.stake_reward();
+
+
     });
+
+    $scope.estimateGas_ = function (name = 'claim_and_withdraw') {
+
+
+        const tx = {
+            inputs_: null,
+            from: walletService.wallet.getAddressString(),
+            value: 0,
+            unit: 'ether'
+        };
+
+
+        ethFuncs.handleContractGasEstimation(name, coldStakingService.contract, tx, function (data) {
+
+            if (!data.error) {
+
+                Object.assign($scope.tx, data);
+            } else {
+
+                $scope.notifier.danger(data.error);
+            }
+
+        });
+
+    };
+
+    $scope.handleOpenWithdraw = function () {
+
+
+        modalService.openWithdrawModal.open();
+        $scope.estimateGas_('claim_and_withdraw');
+
+    };
+
+    $scope.handleOpenClaim = function () {
+
+        modalService.openClaimRewardModal.open();
+
+        $scope.estimateGas_('claim');
+    }
+
 
     $scope.resetTokenField = function () {
 

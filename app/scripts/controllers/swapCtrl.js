@@ -158,6 +158,41 @@ var swapCtrl = function ($scope, $rootScope, $interval) {
             }
 
         });
+
+
+        // wallet balance error
+
+
+        // https://github.com/EthereumCommonwealth/etherwallet/issues/156
+
+
+        // const testing = true;
+        //
+        //
+        // if (testing) {
+        //
+        //     const {orderResult} = $scope;
+        //
+        //        $scope.stage = 3;
+        //
+        //     Object.assign($scope.parentTxConfig, {
+        //         to: ethUtil.toChecksumAddress('0xC866dD1327dBB9284C331E1B75Da7EC467aA279E'),
+        //         value: 4,
+        //         sendMode: 'ether'
+        //     });
+        //
+        //     Object.assign($scope.orderResult, orderResult, {
+        //         "status": "waiting",
+        //         "payinAddress": "0xC866dD1327dBB9284C331E1B75Da7EC467aA279E",
+        //         "payoutAddress": "3D1CcTHm32D4PK4LvvJnJAn21VubVCAfNj",
+        //         "fromCurrency": "etc",
+        //         "toCurrency": "btc",
+        //         "id": "cf529fead83f83",
+        //         "updatedAt": "2018-06-04T10:06:52.318Z",
+        //         "expectedSendAmount": 4,
+        //         "expectedReceiveAmount": 0.9768075
+        //     });
+        // }
     }
 
 

@@ -391,5 +391,5 @@ nodes.nodeList = {
 };
 
 
-nodes.ethPrice = require('./nodeHelpers/ethPrice');
+nodes.coinPrice = require('./nodeHelpers/coinPrice');
 module.exports = nodes;

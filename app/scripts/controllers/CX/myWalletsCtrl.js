@@ -154,7 +154,7 @@ var myWalletsCtrl = function ($scope, $sce, walletService) {
             $scope.removeModal.close();
         });
     };
-    ajaxReq.getETHvalue(function (data) {
+    ajaxReq.getCoinValue(function (data) {
         $scope.fiatVal.usd = data.usd;
         $scope.fiatVal.eur = data.eur;
         $scope.fiatVal.btc = data.btc;

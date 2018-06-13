@@ -55,7 +55,13 @@
                        ng-class="Validator.isPositiveNumber(tx.gasLimit) ? 'is-valid' : 'is-invalid'"/>
             </div>
         </div>
-        <!-- / Gas Limit -->
+
+
+        <transaction-cost></transaction-cost>
+
+        <!-- Transaction Cost -->
+
+        <!-- / Gas Limin-t -->
 
         <!-- Advanced Option Panel -->
         <a ng-click="showAdvance=true" ng-show='globalService.currentTab==globalService.tabs.sendTransaction.id'>

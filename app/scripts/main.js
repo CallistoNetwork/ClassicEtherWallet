@@ -110,6 +110,7 @@ var walletDecryptDrtv = require('./directives/walletDecryptDrtv');
 var messagesOverviewDrtv = require('./directives/messagesOverviewDrtv');
 var cxWalletDecryptDrtv = require('./directives/cxWalletDecryptDrtv');
 var fileReaderDrtv = require('./directives/fileReaderDrtv');
+var transactionCost = require('./directives/transactionCostDtrv');
 var balanceDrtv = require('./directives/balanceDrtv');
 var arrayInputDrtv = require('./directives/arrayInputDrtv');
 var newMessagesDrtv = require('./directives/newMessagesDrtv');
@@ -151,6 +152,8 @@ app.directive('cxWalletDecryptDrtv', cxWalletDecryptDrtv);
 app.directive('messagesOverviewDrtv', ['globalService', messagesOverviewDrtv]);
 app.directive('arrayInputDrtv', arrayInputDrtv);
 app.directive('newMessagesDrtv', ['globalService', newMessagesDrtv]);
+app.directive('transactionCost', transactionCost);
+
 app.controller('tabsCtrl', ['$scope', 'globalService', '$translate', '$sce', 'backgroundNodeService', tabsCtrl]);
 app.controller('switchNetworkCtrl', ['$scope', '$rootScope', 'globalService', switchNetworkCtrl]);
 app.controller('viewCtrl', ['$scope', 'globalService', '$sce', viewCtrl]);
@@ -160,6 +163,7 @@ app.controller('decryptWalletCtrl', ['$scope', '$sce', 'walletService', decryptW
 app.controller('viewWalletCtrl', ['$scope', '$rootScope', 'walletService', viewWalletCtrl]);
 app.controller('txStatusCtrl', ['$scope', '$rootScope', txStatusCtrl]);
 app.controller('sendTxCtrl', ['$scope', '$sce', '$rootScope', 'walletService', sendTxCtrl]);
+
 app.controller('swapCtrl', ['$scope', '$rootScope', '$interval', 'walletService', swapCtrl]);
 app.controller('signMsgCtrl', ['$scope', '$sce', 'walletService', signMsgCtrl]);
 app.controller('contractsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', contractsCtrl]);

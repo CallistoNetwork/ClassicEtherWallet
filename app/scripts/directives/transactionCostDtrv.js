@@ -11,8 +11,9 @@ var transactionCostDrtv = function () {
 
 
                 Object.assign($scope, {
-                    txCostEther: null,
-                    txCostFiat: null,
+                    txCostEther: 0,
+                    txCostFiat: 0,
+                    coinPrices: {}
                 });
 
                 getTxCost();
@@ -25,25 +26,35 @@ var transactionCostDrtv = function () {
             function getTxCost() {
 
 
-                ajaxReq.getCoinValue(function (prices) {
+                $scope.nodeType = nodes.nodeList[globalFuncs.getCurNode()].type;
 
-                    const {gasLimit} = $scope.tx;
+                if ($scope.coinPrices.hasOwnProperty($scope.nodeType)) {
 
-                    $scope.nodeType = nodes.nodeList[globalFuncs.getCurNode()].type;
+                    handleCoinPriceResult($scope.coinPrices[$scope.nodeType]);
 
-                    $scope.gasPrice = etherUnits.unitToUnit(globalFuncs.localStorage.getItem('gasPrice') || 20, 'gwei', 'wei');
-                    const gasPriceE = etherUnits.unitToUnit($scope.gasPrice, 'wei', 'ether');
+                } else {
 
-                    $scope.txCostEther = new BigNumber(gasPriceE).mul(gasLimit);
+                    ajaxReq.getCoinPrice(function (result) {
 
-                    // fixme: add currencies based on language
-
-                    $scope.txCostFiat = $scope.txCostEther.mul(prices.usd).toNumber();
-
-                    var j = 'hi';
+                        if (!result.error) {
 
 
-                });
+                            handleCoinPriceResult(result);
+
+                            $scope.coinPrices[$scope.nodeType] = result;
+
+                        } else {
+
+                            $scope.txCostEther = 0;
+
+                            // todo: handle err
+                        }
+
+                    });
+
+
+                }
+
 
             }
 
@@ -56,6 +67,25 @@ var transactionCostDrtv = function () {
 
                 }
 
+            }
+
+            function handleCoinPriceResult(result) {
+
+                const {gasLimit} = $scope.tx;
+
+                $scope.nodeType = nodes.nodeList[globalFuncs.getCurNode()].type;
+
+                $scope.gasPrice = etherUnits.toWei(globalFuncs.localStorage.getItem('gasPrice') || 20, 'gwei');
+
+                const txCost = new BigNumber($scope.gasPrice).mul(gasLimit);
+
+                $scope.txCostEther = etherUnits.toEther(txCost, 'wei');
+
+                // fixme: add currencies based on language
+
+                // https://jsfiddle.net/LFN8x/1/
+
+                $scope.txCostFiat = etherUnits.toFiat(txCost, 'wei', result.usd);
             }
 
             $scope.$watch(function () {

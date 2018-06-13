@@ -61,7 +61,7 @@ Wallet.prototype.setBalance = function (callback) {
         if (data.error) parentObj.balance = data.msg;
         else {
             parentObj.balance = etherUnits.toEther(data.data.balance, 'wei');
-            ajaxReq.getCoinValue(function (data) {
+            ajaxReq.getCoinPrice(function (data) {
                 parentObj.usdPrice = etherUnits.toFiat('1', 'ether', data.usd);
                 parentObj.gbpPrice = etherUnits.toFiat('1', 'ether', data.gbp);
                 parentObj.eurPrice = etherUnits.toFiat('1', 'ether', data.eur);

@@ -55,26 +55,31 @@ Wallet.prototype.setTokens = function () {
 
 
 Wallet.prototype.setBalance = function (callback) {
-    var parentObj = this;
-    this.balance = this.usdBalance = this.eurBalance = this.btcBalance = this.chfBalance = this.repBalance = this.gbpBalance = 'loading';
-    ajaxReq.getBalance(parentObj.getAddressString(), function (data) {
-        if (data.error) parentObj.balance = data.msg;
-        else {
-            parentObj.balance = etherUnits.toEther(data.data.balance, 'wei');
-            ajaxReq.getCoinPrice(function (data) {
-                parentObj.usdPrice = etherUnits.toFiat('1', 'ether', data.usd);
-                parentObj.gbpPrice = etherUnits.toFiat('1', 'ether', data.gbp);
-                parentObj.eurPrice = etherUnits.toFiat('1', 'ether', data.eur);
-                parentObj.btcPrice = etherUnits.toFiat('1', 'ether', data.btc);
-                parentObj.chfPrice = etherUnits.toFiat('1', 'ether', data.chf);
-                parentObj.repPrice = etherUnits.toFiat('1', 'ether', data.rep);
 
-                parentObj.usdBalance = etherUnits.toFiat(parentObj.balance, 'ether', data.usd);
-                parentObj.gbpBalance = etherUnits.toFiat(parentObj.balance, 'ether', data.gbp);
-                parentObj.eurBalance = etherUnits.toFiat(parentObj.balance, 'ether', data.eur);
-                parentObj.btcBalance = etherUnits.toFiat(parentObj.balance, 'ether', data.btc);
-                parentObj.chfBalance = etherUnits.toFiat(parentObj.balance, 'ether', data.chf);
-                parentObj.repBalance = etherUnits.toFiat(parentObj.balance, 'ether', data.rep);
+    this.balance = this.usdBalance = this.eurBalance = this.btcBalance = this.chfBalance = this.repBalance = this.gbpBalance = 'loading';
+    ajaxReq.getBalance(this.getAddressString(), (data) => {
+        if (data.error) this.balance = data.msg;
+        else {
+            this.balance = etherUnits.toEther(data.data.balance, 'wei');
+            ajaxReq.getCoinPrice((data) => {
+
+
+                if (!data.error) {
+
+                    this.usdPrice = etherUnits.toFiat('1', 'ether', data.usd);
+                    this.gbpPrice = etherUnits.toFiat('1', 'ether', data.gbp);
+                    this.eurPrice = etherUnits.toFiat('1', 'ether', data.eur);
+                    this.btcPrice = etherUnits.toFiat('1', 'ether', data.btc);
+                    this.chfPrice = etherUnits.toFiat('1', 'ether', data.chf);
+                    this.repPrice = etherUnits.toFiat('1', 'ether', data.rep);
+
+                    this.usdBalance = etherUnits.toFiat(this.balance, 'ether', data.usd);
+                    this.gbpBalance = etherUnits.toFiat(this.balance, 'ether', data.gbp);
+                    this.eurBalance = etherUnits.toFiat(this.balance, 'ether', data.eur);
+                    this.btcBalance = etherUnits.toFiat(this.balance, 'ether', data.btc);
+                    this.chfBalance = etherUnits.toFiat(this.balance, 'ether', data.chf);
+                    this.repBalance = etherUnits.toFiat(this.balance, 'ether', data.rep);
+                }
                 if (callback) callback();
             });
         }

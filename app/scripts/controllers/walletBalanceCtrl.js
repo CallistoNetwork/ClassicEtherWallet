@@ -40,6 +40,7 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
 
     $scope.customTokenField = false;
 
+
     $scope.$watch(function () {
         if (walletService.wallet == null) return null;
         return walletService.wallet.getAddressString();
@@ -47,11 +48,10 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
         if (walletService.wallet == null) return;
         $scope.wallet = walletService.wallet;
 
-
+        coldStakingService.reset_staker_info();
         coldStakingService.staking_threshold();
         coldStakingService.staker_info();
-
-        coldStakingService.stake_reward();
+        // coldStakingService.stake_reward();
 
 
     });
@@ -60,7 +60,7 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
 
 
         const tx = {
-            inputs_: null,
+            inputs: null,
             from: walletService.wallet.getAddressString(),
             value: 0,
             unit: 'ether'
@@ -72,9 +72,14 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
             if (!data.error) {
 
                 Object.assign($scope.tx, data);
+
+
             } else {
 
-                $scope.notifier.danger(data.error);
+
+                Object.assign($scope.tx, {gasLimit: -1});
+
+                $scope.notifier.danger(data.msg);
             }
 
         });
@@ -84,16 +89,16 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
     $scope.handleOpenWithdraw = function () {
 
 
-        modalService.openWithdrawModal.open();
         $scope.estimateGas_('claim_and_withdraw');
+        modalService.openWithdrawModal.open();
 
     };
 
     $scope.handleOpenClaim = function () {
 
+        $scope.estimateGas_('claim');
         modalService.openClaimRewardModal.open();
 
-        $scope.estimateGas_('claim');
     }
 
 

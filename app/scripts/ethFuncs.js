@@ -3,14 +3,14 @@ var ethFuncs = function () {
 }
 ethFuncs.gasAdjustment = 21;
 ethFuncs.validateEtherAddress = function (address) {
-    if (address.substring(0, 2) != "0x") return false;
+    if (address.substring(0, 2) !== "0x") return false;
     else if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) return false;
     else if (/^(0x)?[0-9a-f]{40}$/.test(address) || /^(0x)?[0-9A-F]{40}$/.test(address)) return true;
     else
         return this.isChecksumAddress(address);
 }
 ethFuncs.isChecksumAddress = function (address) {
-    return address == ethUtil.toChecksumAddress(address);
+    return address === ethUtil.toChecksumAddress(address);
 }
 ethFuncs.validateHexString = function (str) {
     if (str == "") return true;
@@ -103,6 +103,10 @@ ethFuncs.estimateGas = function (dataObj, callback) {
 /*
 
     Given functionName, contract, and tx data, generates tx data and sends call, returns decoded outputs
+    @param string functionName
+    @param Contract contract
+    @param Transaction tx
+    @param callback function
     @returns {error: bool, data: []any}
  */
 
@@ -185,7 +189,7 @@ ethFuncs.handleContractGasEstimation = function (functionName, contract, tx, cal
                 console.error('error estimating gas', data);
 
 
-                return Object.assign(data, {error: true});
+                callback_(Object.assign({}, data, {error: true}));
 
 
             } else {
@@ -236,7 +240,7 @@ ethFuncs.decodeOutputs = function decodeOutputs(contractFunction, data) {
 /*
 
 
-    Encode inputs and tx data
+    Encode inputs if any and tx data
 
     @param string functionName
     @param Contract contract
@@ -245,7 +249,7 @@ ethFuncs.decodeOutputs = function decodeOutputs(contractFunction, data) {
 
  */
 
-ethFuncs.prepContractData = function (functionName, contract, {inputs: inputs_ = null, from, value = 0, unit = 'ether'}) {
+ethFuncs.prepContractData = function (functionName, contract, {inputs: inputs_ = null, from, value = 0}) {
 
 
     if (!(contract.hasOwnProperty('abi') && contract.hasOwnProperty('address') && Array.isArray(contract.abi))) {
@@ -262,7 +266,7 @@ ethFuncs.prepContractData = function (functionName, contract, {inputs: inputs_ =
 
     if (!foundFunction) {
 
-        console.error('error locating function: ', functionName, 'in', contract);
+        console.error('error locating function:', functionName, 'in', contract);
 
         return {error: true};
     }
@@ -291,7 +295,7 @@ ethFuncs.prepContractData = function (functionName, contract, {inputs: inputs_ =
     };
 
 
-}
+};
 
 
 /*

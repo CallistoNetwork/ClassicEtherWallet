@@ -25,14 +25,26 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
 
     }
 
+    /*
+
+        When switching network, reset staker info, update contract address and fetch staking
+        threshold and staker info if wallet unlocked.
+     */
+
     $scope.$watch(function () {
 
 
         return ajaxReq.type;
     }, function (val, _val) {
 
-
         coldStakingService.updateAddress();
+        if (walletService && walletService.wallet && walletService.wallet.getAddressString()) {
+
+            coldStakingService.reset_staker_info();
+            coldStakingService.staking_threshold();
+            coldStakingService.staker_info();
+
+        }
 
 
     });
@@ -81,7 +93,7 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
 
             uiFuncs.generateTx($scope.tx, function callback(tx_) {
 
-                const {nonce, gasPrice, gasLimit, to, value, data, chainId, rawTx, signedTx, isError} = tx_;
+                const {signedTx, isError} = tx_;
 
 
                 if (!isError) {
@@ -97,6 +109,10 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
                             var completeMsg = '<p>' + globalFuncs.successMsgs[2] + '<strong>' + resp.data + '</strong></p>' + verifyTxBtn;
                             $scope.notifier.success(completeMsg, 0);
                             $scope.wallet.setBalance();
+
+
+                            coldStakingService.staker_info();
+
                         } else {
 
 
@@ -179,20 +195,6 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
 
 
         init();
-
-        // const testing = true;
-        //
-        // if (testing) {
-        //
-        //
-        //     $rootScope.$broadcast('ChangeNode', globalFuncs.networks['RIN'] || 0);
-        //
-        //
-        // } else {
-        //
-        //     //$rootScope.$broadcast('ChangeNode', globalFuncs.networks['CLO'] || 0);
-        //
-        // }
 
 
     }

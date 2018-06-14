@@ -149,7 +149,6 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
             modalService.openClaimRewardModal.close();
             // console.log('stake_reward', data);
 
-
         });
 
     };
@@ -160,7 +159,7 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
         coldStakingService.claim_and_withdraw(function (data) {
 
 
-            handleResponse();
+            notifyError(data);
 
             modalService.openWithdrawModal.close();
             // console.log('claim_and_withdraw', data);
@@ -170,26 +169,28 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
 
     };
 
-    function handleResponse(data) {
+    function notifyError(result) {
 
-        if (!data || data.error) {
+        if (result.error) {
 
+            $scope.notifier.danger(result.error.msg);
 
-            $scope.notifier.danger(data);
         }
+
     }
 
     $scope.claim = function () {
 
         coldStakingService.claim(function (data) {
 
-            handleResponse();
+            notifyError(data);
 
 
             modalService.openClaimRewardModal.close();
             // console.log('claim', data);
         })
-    }
+    };
+
 
     function main() {
 

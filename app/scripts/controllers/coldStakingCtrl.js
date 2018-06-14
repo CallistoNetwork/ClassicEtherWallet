@@ -81,32 +81,40 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
 
             uiFuncs.generateTx($scope.tx, function callback(tx_) {
 
-
-                uiFuncs.sendTx(tx_, function (resp) {
-
-
-                    modalService.startStakingModal.close();
-
-                    if (!resp.isError) {
-                        var txHashLink = $scope.ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data);
-                        var verifyTxBtn = $scope.ajaxReq.type !== nodes.nodeTypes.Custom ? '<a class="btn btn-xs btn-info strong" href="' + txHashLink + '" target="_blank" rel="noopener noreferrer">Verify Transaction</a>' : '';
-                        var completeMsg = '<p>' + globalFuncs.successMsgs[2] + '<strong>' + resp.data + '</strong></p>' + verifyTxBtn;
-                        $scope.notifier.success(completeMsg, 0);
-                        $scope.wallet.setBalance();
-                    } else {
+                const {nonce, gasPrice, gasLimit, to, value, data, chainId, rawTx, signedTx, isError} = tx_;
 
 
-                        if (resp.error.includes('insufficient funds')) {
+                if (!isError) {
 
-                            $scope.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+                    uiFuncs.sendTx(signedTx, function (resp) {
+
+
+                        modalService.startStakingModal.close();
+
+                        if (!resp.isError) {
+                            var txHashLink = $scope.ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data);
+                            var verifyTxBtn = $scope.ajaxReq.type !== nodes.nodeTypes.Custom ? '<a class="btn btn-xs btn-info strong" href="' + txHashLink + '" target="_blank" rel="noopener noreferrer">Verify Transaction</a>' : '';
+                            var completeMsg = '<p>' + globalFuncs.successMsgs[2] + '<strong>' + resp.data + '</strong></p>' + verifyTxBtn;
+                            $scope.notifier.success(completeMsg, 0);
+                            $scope.wallet.setBalance();
+                        } else {
+
+
+                            if (resp.error.includes('insufficient funds')) {
+
+                                $scope.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+                            }
+                            else {
+
+                                $scope.notifier.danger(resp.error || globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+                            }
+
                         }
-                        else {
+                    })
+                } else {
 
-                            $scope.notifier.danger(resp.error || globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
-                        }
-
-                    }
-                })
+                    $scope.notifier.danger('Error generating transaction');
+                }
 
 
             })
@@ -129,7 +137,6 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
         });
 
     };
-
 
 
     $scope.claim_and_withdraw = function () {

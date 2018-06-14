@@ -18,13 +18,6 @@ uiFuncs.getTxData = function ($scope) {
 };
 
 
-uiFuncs.verifyTx = function (tx) {
-
-    return tx.hasOwnProperty('to') &&
-        tx.hasOwnProperty('from') &&
-        tx.hasOwnProperty('value')
-};
-
 uiFuncs.isTxDataValid = function (txData) {
     if (txData.to !== "0xCONTRACT" && !ethFuncs.validateEtherAddress(txData.to)) throw globalFuncs.errorMsgs[5];
     if (txData.to === "0xCONTRACT") txData.to = '';
@@ -300,7 +293,7 @@ uiFuncs.sendTx = function (signedTx, callback) {
 
     // check for web3 late signed tx
 
-    // web3 transaction can be a string that starts w/ quotes
+    // web3 transaction can be a string that starts w/ quotes or object
 
 
     if (typeof signedTx === 'string' && signedTx.slice(0, 2) === '0x') {

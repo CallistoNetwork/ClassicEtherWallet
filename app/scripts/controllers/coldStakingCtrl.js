@@ -58,7 +58,7 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
      */
 
 
-    // would have been easier just to call start_staking();
+    // would have been easier to call start_staking() directly;
 
 
     $scope.startStaking = function () {

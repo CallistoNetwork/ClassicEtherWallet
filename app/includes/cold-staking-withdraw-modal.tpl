@@ -48,11 +48,25 @@
                     </div>
 
 
-                    <h4 translate="SENDModal_Content_3">Are you sure you want to do this?</h4>
-
                 </div>
 
+                <h4 translate="SENDModal_Content_3">Are you sure you want to do this?</h4>
                 <div class="modal-footer">
+
+                    <!--<section class="row">-->
+                    <!--&lt;!&ndash; Raw TX &ndash;&gt;-->
+                    <!--<div class="form-group col-sm-6">-->
+                    <!--<h4 translate="SEND_raw"> Raw Transaction </h4>-->
+                    <!--<textarea class="form-control" rows="4" readonly>{{tx.rawTx}}</textarea>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash; Singed TX &ndash;&gt;-->
+                    <!--<div class="form-group col-sm-6">-->
+                    <!--<h4 translate="SEND_signed"> Signed Transaction </h4>-->
+                    <!--<textarea class="form-control" rows="4" readonly>{{tx.signedTx}}</textarea>-->
+                    <!--</div>-->
+                    <!--</section>-->
+
+
                     <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
                         No, get me out of here!
                     </button>

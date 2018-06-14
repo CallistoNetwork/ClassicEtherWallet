@@ -25,14 +25,26 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
 
     }
 
+    /*
+
+        When switching network, reset staker info, update contract address and fetch staking
+        threshold and staker info if wallet unlocked.
+     */
+
     $scope.$watch(function () {
 
 
         return ajaxReq.type;
     }, function (val, _val) {
 
-
         coldStakingService.updateAddress();
+        if (walletService && walletService.wallet && walletService.wallet.getAddressString()) {
+
+            coldStakingService.reset_staker_info();
+            coldStakingService.staking_threshold();
+            coldStakingService.staker_info();
+
+        }
 
 
     });
@@ -46,7 +58,7 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
      */
 
 
-    // would have been easier just to call start_staking();
+    // would have been easier to call start_staking() directly;
 
 
     $scope.startStaking = function () {
@@ -81,32 +93,44 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
 
             uiFuncs.generateTx($scope.tx, function callback(tx_) {
 
-
-                uiFuncs.sendTx(tx_, function (resp) {
-
-
-                    modalService.startStakingModal.close();
-
-                    if (!resp.isError) {
-                        var txHashLink = $scope.ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data);
-                        var verifyTxBtn = $scope.ajaxReq.type !== nodes.nodeTypes.Custom ? '<a class="btn btn-xs btn-info strong" href="' + txHashLink + '" target="_blank" rel="noopener noreferrer">Verify Transaction</a>' : '';
-                        var completeMsg = '<p>' + globalFuncs.successMsgs[2] + '<strong>' + resp.data + '</strong></p>' + verifyTxBtn;
-                        $scope.notifier.success(completeMsg, 0);
-                        $scope.wallet.setBalance();
-                    } else {
+                const {signedTx, isError} = tx_;
 
 
-                        if (resp.error.includes('insufficient funds')) {
+                if (!isError) {
 
-                            $scope.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+                    uiFuncs.sendTx(signedTx, function (resp) {
+
+
+                        modalService.startStakingModal.close();
+
+                        if (!resp.isError) {
+                            var txHashLink = $scope.ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data);
+                            var verifyTxBtn = $scope.ajaxReq.type !== nodes.nodeTypes.Custom ? '<a class="btn btn-xs btn-info strong" href="' + txHashLink + '" target="_blank" rel="noopener noreferrer">Verify Transaction</a>' : '';
+                            var completeMsg = '<p>' + globalFuncs.successMsgs[2] + '<strong>' + resp.data + '</strong></p>' + verifyTxBtn;
+                            $scope.notifier.success(completeMsg, 0);
+                            $scope.wallet.setBalance();
+
+
+                            coldStakingService.staker_info();
+
+                        } else {
+
+
+                            if (resp.error.includes('insufficient funds')) {
+
+                                $scope.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+                            }
+                            else {
+
+                                $scope.notifier.danger(resp.error || globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+                            }
+
                         }
-                        else {
+                    })
+                } else {
 
-                            $scope.notifier.danger(resp.error || globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
-                        }
-
-                    }
-                })
+                    $scope.notifier.danger('Error generating transaction');
+                }
 
 
             })
@@ -125,11 +149,9 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
             modalService.openClaimRewardModal.close();
             // console.log('stake_reward', data);
 
-
         });
 
     };
-
 
 
     $scope.claim_and_withdraw = function () {
@@ -137,7 +159,7 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
         coldStakingService.claim_and_withdraw(function (data) {
 
 
-            handleResponse();
+            notifyError(data);
 
             modalService.openWithdrawModal.close();
             // console.log('claim_and_withdraw', data);
@@ -147,45 +169,33 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
 
     };
 
-    function handleResponse(data) {
+    function notifyError(result) {
 
-        if (!data || data.error) {
+        if (result.error) {
 
+            $scope.notifier.danger(result.error.msg);
 
-            $scope.notifier.danger(data);
         }
+
     }
 
     $scope.claim = function () {
 
         coldStakingService.claim(function (data) {
 
-            handleResponse();
+            notifyError(data);
 
 
             modalService.openClaimRewardModal.close();
             // console.log('claim', data);
         })
-    }
+    };
+
 
     function main() {
 
 
         init();
-
-        // const testing = true;
-        //
-        // if (testing) {
-        //
-        //
-        //     $rootScope.$broadcast('ChangeNode', globalFuncs.networks['RIN'] || 0);
-        //
-        //
-        // } else {
-        //
-        //     //$rootScope.$broadcast('ChangeNode', globalFuncs.networks['CLO'] || 0);
-        //
-        // }
 
 
     }

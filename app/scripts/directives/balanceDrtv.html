@@ -33,11 +33,13 @@
 
                     <h5 translate="sidebar_AccountBal">Account Balance</h5>
                 </th>
-                <th ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)" class="text-right">
+                <th ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type) && globalService.currentTab === globalService.tabs.sendTransaction.id"
+                    class="text-right">
                     <h5>Staking Balance</h5>
 
                 </th>
-                <th ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)" class="text-right">
+                <th ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type) && globalService.currentTab === globalService.tabs.sendTransaction.id"
+                    class="text-right">
                     <h5>Reward</h5>
 
                 </th>
@@ -56,7 +58,8 @@
                 </td>
 
 
-                <td class="text-right pointer" ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
+                <td class="text-right pointer"
+                    ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type) && globalService.currentTab === globalService.tabs.sendTransaction.id"
                     title="{{coldStakingService._staker_info.weight}} (Double Click)"
                     ng-init="showLongWeight = false;"
                     ng-dblclick="showLongWeight = !showLongWeight"
@@ -74,7 +77,7 @@
 
 
                 <td class="text-right pointer" title="{{coldStakingService._staker_info.reward}} (Double Click)"
-                    ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
+                    ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type) && globalService.currentTab === globalService.tabs.sendTransaction.id"
                     ng-init="showLongReward = false;"
                     ng-dblclick="showLongReward = !showLongReward"
                 >
@@ -87,7 +90,7 @@
                 </td>
 
             </tr>
-            <tr ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)">
+            <tr ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type) && globalService.currentTab === globalService.tabs.sendTransaction.id">
 
                 <td class="text-left">
                     <button class="btn btn-primary btn-teeny text-center"
@@ -119,7 +122,7 @@
                 <td ng-if="altBalance.symbol !== ajaxReq.type" class="account-info point"
                     ng-dblclick="showLongBal=!showLongBal"
                     title="{{altBalance.balance}} (Double-Click)"
-                    colspan="{{['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type) ? 3 : 1}}"
+                    colspan="{{['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type) && globalService.currentTab === globalService.tabs.sendTransaction.id ? 3 : 1}}"
                 >
                     <span class="mono wrap" ng-show="!showLongBal">{{altBalance.balance | number}}</span>
                     <span class="mono wrap" ng-show="showLongBal">{{altBalance.balance}}</span>

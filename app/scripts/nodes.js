@@ -129,8 +129,8 @@ nodes.nodeList = {
     },
     'clo_mainnet': {
         'name': 'CLO',
-        'blockExplorerTX': 'https://cloexplorer.org/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://cloexplorer.org/addr/[[address]]',
+        'blockExplorerTX': 'https://callistoexplorer.com/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://callistoexplorer.com/addr/[[address]]',
         'type': nodes.nodeTypes.CLO,
         'eip155': true,
         'chainId': 820,
@@ -141,8 +141,8 @@ nodes.nodeList = {
     },
     'clo_pool': {
         'name': 'CLO',
-        'blockExplorerTX': 'https://cloexplorer.org/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://cloexplorer.org/addr/[[address]]',
+        'blockExplorerTX': 'https://callistoexplorer.com/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://callistoexplorer.com/addr/[[address]]',
         'type': nodes.nodeTypes.CLO,
         'eip155': true,
         'chainId': 820,

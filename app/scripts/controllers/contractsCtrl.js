@@ -381,7 +381,10 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
 
 
     $scope.readFromContract = function () {
-        ajaxReq.getEthCall({to: $scope.contract.address, data: $scope.getContractData()}, function (data) {
+
+        const data = $scope.getContractData();
+
+        ajaxReq.getEthCall({to: $scope.contract.address, data}, function (data) {
             if (!data.error) {
                 var curFunc = $scope.contract.functions[$scope.contract.selectedFunc.index];
                 var outTypes = curFunc.outputs.map(function (i) {

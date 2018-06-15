@@ -113,7 +113,14 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
                             $scope.wallet.setBalance();
 
 
-                            coldStakingService.staker_info();
+                            // increment staker weight manually
+
+                            coldStakingService._staker_info.weight = new BigNumber($scope.tx.value)
+                                .add(coldStakingService._staker_info.weight).toString();
+
+                            init();
+
+                            // coldStakingService.staker_info();
 
                         } else {
 

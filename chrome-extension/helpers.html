@@ -1,139 +1,190 @@
-
 <!DOCTYPE html>
 <html lang="en" ng-app="mewApp">
-<head>
-<meta charset="utf-8">
-<title>ClassicEtherWallet: Client-Side Classic Ether Wallet</title>
-<link rel="canonical" href="https://classicetherwallet.com" />
-<meta name="description" content="ClassicEtherWallet.com is a free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URL ( .com ) before unlocking your wallet.">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="css/etherwallet-master.min.css">
-<script type="text/javascript" src="js/etherwallet-static.min.js"></script>
-<script type="text/javascript" src="js/etherwallet-master.js"></script>
-<link rel="shortcut icon" href="images/fav/favicon.png">
-<meta name="apple-mobile-web-app-title" content="ClassicEtherWallet">
-<meta name="application-name" content="ClassicEtherWallet">
-<meta name="theme-color" content="#1d6986">
-<meta property="og:url" content="https://classicetherwallet.com" />
-<meta property="og:title" content="ClassicEtherWallet.com" />
-<meta property="og:image" content="/images/myetherwallet-logo-banner.png" />
-<meta property="og:image" content="/images/myetherwallet-logo.png" />
-<meta property="og:image" content="/images/myetherwallet-logo-square.png" />
-<meta property="og:image" content="/images/myetherwallet-banner-fun.jpg" />
-<meta property="og:description" content="ClassicEtherWallet.com is a free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URL ( .com ) before unlocking your wallet." />
-<script type='application/ld+json'>{"@context":"http://schema.org","@type":"Organization","@id":"#organization","url":"https://www.myetherwallet.com/","name":"MyEtherWallet",
-"logo":"https://myetherwallet.com/images/myetherwallet-logo-banner.png","description": "MyEtherWallet.com is a free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URL ( .com ) before unlocking your wallet.","sameAs":["https://www.myetherwallet.com/","https://chrome.google.com/webstore/detail/myetherwallet-cx/nlbmnnijcnlegkjjpcfjclmcfggfefdm","https://www.facebook.com/MyEtherWallet/","https://twitter.com/myetherwallet","https://medium.com/@myetherwallet_96408","https://myetherwallet.groovehq.com/help_center","https://github.com/kvhnuke/etherwallet","https://github.com/MyEtherWallet","https://kvhnuke.github.io/etherwallet/","https://github.com/kvhnuke/etherwallet/releases/latest","https://github.com/409H/EtherAddressLookup","https://myetherwallet.slack.com/","https://myetherwallet.herokuapp.com/","https://www.reddit.com/r/MyEtherWallet/","https://www.reddit.com/user/insomniasexx/","https://www.reddit.com/user/kvhnuke/","https://www.reddit.com/user/myetherwallet"]}</script>
-</head>
-<body>
-<header class="{{curNode.name}} {{curNode.service}} {{curNode.service}} nav-index-{{gService.currentTab}}" aria-label="header" ng-controller='tabsCtrl' >
 
-  
-    <div class="small announcement">
-      <div class="container">
-        	⚠ ClassicEtherWallet is an open source project and it is running directly from source code on github in your local machine, without any servers. You can transparently check the source code here:
-        <a href="https://github.com/ethereumproject/etherwallet/tree/gh-pages" target="_blank" rel="noopener">ethereumproject/etherwallet</a>.
-        <br />
-      </div>
-    </div>
-  
+
+<head>
+    <meta charset="utf-8">
+    <title>ClassicEtherWallet: Client-Side Classic Ether Wallet</title>
+    <link rel="canonical" href="https://classicetherwallet.com"/>
+    <meta name="description"
+          content="ClassicEtherWallet.com is a free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URLbefore unlocking your wallet.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" href="images/fav/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="ClassicEtherWallet">
+    <meta name="application-name" content="ClassicEtherWallet">
+    <meta name="theme-color" content="#1d6986">
+    <meta property="og:url" content="https://ethereumproject.github.io/etherwallet/"/>
+    <meta property="og:title" content="ClassicEtherWallet"/>
+    <meta property="og:image" content="/images/logo-myetherwallet.png"/>
+    <meta property="og:description"
+          content="ClassicEtherWallet.com is a free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URL before unlocking your wallet."/>
+
+    <link rel="stylesheet" href="css/etherwallet-master.min.css">
+    <link rel="stylesheet" href="css/crypto-icons/font.css">
+    <link rel="stylesheet" href="css/crypto-icons/styles.css">
+
+    <script type="text/javascript" src="js/etherwallet-static.min.js"></script>
+    <script type="text/javascript" src="js/etherwallet-master.js"></script>
+
+</head>
+
+
+
+<body>
+
+<div ng-controller="switchNetworkCtrl"></div>
+<div ng-controller="backgroundNodeCtrl">
+</div>
+
+<div ng-controller="tabsCtrl">
+
+  <header class="{{curNode.name}} {{curNode.service}} {{curNode.service}} nav-index-{{gService.currentTab}}"
+        aria-label="header">
 
     
-  <section class="bg-gradient header-branding">
-    <section class="container">
-      
-        <a class="brand" href="https://ethereumproject.github.io/etherwallet/" aria-label="Go to homepage">
-          <img src="images/logo-myetherwallet.png"   height="64px" width="245px" alt="MyEtherWallet" />
-        </a>
-      
-      
-      <div class="tagline">
+    <div class="small announcement">
+        <div class="container">
+            <big>⚠ SECURITY ALERT!<br>There is a security vulnerability in <a
+                    href="https://github.com/ethereum/EIPs/issues/20">ERC20 token standard</a>. ERC20 tokens are <a
+                    href="https://gist.github.com/Dexaran/ddb3e89fe64bf2e06ed15fbd5679bd20">insecure</a>!<br>Use ERC20
+                tokens at your own risk. ClassicEtherWallet is not responsible for the consequences of using tokens of
+                this standard.</big><br>
+            Do not transfer ERC20 tokens into any smart-contract using the <code>transfer</code> function. This will
+            result in the loss of your tokens.
+            <br/>
+        </div>
+    </div>
+    
 
-        <span>3.11.0.0</span>
+    
+    <section class="bg-gradient header-branding">
+        <section class="container">
+            
+            <a class="brand" href="https://ethereumproject.github.io/etherwallet/" aria-label="Go to homepage">
+                <img src="images/logo-myetherwallet.png" height="64px" width="245px" alt="ClassicEtherWallet"/>
+            </a>
+            
+            
+            <div class="tagline">
 
-        <span class="dropdown dropdown-lang" ng-cloak>
-          <a tabindex="0"  aria-haspopup="true" aria-expanded="false" aria-label="change language. current language {{curLang}}" class="dropdown-toggle  btn btn-white" ng-click="dropdown = !dropdown">{{curLang}}<i class="caret"></i></a>
+                <!--<span>3.11.0.0</span>-->
+
+                <span class="dropdown dropdown-lang" ng-cloak>
+          <a tabindex="0" aria-haspopup="true" aria-expanded="false"
+             aria-label="change language. current language {{curLang}}" class="dropdown-toggle  btn btn-white"
+             ng-click="dropdown = !dropdown">{{curLang}}<i class="caret"></i></a>
           <ul class="dropdown-menu" ng-show="dropdown">
-            <li><a ng-class="{true:'active'}[curLang=='Deutsch']"      ng-click="changeLanguage('de','Deutsch'     )"> Deutsch         </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='Ελληνικά']"     ng-click="changeLanguage('el','Ελληνικά'    )"> Ελληνικά        </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='English']"      ng-click="changeLanguage('en','English'     )"> English         </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='Español']"      ng-click="changeLanguage('es','Español'     )"> Español         </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='Suomi']"        ng-click="changeLanguage('fi','Suomi'       )"> Suomi           </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='Français']"     ng-click="changeLanguage('fr','Français'    )"> Français        </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='Magyar']"       ng-click="changeLanguage('hu','Magyar'      )"> Magyar          </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='Indonesian']"   ng-click="changeLanguage('id','Indonesian'  )"> Bahasa Indonesia</a></li>
-            <li><a ng-class="{true:'active'}[curLang=='Italiano']"     ng-click="changeLanguage('it','Italiano'    )"> Italiano        </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='日本語']"        ng-click="changeLanguage('ja','日本語'       )"> 日本語           </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='한국어']"         ng-click="changeLanguage('ko','한국어'       )"> 한국어            </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='Nederlands']"   ng-click="changeLanguage('nl','Nederlands'  )"> Nederlands      </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Deutsch']" ng-click="changeLanguage('de','Deutsch'     )"> Deutsch         </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Ελληνικά']" ng-click="changeLanguage('el','Ελληνικά'    )"> Ελληνικά        </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='English']" ng-click="changeLanguage('en','English'     )"> English         </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Español']" ng-click="changeLanguage('es','Español'     )"> Español         </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Suomi']"
+                   ng-click="changeLanguage('fi','Suomi'       )"> Suomi           </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Français']" ng-click="changeLanguage('fr','Français'    )"> Français        </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Magyar']"
+                   ng-click="changeLanguage('hu','Magyar'      )"> Magyar          </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Indonesian']" ng-click="changeLanguage('id','Indonesian'  )"> Bahasa Indonesia</a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Italiano']" ng-click="changeLanguage('it','Italiano'    )"> Italiano        </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='日本語']"
+                   ng-click="changeLanguage('ja','日本語'       )"> 日本語           </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='한국어']"
+                   ng-click="changeLanguage('ko','한국어'       )"> 한국어            </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Nederlands']" ng-click="changeLanguage('nl','Nederlands'  )"> Nederlands      </a></li>
             <li><a ng-class="{true:'active'}[curLang=='Norsk Bokmål']" ng-click="changeLanguage('no','Norsk Bokmål')"> Norsk Bokmål    </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='Polski']"       ng-click="changeLanguage('pl','Polski'      )"> Polski          </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='Português']"    ng-click="changeLanguage('pt','Português'   )"> Português       </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='Русский']"      ng-click="changeLanguage('ru','Русский'     )"> Русский         </a></li>
-        <!--<li><a ng-class="{true:'active'}[curLang=='Slovenčina']"   ng-click="changeLanguage('sk','Slovenčina'  )"> Slovenčina      </a></li>-->
-        <!--<li><a ng-class="{true:'active'}[curLang=='Slovenščina']"  ng-click="changeLanguage('sl','Slovenščina' )"> Slovenščina     </a></li>-->
-        <!--<li><a ng-class="{true:'active'}[curLang=='Svenska']"      ng-click="changeLanguage('sv','Svenska'     )"> Svenska         </a></li>-->
-            <li><a ng-class="{true:'active'}[curLang=='Türkçe']"       ng-click="changeLanguage('tr','Türkçe'      )"> Türkçe          </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='Tiếng Việt']"   ng-click="changeLanguage('vi','Tiếng Việt'  )"> Tiếng Việt      </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='简体中文']"      ng-click="changeLanguage('zhcn','简体中文'   )"> 简体中文         </a></li>
-            <li><a ng-class="{true:'active'}[curLang=='繁體中文']"      ng-click="changeLanguage('zhtw','繁體中文'   )"> 繁體中文         </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Polski']"
+                   ng-click="changeLanguage('pl','Polski'      )"> Polski          </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Português']" ng-click="changeLanguage('pt','Português'   )"> Português       </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Русский']" ng-click="changeLanguage('ru','Русский'     )"> Русский         </a></li>
+              <!--<li><a ng-class="{true:'active'}[curLang=='Slovenčina']"   ng-click="changeLanguage('sk','Slovenčina'  )"> Slovenčina      </a></li>-->
+              <!--<li><a ng-class="{true:'active'}[curLang=='Slovenščina']"  ng-click="changeLanguage('sl','Slovenščina' )"> Slovenščina     </a></li>-->
+              <!--<li><a ng-class="{true:'active'}[curLang=='Svenska']"      ng-click="changeLanguage('sv','Svenska'     )"> Svenska         </a></li>-->
+            <li><a ng-class="{true:'active'}[curLang=='Türkçe']"
+                   ng-click="changeLanguage('tr','Türkçe'      )"> Türkçe          </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Tiếng Việt']" ng-click="changeLanguage('vi','Tiếng Việt'  )"> Tiếng Việt      </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='简体中文']"
+                   ng-click="changeLanguage('zhcn','简体中文'   )"> 简体中文         </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='繁體中文']"
+                   ng-click="changeLanguage('zhtw','繁體中文'   )"> 繁體中文         </a></li>
             <li role="separator" class="divider"></li>
             <li><a data-toggle="modal" data-target="#disclaimerModal" translate="FOOTER_4"> Disclaimer </a></li>
           </ul>
         </span>
 
-        <span class="dropdown dropdown-gas" ng-cloak>
-          <a tabindex="0" aria-haspopup="true" aria-label="adjust gas price" class="dropdown-toggle  btn btn-white" ng-click="dropdownGasPrice = !dropdownGasPrice">
+                <span class="dropdown dropdown-gas" ng-cloak>
+          <a tabindex="0" aria-haspopup="true" aria-label="adjust gas price" class="dropdown-toggle  btn btn-white"
+             ng-click="dropdownGasPrice = !dropdownGasPrice">
             <span translate="OFFLINE_Step2_Label_3">Gas Price</span>: {{gas.value}} Gwei
             <i class="caret"></i>
           </a>
           <ul class="dropdown-menu" ng-show="dropdownGasPrice">
             <div class="header--gas">
-              <span translate="OFFLINE_Step2_Label_3">Gas Price</span>: <input type="number" ng-model="gas.value" min="{{gas.min}}" max="{{gas.max}}" step="{{gas.step}}" value="{{gas.value}}" ng-change="gasChanged()" /> Gwei
-              <input type="range" ng-model="gas.value" min="{{gas.min}}" max="{{gas.max}}" step="{{gas.step}}" ng-change="gasChanged()"/>
+              <span translate="OFFLINE_Step2_Label_3">Gas Price</span>: <input type="number" ng-model="gas.value"
+                                                                               value="{{gas.value}}" min="{{gas.min}}"
+                                                                               max="{{gas.max}}" step="{{gas.step}}"
+                                                                               ng-change="gasChanged()"
+                                                                               ng-blur="validateGasPrice()"
+            /> Gwei
+              <p class="small col-xs-4 text-left"><{{recommendedGas.low}}</p>
+              <p class="small col-xs-4 text-center">{{recommendedGas.low}} - {{recommendedGas.high}}</p>
+              <p class="small col-xs-4 text-right">>{{recommendedGas.high}}</p>
               <p class="small col-xs-4 text-left">Not So Fast</p>
               <p class="small col-xs-4 text-center">Fast</p>
               <p class="small col-xs-4 text-right">Fast AF</p>
-              <p class="small" style="white-space:normal;font-weight:300;margin: 2rem 0 0;" translate="GAS_PRICE_Desc"></p>
-              <a class="small" translate="x_ReadMore" href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-gas" target="_blank" rel="noopener"></a>
+              <p class="small" style="white-space:normal;font-weight:300;margin: 2rem 0 0;"
+                 translate="GAS_PRICE_Desc"></p>
+              <a class="small" translate="x_ReadMore"
+                 href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-gas" target="_blank"
+                 rel="noopener"></a>
             </div>
           </ul>
         </span>
 
-        <!-- Warning: The separators you see on the frontend are in styles/etherwallet-custom.less. If you add / change a node, you have to adjust these. Ping tayvano if you're not a CSS wizard -->
-        <span class="dropdown dropdown-node" ng-cloak>
-          <a tabindex="0" aria-haspopup="true" aria-label="change node. current node {{curNode.name}} node by {{curNode.service}}" class="dropdown-toggle  btn btn-white" ng-click="dropdownNode = !dropdownNode">
+                <!-- Warning: The separators you see on the frontend are in styles/etherwallet-custom.less. If you add / change a node, you have to adjust these. Ping tayvano if you're not a CSS wizard -->
+                <span class="dropdown dropdown-node" ng-cloak>
+          <a tabindex="0" aria-haspopup="true"
+             aria-label="change node. current node {{curNode.name}} node by {{curNode.service}}"
+             class="dropdown-toggle  btn btn-white" ng-click="dropdownNode = !dropdownNode">
             Network: {{curNode.name}} <small>({{curNode.service}})</small>
             <i class="caret"></i>
           </a>
           <ul class="dropdown-menu" ng-show="dropdownNode">
-            <li ng-repeat="(key, value) in nodeList"><a ng-class="{true:'active'}[curNode == key]" ng-click="changeNode(key)">
+            <li ng-repeat="(key, value) in nodeList"><a ng-class="{true:'active'}[curNode == key]"
+                                                        ng-click="changeNode(key)">
               {{value.name}}
               <small> ({{value.service}}) </small>
-              <img ng-show="value.service=='Custom'" src="images/icon-remove.svg" class="node-remove" title="Remove Custom Node" ng-click="removeNodeFromLocal(value.name)"/>
+              <img ng-show="value.service=='Custom'" src="images/icon-remove.svg" class="node-remove"
+                   title="Remove Custom Node" ng-click="removeNodeFromLocal(value.name)"/>
             </a></li>
             <li><a ng-click="customNodeModal.open(); dropdownNode = !dropdownNode;"> Add Custom Node </a></li>
           </ul>
         </span>
 
-      </div>
+
+            </div>
+        </section>
     </section>
-  </section>
 
-  <nav role="navigation" aria-label="main navigation" class="container nav-container overflowing" >
-    <a aria-hidden="true" ng-show="showLeftArrow" class="nav-arrow-left" ng-click="scrollLeft(100);" ng-mouseover="scrollHoverIn(true,2);" ng-mouseleave="scrollHoverOut()">&#171;</a>
-    <div class="nav-scroll">
-      <ul class="nav-inner">
-        
-        <li ng-repeat="tab in tabNames track by $index" class="nav-item {{tab.name}}" ng-class="{active: $index==gService.currentTab}" ng-show="tab.mew" ng-click="tabClick($index)"> <a tabindex="0" aria-label="nav item: {{tab.name | translate}}" translate="{{tab.name}}"></a></li>
-        
-        
-        <li class="nav-item help"><a href="https://myetherwallet.groovehq.com/help_center" target="_blank" rel="noopener">Help</a></li>
-      </ul>
-    </div>
-    <a aria-hidden="true" ng-show="showRightArrow" class="nav-arrow-right" ng-click="scrollRight(100);" ng-mouseover="scrollHoverIn(false,2);" ng-mouseleave="scrollHoverOut()">&#187;</a>
-  </nav>
+    <nav role="navigation" aria-label="main navigation" class="container nav-container overflowing">
+        <a aria-hidden="true" ng-show="showLeftArrow" class="nav-arrow-left" ng-click="scrollLeft(100);"
+           ng-mouseover="scrollHoverIn(true,2);" ng-mouseleave="scrollHoverOut()">&#171;</a>
+        <div class="nav-scroll">
+            <ul class="nav-inner">
+                
+                <li ng-repeat="tab in tabNames track by $index" class="nav-item {{tab.name}}"
+                    ng-class="{active: $index==gService.currentTab}" ng-show="tab.mew" ng-click="tabClick($index)"><a
+                        tabindex="0" aria-label="nav item: {{tab.name | translate}}" translate="{{tab.name}}"></a></li>
+                
+                
+                <li class="nav-item help"><a href="https://myetherwallet.groovehq.com/help_center" target="_blank"
+                                             rel="noopener">Help</a></li>
+            </ul>
+        </div>
+        <a aria-hidden="true" ng-show="showRightArrow" class="nav-arrow-right" ng-click="scrollRight(100);"
+           ng-mouseover="scrollHoverIn(false,2);" ng-mouseleave="scrollHoverOut()">&#187;</a>
+    </nav>
 
-   <article class="modal fade" id="customNodeModal" tabindex="-1">
+     <article class="modal fade" id="customNodeModal" tabindex="-1">
   <section class="modal-dialog">
     <section class="modal-content">
 
@@ -183,18 +234,23 @@
           </div>
 
           <div class="clearfix col-xs-12 radio">
-            <label><input name="options" type="radio" ng-model="customNode.options" value="eth"> ETH </label>
             <label><input name="options" type="radio" ng-model="customNode.options" value="etc"> ETC </label>
+            <label><input name="options" type="radio" ng-model="customNode.options" value="clo"> CLO </label>
+            <label><input name="options" type="radio" ng-model="customNode.options" value="eth"> ETH </label>
             <label><input name="options" type="radio" ng-model="customNode.options" value="rop"> Ropsten </label>
             <label><input name="options" type="radio" ng-model="customNode.options" value="kov"> Kovan </label>
             <label><input name="options" type="radio" ng-model="customNode.options" value="rin"> Rinkeby </label>
             <label><input name="options" type="radio" ng-model="customNode.options" value="cus"> Custom </label>
+
+          </div>
+
+          <div class="col-sm-6">
             <label><input type="checkbox" ng-model="customNode.eip155" value="true"> Supports EIP-155 </label>
           </div>
 
-          <div class="clearfix col-sm-6 col-sm-offset-6" ng-show="customNode.eip155">
+          <div class="col-sm-6">
             <label>Chain ID</label>
-            <input class="form-control" type="text" placeholder="" ng-model="customNode.chainId" ng-class="Validator.isPositiveNumber(customNode.chainId) ? 'is-valid' : 'is-invalid'">
+            <input class="form-control-sm" type="text" placeholder="" ng-model="customNode.chainId" ng-class="Validator.isPositiveNumber(customNode.chainId) ? 'is-valid' : 'is-invalid'">
           </div>
         </section>
 
@@ -214,16 +270,17 @@
   </section>
 </article>
  
-  
+    
 
 </header>
 
 
-<section class="container" style="min-height: 50%" ng-controller='viewCtrl'>
 
-  <div class="tab-content" >
+  <section class="container" style="min-height: 50%" ng-controller='viewCtrl'>
 
-    <div class="" ng-controller="helpersCtrl">
+    <div class="tab-content">
+
+      <div class="" ng-controller="helpersCtrl">
   <h1> Convert Ethererum Units (e.g. Ether <-> Wei) </h1>
   <h2 class="p"> Ether Wei Converter </h2>
   <section class="mono">
@@ -361,7 +418,7 @@
       <p>
         To: <code>0x6090a6e47849629b7245dfa1ca21d94cd15878ef</code> &nbsp;&middot;&nbsp;
         Amount: <code>[A NUMBER >= BID AMOUNT]</code> &nbsp;&middot;&nbsp;
-        Gas Limit: <code>520000</code> &nbsp;&middot;&nbsp;
+        Gas Limit: <code>570000</code> &nbsp;&middot;&nbsp;
         Data: <code>[ABOVE]</code>
       </p>
     </div>
@@ -540,9 +597,10 @@
 </div>
 
 
-  </div>
 
-  <div data-ng-repeat="alert in notifier.alerts">
+    </div>
+
+    <div data-ng-repeat="alert in notifier.alerts">
   <div class="alert popup alert-{{alert.type}} animated-show-hide"
        style="bottom: {{85*$index}}px; z-index: {{999+$index}};">
     <div class="container">
@@ -553,84 +611,138 @@
 </div>
 
 
-</section>
+  </section>
 
-<section class="pre-footer">
-  <div class="container">
-    <p>ClassicEtherWallet.com does not hold your keys for you. We cannot access accounts, recover keys, reset passwords, nor reverse transactions. Protect your keys &amp; always check that you are on correct URL. <a role="link" tabindex="0" data-toggle="modal" data-target="#disclaimerModal"> You are responsible for your security.</a>
-    </p>
-  </div>
-</section>
-<footer class="footer" role="content" aria-label="footer" ng-controller='footerCtrl' >
-  <article class="block__wrap" style="max-width: 1780px; margin: auto;">
-    <section class="footer--left">
-      <a href="/"><img src="images/logo-myetherwallet.png" height="45px" width="auto" alt="Ether Wallet" class="footer--logo"/></a>
-      <p><span translate="FOOTER_1">Free, open-source, client-side interface for generating Ethereum Classic wallets &amp; more. Interact with the Ethereum-compatible blockchains such are ETH, ETC, UBQ and EXP easily &amp; securely. Double-check the URL ( https://ethereumproject.github.io/etherwallet/ ) before unlocking your wallet.</span></p>
-      <p><a aria-label="knowledge base" href="https://myetherwallet.groovehq.com/help_center" target="_blank" rel="noopener" role="link" tabindex="0">
-        Knowledge Base
-      </a></p>
-      <p><a href="https://ethereumproject.github.io/etherwallet/helpers.html" target="_blank" rel="noopener" role="link" tabindex="0">
-        Helpers &amp; ENS Debugging
-      </a></p>
-      <p><a href="https://ethereumproject.github.io/etherwallet/signmsg.html" target="_blank" rel="noopener" role="link" tabindex="0">
-        Sign Message
-      </a></p>
-      <p><a data-target="#disclaimerModal" data-toggle="modal" target="_blank" rel="noopener" role="link" tabindex="0"  translate="FOOTER_4"> Disclaimer </a></p>
-      <p> &copy; 2017 ClassicEtherWallet, LLC </p>
-    </section>
-    <section class="footer--cent">
-        <h5> <i aria-hidden="true">👫</i> You can support us by supporting our blockchain-family.</h5>
-        <p>Consider using our affiliate links to...</p>
-        <p><a aria-label="Swap Ether or Bitcoin via Bity.com" href="https://bity.com/af/jshkb37v" target="_blank" rel="noopener">Swap ETH/BTC/EUR/CHF via Bity.com</a></p>
-        <p><a href="https://www.ledgerwallet.com/r/fa4b?path=/products/" target="_blank" rel="noopener">Buy a Ledger Wallet</a></p>
-        <p><a href="https://trezor.io/?a=myetherwallet.com" target="_blank" rel="noopener">Buy a TREZOR</a></p>
-        <p><a href="https://digitalbitbox.com/?ref=mew" target="_blank" rel="noopener">Buy a Digital Bitbox</a></p>
-        <h5><i aria-hidden="true">💝</i> Donations are always appreciated!</h5>
-        <p>ETH, ETC, UBQ and EXP donation address: <span class="mono wrap">0x52823e725a34d42e14a1b66fb67299c30c4d8edf</small></span></p>
-        <!--
-        <p>MYD: <span class="mono wrap">mewsupport.eth <small>0xf7e983781609012307f2514f63D526D83D24F466</small></span></p>
-        -->
-        <h5 ng-hide="curLang=='en'"> <i>🏅</i> <span translate="Translator_Desc"> Thank you to our translators </span></h5>
-        <p ng-hide="curLang=='en'">
-          <span translate="TranslatorName_1"></span>
-          <span translate="TranslatorName_2"></span>
-          <span translate="TranslatorName_3"></span>
-          <span translate="TranslatorName_4"></span>
-          <span translate="TranslatorName_5"></span>
+  <section class="pre-footer">
+    <div class="container">
+        <p>ClassicEtherWallet.com does not hold your keys for you. We cannot access accounts, recover keys, reset
+            passwords, nor reverse transactions. Protect your keys &amp; always check that you are on correct URL. <a
+                    role="link" tabindex="0" data-toggle="modal" data-target="#disclaimerModal"> You are responsible for
+                your security.</a>
         </p>
-    </section>
-    <section class="footer--righ">
-      <p><a aria-label="website via my ether wallet dot com" href="https://ethereumproject.github.io/etherwallet" target="_blank" rel="noopener" role="link" tabindex="0">
-       ClassicEtherWallet.com
-      </a></p>
-      <p><a aria-label="website via github URL" href="https://ethereumproject.github.io/etherwallet/" target="_blank" rel="noopener" role="link" tabindex="0">
-        ethereumproject.github.io/etherwallet/
-      </a></p>
-      <p><a aria-label="my ether wallet github" href="https://github.com/EthereumCommonwealth/etherwallet" target="_blank" rel="noopener" role="link" tabindex="0">
-        Github: Current ClassicEtherWallet Site &amp; CX
-      </a></p>
-      <p><a aria-label="our organization on github" href="https://github.com/kvhnuke/etherwallet/releases/latest" target="_blank" rel="noopener" role="link" tabindex="0">
-        Github: MyEtherWallet releases
-      </a></p>
-      <p><a aria-label="my ether wallet chrome extension" href="https://chrome.google.com/webstore/detail/classicetherwallet-cx/opggclcfcbfbchcienjdaohghcamjfhf" target="_blank" rel="noopener" role="link" tabindex="0">
-        ClassicEtherWallet CX
-      </a></p>
-      <p><a aria-label="Anti-Phishing chrome extension" href="https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn" target="_blank" rel="noopener" role="link" tabindex="0">
-        Anti-Phishing CX
-      </a></p>
-      <p>
-        <a aria-label="join our slack" href="http://ethereumclassic.herokuapp.com/" target="_blank" rel="noopener" role="link" tabindex="0">Slack</a>
-        &middot;
-        <a aria-label="reddit" href="https://www.reddit.com/r/EthereumClassic/" target="_blank" rel="noopener" role="link" tabindex="0">Reddit</a>
-        &middot;
-        <a aria-label="twitter" href="https://twitter.com/eth_classic" target="_blank" rel="noopener" role="link" tabindex="0">Twitter</a>
-        &middot;
-        <a aria-label="medium" href="https://medium.com/@dexaran820" target="_blank" rel="noopener" role="link" tabindex="0">Medium</a>
-      </p>
-      <p ng-show="showBlocks">Latest Block#: {{currentBlockNumber}} </p>
-    </section>
-  </article>
-</div>
+    </div>
+</section>
+<footer class="footer {{curNode.type}}" role="content" aria-label="footer" ng-controller='footerCtrl'>
+    <article class="block__wrap" style="max-width: 1780px; margin: auto;">
+        <section class="footer--left">
+            <span>Version: 3.12.1</span>
+            <a href="/"><img src="images/logo-myetherwallet.png" height="45px" width="auto" alt="Ether Wallet"
+                             class="footer--logo"/></a>
+            <p><span translate="FOOTER_1">Free, open-source, client-side interface for generating Ethereum Classic wallets &amp; more. Interact with the Ethereum-compatible blockchains such are ETH, ETC, UBQ and EXP easily &amp; securely. Double-check the URL ( https://ethereumproject.github.io/etherwallet/ ) before unlocking your wallet.</span>
+            </p>
+            <!-- Commented out due to stale link
+            <p><a aria-label="knowledge base" href="https://myetherwallet.groovehq.com/help_center" target="_blank" rel="noopener" role="link" tabindex="0">
+              Knowledge Base
+            </a></p> -->
+            <p><a href="https://ethereumproject.github.io/etherwallet/helpers.html" target="_blank" rel="noopener"
+                  role="link" tabindex="0">
+                Helpers &amp; ENS Debugging
+            </a></p>
+            <p><a data-target="#disclaimerModal" data-toggle="modal" target="_blank" rel="noopener" role="link"
+                  tabindex="0" translate="FOOTER_4"> Disclaimer </a></p>
+            <p> &copy; 2018 ClassicEtherWallet, LLC </p>
+        </section>
+        <section class="footer--cent">
+            <h5><i aria-hidden="true">💝</i> Donations are always appreciated!</h5>
+            <p>ETH or ETC donation address: <span class="mono wrap"><big><a
+                    href="http://gastracker.io/addr/0x2ca1377dfa03577ce5bbb815c98eda1ac7632e7d">0x2ca1377dfa03577ce5bbb815c98eda1ac7632e7d</a></big></span>
+            </p>
+
+            <h5><i aria-hidden="true">👫</i> You can support us by supporting our blockchain-family.</h5>
+            <p><a
+                    aria-label="Swap Ether or Bitcoin via Change Now.com"
+                    href="{{changeNow.affiliateLink}}" target="_blank"
+                    rel="noopener">Swap via Change Now.com</a>
+            </p>
+            <p><a href="https://www.ledgerwallet.com/r/fa4b?path=/products/" target="_blank" rel="noopener">Buy a Ledger
+                Wallet</a></p>
+            <p><a href="https://trezor.io/?a=myetherwallet.com" target="_blank" rel="noopener">Buy a TREZOR</a></p>
+            <p><a href="https://digitalbitbox.com/?ref=mew" target="_blank" rel="noopener">Buy a Digital Bitbox</a></p>
+            <h5 ng-hide="curLang=='en'"><i>🏅</i> <span
+                    translate="Translator_Desc"> Thank you to our translators </span></h5>
+            <p ng-hide="curLang=='en'">
+                <span translate="TranslatorName_1"></span>
+                <span translate="TranslatorName_2"></span>
+                <span translate="TranslatorName_3"></span>
+                <span translate="TranslatorName_4"></span>
+                <span translate="TranslatorName_5"></span>
+            </p>
+        </section>
+        <section class="footer--righ brand-primary">
+
+            <div class="footer-branding">
+
+      <span
+
+
+              ng-controller="backgroundNodeCtrl"
+              class="dropdown dropdown-background-node">
+
+
+           <a tabindex="0"
+              aria-haspopup="true"
+              aria-label="change node. current node {{nodeList[backgroundNodeService.backgroundNode].name}} node by {{nodeList[backgroundNodeService.backgroundNode].service}}"
+              class="dropdown-toggle  btn btn-white background-node"
+              ng-click="dropdownNodeBackground = !dropdownNodeBackground"
+           >
+
+            <span translate="NODE_BACKGROUND"></span>
+             {{nodeList[backgroundNodeService.backgroundNode].name}} <small>({{nodeList[backgroundNodeService.backgroundNode].service}})</small>
+            <i class="caret"></i>
+          </a>
+          <ul class="dropdown-menu" ng-show="dropdownNodeBackground">
+            <li ng-repeat="node in backgroundNodeService.availableNodes"><a
+                    ng-class="{true:'active'}[backgroundNodeService.backgroundNode == node]"
+                    ng-click="setBackgroundNode(node)">
+
+                {{nodeList[node].name}}
+              <small> ({{nodeList[node].service}}) </small>
+            </a></li>
+          </ul>
+        </span>
+            </div>
+            <p><a aria-label="website via my ether wallet dot com" href="https://ethereumproject.github.io/etherwallet"
+                  target="_blank" rel="noopener" role="link" tabindex="0">
+                ClassicEtherWallet.com
+            </a></p>
+            <p><a aria-label="website via github URL" href="https://ethereumproject.github.io/etherwallet/"
+                  target="_blank" rel="noopener" role="link" tabindex="0">
+                ethereumproject.github.io/etherwallet/
+            </a></p>
+            <p><a aria-label="my ether wallet github" href="https://github.com/EthereumCommonwealth/etherwallet"
+                  target="_blank" rel="noopener" role="link" tabindex="0">
+                Github: Current ClassicEtherWallet Site &amp; CX
+            </a></p>
+            <p><a aria-label="our organization on github"
+                  href="https://github.com/EthereumCommonwealth/etherwallet/releases/latest" target="_blank"
+                  rel="noopener" role="link" tabindex="0">
+                Github: Ether wallet releases (downloadable version)
+            </a></p>
+            <!-- Commented out due to incompatibility
+            <p><a aria-label="my ether wallet chrome extension" href="https://chrome.google.com/webstore/detail/classicetherwallet-cx/opggclcfcbfbchcienjdaohghcamjfhf" target="_blank" rel="noopener" role="link" tabindex="0">
+              ClassicEtherWallet CX
+            </a></p> -->
+            <p><a aria-label="Anti-Phishing chrome extension"
+                  href="https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn"
+                  target="_blank" rel="noopener" role="link" tabindex="0">
+                Anti-Phishing CX
+            </a></p>
+            <p>
+                <a aria-label="join our discord live chat" href="https://discordapp.com/invite/HgBa9b4" target="_blank"
+                   rel="noopener" role="link" tabindex="0">Discord live chat</a>
+                &middot;
+                <a aria-label="reddit" href="https://www.reddit.com/r/EthereumClassic/" target="_blank" rel="noopener"
+                   role="link" tabindex="0">Reddit</a>
+                &middot;
+                <a aria-label="twitter" href="https://twitter.com/eth_classic" target="_blank" rel="noopener"
+                   role="link" tabindex="0">Twitter</a>
+                &middot;
+                <a aria-label="medium" href="https://medium.com/@dexaran820" target="_blank" rel="noopener" role="link"
+                   tabindex="0">Medium</a>
+            </p>
+            <p ng-show="showBlocks">Latest Block#: {{currentBlockNumber}} </p>
+        </section>
+    </article>
 </footer>
 
  <article class="modal fade" id="disclaimerModal" tabindex="-1">
@@ -669,7 +781,5 @@
  
 
 
-</main>
+</div>
 </body>
-</html>
-

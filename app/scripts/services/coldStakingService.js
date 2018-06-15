@@ -3,16 +3,13 @@ var coldStakingService = function (walletService) {
 
         this.contractAddrs = {
             "Testnet CLO": '0xa45083107ae67636cd9b93ad13c15b939dbdce31',
-            // fixme: testing addr
-            'RINKEBY ETH': '0x713f80e73b174b9aba62dd75fa1da6925c13ace5',//'0xa3a278371d1569d849f93f4241c7812969e863a3',
-            // CLO: '0x',
+            'RINKEBY ETH': '0x713f80e73b174b9aba62dd75fa1da6925c13ace5',
         };
 
 
         this.contract = {
             "name": "Cold Staking",
-            //fixme testing addr
-            "address": this.contractAddrs["Testnet CLO"],//"0xa3a278371d1569d849f93f4241c7812969e863a3",
+            "address": this.contractAddrs["Testnet CLO"],
             abi: [
                 {
                     "anonymous": false,
@@ -303,13 +300,6 @@ var coldStakingService = function (walletService) {
 
         this._staking_threshold = 0;
 
-        this.defaultTx = () => ({
-            inputs: null,
-            from: walletService.wallet.getAddressString(),
-            value: 0,
-            unit: 'ether',
-        });
-
 
         this.reset_staker_info = function () {
 
@@ -332,7 +322,7 @@ var coldStakingService = function (walletService) {
 
             const addr = walletService.wallet.getAddressString();
 
-            const _tx = {inputs: [addr], from: addr, value: 0};
+            const _tx = {inputs: [addr]};
 
             ethFuncs.handleContractCall('staker_info', this.contract, _tx, data => {
 
@@ -344,12 +334,14 @@ var coldStakingService = function (walletService) {
 
                     const [weight, init, stake_time, reward] = data.data;
 
-                    Object.assign(this._staker_info, {
-                        weight: etherUnits.toEther(weight.toFixed(0), 'wei'),
-                        init: init.toFixed(0),
-                        stake_time: stake_time.toFixed(0),
-                        reward: reward.toFixed(0),
-                    });
+                    const STAKER_INFO = {
+                        weight: etherUnits.toEther(weight, 'wei'),
+                        init,
+                        stake_time,
+                        reward,
+                    };
+
+                    Object.assign(this._staker_info, STAKER_INFO);
 
                     return this._staker_info;
 
@@ -360,7 +352,7 @@ var coldStakingService = function (walletService) {
 
         this.staking_threshold = function () {
 
-            ethFuncs.handleContractCall('staking_threshold', this.contract, this.defaultTx(), data => {
+            ethFuncs.handleContractCall('staking_threshold', this.contract, {}, data => {
 
                 if (!data.error) {
 
@@ -397,17 +389,14 @@ var coldStakingService = function (walletService) {
         this.claim_and_withdraw = function (callback = console.log) {
 
 
-            // claim_and_withdraw
-
-
-            ethFuncs.handleContractCall('claim_and_withdraw', this.contract, this.defaultTx(), callback);
+            ethFuncs.handleContractCall('claim_and_withdraw', this.contract, {from: walletService.wallet.getAddressString()}, callback);
 
 
         };
 
         this.valid_staking_tx = function (num_) {
 
-            return new BigNumber(this._staking_threshold).lte(new BigNumber(num_));
+            return new BigNumber(this._staking_threshold).lte(num_);
         };
 
         this.claim = function (callback = console.log) {
@@ -416,7 +405,7 @@ var coldStakingService = function (walletService) {
             // claim
 
 
-            ethFuncs.handleContractCall('claim', this.contract, this.defaultTx(), callback);
+            ethFuncs.handleContractCall('claim', this.contract, {from: walletService.wallet.getAddressString()}, callback);
 
 
         };

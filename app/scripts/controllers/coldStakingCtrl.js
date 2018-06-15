@@ -38,12 +38,14 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
     }, function (val, _val) {
 
         coldStakingService.updateAddress();
+
+        $scope.tx.to = coldStakingService.contract.address;
+
         if (walletService && walletService.wallet && walletService.wallet.getAddressString()) {
 
             coldStakingService.reset_staker_info();
             coldStakingService.staking_threshold();
             coldStakingService.staker_info();
-
         }
 
 

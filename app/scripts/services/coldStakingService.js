@@ -14,7 +14,7 @@ var coldStakingService = function (walletService) {
             "name": "Cold Staking",
             // rinkeby
             //fixme testing addr
-            "address": '0x713f80e73b174b9aba62dd75fa1da6925c13ace5',//"0xa3a278371d1569d849f93f4241c7812969e863a3",
+            "address": '0xa45083107ae67636cd9b93ad13c15b939dbdce31',//"0xa3a278371d1569d849f93f4241c7812969e863a3",
             abi: [
                 {
                     "anonymous": false,

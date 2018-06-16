@@ -43,9 +43,15 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
 
         if (walletService && walletService.wallet && walletService.wallet.getAddressString()) {
 
+
             coldStakingService.reset_staker_info();
             coldStakingService.staking_threshold();
+
             coldStakingService.staker_info();
+            setTimeout(() => {
+
+                coldStakingService.staker_info();
+            }, 1000);
         }
 
 

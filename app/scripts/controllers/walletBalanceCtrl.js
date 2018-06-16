@@ -51,7 +51,11 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
         coldStakingService.reset_staker_info();
         coldStakingService.staking_threshold();
         coldStakingService.staker_info();
-        // coldStakingService.stake_reward();
+
+        setTimeout(() => {
+
+            coldStakingService.staker_info();
+        }, 1000);
 
 
     });
@@ -60,10 +64,7 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
 
 
         const tx = {
-            inputs: null,
             from: walletService.wallet.getAddressString(),
-            value: 0,
-            unit: 'ether'
         };
 
 

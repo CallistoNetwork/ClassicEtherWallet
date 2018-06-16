@@ -140,7 +140,7 @@ app.factory('changeNowService', changeNow);
 app.factory('modalService', modalService);
 
 app.factory('newMessageService', newMessageService);
-app.factory('coldStakingService', ['walletService', coldStakingService]);
+app.factory('coldStakingService', [ 'walletService', coldStakingService]);
 
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('addressField', ['$compile', 'backgroundNodeService', addressFieldDrtv]);

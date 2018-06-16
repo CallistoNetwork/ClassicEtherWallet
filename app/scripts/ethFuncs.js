@@ -134,46 +134,15 @@ ethFuncs.handleContractCall = function (functionName, contract, {inputs = null, 
 
 
 
-        // if reading from contract, no need to estimate gas
+        // if reading from contract, send call
         if (!from) {
 
-            const testing = false;
 
-
-            if (functionName === 'staker_info') {
-
-                if (testing) {
-
-                    const to = '0xa45083107ae67636cd9b93ad13c15b939dbdce31';
-
-                    console.log(angular.equals(to, transObj.to), to, transObj.to);
-
-                    const dater = "0x3f5e8ff400000000000000000000000001000b5fe61411c466b70631d7ff070187179bbf";
-                    console.log(transObj.data, dater, angular.equals(transObj.data, dater));
-                    transObj.data = dater;
-                }
-
-            }
+            //  console.log(Object.keys(ajaxReq));
 
 
             ajaxReq.getEthCall({to: transObj.to, data: transObj.data}, function (data) {
 
-
-                if (functionName === 'staker_info') {
-
-                    if (testing) {
-
-                        const result = "0x00000000000000000000000000000000000000000000002b5e3af16b18800000000000000000000000000000000000000000000000000000000000000000089b0000000000000000000000000000000000000000000000000000000000000d100000000000000000000000000000000000000000000000000000000000000000";
-
-
-                        console.log(angular.equals(result, data.data));
-                        console.log('result', result);
-                        console.log('data.data', data.data);
-                        console.log('data', data);
-                    }
-                    console.log('staker info', data.data);
-
-                }
 
                 callback_(Object.assign({}, data, {data: ethFuncs.decodeOutputs(foundFunction, data)}));
 

@@ -48,9 +48,11 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
             coldStakingService.staking_threshold();
 
             coldStakingService.staker_info();
+
+
             setTimeout(() => {
 
-                coldStakingService.staker_info();
+                coldStakingService._staker_info.weight === 0 && coldStakingService.staker_info();
             }, 1000);
         }
 

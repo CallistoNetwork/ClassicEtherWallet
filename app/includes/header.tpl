@@ -1,4 +1,6 @@
-<header class="{{curNode.name}} {{curNode.service}} {{curNode.service}} nav-index-{{gService.currentTab}}"
+
+
+<header class="{{curNode.name}} {{curNode.service}} nav-index-{{gService.currentTab}}"
         aria-label="header">
 
     @@if (site === 'cew' ) {
@@ -141,6 +143,12 @@
            ng-mouseover="scrollHoverIn(true,2);" ng-mouseleave="scrollHoverOut()">&#171;</a>
         <div class="nav-scroll">
             <ul class="nav-inner">
+
+                <li>
+
+                    <css-theme-drtv></css-theme-drtv>
+                </li>
+
                 @@if (site === 'cew' ) {
                 <li ng-repeat="tab in tabNames track by $index" class="nav-item {{tab.name}}"
                     ng-class="{active: $index==gService.currentTab}" ng-show="tab.mew" ng-click="tabClick($index)"><a

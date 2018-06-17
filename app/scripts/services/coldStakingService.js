@@ -8,7 +8,7 @@ var coldStakingService = function (walletService) {
 
     this.contract = {
         "name": "Cold Staking",
-        "address": '0xa45083107ae67636cd9b93ad13c15b939dbdce31',
+        "address": this.contractAddrs['Testnet CLO'],
         abi: [
             {
                 "anonymous": false,
@@ -305,28 +305,27 @@ var coldStakingService = function (walletService) {
      */
 
 
-
     this.staker_info = function (addr = walletService.wallet.getAddressString()) {
 
 
         const _tx = {inputs: [addr]};
 
 
-        this.handleCall('staker_info', _tx, data => {
+        this.handleContractCall('staker_info', _tx, data => {
 
-            console.log('staker_info()', data);
+            // console.log('staker_info()', data);
 
 
             if (!data.error) {
 
 
-                const [weight, init, stake_time, reward] = data.data;
+                const [weight, init, stake_time, reward] = data.data.map(Number);
 
                 const STAKER_INFO = {
                     weight: etherUnits.toEther(weight, 'wei'),
                     init,
                     stake_time,
-                    reward,
+                    reward: etherUnits.toEther(reward, 'wei'),
                 };
 
                 Object.assign(this._staker_info, STAKER_INFO);
@@ -338,7 +337,7 @@ var coldStakingService = function (walletService) {
 
     };
 
-    this.handleCall = function (functionName, transaction, callback) {
+    this.handleContractCall = function (functionName, transaction, callback) {
 
         this.updateAddress();
 
@@ -350,7 +349,7 @@ var coldStakingService = function (walletService) {
     this.staking_threshold = function () {
 
 
-        this.handleCall('staking_threshold', {}, data => {
+        this.handleContractCall('staking_threshold', {}, data => {
 
             if (!data.error) {
 
@@ -365,7 +364,7 @@ var coldStakingService = function (walletService) {
         const _tx = {inputs: [addr]};
 
 
-        this.handleCall('stake_reward', _tx, data => {
+        this.handleContractCall('stake_reward', _tx, data => {
 
             // console.log('stake_reward()', data);
 
@@ -387,7 +386,7 @@ var coldStakingService = function (walletService) {
     this.claim_and_withdraw = function (callback = console.log) {
 
 
-        this.handleCall('claim_and_withdraw', {from: walletService.wallet.getAddressString()}, callback);
+        this.handleContractCall('claim_and_withdraw', {from: walletService.wallet.getAddressString()}, callback);
 
 
     };
@@ -400,7 +399,7 @@ var coldStakingService = function (walletService) {
     this.claim = function (callback = console.log) {
 
 
-        this.handleCall('claim', {from: walletService.wallet.getAddressString()}, callback);
+        this.handleContractCall('claim', {from: walletService.wallet.getAddressString()}, callback);
 
 
     };

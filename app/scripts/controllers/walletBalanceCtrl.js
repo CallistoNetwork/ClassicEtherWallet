@@ -54,7 +54,7 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
 
         setTimeout(() => {
 
-            coldStakingService.staker_info();
+            coldStakingService._staker_info.weight === 0 && coldStakingService.staker_info();
         }, 1000);
 
 

@@ -8,7 +8,7 @@ var coldStakingService = function (walletService) {
 
     this.contract = {
         "name": "Cold Staking",
-        "address": '0xa45083107ae67636cd9b93ad13c15b939dbdce31',
+        "address": this.contractAddrs['Testnet CLO'],
         abi: [
             {
                 "anonymous": false,
@@ -299,11 +299,48 @@ var coldStakingService = function (walletService) {
 
     this._staking_threshold = 0;
 
+    /*
+
+        Reset information and read from contract
+     */
+
+    this.handleInit = function () {
+
+
+        this.reset_staker_info();
+        this._staking_threshold = 0;
+
+        if (Object.keys(this.contractAddrs).includes(ajaxReq.type)) {
+
+
+            this.staking_threshold();
+
+            if (walletService &&
+                walletService.wallet &&
+                walletService.wallet.getAddressString()
+            ) {
+
+                // fixme: call fails unless specified wait time
+
+                setTimeout(() => {
+
+
+                    this.staker_info();
+
+                }, 1000);
+
+
+            }
+
+        }
+
+
+    };
+
 
     /*
         Gets the reward for address
      */
-
 
 
     this.staker_info = function (addr = walletService.wallet.getAddressString()) {
@@ -312,7 +349,7 @@ var coldStakingService = function (walletService) {
         const _tx = {inputs: [addr]};
 
 
-        this.handleCall('staker_info', _tx, data => {
+        this.handleContractCall('staker_info', _tx, data => {
 
             console.log('staker_info()', data);
 
@@ -331,18 +368,16 @@ var coldStakingService = function (walletService) {
 
                 Object.assign(this._staker_info, STAKER_INFO);
 
-                return this._staker_info;
-
             }
         })
 
     };
 
-    this.handleCall = function (functionName, transaction, callback) {
+    this.handleContractCall = function (functionName, transaction, callback) {
 
-        this.updateAddress();
+        const address = this.updateAddress();
 
-        ethFuncs.handleContractCall(functionName, this.contract, transaction, callback);
+        ethFuncs.handleContractCall(functionName, this.contract, Object.assign({}, transaction, {to: address}), callback);
 
 
     };
@@ -350,7 +385,7 @@ var coldStakingService = function (walletService) {
     this.staking_threshold = function () {
 
 
-        this.handleCall('staking_threshold', {}, data => {
+        this.handleContractCall('staking_threshold', {}, data => {
 
             if (!data.error) {
 
@@ -365,7 +400,7 @@ var coldStakingService = function (walletService) {
         const _tx = {inputs: [addr]};
 
 
-        this.handleCall('stake_reward', _tx, data => {
+        this.handleContractCall('stake_reward', _tx, data => {
 
             // console.log('stake_reward()', data);
 
@@ -379,7 +414,6 @@ var coldStakingService = function (walletService) {
 
             }
 
-            return this._staker_info.reward;
         })
     };
 
@@ -387,7 +421,7 @@ var coldStakingService = function (walletService) {
     this.claim_and_withdraw = function (callback = console.log) {
 
 
-        this.handleCall('claim_and_withdraw', {from: walletService.wallet.getAddressString()}, callback);
+        this.handleContractCall('claim_and_withdraw', {from: walletService.wallet.getAddressString()}, callback);
 
 
     };
@@ -400,7 +434,7 @@ var coldStakingService = function (walletService) {
     this.claim = function (callback = console.log) {
 
 
-        this.handleCall('claim', {from: walletService.wallet.getAddressString()}, callback);
+        this.handleContractCall('claim', {from: walletService.wallet.getAddressString()}, callback);
 
 
     };
@@ -415,6 +449,8 @@ var coldStakingService = function (walletService) {
                 address: this.contractAddrs[ajaxReq.type]
             });
         }
+
+        return this.contract.address;
     };
 
     this.reset_staker_info = function () {

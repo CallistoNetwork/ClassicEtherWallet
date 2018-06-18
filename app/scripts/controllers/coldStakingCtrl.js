@@ -1,7 +1,12 @@
 'use strict';
 
 
-var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService, coldStakingService) {
+var coldStakingCtrl = function ($scope,
+                                $rootScope,
+                                walletService,
+                                modalService,
+                                coldStakingService
+) {
 
 
     $scope.walletService = walletService;
@@ -25,6 +30,7 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
 
     }
 
+
     /*
 
         When switching network, reset staker info, update contract address and fetch staking
@@ -37,23 +43,13 @@ var coldStakingCtrl = function ($scope, $rootScope, walletService, modalService,
         return ajaxReq.type;
     }, function (val, _val) {
 
+
         coldStakingService.updateAddress();
 
         $scope.tx.to = coldStakingService.contract.address;
 
-        if (walletService && walletService.wallet && walletService.wallet.getAddressString()) {
 
-
-            coldStakingService.reset_staker_info();
-            coldStakingService.staking_threshold();
-
-            coldStakingService.staker_info();
-            setTimeout(() => {
-
-                coldStakingService.staker_info();
-            }, 1000);
-        }
-
+        coldStakingService.handleInit();
 
     });
 

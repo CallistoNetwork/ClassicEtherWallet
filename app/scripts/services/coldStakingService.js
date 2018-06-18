@@ -320,7 +320,8 @@ var coldStakingService = function (walletService) {
                 walletService.wallet.getAddressString()
             ) {
 
-                // fixme: call fails unless specified wait time
+                // fixme: call fails unless waiting a period of time
+                this.staker_info();
 
                 setTimeout(() => {
 
@@ -357,16 +358,15 @@ var coldStakingService = function (walletService) {
             if (!data.error) {
 
 
-                const [weight, init, stake_time, reward] = data.data;
+                const [weight, init, stake_time, reward] = data.data.map(Number);
 
-                const STAKER_INFO = {
-                    weight: etherUnits.toEther(weight, 'wei'),
+
+                Object.assign(this._staker_info, {
                     init,
                     stake_time,
                     reward,
-                };
-
-                Object.assign(this._staker_info, STAKER_INFO);
+                    weight: etherUnits.toEther(weight, 'wei')
+                });
 
             }
         })
@@ -376,6 +376,11 @@ var coldStakingService = function (walletService) {
     this.handleContractCall = function (functionName, transaction, callback) {
 
         const address = this.updateAddress();
+
+        if (functionName === 'staker_info') {
+
+            console.log('staker info', this.contract, transaction);
+        }
 
         ethFuncs.handleContractCall(functionName, this.contract, Object.assign({}, transaction, {to: address}), callback);
 
@@ -389,7 +394,7 @@ var coldStakingService = function (walletService) {
 
             if (!data.error) {
 
-                this._staking_threshold = data.data[0];
+                this._staking_threshold = parseInt(data.data[0]);
             }
         })
     };
@@ -407,7 +412,7 @@ var coldStakingService = function (walletService) {
             if (!data.error) {
 
 
-                this._staker_info.reward = data.data[0].toFixed(0);
+                this._staker_info.reward = parseInt(data.data[0]);
 
                 // console.log('staking info', this._staker_info);
 

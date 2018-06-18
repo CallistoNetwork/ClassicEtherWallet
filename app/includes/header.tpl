@@ -1,5 +1,3 @@
-
-
 <header class="{{curNode.name}} {{curNode.service}} nav-index-{{gService.currentTab}}"
         aria-label="header">
 
@@ -111,6 +109,8 @@
                  rel="noopener"></a>
             </div>
           </ul>
+
+
         </span>
 
                 <!-- Warning: The separators you see on the frontend are in styles/etherwallet-custom.less. If you add / change a node, you have to adjust these. Ping tayvano if you're not a CSS wizard -->
@@ -133,6 +133,9 @@
           </ul>
         </span>
 
+                <css-theme-drtv></css-theme-drtv>
+
+
 
             </div>
         </section>
@@ -144,10 +147,6 @@
         <div class="nav-scroll">
             <ul class="nav-inner">
 
-                <li>
-
-                    <css-theme-drtv></css-theme-drtv>
-                </li>
 
                 @@if (site === 'cew' ) {
                 <li ng-repeat="tab in tabNames track by $index" class="nav-item {{tab.name}}"

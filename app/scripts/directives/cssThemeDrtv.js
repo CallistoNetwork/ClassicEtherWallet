@@ -5,42 +5,20 @@ const cssThemeDrtv = function () {
 
     const localStorageKey = '@css-theme@';
 
-    const themeLink = document.getElementById('cssTheme');
-
     return {
         restrict: "E",
         template: require('./cssThemeDrtv.html'),
         link: function ($scope, element, attrs) {
 
 
-            $scope.applyDarkTheme = globalFuncs.localStorage.getItem(localStorageKey, false);
+            $scope.applyDarkTheme = globalFuncs.localStorage.getItem(localStorageKey, 'light');
 
+            // console.log('applyDarktheme', $scope.applyDarkTheme);
 
-            function applyTheme() {
-
-                const style = $scope.applyDarkTheme ?
-                    'https://bootswatch.com/3/darkly/bootstrap.min' :
-                    'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min';
-
-
-                themeLink.href = `${style}.css`;
-
+            angular.element(window).bind('beforeunload', function () {
 
                 globalFuncs.localStorage.setItem(localStorageKey, $scope.applyDarkTheme);
-
-            }
-
-            $scope.handleSubmit = function () {
-
-                $scope.applyDarkTheme = !$scope.applyDarkTheme;
-
-
-                applyTheme();
-
-
-            };
-
-            applyTheme();
+            });
 
 
         }

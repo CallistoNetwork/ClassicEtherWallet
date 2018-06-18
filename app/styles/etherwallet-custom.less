@@ -249,6 +249,11 @@ input[type="text"] + .eye {
   }
 }
 
+span .moon {
+
+  background: url('../images/icon-moon.svg');
+}
+
 input[type="password"] + .eye {
   cursor: pointer;
   &:before {
@@ -1099,61 +1104,3 @@ footer {
   border: none !important;
 }
 
-
-@gray-base:              #000;
-@gray-darker:            lighten(@gray-base, 13.5%); // #222
-@gray-dark:              #303030;   // #333
-@gray:                   #464545;
-@gray-light:             #999;   // #999
-@gray-lighter:           #EBEBEB; // #eee
-
-@brand-primary:         #375a7f;
-@brand-success:         #00bc8c;
-@brand-info:            #3498DB;
-@brand-warning:         #F39C12;
-@brand-danger:          #E74C3C;
-
-
-//== Scaffolding
-//
-//## Settings for some of the most global styles.
-
-//** Background color for `<body>`.
-@body-bg:               @gray-darker;
-//** Global text color on `<body>`.
-@text-color:            #fff;
-
-//== Forms
-//
-//##
-
-//** `<input>` background color
-@input-bg:                       #fff;
-//** `<input disabled>` background color
-@input-bg-disabled:              @gray-lighter;
-
-//** Text color for `<input>`s
-@input-color:                    @gray;
-//** `<input>` border color
-@input-border:                   #f1f1f1;
-
-// TODO: Rename `@input-border-radius` to `@input-border-radius-base` in v4
-//** Default `.form-control` border radius
-// This has no effect on `<select>`s in some browsers, due to the limited stylability of `<select>`s in CSS.
-@input-border-radius:            @border-radius-base;
-//** Large `.form-control` border radius
-@input-border-radius-large:      @border-radius-large;
-//** Small `.form-control` border radius
-@input-border-radius-small:      @border-radius-small;
-
-//** Border color for inputs on focus
-@input-border-focus:             #fff;
-
-//** Placeholder text color
-@input-color-placeholder:        @gray-light;
-
-
-body {
-
-
-}

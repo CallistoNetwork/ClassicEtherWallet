@@ -20,8 +20,6 @@
     <link rel="stylesheet" href="css/crypto-icons/styles.css">
     <link rel="stylesheet" href="css/etherwallet-master.min.css">
 
-    <link id="cssTheme" rel="stylesheet">
-
     <script type="text/javascript" src="js/etherwallet-static.min.js"></script>
     <script type="text/javascript" src="js/etherwallet-master.js"></script>
 

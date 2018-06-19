@@ -140,7 +140,7 @@ app.factory('changeNowService', changeNow);
 app.factory('modalService', modalService);
 
 app.factory('newMessageService', newMessageService);
-app.factory('coldStakingService', ['walletService', coldStakingService]);
+app.factory('coldStakingService', [ 'walletService', coldStakingService]);
 
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('addressField', ['$compile', 'backgroundNodeService', addressFieldDrtv]);
@@ -160,7 +160,7 @@ app.controller('viewCtrl', ['$scope', 'globalService', '$sce', viewCtrl]);
 app.controller('walletGenCtrl', ['$rootScope', '$scope', walletGenCtrl]);
 app.controller('bulkGenCtrl', ['$scope', bulkGenCtrl]);
 app.controller('decryptWalletCtrl', ['$scope', '$sce', 'walletService', decryptWalletCtrl]);
-app.controller('viewWalletCtrl', ['$scope', '$rootScope', 'walletService', viewWalletCtrl]);
+app.controller('viewWalletCtrl', ['$scope', '$rootScope', 'walletService', 'coldStakingService', viewWalletCtrl]);
 app.controller('txStatusCtrl', ['$scope', '$rootScope', txStatusCtrl]);
 app.controller('sendTxCtrl', ['$scope', '$sce', '$rootScope', 'walletService', sendTxCtrl]);
 

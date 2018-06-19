@@ -1,5 +1,5 @@
 'use strict';
-var viewWalletCtrl = function($scope, $rootScope, walletService) {
+var viewWalletCtrl = function ($scope, $rootScope, walletService) {
     $scope.usdBalance = "loading";
     $scope.gbpBalance = "loading";
     $scope.eurBalance = "loading";
@@ -14,10 +14,10 @@ var viewWalletCtrl = function($scope, $rootScope, walletService) {
     walletService.wallet = null;
     walletService.password = '';
     $scope.ajaxReq = ajaxReq;
-    $scope.$watch(function() {
+    $scope.$watch(function () {
         if (walletService.wallet == null) return null;
         return walletService.wallet.getAddressString();
-    }, function() {
+    }, function () {
         if (walletService.wallet == null) return;
         $scope.wallet = walletService.wallet;
         $scope.wd = true;
@@ -32,25 +32,27 @@ var viewWalletCtrl = function($scope, $rootScope, walletService) {
         }
         $scope.wallet.setBalance();
         $scope.wallet.setTokens();
+
+
     });
-    $scope.$watch('ajaxReq.key', function() {
+    $scope.$watch('ajaxReq.key', function () {
         if ($scope.wallet) {
             $scope.wallet.setBalance();
             $scope.wallet.setTokens();
         }
     });
 
-    $scope.printQRCode = function() {
+    $scope.printQRCode = function () {
         globalFuncs.printPaperWallets(JSON.stringify([{
             address: $scope.wallet.getChecksumAddressString(),
             private: $scope.wallet.getPrivateKeyString()
         }]));
     }
 
-    $scope.showHidePkey = function() {
+    $scope.showHidePkey = function () {
         $scope.pkeyVisible = !$scope.pkeyVisible;
     }
-    $scope.resetWallet = function() {
+    $scope.resetWallet = function () {
         $scope.wallet = null;
         walletService.wallet = null;
         walletService.password = '';

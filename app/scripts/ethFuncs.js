@@ -110,7 +110,8 @@ ethFuncs.estimateGas = function (dataObj, callback) {
     @returns {error: bool, data: []any}
  */
 
-ethFuncs.handleContractCall = function (functionName, contract, {inputs = null, from, value = 0, unit = 'ether'}, callback_ = console.log) {
+
+ethFuncs.handleContractCall = function (functionName, contract, {inputs = null, from = null, value = 0, unit = 'ether'} = {}, callback_ = console.log) {
 
 
     const foundFunction = contract.abi.find(itm => itm.type === 'function' && itm.name === functionName);
@@ -118,12 +119,12 @@ ethFuncs.handleContractCall = function (functionName, contract, {inputs = null, 
 
     if (!foundFunction) {
 
-        console.error('error locating function: ', functionName, 'in', contract);
+        console.error('error locating function:', functionName, 'in', contract);
 
         callback_({error: true, data: null});
     }
 
-    const transObj = ethFuncs.prepContractData(functionName, contract, {inputs, from, value});
+    const transObj = ethFuncs.prepContractData(functionName, contract, {inputs, from, value, unit});
 
     if (transObj.error) {
 
@@ -132,33 +133,52 @@ ethFuncs.handleContractCall = function (functionName, contract, {inputs = null, 
     } else {
 
 
-        ethFuncs.estimateGas(transObj, function (data) {
 
-            if (data.error || parseInt(data.data) === -1) {
-
-                console.error('error estimating gas', data);
-
-                callback_({error: data, data: null});
-
-            } else {
+        // if reading from contract, send call
+        if (!from) {
 
 
-                Object.assign(transObj, {
-                    gasLimit: data.data,
-                    value: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(value, unit)))
-                });
+            //  console.log(Object.keys(ajaxReq));
 
 
-                ajaxReq.getEthCall(transObj, function (data) {
-
-                    callback_(Object.assign({}, data, {data: ethFuncs.decodeOutputs(foundFunction, data)}));
-
-                })
-
-            }
+            ajaxReq.getEthCall({to: transObj.to, data: transObj.data}, function (data) {
 
 
-        });
+                callback_(Object.assign({}, data, {data: ethFuncs.decodeOutputs(foundFunction, data)}));
+
+            })
+
+        } else {
+
+
+            ethFuncs.estimateGas(transObj, function (data) {
+
+                if (data.error || parseInt(data.data) === -1) {
+
+                    console.error('error estimating gas', data);
+
+                    callback_({error: data, data: null});
+
+                } else {
+
+
+                    Object.assign(transObj, {
+                        gasLimit: data.data,
+
+                    });
+
+
+                    ajaxReq.getEthCall(transObj, function (data) {
+
+                        callback_(Object.assign({}, data, {data: ethFuncs.decodeOutputs(foundFunction, data)}));
+
+                    })
+
+                }
+
+
+            });
+        }
 
     }
 
@@ -233,8 +253,17 @@ ethFuncs.decodeOutputs = function decodeOutputs(contractFunction, data) {
 
     const {outputs} = contractFunction;
 
-    return ethUtil.solidityCoder.decodeParams(outputs.map(o => o.type), data.data.replace('0x', ''));
+    const output = ethUtil.solidityCoder.decodeParams(outputs.map(o => o.type), data.data.replace('0x', ''));
 
+
+    return output.map(i => {
+        if (i instanceof BigNumber) {
+
+            return i.toFixed(0);
+        }
+
+        return i;
+    });
 };
 
 /*
@@ -249,7 +278,7 @@ ethFuncs.decodeOutputs = function decodeOutputs(contractFunction, data) {
 
  */
 
-ethFuncs.prepContractData = function (functionName, contract, {inputs: inputs_ = null, from, value = 0}) {
+ethFuncs.prepContractData = function (functionName, contract, {inputs = [], from, value = 0}) {
 
 
     if (!(contract.hasOwnProperty('abi') && contract.hasOwnProperty('address') && Array.isArray(contract.abi))) {
@@ -280,17 +309,15 @@ ethFuncs.prepContractData = function (functionName, contract, {inputs: inputs_ =
 
     }
 
-    if (inputs_) {
 
-        foundFunction.inputs.forEach((item, i) => item.value = inputs_[i]);
+    foundFunction.inputs.forEach((item, i) => item.value = inputs[i] || "");
 
-        data += ethFuncs.encodeInputs(foundFunction);
-    }
+    var inputs__ = ethFuncs.encodeInputs(foundFunction);
 
 
     return {
         to: contract.address,
-        data: ethFuncs.sanitizeHex(data),
+        data: ethFuncs.sanitizeHex(data + inputs__),
         value
     };
 

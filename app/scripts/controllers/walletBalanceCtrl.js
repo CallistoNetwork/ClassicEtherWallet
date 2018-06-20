@@ -69,10 +69,11 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
             } else {
 
 
-                Object.assign($scope.tx, {gasLimit: -1});
+                // Object.assign($scope.tx, {gasLimit: -1});
 
                 $scope.notifier.danger(data.msg);
             }
+
 
         });
 
@@ -82,6 +83,7 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
 
 
         $scope.estimateGas_('claim_and_withdraw');
+
         modalService.openWithdrawModal.open();
 
     };

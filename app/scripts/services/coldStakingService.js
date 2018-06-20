@@ -5,6 +5,12 @@ var coldStakingService = function (walletService) {
         'RINKEBY ETH': '0x713f80e73b174b9aba62dd75fa1da6925c13ace5',
     };
 
+    this._round_interval = {
+        'CLO': 172800,
+        'Testnet CLO': 15000,
+        'RINKEBY ETH': 15000,
+    };
+
 
     this.contract = {
         "name": "Cold Staking",
@@ -299,6 +305,12 @@ var coldStakingService = function (walletService) {
 
     this._staking_threshold = 0;
 
+
+    this.userCanWithdraw = function () {
+
+
+        return new BigNumber(this._round_interval[ajaxReq.type]).lte(this._staker_info.stake_time);
+    };
     /*
 
         Reset information and read from contract
@@ -320,15 +332,23 @@ var coldStakingService = function (walletService) {
                 walletService.wallet.getAddressString()
             ) {
 
-                // fixme: call fails unless waiting a period of time
                 this.staker_info();
 
+                // fixme: call fails unless waiting a period of time
                 setTimeout(() => {
 
 
                     this.staker_info();
 
                 }, 1000);
+
+
+                setTimeout(() => {
+
+
+                    this._staker_info.weight === 0 && this.staker_info();
+
+                }, 2000);
 
 
             }
@@ -443,6 +463,7 @@ var coldStakingService = function (walletService) {
 
 
     };
+
 
     this.updateAddress = function () {
 

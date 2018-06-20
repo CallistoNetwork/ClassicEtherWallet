@@ -42,20 +42,11 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
 
 
     $scope.$watch(function () {
-        if (walletService.wallet == null) return null;
-        return walletService.wallet.getAddressString();
-    }, function () {
-        if (walletService.wallet == null) return;
+        return walletService.wallet && walletService.wallet.getAddressString();
+    }, function (val, _val) {
+        if (!val) return;
         $scope.wallet = walletService.wallet;
-
-        coldStakingService.reset_staker_info();
-        coldStakingService.staking_threshold();
-        coldStakingService.staker_info();
-
-        setTimeout(() => {
-
-            coldStakingService._staker_info.weight === 0 && coldStakingService.staker_info();
-        }, 1000);
+        coldStakingService.handleInit();
 
 
     });

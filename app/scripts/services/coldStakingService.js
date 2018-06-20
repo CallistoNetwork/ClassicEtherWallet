@@ -299,6 +299,45 @@ var coldStakingService = function (walletService) {
 
     this._staking_threshold = 0;
 
+    /*
+
+        Reset information and read from contract
+     */
+
+    this.handleInit = function () {
+
+
+        this.reset_staker_info();
+        this._staking_threshold = 0;
+
+        if (Object.keys(this.contractAddrs).includes(ajaxReq.type)) {
+
+
+            this.staking_threshold();
+
+            if (walletService &&
+                walletService.wallet &&
+                walletService.wallet.getAddressString()
+            ) {
+
+                // fixme: call fails unless waiting a period of time
+                this.staker_info();
+
+                setTimeout(() => {
+
+
+                    this.staker_info();
+
+                }, 1000);
+
+
+            }
+
+        }
+
+
+    };
+
 
     /*
         Gets the reward for address
@@ -313,7 +352,7 @@ var coldStakingService = function (walletService) {
 
         this.handleContractCall('staker_info', _tx, data => {
 
-            // console.log('staker_info()', data);
+            console.log('staker_info()', data);
 
 
             if (!data.error) {
@@ -321,16 +360,13 @@ var coldStakingService = function (walletService) {
 
                 const [weight, init, stake_time, reward] = data.data.map(Number);
 
-                const STAKER_INFO = {
-                    weight: etherUnits.toEther(weight, 'wei'),
+
+                Object.assign(this._staker_info, {
                     init,
                     stake_time,
-                    reward: etherUnits.toEther(reward, 'wei'),
-                };
-
-                Object.assign(this._staker_info, STAKER_INFO);
-
-                return this._staker_info;
+                    reward,
+                    weight: etherUnits.toEther(weight, 'wei')
+                });
 
             }
         })
@@ -339,9 +375,14 @@ var coldStakingService = function (walletService) {
 
     this.handleContractCall = function (functionName, transaction, callback) {
 
-        this.updateAddress();
+        const address = this.updateAddress();
 
-        ethFuncs.handleContractCall(functionName, this.contract, transaction, callback);
+        if (functionName === 'staker_info') {
+
+            console.log('staker info', this.contract, transaction);
+        }
+
+        ethFuncs.handleContractCall(functionName, this.contract, Object.assign({}, transaction, {to: address}), callback);
 
 
     };
@@ -353,7 +394,7 @@ var coldStakingService = function (walletService) {
 
             if (!data.error) {
 
-                this._staking_threshold = data.data[0];
+                this._staking_threshold = parseInt(data.data[0]);
             }
         })
     };
@@ -371,14 +412,13 @@ var coldStakingService = function (walletService) {
             if (!data.error) {
 
 
-                this._staker_info.reward = data.data[0].toFixed(0);
+                this._staker_info.reward = parseInt(data.data[0]);
 
                 // console.log('staking info', this._staker_info);
 
 
             }
 
-            return this._staker_info.reward;
         })
     };
 
@@ -414,6 +454,8 @@ var coldStakingService = function (walletService) {
                 address: this.contractAddrs[ajaxReq.type]
             });
         }
+
+        return this.contract.address;
     };
 
     this.reset_staker_info = function () {

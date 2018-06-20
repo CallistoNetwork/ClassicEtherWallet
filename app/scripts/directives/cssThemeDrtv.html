@@ -5,13 +5,24 @@
                 name="theme"
                 id="theme"
                 ng-model="applyDarkTheme"
-                style="width: 300px;"
+                class="theme-selector"
                 ng-change="handleSubmit()"
         >
             <option id="dark" name="dark" value="dark">dark</option>
             <option id="light" name="light" value="light">light</option>
         </select>
     </form>
+
+    <style>
+        .theme-selector {
+
+            width: 7rem;
+
+            color: #282828 ;
+        }
+
+
+    </style>
 
     <span ng-if="applyDarkTheme === 'dark'">
 <!--

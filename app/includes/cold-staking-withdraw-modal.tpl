@@ -22,6 +22,8 @@
                         Withdraw is impossible as stake time < round interval (
                         {{coldStakingService._staker_info.stake_time}} <
                         {{coldStakingService._round_interval[ajaxReq.type]}}
+
+                        )
                     </div>
                     <h2 class="modal-title">You are about to <b>withdraw {{ajaxReq.type}} from Cold Staking:</b></h2>
 
@@ -56,26 +58,24 @@
 
                             <div class="addressIdenticon med" title="Address Indenticon"
                                  blockie-address="{{walletService.wallet.getAddressString()}}"
-                                 watch-var="walletService.wallet.getAddressString()"></div>
-                            </td>
+                                 watch-var="walletService.wallet.getAddressString()">
 
-
+                            </div>
                         </div>
+
+
                     </div>
-
-
+                    <h4 translate="SENDModal_Content_3">Are you sure you want to do this?</h4>
                 </div>
-
-                <h4 translate="SENDModal_Content_3">Are you sure you want to do this?</h4>
                 <div class="modal-footer">
 
                     <!--<section class="row">-->
-                        <!--&lt;!&ndash; Raw TX &ndash;&gt;-->
-                        <!--<div class="form-group col-xs-12">-->
-                            <!--<h4 translate="SEND_raw"> Raw Transaction </h4>-->
-                            <!--<textarea class="form-control" rows="4" readonly>{{tx | json: 4}}</textarea>-->
-                        <!--</div>-->
-                        <!--&lt;!&ndash; Singed TX &ndash;&gt;-->
+                    <!--&lt;!&ndash; Raw TX &ndash;&gt;-->
+                    <!--<div class="form-group col-xs-12">-->
+                    <!--<h4 translate="SEND_raw"> Raw Transaction </h4>-->
+                    <!--<textarea class="form-control" rows="4" readonly>{{tx | json: 4}}</textarea>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash; Singed TX &ndash;&gt;-->
                     <!--</section>-->
 
 

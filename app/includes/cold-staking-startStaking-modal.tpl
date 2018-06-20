@@ -1,7 +1,7 @@
 <article class="modal fade" id="startStakingModal" tabindex="-1">
     <section class="modal-dialog">
         <form ng-submit="startStaking();">
-            <div class="modal-content">
+            <section class="modal-content">
 
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -99,18 +99,19 @@
                 </div>
 
 
-            </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
+                        No, get me out of here!
+                    </button>
+                    <button
+                            type="submit"
+                            class="btn btn-primary" translate="SENDModal_Yes">
+                        Yes, I am sure! Make transaction.
+                    </button>
+                </div>
 
-            <div class="modal-footer">
-                <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
-                    No, get me out of here!
-                </button>
-                <button
-                        type="submit"
-                        class="btn btn-primary" translate="SENDModal_Yes">
-                    Yes, I am sure! Make transaction.
-                </button>
-            </div>
+            </section>
+
         </form>
     </section>
 </article>

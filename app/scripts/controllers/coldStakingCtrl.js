@@ -77,7 +77,7 @@ var coldStakingCtrl = function ($scope,
                 const {input: {understand}} = $scope;
                 if (!understand) {
 
-                    return $scope.notifier.danger('Understand');
+                    return $scope.notifier.danger('Press checkbox to continue');
                 }
             }
             $scope.wallet = walletService.wallet;
@@ -184,7 +184,7 @@ var coldStakingCtrl = function ($scope,
                 // fixme: translation
 
 
-                $scope.notifier.danger('cannot withraw');
+                $scope.notifier.danger('ERROR: Cannot withdraw');
 
                 return false;
             }

@@ -8,7 +8,7 @@ const cssThemeDrtv = function () {
     return {
         restrict: "E",
         template: require('./cssThemeDrtv.html'),
-        link: function ($scope, element, attrs) {
+        link: function ($scope) {
 
 
             $scope.applyDarkTheme = globalFuncs.localStorage.getItem(localStorageKey, 'light');

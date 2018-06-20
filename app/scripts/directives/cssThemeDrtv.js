@@ -11,13 +11,11 @@ const cssThemeDrtv = function () {
         link: function ($scope) {
 
 
-            $scope.applyDarkTheme = globalFuncs.localStorage.getItem(localStorageKey, 'light');
-
-            // console.log('applyDarktheme', $scope.applyDarkTheme);
+            $scope.currentTheme = globalFuncs.localStorage.getItem(localStorageKey, 'light');
 
             angular.element(window).bind('beforeunload', function () {
 
-                globalFuncs.localStorage.setItem(localStorageKey, $scope.applyDarkTheme);
+                globalFuncs.localStorage.setItem(localStorageKey, $scope.currentTheme);
             });
 
 

@@ -7,15 +7,23 @@
             ng-model="currentTheme"
             class="theme-selector"
     >
-        <option class="text-capitalize" id="night" name="night" value="night">
+        <option id="night" name="night" value="night">
             night
         </option>
-        <option class="text-capitalize" id="day" name="day" value="day">
+        <option id="day" name="day" value="day">
             day
         </option>
     </select>
 </form>
 <style>
+
+
+    body, body * {
+
+        transition: background-color 750ms ease-in-out;
+
+    }
+
     .theme-selector {
 
         width: 7rem;
@@ -23,6 +31,7 @@
         color: #282828;
 
         text-transform: capitalize;
+
     }
 </style>
 
@@ -40,7 +49,7 @@ body {
     border-color: #282828;
 }
 
-.panel, main > article > section, .block {
+.panel, .block, main > article > section {
     background-color: #222222;
     border: 1px solid transparent;
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);

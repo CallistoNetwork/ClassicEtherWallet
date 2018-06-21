@@ -338,7 +338,7 @@ var coldStakingService = function (walletService) {
                 setTimeout(() => {
 
 
-                    this.staker_info();
+                    this._staker_info.weight === 0 && this.staker_info();
 
                 }, 1000);
 
@@ -372,7 +372,7 @@ var coldStakingService = function (walletService) {
 
         this.handleContractCall('staker_info', _tx, data => {
 
-            console.log('staker_info()', data);
+            // console.log('staker_info()', data);
 
 
             if (!data.error) {
@@ -397,10 +397,10 @@ var coldStakingService = function (walletService) {
 
         const address = this.updateAddress();
 
-        if (functionName === 'staker_info') {
-
-            console.log('staker info', this.contract, transaction);
-        }
+        // if (functionName === 'staker_info') {
+        //
+        //     console.log('staker info', this.contract, transaction);
+        // }
 
         ethFuncs.handleContractCall(functionName, this.contract, Object.assign({}, transaction, {to: address}), callback);
 

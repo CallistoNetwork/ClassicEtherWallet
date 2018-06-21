@@ -11,7 +11,16 @@ const cssThemeDrtv = function () {
         link: function ($scope) {
 
 
-            $scope.currentTheme = globalFuncs.localStorage.getItem(localStorageKey, 'day');
+            const theme = globalFuncs.localStorage.getItem(localStorageKey, 'day');
+
+            if (['night', 'day'].includes(theme)) {
+
+                $scope.currentTheme = theme;
+
+            } else {
+
+                $scope.currentTheme = 'day';
+            }
 
             angular.element(window).bind('beforeunload', function () {
 

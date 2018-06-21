@@ -8,14 +8,6 @@
 
 
                     <div class="alert alert-danger"
-                         ng-if="coldStakingService._staker_info.reward === 0"
-                    >
-                        <h1>WARNING!
-                        </h1>
-                        You do not have any deposit to withdraw.
-                    </div>
-
-                    <div class="alert alert-danger"
                          ng-if="!coldStakingService.userCanWithdraw();">
                         <h1>WARNING!
                         </h1>
@@ -25,6 +17,17 @@
 
                         )
                     </div>
+
+
+                    <div class="alert alert-danger"
+                         ng-if="coldStakingService.userCanWithdraw() && coldStakingService._staker_info.reward === 0"
+                    >
+                        <h1>WARNING!
+                        </h1>
+                        You do not have any deposit to withdraw.
+                    </div>
+
+
                     <h2 class="modal-title">You are about to <b>withdraw {{ajaxReq.type}} from Cold Staking:</b></h2>
 
                     <h5>You will withdraw from the staking contract:

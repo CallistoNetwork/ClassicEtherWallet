@@ -108,6 +108,7 @@ var addressFieldDrtv = require('./directives/addressFieldDrtv');
 var QRCodeDrtv = require('./directives/QRCodeDrtv');
 var walletDecryptDrtv = require('./directives/walletDecryptDrtv');
 var messagesOverviewDrtv = require('./directives/messagesOverviewDrtv');
+var cssThemeDrtv = require('./directives/cssThemeDrtv');
 var cxWalletDecryptDrtv = require('./directives/cxWalletDecryptDrtv');
 var fileReaderDrtv = require('./directives/fileReaderDrtv');
 var transactionCost = require('./directives/transactionCostDtrv');
@@ -140,9 +141,10 @@ app.factory('changeNowService', changeNow);
 app.factory('modalService', modalService);
 
 app.factory('newMessageService', newMessageService);
-app.factory('coldStakingService', [ 'walletService', coldStakingService]);
+app.factory('coldStakingService', ['walletService', coldStakingService]);
 
 app.directive('blockieAddress', blockiesDrtv);
+app.directive('cssThemeDrtv', cssThemeDrtv);
 app.directive('addressField', ['$compile', 'backgroundNodeService', addressFieldDrtv]);
 app.directive('qrCode', QRCodeDrtv);
 app.directive('onReadFile', fileReaderDrtv);
@@ -153,7 +155,6 @@ app.directive('messagesOverviewDrtv', ['globalService', messagesOverviewDrtv]);
 app.directive('arrayInputDrtv', arrayInputDrtv);
 app.directive('newMessagesDrtv', ['globalService', newMessagesDrtv]);
 app.directive('transactionCost', transactionCost);
-
 app.controller('tabsCtrl', ['$scope', 'globalService', '$translate', '$sce', 'backgroundNodeService', tabsCtrl]);
 app.controller('switchNetworkCtrl', ['$scope', '$rootScope', 'globalService', switchNetworkCtrl]);
 app.controller('viewCtrl', ['$scope', 'globalService', '$sce', viewCtrl]);

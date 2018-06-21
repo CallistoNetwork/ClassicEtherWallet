@@ -1,5 +1,5 @@
 <!-- Content -->
-<section class="col-sm-8">
+<article class="col-sm-8">
     <div class="block">
 
         <!-- To Address -->
@@ -164,11 +164,11 @@
                translate="SEND_trans"> Send Transaction </a>
         </div>
     </div>
-</section>
+</article>
 <!-- / Content -->
 
 <!-- Sidebar -->
-<section class="col-sm-4">
+<article class="col-sm-4">
 
     <wallet-balance-drtv></wallet-balance-drtv>
 
@@ -177,5 +177,5 @@
         <small>Advanced Users Only.</small>
     </div>
 
-</section>
+</article>
 <!-- / Sidebar -->

@@ -19,7 +19,7 @@
 
 <body>
 
-<header class="bg-gradient text-white">
+<header class="bg-gradient">
 <section class="container text-center">
   <a href="https://ethereumproject.github.io/etherwallet/"><img src="images/logo-myetherwallet.png" height="50px" width="auto" alt="Ether Wallet" class="embedded-logo" /></a>
 </section>

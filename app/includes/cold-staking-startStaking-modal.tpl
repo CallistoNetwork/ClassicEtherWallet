@@ -17,10 +17,20 @@
 
                         </p>
 
+                        <div class="checkbox">
+                            <label>
 
-                        <label translate="COLD_STAKING_UNDERSTAND">I understand, proceed anyways</label>
-                        <input name="understand" id="understand" type="checkbox"
-                               ng-model="input.understand"/>
+
+                                <input name="understand" id="understand" type="checkbox"
+                                       ng-model="input.understand"/>
+
+                                <span translate="COLD_STAKING_UNDERSTAND">
+                                I understand, proceed anyways
+                                </span>
+                            </label>
+                        </div>
+
+
                     </div>
 
 

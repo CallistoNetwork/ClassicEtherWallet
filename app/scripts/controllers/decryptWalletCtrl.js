@@ -252,15 +252,24 @@ var decryptWalletCtrl = function ($scope, $sce, walletService) {
         } else {
 
             web3.eth.getAccounts(function (err, accounts) {
-                if (err) $scope.notifier.danger(err + '. Are you sure you are on a secure (SSL / HTTPS) connection?')
-                var address = accounts[0]
-                var addressBuffer = Buffer.from(address.slice(2), 'hex');
-                var wallet = new Web3Wallet(addressBuffer);
-                wallet.setBalance(false);
-                // set wallet
-                walletService.wallet = wallet;
-                $scope.wallet = wallet;
-                $scope.notifier.info(globalFuncs.successMsgs[6])
+                if (err) $scope.notifier.danger(err + '. Are you sure you are on a secure (SSL / HTTPS) connection?');
+
+
+                if (!(Array.isArray(accounts) && accounts.length > 0)) {
+
+                    $scope.notifier.danger('Unlock Account');
+                } else {
+
+                    var address = accounts[0];
+                    var addressBuffer = Buffer.from(address.slice(2), 'hex');
+                    var wallet = new Web3Wallet(addressBuffer);
+                    wallet.setBalance(false);
+                    // set wallet
+                    walletService.wallet = wallet;
+                    $scope.wallet = wallet;
+                    $scope.notifier.info(globalFuncs.successMsgs[6])
+                }
+
             });
         }
     };

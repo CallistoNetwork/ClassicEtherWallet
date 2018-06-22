@@ -242,17 +242,27 @@ var decryptWalletCtrl = function ($scope, $sce, walletService) {
     }
 
     $scope.scanMetamask = function () {
-        window.web3.eth.getAccounts(function (err, accounts) {
-            if (err) $scope.notifier.danger(err + '. Are you sure you are on a secure (SSL / HTTPS) connection?')
-            var address = accounts[0]
-            var addressBuffer = Buffer.from(address.slice(2), 'hex');
-            var wallet = new Web3Wallet(addressBuffer);
-            wallet.setBalance(false);
-            // set wallet
-            $scope.wallet = wallet
-            walletService.wallet = wallet
-            $scope.notifier.info(globalFuncs.successMsgs[6])
-        });
+
+
+        const web3 = window.web3;
+
+        if (!web3) {
+
+            $scope.notifier.danger('ClassicMask / Metamask / Mist not found');
+        } else {
+
+            web3.eth.getAccounts(function (err, accounts) {
+                if (err) $scope.notifier.danger(err + '. Are you sure you are on a secure (SSL / HTTPS) connection?')
+                var address = accounts[0]
+                var addressBuffer = Buffer.from(address.slice(2), 'hex');
+                var wallet = new Web3Wallet(addressBuffer);
+                wallet.setBalance(false);
+                // set wallet
+                walletService.wallet = wallet;
+                $scope.wallet = wallet;
+                $scope.notifier.info(globalFuncs.successMsgs[6])
+            });
+        }
     };
 
     // helper function that removes 0x prefix from strings

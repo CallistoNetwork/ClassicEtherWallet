@@ -104,6 +104,7 @@
                         No, get me out of here!
                     </button>
                     <button
+                            ng-disabled="coldStakingService._staker_info.weight > 0 && !input.understand"
                             type="submit"
                             class="btn btn-primary" translate="SENDModal_Yes">
                         Yes, I am sure! Make transaction.

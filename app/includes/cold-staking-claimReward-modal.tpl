@@ -10,7 +10,6 @@
                         <h1>WARNING!</h1>
                         <p translate="COLD_STAKING_NO_WITHDRAW">
                             You do not have any deposit to withdraw.
-
                         </p>
                     </div>
 
@@ -46,8 +45,6 @@
 
                     <h5>Warning: Staking reward can vary over time. Your staking reward depend on:</h5>
                     <ol>
-
-
                         <li>
                             Total amount of staking {{ajaxReq.type}} (network weight)
                         </li>
@@ -62,7 +59,6 @@
                         </li>
                     </ol>
                     <h4 translate="SENDModal_Content_3">Are you sure you want to do this?</h4>
-
                 </div>
 
                 <div class="modal-footer">
@@ -70,13 +66,13 @@
                         No, get me out of here!
                     </button>
                     <button
+                            ng-disabled="coldStakingService._staker_info.reward === 0;"
+
                             type="submit"
                             class="btn btn-primary" translate="SENDModal_Yes">
                         Yes, I am sure! Make transaction.
                     </button>
                 </div>
-
-
             </section>
         </form>
     </section>

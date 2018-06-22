@@ -13,9 +13,7 @@
                         </h1>
                         Withdraw is impossible as stake time < round interval (
                         {{coldStakingService._staker_info.stake_time}} <
-                        {{coldStakingService._round_interval[ajaxReq.type]}}
-
-                        )
+                        {{coldStakingService._round_interval[ajaxReq.type]}})
                     </div>
 
 
@@ -71,22 +69,12 @@
                     <h4 translate="SENDModal_Content_3">Are you sure you want to do this?</h4>
                 </div>
                 <div class="modal-footer">
-
-                    <!--<section class="row">-->
-                    <!--&lt;!&ndash; Raw TX &ndash;&gt;-->
-                    <!--<div class="form-group col-xs-12">-->
-                    <!--<h4 translate="SEND_raw"> Raw Transaction </h4>-->
-                    <!--<textarea class="form-control" rows="4" readonly>{{tx | json: 4}}</textarea>-->
-                    <!--</div>-->
-                    <!--&lt;!&ndash; Singed TX &ndash;&gt;-->
-                    <!--</section>-->
-
-
                     <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
                         No, get me out of here!
                     </button>
                     <button
 
+                            ng-disabled="!coldStakingService.userCanWithdraw();"
                             type="submit"
                             class="btn btn-primary" translate="SENDModal_Yes">
                         Yes, I am sure! Make transaction.

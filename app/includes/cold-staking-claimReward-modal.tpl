@@ -14,12 +14,12 @@
                     </div>
 
 
-                    <h2 class="modal-title">You are about to <b>claim Reward {{coldStakingService.stake_balance}}
-                        {{ajaxReq.type}} from Cold Staking:</b>
+                    <h2 class="modal-title">You are about to claim <b> Reward {{coldStakingService.stake_balance || 0}}
+                        {{ajaxReq.type}}</b>
                     </h2>
 
                     <h5>
-                        You will claim reward from the staking contract:
+                        You will claim reward from the cold staking contract:
                         <a
                                 target="_blank"
                                 href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', coldStakingService.contract.address)}}"
@@ -32,18 +32,18 @@
                     <p>
                         <b translate="TRANS_gas"></b>
 
-                        {{tx.gasLimit}}
+                        {{tx.gasLimit || '-1'}}
                     </p>
 
-                    <h5>Warning: After claiming the reward, your funds will be frozen for the next 172,800 blocks</h5>
                     <p>
+                        <b>Warning:</b> After claiming the reward, your funds will be frozen for the next 172,800 blocks
 
                         (approx. 1 month) and you will be unable to claim new reward OR withdraw your funds during this
                         period.
                     </p>
 
 
-                    <h5>Warning: Staking reward can vary over time. Your staking reward depend on:</h5>
+                    <b>Warning:</b> Staking reward can vary over time. Your staking reward depend on:
                     <ol>
                         <li>
                             Total amount of staking {{ajaxReq.type}} (network weight)

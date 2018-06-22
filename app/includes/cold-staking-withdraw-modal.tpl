@@ -11,9 +11,10 @@
                          ng-if="!coldStakingService.userCanWithdraw();">
                         <h1>WARNING!
                         </h1>
-                        Withdraw is impossible as stake time < round interval (
-                        {{coldStakingService._staker_info.stake_time}} <
-                        {{coldStakingService._round_interval[ajaxReq.type]}})
+                        Withdraw is impossible
+                        stake time < round interval
+                        ({{coldStakingService._staker_info.stake_time | number}} <
+                        {{coldStakingService._round_interval[ajaxReq.type] | number}})
                     </div>
 
 

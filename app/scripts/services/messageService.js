@@ -51,11 +51,6 @@ const messageService = function () {
 
     };
 
-    window.addEventListener('beforeunload', () => {
-
-        this.saveMessages();
-    });
-
 
     this.mapMessagesToMessageList = function mapMessagesToMessageList(addr) {
 

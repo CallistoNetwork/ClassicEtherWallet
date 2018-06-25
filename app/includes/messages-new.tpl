@@ -44,12 +44,12 @@
 
             <div class="col-xs-2" style="max-width: 70px;">
                 <div class="addressIdenticon med float" title="Address Indenticon"
-                     blockie-address="{{messagesConversation[0].from}}"></div>
+                     blockie-address="{{newMessageService.messagesConversation[0].from}}"></div>
             </div>
             <div class="col-sm-10">
                 <input
 
-                        class="form-control" readonly name="to" value="{{messagesConversation[0].from}}"/>
+                        class="form-control" readonly name="to" value="{{newMessageService.messagesConversation[0].from}}"/>
             </div>
 
         </div>

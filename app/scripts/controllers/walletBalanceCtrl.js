@@ -1,9 +1,16 @@
 'use strict';
-var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeService, modalService, coldStakingService) {
+var walletBalanceCtrl = function ($scope, $sce,
+                                  walletService,
+                                  backgroundNodeService,
+                                  modalService,
+                                  coldStakingService,
+                                  newMessageService) {
     $scope.ajaxReq = ajaxReq;
     $scope.erc20Abi = require('../abiDefinitions/erc20abi.json');
     $scope.DEXNS = require('../abiDefinitions/etcAbi.json')[5];
     $scope.DEXNSAddress = $scope.DEXNS.address;
+
+    $scope.newMessageService = newMessageService;
 
     $scope.modalService = modalService;
     $scope.coldStakingService = coldStakingService;

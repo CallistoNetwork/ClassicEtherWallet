@@ -1,21 +1,22 @@
 <section class="messagesList">
     <h2>Inbox</h2>
+
     <ul class="list-group">
 
         <li ng-if="!loadingMessages && empty()">No messages found for {{wallet.getAddressString()}}</li>
 
-        <p ng-if="loadingMessages">
+        <li ng-if="loadingMessages">
             LOADING...
-        </p>
-        <p ng-if="!loadingMessages && msgCheckTime">
+        </li>
+        <li ng-if="!loadingMessages && msgCheckTime">
             last checked: {{msgCheckTime}}
-        </p>
+        </li>
 
 
         <li
 
                 class="list-group-item pointer"
-                ng-repeat="message in messagesList"
+                ng-repeat="message in newMessageService.messagesList"
                 ng-click="viewMessagesConversation(message[0].from)"
 
         >

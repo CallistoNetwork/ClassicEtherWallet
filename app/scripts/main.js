@@ -172,7 +172,7 @@ app.controller('ensCtrl', ['$scope', '$sce', '$rootScope', 'walletService', ensC
 app.controller('dexnsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', 'backgroundNodeService', dexnsCtrl]);
 app.controller('footerCtrl', ['$scope', footerCtrl]);
 app.controller('offlineTxCtrl', ['$scope', '$sce', '$rootScope', 'walletService', offlineTxCtrl]);
-app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', 'backgroundNodeService', 'modalService', 'coldStakingService', walletBalanceCtrl]);
+app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', 'backgroundNodeService', 'modalService', 'coldStakingService', 'newMessageService', walletBalanceCtrl]);
 app.controller('helpersCtrl', ['$scope', helpersCtrl]);
 app.controller('messagesCtrl', ['$scope', '$rootScope', '$interval', 'globalService', 'newMessageService', 'walletService', 'backgroundNodeService', messagesControl]);
 app.controller('encryptCtrl', ['$scope', 'walletService', encryptCtrl]);

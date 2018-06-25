@@ -10,7 +10,7 @@
                 LOADING...
             </span>
             <span ng-if="!loadingMessages">
-                {{NUMBER_OF_NEW_MESSAGES}} Recent messages
+                {{newMessageService.numberOfNewMessages(wallet.getAddressString())}} Recent messages
             </span>
         </div>
     </a>
@@ -19,7 +19,7 @@
                 LOADING...
             </span>
         <span ng-if="!loadingMessages">
-            {{NUMBER_OF_MESSAGES}} messages
+            {{newMessageService.messages.length}} messages
        </span>
     </div>
 </div>

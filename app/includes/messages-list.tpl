@@ -3,20 +3,21 @@
 
     <ul class="list-group">
 
-        <li ng-if="!loadingMessages && empty()">No messages found for {{wallet.getAddressString()}}</li>
+        <li ng-if="!messageService.loadingMessages && empty()">No messages found for {{wallet.getAddressString()}}
+        </li>
 
-        <li ng-if="loadingMessages">
+        <li ng-if="messageService.loadingMessages">
             LOADING...
         </li>
-        <li ng-if="!loadingMessages && msgCheckTime">
-            last checked: {{msgCheckTime}}
+        <li ng-if="!messageService.loadingMessages && messageService.msgCheckTime">
+            last checked: {{messageService.msgCheckTime}}
         </li>
 
 
         <li
 
                 class="list-group-item pointer"
-                ng-repeat="message in newMessageService.messagesList"
+                ng-repeat="message in messageService.messagesList"
                 ng-click="viewMessagesConversation(message[0].from)"
 
         >
@@ -30,7 +31,6 @@
                     <span class="from">{{message[0].from}}</span>
 
 
-                    </span>
                 </div>
                 <div class="col-sm-3">
                     <div class="row">

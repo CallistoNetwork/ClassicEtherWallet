@@ -6,20 +6,20 @@
     <a ng-click="viewMessageList()">
         <div class="col-xs-6">
 
-            <span ng-if="loadingMessages">
+            <span ng-if="messageService.loadingMessages">
                 LOADING...
             </span>
-            <span ng-if="!loadingMessages">
-                {{newMessageService.numberOfNewMessages(wallet.getAddressString())}} Recent messages
+            <span ng-if="!messageService.loadingMessages">
+                {{messageService.numberOfNewMessages(wallet.getAddressString())}} Recent messages
             </span>
         </div>
     </a>
     <div class="col-xs-6">
-        <span ng-if="loadingMessages">
+        <span ng-if="messageService.loadingMessages">
                 LOADING...
             </span>
-        <span ng-if="!loadingMessages">
-            {{newMessageService.messages.length}} messages
+        <span ng-if="!messageService.loadingMessages">
+            {{messageService.messages.length}} messages
        </span>
     </div>
 </div>

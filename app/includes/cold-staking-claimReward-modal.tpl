@@ -1,7 +1,11 @@
-<article class="modal fade" id="openClaimRewardModal" tabindex="-1">
+<article class="modal fade" id="openClaimRewardModal" tabindex="-1"
+>
     <section class="modal-dialog">
         <form ng-submit="claim()">
-            <section class="modal-content">
+            <section class="modal-content"
+                     ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
+
+            >
 
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>

@@ -31,16 +31,17 @@ const messageService = function () {
     this.message_staling_period = new Date(new Date().getTime() - (MESSAGE_STALING_PERIOD * 1000)).getTime();
 
 
-    this.CONTRACT = nodes.nodeList.etc_ethereumcommonwealth_geth.abiList.find(contract => contract.address.toLowerCase() === CONTRACT_ADDRESS.toLowerCase());
+    var CONTRACT = nodes.nodeList.etc_ethereumcommonwealth_geth.abiList.find(contract => contract.address.toLowerCase() === CONTRACT_ADDRESS.toLowerCase());
 
-    if (!this.CONTRACT) {
+
+    if (!CONTRACT) {
 
         throw new Error('ERROR FINDING CONTRACT: ' + CONTRACT_ADDRESS);
     }
 
 
-    Object.assign(this.CONTRACT, {
-        abi: JSON.parse(this.CONTRACT.abi)
+    this.CONTRACT = Object.assign({}, CONTRACT, {
+        abi: JSON.parse(CONTRACT.abi)
     });
 
     this.saveMessages = function saveMessages() {

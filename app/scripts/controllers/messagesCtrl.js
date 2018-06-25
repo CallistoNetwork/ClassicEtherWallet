@@ -248,9 +248,8 @@ var messagesCtrl = function ($scope,
 
 
                             messageService.messages.push(MESSAGE);
-
-                            messageService.saveMessages();
                             messageService.mapMessagesToMessageList(addr);
+                            messageService.saveMessages();
 
 
                             if ($scope.visibility === $scope.VISIBILITY.CONVERSATION) {

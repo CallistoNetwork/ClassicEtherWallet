@@ -414,33 +414,33 @@ var coldStakingService = function (walletService) {
 
             if (!data.error) {
 
-                this._staking_threshold = parseInt(data.data[0]);
+                this._staking_threshold = etherUnits.toEther(data.data[0], 'wei');
             }
         })
     };
 
-    this.stake_reward = function (addr = walletService.wallet.getAddressString()) {
-
-
-        const _tx = {inputs: [addr]};
-
-
-        this.handleContractCall('stake_reward', _tx, data => {
-
-            // console.log('stake_reward()', data);
-
-            if (!data.error) {
-
-
-                this._staker_info.reward = parseInt(data.data[0]);
-
-                // console.log('staking info', this._staker_info);
-
-
-            }
-
-        })
-    };
+    // this.stake_reward = function (addr = walletService.wallet.getAddressString()) {
+    //
+    //
+    //     const _tx = {inputs: [addr]};
+    //
+    //
+    //     this.handleContractCall('stake_reward', _tx, data => {
+    //
+    //         // console.log('stake_reward()', data);
+    //
+    //         if (!data.error) {
+    //
+    //
+    //             this._staker_info.reward = parseInt(data.data[0]);
+    //
+    //             // console.log('staking info', this._staker_info);
+    //
+    //
+    //         }
+    //
+    //     })
+    // };
 
 
     this.claim_and_withdraw = function (callback = console.log) {

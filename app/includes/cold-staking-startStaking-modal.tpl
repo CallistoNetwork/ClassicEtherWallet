@@ -18,7 +18,8 @@
                         </p>
 
 
-                        <label translate="COLD_STAKING_UNDERSTAND">I understand, proceed anyways</label>
+                        <label for="understand" translate="COLD_STAKING_UNDERSTAND">I understand, proceed
+                            anyways</label>
                         <input name="understand" id="understand" type="checkbox"
                                ng-model="input.understand"/>
                     </div>

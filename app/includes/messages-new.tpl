@@ -47,8 +47,10 @@
                      blockie-address="{{messageService.messagesConversation[0].from}}"></div>
             </div>
             <div class="col-sm-10">
+
                 <input
 
+                        title="to"
                         class="form-control" readonly name="to" value="{{messageService.messagesConversation[0].from}}"/>
             </div>
 

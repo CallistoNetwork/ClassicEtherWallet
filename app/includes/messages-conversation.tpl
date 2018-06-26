@@ -1,10 +1,9 @@
 <div class="messagesConversation">
     <h2>{{messageService.messagesConversation[0].from}}
-        <div class="addressIdenticon med float" title="Address Indenticon"
-             blockie-address="{{messageService.messagesConversation[0].from}}"></div>
+        <span class="addressIdenticon med float" title="Address Indenticon"
+              blockie-address="{{messageService.messagesConversation[0].from}}"></span>
     </h2>
-    <hr />
-
+    <hr/>
 
     <ol class="list-group">
         <li

@@ -297,19 +297,6 @@ var messagesCtrl = function ($scope,
     };
 
 
-    $scope.numberOfNewMessagesFrom = function numberOfNewMessages(from, address) {
-
-
-        return messageService.messages.filter(message =>
-
-            message.to === address &&
-            message.from === from &&
-            messageService.message_staling_period < message.time
-        ).length
-
-    };
-
-
     /*
 
         messages are grouped by addr and sorted

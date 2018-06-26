@@ -79,16 +79,27 @@ const messageService = function () {
     };
 
 
-    this.numberOfNewMessages = function numberOfNewMessages(address) {
+    this.numberOfNewMessages = function numberOfNewMessages(to, from = null) {
 
 
         //console.log('new messages', new Date($scope.message_staling_period));
 
+        if (from) {
+
+            return this.messages.filter(message =>
+
+                message.to === to &&
+                message.from === from &&
+                this.message_staling_period < message.time
+            ).length
+        }
+
         return this.messages.filter(message =>
 
-            message.to === address &&
+            message.to === to &&
             this.message_staling_period < message.time
         ).length
+
 
     };
 
@@ -96,7 +107,6 @@ const messageService = function () {
 
 
         return this.messages.filter(message =>
-
             message.to === address
         ).length
 

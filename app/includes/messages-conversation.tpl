@@ -4,7 +4,6 @@
               blockie-address="{{messageService.messagesConversation[0].from}}"></span>
     </h2>
     <hr/>
-
     <ol class="list-group">
         <li
                 class="list-group-item"

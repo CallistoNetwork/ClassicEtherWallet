@@ -92,6 +92,16 @@ const messageService = function () {
 
     };
 
+    this.numberOfMessages = function numberOfMessages(address) {
+
+
+        return this.messages.filter(message =>
+
+            message.to === address
+        ).length
+
+    };
+
 
     this.validMessage = function validMessage(obj_) {
 

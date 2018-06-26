@@ -1,0 +1,28 @@
+<article class="modal fade" id="newMessagesModal" tabindex="-1">
+    <section class="modal-dialog">
+        <section class="modal-content">
+
+            <div class="modal-body">
+
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                <h2 class="modal-title">
+
+                    You have {{messageService.numberOfMessages(walletService.wallet.getAddressString()) }}
+                    recent message{{messageService.numberOfMessages(walletService.wallet.getAddressString()) > 1 ? 's' :
+                    null}}!
+                </h2>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
+                    No, get me out of here!
+                </button>
+                <a ng-click="handleViewMessages()" class="btn btn-primary">
+                    View Messages
+                </a>
+            </div>
+
+        </section>
+    </section>
+</article>

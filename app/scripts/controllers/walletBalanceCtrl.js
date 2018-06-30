@@ -59,23 +59,15 @@ var walletBalanceCtrl = function ($scope, $sce, walletService, backgroundNodeSer
         };
 
 
-        ethFuncs.handleContractGasEstimation(name, coldStakingService.contract, tx, function (data) {
-
-            if (!data.error) {
-
-                Object.assign($scope.tx, data);
+        return ethFuncs.handleContractGasEstimation(name, coldStakingService.contract, tx).then((data) => {
 
 
-            } else {
+            Object.assign($scope.tx, data);
 
+        }).catch(err => {
 
-                // Object.assign($scope.tx, {gasLimit: -1});
-
-                $scope.notifier.danger(data.msg);
-            }
-
-
-        });
+            $scope.notifier.danger(err.msg);
+        })
 
     };
 

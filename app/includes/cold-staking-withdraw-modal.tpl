@@ -17,13 +17,13 @@
                         </h1>
                         Withdraw is impossible
                         stake time < round interval
-                        ({{coldStakingService._staker_info.stake_time | number}} <
+                        ({{coldStakingService.contract.staker_info.stake_time | number}} <
                         {{coldStakingService._round_interval[ajaxReq.type] | number}})
                     </div>
 
 
                     <div class="alert alert-danger"
-                         ng-if="coldStakingService.userCanWithdraw() && coldStakingService._staker_info.reward === 0"
+                         ng-if="coldStakingService.userCanWithdraw() && coldStakingService.contract.staker_info.reward === 0"
                     >
                         <h1>WARNING!
                         </h1>

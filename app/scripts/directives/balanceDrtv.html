@@ -57,15 +57,15 @@
 
 
                 <td class="text-right pointer" ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
-                    title="{{coldStakingService._staker_info.weight}} (Double Click)"
+                    title="{{coldStakingService.contract.staker_info.weight}} (Double Click)"
                     ng-init="showLongWeight = false;"
                     ng-dblclick="showLongWeight = !showLongWeight"
                 >
 
 
-                    <span class="mono wrap" ng-show="!showLongWeight">{{coldStakingService._staker_info.weight | number}}</span>
+                    <span class="mono wrap" ng-show="!showLongWeight">{{coldStakingService.contract.staker_info.weight | number}}</span>
                     <span class="mono wrap"
-                          ng-show="showLongWeight">{{coldStakingService._staker_info.weight}}</span>
+                          ng-show="showLongWeight">{{coldStakingService.contract.staker_info.weight}}</span>
 
                     {{ajaxReq.type}}
 
@@ -73,15 +73,15 @@
                 </td>
 
 
-                <td class="text-right pointer" title="{{coldStakingService._staker_info.reward}} (Double Click)"
+                <td class="text-right pointer" title="{{coldStakingService.contract.staker_info.reward}} (Double Click)"
                     ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
                     ng-init="showLongReward = false;"
                     ng-dblclick="showLongReward = !showLongReward"
                 >
 
-                    <span class="mono wrap" ng-show="!showLongReward">{{coldStakingService._staker_info.reward | number}}</span>
+                    <span class="mono wrap" ng-show="!showLongReward">{{coldStakingService.contract.staker_info.reward | number}}</span>
                     <span class="mono wrap"
-                          ng-show="showLongReward">{{coldStakingService._staker_info.reward}}</span>
+                          ng-show="showLongReward">{{coldStakingService.contract.staker_info.reward}}</span>
 
                     {{ajaxReq.type}}
                 </td>

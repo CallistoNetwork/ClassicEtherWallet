@@ -52,6 +52,14 @@ var changeNow = require('./changeNow');
 
 window.changeNow = changeNow;
 
+var contracts = require('./contract');
+
+const {OfficialityContract, Contract, InitContract} = contracts;
+
+window.OfficialityContract = OfficialityContract;
+window.Contract = Contract;
+window.InitContract = InitContract;
+
 var ens = require('./ens');
 window.ens = ens;
 var translate = require('./translations/translate.js');
@@ -74,6 +82,9 @@ if (IS_CX) {
 }
 var CustomGasMessages = require('./customGas.js')
 window.CustomGasMessages = CustomGasMessages;
+
+// CONTROLLERS
+
 var tabsCtrl = require('./controllers/tabsCtrl');
 var viewCtrl = require('./controllers/viewCtrl');
 var coldStakingCtrl = require('./controllers/coldStakingCtrl');
@@ -97,12 +108,27 @@ var encryptCtrl = require('./controllers/encryptCtrl');
 var helpersCtrl = require('./controllers/helpersCtrl');
 var messagesControl = require('./controllers/messagesCtrl');
 var switchNetworkCtrl = require('./controllers/switchNetworkCtrl');
+
+
+// SERVICES
+
+
 var globalService = require('./services/globalService');
 var coldStakingService = require('./services/coldStakingService');
 var modalService = require('./services/modalService');
 var walletService = require('./services/walletService');
+var dexnsService = require('./services/dexnsService');
+
 var newMessageService = require('./services/newMessageService');
 var backgroundNodeService = require('./services/backgroundNodeService');
+
+
+// DIRECTIVES
+
+
+
+
+var etherDisplay = require('./directives/etherDisplay');
 var blockiesDrtv = require('./directives/blockiesDrtv');
 var addressFieldDrtv = require('./directives/addressFieldDrtv');
 var QRCodeDrtv = require('./directives/QRCodeDrtv');
@@ -122,6 +148,8 @@ if (IS_CX) {
     var mainPopCtrl = require('./controllers/CX/mainPopCtrl');
     var quickSendCtrl = require('./controllers/CX/quickSendCtrl');
 }
+
+
 var app = angular.module('mewApp', ['pascalprecht.translate', 'ngSanitize', 'ngAnimate']);
 app.config(['$compileProvider', function ($compileProvider) {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(|blob|https|mailto):/);
@@ -140,9 +168,15 @@ app.factory('backgroundNodeService', backgroundNodeService);
 app.factory('changeNowService', changeNow);
 app.factory('modalService', modalService);
 
+
+app.factory('dexnsService', dexnsService);
+
 app.factory('newMessageService', newMessageService);
 app.factory('coldStakingService', ['walletService', coldStakingService]);
 
+
+
+app.directive('etherDisplay', etherDisplay);
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('cssThemeDrtv', cssThemeDrtv);
 app.directive('addressField', ['$compile', 'backgroundNodeService', addressFieldDrtv]);
@@ -169,7 +203,7 @@ app.controller('swapCtrl', ['$scope', '$rootScope', '$interval', 'walletService'
 app.controller('signMsgCtrl', ['$scope', '$sce', 'walletService', signMsgCtrl]);
 app.controller('contractsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', contractsCtrl]);
 app.controller('ensCtrl', ['$scope', '$sce', '$rootScope', 'walletService', ensCtrl]);
-app.controller('dexnsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', 'backgroundNodeService', dexnsCtrl]);
+app.controller('dexnsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', 'backgroundNodeService', 'dexnsService', dexnsCtrl]);
 app.controller('footerCtrl', ['$scope', footerCtrl]);
 app.controller('offlineTxCtrl', ['$scope', '$sce', '$rootScope', 'walletService', offlineTxCtrl]);
 app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', 'backgroundNodeService', 'modalService', 'coldStakingService', walletBalanceCtrl]);

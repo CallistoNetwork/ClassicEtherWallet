@@ -10,7 +10,7 @@
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-                    <div class="alert alert-danger" ng-if="coldStakingService._staker_info.reward === 0">
+                    <div class="alert alert-danger" ng-if="coldStakingService.contract.staker_info.reward === 0">
                         <h1>WARNING!</h1>
                         <p translate="COLD_STAKING_NO_WITHDRAW">
                             You do not have any deposit to withdraw.
@@ -18,7 +18,8 @@
                     </div>
 
 
-                    <h2 class="modal-title">You are about to claim <b> Reward {{coldStakingService.stake_balance || 0}}
+                    <h2 class="modal-title">You are about to claim <b> Reward
+                        {{coldStakingService.contract.stake_balance || 0}}
                         {{ajaxReq.type}}</b>
                     </h2>
 
@@ -70,7 +71,7 @@
                         No, get me out of here!
                     </button>
                     <button
-                            ng-disabled="coldStakingService._staker_info.reward === 0;"
+                            ng-disabled="coldStakingService.contract.staker_info.reward === 0;"
 
                             type="submit"
                             class="btn btn-primary" translate="SENDModal_Yes">

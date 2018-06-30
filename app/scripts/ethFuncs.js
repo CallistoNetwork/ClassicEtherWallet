@@ -102,86 +102,190 @@ ethFuncs.estimateGas = function (dataObj, callback) {
 
 /*
 
-    Given functionName, contract, and tx data, generates tx data and sends call, returns decoded outputs
+    Given functionName, contract, and tx data, generates data and sends call, returns decoded outputs
     @param string functionName
     @param Contract contract
     @param Transaction tx
     @param callback function
-    @returns {error: bool, data: []any}
+    @returns Promise<{error: bool, data: []any}>
  */
 
 
-ethFuncs.handleContractCall = function (functionName, contract, {inputs = null, from = null, value = 0, unit = 'ether'} = {}, callback_ = console.log) {
+ethFuncs.handleContractCall = function (
+    functionName,
+    contract,
+    {network = ajaxReq.type, inputs = null, from = null, value = 0, unit = 'ether'} = {}
+) {
 
 
-    const foundFunction = contract.abi.find(itm => itm.type === 'function' && itm.name === functionName);
+    return new Promise((resolve, reject) => {
 
 
-    if (!foundFunction) {
-
-        console.error('error locating function:', functionName, 'in', contract);
-
-        callback_({error: true, data: null});
-    }
-
-    const transObj = ethFuncs.prepContractData(functionName, contract, {inputs, from, value, unit});
-
-    if (transObj.error) {
-
-        callback_({error: transObj, data: null});
-
-    } else {
+        const foundFunction = contract.abi.find(itm => ['function'].includes(itm.type) && itm.name === functionName);
 
 
-
-        // if reading from contract, send call
-        if (!from) {
+        const node = Object.values(nodes.nodeList).find(node => node.type === network);
 
 
-            //  console.log(Object.keys(ajaxReq));
+        if (!foundFunction) {
 
+            console.error('error locating function:', functionName, 'in', contract);
 
-            ajaxReq.getEthCall({to: transObj.to, data: transObj.data}, function (data) {
+            reject({error: true, data: null});
 
+        } else if (!node && node.hasOwnProperty('lib') && node.lib.hasOwnProperty('getEthCall')) {
 
-                callback_(Object.assign({}, data, {data: ethFuncs.decodeOutputs(foundFunction, data)}));
+            console.error('error locating node for network:', network);
 
-            })
+            reject({error: true, data: null});
+
+        }
+
+        const transObj = ethFuncs.prepContractData(functionName, contract, {inputs, from, value, unit});
+
+        if (transObj.error) {
+
+            reject({error: transObj, data: null});
 
         } else {
 
 
-            ethFuncs.estimateGas(transObj, function (data) {
 
-                if (data.error || parseInt(data.data) === -1) {
+            // if reading from contract, send call
 
-                    console.error('error estimating gas', data);
-
-                    callback_({error: data, data: null});
-
-                } else {
+            node.lib.getEthCall({to: transObj.to, data: transObj.data}, function (data) {
 
 
-                    Object.assign(transObj, {
-                        gasLimit: data.data,
-
-                    });
-
-
-                    ajaxReq.getEthCall(transObj, function (data) {
-
-                        callback_(Object.assign({}, data, {data: ethFuncs.decodeOutputs(foundFunction, data)}));
-
-                    })
-
-                }
+                resolve(Object.assign({}, data, {data: ethFuncs.decodeOutputs(foundFunction, data)}));
 
 
             });
+
         }
+    })
 
-    }
+}
 
+
+/*
+
+    Write to contract function
+
+    @param: functionName: string
+    @param: contract Contract
+    @param wallet Wallet
+    @param tx: Array<any>
+
+    @returns: Promise<tx|Error>
+
+
+ */
+
+ethFuncs.handleContractWrite = function (
+    functionName,
+    contract,
+    wallet,
+    {network = ajaxReq.type, inputs = null, from = null, value = 0, unit = 'ether'} = {}) {
+
+    return new Promise((resolve, reject) => {
+
+
+            const {node} = contract;
+
+            const tx = {network, inputs, from, value, unit};
+
+            const _func = contract.abi.find(i => i.name === functionName);
+
+            if (!_func) {
+
+
+                reject(new Error('Invalid Request'));
+            }
+
+
+            const funcSig = ethFuncs.getFunctionSignature(ethUtil.solidityUtils.transformToFullName(_func));
+
+
+            const tx_data = ethFuncs.sanitizeHex(funcSig + ethUtil.solidityCoder.encodeParams(
+                _func.inputs.map(i => i.type),
+                tx.inputs,
+            ));
+
+
+            Object.assign(tx, {data: tx_data});
+
+
+            return ethFuncs.handleContractGasEstimation(functionName, contract, tx)
+                .catch(err => reject(err))
+                .then(result => {
+
+                    Object.assign(tx, result);
+
+
+                    var txData = uiFuncs.getTxData({tx, wallet});
+
+                    uiFuncs.generateTx(txData, (rawTx) => {
+                        if (rawTx.isError) {
+
+                            uiFuncs.notifier.danger(rawTx.error);
+
+                            reject(false);
+
+                        }
+
+                        Object.assign(tx, rawTx);
+
+
+                        if (typeof rawTx.signedTx === 'string' && rawTx.signedTx.slice(0, 2) === '0x') {
+
+                            // send tx over network defined by contract
+
+
+                            node.lib.sendRawTx(rawTx.signedTx, (resp) => {
+                                if (!resp.isError) {
+                                    var bExStr = ajaxReq.type !== nodes.nodeTypes.Custom ? "<a href='" + ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
+                                    var contractAddr = tx.to ? " & Contract Address <a href='" + ajaxReq.blockExplorerAddr.replace('[[address]]', tx.to) + "' target='_blank' rel='noopener'>" + tx.to + "</a>" : '';
+                                    uiFuncs.notifier.success(globalFuncs.successMsgs[2] + "<br />" + resp.data + "<br />" + bExStr + contractAddr);
+
+                                    resolve(Object.assign(Object.assign({}, tx, resp.data)));
+
+                                } else {
+                                    uiFuncs.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
+
+                                    reject(false);
+                                }
+                            })
+                        } else {
+
+                            // send tx via web3
+
+                            uiFuncs.handleWeb3Trans(rawTx.signedTx, function (err, result) {
+
+
+                                if (err) {
+
+                                    uiFuncs.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', this.network));
+
+                                    reject(false);
+                                } else {
+
+                                    var bExStr = this.network !== nodes.nodeTypes.Custom ? "<a href='" + ajaxReq.blockExplorerTX.replace("[[txHash]]", result) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
+                                    var contractAddr = tx.to ? " & Contract Address <a href='" + ajaxReq.blockExplorerAddr.replace('[[address]]', tx.to) + "' target='_blank' rel='noopener'>" + tx.to + "</a>" : '';
+                                    uiFuncs.notifier.success(globalFuncs.successMsgs[2] + "<br />" + result + "<br />" + bExStr + contractAddr);
+
+                                    resolve(Object.assign(Object.assign({}, tx)));
+                                }
+                            });
+
+                        }
+
+
+                    })
+
+
+                });
+        }
+    )
 }
 
 
@@ -196,33 +300,39 @@ ethFuncs.handleContractCall = function (functionName, contract, {inputs = null, 
 
  */
 
-ethFuncs.handleContractGasEstimation = function (functionName, contract, tx, callback_) {
-
-    const result = ethFuncs.prepContractData(functionName, contract, tx);
+ethFuncs.handleContractGasEstimation = function (functionName, contract, tx) {
 
 
-    if (!result.error) {
-
-        ethFuncs.estimateGas(result, function (data) {
-            if (data.error || parseInt(data.data) === -1) {
-
-                console.error('error estimating gas', data);
+    return new Promise((resolve, reject) => {
 
 
-                callback_(Object.assign({}, data, {error: true}));
+        const result = ethFuncs.prepContractData(functionName, contract, tx);
 
 
-            } else {
+        if (!result.error) {
 
-                callback_(Object.assign({}, tx, {
-                    gasLimit: data.data,
-                }))
-            }
-        });
-    } else {
+            ethFuncs.estimateGas(result, function (data) {
+                if (data.error || parseInt(data.data) === -1) {
 
-        callback_(result);
-    }
+                    console.error('error estimating gas', data);
+
+
+                    reject(Object.assign({}, data, {error: true}));
+
+
+                } else {
+
+                    resolve(Object.assign({}, tx, {
+                        gasLimit: data.data,
+                    }))
+                }
+            });
+        } else {
+
+            reject(result);
+        }
+    })
+
 }
 
 

@@ -21,6 +21,8 @@
 
         };
     }]);
+
+
     describe('Wallet generation Test', function () {
         beforeEach(angular.mock.module('mewApp'));
         beforeEach(angular.mock.module('myApp'));
@@ -53,8 +55,56 @@
             // });
 
 
-
         }));
+
+
+        // describe('Officiality Checker', function () {
+        //
+        //     const official_url = 'https://callisto.network/';
+        //
+        //     const path = official_url;
+        //
+        //     const oc = new OfficialityContract();
+        //
+        //     it('returns offical', function () {
+        //
+        //
+        //         const calls = [
+        //             "http://" + path,
+        //             "https://" + path,
+        //             "http://" + path + '/',
+        //             "https://" + path + '/'
+        //         ].map(p => oc.handleContractCall('is_official', p));
+        //
+        //         Promise.all(calls).then(result => {
+        //
+        //             expect(false).toBe(true);
+        //
+        //             this.is_official = result.some(item => item);
+        //
+        //
+        //         })
+        //
+        //
+        //         // oc.handle_is_official(official_url).then(result => {
+        //         //
+        //         //
+        //         //     console.log(result);
+        //         //
+        //         //     console.log(oc);
+        //         //
+        //         //     expect(result).toBe(true);
+        //         //
+        //         //     expect(false).toBe(true);
+        //         // }).catch(err => {
+        //         //
+        //         //     expect(false).toBe(true);
+        //         // })
+        //
+        //
+        //     })
+        // })
+
         describe('Test', function () {
 
 
@@ -84,28 +134,28 @@
         describe('Encrypt wallet', function () {
 
             it('Encrypts wallet w/ new password', function () {
-                var wallet = Wallet.generate(false);
+                const wallet = Wallet.generate(false);
 
-                var password = 'testing123';
+                const password = 'testing123';
 
-                var opts = {
+                const opts = {
                     kdf: globalFuncs.kdf,
                     n: globalFuncs.scrypt.n
                 };
 
-                var wStr = wallet.toV3(password, opts);
+                const wStr = wallet.toV3(password, opts);
 
-                var privKey = wallet.toJSON().privKey;
-                var newPassword = 'NEW PASSWORD 123456';
-                var wallet_ = new Wallet(privKey);
-                var wStr_ = wallet_.toV3(newPassword, opts);
+                const privKey = wallet.toJSON().privKey;
+                const newPassword = 'NEW PASSWORD 123456';
+                const wallet_ = new Wallet(privKey);
+                const wStr_ = wallet_.toV3(newPassword, opts);
 
-                var unlocked_wallet = Wallet.getWalletFromPrivKeyFile(JSON.stringify(wStr), password);
-                var unlocked_wallet_ = Wallet.getWalletFromPrivKeyFile(JSON.stringify(wStr_), newPassword);
+                const unlocked_wallet = Wallet.getWalletFromPrivKeyFile(JSON.stringify(wStr), password);
+                const unlocked_wallet_ = Wallet.getWalletFromPrivKeyFile(JSON.stringify(wStr_), newPassword);
 
 
-                var wJson = unlocked_wallet.toJSON();
-                var wJson_ = unlocked_wallet_.toJSON();
+                const wJson = unlocked_wallet.toJSON();
+                const wJson_ = unlocked_wallet_.toJSON();
 
 
                 expect(wJson.privKey).toBe(wJson_.privKey);

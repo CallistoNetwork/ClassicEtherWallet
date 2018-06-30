@@ -1,19 +1,19 @@
 'use strict';
 var uiFuncs = function () {
 }
-uiFuncs.getTxData = function ($scope) {
+uiFuncs.getTxData = function ({tx, wallet}) {
     return {
-        to: $scope.tx.to,
-        value: $scope.tx.value,
-        unit: $scope.tx.unit,
-        gasLimit: $scope.tx.gasLimit,
-        data: $scope.tx.data,
-        from: $scope.wallet.getAddressString(),
-        privKey: $scope.wallet.privKey ? $scope.wallet.getPrivateKeyString() : '',
-        path: $scope.wallet.getPath(),
-        hwType: $scope.wallet.getHWType(),
-        hwTransport: $scope.wallet.getHWTransport(),
-        //gasPrice: $scope.tx.gasPrice || $scope.tx.gasprice || '',
+        to: tx.to,
+        value: tx.value,
+        unit: tx.unit,
+        gasLimit: tx.gasLimit,
+        data: tx.data,
+        from: wallet.getAddressString(),
+        privKey: wallet.privKey ? wallet.getPrivateKeyString() : '',
+        path: wallet.getPath(),
+        hwType: wallet.getHWType(),
+        hwTransport: wallet.getHWTransport(),
+        gasPrice: globalFuncs.localStorage.getItem('gasPrice', 21)
     };
 };
 
@@ -318,24 +318,8 @@ uiFuncs.sendTx = function (signedTx, callback) {
 
     } else {
 
-        let transaction;
 
-
-        try {
-
-            // when sending tx, web3 tx comes in as string or object
-
-            const _signedTx = typeof signedTx === 'string' ? JSON.parse(signedTx) : signedTx;
-
-            transaction = mapTransToWeb3Trans(_signedTx);
-
-        } catch (e) {
-
-            handleErr(e);
-        }
-
-
-        web3.eth.sendTransaction(transaction, function (err, txHash) {
+        var cb_ = function (err, txHash) {
             if (err) {
 
                 handleErr(err);
@@ -343,7 +327,10 @@ uiFuncs.sendTx = function (signedTx, callback) {
 
                 callback({data: txHash})
             }
-        });
+        };
+
+
+        uiFuncs.handleWeb3Trans(signedTx, cb_);
 
 
     }
@@ -358,6 +345,27 @@ uiFuncs.sendTx = function (signedTx, callback) {
 
 
 }
+
+uiFuncs.handleWeb3Trans = function (signedTx, cb_) {
+
+    let transaction;
+
+
+    try {
+
+        // when sending tx, web3 tx comes in as string or object
+
+        const _signedTx = typeof signedTx === 'string' ? JSON.parse(signedTx) : signedTx;
+
+        transaction = mapTransToWeb3Trans(_signedTx);
+
+    } catch (e) {
+
+        cb_(e);
+    }
+    web3.eth.sendTransaction(transaction, cb_);
+}
+
 uiFuncs.transferAllBalance = function (fromAdd, gasLimit, callback) {
     try {
         ajaxReq.getTransactionData(fromAdd, function (data) {

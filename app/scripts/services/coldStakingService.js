@@ -430,7 +430,12 @@ var coldStakingService = function (walletService) {
             .then(result => {
 
                 const [weight, init, stake_time, reward] = result.data.map(Number);
-                this.contract.staker_info = {weight, init, stake_time, reward};
+                this.contract.staker_info = {
+                    weight: etherUnits.toEther(weight, 'wei'),
+                    init,
+                    stake_time,
+                    reward: etherUnits.toEther(reward, 'wei')
+                };
 
             })
     }

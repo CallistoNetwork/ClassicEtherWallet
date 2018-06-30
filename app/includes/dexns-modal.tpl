@@ -30,7 +30,7 @@
                     <tr class="text-center">
                         <td>
                             <div class="addressIdenticon med" title="Address Indenticon"
-                                 blockie-address="{{wallet.getAddressString()}}"
+                                 blockie-address="{{walletService.wallet.getAddressString()}}"
                                  watch-var="wallet.getAddressString()"></div>
                         </td>
                         <td class="mono">-><br/>

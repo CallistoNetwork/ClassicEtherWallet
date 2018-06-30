@@ -1,6 +1,13 @@
 const {WAValidator} = ethUtil;
 
 
+/*
+
+    abi: Array<>
+    address: string
+    network: string
+ */
+
 class Contract {
 
 
@@ -19,6 +26,7 @@ class Contract {
             abi: this.abi,
             address: this.address,
             network: this.network,
+
         };
     }
 
@@ -90,19 +98,33 @@ class Contract {
 
 }
 
-// contract that initilizes its view params
+/*
+
+ contract that initilizes its view params
+
+    @property contract {node, }
+    @property node
+
+  */
+
 
 class InitContract extends Contract {
+
 
     constructor(abi = [], addr = '0x', network = 'ETC') {
 
         super(abi, addr, network);
 
         this.setNode();
-
         this.setViewParams();
 
         this.getViewParams();
+    }
+
+    get contract() {
+
+        return Object.assign({}, super.contract, {node: this.node});
+
     }
 
     setNode(network = this.network) {
@@ -191,24 +213,57 @@ class InitContract extends Contract {
             if (!node) {
 
                 reject(new Error('could not find node'));
+            } else {
+
+                node.lib.getBalance(this.address, (result) => {
+
+                    // console.log('bal', result);
+
+                    if (result.error) {
+
+                        reject(result);
+
+                    } else {
+
+                        const {data: {address, balance}} = result;
+
+                        this._balance = balance;
+
+                        resolve(this._balance);
+                    }
+                })
             }
+        })
+    }
 
-            node.lib.getBalance(this.address, (result) => {
 
-                // console.log('bal', result);
+    getTxData(tx) {
 
-                if (result.error) {
+        return new Promise((resolve, reject) => {
 
-                    reject(result);
-
+            this.node.lib.getTransactionData(tx.from, function (data) {
+                if (data.error) {
+                    reject({
+                        isError: true,
+                        error: data.error
+                    });
                 } else {
 
-                    const {data: {address, balance}} = result;
 
-                    this._balance = balance;
+                    Object.assign(tx, {nonce: data.data.nonce});
 
-                    resolve(this._balance);
+                    uiFuncs.genTxWithInfo(tx, function (result) {
+
+                        if (result.error) {
+
+                            reject(result);
+                        } else {
+
+                            resolve(result);
+                        }
+                    });
                 }
+
             })
         })
     }
@@ -228,17 +283,17 @@ class InitContract extends Contract {
 
         const tx_ = {inputs, to: this.address, network: this.network, value, unit, from};
 
-        return ethFuncs.handleContractCall(functionName, this.contract, tx_);
+        return ethFuncs.handleContractCall(functionName, this, tx_);
 
     }
 
-    handleContractWrite(functionName, inputs = [], {value = 0, unit = 'ether', from = null} = {}, wallet) {
+    handleContractWrite(functionName, {inputs = [], value = 0, unit = 'ether', from = null} = {}, wallet) {
 
 
         return ethFuncs.handleContractWrite(
-            wallet,
             functionName,
-            this.contract,
+            this,
+            wallet,
             Object.assign({}, {inputs, network: this.network, to: this.address, value, unit, from})
         );
 
@@ -248,7 +303,7 @@ class InitContract extends Contract {
     handleEstimateGasLimit(functionName, tx) {
 
 
-        return ethFuncs.handleContractGasEstimation(functionName, this.contract, tx);
+        return ethFuncs.handleContractGasEstimation(functionName, this, tx);
     }
 
     /*

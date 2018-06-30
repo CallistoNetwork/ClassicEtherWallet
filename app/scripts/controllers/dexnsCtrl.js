@@ -108,8 +108,10 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService, backgroundNod
 
         const _metadata = dexnsService.metaData($scope.input);
 
+        const inputs = [tokenName, owner, destination, _metadata, hideOwner, assign];
+
         Object.assign($scope.tx, {
-            inputs: [tokenName, owner, destination, _metadata, hideOwner, assign],
+            inputs,
             value: 1e15.toString(),
             unit: 'wei',
             from: walletService.wallet.getAddressString(),
@@ -120,6 +122,7 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService, backgroundNod
 
         dexnsService.CONTRACT.handleContractWrite(
             'registerAndUpdateName',
+            inputs,
             tx,
             wallet
         );
@@ -188,22 +191,9 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService, backgroundNod
         const tx = {
             value: 1e15.toString(),
             unit: 'wei',
-            to: dexnsService.CONTRACT.address,
-            inputs: [$scope.DexNSName]
+            from: walletService.wallet.getAddressString(),
+            inputs: [$scope.DexNSName],
         };
-
-        if (dexnsService.CONTRACT.network !== ajaxReq.type) {
-
-            const _network = globalFuncs.networks[network];
-
-            if (!_network) {
-
-                uiFuncs.notifier.danger(`Add network :${network}`);
-            }
-            else $rootScope.$broadcast('ChangeNode', _network || 0);
-
-        }
-
 
         dexnsService.CONTRACT.handleContractWrite('registerName', tx, walletService.wallet);
     };

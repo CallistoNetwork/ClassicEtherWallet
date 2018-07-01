@@ -1,21 +1,23 @@
 <section class="messagesList">
     <h2>Inbox</h2>
+
     <ul class="list-group">
 
-        <li ng-if="!loadingMessages && empty()">No messages found for {{wallet.getAddressString()}}</li>
+        <li ng-if="!messageService.loadingMessages && empty()">No messages found for {{wallet.getAddressString()}}
+        </li>
 
-        <p ng-if="loadingMessages">
+        <li ng-if="messageService.loadingMessages">
             LOADING...
-        </p>
-        <p ng-if="!loadingMessages && msgCheckTime">
-            last checked: {{msgCheckTime}}
-        </p>
+        </li>
+        <li ng-if="!messageService.loadingMessages && messageService.msgCheckTime">
+            last checked: {{messageService.msgCheckTime}}
+        </li>
 
 
         <li
 
                 class="list-group-item pointer"
-                ng-repeat="message in messagesList"
+                ng-repeat="message in messageService.messagesList"
                 ng-click="viewMessagesConversation(message[0].from)"
 
         >
@@ -29,7 +31,6 @@
                     <span class="from">{{message[0].from}}</span>
 
 
-                    </span>
                 </div>
                 <div class="col-sm-3">
                     <div class="row">
@@ -41,10 +42,10 @@
                     <div class="row">
                         <b>New Messages: </b>
                         <b
-                                ng-class="numberOfNewMessagesFrom(message[0].from, message[0].to) > 0 ? 'text-success' : 'text-gray'"
+                                ng-class="messageService.numberOfNewMessages(message[0].to, message[0].from) > 0 ? 'text-success' : 'text-gray'"
                         >
 
-                            {{numberOfNewMessagesFrom(message[0].from, message[0].to)}}
+                            {{messageService.numberOfNewMessages(message[0].to, message[0].from)}}
                         </b>
                     </div>
                     <div>

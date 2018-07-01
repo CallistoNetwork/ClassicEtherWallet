@@ -101,7 +101,7 @@ var globalService = require('./services/globalService');
 var coldStakingService = require('./services/coldStakingService');
 var modalService = require('./services/modalService');
 var walletService = require('./services/walletService');
-var newMessageService = require('./services/newMessageService');
+var messageService = require('./services/messageService');
 var backgroundNodeService = require('./services/backgroundNodeService');
 var blockiesDrtv = require('./directives/blockiesDrtv');
 var addressFieldDrtv = require('./directives/addressFieldDrtv');
@@ -140,7 +140,7 @@ app.factory('backgroundNodeService', backgroundNodeService);
 app.factory('changeNowService', changeNow);
 app.factory('modalService', modalService);
 
-app.factory('newMessageService', newMessageService);
+app.factory('messageService', messageService);
 app.factory('coldStakingService', ['walletService', coldStakingService]);
 
 app.directive('blockieAddress', blockiesDrtv);
@@ -151,7 +151,7 @@ app.directive('onReadFile', fileReaderDrtv);
 app.directive('walletBalanceDrtv', balanceDrtv);
 app.directive('walletDecryptDrtv', walletDecryptDrtv);
 app.directive('cxWalletDecryptDrtv', cxWalletDecryptDrtv);
-app.directive('messagesOverviewDrtv', ['globalService', messagesOverviewDrtv]);
+app.directive('messagesOverviewDrtv', ['globalService', 'walletService', 'messageService', messagesOverviewDrtv]);
 app.directive('arrayInputDrtv', arrayInputDrtv);
 app.directive('newMessagesDrtv', ['globalService', newMessagesDrtv]);
 app.directive('transactionCost', transactionCost);
@@ -172,9 +172,9 @@ app.controller('ensCtrl', ['$scope', '$sce', '$rootScope', 'walletService', ensC
 app.controller('dexnsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', 'backgroundNodeService', dexnsCtrl]);
 app.controller('footerCtrl', ['$scope', footerCtrl]);
 app.controller('offlineTxCtrl', ['$scope', '$sce', '$rootScope', 'walletService', offlineTxCtrl]);
-app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', 'backgroundNodeService', 'modalService', 'coldStakingService', walletBalanceCtrl]);
+app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', 'backgroundNodeService', 'modalService', 'coldStakingService', 'messageService', walletBalanceCtrl]);
 app.controller('helpersCtrl', ['$scope', helpersCtrl]);
-app.controller('messagesCtrl', ['$scope', '$rootScope', '$interval', 'globalService', 'newMessageService', 'walletService', 'backgroundNodeService', messagesControl]);
+app.controller('messagesCtrl', ['$scope', '$rootScope', '$interval', 'globalService', 'messageService', 'walletService', 'backgroundNodeService', messagesControl]);
 app.controller('encryptCtrl', ['$scope', 'walletService', encryptCtrl]);
 app.controller('backgroundNodeCtrl', ['$scope', 'backgroundNodeService', '$interval', backgroundNodeCtrl]);
 

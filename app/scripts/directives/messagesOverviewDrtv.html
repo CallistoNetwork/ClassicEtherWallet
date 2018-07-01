@@ -1,25 +1,24 @@
 <div class="row"
-     ng-if="wallet"
+     ng-if="walletService.wallet && walletService.wallet.getAddressString()"
 >
     <div class="col-xs-6">You have:</div>
     <div class="col-xs-6">Total:</div>
     <a ng-click="viewMessageList()">
         <div class="col-xs-6">
+            <span ng-if="messageService.loadingMessages">LOADING...</span>
 
-            <span ng-if="loadingMessages">
-                LOADING...
-            </span>
-            <span ng-if="!loadingMessages">
-                {{NUMBER_OF_NEW_MESSAGES}} Recent messages
+            <span ng-if="!messageService.loadingMessages">
+                {{messageService.numberOfNewMessages(walletService.wallet.getAddressString()) }}
+                Recent Messages
             </span>
         </div>
     </a>
     <div class="col-xs-6">
-        <span ng-if="loadingMessages">
-                LOADING...
-            </span>
-        <span ng-if="!loadingMessages">
-            {{NUMBER_OF_MESSAGES}} messages
-       </span>
+        <span ng-if="messageService.loadingMessages">LOADING...</span>
+
+        <span ng-if="!messageService.loadingMessages">
+            {{messageService.numberOfMessages(walletService.wallet.getAddressString())}}
+        messages
+        </span>
     </div>
 </div>

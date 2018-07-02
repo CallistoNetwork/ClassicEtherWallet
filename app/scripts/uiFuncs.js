@@ -517,8 +517,8 @@ uiFuncs.handleContractWrite = function (
 
                                     contract.node.lib.sendRawTx(tx.signedTx, (resp) => {
                                         if (!resp.isError) {
-                                            const bExStr = ajaxReq.type !== nodes.nodeTypes.Custom ? "<a href='" + ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
-                                            const contractAddr = tx.to ? " & Contract Address <a href='" + ajaxReq.blockExplorerAddr.replace('[[address]]', tx.to) + "' target='_blank' rel='noopener'>" + tx.to + "</a>" : '';
+                                            const bExStr = contract.node.type !== nodes.nodeTypes.Custom ? "<a href='" + contract.node.blockExplorerTX.replace("[[txHash]]", resp.data) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
+                                            const contractAddr = tx.to ? " & Contract Address <a href='" + contract.node.blockExplorerAddr.replace('[[address]]', tx.to) + "' target='_blank' rel='noopener'>" + tx.to + "</a>" : '';
                                             uiFuncs.notifier.success(globalFuncs.successMsgs[2] + "<br />" + resp.data + "<br />" + bExStr + contractAddr);
 
                                             resolve(Object.assign(Object.assign({}, tx, resp.data)));
@@ -568,8 +568,8 @@ uiFuncs.handleContractWrite = function (
                                             reject(false);
                                         } else {
 
-                                            const bExStr = contract.network !== nodes.nodeTypes.Custom ? "<a href='" + ajaxReq.blockExplorerTX.replace("[[txHash]]", result) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
-                                            const contractAddr = tx.to ? " & Contract Address <a href='" + ajaxReq.blockExplorerAddr.replace('[[address]]', tx.to) + "' target='_blank' rel='noopener'>" + tx.to + "</a>" : '';
+                                            const bExStr = contract.network !== nodes.nodeTypes.Custom ? "<a href='" + contract.node.blockExplorerTX.replace("[[txHash]]", result) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
+                                            const contractAddr = tx.to ? " & Contract Address <a href='" + contract.node.blockExplorerAddr.replace('[[address]]', tx.to) + "' target='_blank' rel='noopener'>" + tx.to + "</a>" : '';
                                             uiFuncs.notifier.success(globalFuncs.successMsgs[2] + "<br />" + result + "<br />" + bExStr + contractAddr);
 
                                             resolve(Object.assign(Object.assign({}, tx)));

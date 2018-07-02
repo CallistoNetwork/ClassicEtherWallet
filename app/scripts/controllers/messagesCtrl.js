@@ -1,36 +1,21 @@
 'use strict';
 
-const _uniqueBy = require('lodash/uniqBy');
-
 var messagesCtrl = function ($scope,
                              $rootScope,
                              $interval,
                              globalService,
-                             newMessageService,
-                             walletService, backgroundNodeService) {
+                             messageService,
+                             walletService,
+                             backgroundNodeService) {
 
 
-    const DATE = new Date();
-
-    // localStorage key
-    const KEY = '@messages@';
-
-
-    let CONTRACT_ADDRESS = '0x6A77417FFeef35ae6fe2E9d6562992bABA47a676';
-
-    const CONTRACT = nodes.nodeList.etc_ethereumcommonwealth_geth.abiList.find(contract => contract.address.toLowerCase() === CONTRACT_ADDRESS.toLowerCase());
-
-    if (!CONTRACT) {
-
-        throw new Error('ERROR FINDING CONTRACT: ' + CONTRACT_ADDRESS);
-    }
-
+    const {CONTRACT} = messageService;
 
     const {name, address, abi} = CONTRACT;
 
     const messageContract = {
         functions: [],
-        abi: JSON.parse(abi),
+        abi: typeof abi === 'string' ? JSON.parse(abi) : abi,
         name,
         address
     };
@@ -57,26 +42,15 @@ var messagesCtrl = function ($scope,
     };
 
 
-    const MESSAGE = {
-        from: '0x1234',
-        to: '', // adding param locally so can switch b/w accounts easier
-        text: 'TEST',
-        time: DATE.getTime(),
-        index: 0,
-    };
-
-
-    const messageSet = messages => _uniqueBy(messages, message => message.to + message.index);
-
-
-    const MESSAGE_STALING_PERIOD = 2160000; // 25 days
-
     const VISIBILITY = {
         LIST: 'list',
         NEW: 'new',
         CONVERSATION: 'conversation',
 
     };
+
+
+    messageService.handleGetLocalMessages();
 
 
     Object.assign($scope, {
@@ -86,14 +60,10 @@ var messagesCtrl = function ($scope,
         rawTx: null,
         signedTx: null,
         msgCheckTime: null,
-        messagesList: {},
         messagesConversation: null,
         unlockWallet: false,
         loadingMessages: false,
-        MESSAGE_STALING_PERIOD,
-        message_staling_period: new Date(DATE.getTime() - (MESSAGE_STALING_PERIOD * 1000)).getTime(),
-        NUMBER_OF_MESSAGES: 0,
-        NUMBER_OF_NEW_MESSAGES: 0,
+        messageService,
         newMessage: {
             to: '',
             text: '',
@@ -107,7 +77,7 @@ var messagesCtrl = function ($scope,
             from: '',
         },
         interval: null,
-        messages: handleGetLocalMessages(),
+
     });
 
 
@@ -198,9 +168,9 @@ var messagesCtrl = function ($scope,
 
             if (result && 'data' in result) {
 
-                $scope.MESSAGE_STALING_PERIOD = parseInt(ethFuncs.hexToDecimal(result.data));
+                messageService.MESSAGE_STALING_PERIOD = parseInt(ethFuncs.hexToDecimal(result.data));
             }
-            $scope.message_staling_period = new Date(DATE.getTime() - (MESSAGE_STALING_PERIOD * 1000)).getTime()
+            messageService.message_staling_period = new Date(new Date().getTime() - (messageService.MESSAGE_STALING_PERIOD * 1000)).getTime()
         });
 
 
@@ -224,14 +194,10 @@ var messagesCtrl = function ($scope,
     function initMessages(addr) {
 
 
-
-
-
         // filter messages by address in wallet
-        const messages = $scope.messages.slice().filter(message => message.to === addr);
+        const messages = messageService.messages.filter(message => message.to === addr);
 
-
-        mapMessagesToMessageList();
+        messageService.mapMessagesToMessageList(addr);
 
 
         getLastMsgIndex(addr, function (result) {
@@ -259,7 +225,7 @@ var messagesCtrl = function ($scope,
 
                     if (queue.length === 0) {
 
-                        $scope.loadingMessages = false;
+                        messageService.loadingMessages = false;
 
                     }
 
@@ -272,39 +238,44 @@ var messagesCtrl = function ($scope,
 
                             const [from, text, time] = ethUtil.solidityCoder.decodeParams(outTypes, result.data.replace('0x', ''));
 
-                            const MESSAGE = mapToMessage(from, addr, text, Number(time.toString()) * 1000, index_);
+                            const MESSAGE = new messageService.Message({
+                                from,
+                                to: addr,
+                                text,
+                                time: Number(time.toString()) * 1000,
+                                index: index_
+                            });
 
 
-                            $scope.messages.push(MESSAGE);
-
-                            $scope.saveMessages();
-                            mapMessagesToMessageList();
+                            messageService.messages.push(MESSAGE);
+                            messageService.mapMessagesToMessageList(addr);
+                            messageService.saveMessages();
 
 
                             if ($scope.visibility === $scope.VISIBILITY.CONVERSATION) {
 
                                 // update if sending msg to same addr
 
-                                $scope.messagesConversation = $scope.messages.filter(m => m.to === addr);
+                                messageService.messagesConversation = messageService.messages.filter(m => m.to === addr);
                             }
 
                         }
 
-                        $scope.loadingMessages = false;
+                        messageService.loadingMessages = false;
 
                     }));
 
 
                 } else {
 
-                    $scope.loadingMessages = false;
+                    messageService.loadingMessages = false;
 
                 }
 
 
             } else {
 
-                $scope.loadingMessages = false;
+                messageService.loadingMessages = false;
 
                 //$scope.notifier.danger('Error locating lastMsgIndex');
                 console.error('Error locating lastMsgIndex');
@@ -316,101 +287,14 @@ var messagesCtrl = function ($scope,
 
     }
 
-    function validMessage(obj_) {
-
-        return Object.keys(MESSAGE).every(key => {
-
-
-            return obj_.hasOwnProperty(key);
-        });
-    }
-
-    function handleGetLocalMessages() {
-
-
-        let messages = [];
-
-        try {
-
-            const messages_ = JSON.parse(globalFuncs.localStorage.getItem(KEY));
-
-            messages = messageSet(messages_);
-
-        } catch (e) {
-
-            messages = [];
-
-        } finally {
-
-            if (!(messages && Array.isArray(messages) && messages.every(validMessage))) {
-
-                messages = messages.filter(validMessage);
-            }
-
-
-        }
-        return messages;
-    }
-
-
-    $scope.saveMessages = function saveMessages() {
-
-
-        let messages = $scope.messages.slice().filter(validMessage);
-
-
-        let messageSet_ = messageSet(messages);
-
-        // console.log(messageSet_, messageSet_.length);
-
-        globalFuncs.localStorage.setItem(KEY, JSON.stringify(messageSet_));
-
-        return messageSet_;
-
-    }
-
 
     $scope.viewMessagesConversation = function (addr) {
 
         $scope.visibility = $scope.VISIBILITY.CONVERSATION;
-        $scope.messagesConversation = $scope.messagesList[addr];
+        messageService.messagesConversation = messageService.messagesList[addr];
 
 
     };
-
-
-    $scope.numberOfNewMessages = function numberOfNewMessages(address) {
-
-
-        //console.log('new messages', new Date($scope.message_staling_period));
-
-        return $scope.messages.filter(message =>
-
-            validMessage(message) &&
-            message.to === address &&
-            $scope.message_staling_period < message.time
-        ).length
-
-    };
-
-    $scope.numberOfNewMessagesFrom = function numberOfNewMessages(from, address) {
-
-
-        return $scope.messages.filter(message =>
-
-            validMessage(message) &&
-            message.to === address &&
-            message.from === from &&
-            $scope.message_staling_period < message.time
-        ).length
-
-    };
-
-
-    function mapToMessage(from, to, text, time, index) {
-
-        return Object.assign({}, MESSAGE, {from, to, text, time, index});
-    }
 
 
     /*
@@ -419,40 +303,9 @@ var messagesCtrl = function ($scope,
      */
 
 
-    function mapMessagesToMessageList() {
-
-
-        // console.log($scope.messages);
-
-
-        const addr = $scope.wallet.getAddressString();
-
-        const sorted = $scope.messages.filter(message => message.to === addr).sort((a, b) => b.time - a.time);
-
-
-        $scope.messagesList = sorted.reduce((accum_, message) => {
-
-            if (!accum_[message.from]) {
-
-                accum_[message.from] = [message];
-            }
-
-            else accum_[message.from].push(message);
-
-            return accum_;
-
-        }, {});
-
-
-        $scope.NUMBER_OF_MESSAGES = sorted.length;
-        $scope.NUMBER_OF_NEW_MESSAGES = $scope.numberOfNewMessages(addr);
-
-
-    }
-
     function messageInterval() {
 
-        $scope.msgCheckTime = new Date().toLocaleTimeString();
+        messageService.msgCheckTime = new Date().toLocaleTimeString();
         // console.log('check messages', $scope.msgCheckTime);
 
 
@@ -486,10 +339,9 @@ var messagesCtrl = function ($scope,
         $interval.cancel($scope.interval);
         $scope.interval = null;
 
-        $scope.messagesList = {};
+        messageService.messagesList = {};
 
-        $scope.loadingMessages = true;
-
+        messageService.loadingMessages = true;
 
         initMessages(walletService.wallet.getAddressString());
 
@@ -505,13 +357,13 @@ var messagesCtrl = function ($scope,
         const {tabs: {sendTransaction: {id}}} = globalService;
 
         if (0 < val &&
-            !newMessageService.openedModals.includes($scope.wallet.getAddressString()) &&
+            !messageService.openedModals.includes($scope.wallet.getAddressString()) &&
             globalService.currentTab === id) {
 
 
             newMessagesModal.open();
 
-            newMessageService.openedModals.push($scope.wallet.getAddressString());
+            messageService.openedModals.push($scope.wallet.getAddressString());
 
         }
     });
@@ -658,7 +510,7 @@ var messagesCtrl = function ($scope,
 
     $scope.empty = function () {
 
-        return Object.keys($scope.messagesList).length === 0;
+        return Object.keys(messageService.messagesList).length === 0;
     };
 
 

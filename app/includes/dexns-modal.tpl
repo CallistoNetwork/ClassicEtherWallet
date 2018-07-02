@@ -15,11 +15,8 @@
                 <div>
                     <h4>{{ DexNSName }}</h4>
                     <small>You will pay
-                        <ether-display
-                                unit="wei"
-                                value="{{tx.value}}"
-                        >
-                        </ether-display>
+
+                        {{tx.value / 1e18 | number }}
                         ETC for this name.
                     </small>
                     <small>You will own this name for 1 year.</small>
@@ -35,11 +32,8 @@
                         </td>
                         <td class="mono">-><br/>
 
-                            <ether-display
-                                    unit="wei"
-                                    value="{{tx.value}}"
-                            >
-                            </ether-display>
+                            {{tx.value / 1e18 | number }}
+
 
                             {{ajaxReq.type}}
                         </td>

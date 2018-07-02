@@ -29,31 +29,24 @@
             <p>
                 Registration of the Name will cost you <code>
 
-                <span ng-if="0 <= dexnsService.contract.namePrice">
 
-                    <ether-display
-                            unit="wei"
-                            value="{{dexnsService.contract.namePrice}}"
-                    >
+                {{dexnsService.contract.namePrice / 1e18 | number}}
+                <!--<ether-display-->
+                <!--unit="wei"-->
+                <!--value="{{dexnsService.contract.namePrice}}"-->
+                <!--&gt;-->
 
-                    </ether-display>
-                    {{dexnsService.contract.network}}
-                </span>
-                <span ng-if="!dexnsService.contract.namePrice">
-                    loading...
-                </span>
+                <!--</ether-display>-->
+
+                {{dexnsService.contract.network}}
+
 
             </code>, and you will own each
                 registered name for <code>
 
-                <span ng-if="dexnsService.contract.owningTime">
                 {{ dexnsService.contract.owningTime}}
-                    seconds ~= 1 year
+                seconds ~= 1 year
 
-                </span>
-                <span ng-if="!dexnsService.contract.owningTime">
-                    loading...
-                </span>
 
             </code>. You
                 can

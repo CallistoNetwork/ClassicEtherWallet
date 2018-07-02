@@ -1,15 +1,13 @@
 <div class="messagesConversation">
-    <h2>{{messagesConversation[0].from}}
-        <div class="addressIdenticon med float" title="Address Indenticon"
-             blockie-address="{{messagesConversation[0].from}}"></div>
+    <h2>{{messageService.messagesConversation[0].from}}
+        <span class="addressIdenticon med float" title="Address Indenticon"
+              blockie-address="{{messageService.messagesConversation[0].from}}"></span>
     </h2>
-    <hr />
-
-
+    <hr/>
     <ol class="list-group">
         <li
                 class="list-group-item"
-                ng-repeat="message in messagesConversation | orderBy: '+time' track by $index">
+                ng-repeat="message in messageService.messagesConversation | orderBy: '+time' track by $index">
             <div class="row">
                 {{message.time | date: 'yyyy-MM-dd HH:mm:ss'}}
             </div>

@@ -3,7 +3,7 @@
     <section class="modal-dialog">
         <form ng-submit="claim()">
             <section class="modal-content"
-                     ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
+                     ng-if="coldStakingService.validNetwork()"
 
             >
 
@@ -34,10 +34,11 @@
 
                     </h5>
 
+
                     <p>
                         <b translate="TRANS_gas"></b>
 
-                        {{tx.gasLimit || '-1'}}
+                        {{coldStakingService.tx.gasLimit | number}}
                     </p>
 
                     <p>
@@ -67,11 +68,12 @@
                 </div>
 
                 <div class="modal-footer">
+
                     <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
                         No, get me out of here!
                     </button>
                     <button
-                            ng-disabled="coldStakingService.contract.staker_info.reward === 0;"
+                            ng-disabled="!coldStakingService.contract.staker_info.reward"
 
                             type="submit"
                             class="btn btn-primary" translate="SENDModal_Yes">

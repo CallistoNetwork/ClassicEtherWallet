@@ -33,11 +33,11 @@
 
                     <h5 translate="sidebar_AccountBal">Account Balance</h5>
                 </th>
-                <th ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)" class="text-right">
+                <th ng-if="coldStakingService.validNetwork()" class="text-right">
                     <h5>Staking Balance</h5>
 
                 </th>
-                <th ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)" class="text-right">
+                <th ng-if="coldStakingService.validNetwork()" class="text-right">
                     <h5>Reward</h5>
 
                 </th>
@@ -56,7 +56,7 @@
                 </td>
 
 
-                <td class="text-right pointer" ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
+                <td class="text-right pointer" ng-if="coldStakingService.validNetwork()"
                     title="{{coldStakingService.contract.staker_info.weight}} (Double Click)"
                     ng-init="showLongWeight = false;"
                     ng-dblclick="showLongWeight = !showLongWeight"
@@ -74,7 +74,7 @@
 
 
                 <td class="text-right pointer" title="{{coldStakingService.contract.staker_info.reward}} (Double Click)"
-                    ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
+                    ng-if="coldStakingService.validNetwork()"
                     ng-init="showLongReward = false;"
                     ng-dblclick="showLongReward = !showLongReward"
                 >
@@ -87,7 +87,7 @@
                 </td>
 
             </tr>
-            <tr ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)">
+            <tr ng-if="coldStakingService.validNetwork()">
 
                 <td class="text-left">
 
@@ -126,7 +126,7 @@
                 <td ng-if="altBalance.symbol !== ajaxReq.type" class="account-info point"
                     ng-dblclick="showLongBal=!showLongBal"
                     title="{{altBalance.balance}} (Double-Click)"
-                    colspan="{{['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type) ? 3 : 1}}"
+                    colspan="{{coldStakingService.validNetwork() ? 3 : 1}}"
                 >
                     <span class="mono wrap" ng-show="!showLongBal">{{altBalance.balance | number}}</span>
                     <span class="mono wrap" ng-show="showLongBal">{{altBalance.balance}}</span>

@@ -19,18 +19,40 @@ const statusCodes = {
     'confirmation': 7,
 };
 
-var DexNSFrontendABI = require('../abiDefinitions/rinkebyAbi.json').find(i => i.address === '0x1797a49729e1595d385484a2d48e74703bf4f150');
+
+//var DexNSFrontendABI = require('../abiDefinitions/rinkebyAbi.json').find(i => i.address === '0x1797a49729e1595d385484a2d48e74703bf4f150');
+
+
+var DexNSFrontendABI = require('../abiDefinitions/etcAbi.json').find(i => i.name === 'DexNS Frontend contract');
+
+var DexNSABI = require('../abiDefinitions/etcAbi.json').find(i => i.name === 'DexNS State storage');
+
+
+if (!DexNSFrontendABI) {
+
+    throw new Error('Unable to locate DexNSFrontendABI')
+}
+
+if (!DexNSABI) {
+
+    throw new Error('Unable to locate DexNSABI');
+}
 
 
 var dexnsCtrl = function ($scope, $sce, $rootScope, walletService, backgroundNodeService, dexnsService) {
 
 
+    $scope.dexnsService = dexnsService;
     walletService.wallet = null;
-    $scope.CONTRACT = dexnsService.CONTRACT;
+    $scope.contract = dexnsService.contract;
+    $scope.sendTxStatus = "";
 
     $scope.walletService = walletService;
 
     $scope.dexns_status = statusCodes.nothing; //0;
+
+
+    $rootScope.$broadcast('ChangeNode', globalFuncs.networks['ETC'] || 0);
 
     $scope.input = {
         abi: '',
@@ -40,18 +62,6 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService, backgroundNod
         tokenName: '',
         tokenNetwork: ajaxReq.type,
     };
-
-    // 19 => namePrice
-
-    var DexNSABI = require('../abiDefinitions/rinkebyAbi.json').find(i => i.address === '0xf6e523420045d6a14f121e9a3b3bd2659d135dec');
-
-    // 16 => endtimeOf
-    // 1  => registerName
-    // 22 => registerAndUpdate
-
-    var DEXNSFrontendAddress = DexNSFrontendABI.address;
-    DexNSABI = JSON.parse(DexNSABI.abi);
-    DexNSFrontendABI = JSON.parse(DexNSFrontendABI.abi);
 
 
     $scope.hideEnsInfoPanel = false;
@@ -112,7 +122,7 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService, backgroundNod
 
         Object.assign($scope.tx, {
             inputs,
-            value: 1e15.toString(),
+            value: dexnsService.contract.namePrice,
             unit: 'wei',
             from: walletService.wallet.getAddressString(),
         });
@@ -120,24 +130,47 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService, backgroundNod
 
         const wallet = walletService.wallet;
 
-        dexnsService.CONTRACT.handleContractWrite(
+        dexnsService.contract.handleContractWrite(
             'registerAndUpdateName',
-            inputs,
+            wallet,
             tx,
-            wallet
         );
 
     };
 
 
+    $scope.getOwningTime = function () {
+
+        dexnsService.contract.handleContractCall('owningTime')
+            .then(result => {
+
+                dexnsService.contract.owningTime = result.data[0];
+            }).catch(err => {
+
+            console.error('error getOwningTime');
+            dexnsService.contract.owningTime = 31536000;
+
+
+        })
+    }
+
     $scope.getDexNSPrice = function () {
 
 
-        $scope.CONTRACT.get_namePrice().catch(err => {
+        dexnsService.contract.handleContractCall('namePrice')
+            .then(result => {
 
-            $scope.notifier.danger(err);
-        });
+                console.log('namePrice', result);
 
+                dexnsService.contract.namePrice = result.data[0];
+            })
+            .catch(err => {
+
+                console.error('error locating name price');
+
+                dexnsService.contract.namePrice = 100000000000000000;
+                $scope.notifier.danger(err);
+            });
 
     };
 
@@ -153,14 +186,14 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService, backgroundNod
     $scope.checkDexNSName = function () {
 
 
-        dexnsService.CONTRACT.handleContractCall('endtimeOf', [$scope.DexNSName], {})
+        dexnsService.contract.handleContractCall('endtimeOf', [$scope.DexNSName], {})
             .then(data => {
 
-                var _time = new Date().getTime();
-                var _renderedTime = new BigNumber(_time);
-                // if (ajaxReq.type != "ETC") {
-                //     $scope.notifier.danger("DexNS accepts only $ETC for gas payments! You should switch to ETC node first to register your name.");
-                // }
+                const _time = new Date().getTime();
+                const _renderedTime = new BigNumber(_time);
+                if (ajaxReq.type !== "ETC") {
+                    $scope.notifier.danger("DexNS accepts only $ETC for gas payments! You should switch to ETC node first to register your name.");
+                }
                 if (_renderedTime > data.data) {
                     $scope.dexns_status = statusCodes['step 2 register Name'];
                     $scope.notifier.info("This name is available for registration.");
@@ -183,19 +216,18 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService, backgroundNod
         }
     }
 
-    $scope.sendTxStatus = "";
 
     $scope.sendTx = function () {
         $scope.dexnsConfirmModalModal.close();
 
         const tx = {
-            value: 1e15.toString(),
+            value: dexnsService.contract.namePrice,
             unit: 'wei',
             from: walletService.wallet.getAddressString(),
             inputs: [$scope.DexNSName],
         };
 
-        dexnsService.CONTRACT.handleContractWrite('registerName', tx, walletService.wallet);
+        dexnsService.contract.handleContractWrite('registerName', walletService.wallet, tx);
     };
 
 
@@ -203,7 +235,11 @@ var dexnsCtrl = function ($scope, $sce, $rootScope, walletService, backgroundNod
         var dateSplitted = date.split('-'); // date must be in DD-MM-YYYY format
         var formattedDate = dateSplitted[1] + '/' + dateSplitted[0] + '/' + dateSplitted[2];
         return new Date(formattedDate).getTime();
-    }
+    };
+
+    $scope.getDexNSPrice();
+    $scope.getOwningTime();
+
 }
 
 module.exports = dexnsCtrl;

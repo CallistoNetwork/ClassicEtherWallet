@@ -201,6 +201,7 @@ uiFuncs.genTxWithInfo = function (data, callback) {
     };
 
 
+    // fixme contract
     if (ajaxReq.eip155) rawTx.chainId = ajaxReq.chainId;
 
 
@@ -431,5 +432,215 @@ uiFuncs.notifier = {
             }
         }
     },
+};
+
+
+/*
+
+    Write to contract function
+
+    @param: functionName: string
+    @param: contract Contract
+    @param wallet Wallet
+    @param tx Tx
+
+    @returns: Promise<tx|Error>
+
+
+ */
+
+uiFuncs.handleContractWrite = function (
+    functionName,
+    contract,
+    wallet,
+    {network = ajaxReq.type, inputs = null, from = null, value = 0, unit = 'ether'} = {}) {
+
+
+    return new Promise((resolve, reject) => {
+
+
+            const tx = {network, inputs, from, value, unit};
+
+            const _func = contract.abi.find(i => i.name === functionName);
+
+            if (!_func) {
+
+
+                reject(new Error('Invalid Request'));
+            }
+
+
+            const funcSig = ethFuncs.getFunctionSignature(ethUtil.solidityUtils.transformToFullName(_func));
+
+
+            const tx_data = ethFuncs.sanitizeHex(funcSig + ethUtil.solidityCoder.encodeParams(
+                _func.inputs.map(i => i.type),
+                tx.inputs,
+            ));
+
+
+            Object.assign(tx, {data: tx_data});
+
+
+            ethFuncs.handleContractGasEstimation(functionName, contract, tx)
+                .then(result => {
+
+                    Object.assign(tx, result, {value: etherUnits.toEther(tx.value, tx.unit), unit: 'ether'});
+
+
+                    // gen tx data from tx and wallet
+
+                    genTx(tx, wallet)
+                        .catch(error => {
+                            uiFuncs.notifier.danger(error && error.msg || 'error generating tx');
+
+                            reject(false);
+
+                        })
+                        .then(rawTx => {
+
+                            if (!rawTx) {
+
+                                reject(false);
+                            } else {
+
+
+                                Object.assign(tx, rawTx);
+
+
+                                // if not web3 tx
+                                // send tx over network defined by contract
+
+
+                                if (typeof tx.signedTx === 'string' && tx.signedTx.slice(0, 2) === '0x') {
+
+
+                                    contract.node.lib.sendRawTx(tx.signedTx, (resp) => {
+                                        if (!resp.isError) {
+                                            const bExStr = ajaxReq.type !== nodes.nodeTypes.Custom ? "<a href='" + ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
+                                            const contractAddr = tx.to ? " & Contract Address <a href='" + ajaxReq.blockExplorerAddr.replace('[[address]]', tx.to) + "' target='_blank' rel='noopener'>" + tx.to + "</a>" : '';
+                                            uiFuncs.notifier.success(globalFuncs.successMsgs[2] + "<br />" + resp.data + "<br />" + bExStr + contractAddr);
+
+                                            resolve(Object.assign(Object.assign({}, tx, resp.data)));
+
+                                        } else {
+
+
+                                            let response = resp.error;
+
+
+                                            // if (resp.error.includes('Insufficient funds')) {
+                                            //
+                                            //
+                                            //     response = globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type);
+                                            //
+                                            //
+                                            // }
+
+                                            uiFuncs.notifier.danger(response);
+
+                                            reject(false);
+                                        }
+                                    })
+                                } else {
+
+                                    // send tx via web3
+
+                                    uiFuncs.handleWeb3Trans(tx.signedTx, function (err, result) {
+
+
+                                        if (err) {
+
+                                            const {message, stack} = err;
+
+
+                                            //
+                                            // if (message.includes('Insufficient funds')) {
+                                            //
+                                            //
+                                            //     response = globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type);
+                                            //
+                                            //
+                                            // }
+
+                                            uiFuncs.notifier.danger(message);
+
+                                            reject(false);
+                                        } else {
+
+                                            const bExStr = contract.network !== nodes.nodeTypes.Custom ? "<a href='" + ajaxReq.blockExplorerTX.replace("[[txHash]]", result) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
+                                            const contractAddr = tx.to ? " & Contract Address <a href='" + ajaxReq.blockExplorerAddr.replace('[[address]]', tx.to) + "' target='_blank' rel='noopener'>" + tx.to + "</a>" : '';
+                                            uiFuncs.notifier.success(globalFuncs.successMsgs[2] + "<br />" + result + "<br />" + bExStr + contractAddr);
+
+                                            resolve(Object.assign(Object.assign({}, tx)));
+
+
+                                        }
+                                    });
+
+                                }
+                            }
+
+
+                        })
+
+
+                }).catch(error => {
+                uiFuncs.notifier.danger(error.msg);
+
+                reject(false);
+
+            });
+
+
+        }
+    );
+
+
+    /*
+      get tx data from network
+
+      generate tx
+
+      @returns Promise<tx> signed
+
+   */
+    function genTx(tx, wallet) {
+
+        return new Promise((resolve, reject) => {
+
+            contract.node.lib.getTransactionData(tx.from, function (data) {
+                if (data.error) {
+                    reject({
+                        isError: true,
+                        error: data.error
+                    });
+                } else {
+
+
+                    //const {address, balance, gasprice, nonce} = data.data;
+
+                    const {nonce} = data.data;
+
+                    Object.assign(tx, {nonce});
+
+                    // wallet and tx must be combined parameters to work
+                    uiFuncs.genTxWithInfo(Object.assign({}, tx, wallet), function (result) {
+
+                        if (result.error) {
+
+                            reject(result);
+                        } else {
+
+                            resolve(result);
+                        }
+                    });
+                }
+
+            })
+        })
+    }
 }
+
+
 module.exports = uiFuncs;

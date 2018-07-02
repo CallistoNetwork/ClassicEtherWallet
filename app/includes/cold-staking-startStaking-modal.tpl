@@ -4,7 +4,7 @@
     <section class="modal-dialog">
         <form ng-submit="startStaking();">
             <section class="modal-content"
-                     ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
+                     ng-if="coldStakingService.validNetwork()"
 
             >
 

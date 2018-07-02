@@ -1,6 +1,9 @@
 const DexNSFrontendABI = require('../abiDefinitions/rinkebyAbi.json')
     .find(itm => itm.address === '0x1797a49729e1595d385484a2d48e74703bf4f150');
 
+// const DexNSFrontendABI = require('../abiDefinitions/etcAbi.json')
+//     .find(itm => itm.name === 'DexNS Frontend contract');
+
 if (!DexNSFrontendABI) {
 
 
@@ -13,8 +16,12 @@ const metaData = ({tokenNetwork, link, sourceCode, abi, info = null}) =>
 
 const dexnsService = function (walletService) {
 
-    this.CONTRACT = new InitContract(DexNSFrontendABI.abi, DexNSFrontendABI.address, 'RINKEBY ETH');
 
+    // InitContract to init all view params
+    this.contract = new Contract(DexNSFrontendABI.abi, DexNSFrontendABI.address, 'ETC');
+
+    this.contract.namePrice = 100000000000000000;
+    this.contract.owningTime = 31536000; // 1 year
 
     this.metaData = metaData;
     return this;

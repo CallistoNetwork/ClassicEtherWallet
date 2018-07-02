@@ -29,28 +29,29 @@
             <p>
                 Registration of the Name will cost you <code>
 
-                <span ng-if="0 <= CONTRACT.namePrice">
+                <span ng-if="0 <= dexnsService.contract.namePrice">
 
                     <ether-display
                             unit="wei"
-                            value="{{CONTRACT.namePrice}}"
+                            value="{{dexnsService.contract.namePrice}}"
                     >
 
                     </ether-display>
-                    {{CONTRACT.network}}
+                    {{dexnsService.contract.network}}
                 </span>
-                <span ng-if="!CONTRACT.namePrice">
+                <span ng-if="!dexnsService.contract.namePrice">
                     loading...
                 </span>
 
             </code>, and you will own each
                 registered name for <code>
 
-                <span ng-if="CONTRACT.owningTime">
-                {{ CONTRACT.owningTime + ' seconds ~= 1 year'}}
+                <span ng-if="dexnsService.contract.owningTime">
+                {{ dexnsService.contract.owningTime}}
+                    seconds ~= 1 year
 
                 </span>
-                <span ng-if="!CONTRACT.owningTime">
+                <span ng-if="!dexnsService.contract.owningTime">
                     loading...
                 </span>
 
@@ -72,7 +73,6 @@
                     for my address
                 </button>
                 <button class="btn btn-default"
-                        ng-disabled="!(walletService.wallet && walletService.wallet.getAddressString())"
                         ng-click="openRegisterToken()"> I am a token developer and I
                     want to register my token symbol
                 </button>

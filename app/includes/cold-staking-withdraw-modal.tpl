@@ -3,7 +3,7 @@
     <section class="modal-dialog">
         <form ng-submit="claim_and_withdraw()">
             <section class="modal-content"
-                     ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
+                     ng-if="coldStakingService.validNetwork()"
 
             >
 
@@ -18,7 +18,7 @@
                         Withdraw is impossible
                         stake time < round interval
                         ({{coldStakingService.contract.staker_info.stake_time | number}} <
-                        {{coldStakingService._round_interval[ajaxReq.type] | number}})
+                        {{coldStakingService.contract.round_interval | number}})
                     </div>
 
 

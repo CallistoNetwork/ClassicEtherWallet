@@ -169,124 +169,6 @@ ethFuncs.handleContractCall = function (
 }
 
 
-/*
-
-    Write to contract function
-
-    @param: functionName: string
-    @param: contract Contract
-    @param wallet Wallet
-    @param tx: Array<any>
-
-    @returns: Promise<tx|Error>
-
-
- */
-
-ethFuncs.handleContractWrite = function (
-    functionName,
-    contract,
-    wallet,
-    {network = ajaxReq.type, inputs = null, from = null, value = 0, unit = 'ether'} = {}) {
-
-    return new Promise((resolve, reject) => {
-
-
-            const tx = {network, inputs, from, value, unit};
-
-            const _func = contract.abi.find(i => i.name === functionName);
-
-            if (!_func) {
-
-
-                reject(new Error('Invalid Request'));
-            }
-
-
-            const funcSig = ethFuncs.getFunctionSignature(ethUtil.solidityUtils.transformToFullName(_func));
-
-
-            const tx_data = ethFuncs.sanitizeHex(funcSig + ethUtil.solidityCoder.encodeParams(
-                _func.inputs.map(i => i.type),
-                tx.inputs,
-            ));
-
-
-            Object.assign(tx, {data: tx_data});
-
-
-            return ethFuncs.handleContractGasEstimation(functionName, contract, tx)
-                .then(result => {
-
-                    Object.assign(tx, result);
-
-
-                    // get tx data from contract network
-                    contract.getTxData(Object.assign({}, tx, wallet))
-
-                        .then(rawTx => {
-
-                            Object.assign(tx, rawTx);
-
-
-                            // if not web3 tx
-                            // send tx over network defined by contract
-
-
-                            if (typeof tx.signedTx === 'string' && tx.signedTx.slice(0, 2) === '0x') {
-
-
-                                contract.node.lib.sendRawTx(tx.signedTx, (resp) => {
-                                    if (!resp.isError) {
-                                        const bExStr = ajaxReq.type !== nodes.nodeTypes.Custom ? "<a href='" + ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
-                                        const contractAddr = tx.to ? " & Contract Address <a href='" + ajaxReq.blockExplorerAddr.replace('[[address]]', tx.to) + "' target='_blank' rel='noopener'>" + tx.to + "</a>" : '';
-                                        uiFuncs.notifier.success(globalFuncs.successMsgs[2] + "<br />" + resp.data + "<br />" + bExStr + contractAddr);
-
-                                        resolve(Object.assign(Object.assign({}, tx, resp.data)));
-
-                                    } else {
-                                        uiFuncs.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
-
-                                        reject(false);
-                                    }
-                                })
-                            } else {
-
-                                // send tx via web3
-
-                                uiFuncs.handleWeb3Trans(tx.signedTx, function (err, result) {
-
-
-                                    if (err) {
-
-                                        uiFuncs.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', contract.network));
-
-                                        reject(false);
-                                    } else {
-
-                                        const bExStr = contract.network !== nodes.nodeTypes.Custom ? "<a href='" + ajaxReq.blockExplorerTX.replace("[[txHash]]", result) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
-                                        const contractAddr = tx.to ? " & Contract Address <a href='" + ajaxReq.blockExplorerAddr.replace('[[address]]', tx.to) + "' target='_blank' rel='noopener'>" + tx.to + "</a>" : '';
-                                        uiFuncs.notifier.success(globalFuncs.successMsgs[2] + "<br />" + result + "<br />" + bExStr + contractAddr);
-
-                                        resolve(Object.assign(Object.assign({}, tx)));
-                                    }
-                                });
-
-                            }
-
-
-                        })
-
-
-                }).catch(error => {
-                    uiFuncs.notifier.danger(error);
-
-                    reject(false);
-
-                })
-        }
-    )
-}
 
 
 /*
@@ -299,6 +181,8 @@ ethFuncs.handleContractWrite = function (
     @param Contract contract
     @param Tx transaction
     @param callback_ function
+
+    @returns tx: Tx {gasLimit: }
 
  */
 
@@ -334,8 +218,6 @@ ethFuncs.handleContractGasEstimation = function (
 
                 if (data.error || parseInt(data.data) === -1) {
 
-                    console.error('error estimating gas', data);
-
 
                     reject(Object.assign({}, data, {error: true}));
 
@@ -354,6 +236,9 @@ ethFuncs.handleContractGasEstimation = function (
     })
 
 }
+
+
+// utils
 
 
 ethFuncs.encodeInputs = function encodeInputs({inputs}) {

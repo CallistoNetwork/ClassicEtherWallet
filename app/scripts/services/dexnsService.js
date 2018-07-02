@@ -1,7 +1,4 @@
-// const DexNSFrontendABI = require('../abiDefinitions/rinkebyAbi.json')
-//     .find(itm => itm.address === '0x1797a49729e1595d385484a2d48e74703bf4f150');
-
-const DexNSFrontendABI = require('../abiDefinitions/etcAbi.json')
+const DexNSFrontendABI = require('../abiDefinitions/etcAbi.json') //require('../abiDefinitions/rinkebyAbi.json')
     .find(itm => itm.name === 'DexNS Frontend contract');
 
 if (!DexNSFrontendABI) {

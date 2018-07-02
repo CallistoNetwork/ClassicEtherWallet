@@ -31,12 +31,6 @@
 
 
                 {{dexnsService.contract.namePrice / 1e18 | number}}
-                <!--<ether-display-->
-                <!--unit="wei"-->
-                <!--value="{{dexnsService.contract.namePrice}}"-->
-                <!--&gt;-->
-
-                <!--</ether-display>-->
 
                 {{dexnsService.contract.network}}
 

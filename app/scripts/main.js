@@ -54,9 +54,8 @@ window.changeNow = changeNow;
 
 var contracts = require('./contract');
 
-const {OfficialityContract, Contract, InitContract} = contracts;
+const {Contract, InitContract} = contracts;
 
-window.OfficialityContract = OfficialityContract;
 window.Contract = Contract;
 window.InitContract = InitContract;
 
@@ -125,9 +124,6 @@ var backgroundNodeService = require('./services/backgroundNodeService');
 // DIRECTIVES
 
 
-
-
-var etherDisplay = require('./directives/etherDisplay');
 var blockiesDrtv = require('./directives/blockiesDrtv');
 var addressFieldDrtv = require('./directives/addressFieldDrtv');
 var QRCodeDrtv = require('./directives/QRCodeDrtv');
@@ -173,7 +169,6 @@ app.factory('dexnsService', dexnsService);
 
 app.factory('messageService', messageService);
 app.factory('coldStakingService', ['walletService', coldStakingService]);
-
 
 
 app.directive('etherDisplay', etherDisplay);

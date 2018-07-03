@@ -10,6 +10,7 @@ const addrs = {
     'RINKEBY ETH': '0x713f80e73b174b9aba62dd75fa1da6925c13ace5',
 };
 
+// fixme: 200 for clot, rinkeby eth
 const round_interval = {
     'CLO': 172800,
     'Testnet CLO': 15000,

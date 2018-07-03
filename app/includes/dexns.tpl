@@ -56,15 +56,14 @@
 
         <article class="row" ng-show="(dexns_status === 0)">
             <section class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
-                <button class="btn btn-default" ng-click="openRegisterName()"> I am a user and I want to register a Name
+                <button class="btn btn-primary btn-block" ng-click="openRegisterName()"> I am a user and I want to register a Name
                     for my address
                 </button>
-                <button class="btn btn-default"
+                <button class="btn btn-primary btn-block"
                         ng-click="openRegisterToken()"> I am a token developer and I
                     want to register my token symbol
                 </button>
-                <button class="btn btn-default disabled" ng-click="openExtendName()"> I have a Name, and I want to
-                    extend the term of ownership
+                <button class="btn btn-primary btn-block disabled" ng-click="openExtendName()"> I want to manage my DexNS name(s)
                 </button>
 
                 <!--<button class="btn btn-default" ng-click="checkName()"> I am a smart-contract developer </button> -->

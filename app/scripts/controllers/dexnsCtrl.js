@@ -70,7 +70,7 @@ const dexnsCtrl = function (
         to: '',
         unit: "ether",
         value: 0,
-        gasPrice: null
+        gasPrice: ''
     };
 
 
@@ -97,6 +97,8 @@ const dexnsCtrl = function (
 
         event.preventDefault();
 
+        if (!walletUnlocked()) return false;
+
         const {tokenName, owner, destination, abi, link, sourceCode, info, tokenNetwork, hideOwner, assign} = $scope.input;
 
 
@@ -104,21 +106,28 @@ const dexnsCtrl = function (
 
         const _metadata = dexnsService.metaData($scope.input);
 
+        const _owner = walletService.wallet.getAddressString();
+
+        const _destination = _owner;
+
+        const _hideOwner = true;
+
+        const _assign = true;
+
 
         Object.assign($scope.tx, {
-            inputs: [tokenName, owner, destination, _metadata, hideOwner, assign],
+            inputs: [tokenName, _owner, _destination, _metadata, _hideOwner, _assign],
             value: dexnsService.contract.namePrice,
             unit: 'wei',
-            from: walletService.wallet.getAddressString(),
+            from: _owner,
         });
-        const {tx} = $scope;
 
         const wallet = walletService.wallet;
 
         dexnsService.contract.handleContractWrite(
             'registerAndUpdateName',
             wallet,
-            tx,
+            $scope.tx,
         );
 
     };
@@ -133,8 +142,6 @@ const dexnsCtrl = function (
             }).catch(err => {
 
             console.error('error getOwningTime');
-            dexnsService.contract.owningTime = 31536000;
-
 
         })
     }
@@ -152,8 +159,6 @@ const dexnsCtrl = function (
 
                 console.error('error locating name price');
 
-                dexnsService.contract.namePrice = 100000000000000000;
-                $scope.notifier.danger(err);
             });
 
     };
@@ -189,11 +194,21 @@ const dexnsCtrl = function (
 
     }
 
-    $scope.registerDexNSName = function () {
+
+    function walletUnlocked() {
 
         if ($scope.wallet === undefined) {
             $scope.notifier.danger("Unlock your wallet first!");
-        } else {
+
+            return false;
+        }
+
+        return true;
+    }
+
+    $scope.registerDexNSName = function () {
+
+        if (walletUnlocked()) {
 
             $scope.dexns_status = statusCodes.confirmation;
 

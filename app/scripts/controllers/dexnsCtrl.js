@@ -20,7 +20,7 @@ const statusCodes = {
 };
 
 
-var dexnsCtrl = function (
+const dexnsCtrl = function (
     $scope,
     $sce,
     $rootScope,
@@ -41,7 +41,7 @@ var dexnsCtrl = function (
     $scope.dexns_status = statusCodes.nothing; //0;
 
 
-    if (nodes.nodeList[globalFuncs.getCurNode()].type) {
+    if (nodes.nodeList[globalFuncs.getCurNode()].type !== 'ETC') {
 
         $rootScope.$broadcast('ChangeNode', globalFuncs.networks['ETC'] || 0);
 
@@ -54,6 +54,10 @@ var dexnsCtrl = function (
         info: '',
         tokenName: '',
         tokenNetwork: ajaxReq.type,
+        owner: '',
+        destination: '',
+        hideOwner: false,
+        assign: false,
     };
 
 
@@ -93,17 +97,16 @@ var dexnsCtrl = function (
 
         event.preventDefault();
 
-        const {tokenName, owner, destination, metadata, hideOwner, assign} = $scope.input;
+        const {tokenName, owner, destination, abi, link, sourceCode, info, tokenNetwork, hideOwner, assign} = $scope.input;
 
 
         // fixme: hideOwner, owner
 
         const _metadata = dexnsService.metaData($scope.input);
 
-        const inputs = [tokenName, owner, destination, _metadata, hideOwner, assign];
 
         Object.assign($scope.tx, {
-            inputs,
+            inputs: [tokenName, owner, destination, _metadata, hideOwner, assign],
             value: dexnsService.contract.namePrice,
             unit: 'wei',
             from: walletService.wallet.getAddressString(),

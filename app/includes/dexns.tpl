@@ -6,6 +6,10 @@
 
     <div class="block">
 
+        <div class="row">
+            <button ng-click="init();">refresh</button>
+        </div>
+
         <!-- Title -->
         <article class="cont-md">
             <h1 class="text-center" translate="NAV_DexNS"> DexNS </h1>

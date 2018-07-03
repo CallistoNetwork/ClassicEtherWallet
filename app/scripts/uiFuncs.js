@@ -169,14 +169,17 @@ uiFuncs.generateTx = function (txData, callback) {
 
         ajaxReq.getTransactionData(txData.from, function (data) {
             if (data.error) {
-                return callback({
+                callback({
                     isError: true,
                     error: data.error
                 });
-            }
-            Object.assign(txData, data, {isOffline: Boolean(data.isOffline)});
+            } else {
 
-            uiFuncs.genTxWithInfo(txData);
+                Object.assign(txData, {isOffline: Boolean(data.isOffline), nonce: data.data.nonce});
+
+                uiFuncs.genTxWithInfo(txData, callback);
+            }
+
 
         });
 

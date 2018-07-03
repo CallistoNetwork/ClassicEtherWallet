@@ -29,16 +29,13 @@ const dexnsCtrl = function (
     dexnsService
 ) {
 
+    $scope.etherUnits = etherUnits;
 
     $scope.dexnsService = dexnsService;
     walletService.wallet = null;
-    $scope.sendTxStatus = "";
 
-    $scope.etherUnits = etherUnits;
 
     $scope.walletService = walletService;
-
-    $scope.dexns_status = statusCodes.nothing; //0;
 
 
     if (nodes.nodeList[globalFuncs.getCurNode()].type !== 'ETC') {
@@ -46,36 +43,8 @@ const dexnsCtrl = function (
         $rootScope.$broadcast('ChangeNode', globalFuncs.networks['ETC'] || 0);
 
     }
-
-    $scope.input = {
-        abi: '',
-        link: '',
-        sourceCode: '',
-        info: '',
-        tokenName: '',
-        tokenNetwork: ajaxReq.type,
-        owner: '',
-        destination: '',
-        hideOwner: false,
-        assign: false,
-    };
-
-
-    $scope.hideEnsInfoPanel = false;
     $scope.networks = globalFuncs.networks;
 
-    $scope.tx = {
-        gasLimit: '200000',
-        data: '',
-        to: '',
-        unit: "ether",
-        value: 0,
-        gasPrice: ''
-    };
-
-
-    // user input of name to register
-    $scope.DexNSName = '';
 
     $scope.dexnsConfirmModalModal = new Modal(document.getElementById('dexnsConfirmModal'));
 
@@ -246,10 +215,54 @@ const dexnsCtrl = function (
         return new Date(formattedDate).getTime();
     };
 
-    Promise.all([
-        $scope.getDexNSPrice(),
-        $scope.getOwningTime(),
-    ]);
+    function main() {
+
+        init();
+
+        Promise.all([
+            $scope.getDexNSPrice(),
+            $scope.getOwningTime(),
+        ]);
+
+    }
+
+    function init() {
+
+
+        Object.assign($scope, {
+            dexns_status: statusCodes.nothing, //0,
+            // user input of name to register
+            DexNSName: '',
+            input: {
+                abi: '',
+                link: '',
+                sourceCode: '',
+                info: '',
+                tokenName: '',
+                tokenNetwork: ajaxReq.type,
+                owner: '',
+                destination: '',
+                hideOwner: false,
+                assign: false,
+            },
+            hideEnsInfoPanel: false,
+            tx: {
+                gasLimit: '200000',
+                data: '',
+                to: '',
+                unit: "ether",
+                value: 0,
+                gasPrice: ''
+            },
+            sendTxStatus: "",
+        });
+
+
+    }
+
+    $scope.init = init;
+
+    main();
 
 }
 

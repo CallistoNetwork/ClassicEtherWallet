@@ -79,7 +79,7 @@ var walletBalanceCtrl = function ($scope, $sce,
         };
 
 
-        ethFuncs.handleContractGasEstimation(name, coldStakingService.contract, tx).then((data) => {
+        ethFuncs.estGasContract(name, coldStakingService.contract, tx).then((data) => {
 
 
             Object.assign(coldStakingService.tx, data);

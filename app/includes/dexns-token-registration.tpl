@@ -72,7 +72,15 @@
 
 
     <label for="tokenNetwork">token network</label>
-    <input class="form-control" id="tokenNetwork" name="tokenNetwork" ng-model="input.tokenNetwork"/>
+
+
+    <select class="form-control" id="tokenNetwork" name="tokenNetwork" ng-model="input.tokenNetwork">
+        <option ng-repeat="node in noder"
+                value="{{node}}"
+        >{{node}}</option>
+    </select>
+
+
 
 
     <button type="submit" class="btn btn-primary">Register Token</button>

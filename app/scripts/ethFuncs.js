@@ -104,8 +104,8 @@ ethFuncs.estimateGas = function (dataObj, callback) {
 
 /*
 
-    Given functionName, contract, and tx data, generates data and sends call, returns decoded outputs
-    @param string functionName
+    Given funcName, contract, and tx data, generates data and sends call, returns decoded outputs
+    @param string funcName
     @param Contract contract
     @param Transaction tx
     @param callback function
@@ -113,8 +113,8 @@ ethFuncs.estimateGas = function (dataObj, callback) {
  */
 
 
-ethFuncs.handleContractCall = function (
-    functionName,
+ethFuncs.call = function (
+    funcName,
     contract,
     {network = ajaxReq.type, inputs = null, from = null, value = 0, unit = 'ether'} = {}
 ) {
@@ -123,7 +123,7 @@ ethFuncs.handleContractCall = function (
     return new Promise((resolve, reject) => {
 
 
-        const foundFunction = contract.abi.find(itm => ['function'].includes(itm.type) && itm.name === functionName);
+        const foundFunction = contract.abi.find(itm => ['function'].includes(itm.type) && itm.name === funcName);
 
 
         const {node} = contract;
@@ -131,7 +131,7 @@ ethFuncs.handleContractCall = function (
 
         if (!foundFunction) {
 
-            console.error('error locating function:', functionName, 'in', contract);
+            console.error('error locating function:', funcName, 'in', contract);
 
             reject({error: true, data: null});
 
@@ -143,7 +143,7 @@ ethFuncs.handleContractCall = function (
 
         }
 
-        const transObj = ethFuncs.prepContractData(functionName, contract, {inputs, from, value, unit});
+        const transObj = ethFuncs.prepContractData(funcName, contract, {inputs, from, value, unit});
 
         if (transObj.error) {
 
@@ -177,7 +177,7 @@ ethFuncs.handleContractCall = function (
 
     sent over contract's set network
 
-    @param string functionName
+    @param string funcName
     @param Contract contract
     @param Tx transaction
     @param callback_ function
@@ -186,8 +186,8 @@ ethFuncs.handleContractCall = function (
 
  */
 
-ethFuncs.handleContractGasEstimation = function (
-    functionName,
+ethFuncs.estGasContract = function (
+    funcName,
     contract,
     {network = ajaxReq.type, inputs = null, from = null, value = 0, unit = 'ether'} = {}) {
 
@@ -196,7 +196,7 @@ ethFuncs.handleContractGasEstimation = function (
 
         const tx = {network, inputs, from, value, unit};
 
-        const result = ethFuncs.prepContractData(functionName, contract, tx);
+        const result = ethFuncs.prepContractData(funcName, contract, tx);
 
 
         if (!result.error) {
@@ -286,14 +286,14 @@ ethFuncs.decodeOutputs = function decodeOutputs(contractFunction, data) {
 
     Encode inputs if any and tx data
 
-    @param string functionName
+    @param string funcName
     @param Contract contract
     @param Tx {}
     @returns {error: bool | error, tx: Tx } if cannot estimate gas
 
  */
 
-ethFuncs.prepContractData = function (functionName, contract, {inputs = [], from, value = 0}) {
+ethFuncs.prepContractData = function (funcName, contract, {inputs = [], from, value = 0}) {
 
 
     if (!(contract.hasOwnProperty('abi') && contract.hasOwnProperty('address') && Array.isArray(contract.abi))) {
@@ -305,18 +305,18 @@ ethFuncs.prepContractData = function (functionName, contract, {inputs = [], from
 
     }
 
-    const foundFunction = contract.abi.find(itm => itm.type === 'function' && itm.name === functionName);
+    const foundFunction = contract.abi.find(itm => itm.type === 'function' && itm.name === funcName);
 
 
     if (!foundFunction) {
 
-        console.error('error locating function:', functionName, 'in', contract);
+        console.error('error locating function:', funcName, 'in', contract);
 
         return {error: true};
     }
 
 
-    let data = ethFuncs.encodeFunctionName(foundFunction.name, contract);
+    let data = ethFuncs.encodefuncName(foundFunction.name, contract);
 
     if (!data) {
 
@@ -344,16 +344,16 @@ ethFuncs.prepContractData = function (functionName, contract, {inputs = [], from
 
     given a function name and contract, returns function signature
 
-    @param string functionName
+    @param string funcName
 
     @param Contract contract
 
     @returns string functionSig
  */
 
-ethFuncs.encodeFunctionName = function (functionName, contract) {
+ethFuncs.encodefuncName = function (funcName, contract) {
 
-    const foundFunction = contract.abi.find(function_ => function_.type === 'function' && function_.name === functionName);
+    const foundFunction = contract.abi.find(function_ => function_.type === 'function' && function_.name === funcName);
 
     if (foundFunction) {
 
@@ -363,7 +363,7 @@ ethFuncs.encodeFunctionName = function (functionName, contract) {
 
     } else {
 
-        console.error('error locating', functionName, 'in', contract);
+        console.error('error locating', funcName, 'in', contract);
 
         return false;
     }

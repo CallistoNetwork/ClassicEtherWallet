@@ -17,7 +17,7 @@
                     <small>You will pay
 
                         {{tx.value / 1e18 | number }}
-                        ETC for this name.
+                        {{dexnsService.contract.network}} for this name.
                     </small>
                     <small>You will own this name for 1 year.</small>
                 </div>
@@ -57,7 +57,7 @@
                 <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
                     No, get me out of here!
                 </button>
-                <button class="btn btn-primary" ng-click="sendTx()" translate="SENDModal_Yes">
+                <button class="btn btn-primary" ng-click="_registerName()" translate="SENDModal_Yes">
                     Yes, I am sure! Make transaction.
                 </button>
             </div>

@@ -440,9 +440,9 @@ uiFuncs.notifier = {
 
 /*
 
-    Write to contract function
+    gen tx w/ contract
 
-    @param: functionName: string
+    @param: funcName: string
     @param: contract Contract
     @param wallet Wallet
     @param tx Tx
@@ -452,8 +452,8 @@ uiFuncs.notifier = {
 
  */
 
-uiFuncs.handleContractWrite = function (
-    functionName,
+uiFuncs.genTxContract = function (
+    funcName,
     contract,
     wallet,
     {network = ajaxReq.type, inputs = null, from = null, value = 0, unit = 'ether'} = {}) {
@@ -464,7 +464,7 @@ uiFuncs.handleContractWrite = function (
 
             const tx = {network, inputs, from, value, unit};
 
-            const _func = contract.abi.find(i => i.name === functionName);
+            const _func = contract.abi.find(i => i.name === funcName);
 
             if (!_func) {
 
@@ -485,7 +485,7 @@ uiFuncs.handleContractWrite = function (
             Object.assign(tx, {data: tx_data});
 
 
-            ethFuncs.handleContractGasEstimation(functionName, contract, tx)
+            ethFuncs.estGasContract(funcName, contract, tx)
                 .then(result => {
 
                     Object.assign(tx, result, {value: etherUnits.toEther(tx.value, tx.unit), unit: 'ether'});
@@ -508,80 +508,8 @@ uiFuncs.handleContractWrite = function (
                             } else {
 
 
-                                Object.assign(tx, rawTx);
+                                resolve(Object.assign(tx, rawTx));
 
-
-                                // if not web3 tx
-                                // send tx over network defined by contract
-
-
-                                if (typeof tx.signedTx === 'string' && tx.signedTx.slice(0, 2) === '0x') {
-
-
-                                    contract.node.lib.sendRawTx(tx.signedTx, (resp) => {
-                                        if (!resp.isError) {
-                                            const bExStr = contract.node.type !== nodes.nodeTypes.Custom ? "<a href='" + contract.node.blockExplorerTX.replace("[[txHash]]", resp.data) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
-                                            const contractAddr = tx.to ? " & Contract Address <a href='" + contract.node.blockExplorerAddr.replace('[[address]]', tx.to) + "' target='_blank' rel='noopener'>" + tx.to + "</a>" : '';
-                                            uiFuncs.notifier.success(globalFuncs.successMsgs[2] + "<br />" + resp.data + "<br />" + bExStr + contractAddr);
-
-                                            resolve(Object.assign(Object.assign({}, tx, resp.data)));
-
-                                        } else {
-
-
-                                            let response = resp.error;
-
-
-                                            // if (resp.error.includes('Insufficient funds')) {
-                                            //
-                                            //
-                                            //     response = globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type);
-                                            //
-                                            //
-                                            // }
-
-                                            uiFuncs.notifier.danger(response);
-
-                                            reject(false);
-                                        }
-                                    })
-                                } else {
-
-                                    // send tx via web3
-
-                                    uiFuncs.handleWeb3Trans(tx.signedTx, function (err, result) {
-
-
-                                        if (err) {
-
-                                            const {message, stack} = err;
-
-
-                                            //
-                                            // if (message.includes('Insufficient funds')) {
-                                            //
-                                            //
-                                            //     response = globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type);
-                                            //
-                                            //
-                                            // }
-
-                                            uiFuncs.notifier.danger(message);
-
-                                            reject(false);
-                                        } else {
-
-                                            const bExStr = contract.network !== nodes.nodeTypes.Custom ? "<a href='" + contract.node.blockExplorerTX.replace("[[txHash]]", result) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
-                                            const contractAddr = tx.to ? " & Contract Address <a href='" + contract.node.blockExplorerAddr.replace('[[address]]', tx.to) + "' target='_blank' rel='noopener'>" + tx.to + "</a>" : '';
-                                            uiFuncs.notifier.success(globalFuncs.successMsgs[2] + "<br />" + result + "<br />" + bExStr + contractAddr);
-
-                                            resolve(Object.assign(Object.assign({}, tx)));
-
-
-                                        }
-                                    });
-
-                                }
                             }
 
 
@@ -591,10 +519,8 @@ uiFuncs.handleContractWrite = function (
                 }).catch(error => {
                 uiFuncs.notifier.danger(error.msg);
 
-                reject(false);
-
+                reject(error);
             });
-
 
         }
     );
@@ -643,6 +569,91 @@ uiFuncs.handleContractWrite = function (
             })
         })
     }
+}
+
+
+/*
+
+send tx to contract
+
+    @param: {node, network} contract Contract
+
+
+    @param tx Tx
+
+    @returns: Promise<tx|Error>
+ */
+uiFuncs.sendTxContract = function ({node, network}, tx) {
+
+    return new Promise((resolve, reject) => {
+        if (typeof tx.signedTx === 'string' && tx.signedTx.slice(0, 2) === '0x') {
+
+
+            node.lib.sendRawTx(tx.signedTx, (resp) => {
+                if (!resp.isError) {
+                    const bExStr = node.type !== nodes.nodeTypes.Custom ? "<a href='" + node.blockExplorerTX.replace("[[txHash]]", resp.data) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
+                    const contractAddr = tx.to ? " & Contract Address <a href='" + node.blockExplorerAddr.replace('[[address]]', tx.to) + "' target='_blank' rel='noopener'>" + tx.to + "</a>" : '';
+                    uiFuncs.notifier.success(globalFuncs.successMsgs[2] + "<br />" + resp.data + "<br />" + bExStr + contractAddr);
+
+                    resolve(Object.assign(Object.assign({}, tx, resp.data)));
+
+                } else {
+
+
+                    let response = resp.error;
+
+
+                    // if (resp.error.includes('Insufficient funds')) {
+                    //
+                    //
+                    //     response = globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type);
+                    //
+                    //
+                    // }
+
+                    uiFuncs.notifier.danger(response);
+
+                    reject(false);
+                }
+            })
+        } else {
+
+            // send tx via web3
+
+            uiFuncs.handleWeb3Trans(tx.signedTx, function (err, result) {
+
+
+                if (err) {
+
+                    const {message, stack} = err;
+
+
+                    //
+                    // if (message.includes('Insufficient funds')) {
+                    //
+                    //
+                    //     response = globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type);
+                    //
+                    //
+                    // }
+
+                    uiFuncs.notifier.danger(message);
+
+                    reject(false);
+                } else {
+
+                    const bExStr = network !== nodes.nodeTypes.Custom ? "<a href='" + node.blockExplorerTX.replace("[[txHash]]", result) + "' target='_blank' rel='noopener'> View your transaction </a>" : '';
+                    const contractAddr = tx.to ? " & Contract Address <a href='" + node.blockExplorerAddr.replace('[[address]]', tx.to) + "' target='_blank' rel='noopener'>" + tx.to + "</a>" : '';
+                    uiFuncs.notifier.success(globalFuncs.successMsgs[2] + "<br />" + result + "<br />" + bExStr + contractAddr);
+
+                    resolve(Object.assign(Object.assign({}, tx)));
+
+
+                }
+            });
+
+        }
+    });
 }
 
 

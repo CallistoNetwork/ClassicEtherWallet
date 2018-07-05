@@ -114,38 +114,30 @@ class Contract {
 
         get balance of contract address
 
-       @returns Promise<balance -> wei>
+       @returns Promise<balance : wei | Error>
     */
 
     getBalance() {
 
         return new Promise((resolve, reject) => {
 
-            const node = Object.values(nodes.nodeList).find(node => node.type === this.network);
 
-            if (!node) {
+            this.node.lib.getBalance(this.address, (result) => {
 
-                reject(new Error('could not find node'));
-            } else {
 
-                node.lib.getBalance(this.address, (result) => {
+                if (result.error) {
 
-                    // console.log('bal', result);
+                    reject(result);
 
-                    if (result.error) {
+                } else {
 
-                        reject(result);
+                    const {data: {address, balance}} = result;
 
-                    } else {
+                    this.balance = balance;
 
-                        const {data: {address, balance}} = result;
-
-                        this.balance = balance;
-
-                        resolve(this.balance);
-                    }
-                })
-            }
+                    resolve(this.balance);
+                }
+            })
         })
     }
 
@@ -155,12 +147,12 @@ class Contract {
     }
 
 
-    // Wrapper functions for globally available network calls
+    // Wrapper functions for network calls
 
 
     /*
 
-        @param functionName: string
+        @param funcName: string
         @param inputs Array<any>
 
         @param tx
@@ -168,19 +160,19 @@ class Contract {
 
 
      */
-    handleContractCall(functionName, inputs = [], {value = 0, unit = 'ether', from = null} = {}) {
+    call(funcName, {inputs = [], value = 0, unit = 'ether', from = null} = {}) {
 
         const tx_ = {inputs, to: this.address, network: this.network, value, unit, from};
 
-        return ethFuncs.handleContractCall(functionName, this, tx_);
+        return ethFuncs.call(funcName, this, tx_);
 
     }
 
-    handleContractWrite(functionName, wallet, {inputs = [], value = 0, unit = 'ether', from = null} = {}) {
+    genTxContract(funcName, wallet, {inputs = [], value = 0, unit = 'ether', from = null} = {}) {
 
 
-        return uiFuncs.handleContractWrite(
-            functionName,
+        return uiFuncs.genTxContract(
+            funcName,
             this,
             wallet,
             Object.assign({}, {inputs, network: this.network, to: this.address, value, unit, from})
@@ -189,10 +181,22 @@ class Contract {
 
     }
 
-    handleEstimateGasLimit(functionName, tx) {
 
+    sendTx(tx) {
 
-        return ethFuncs.handleContractGasEstimation(functionName, this, tx);
+        return uiFuncs.sendTxContract({node: this.node, network: this.network}, tx);
+    }
+
+    handleSendTx(funcName, wallet, {inputs = [], value = 0, unit = 'ether', from = null} = {}) {
+
+        return this.genTxContract(funcName, wallet, {inputs, value, unit, from})
+            .then(tx => this.sendTx(tx));
+
+    }
+
+    estGasLimit(funcName, tx) {
+
+        return ethFuncs.estGasContract(funcName, this, tx);
     }
 
 
@@ -214,19 +218,22 @@ class InitContract extends Contract {
 
         super(abi, addr, network);
 
-        this.setViewParams();
-        this.getViewParams();
+        this.bootstrap();
     }
 
 
-    getViewParams() {
+    // if view function and has no inputs, call function and set values
+
+
+    bootstrap() {
 
         this.contract.abi.forEach(obj => {
+
 
             if (obj.stateMutability === 'view' && obj.inputs.length === 0) {
 
 
-                this['get_' + obj.name]();
+                this.call(obj.name);
             }
         })
     }
@@ -238,49 +245,12 @@ class InitContract extends Contract {
 
      */
 
-    setViewParams() {
 
-        this.abi.forEach(obj => {
+    /*
+        function.type == view
 
-
-            // get view params if there are no input values
-
-            if (obj.stateMutability === 'view' && obj.inputs.length === 0) {
-
-                this['get_' + obj.name] = () => {
-
-                    return this.handleContractCall(obj.name, arguments)
-                        .then(result => {
-
-                            const func = this.abi.find(a => a.name === obj.name);
-
-                            const {outputs} = func;
-
-                            return outputs.map((out, idx) => {
-
-                                let {name, type} = out;
-
-                                if (!name) {
-
-                                    name = obj.name;
-                                }
-
-                                this[name] = result.data[idx];
-
-                                return this[name];
-
-                            })
-
-                        }).catch(err => {
-
-                            console.error(err);
-                        });
-                };
-
-
-            }
-        });
-    }
+        get and set params
+     */
 
 
 }
@@ -394,7 +364,7 @@ class InitContract extends Contract {
 //             "https://" + path,
 //             "http://" + path + '/',
 //             "https://" + path + '/'
-//         ].map(_path => this.handleContractCall('is_official', _path));
+//         ].map(_path => this.call('is_official', _path));
 //
 //         return Promise.all(calls).then(result => {
 //

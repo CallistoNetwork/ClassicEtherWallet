@@ -15,6 +15,8 @@ const addrs = {
 const metaData = ({tokenNetwork = 'ETC', link = '', sourceCode = '', abi = '', info = ''} = {}) => {
 
 
+    // extend_Name_Binding_Time
+
     let validAbi = false;
     try {
 
@@ -35,15 +37,78 @@ const metaData = ({tokenNetwork = 'ETC', link = '', sourceCode = '', abi = '', i
 
     const abiText = validAbi ? ` -A ${abi}` : '';
 
-    return `-${tokenNetwork}${link && ` -L ${link}`}${sourceCode && ` -S ${sourceCode}`}${abiText}${info && `-i ${info}`}`;
+    return `-${tokenNetwork}${link && ` -L ${link}`}${sourceCode && ` -S ${sourceCode}`}${abiText}${info && ` -i ${info}`}`;
 }
 
+
+class DexnsContract extends Contract {
+
+    constructor() {
+
+        super(DexNSFrontendABI.abi, DexNSFrontendABI.address, 'RINKEBY ETH');
+
+        this.abi.forEach(func => {
+
+            this[func.name] = '';
+
+            func.inputs.forEach(input => {
+
+                input.value = '';
+            })
+        });
+    }
+
+    call(funcName, tx) {
+
+
+        return super.call(funcName, tx)
+            .then(result => {
+
+                const func = this.abi.find(a => a.name === funcName);
+
+                const {outputs} = func;
+
+                if (outputs.length === 1) {
+
+                    this[funcName] = result.data[0];
+                } else {
+
+                    this[funcName] = outputs.map((out, idx) => {
+
+                        return result.data[idx];
+
+
+                    });
+                }
+
+                return this[funcName];
+
+            });
+    }
+
+
+    // sendTx(funcName, wallet, tx) {
+    //
+    //
+    //     return super.sendTx(funcName, wallet, tx)
+    //         .then(result => {
+    //
+    //             const f = this.abi.find(i => i.name === funcName);
+    //
+    //             f.outputs.forEach((out, i) => {
+    //
+    //                 Object.assign(out.value, result[i]);
+    //             })
+    //         });
+    //
+    // }
+}
 
 const dexnsService = function (walletService) {
 
 
     // InitContract to init all view params
-    this.contract = new Contract(DexNSFrontendABI.abi, DexNSFrontendABI.address, 'RINKEBY ETH');
+    this.contract = new DexnsContract();
 
 
     this.contract.namePrice = 100000000000000000;

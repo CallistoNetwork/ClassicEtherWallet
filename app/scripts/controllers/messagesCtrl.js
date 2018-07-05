@@ -103,9 +103,9 @@ var messagesCtrl = function ($scope,
     }
 
 
-    function encode_(functionName) {
+    function encode_(funcName) {
 
-        const foundFunction = messageContract.functions.find(function_ => function_.name === functionName);
+        const foundFunction = messageContract.functions.find(function_ => function_.name === funcName);
 
         if (foundFunction) {
 
@@ -115,15 +115,15 @@ var messagesCtrl = function ($scope,
 
         } else {
 
-            console.error('error locationg', functionName);
+            console.error('error locationg', funcName);
         }
 
 
     }
 
-    function handleContractCall(functionName, inputs_ = null, callback_) {
+    function call(funcName, inputs_ = null, callback_) {
 
-        const foundFunction = messageContract.functions.find(function_ => function_.name === functionName);
+        const foundFunction = messageContract.functions.find(function_ => function_.name === funcName);
 
 
         if (!foundFunction) {
@@ -163,7 +163,7 @@ var messagesCtrl = function ($scope,
 
     function getMessageStalingPeriod() {
 
-        handleContractCall('message_staling_period', null, function (result) {
+        call('message_staling_period', null, function (result) {
 
 
             if (result && 'data' in result) {
@@ -180,12 +180,12 @@ var messagesCtrl = function ($scope,
     function getLastMsgIndex(addr, callback_ = console.log) {
 
 
-        handleContractCall('last_msg_index', [addr], callback_);
+        call('last_msg_index', [addr], callback_);
     }
 
     function getMessageByIndex(addr, index, callback_ = console.log) {
 
-        handleContractCall('getMessageByIndex', [addr, index], callback_);
+        call('getMessageByIndex', [addr, index], callback_);
 
 
     }

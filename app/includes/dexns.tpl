@@ -4,11 +4,27 @@
       ng-cloak
 >
 
+
+    @@if (site === 'cew' ) { @@include( './sendTx-contract-modal.tpl', { "site": "cew" } ) }
+    @@if (site === 'cx' ) { @@include( './sendTx-contract-modal.tpl', { "site": "cx" } ) }
+
+
+    @@if (site === 'cew' ) { @@include( './dexns-modal.tpl', { "site": "cew" } ) }
+    @@if (site === 'cx' ) { @@include( './dexns-modal.tpl', { "site": "cx" } ) }
+
     <div class="block">
 
-        <div class="row">
-            <button ng-click="init();">refresh</button>
+
+        <div class="row text-right">
+            <button
+                    class="btn btn-default"
+                    ng-click="init();"
+            >
+                Reset
+            </button>
+
         </div>
+
 
         <!-- Title -->
         <article class="cont-md">
@@ -41,9 +57,7 @@
 
             </code>, and you will own each
                 registered name for <code>
-
-                {{ dexnsService.contract.owningTime}}
-                seconds ~= 1 year
+                1 year
 
 
             </code>. You
@@ -60,14 +74,16 @@
 
         <article class="row" ng-show="(dexns_status === 0)">
             <section class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
-                <button class="btn btn-primary btn-block" ng-click="openRegisterName()"> I am a user and I want to register a Name
+                <button class="btn btn-primary btn-block" ng-click="openRegisterName()"> I am a user and I want to
+                    register a Name
                     for my address
                 </button>
                 <button class="btn btn-primary btn-block"
                         ng-click="openRegisterToken()"> I am a token developer and I
                     want to register my token symbol
                 </button>
-                <button class="btn btn-primary btn-block disabled" ng-click="openExtendName()"> I want to manage my DexNS name(s)
+                <button class="btn btn-primary btn-block" ng-click="dexns_status = 3"> I want to manage my
+                    DexNS name(s)
                 </button>
 
                 <!--<button class="btn btn-default" ng-click="checkName()"> I am a smart-contract developer </button> -->
@@ -120,6 +136,14 @@
             </section>
         </article>
 
+
+        <!-- / Unlock Directive: Everything but notAvailable / forbidden -->
+
+
+        @@if (site === 'cew' ) { @@include( './dexns-contract-interact.tpl', { "site": "cew" } ) }
+        @@if (site === 'cx' ) { @@include( './dexns-contract-interact.tpl', { "site": "cx" } ) }
+
+
         <div ng-show="!wd">
             @@if (site === 'cew' ) {
             <wallet-decrypt-drtv></wallet-decrypt-drtv>
@@ -128,11 +152,6 @@
             <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>
             }
         </div>
-        <!-- / Unlock Directive: Everything but notAvailable / forbidden -->
-
-
-        @@if (site === 'cew' ) { @@include( './dexns-modal.tpl', { "site": "cew" } ) }
-        @@if (site === 'cx' ) { @@include( './dexns-modal.tpl', { "site": "cx" } ) }
 
 
     </div>

@@ -76,14 +76,18 @@ const coldStakingCtrl = function (
                 }
             }
 
-            coldStakingService.contract.handleContractWrite(
+            uiFuncs.genTxContract(
                 'start_staking',
+                coldStakingService.contract,
                 walletService.wallet,
                 Object.assign({}, $scope.tx, {
                     value: etherUnits.toWei($scope.tx.value, $scope.tx.unit),
                     from: walletService.wallet.getAddressString(),
                     unit: 'wei',
                 }))
+                .then(tx => {
+                    uiFuncs.sendTxContract(coldStakingService.contract, tx);
+                })
                 .finally(() => modalService.startStakingModal.close());
 
         };
@@ -110,11 +114,15 @@ const coldStakingCtrl = function (
             if (handleUserCanWithdraw()) {
 
 
-                coldStakingService.contract.handleContractWrite(
+                uiFuncs.genTxContract(
                     'claim_and_withdraw',
+                    coldStakingService.contract,
                     walletService.wallet,
                     Object.assign({}, coldStakingService.tx, {from: walletService.wallet.getAddressString()})
                 )
+                    .then(tx => {
+                        uiFuncs.sendTxContract(coldStakingService.contract, tx);
+                    })
                     .finally(() => {
                         modalService.openWithdrawModal.close();
                         init();
@@ -127,10 +135,15 @@ const coldStakingCtrl = function (
 
             if (handleUserCanWithdraw()) {
 
-                coldStakingService.contract.handleContractWrite('claim',
+                uiFuncs.genTxContract(
+                    'claim',
+                    coldStakingService.contract,
                     walletService.wallet,
                     Object.assign({}, coldStakingService.tx, {from: walletService.wallet.getAddressString()}),
                 )
+                    .then(tx => {
+                        uiFuncs.sendTxContract(coldStakingService.contract, tx);
+                    })
                     .finally(() => {
                         modalService.openClaimRewardModal.close();
                         init();

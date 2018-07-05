@@ -33,8 +33,7 @@ class ColdStakingContract extends Contract {
         this.networks = Object.keys(addrs);
 
         this.initStakerInfo();
-        this.handleContractCall('staking_threshold');
-
+        this.call('staking_threshold');
 
 
     }
@@ -137,7 +136,7 @@ const coldStakingService = function (walletService) {
 
     this.staker_info = function () {
 
-        return this.contract.handleContractCall('staker_info', [walletService.wallet.getAddressString()])
+        return this.contract.call('staker_info', {inputs: [walletService.wallet.getAddressString()]})
             .then(result => {
 
                 const [weight, init, stake_time, reward] = result.data.map(Number);

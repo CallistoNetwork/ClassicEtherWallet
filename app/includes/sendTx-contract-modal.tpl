@@ -48,6 +48,19 @@
                 </p>
 
                 <h4 translate="SENDModal_Content_3"> Are you sure you want to do this? </h4>
+
+                <section class="row">
+                    <!-- Raw TX -->
+                    <div class="form-group col-sm-6">
+                        <h4 translate="SEND_raw"> Raw Transaction </h4>
+                        <textarea class="form-control" rows="4" readonly>{{tx.rawTx}}</textarea>
+                    </div>
+                    <!-- Singed TX -->
+                    <div class="form-group col-sm-6">
+                        <h4 translate="SEND_signed"> Signed Transaction </h4>
+                        <textarea class="form-control" rows="4" readonly>{{tx.signedTx}}</textarea>
+                    </div>
+                </section>
             </div>
 
 

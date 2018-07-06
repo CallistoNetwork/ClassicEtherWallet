@@ -156,8 +156,11 @@ const dexnsCtrl = function (
     function openModal(signedTx) {
 
 
-        $scope.tx = signedTx;
-        $scope.sendTransactionContractModal.open();
+        $scope.$apply(function () {
+
+            $scope.tx = signedTx;
+            $scope.sendTransactionContractModal.open();
+        });
 
     }
 
@@ -168,9 +171,11 @@ const dexnsCtrl = function (
 
     $scope.sendTxContract = function () {
 
-        dexnsService.contract.sendTx($scope.tx).finally(() => {
+        dexnsService.contract.sendTx($scope.tx).finally((result) => {
 
             $scope.sendTransactionContractModal.close();
+
+            // todo: save result and display 
         });
     };
 
@@ -317,6 +322,14 @@ const dexnsCtrl = function (
 
     const values = Object.values(nodes.nodeTypes);
 
+    $scope.selectFunc = function (_func) {
+
+        $scope.dropdownContracts = !$scope.dropdownContracts;
+        $scope.selectedFunc = _func.name;
+
+
+    }
+
     function init() {
 
 
@@ -351,10 +364,13 @@ const dexnsCtrl = function (
             },
             sendTxStatus: "",
             _function: null,
+            dropdownContracts: false,
+            selectedFunc: null,
         });
 
 
     }
+
 
     $scope.init = init;
 

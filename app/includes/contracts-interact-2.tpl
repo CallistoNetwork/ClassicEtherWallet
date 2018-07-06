@@ -39,6 +39,7 @@
                     translate="TRANS_gas">Gas Limit</span>: at least <code>90000</code></li>
           </ul>
         </li>
+      </ol>
     </div>
 
     <div class="btn-group">

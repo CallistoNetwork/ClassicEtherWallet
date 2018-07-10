@@ -1,13 +1,21 @@
 <div>
+    <label for="dexnsName">
+        DexNS Name
+    </label>
     <div ng-show="!dexnsName">
-        You don't have a Name yet. You can register one for your address
-        <a ng-click="goToDexns();">
+        You don't have a Name yet.
+        You can register one for your address
+        <!--href="https://ethereumproject.github.io/etherwallet/#dexns"-->
+        <a ng-click="goToDexns();"
+        >
             here
         </a>
     </div>
-    <label>
-        DexNS Name
-    </label>
-    <input ng-show="dexnsName" disabled value="{{dexnsName}}" class="form-control"/>
+    <div ng-show="dexnsName">
+
+        <span id="dexnsName" class="mono wrap">
+        {{dexnsName}}
+        </span>
+    </div>
 </div>
 

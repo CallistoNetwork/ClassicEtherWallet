@@ -171,7 +171,8 @@ app.factory('messageService', messageService);
 app.factory('coldStakingService', ['walletService', coldStakingService]);
 
 
-app.directive('dexnsNameDisplay', ['dexnsService', 'walletService', dexnsNameDisplay])
+app.directive('dexnsNameDisplay', ['dexnsService', 'walletService', 'globalService', dexnsNameDisplay]);
+
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('cssThemeDrtv', cssThemeDrtv);
 app.directive('addressField', ['$compile', 'backgroundNodeService', addressFieldDrtv]);

@@ -1,6 +1,6 @@
 'use strict';
 
-const dexnsNameDisplay = function (dexnsService, walletService) {
+const dexnsNameDisplay = function (dexnsService, walletService, globalService) {
 
     return {
 
@@ -22,6 +22,13 @@ const dexnsNameDisplay = function (dexnsService, walletService) {
                     }
                 });
             }
+
+
+            $scope.goToDexns = function () {
+
+                globalService.currentTab = globalService.tabs.dexns.id;
+                location.hash = globalService.tabs.dexns.url;
+            };
 
             $scope.$watch(function () {
 

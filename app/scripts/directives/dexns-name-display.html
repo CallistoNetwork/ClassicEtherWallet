@@ -1,7 +1,13 @@
 <div>
-    <label for="dexnsName">
+    <label for="dexnsName" translate="DEXNS_name">
         DexNS Name
     </label>
+    <div ng-show="dexnsName">
+
+        <span id="dexnsName" class="mono wrap">
+        {{dexnsName}}
+        </span>
+    </div>
     <div ng-show="!dexnsName">
         <span translate="DEXNS_href">
             You don't have a Name yet.
@@ -12,12 +18,6 @@
         >
             here
         </a>
-    </div>
-    <div ng-show="dexnsName">
-
-        <span id="dexnsName" class="mono wrap">
-        {{dexnsName}}
-        </span>
     </div>
 </div>
 

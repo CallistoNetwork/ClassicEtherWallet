@@ -5,6 +5,9 @@ var en = function () {
 en.code = 'en';
 en.data = {
 
+    DEXNS_href: 'You don\'t have a Name yet.\n' +
+    'You can register one for your address',
+
 
     COLD_STAKING_NO_WITHDRAW: 'You do not have any deposit to withdraw.',
     COLD_STAKING_START_STAKING_WARNING: 'You already have funds in staking contract.\n' +

@@ -5,7 +5,7 @@ const dexnsNameDisplay = function (dexnsService, walletService, globalService) {
     return {
 
         template: require('./dexns-name-display.html'),
-        link: function ($scope, e, attrs) {
+        link: function ($scope) {
 
             $scope.dexnsName = null;
 

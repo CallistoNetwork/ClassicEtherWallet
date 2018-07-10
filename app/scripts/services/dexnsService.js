@@ -1,10 +1,19 @@
-const DexNSFrontendABI = require('../abiDefinitions/rinkebyAbi.json') //require('../abiDefinitions/etcAbi.json')
+const DexNSFrontendABI = require('../abiDefinitions/rinkebyAbi.json')//require('../abiDefinitions/etcAbi.json')
     .find(itm => itm.name === 'DexNS Frontend contract');
+
+
+const DexNSStorage = require('../abiDefinitions/rinkebyAbi')
+    .find(i => i.name === 'DexNs_Storage');
 
 if (!DexNSFrontendABI) {
 
 
     throw new Error('Unable to locate DexNSFrontendABI');
+}
+
+if (!DexNSStorage) {
+
+    throw new Error('Unable to locate DEXNS storage');
 }
 
 const addrs = {
@@ -43,9 +52,9 @@ const metaData = ({tokenNetwork = 'ETC', link = '', sourceCode = '', abi = '', i
 
 class DexnsContract extends Contract {
 
-    constructor() {
+    constructor(abi, address, network) {
 
-        super(DexNSFrontendABI.abi, DexNSFrontendABI.address, 'RINKEBY ETH');
+        super(abi, address, network);
 
         this.abi.forEach(func => {
 
@@ -57,6 +66,8 @@ class DexnsContract extends Contract {
             })
         });
     }
+
+    // call contract and set param
 
     call(funcName, tx) {
 
@@ -108,8 +119,9 @@ const dexnsService = function (walletService) {
 
 
     // InitContract to init all view params
-    this.contract = new DexnsContract();
+    this.contract = new DexnsContract(DexNSFrontendABI.abi, DexNSFrontendABI.address, 'RINKEBY ETH');
 
+    this.storageContract = new DexnsContract(DexNSStorage.abi, DexNSStorage.address, 'RINKEBY ETH');
 
     this.contract.namePrice = 100000000000000000;
     this.contract.owningTime = 31536000; // 1 year

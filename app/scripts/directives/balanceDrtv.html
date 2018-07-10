@@ -10,6 +10,12 @@
                 ↳ <span class="mono ng-binding"> {{ensAddress}} </span>
             </label>
         </ul>
+
+        <div ng-if="walletService && walletService.wallet && walletService.wallet.getAddressString();">
+
+            <dexns-name-display></dexns-name-display>
+
+        </div>
         <div ng-show="showDisplayOnTrezor()">
             <h5 translate="sidebar_DisplayOnTrezor">Display address on TREZOR</h5>
             <ul class="account-info">

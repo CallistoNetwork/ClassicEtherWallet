@@ -123,7 +123,7 @@ var backgroundNodeService = require('./services/backgroundNodeService');
 
 // DIRECTIVES
 
-
+var dexnsNameDisplay = require('./directives/dexns-name-display');
 var blockiesDrtv = require('./directives/blockiesDrtv');
 var addressFieldDrtv = require('./directives/addressFieldDrtv');
 var QRCodeDrtv = require('./directives/QRCodeDrtv');
@@ -171,6 +171,7 @@ app.factory('messageService', messageService);
 app.factory('coldStakingService', ['walletService', coldStakingService]);
 
 
+app.directive('dexnsNameDisplay', ['dexnsService', 'walletService', dexnsNameDisplay])
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('cssThemeDrtv', cssThemeDrtv);
 app.directive('addressField', ['$compile', 'backgroundNodeService', addressFieldDrtv]);

@@ -115,22 +115,10 @@ nodes.nodeList = {
         'service': 'Ethereum Commonwealth Parity',
         'lib': new nodes.customNode('https://etc-parity.0xinfra.com/', '')
     },
-    'etc_chainkorea': {
-        'name': 'ETC',
-        'blockExplorerTX': 'https://classicexplorer.org/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://classicexplorer.org/addr/[[address]]',
-        'type': nodes.nodeTypes.ETC,
-        'eip155': true,
-        'chainId': 61,
-        'tokenList': require('./tokens/etcTokens.json'),
-        'abiList': require('./abiDefinitions/etcAbi.json'),
-        'service': 'Chainkorea',
-        'lib': new nodes.customNode('https://node.classicexplorer.org/', '')
-    },
     'clo_mainnet': {
         'name': 'CLO',
-        'blockExplorerTX': 'https://callistoexplorer.com/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://callistoexplorer.com/addr/[[address]]',
+        'blockExplorerTX': 'https://cloexplorer.org/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://cloexplorer.org/addr/[[address]]',
         'type': nodes.nodeTypes.CLO,
         'eip155': true,
         'chainId': 820,
@@ -141,14 +129,14 @@ nodes.nodeList = {
     },
     'clo_pool': {
         'name': 'CLO',
-        'blockExplorerTX': 'https://callistoexplorer.com/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://callistoexplorer.com/addr/[[address]]',
+        'blockExplorerTX': 'https://cloexplorer.org/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://cloexplorer.org/addr/[[address]]',
         'type': nodes.nodeTypes.CLO,
         'eip155': true,
         'chainId': 820,
         'tokenList': [],
         'abiList': [],
-        'service': 'clopool.net',
+        'service': 'Chainkorea',
         'lib': new nodes.customNode('https://node.clopool.net', '')
     },
     'clo_testnet3': {

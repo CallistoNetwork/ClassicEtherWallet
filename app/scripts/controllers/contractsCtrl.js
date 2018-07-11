@@ -107,7 +107,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
     /*
 
 
-        if adding params to constructor, append params to data
+        if adding params to constructor, append params to bytecode
      */
 
     function handleContractData() {
@@ -124,9 +124,7 @@ var contractsCtrl = function ($scope, $sce, $rootScope, walletService) {
             }
 
             return $scope.getContractData();
-        }
-
-        else if (applyConstructorParams && abi) {
+        } else if (applyConstructorParams && abi) {
 
 
             return ethFuncs.sanitizeHex(bytecode + ethUtil.solidityCoder.encodeParams(

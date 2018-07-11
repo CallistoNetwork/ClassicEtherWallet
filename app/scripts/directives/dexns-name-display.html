@@ -1,0 +1,23 @@
+<div>
+    <label for="dexnsName" translate="DEXNS_name">
+        DexNS Name
+    </label>
+    <div ng-show="dexnsName[0].value">
+
+        <span id="dexnsName" class="form-control disabled mono wrap">
+        {{dexnsName[0].value}}
+        </span>
+    </div>
+    <div ng-show="!dexnsName[0].value">
+        <span translate="DEXNS_href">
+            You don't have a Name yet.
+        You can register one for your address
+        </span>
+        <!--href="https://ethereumproject.github.io/etherwallet/#dexns"-->
+        <a ng-click="goToDexns();"
+        >
+            here
+        </a>
+    </div>
+</div>
+

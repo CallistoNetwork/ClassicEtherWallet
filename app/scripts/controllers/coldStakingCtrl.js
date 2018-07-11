@@ -1,20 +1,18 @@
 'use strict';
 
 
-var coldStakingCtrl = function ($scope,
-                                $rootScope,
-                                walletService,
-                                modalService,
-                                coldStakingService
+const coldStakingCtrl = function (
+    $scope,
+    $rootScope,
+    walletService,
+    modalService,
+    coldStakingService
     ) {
 
 
         $scope.walletService = walletService;
         $scope.modalService = modalService;
         $scope.coldStakingService = coldStakingService;
-
-
-        $scope.contract = coldStakingService.contract;
 
 
         function init() {
@@ -48,12 +46,9 @@ var coldStakingCtrl = function ($scope,
         }, function (val, _val) {
 
 
-            coldStakingService.updateAddress();
-
+            coldStakingService.handleInit();
             $scope.tx.to = coldStakingService.contract.address;
 
-
-            coldStakingService.handleInit();
 
         });
 
@@ -72,7 +67,7 @@ var coldStakingCtrl = function ($scope,
         $scope.startStaking = function () {
 
 
-            if (coldStakingService._staker_info.weight > 0) {
+            if (coldStakingService.staker_info.weight > 0) {
 
                 const {input: {understand}} = $scope;
                 if (!understand) {
@@ -80,104 +75,24 @@ var coldStakingCtrl = function ($scope,
                     return $scope.notifier.danger('Press checkbox to continue');
                 }
             }
-            $scope.wallet = walletService.wallet;
 
-
-            ethFuncs.estimateGas({
-                to: $scope.tx.to,
-                value: etherUnits.toWei($scope.tx.value, $scope.tx.unit)
-            }, function (data) {
-
-                if (data.error) {
-
-                    $scope.notifier.danger(data.msg);
-
-                    return false;
-
-                } else if (data.data === '-1') {
-
-                    $scope.notifier.danger(globalFuncs.errorMsgs[21]);
-
-                    return false;
-                }
-
-
-                $scope.tx.gasLimit = data.data;
-
-                Object.assign($scope.tx, uiFuncs.getTxData($scope));
-
-
-                uiFuncs.generateTx($scope.tx, function callback(tx_) {
-
-                    const {signedTx, isError} = tx_;
-
-
-                    if (!isError) {
-
-                        uiFuncs.sendTx(signedTx, function (resp) {
-
-
-                            modalService.startStakingModal.close();
-
-                            if (!resp.isError) {
-                                var txHashLink = $scope.ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data);
-                                var verifyTxBtn = $scope.ajaxReq.type !== nodes.nodeTypes.Custom ? '<a class="btn btn-xs btn-info strong" href="' + txHashLink + '" target="_blank" rel="noopener noreferrer">Verify Transaction</a>' : '';
-                                var completeMsg = '<p>' + globalFuncs.successMsgs[2] + '<strong>' + resp.data + '</strong></p>' + verifyTxBtn;
-                                $scope.notifier.success(completeMsg, 0);
-                                $scope.wallet.setBalance();
-
-
-                                // increment staker weight manually
-
-                                coldStakingService._staker_info.weight = new BigNumber($scope.tx.value)
-                                    .add(coldStakingService._staker_info.weight).toString();
-
-
-                                // coldStakingService.staker_info();
-
-                            } else {
-
-
-                                if (resp.error.includes('insufficient funds')) {
-
-                                    $scope.notifier.danger(globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
-                                }
-                                else {
-
-                                    $scope.notifier.danger(resp.error || globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type));
-                                }
-
-                            }
-                            init();
-                        })
-                    } else {
-
-                        $scope.notifier.danger('Error generating transaction');
-                    }
-
-
+            uiFuncs.genTxContract(
+                'start_staking',
+                coldStakingService.contract,
+                walletService.wallet,
+                Object.assign({}, $scope.tx, {
+                    value: etherUnits.toWei($scope.tx.value, $scope.tx.unit),
+                    from: walletService.wallet.getAddressString(),
+                    unit: 'wei',
+                }))
+                .then(tx => {
+                    uiFuncs.sendTxContract(coldStakingService.contract, tx);
                 })
-
-            })
-
+                .finally(() => modalService.startStakingModal.close());
 
         };
 
-
-        $scope.stake_reward = function () {
-
-
-            coldStakingService.stake_reward(function (data) {
-
-                modalService.openClaimRewardModal.close();
-                // console.log('stake_reward', data);
-
-            });
-
-        };
-
-
-        function handleWithdraw() {
+        function handleUserCanWithdraw() {
 
             if (!coldStakingService.userCanWithdraw()) {
 
@@ -196,41 +111,44 @@ var coldStakingCtrl = function ($scope,
         $scope.claim_and_withdraw = function () {
 
 
-            handleWithdraw() && coldStakingService.claim_and_withdraw(function (data) {
+            if (handleUserCanWithdraw()) {
 
 
-                notifyError(data);
-
-                modalService.openWithdrawModal.close();
-                // console.log('claim_and_withdraw', data);
-
-
-            });
-
-        };
-
-        function notifyError(result) {
-
-            if (result.error) {
-
-                $scope.notifier.danger(result.error.msg);
+                uiFuncs.genTxContract(
+                    'claim_and_withdraw',
+                    coldStakingService.contract,
+                    walletService.wallet,
+                    Object.assign({}, coldStakingService.tx, {from: walletService.wallet.getAddressString()})
+                )
+                    .then(tx => {
+                        uiFuncs.sendTxContract(coldStakingService.contract, tx);
+                    })
+                    .finally(() => {
+                        modalService.openWithdrawModal.close();
+                        init();
+                    });
 
             }
-
-            init();
-
-        }
+        };
 
         $scope.claim = function () {
 
-            handleWithdraw() && coldStakingService.claim(function (data) {
+            if (handleUserCanWithdraw()) {
 
-                notifyError(data);
-
-
-                modalService.openClaimRewardModal.close();
-                // console.log('claim', data);
-            })
+                uiFuncs.genTxContract(
+                    'claim',
+                    coldStakingService.contract,
+                    walletService.wallet,
+                    Object.assign({}, coldStakingService.tx, {from: walletService.wallet.getAddressString()}),
+                )
+                    .then(tx => {
+                        uiFuncs.sendTxContract(coldStakingService.contract, tx);
+                    })
+                    .finally(() => {
+                        modalService.openClaimRewardModal.close();
+                        init();
+                    })
+            }
         };
 
 

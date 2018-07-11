@@ -129,7 +129,7 @@
       <div class="addressIdenticon med float" title="Address Indenticon" blockie-address="{{wallet.getAddressString()}}" watch-var="wallet"></div>
       <span class="mono wrap">{{wallet.getChecksumAddressString()}}</span>
       </ul>
-      <h5 translate="sidebar_AccountBal">Account Balance:</h5>
+      <label translate="sidebar_AccountBal">Account Balance:</label>
       <ul class="account-info">
         <li><strong>{{etherBalance}}</strong> ETH </li>
       </ul>
@@ -140,7 +140,7 @@
         <li><strong>{{btcBalance}}</strong> BTC</li>
       </ul>
 
-      <a ng-click="globalService.currentTab=globalService.tabs.swap.id" class="btn btn-primary btn-xs">Swap via Change Now</a>
+      <a ng-click="globalService.currentTab = globalService.tabs.swap.id" class="btn btn-primary btn-xs">Swap via Change Now</a>
 
       <h5 translate="sidebar_TransHistory"> Transaction History: </h5>
       <ul class="account-info">

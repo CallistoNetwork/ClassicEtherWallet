@@ -12,6 +12,16 @@
            ng-class="input.tokenName ? 'is-valid' : 'is-invalid'"
     />
 
+    <label for="tokenNetwork">token network</label>
+
+
+    <select class="form-control" id="tokenNetwork" name="tokenNetwork" ng-model="input.tokenNetwork">
+        <option ng-repeat="node in nodeList"
+                value="{{node}}"
+        >{{node}}
+        </option>
+    </select>
+
 
     <!--<label for="owner">-->
     <!--owner-->
@@ -69,18 +79,6 @@
     </label>
     <input name="info" id="info" ng-model="input.info" class="form-control"
            placeholder="brief description of the token"/>
-
-
-    <label for="tokenNetwork">token network</label>
-
-
-    <select class="form-control" id="tokenNetwork" name="tokenNetwork" ng-model="input.tokenNetwork">
-        <option ng-repeat="node in noder"
-                value="{{node}}"
-        >{{node}}</option>
-    </select>
-
-
 
 
     <button type="submit" class="btn btn-primary">Register Token</button>

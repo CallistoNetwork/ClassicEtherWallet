@@ -214,46 +214,102 @@ class Contract {
 class InitContract extends Contract {
 
 
-    constructor(abi = [], addr, network) {
+    constructor(abi = [], addr, network, _bootstrap = false) {
 
         super(abi, addr, network);
 
-        this.bootstrap();
+
+        this.abi.forEach(func => {
+
+            this[func.name] = '';
+
+            func.inputs.forEach(input => {
+
+                input.value = '';
+            })
+        });
+
+        if (_bootstrap) {
+
+            this._bootstrap();
+        }
     }
 
 
-    // if view function and has no inputs, call function and set values
+    // if view function and has no inputs, call function and save result
 
 
-    bootstrap() {
+    _bootstrap() {
 
-        this.contract.abi.forEach(obj => {
+        return Promise.all(
+            this.abi.map(_func => {
+                if (_func.stateMutability === 'view' && _func.inputs.length === 0) {
 
+                    return this.call(_func.name);
+                }
+            })
+        )
 
-            if (obj.stateMutability === 'view' && obj.inputs.length === 0) {
-
-
-                this.call(obj.name);
-            }
-        })
     }
 
     /*
 
-        http request to get view params and set values
+        request to get view params and set values
 
+@returns Promise<>
 
      */
 
 
-    /*
-        function.type == view
+    call(funcName, tx) {
 
-        get and set params
-     */
+        const func = this.abi.find(a => a.name === funcName);
+
+        if (!func) {
+
+            throw new Error('Invalid Request');
+        }
+
+        return super.call(funcName, tx)
+            .then(result => {
+
+
+                const {outputs} = func;
+
+
+                this[funcName] = outputs.map((out, idx) => {
+
+                    const name = out.name || funcName;
+
+                    return Object.assign({}, out, {value: result.data[idx], name});
+
+                });
+
+                return this[funcName];
+
+            });
+    }
+
+
+    // sendTx(funcName, wallet, tx) {
+    //
+    //
+    //     return super.sendTx(funcName, wallet, tx)
+    //         .then(result => {
+    //
+    //             const f = this.abi.find(i => i.name === funcName);
+    //
+    //             f.outputs.forEach((out, i) => {
+    //
+    //                 Object.assign(out.value, result[i]);
+    //             })
+    //         });
+    //
+    // }
 
 
 }
+
 
 //
 // class OfficialityContract extends InitContract {

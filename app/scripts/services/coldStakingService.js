@@ -17,7 +17,13 @@ const round_interval = {
     'RINKEBY ETH': 15000,
 };
 
-// extending InitContract will set view params
+/*
+
+// extending InitContract will  auto set view params
+
+// but will need to update params
+
+ */
 class ColdStakingContract extends Contract {
 
     constructor(network = 'RINKEBY ETH') {

@@ -7,7 +7,7 @@ const dexnsNameDisplay = function (dexnsService, walletService, globalService) {
         template: require('./dexns-name-display.html'),
         link: function ($scope) {
 
-            $scope.dexnsName = null;
+            $scope.dexnsName = [];
 
             function getAssignation(addr) {
 
@@ -15,7 +15,9 @@ const dexnsNameDisplay = function (dexnsService, walletService, globalService) {
                     inputs: [addr]
                 }).then(result => {
 
-                    if (!(result === '0x0000000000000000000000000000000000000000' || result === '0x0')) {
+                    const addr = result[0].value;
+
+                    if (!(addr === '0x0000000000000000000000000000000000000000' || addr === '0x0')) {
 
                         $scope.dexnsName = result;
 

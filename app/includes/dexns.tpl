@@ -50,7 +50,7 @@
                 Registration of the Name will cost you <code>
 
 
-                {{dexnsService.contract.namePrice / 1e18 | number}}
+                {{dexnsService.contract.namePrice[0].value / 1e18}}
 
                 {{dexnsService.contract.network}}
 

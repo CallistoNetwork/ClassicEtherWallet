@@ -21,7 +21,7 @@ const addrs = {
     'ETC': '0x101f1920e4cD9c7e2aF056E2cB1954d0DD9647b9'
 };
 
-const metaData = ({tokenNetwork = 'ETC', link = '', sourceCode = '', abi = '', info = ''} = {}) => {
+const stringifyMetadata = ({tokenNetwork = 'ETC', link = '', sourceCode = '', abi = '', info = ''} = {}) => {
 
 
     // extend_Name_Binding_Time
@@ -47,86 +47,88 @@ const metaData = ({tokenNetwork = 'ETC', link = '', sourceCode = '', abi = '', i
     const abiText = validAbi ? ` -A ${abi}` : '';
 
     return `-${tokenNetwork}${link && ` -L ${link}`}${sourceCode && ` -S ${sourceCode}`}${abiText}${info && ` -i ${info}`}`;
-}
+};
+
+const parseMetadata = (_metadata) => {
 
 
-class DexnsContract extends Contract {
+    if (!_metadata) {
 
-    constructor(abi, address, network) {
-
-        super(abi, address, network);
-
-        this.abi.forEach(func => {
-
-            this[func.name] = '';
-
-            func.inputs.forEach(input => {
-
-                input.value = '';
-            })
-        });
+        return '';
     }
 
-    // call contract and set param
+    const _arr = _metadata.split('-');
 
-    call(funcName, tx) {
+    const network = _arr[1];
 
-
-        return super.call(funcName, tx)
-            .then(result => {
-
-                const func = this.abi.find(a => a.name === funcName);
-
-                const {outputs} = func;
-
-                if (outputs.length === 1) {
-
-                    this[funcName] = result.data[0];
-                } else {
-
-                    this[funcName] = outputs.map((out, idx) => {
-
-                        return result.data[idx];
+    const rest = _arr.slice(2);
 
 
-                    });
-                }
+    /*
 
-                return this[funcName];
+    -A for ABI.
 
-            });
-    }
+-L for attached link.
+
+-S for source code reference.
+
+-i for informational data chunk.
+     */
+
+    const params = rest.map(i => {
+
+        const param = i[0].toLowerCase();
+
+        let key = 'data';
+
+        if (param === 'l') {
+
+            key = 'link';
 
 
-    // sendTx(funcName, wallet, tx) {
-    //
-    //
-    //     return super.sendTx(funcName, wallet, tx)
-    //         .then(result => {
-    //
-    //             const f = this.abi.find(i => i.name === funcName);
-    //
-    //             f.outputs.forEach((out, i) => {
-    //
-    //                 Object.assign(out.value, result[i]);
-    //             })
-    //         });
-    //
-    // }
+        } else if (param === 's') {
+
+            key = 'source';
+
+
+        } else if (param === 'i') {
+
+            key = 'info';
+
+
+        }
+
+        return {
+            key,
+            value: i.slice(2)
+        }
+
+
+    });
+
+    return [].concat([{key: 'network', value: network}], params);
+
 }
+
 
 const dexnsService = function (walletService) {
 
 
+    this.parseMetadata = parseMetadata;
+
+
+    this.parsedMetadata = '';
+
+
     // InitContract to init all view params
-    this.contract = new DexnsContract(DexNSFrontendABI.abi, DexNSFrontendABI.address, 'RINKEBY ETH');
+    this.contract = new InitContract(DexNSFrontendABI.abi, DexNSFrontendABI.address, 'RINKEBY ETH', false);
 
-    this.storageContract = new DexnsContract(DexNSStorage.abi, DexNSStorage.address, 'RINKEBY ETH');
+    this.storageContract = new InitContract(DexNSStorage.abi, DexNSStorage.address, 'RINKEBY ETH', false);
 
-    this.contract.namePrice = 100000000000000000;
-    this.contract.owningTime = 31536000; // 1 year
+    this.contract.namePrice = [{value: 100000000000000000, type: 'uint256', name: 'namePrice'}];
+    this.contract.owningTime = [{value: 31536000, type: 'uint256', name: 'owningTime'}]; // 1 year
 
-    this.metaData = metaData;
+    this.stringifyMetadata = stringifyMetadata;
     return this;
 
 };

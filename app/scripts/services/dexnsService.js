@@ -121,12 +121,12 @@ const dexnsService = function (walletService) {
 
 
     // InitContract to init all view params
-    this.contract = new InitContract(DexNSFrontendABI.abi, DexNSFrontendABI.address, 'RINKEBY ETH', false);
+    this.feContract = new InitContract(DexNSFrontendABI.abi, DexNSFrontendABI.address, 'RINKEBY ETH', false);
 
     this.storageContract = new InitContract(DexNSStorage.abi, DexNSStorage.address, 'RINKEBY ETH', false);
 
-    this.contract.namePrice = [{value: 100000000000000000, type: 'uint256', name: 'namePrice'}];
-    this.contract.owningTime = [{value: 31536000, type: 'uint256', name: 'owningTime'}]; // 1 year
+    this.feContract.namePrice = [{value: 100000000000000000, type: 'uint256', name: 'namePrice'}];
+    this.feContract.owningTime = [{value: 31536000, type: 'uint256', name: 'owningTime'}]; // 1 year
 
     this.stringifyMetadata = stringifyMetadata;
     return this;

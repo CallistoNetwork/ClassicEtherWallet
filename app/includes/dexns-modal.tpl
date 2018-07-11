@@ -17,7 +17,7 @@
                     <small>You will pay
 
                         {{tx.value / 1e18 | number }}
-                        {{dexnsService.contract.network}} for this name.
+                        {{dexnsService.feContract.network}} for this name.
                     </small>
                     <small>You will own this name for 1 year.</small>
                 </div>
@@ -35,7 +35,7 @@
                             {{tx.value / 1e18 | number }}
 
 
-                            {{dexnsService.contract.network}}
+                            {{dexnsService.feContract.network}}
                         </td>
                         <td>
                             <div class="addressIdenticon med" title="Address Indenticon" blockie-address="{{tx.to}}"
@@ -45,8 +45,8 @@
                     </tbody>
                 </table>
 
-                <p> The <strong>{{dexnsService.contract.network}}</strong> node you are sending through is provided by
-                    <strong>{{dexnsService.contract.service}}</strong>.
+                <p> The <strong>{{dexnsService.feContract.network}}</strong> node you are sending through is provided by
+                    <strong>{{dexnsService.feContract.service}}</strong>.
                 </p>
 
                 <h4 translate="SENDModal_Content_3"> Are you sure you want to do this? </h4>

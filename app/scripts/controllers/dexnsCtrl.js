@@ -34,7 +34,7 @@ const dexnsCtrl = function (
     $scope.dexnsService = dexnsService;
     walletService.wallet = null;
 
-    $scope.contract = dexnsService.contract;
+    $scope.contract = dexnsService.feContract;
 
     $scope.walletService = walletService;
 
@@ -88,14 +88,14 @@ const dexnsCtrl = function (
 
         $scope.tx = {
             inputs: [tokenName, _owner, _destination, _metadata, _hideOwner, _assign],
-            value: dexnsService.contract.namePrice[0].value,
+            value: dexnsService.feContract.namePrice[0].value,
             unit: 'wei',
             from: _owner,
         };
 
         const wallet = walletService.wallet;
 
-        dexnsService.contract.genTxContract(
+        dexnsService.feContract.genTxContract(
             'registerAndUpdateName',
             wallet,
             $scope.tx,
@@ -106,7 +106,7 @@ const dexnsCtrl = function (
 
     $scope.getOwningTime = function () {
 
-        dexnsService.contract.call('owningTime');
+        dexnsService.feContract.call('owningTime');
 
     };
 
@@ -116,31 +116,39 @@ const dexnsCtrl = function (
 
         const tx = {inputs: _function.inputs.map(i => i.value)};
 
-        // $scope.$evalAsync(async () => {
 
-        if (_function.name === 'metadataOf') {
+        if (_function.contract === 'storageContract') {
 
+            if (_function.name === 'metadataOf') {
+                $scope.raw = '';
 
-            // dexnsService.storageContract[_function.name] = '';
-
-
-            $scope.METADATA = [];
+            }
 
 
             const result = await dexnsService.storageContract.call(_function.name, tx);
 
+
             $scope.$apply(function () {
 
-                $scope.METADATA = dexnsService.parseMetadata(result[0].value);
+                if (_function.name === 'metadataOf') {
+
+                    const {value} = result[0];
+
+                    $scope.outputs[_function.name] = dexnsService.parseMetadata(value);
+                    $scope.raw = value;
+                } else {
+
+                    $scope.outputs[_function.name] = result;
+                }
+
 
             })
 
 
         } else {
 
-            $scope.outputs[_function.name] = 'loading...';
 
-            const result = await dexnsService.contract.call(_function.name, tx);
+            const result = await dexnsService.feContract.call(_function.name, tx);
 
             $scope.$apply(function () {
 
@@ -185,12 +193,12 @@ const dexnsCtrl = function (
 
         if (['registerName', 'registerAndUpDateName'].includes(_function.name)) {
 
-            value = dexnsService.contract.namePrice[0].value;
+            value = dexnsService.feContract.namePrice[0].value;
 
         }
 
         $scope._function = _function;
-        dexnsService.contract.genTxContract(_function.name,
+        dexnsService.feContract.genTxContract(_function.name,
             walletService.wallet,
             {
                 inputs: _function.inputs.map(i => i.value),
@@ -219,7 +227,7 @@ const dexnsCtrl = function (
 
     $scope.sendTxContract = function () {
 
-        dexnsService.contract.sendTx($scope.tx).finally((result) => {
+        dexnsService.feContract.sendTx($scope.tx).finally((result) => {
 
             $scope.sendTransactionContractModal.close();
 
@@ -240,7 +248,7 @@ const dexnsCtrl = function (
     $scope.checkDexNSName = function () {
 
 
-        dexnsService.contract.call('endtimeOf', {inputs: [$scope.DexNSName]})
+        dexnsService.feContract.call('endtimeOf', {inputs: [$scope.DexNSName]})
             .then(data => {
 
                 const {value} = data[0];
@@ -282,65 +290,62 @@ const dexnsCtrl = function (
             $scope.dexns_status = statusCodes.confirmation;
 
             Object.assign($scope.tx, {
-                value: dexnsService.contract.namePrice[0].value,
+                value: dexnsService.feContract.namePrice[0].value,
                 unit: 'wei',
-                to: dexnsService.contract.address
+                to: dexnsService.feContract.address
             });
 
             $scope.dexnsConfirmModalModal.open();
         }
     }
 
-    $scope.viewContracts = [
-        'registerName',
-        'namePrice',
+    const viewContracts = [
+        // 'registerName',
         'endtimeOf',
         'extend_Name_Binding_Time',
         'unassignName',
         'updateName',
         'appendNameMetadata',
-        'updateName',
         'hideNameOwner',
         'assignName',
         'changeNameOwner',
     ];
 
+    const storageContractVisible = [
+        'metadataOf',
+        'ownerOf',
+        'getName',
+        'name_assignation'
+    ]
+
 
     $scope.visibleFuncList = [].concat(
-        dexnsService.storageContract.abi.find(i => i.name === 'metadataOf'),
-        dexnsService.contract.abi
-            .filter(i => $scope.viewContracts.includes(i.name))
-            .map(i => {
-
-                if (i.type !== 'view') {
-
-                    i.sortBy = 10;
-                } else {
-
-                    i.sortBy = 1;
-                }
-
-                return i;
-            })
-            .sort((a, b) => b.sortBy - a.sortBy)
-    );
+        dexnsService.storageContract.abi
+            .filter(i => storageContractVisible.includes(i.name))
+            .map(i => Object.assign(i, {contract: 'storageContract'})),
+        dexnsService.feContract.abi
+            .filter(i => viewContracts.includes(i.name))
+            .map(i => Object.assign(i, {contract: 'feContract'}))
+    )
+        .map(i => Object.assign(i, {sortBy: i.type === 'view' ? 10 : 1}))
+        .sort((a, b) => b.sortBy - a.sortBy);
 
 
     $scope._registerName = function () {
 
         const tx = {
-            value: dexnsService.contract.namePrice[0].value,
+            value: dexnsService.feContract.namePrice[0].value,
             unit: 'wei',
             from: walletService.wallet.getAddressString(),
             inputs: [$scope.DexNSName],
         };
 
-        return uiFuncs.genTxContract('registerName', dexnsService.contract, walletService.wallet, tx)
+        return uiFuncs.genTxContract('registerName', dexnsService.feContract, walletService.wallet, tx)
             .then(_tx => {
 
 
                 $scope.tx = _tx;
-                return uiFuncs.sendTxContract(dexnsService.contract, $scope.tx);
+                return uiFuncs.sendTxContract(dexnsService.feContract, $scope.tx);
 
 
             })
@@ -363,8 +368,8 @@ const dexnsCtrl = function (
         init();
 
         Promise.all([
-            dexnsService.contract.call('namePrice'),
-            dexnsService.contract.call('owningTime'),
+            dexnsService.feContract.call('namePrice'),
+            dexnsService.feContract.call('owningTime'),
         ]);
 
 
@@ -389,6 +394,7 @@ const dexnsCtrl = function (
 
         Object.assign($scope, {
             nodeList: Object.values(nodes.nodeTypes),
+            raw: '',
             outputs: [],
             dexns_status: statusCodes.nothing, //0,
             // user input of name to register

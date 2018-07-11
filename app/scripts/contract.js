@@ -11,6 +11,7 @@ const {WAValidator} = ethUtil;
 
  */
 
+
 class Contract {
 
 
@@ -210,6 +211,21 @@ class Contract {
 
   */
 
+
+/*
+
+load contract from abiDefinitions
+ */
+
+class JsonContract extends Contract {
+
+
+    constructor({abi, address, name = ''}, network) {
+
+        super(abi, address, network);
+        this.name = name;
+    }
+}
 
 class InitContract extends Contract {
 

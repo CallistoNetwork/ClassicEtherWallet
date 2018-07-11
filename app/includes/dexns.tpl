@@ -50,9 +50,9 @@
                 Registration of the Name will cost you <code>
 
 
-                {{dexnsService.contract.namePrice[0].value / 1e18}}
+                {{dexnsService.feContract.namePrice[0].value / 1e18}}
 
-                {{dexnsService.contract.network}}
+                {{dexnsService.feContract.network}}
 
 
             </code>, and you will own each

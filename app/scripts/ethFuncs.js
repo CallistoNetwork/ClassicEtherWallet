@@ -123,7 +123,7 @@ ethFuncs.call = function (
     return new Promise((resolve, reject) => {
 
 
-        const foundFunction = contract.abi.find(itm => ['function'].includes(itm.type) && itm.name === funcName);
+        const foundFunction = contract.abi.find(itm => itm.name === funcName);
 
 
         const {node} = contract;
@@ -305,7 +305,7 @@ ethFuncs.prepContractData = function (funcName, contract, {inputs = [], from, va
 
     }
 
-    const foundFunction = contract.abi.find(itm => itm.type === 'function' && itm.name === funcName);
+    const foundFunction = contract.abi.find(itm => itm.name === funcName);
 
 
     if (!foundFunction) {
@@ -353,7 +353,7 @@ ethFuncs.prepContractData = function (funcName, contract, {inputs = [], from, va
 
 ethFuncs.encodefuncName = function (funcName, contract) {
 
-    const foundFunction = contract.abi.find(function_ => function_.type === 'function' && function_.name === funcName);
+    const foundFunction = contract.abi.find(function_ => function_.name === funcName);
 
     if (foundFunction) {
 

@@ -131,7 +131,7 @@ var backgroundNodeService = require('./services/backgroundNodeService');
 
 
 // DIRECTIVES
-
+var lookup = require('./directives/crosschain-ens-dexns-lookup');
 var dexnsNameDisplay = require('./directives/dexns-name-display');
 var blockiesDrtv = require('./directives/blockiesDrtv');
 var addressFieldDrtv = require('./directives/addressFieldDrtv');
@@ -181,7 +181,7 @@ app.factory('coldStakingService', ['walletService', coldStakingService]);
 
 
 app.directive('dexnsNameDisplay', ['dexnsService', 'walletService', 'globalService', dexnsNameDisplay]);
-
+app.directive('lookup', lookup)
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('cssThemeDrtv', cssThemeDrtv);
 app.directive('addressField', ['$compile', 'backgroundNodeService', addressFieldDrtv]);

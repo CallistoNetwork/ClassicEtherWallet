@@ -1,0 +1,18 @@
+<form class="row">
+
+    <label class="col-xs-4">Lookup Service: </label>
+    <div ng-repeat="service in services track by service" class="col-xs-2">
+        <label>
+            <input
+                    type="radio"
+                    name="lookupService"
+                    ng-model="input.currentService"
+                    ng-value="service"
+                    ng-change="handleChange(service);"
+            />
+            {{service}}
+        </label>
+
+
+    </div>
+</form>

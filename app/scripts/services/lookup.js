@@ -6,6 +6,8 @@ const lookupService = function (dexnsService, walletService) {
     this.network = 'ETC';
     this.service = 'dexns';
 
+    this.services = services;
+
 
     this.lookup = function () {
 
@@ -60,3 +62,5 @@ const lookupService = function (dexnsService, walletService) {
 
     return this;
 }
+
+module.exports = lookupService;

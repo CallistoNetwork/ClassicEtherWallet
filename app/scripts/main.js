@@ -65,9 +65,6 @@ var changeNow = require('./changeNow');
 window.changeNow = changeNow;
 
 
-
-
-
 var ens = require('./ens');
 window.ens = ens;
 var translate = require('./translations/translate.js');
@@ -120,7 +117,7 @@ var switchNetworkCtrl = require('./controllers/switchNetworkCtrl');
 
 // SERVICES
 
-
+var lookupService = require('./services/lookup');
 var globalService = require('./services/globalService');
 var coldStakingService = require('./services/coldStakingService');
 var modalService = require('./services/modalService');
@@ -176,12 +173,14 @@ app.factory('messageService', messageService);
 
 app.factory('dexnsService', dexnsService);
 
+app.factory('lookupService', ['dexnsService', 'walletService', lookupService]);
+
 app.factory('messageService', messageService);
 app.factory('coldStakingService', ['walletService', coldStakingService]);
 
 
 app.directive('dexnsNameDisplay', ['dexnsService', 'walletService', 'globalService', dexnsNameDisplay]);
-app.directive('lookup', lookup)
+app.directive('lookup', ['lookupService', lookup])
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('cssThemeDrtv', cssThemeDrtv);
 app.directive('addressField', ['$compile', 'backgroundNodeService', addressFieldDrtv]);

@@ -14,7 +14,7 @@ const lookup = function (lookupService) {
         link: function ($scope) {
 
 
-            $scope.services = services;
+            $scope.services = lookupService.services;
 
             $scope.input = {
                 currentService: lookupService.service,

@@ -1,6 +1,6 @@
-const DexNSFrontendABI = // require('../abiDefinitions/etcAbi.json')
-    require('../abiDefinitions/rinkebyAbi.json')
-        .find(itm => itm.name === 'DexNS Frontend contract');
+const DexNSFrontendABI = require('../abiDefinitions/etcAbi.json')
+//require('../abiDefinitions/rinkebyAbi.json')
+    .find(itm => itm.name === 'DexNS Frontend contract');
 
 
 const DexNSStorage =
@@ -111,7 +111,6 @@ const dexnsService = function (walletService) {
 
     this.parseMetadata = parseMetadata;
 
-    // InitContract to init all view params
     this.feContract = new InitContract(DexNSFrontendABI.abi, DexNSFrontendABI.address, 'ETC', false);
 
     this.storageContract = new InitContract(DexNSStorage.abi, DexNSStorage.address, 'ETC', false);

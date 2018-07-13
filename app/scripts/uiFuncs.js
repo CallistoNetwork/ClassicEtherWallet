@@ -194,7 +194,7 @@ uiFuncs.genTxWithInfo = function (data, callback) {
 
     const gasPrice = parseFloat(globalFuncs.localStorage.getItem('gasPrice')) || 21;
 
-    var rawTx = {
+    const rawTx = {
         nonce: ethFuncs.sanitizeHex(data.nonce),
         gasPrice: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(gasPrice, 'gwei'))),
         gasLimit: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(data.gasLimit)),
@@ -203,12 +203,21 @@ uiFuncs.genTxWithInfo = function (data, callback) {
         data: ethFuncs.sanitizeHex(data.data)
     };
 
+    // if sending tx to contract, include eip155 and chainId
 
-    // fixme contract
-    if (ajaxReq.eip155) rawTx.chainId = ajaxReq.chainId;
+    if (data.eip155 && data.chainId) {
+
+        rawTx.chainId = data.chainId;
+
+        // default to ajaxReq
+
+    } else if (ajaxReq.eip155) {
+
+        rawTx.chainId = ajaxReq.chainId;
+    }
 
 
-    var eTx = new ethUtil.Tx(rawTx);
+    const eTx = new ethUtil.Tx(rawTx);
 
 
     if (data.hwType === "ledger") {
@@ -538,7 +547,10 @@ uiFuncs.genTxContract = function (
 
         return new Promise((resolve, reject) => {
 
-            contract.node.lib.getTransactionData(tx.from, function (data) {
+            const {chainId, eip155, lib} = contract.node;
+
+
+            lib.getTransactionData(tx.from, function (data) {
                 if (data.error) {
                     reject({
                         isError: true,
@@ -551,10 +563,9 @@ uiFuncs.genTxContract = function (
 
                     const {nonce} = data.data;
 
-                    Object.assign(tx, {nonce});
 
                     // wallet and tx must be combined parameters to work
-                    uiFuncs.genTxWithInfo(Object.assign({}, tx, wallet), function (result) {
+                    uiFuncs.genTxWithInfo(Object.assign({}, tx, wallet, {nonce, chainId, eip155}), function (result) {
 
                         if (result.error) {
 

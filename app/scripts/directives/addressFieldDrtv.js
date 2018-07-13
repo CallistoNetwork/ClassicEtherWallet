@@ -119,7 +119,7 @@ var addressFieldDrtv = function ($compile, backgroundNodeService) {
                             });
                             data.data = ethUtil.solidityCoder.decodeParams(outTypes, data.data.replace('0x', ''))[0];
                             if (data.error) uiFuncs.notifier.danger(data.msg);
-                            else if (data.data === '0x0000000000000000000000000000000000000000' || data.data === '0x') {
+                                else if (data.data === '0x0000000000000000000000000000000000000000' || data.data === '0x') {
                                 setValue('null');
                                 scope.addressDrtv.derivedAddress = '    ⊘ ERROR: DexNS Name is not found!';
                                 scope.addressDrtv.showDerivedAddress = true;

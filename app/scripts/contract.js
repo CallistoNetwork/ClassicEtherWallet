@@ -452,4 +452,5 @@ class InitContract extends Contract {
 module.exports = {
     Contract,
     InitContract,
+    JsonContract,
 };

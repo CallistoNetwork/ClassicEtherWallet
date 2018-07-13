@@ -1,11 +1,11 @@
-const DexNSFrontendABI = require('../abiDefinitions/etcAbi.json')
-//require('../abiDefinitions/rinkebyAbi.json')
+const DexNSFrontendABI = //require('../abiDefinitions/etcAbi.json')
+require('../abiDefinitions/rinkebyAbi.json')
     .find(itm => itm.name === 'DexNS Frontend contract');
 
 
 const DexNSStorage =
-    require('../abiDefinitions/etcAbi.json')
-    //require('../abiDefinitions/rinkebyAbi')
+    //require('../abiDefinitions/etcAbi.json')
+    require('../abiDefinitions/rinkebyAbi')
         .find(i => i.name === 'DexNS State storage');
 
 if (!DexNSFrontendABI) {
@@ -23,24 +23,20 @@ if (!DexNSStorage) {
 function stringifyMetadata({tokenNetwork = 'ETC', link = '', sourceCode = '', abi = '', info = ''} = {}) {
 
 
-    // extend_Name_Binding_Time
-
     let validAbi = false;
-    try {
 
+    if (abi) {
 
-        if (abi) {
-
+        try {
             _abi = JSON.parse(abi);
             validAbi = true;
 
+
+        } catch (e) {
+
+            uiFuncs.notifier.danger(globalFuncs.errorMsgs[26]);
+
         }
-
-
-    } catch (e) {
-
-        uiFuncs.notifier.danger(globalFuncs.errorMsgs[26]);
-
     }
 
     const abiText = validAbi ? ` -A ${abi}` : '';
@@ -116,9 +112,9 @@ const dexnsService = function (walletService) {
     this.parseMetadata = parseMetadata;
 
     // InitContract to init all view params
-    this.feContract = new InitContract(DexNSFrontendABI.abi, DexNSFrontendABI.address, 'ETC', false);
+    this.feContract = new InitContract(DexNSFrontendABI.abi, DexNSFrontendABI.address, 'RINKEBY ETH', false);
 
-    this.storageContract = new InitContract(DexNSStorage.abi, DexNSStorage.address, 'ETC', false);
+    this.storageContract = new InitContract(DexNSStorage.abi, DexNSStorage.address, 'RINKEBY ETH', false);
 
     this.feContract.namePrice = [{value: 100000000000000000, type: 'uint256', name: 'namePrice'}];
     this.feContract.owningTime = [{value: 31536000, type: 'uint256', name: 'owningTime'}]; // 1 year

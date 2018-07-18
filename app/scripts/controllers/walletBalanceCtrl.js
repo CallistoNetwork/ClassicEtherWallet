@@ -1,10 +1,14 @@
 'use strict';
-var walletBalanceCtrl = function ($scope, $sce,
-                                  walletService,
-                                  backgroundNodeService,
-                                  modalService,
-                                  coldStakingService,
-                                  messageService) {
+var walletBalanceCtrl = function (
+    $scope,
+    $sce,
+    walletService,
+    backgroundNodeService,
+    modalService,
+    coldStakingService,
+    messageService,
+    lookupService,
+) {
     $scope.ajaxReq = ajaxReq;
     $scope.erc20Abi = require('../abiDefinitions/erc20abi.json');
     $scope.DEXNS = require('../abiDefinitions/etcAbi.json')[5];
@@ -46,7 +50,6 @@ var walletBalanceCtrl = function ($scope, $sce,
     $scope.alternativeBalance = nodes.alternativeBalance;
 
     $scope.customTokenField = false;
-
 
     $scope.$watch(function () {
         return walletService.wallet && walletService.wallet.getAddressString();

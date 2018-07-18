@@ -1,0 +1,27 @@
+<div class="col-xs-11">
+    <label translate="{{labelTranslated}}"></label>
+    <input class="form-control"
+           type="text"
+           placeholder="{{placeholder}}"
+           ng-model="addressDrtv.ensAddressField"
+           ng-disabled="addressDrtv.readOnly"
+           ng-class="Validator.isValidAddress(addressDrtv.ensAddressField) ? 'is-valid' : 'is-invalid'"
+           ng-model-options="{debounce: 750}"
+    />
+    <p class="ens-response" ng-show="addressDrtv.showDerivedAddress"> ↳ <span
+            class="mono ng-binding">
+
+        {{addressDrtv.NAME}}
+        {{' -> '}}
+        {{addressDrtv.derivedAddress}}
+
+    </span>
+    </p>
+</div>
+<div class="col-xs-1 address-identicon-container">
+    <div class="addressIdenticon"
+         title="Address Indenticon"
+         blockie-address="{{varName}}"
+         watch-var="{{varName}}"
+    ></div>
+</div>

@@ -10,25 +10,24 @@ const lookup = function (lookupService) {
 
     return {
 
-        template: require('./crosschain-ens-dexns-lookup.html'),
+        template: require('./crosschain-lookup.html'),
         link: function ($scope) {
 
+            $scope.lookupService = lookupService;
 
-            $scope.services = lookupService.services;
+            $scope.services = Object.keys(lookupService.services);
 
             $scope.input = {
                 currentService: lookupService.service,
-                currentNetwork: ajaxReq.type,
             };
 
             $scope.handleChange = function (_service) {
 
-
                 lookupService.setNetwork(_service);
 
-                $scope.input = {
-                    currentService: lookupService.service,
-                    currentNetwork: lookupService.network,
+                if (lookupService.service === 'none') {
+
+                    $scope.addressDrtv.showDerivedAddress = false;
                 }
 
             }

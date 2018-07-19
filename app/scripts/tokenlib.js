@@ -1,5 +1,11 @@
 'use strict';
 
+const feContract = require('./abiDefinitions/etcAbi.json')
+    .find(i => i.name === 'DexNS State storage');
+
+const dexnsStorageContract = new JsonContract(feContract, 'ETC');
+
+
 var Token = function (contractAddress, userAddress, symbol, decimal, type, network, node) {
     this.contractAddress = contractAddress;
     this.userAddress = userAddress;
@@ -9,6 +15,17 @@ var Token = function (contractAddress, userAddress, symbol, decimal, type, netwo
     this.balance = "loading";
     this.network = network; // str
     this.node = node; // str
+
+
+    this.dexns = {
+        info: '',
+        name: '',
+    };
+
+
+    this.initDexns();
+
+
 };
 
 Token.balanceHex = "0x70a08231";
@@ -41,11 +58,29 @@ Token.prototype.setBalance = function (balance) {
     this.balance = balance;
 }
 
+Token.prototype.initDexns = function () {
+
+    dexnsStorageContract.call('assignation', {inputs: [this.contractAddress]})
+        .then(result => {
+
+            const [_name] = result.data;
+            this.dexns.name = _name;
+
+            if (_name) {
+
+
+                dexnsStorageContract.call('getName', {inputs: [_name]}).then(result => {
+
+                    const [_info] = result.data;
+                    this.dexns.info = _info;
+                })
+            }
+        });
+}
+
 Token.prototype.fetchBalance = function () {
 
     const request_ = ethFuncs.getDataObj(this.contractAddress, Token.balanceHex, [ethFuncs.getNakedAddress(this.userAddress)]);
-
-
 
 
     const node_ = nodes.nodeList[this.node];

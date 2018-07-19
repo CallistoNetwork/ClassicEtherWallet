@@ -19,6 +19,28 @@ const statusCodes = {
     'confirmation': 7,
 };
 
+// visible function list
+
+const feContracts = [
+    // 'registerName',
+    'endtimeOf',
+    'extend_Name_Binding_Time',
+    'unassignName',
+    'updateName',
+    'appendNameMetadata',
+    'hideNameOwner',
+    'assignName',
+    'changeNameOwner',
+];
+
+const storageContracts = [
+    'metadataOf',
+    'ownerOf',
+    'getName',
+    'name_assignation',
+    'assignation'
+];
+
 
 const dexnsCtrl = function (
     $scope,
@@ -299,32 +321,13 @@ const dexnsCtrl = function (
         }
     }
 
-    const viewContracts = [
-        // 'registerName',
-        'endtimeOf',
-        'extend_Name_Binding_Time',
-        'unassignName',
-        'updateName',
-        'appendNameMetadata',
-        'hideNameOwner',
-        'assignName',
-        'changeNameOwner',
-    ];
-
-    const storageContractVisible = [
-        'metadataOf',
-        'ownerOf',
-        'getName',
-        'name_assignation'
-    ]
-
 
     $scope.visibleFuncList = [].concat(
         dexnsService.storageContract.abi
-            .filter(i => storageContractVisible.includes(i.name))
+            .filter(i => storageContracts.includes(i.name))
             .map(i => Object.assign(i, {contract: 'storageContract'})),
         dexnsService.feContract.abi
-            .filter(i => viewContracts.includes(i.name))
+            .filter(i => feContracts.includes(i.name))
             .map(i => Object.assign(i, {contract: 'feContract'}))
     )
         .map(i => Object.assign(i, {sortBy: i.type === 'view' ? 10 : 1}))

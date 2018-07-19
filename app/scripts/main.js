@@ -27,6 +27,19 @@ var format = require('string-format');
 window.format = format;
 var browser = require('detect-browser');
 window.browser = browser;
+
+var nodes = require('./nodes');
+window.nodes = nodes;
+
+var contracts = require('./contract');
+
+const {Contract, InitContract, JsonContract} = contracts;
+
+window.Contract = Contract;
+window.JsonContract = JsonContract;
+window.InitContract = InitContract;
+
+
 var Wallet = require('./myetherwallet');
 window.Wallet = Wallet;
 var Web3Wallet = require('./web3Wallet');
@@ -41,8 +54,7 @@ var etherUnits = require('./etherUnits');
 window.etherUnits = etherUnits;
 var ajaxReq = require('./ajaxReq');
 window.ajaxReq = ajaxReq;
-var nodes = require('./nodes');
-window.nodes = nodes;
+
 var ethFuncs = require('./ethFuncs');
 window.ethFuncs = ethFuncs;
 var Validator = require('./validator');
@@ -52,12 +64,9 @@ var changeNow = require('./changeNow');
 
 window.changeNow = changeNow;
 
-var contracts = require('./contract');
 
-const {Contract, InitContract} = contracts;
 
-window.Contract = Contract;
-window.InitContract = InitContract;
+
 
 var ens = require('./ens');
 window.ens = ens;

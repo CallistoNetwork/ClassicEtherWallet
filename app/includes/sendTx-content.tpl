@@ -1,8 +1,6 @@
 <!-- Content -->
 <article class="col-sm-8">
 
-    <lookup></lookup>
-
 
     <div class="block">
 
@@ -10,6 +8,7 @@
         <div class="row form-group">
             <address-field placeholder="0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8" var-name="tx.to"></address-field>
         </div>
+        <lookup></lookup>
 
         <!-- Amount to Send -->
         <label translate="SEND_amount">Amount to Send:</label>

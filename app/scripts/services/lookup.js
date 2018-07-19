@@ -71,38 +71,17 @@ const lookupService = function (dexnsService, walletService) {
 
         if (this.service === 'dexns') {
 
-            return dexnsService.storageContract.call('ownerOf', tx).then(result => {
+            return dexnsService.storageContract.call('ownerOf', tx)
+                .then(result => result[0].value);
 
-                return result[0].value;
-
-
-            });
         } else if (this.service === 'ens') {
 
-            return new Promise((resolve, reject) => {
-
-
-                this.ens.getOwner(_name + '.eth', function (data) {
-                    if (data.error) {
-
-                        uiFuncs.notifier.danger(data.msg);
-
-                        reject(data);
-                    } else if (data.data === '0x0000000000000000000000000000000000000000' || data.data === '0x') {
-                        resolve('0x0000000000000000000000000000000000000000');
-                    } else {
-                        resolve(ethUtil.toChecksumAddress(data.data));
-                    }
-                });
-            })
+            return this.getEnsAddr(name);
 
         } else if (this.service === 'ecns') {
 
 
-            return this.getEcnsAddr(_name).then(result => {
-
-                return result[0].value;
-            })
+            return this.getEcnsAddr(_name);
 
         } else if (this.service === 'none') {
 
@@ -114,30 +93,43 @@ const lookupService = function (dexnsService, walletService) {
         }
     };
 
+    this.getEnsAddr = function (_name) {
+
+        return new Promise((resolve, reject) => {
+
+
+            this.ens.getOwner(_name + '.eth', function (data) {
+                if (data.error) {
+
+                    uiFuncs.notifier.danger(data.msg);
+
+                    reject(data);
+                } else if (data.data === '0x0000000000000000000000000000000000000000' || data.data === '0x') {
+                    resolve('0x0000000000000000000000000000000000000000');
+                } else {
+                    resolve(ethUtil.toChecksumAddress(data.data));
+                }
+            });
+        })
+    };
+
 
     this.getEcnsAddr = function (name) {
-        const node = namehash(name);
 
 
-        return this.ecns.call('resolver', {inputs: [node]}).then(resolverAddress => {
+        return this.ecns.call('namehash', {inputs: [name]}).then(result => {
 
-            if (resolverAddress === ' 0x0000000000000000000000000000000000000000') {
-                return resolverAddress;
-            }
-            return this.resolverContract.call('addr', {inputs: [node]})
+            const namehash = result[0].value;
+
+            return this.ecns.call('owner', {inputs: [namehash]}).then(result_ => {
+
+                return result_[0].value;
+
+
+            })
         })
     }
 
-    function namehash(name) {
-        var node = '0x0000000000000000000000000000000000000000000000000000000000000000';
-        if (name !== '') {
-            var labels = name.split(".");
-            for (var i = labels.length - 1; i >= 0; i--) {
-                node = ethUtil.sha3(node + ethUtil.sha3(labels[i]).toString('hex').slice(2));
-            }
-        }
-        return node.toString();
-    }
 
     this.testLookup = function () {
 
@@ -151,7 +143,7 @@ const lookupService = function (dexnsService, walletService) {
 
 
                 this.service = 'ecns';
-                this.lookup('myaddress').then(r2 => {
+                this.lookup('etc').then(r2 => {
 
 
                 })

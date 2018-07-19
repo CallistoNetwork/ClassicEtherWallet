@@ -15,6 +15,11 @@ var coinPrice = function () {
 };
 
 
+/*
+
+    get coin price based on ajaxReq
+ */
+
 coinPrice.getCoinPrice = function (callback) {
 
     const coin = nodes.nodeList[globalFuncs.getCurNode()].type;

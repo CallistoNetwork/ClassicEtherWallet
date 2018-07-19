@@ -97,12 +97,18 @@ var encryptCtrl = require('./controllers/encryptCtrl');
 var helpersCtrl = require('./controllers/helpersCtrl');
 var messagesControl = require('./controllers/messagesCtrl');
 var switchNetworkCtrl = require('./controllers/switchNetworkCtrl');
+
+
+
 var globalService = require('./services/globalService');
 var coldStakingService = require('./services/coldStakingService');
 var modalService = require('./services/modalService');
 var walletService = require('./services/walletService');
 var messageService = require('./services/messageService');
 var backgroundNodeService = require('./services/backgroundNodeService');
+
+
+
 var blockiesDrtv = require('./directives/blockiesDrtv');
 var addressFieldDrtv = require('./directives/addressFieldDrtv');
 var QRCodeDrtv = require('./directives/QRCodeDrtv');

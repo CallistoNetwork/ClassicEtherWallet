@@ -44,12 +44,27 @@ if (!encsResolver) {
 
 const lookupService = function (dexnsService, walletService) {
 
-    this.network = 'ETC';
-    this.service = 'dexns';
+
+    const network = ajaxReq.type;
+
+    if (network === 'ETH') {
+
+        this.network = network;
+
+        this.service = 'ens';
+
+    } else {
+
+        this.network = 'ETC';
+        this.service = 'dexns';
+
+
+    }
+
 
     this.services = services;
 
-    this.ens = new ens();
+    this.ens = new ens('ETH');
 
     this.ecns = parseJsonContract(_ecns, 'ETC', false);
 
@@ -66,17 +81,16 @@ const lookupService = function (dexnsService, walletService) {
 
     this.lookup = function (_name) {
 
-        const tx = {inputs: [_name]};
-
 
         if (this.service === 'dexns') {
 
-            return dexnsService.storageContract.call('ownerOf', tx)
+
+            return dexnsService.storageContract.call('ownerOf', {inputs: [_name]})
                 .then(result => result[0].value);
 
         } else if (this.service === 'ens') {
 
-            return this.getEnsAddr(name);
+            return this.getEnsAddr(_name);
 
         } else if (this.service === 'ecns') {
 
@@ -98,6 +112,7 @@ const lookupService = function (dexnsService, walletService) {
         return new Promise((resolve, reject) => {
 
 
+            // fixme label
             this.ens.getOwner(_name + '.eth', function (data) {
                 if (data.error) {
 
@@ -133,18 +148,23 @@ const lookupService = function (dexnsService, walletService) {
 
     this.testLookup = function () {
 
+        this.service = 'dexns';
 
         this.lookup('dexaran').then((r) => {
+
+            console.log('dexns', r);
 
             this.service = 'ens';
 
 
             this.lookup('myetherwallet').then((r1) => {
 
+                console.log('ens', r1);
 
                 this.service = 'ecns';
                 this.lookup('etc').then(r2 => {
 
+                    console.log('ecns', r2);
 
                 })
             })

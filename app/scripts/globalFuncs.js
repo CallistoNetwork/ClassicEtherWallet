@@ -395,6 +395,8 @@ globalFuncs.getWalletPath = function (walletType = 'trezor', nodeType = nodes.no
                 return globalFuncs.HDWallet.trezorPath;
             case nodes.nodeTypes.ETC:
                 return globalFuncs.HDWallet.trezorClassicPath;
+            case nodes.nodeTypes.ETCT:
+                return globalFuncs.HDWallet.trezorTestnetPath;
             case nodes.nodeTypes.Ropsten:
                 return globalFuncs.HDWallet.trezorTestnetPath;
             case nodes.nodeTypes.Rinkeby:
@@ -428,6 +430,8 @@ globalFuncs.getWalletPath = function (walletType = 'trezor', nodeType = nodes.no
                 return globalFuncs.HDWallet.defaultDPath;
             case nodes.nodeTypes.ETC:
                 return globalFuncs.HDWallet.trezorClassicPath;
+            case nodes.nodeTypes.ETCT:
+                return globalFuncs.HDWallet.trezorTestnetPath;
             case nodes.nodeTypes.Ropsten:
                 return globalFuncs.HDWallet.trezorTestnetPath;
             case nodes.nodeTypes.Rinkeby:

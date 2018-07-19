@@ -10,6 +10,7 @@ nodes.nodeTypes = {
     CLOT: "Testnet CLO",
     ETH: "ETH",
     ETC: "ETC",
+    ETCT: "Testnet ETC",
     Ropsten: "ROPSTEN ETH",
     Kovan: "KOVAN ETH",
     Rinkeby: "RINKEBY ETH",
@@ -114,6 +115,18 @@ nodes.nodeList = {
         'abiList': require('./abiDefinitions/etcAbi.json'),
         'service': 'Ethereum Commonwealth Parity',
         'lib': new nodes.customNode('https://etc-parity.0xinfra.com/', '')
+    },
+    'etc_testnet': {
+        'name': 'ETC Testnet',
+        'type': nodes.nodeTypes.ETCT,
+        'blockExplorerTX': 'http://mordenexplorer.ethertrack.io/tx/[[txHash]]',
+        'blockExplorerAddr': 'http://mordenexplorer.ethertrack.io/addr/[[address]]',
+        'eip155': true,
+        'chainId': 62,
+        'tokenList': [],
+        'abiList': [],
+        'service': 'ethertrack.io',
+        'lib': new nodes.customNode('https://morden.eos-classic.io', '')
     },
     'clo_mainnet': {
         'name': 'CLO',

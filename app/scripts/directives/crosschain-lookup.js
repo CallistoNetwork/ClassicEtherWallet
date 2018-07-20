@@ -5,7 +5,7 @@
 
     Lookup name based on service
  */
-const lookup = function (lookupService) {
+const lookup = function ($rootScope, lookupService) {
 
 
     return {
@@ -28,7 +28,11 @@ const lookup = function (lookupService) {
                 if (lookupService.service === 'none') {
 
                     $scope.addressDrtv.showDerivedAddress = false;
+
                 }
+
+                $rootScope.$broadcast('lookupName', $scope.addressDrtv.ensAddressField);
+
 
             }
         }

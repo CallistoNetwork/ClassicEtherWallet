@@ -180,7 +180,7 @@ app.factory('coldStakingService', ['walletService', coldStakingService]);
 
 
 app.directive('dexnsNameDisplay', ['dexnsService', 'walletService', 'globalService', dexnsNameDisplay]);
-app.directive('lookup', ['lookupService', lookup])
+app.directive('lookup', ['$rootScope', 'lookupService', lookup])
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('cssThemeDrtv', cssThemeDrtv);
 app.directive('addressField', ['$compile', 'backgroundNodeService', 'lookupService', addressFieldDrtv]);
@@ -193,6 +193,8 @@ app.directive('messagesOverviewDrtv', ['globalService', 'walletService', 'messag
 app.directive('arrayInputDrtv', arrayInputDrtv);
 app.directive('newMessagesDrtv', ['globalService', newMessagesDrtv]);
 app.directive('transactionCost', transactionCost);
+
+
 app.controller('tabsCtrl', ['$scope', 'globalService', '$translate', '$sce', 'backgroundNodeService', tabsCtrl]);
 app.controller('switchNetworkCtrl', ['$scope', '$rootScope', 'globalService', switchNetworkCtrl]);
 app.controller('viewCtrl', ['$scope', 'globalService', '$sce', viewCtrl]);

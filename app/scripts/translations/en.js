@@ -8,6 +8,7 @@ en.data = {
     DEXNS_href: 'You don\'t have a Name yet.\n' +
     'You can register one for your address',
     DEXNS_name: "DexNS Name",
+    DEXNS_time_remaining: 'Time Remaining',
     COLD_STAKING_NO_WITHDRAW: 'You do not have any deposit to withdraw.',
     COLD_STAKING_START_STAKING_WARNING: 'You already have funds in staking contract.\n' +
     '                            You will lose your staking reward if you make a new deposit into the contract.\n' +

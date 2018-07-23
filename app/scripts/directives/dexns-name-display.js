@@ -23,16 +23,13 @@ const dexnsNameDisplay = function (dexnsService, walletService, globalService) {
 
                     if (!(addr === '0x0000000000000000000000000000000000000000' || addr === '0x0')) {
 
-                        $scope.dexnsName = result;
+                        $scope.dexnsName = addr;
+
 
                     }
                 });
             }
 
-            function test(_name = 'dexaran') {
-
-                $scope.dexnsName = _name;
-            }
 
             function endTimeOf(_name = 'dexaran') {
 
@@ -71,23 +68,29 @@ const dexnsNameDisplay = function (dexnsService, walletService, globalService) {
                 location.hash = globalService.tabs.dexns.url;
             };
 
+            $scope.$watch('dexnsName', function (val) {
+
+                if (val) {
+
+                    endTimeOf(val);
+                }
+            })
+
             $scope.$watch(function () {
 
                 return walletService.wallet.getAddressString();
 
-            }, function (val, _val) {
+            }, function (val) {
 
 
-                //getAssignation(val);
-
+                // getAssignation(val);
 
             });
 
-            //getAssignation(walletService.wallet.getAddressString());
+            // getAssignation(walletService.wallet.getAddressString());
 
-            test();
+            $scope.dexnsName = 'dexaran';
 
-            endTimeOf();
 
         }
     }

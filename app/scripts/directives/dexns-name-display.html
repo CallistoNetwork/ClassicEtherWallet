@@ -9,12 +9,27 @@
         </span>
 
 
-        <label for="timeRemaining" translate="DEXNS_time_remaining"></label>
-        <div ng-show="timeRemaining">
+        <div ng-show="endTime && timeRemaining">
+            <label for="endTime" translate="DEXNS_end_time"></label>
 
-            <br/>
-            <span id="timeRemaining" class="mono wrap" title="{{timeRemaining}}">
-                {{timeRemaining}}
+            <span id="endTime" class="form-control disabled mono wrap" title="{{endTime | number}}">
+                {{endTime | date}}
+            </span>
+
+
+            <label for="timeRemaining" translate="DEXNS_time_remaining"></label>
+
+            <span
+                    style="height: 5em;"
+                    id="timeRemaining"
+                    class="form-control mono wrap"
+                    title="{{timeRemaining}}"
+
+            >
+                <small>
+                    {{timeRemaining}}
+                </small>
+
             </span>
         </div>
     </div>

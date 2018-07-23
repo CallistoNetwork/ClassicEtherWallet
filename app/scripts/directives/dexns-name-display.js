@@ -83,13 +83,11 @@ const dexnsNameDisplay = function (dexnsService, walletService, globalService) {
             }, function (val) {
 
 
-                // getAssignation(val);
+                getAssignation(val);
 
             });
 
-            // getAssignation(walletService.wallet.getAddressString());
-
-            $scope.dexnsName = 'dexaran';
+            getAssignation(walletService.wallet.getAddressString());
 
 
         }

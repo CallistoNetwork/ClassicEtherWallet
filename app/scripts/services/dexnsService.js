@@ -106,7 +106,7 @@ function parseMetadata(_metadata) {
 }
 
 
-const dexnsService = function (walletService) {
+const dexnsService = function () {
 
 
     this.parseMetadata = parseMetadata;
@@ -119,12 +119,6 @@ const dexnsService = function (walletService) {
     this.feContract.owningTime = [{value: 31536000, type: 'uint256', name: 'owningTime'}]; // 1 year
 
     this.stringifyMetadata = stringifyMetadata;
-
-
-    this.getAddress = function (_name) {
-
-
-    }
 
     return this;
 

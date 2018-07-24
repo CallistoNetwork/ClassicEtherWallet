@@ -20,7 +20,7 @@ var addressFieldDrtv = function ($compile, backgroundNodeService, lookupService)
             }
 
 
-            scope.lookupNameDelay = _.debounce(lookupName, 3000);
+            scope.lookupNameDelay = _.debounce(lookupName, 400);
 
 
             function lookupName(_val) {

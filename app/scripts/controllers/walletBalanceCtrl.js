@@ -380,7 +380,7 @@ var walletBalanceCtrl = function (
 
 
         $scope.localToken.contractAdd = address;
-        $scope.localToken.network = Object.values(nodes.nodeList).find(_node => _node.type === globalFuncs.getCurNode()).name;
+        $scope.localToken.network = nodes.nodeList[globalFuncs.getCurNode()].name;
 
 
         var request_ = {

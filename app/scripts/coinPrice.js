@@ -49,7 +49,5 @@ module.exports = function coinPrice(coin = nodes.nodeList[globalFuncs.getCurNode
         return Object.assign({}, err, {error: true});
     })
 }
-)
-}
 
 

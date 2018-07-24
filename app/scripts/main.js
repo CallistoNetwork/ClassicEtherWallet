@@ -44,7 +44,7 @@ window.Contract = Contract;
 window.InitContract = InitContract;
 window.parseJsonContract = parseJsonContract;
 
-const coinPrice = require('./nodeHelpers/coinPrice');
+const coinPrice = require('./coinPrice');
 
 window._coinPrice = coinPrice;
 

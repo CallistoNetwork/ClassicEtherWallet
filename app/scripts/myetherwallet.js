@@ -40,7 +40,7 @@ Wallet.prototype.setTokens = function () {
 
 
     this.tokenObjs = tokens.map(token => {
-        if (token.network === network.name || token.network === network.type) {
+        if (token.network === network.type) {
             token.fetchBalance();
         } else {
 

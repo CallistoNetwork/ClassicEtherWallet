@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('lodash');
+var _debounce = require('lodash/debounce');
 
 var addressFieldDrtv = function ($compile, backgroundNodeService, lookupService) {
     return {
@@ -20,7 +20,7 @@ var addressFieldDrtv = function ($compile, backgroundNodeService, lookupService)
             }
 
 
-            scope.lookupNameDelay = _.debounce(lookupName, 400);
+            scope.lookupNameDelay = _debounce(lookupName, 400);
 
 
             function lookupName(_val) {

@@ -6,10 +6,11 @@
             <p class="account-help-text" translate="TXFEE_Desc"></p>
         </a>
 
-        <label>Transaction Fee</label>
+        <label for="txfee">Transaction Fee</label>
         <input class="form-control"
                disabled
-               value="{{txCostEther}} {{nodeType}} ~= {{txCostFiat | currency}}"
+               id="txfee"
+               value="{{txCostEther}} {{node.type}} ~= {{txCostFiat | currency}}"
         />
     </div>
 </div>

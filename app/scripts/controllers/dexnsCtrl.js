@@ -61,7 +61,7 @@ const dexnsCtrl = function (
     $scope.walletService = walletService;
 
 
-    if (nodes.nodeList[globalFuncs.getCurNode()].type !== 'ETC') {
+    if (Object.values(nodes.nodeList).find(_node => _node.type === globalFuncs.getCurNode()).type !== 'ETC') {
 
         $rootScope.$broadcast('ChangeNode', globalFuncs.networks['ETC'] || 0);
 

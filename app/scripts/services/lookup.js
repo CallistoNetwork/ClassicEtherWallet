@@ -112,8 +112,13 @@ const lookupService = function (dexnsService, walletService) {
         return new Promise((resolve, reject) => {
 
 
-            // fixme label
-            this.ens.getOwner(_name + '.eth', function (data) {
+            if (!_name.includes('.eth')) {
+
+                _name += '.eth';
+            }
+
+
+            this.ens.getOwner(_name, function (data) {
                 if (data.error) {
 
                     uiFuncs.notifier.danger(data.msg);
@@ -122,6 +127,8 @@ const lookupService = function (dexnsService, walletService) {
                 } else if (data.data === '0x0000000000000000000000000000000000000000' || data.data === '0x') {
                     resolve('0x0000000000000000000000000000000000000000');
                 } else {
+
+
                     resolve(ethUtil.toChecksumAddress(data.data));
                 }
             });

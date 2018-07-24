@@ -11,7 +11,7 @@ var switchNetworkCtrl = function ($scope, $rootScope, globalService) {
 
             if (network) {
 
-                const curNetwork = nodes.nodeList[globalFuncs.getCurNode()].type;
+                const curNetwork = Object.values(nodes.nodeList).find(_node => _node.type === globalFuncs.getCurNode()).type;
 
 
                 if (network.toUpperCase() !== curNetwork.toUpperCase()) {

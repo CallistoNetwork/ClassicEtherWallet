@@ -26,7 +26,7 @@ var txStatusCtrl = function($scope) {
         if (!$scope.$$phase) $scope.$apply();
     }
     var setUSDvalues = function() {
-        ajaxReq.getCoinPrice(function(data) {
+        _coinPrice().then(function(data) {
             $scope.txInfo.gasPrice.usd = new BigNumber(data.usd).mul(new BigNumber($scope.txInfo.gasPrice.eth)).toString();
             applyScope();
         });

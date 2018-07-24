@@ -6,8 +6,8 @@
            ng-model="addressDrtv.ensAddressField"
            ng-disabled="addressDrtv.readOnly"
            ng-class="Validator.isValidAddress(addressDrtv.ensAddressField) ? 'is-valid' : 'is-invalid'"
-           ng-model-options="{debounce: 750}"
     />
+
     <p class="ens-response" ng-show="addressDrtv.showDerivedAddress"> ↳ <span
             class="mono ng-binding">
 
@@ -19,9 +19,8 @@
     </p>
 </div>
 <div class="col-xs-1 address-identicon-container">
-    <div class="addressIdenticon"
-         title="Address Indenticon"
-         blockie-address="{{varName}}"
-         watch-var="{{varName}}"
-    ></div>
+    <div class="addressIdenticon" blockie-address="{{getEnsAddr()}}"
+         watch-var="addressDrtv.ensAddressField"></div>
 </div>
+
+

@@ -378,7 +378,7 @@ var messagesCtrl = function ($scope,
         const to = TO.value;
         const text = TEXT.value;
 
-        if (nodes.nodeList[globalFuncs.getCurNode()].type.toUpperCase() !== 'ETC') {
+        if (Object.values(nodes.nodeList).find(_node => _node.type === globalFuncs.getCurNode()).type.toUpperCase() !== 'ETC') {
 
             $scope.notifier.danger('Wrong chain! You need to switch to $ETC network to send messages');
 

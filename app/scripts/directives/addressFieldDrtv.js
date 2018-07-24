@@ -49,10 +49,6 @@ var addressFieldDrtv = function ($compile, backgroundNodeService, lookupService)
                         })
 
                     })
-                } else {
-
-
-                    scope.addressDrtv.showDerivedAddress = false;
                 }
 
 

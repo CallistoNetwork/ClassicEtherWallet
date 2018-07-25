@@ -40,7 +40,7 @@ var addressFieldDrtv = function ($compile, backgroundNodeService, lookupService)
                             if (!(['0x0000000000000000000000000000000000000000', '0x'].includes(result))) {
 
 
-                                scope.addressDrtv.derivedAddress = scope.addressDrtv.ensAddressField = ethUtil.toChecksumAddress(result);
+                                scope.tx.to = scope.addressDrtv.derivedAddress = scope.addressDrtv.ensAddressField = ethUtil.toChecksumAddress(result);
 
                             } else {
 
@@ -62,7 +62,11 @@ var addressFieldDrtv = function ($compile, backgroundNodeService, lookupService)
             };
 
 
-            scope.$watch('addressDrtv.ensAddressField', scope.lookupNameDelay);
+            scope.$watch('addressDrtv.ensAddressField', (_val) => {
+
+                scope.tx.to = _val;
+                scope.lookupNameDelay(_val);
+            });
 
             // when viewing wallet info tab / fire lookup name after unlocking wallet
 

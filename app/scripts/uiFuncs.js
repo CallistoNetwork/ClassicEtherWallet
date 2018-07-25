@@ -42,8 +42,8 @@ uiFuncs.isTxDataValid = function (txData) {
 const removeChainIdIfCLO = (chainId) => parseInt(chainId) === 820 ? null : chainId;
 
 
-uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
-    var localCallback = function (result) {
+uiFuncs.signTxTrezor = function (rawTx, {path}, callback) {
+    function localCallback(result) {
         if (!result.success) {
             if (callback !== undefined) {
                 callback({
@@ -51,7 +51,6 @@ uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
                     error: result.error
                 });
             }
-            return;
         }
 
         rawTx.v = "0x" + ethFuncs.decimalToHex(result.v);
@@ -65,11 +64,10 @@ uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
     }
 
 
-    const chainId = removeChainIdIfCLO(rawTx.chainId);
-
+    const chainId = removeChainIdIfCLO(rawTx.chainId);// rawTx.chainId;
 
     TrezorConnect.signEthereumTx(
-        txData.path,
+        path,
         ethFuncs.getNakedAddress(rawTx.nonce),
         ethFuncs.getNakedAddress(rawTx.gasPrice),
         ethFuncs.getNakedAddress(rawTx.gasLimit),
@@ -135,18 +133,21 @@ uiFuncs.signTxDigitalBitbox = function (eTx, rawTx, txData, callback) {
     var app = new DigitalBitboxEth(txData.hwTransport, '');
     app.signTransaction(txData.path, eTx, localCallback);
 }
-uiFuncs.trezorUnlockCallback = function (txData, callback) {
-    TrezorConnect.open(function (error) {
-        if (error) {
-            if (callback !== undefined) callback({
-                isError: true,
-                error: error
-            });
-        } else {
-            txData.trezorUnlocked = true;
-            uiFuncs.generateTx(txData, callback);
-        }
-    });
+uiFuncs.trezorUnlock = function () {
+
+    return new Promise((resolve, reject) => {
+
+        TrezorConnect.open(function (error) {
+            if (error) {
+                reject({
+                    isError: true,
+                    error: error
+                });
+            } else {
+                resolve(true);
+            }
+        });
+    })
 };
 
 /*
@@ -261,7 +262,13 @@ uiFuncs.genTxWithInfo = function (data, callback) {
 
         if (!data.trezorUnlocked) {
 
-            uiFuncs.trezorUnlockCallback(data, callback);
+            uiFuncs.trezorUnlock().then(() => {
+
+                data.trezorUnlocked = true;
+
+
+                uiFuncs.signTxTrezor(rawTx, data, callback);
+            });
 
         } else {
 

@@ -313,8 +313,8 @@ nodes.nodeList = {
     },
     'pirl': {
         'name': 'PIRL',
-        'blockExplorerTX': 'https://pirl.site/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://pirl.site/addr/[[address]]',
+        'blockExplorerTX': 'https://poseidon.pirl.io/explorer/transaction/[[txHash]]',
+        'blockExplorerAddr': 'https://poseidon.pirl.io/explorer/address/[[address]]',
         'type': nodes.nodeTypes.PIRL,
         'eip155': true,
         'chainId': 3125659152,

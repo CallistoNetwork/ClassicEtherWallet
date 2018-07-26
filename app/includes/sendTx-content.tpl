@@ -8,7 +8,7 @@
         <div class="row form-group">
             <address-field placeholder="0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8" var-name="tx.to"></address-field>
         </div>
-        <lookup></lookup>
+
 
         <!-- Amount to Send -->
         <label translate="SEND_amount">Amount to Send:</label>
@@ -134,6 +134,25 @@
         </section>
 
         <!-- / Advanced Option Panel -->
+
+        <a
+                ng-click="showLookup = !showLookup"
+                ng-init="showLookup = false;"
+
+        >
+            <p class="strong">
+
+                <span>{{showLookup ? '-' : '+'}}</span>
+
+                <span translate="LOOKUP_SERVICE">Lookup Service</span>
+
+            </p>
+        </a>
+
+        <div ng-show="showLookup">
+            <lookup></lookup>
+        </div>
+
 
         <div class="clearfix form-group">
             <div class="well" ng-show="wallet!=null && customGasMsg!=''">

@@ -55,11 +55,8 @@
 
             <div class="table-responsive">
 
-                <table class="table table-hover table-striped" title="Metadata"
+                <table class="table" title="Metadata"
                 >
-                    <caption>
-                        Result
-                    </caption>
 
                     <tbody>
                     <!-- Custom Metadata UI -->

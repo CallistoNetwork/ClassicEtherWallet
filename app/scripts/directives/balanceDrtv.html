@@ -10,6 +10,12 @@
                 ↳ <span class="mono ng-binding"> {{ensAddress}} </span>
             </label>
         </ul>
+
+        <div ng-if="walletService && walletService.wallet && walletService.wallet.getAddressString();">
+
+            <dexns-name-display></dexns-name-display>
+
+        </div>
         <div ng-show="showDisplayOnTrezor()">
             <h5 translate="sidebar_DisplayOnTrezor">Display address on TREZOR</h5>
             <ul class="account-info">
@@ -33,11 +39,11 @@
 
                     <h5 translate="sidebar_AccountBal">Account Balance</h5>
                 </th>
-                <th ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)" class="text-right">
+                <th ng-if="coldStakingService.validNetwork()" class="text-right">
                     <h5>Staking Balance</h5>
 
                 </th>
-                <th ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)" class="text-right">
+                <th ng-if="coldStakingService.validNetwork()" class="text-right">
                     <h5>Reward</h5>
 
                 </th>
@@ -56,16 +62,16 @@
                 </td>
 
 
-                <td class="text-right pointer" ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
-                    title="{{coldStakingService._staker_info.weight}} (Double Click)"
+                <td class="text-right pointer" ng-if="coldStakingService.validNetwork()"
+                    title="{{coldStakingService.contract.staker_info.weight}} (Double Click)"
                     ng-init="showLongWeight = false;"
                     ng-dblclick="showLongWeight = !showLongWeight"
                 >
 
 
-                    <span class="mono wrap" ng-show="!showLongWeight">{{coldStakingService._staker_info.weight | number}}</span>
+                    <span class="mono wrap" ng-show="!showLongWeight">{{coldStakingService.contract.staker_info.weight | number}}</span>
                     <span class="mono wrap"
-                          ng-show="showLongWeight">{{coldStakingService._staker_info.weight}}</span>
+                          ng-show="showLongWeight">{{coldStakingService.contract.staker_info.weight}}</span>
 
                     {{ajaxReq.type}}
 
@@ -73,21 +79,21 @@
                 </td>
 
 
-                <td class="text-right pointer" title="{{coldStakingService._staker_info.reward}} (Double Click)"
-                    ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
+                <td class="text-right pointer" title="{{coldStakingService.contract.staker_info.reward}} (Double Click)"
+                    ng-if="coldStakingService.validNetwork()"
                     ng-init="showLongReward = false;"
                     ng-dblclick="showLongReward = !showLongReward"
                 >
 
-                    <span class="mono wrap" ng-show="!showLongReward">{{coldStakingService._staker_info.reward | number}}</span>
+                    <span class="mono wrap" ng-show="!showLongReward">{{coldStakingService.contract.staker_info.reward | number}}</span>
                     <span class="mono wrap"
-                          ng-show="showLongReward">{{coldStakingService._staker_info.reward}}</span>
+                          ng-show="showLongReward">{{coldStakingService.contract.staker_info.reward}}</span>
 
                     {{ajaxReq.type}}
                 </td>
 
             </tr>
-            <tr ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)">
+            <tr ng-if="coldStakingService.validNetwork()">
 
                 <td class="text-left">
 
@@ -126,7 +132,7 @@
                 <td ng-if="altBalance.symbol !== ajaxReq.type" class="account-info point"
                     ng-dblclick="showLongBal=!showLongBal"
                     title="{{altBalance.balance}} (Double-Click)"
-                    colspan="{{['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type) ? 3 : 1}}"
+                    colspan="{{coldStakingService.validNetwork() ? 3 : 1}}"
                 >
                     <span class="mono wrap" ng-show="!showLongBal">{{altBalance.balance | number}}</span>
                     <span class="mono wrap" ng-show="showLongBal">{{altBalance.balance}}</span>

@@ -79,12 +79,14 @@ ethFuncs.getDataObj = function (to, func, arrVals) {
 ethFuncs.getFunctionSignature = function (name) {
     return ethUtil.sha3(name).toString('hex').slice(0, 8);
 };
+const adjustGas = (gasLimit) => {
+    if (gasLimit === "0x5209") return "21000";
+    if (new BigNumber(gasLimit).gt(3500000)) return "-1";
+    return new BigNumber(gasLimit).toString();
+}
+
 ethFuncs.estimateGas = function (dataObj, callback) {
-    var adjustGas = function (gasLimit) {
-        if (gasLimit == "0x5209") return "21000";
-        if (new BigNumber(gasLimit).gt(3500000)) return "-1";
-        return new BigNumber(gasLimit).toString();
-    }
+
     ajaxReq.getEstimatedGas(dataObj, function (data) {
         if (data.error) {
             callback(data);
@@ -102,128 +104,141 @@ ethFuncs.estimateGas = function (dataObj, callback) {
 
 /*
 
-    Given functionName, contract, and tx data, generates tx data and sends call, returns decoded outputs
-    @param string functionName
+    Given funcName, contract, and tx data, generates data and sends call, returns decoded outputs
+    @param string funcName
     @param Contract contract
     @param Transaction tx
     @param callback function
-    @returns {error: bool, data: []any}
+    @returns Promise<{error: bool, data: []any}>
  */
 
 
-ethFuncs.handleContractCall = function (functionName, contract, {inputs = null, from = null, value = 0, unit = 'ether'} = {}, callback_ = console.log) {
+ethFuncs.call = function (
+    funcName,
+    contract,
+    {network = ajaxReq.type, inputs = null, from = null, value = 0, unit = 'ether'} = {}
+) {
 
 
-    const foundFunction = contract.abi.find(itm => itm.type === 'function' && itm.name === functionName);
+    return new Promise((resolve, reject) => {
 
 
-    if (!foundFunction) {
-
-        console.error('error locating function:', functionName, 'in', contract);
-
-        callback_({error: true, data: null});
-    }
-
-    const transObj = ethFuncs.prepContractData(functionName, contract, {inputs, from, value, unit});
-
-    if (transObj.error) {
-
-        callback_({error: transObj, data: null});
-
-    } else {
+        const foundFunction = contract.abi.find(itm => itm.name === funcName);
 
 
-
-        // if reading from contract, send call
-        if (!from) {
+        const {node} = contract;
 
 
-            //  console.log(Object.keys(ajaxReq));
+        if (!foundFunction) {
 
+            console.error('error locating function:', funcName, 'in', contract);
 
-            ajaxReq.getEthCall({to: transObj.to, data: transObj.data}, function (data) {
+            reject({error: true, data: null});
 
+        } else if (!node && node.hasOwnProperty('lib') && node.lib.hasOwnProperty('getEthCall')) {
 
-                callback_(Object.assign({}, data, {data: ethFuncs.decodeOutputs(foundFunction, data)}));
+            console.error('error locating node for network:', network);
 
-            })
+            reject({error: true, data: null});
+
+        }
+
+        const transObj = ethFuncs.prepContractData(funcName, contract, {inputs, from, value, unit});
+
+        if (transObj.error) {
+
+            reject({error: transObj, data: null});
 
         } else {
 
 
-            ethFuncs.estimateGas(transObj, function (data) {
 
-                if (data.error || parseInt(data.data) === -1) {
+            // if reading from contract, send call
 
-                    console.error('error estimating gas', data);
-
-                    callback_({error: data, data: null});
-
-                } else {
+            node.lib.getEthCall({to: transObj.to, data: transObj.data}, function (data) {
 
 
-                    Object.assign(transObj, {
-                        gasLimit: data.data,
-
-                    });
-
-
-                    ajaxReq.getEthCall(transObj, function (data) {
-
-                        callback_(Object.assign({}, data, {data: ethFuncs.decodeOutputs(foundFunction, data)}));
-
-                    })
-
-                }
+                resolve(Object.assign({}, data, {data: ethFuncs.decodeOutputs(foundFunction, data)}));
 
 
             });
-        }
 
-    }
+        }
+    })
 
 }
+
+
 
 
 /*
 
     Estimate gasPrice of tx to contract
 
-    @param string functionName
+    sent over contract's set network
+
+    @param string funcName
     @param Contract contract
     @param Tx transaction
     @param callback_ function
 
+    @returns tx: Tx {gasLimit: }
+
  */
 
-ethFuncs.handleContractGasEstimation = function (functionName, contract, tx, callback_) {
-
-    const result = ethFuncs.prepContractData(functionName, contract, tx);
-
-
-    if (!result.error) {
-
-        ethFuncs.estimateGas(result, function (data) {
-            if (data.error || parseInt(data.data) === -1) {
-
-                console.error('error estimating gas', data);
+ethFuncs.estGasContract = function (
+    funcName,
+    contract,
+    {network = ajaxReq.type, inputs = null, from = null, value = 0, unit = 'ether'} = {}) {
 
 
-                callback_(Object.assign({}, data, {error: true}));
+    return new Promise((resolve, reject) => {
+
+        const tx = {network, inputs, from, value, unit};
+
+        const result = ethFuncs.prepContractData(funcName, contract, tx);
 
 
-            } else {
+        if (!result.error) {
 
-                callback_(Object.assign({}, tx, {
-                    gasLimit: data.data,
-                }))
-            }
-        });
-    } else {
 
-        callback_(result);
-    }
+            Object.assign(tx, result);
+
+            const estObj = {
+                from: tx.from,
+                data: tx.data,
+                to: contract.address,
+                value: tx.value,
+            };
+
+            // estObj.value = ethFuncs.sanitizeHex(ethFuncs.decimalToHex(etherUnits.toWei(tx.value, tx.unit)));
+
+
+            contract.node.lib.getEstimatedGas(estObj, function (data) {
+
+                if (data.error || parseInt(data.data) === -1) {
+
+
+                    reject(Object.assign({}, data, {error: true}));
+
+
+                } else {
+
+                    resolve(Object.assign({}, tx, {
+                        gasLimit: adjustGas(data.data),
+                    }))
+                }
+            });
+        } else {
+
+            reject(result);
+        }
+    })
+
 }
+
+
+// utils
 
 
 ethFuncs.encodeInputs = function encodeInputs({inputs}) {
@@ -271,14 +286,14 @@ ethFuncs.decodeOutputs = function decodeOutputs(contractFunction, data) {
 
     Encode inputs if any and tx data
 
-    @param string functionName
+    @param string funcName
     @param Contract contract
     @param Tx {}
     @returns {error: bool | error, tx: Tx } if cannot estimate gas
 
  */
 
-ethFuncs.prepContractData = function (functionName, contract, {inputs = [], from, value = 0}) {
+ethFuncs.prepContractData = function (funcName, contract, {inputs = [], from, value = 0}) {
 
 
     if (!(contract.hasOwnProperty('abi') && contract.hasOwnProperty('address') && Array.isArray(contract.abi))) {
@@ -290,18 +305,18 @@ ethFuncs.prepContractData = function (functionName, contract, {inputs = [], from
 
     }
 
-    const foundFunction = contract.abi.find(itm => itm.type === 'function' && itm.name === functionName);
+    const foundFunction = contract.abi.find(itm => itm.name === funcName);
 
 
     if (!foundFunction) {
 
-        console.error('error locating function:', functionName, 'in', contract);
+        console.error('error locating function:', funcName, 'in', contract);
 
         return {error: true};
     }
 
 
-    let data = ethFuncs.encodeFunctionName(foundFunction.name, contract);
+    let data = ethFuncs.encodefuncName(foundFunction.name, contract);
 
     if (!data) {
 
@@ -329,16 +344,16 @@ ethFuncs.prepContractData = function (functionName, contract, {inputs = [], from
 
     given a function name and contract, returns function signature
 
-    @param string functionName
+    @param string funcName
 
     @param Contract contract
 
     @returns string functionSig
  */
 
-ethFuncs.encodeFunctionName = function (functionName, contract) {
+ethFuncs.encodefuncName = function (funcName, contract) {
 
-    const foundFunction = contract.abi.find(function_ => function_.type === 'function' && function_.name === functionName);
+    const foundFunction = contract.abi.find(function_ => function_.name === funcName);
 
     if (foundFunction) {
 
@@ -348,7 +363,7 @@ ethFuncs.encodeFunctionName = function (functionName, contract) {
 
     } else {
 
-        console.error('error locating', functionName, 'in', contract);
+        console.error('error locating', funcName, 'in', contract);
 
         return false;
     }

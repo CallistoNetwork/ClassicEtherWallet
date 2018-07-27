@@ -10,6 +10,7 @@ nodes.nodeTypes = {
     CLOT: "Testnet CLO",
     ETH: "ETH",
     ETC: "ETC",
+    ETCT: "Testnet ETC",
     Ropsten: "ROPSTEN ETH",
     Kovan: "KOVAN ETH",
     Rinkeby: "RINKEBY ETH",
@@ -115,22 +116,22 @@ nodes.nodeList = {
         'service': 'Ethereum Commonwealth Parity',
         'lib': new nodes.customNode('https://etc-parity.0xinfra.com/', '')
     },
-    'etc_chainkorea': {
-        'name': 'ETC',
-        'blockExplorerTX': 'https://classicexplorer.org/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://classicexplorer.org/addr/[[address]]',
-        'type': nodes.nodeTypes.ETC,
+    'etc_testnet': {
+        'name': 'ETC Testnet',
+        'type': nodes.nodeTypes.ETCT,
+        'blockExplorerTX': 'http://mordenexplorer.ethertrack.io/tx/[[txHash]]',
+        'blockExplorerAddr': 'http://mordenexplorer.ethertrack.io/addr/[[address]]',
         'eip155': true,
-        'chainId': 61,
-        'tokenList': require('./tokens/etcTokens.json'),
-        'abiList': require('./abiDefinitions/etcAbi.json'),
-        'service': 'Chainkorea',
-        'lib': new nodes.customNode('https://node.classicexplorer.org/', '')
+        'chainId': 62,
+        'tokenList': [],
+        'abiList': [],
+        'service': 'ethertrack.io',
+        'lib': new nodes.customNode('https://morden.eos-classic.io', '')
     },
     'clo_mainnet': {
         'name': 'CLO',
-        'blockExplorerTX': 'https://callistoexplorer.com/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://callistoexplorer.com/addr/[[address]]',
+        'blockExplorerTX': 'https://cloexplorer.org/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://cloexplorer.org/addr/[[address]]',
         'type': nodes.nodeTypes.CLO,
         'eip155': true,
         'chainId': 820,
@@ -141,14 +142,14 @@ nodes.nodeList = {
     },
     'clo_pool': {
         'name': 'CLO',
-        'blockExplorerTX': 'https://callistoexplorer.com/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://callistoexplorer.com/addr/[[address]]',
+        'blockExplorerTX': 'https://cloexplorer.org/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://cloexplorer.org/addr/[[address]]',
         'type': nodes.nodeTypes.CLO,
         'eip155': true,
         'chainId': 820,
         'tokenList': [],
         'abiList': [],
-        'service': 'clopool.net',
+        'service': 'Chainkorea',
         'lib': new nodes.customNode('https://node.clopool.net', '')
     },
     'clo_testnet3': {
@@ -312,8 +313,8 @@ nodes.nodeList = {
     },
     'pirl': {
         'name': 'PIRL',
-        'blockExplorerTX': 'https://pirl.site/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://pirl.site/addr/[[address]]',
+        'blockExplorerTX': 'https://poseidon.pirl.io/explorer/transaction/[[txHash]]',
+        'blockExplorerAddr': 'https://poseidon.pirl.io/explorer/address/[[address]]',
         'type': nodes.nodeTypes.PIRL,
         'eip155': true,
         'chainId': 3125659152,

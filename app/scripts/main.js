@@ -27,6 +27,19 @@ var format = require('string-format');
 window.format = format;
 var browser = require('detect-browser');
 window.browser = browser;
+
+var nodes = require('./nodes');
+window.nodes = nodes;
+
+var contracts = require('./contract');
+
+const {Contract, InitContract, JsonContract} = contracts;
+
+window.Contract = Contract;
+window.JsonContract = JsonContract;
+window.InitContract = InitContract;
+
+
 var Wallet = require('./myetherwallet');
 window.Wallet = Wallet;
 var Web3Wallet = require('./web3Wallet');
@@ -41,8 +54,7 @@ var etherUnits = require('./etherUnits');
 window.etherUnits = etherUnits;
 var ajaxReq = require('./ajaxReq');
 window.ajaxReq = ajaxReq;
-var nodes = require('./nodes');
-window.nodes = nodes;
+
 var ethFuncs = require('./ethFuncs');
 window.ethFuncs = ethFuncs;
 var Validator = require('./validator');
@@ -51,6 +63,10 @@ window.Validator = Validator;
 var changeNow = require('./changeNow');
 
 window.changeNow = changeNow;
+
+
+
+
 
 var ens = require('./ens');
 window.ens = ens;
@@ -74,6 +90,9 @@ if (IS_CX) {
 }
 var CustomGasMessages = require('./customGas.js')
 window.CustomGasMessages = CustomGasMessages;
+
+// CONTROLLERS
+
 var tabsCtrl = require('./controllers/tabsCtrl');
 var viewCtrl = require('./controllers/viewCtrl');
 var coldStakingCtrl = require('./controllers/coldStakingCtrl');
@@ -99,16 +118,21 @@ var messagesControl = require('./controllers/messagesCtrl');
 var switchNetworkCtrl = require('./controllers/switchNetworkCtrl');
 
 
+// SERVICES
+
 
 var globalService = require('./services/globalService');
 var coldStakingService = require('./services/coldStakingService');
 var modalService = require('./services/modalService');
 var walletService = require('./services/walletService');
 var messageService = require('./services/messageService');
+var dexnsService = require('./services/dexnsService');
 var backgroundNodeService = require('./services/backgroundNodeService');
 
 
+// DIRECTIVES
 
+var dexnsNameDisplay = require('./directives/dexns-name-display');
 var blockiesDrtv = require('./directives/blockiesDrtv');
 var addressFieldDrtv = require('./directives/addressFieldDrtv');
 var QRCodeDrtv = require('./directives/QRCodeDrtv');
@@ -128,6 +152,8 @@ if (IS_CX) {
     var mainPopCtrl = require('./controllers/CX/mainPopCtrl');
     var quickSendCtrl = require('./controllers/CX/quickSendCtrl');
 }
+
+
 var app = angular.module('mewApp', ['pascalprecht.translate', 'ngSanitize', 'ngAnimate']);
 app.config(['$compileProvider', function ($compileProvider) {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(|blob|https|mailto):/);
@@ -147,7 +173,14 @@ app.factory('changeNowService', changeNow);
 app.factory('modalService', modalService);
 
 app.factory('messageService', messageService);
+
+app.factory('dexnsService', dexnsService);
+
+app.factory('messageService', messageService);
 app.factory('coldStakingService', ['walletService', coldStakingService]);
+
+
+app.directive('dexnsNameDisplay', ['dexnsService', 'walletService', 'globalService', dexnsNameDisplay]);
 
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('cssThemeDrtv', cssThemeDrtv);
@@ -175,7 +208,7 @@ app.controller('swapCtrl', ['$scope', '$rootScope', '$interval', 'walletService'
 app.controller('signMsgCtrl', ['$scope', '$sce', 'walletService', signMsgCtrl]);
 app.controller('contractsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', contractsCtrl]);
 app.controller('ensCtrl', ['$scope', '$sce', '$rootScope', 'walletService', ensCtrl]);
-app.controller('dexnsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', 'backgroundNodeService', dexnsCtrl]);
+app.controller('dexnsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', 'backgroundNodeService', 'dexnsService', dexnsCtrl]);
 app.controller('footerCtrl', ['$scope', footerCtrl]);
 app.controller('offlineTxCtrl', ['$scope', '$sce', '$rootScope', 'walletService', offlineTxCtrl]);
 app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', 'backgroundNodeService', 'modalService', 'coldStakingService', 'messageService', walletBalanceCtrl]);

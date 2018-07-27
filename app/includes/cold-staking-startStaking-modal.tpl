@@ -4,7 +4,7 @@
     <section class="modal-dialog">
         <form ng-submit="startStaking();">
             <section class="modal-content"
-                     ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
+                     ng-if="coldStakingService.validNetwork()"
 
             >
 
@@ -12,7 +12,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
 
 
-                    <div ng-if="coldStakingService._staker_info.weight > 0" class="alert alert-danger">
+                    <div ng-if="coldStakingService.contract.staker_info.weight > 0" class="alert alert-danger">
                         <h2> WARNING!</h2>
                         <p translate="COLD_STAKING_START_STAKING_WARNING">
                             You already have funds in staking contract.
@@ -119,7 +119,7 @@
                         No, get me out of here!
                     </button>
                     <button
-                            ng-disabled="coldStakingService._staker_info.weight > 0 && !input.understand"
+                            ng-disabled="coldStakingService.contract.staker_info.weight > 0 && !input.understand"
                             type="submit"
                             class="btn btn-primary" translate="SENDModal_Yes">
                         Yes, I am sure! Make transaction.

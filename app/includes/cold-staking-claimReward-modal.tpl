@@ -3,14 +3,14 @@
     <section class="modal-dialog">
         <form ng-submit="claim()">
             <section class="modal-content"
-                     ng-if="['RINKEBY ETH', 'Testnet CLO'].includes(ajaxReq.type)"
+                     ng-if="coldStakingService.validNetwork()"
 
             >
 
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-                    <div class="alert alert-danger" ng-if="coldStakingService._staker_info.reward === 0">
+                    <div class="alert alert-danger" ng-if="coldStakingService.contract.staker_info.reward === 0">
                         <h1>WARNING!</h1>
                         <p translate="COLD_STAKING_NO_WITHDRAW">
                             You do not have any deposit to withdraw.
@@ -18,7 +18,8 @@
                     </div>
 
 
-                    <h2 class="modal-title">You are about to claim <b> Reward {{coldStakingService.stake_balance || 0}}
+                    <h2 class="modal-title">You are about to claim <b> Reward
+                        {{coldStakingService.contract.stake_balance || 0}}
                         {{ajaxReq.type}}</b>
                     </h2>
 
@@ -33,10 +34,11 @@
 
                     </h5>
 
+
                     <p>
                         <b translate="TRANS_gas"></b>
 
-                        {{tx.gasLimit || '-1'}}
+                        {{coldStakingService.tx.gasLimit | number}}
                     </p>
 
                     <p>
@@ -66,11 +68,12 @@
                 </div>
 
                 <div class="modal-footer">
+
                     <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
                         No, get me out of here!
                     </button>
                     <button
-                            ng-disabled="coldStakingService._staker_info.reward === 0;"
+                            ng-disabled="!coldStakingService.contract.staker_info.reward"
 
                             type="submit"
                             class="btn btn-primary" translate="SENDModal_Yes">

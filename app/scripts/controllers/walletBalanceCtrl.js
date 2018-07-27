@@ -53,10 +53,23 @@ var walletBalanceCtrl = function ($scope, $sce,
     }, function (val, _val) {
         if (!val) return;
         $scope.wallet = walletService.wallet;
-        coldStakingService.handleInit();
 
+        coldStakingService.contract.initStakerInfo();
+
+        if (coldStakingService.validNetwork()) {
+
+            coldStakingService.staker_info();
+        }
 
     });
+
+    /*
+
+
+        This function is used to estimate gas of cliam and claim_and_withrdaw from
+        cold staking service.
+     */
+
 
     $scope.estimateGas_ = function (name = 'claim_and_withdraw') {
 
@@ -66,39 +79,40 @@ var walletBalanceCtrl = function ($scope, $sce,
         };
 
 
-        ethFuncs.handleContractGasEstimation(name, coldStakingService.contract, tx, function (data) {
-
-            if (!data.error) {
-
-                Object.assign($scope.tx, data);
+        ethFuncs.estGasContract(name, coldStakingService.contract, tx).then((data) => {
 
 
-            } else {
+            Object.assign(coldStakingService.tx, data);
 
 
-                // Object.assign($scope.tx, {gasLimit: -1});
+        }).catch(err => {
 
-                $scope.notifier.danger(data.msg);
+            uiFuncs.notifier.danger(err && err.msg || err);
+        }).finally(() => {
+
+            if (name === 'claim_and_withdraw') {
+
+                modalService.openWithdrawModal.open();
+            } else if (name === 'claim') {
+
+                modalService.openClaimRewardModal.open();
             }
-
-
-        });
+        })
 
     };
+
 
     $scope.handleOpenWithdraw = function () {
 
 
         $scope.estimateGas_('claim_and_withdraw');
 
-        modalService.openWithdrawModal.open();
 
     };
 
     $scope.handleOpenClaim = function () {
 
         $scope.estimateGas_('claim');
-        modalService.openClaimRewardModal.open();
 
     }
 

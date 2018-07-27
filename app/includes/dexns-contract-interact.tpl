@@ -11,6 +11,7 @@
             <li ng-repeat="func in visibleFuncList track by $index"
                 ng-class="func.stateMutability === 'view' ? 'btn-read' : 'btn-write'"
             ><a
+                    style="color: rgb(0,0,0);"
                     ng-click="selectFunc(func);">{{func.name}}</a></li>
         </ul>
     </div>

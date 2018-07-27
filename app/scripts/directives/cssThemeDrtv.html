@@ -19,6 +19,11 @@
 <style>
 
 
+    :root {
+
+        --classic-black: rgb(40, 40, 40);
+    }
+
     body, body * {
 
         transition: background-color 750ms ease-in-out;
@@ -29,7 +34,7 @@
 
         width: 7rem;
 
-        color: #282828;
+        color: var(--classic-black);
 
         text-transform: capitalize;
 
@@ -39,115 +44,133 @@
 <span ng-if="currentTheme === 'night'">
     <style>
 
+        :root {
 
+            --black: rgb(25, 33, 38);
+            --nav-black: rgb(34, 34, 34);
+            --modal-content-black: rgb(32, 32, 32);
+            --list-black: rgb(25, 33, 38);
+            --blue: rgb(49, 121, 205);
+            --classic-gray: rgb(47, 61, 69);
+            --grey: rgba(255, 255, 255, 0.4);
+            --modal-content-gray-text: rgb(136, 136, 136);
+            --light-gray: rgb(173, 175, 174);
+            --white: rgb(255, 255, 255);
+            --panel-gray: rgb(60, 60, 60);
+            --light-gray-2: rgb(51, 51, 51);
 
-body {
-    background-color: rgb(25, 33, 38);
-    color: white;
-}
+        }
 
-small, .small {
+        body {
+            background-color: var(--black);
+            color: var(--white);
+        }
 
-    color: rgba(255, 255, 255, 0.4);
-}
+        li {
 
-a {
+            background-color: var(--list-black);
+            color: var(--white);
+        }
 
-    color: rgb(49, 121, 205);
+        .dropdown-menu > li > a {
 
-}
+            color: var(--white);
 
-a.isActive {
+        }
 
-    color: white;
-}
+        a {
 
-.form-control {
+            color: var(--blue);
 
-    color: #333;
-}
+        }
 
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-    background-color: #adafae;
-    opacity: 1;
-    color: #282828;
-}
+        a.isActive, li.isActive, li.active {
 
-.panel-default {
-    border-color: #282828;
-}
+            color: var(--white);
+        }
 
-.panel, .block, main > article > section {
-    background-color: rgb(47, 61, 69);
-    border: 1px solid transparent;
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-}
+        .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+            background-color: var(--light-gray);
+            opacity: 1;
+            color: var(--classic-black);
+        }
 
-.panel-default > .panel-heading {
-    color: white;
-    background-color: #3c3c3c;
-    border-color: #282828;
-}
+        .panel-default {
+            border-color: var(--classic-black);
+        }
 
-.panel-footer {
-    background-color: #3c3c3c;
-    border-top: 1px solid #282828;
-}
+        .panel, .block, main > article > section {
+            background-color: var(--classic-gray);
+            border: 1px solid transparent;
+            -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        }
 
-.navbar-default {
-    background-color: rgb(25, 33, 38);
-}
+        .panel-default > .panel-heading {
+            color: var(--white);
+            background-color: var(--panel-gray);
+            border-color: var(--classic-black);
+        }
 
-.modal-content {
-    background-color: #202020;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
-    outline: 0;
-}
+        .panel-footer {
+            background-color: var(--panel-gray);
+            border-top: 1px solid var(--classic-black);
+        }
 
-.modal-header {
-    border-bottom: 1px solid #282828;
-}
+        .navbar-default {
+            background-color: var(--black);
+        }
 
-.modal-footer {
-    border-top: 1px solid #282828;
-}
+        .modal-content {
+            background-color: var(--modal-content-black);
+            color: var(--white);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+            outline: 0;
+        }
 
-.nav-container {
+        .modal-header {
+            border-bottom: 1px solid var(--classic-black);
+        }
 
-    border: none;
-}
+        .modal-footer {
+            border-top: 1px solid var(--classic-black);
+        }
 
-.nav-container .nav-scroll .nav-inner .nav-item.active a,
-.nav-container .nav-scroll .nav-inner .nav-item a:focus,
-.nav-container .nav-scroll .nav-inner .nav-item a:hover {
-    color: #fff;
-    background-color: transparent;
+        .nav-container {
 
-}
+            border: none;
+        }
 
-.nav-container .nav-scroll .nav-inner .nav-item a {
-    color: white;
-    text-decoration: none;
-    background-color: rgb(47, 61, 69);
-}
+        .nav-container .nav-scroll .nav-inner .nav-item.active a,
+        .nav-container .nav-scroll .nav-inner .nav-item a:focus,
+        .nav-container .nav-scroll .nav-inner .nav-item a:hover {
+            color: var(--white);
+            background-color: transparent;
 
-.addressIdenticon {
+        }
 
-    background-color: #fff;
-}
+        .nav-container .nav-scroll .nav-inner .nav-item a {
+            color: var(--white);
+            text-decoration: none;
+            background-color: var(--classic-gray);
+        }
 
-.nav-inner {
+        .addressIdenticon {
 
-    border-color: white !important;
-}
+            background-color: var(--white);
+        }
 
-.nav-container .nav-arrow-left, .nav-container .nav-arrow-right {
+        .nav-inner {
 
-    background-color: #222;
-}
+            border-color: var(--white) !important;
+        }
+
+        .nav-container .nav-arrow-left, .nav-container .nav-arrow-right {
+
+            background-color: var(--nav-black);
+        }
 
 
 

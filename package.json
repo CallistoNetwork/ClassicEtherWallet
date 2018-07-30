@@ -1,13 +1,24 @@
 {
-  "name": "classic-custom",
+  "name": "classicetherwallet",
   "version": "1.1.0",
   "description": "",
+  "contributors": [
+    "jchimien@gmail.com"
+  ],
   "main": "gulpfile.js",
   "author": "ClassicEtherWallet",
   "license": "ISC",
   "scripts": {
     "dev": "gulp",
-    "dist": "gulp clean"
+    "dist": "gulp clean",
+    "format": "prettier --write \"app/**/*.js\"",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "app/**/*.js": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "devDependencies": {
     "angular": "^1.6.2",
@@ -27,10 +38,13 @@
     "gulp-util": "^3.0.8",
     "hdkey": "^0.7.1",
     "html2js-browserify": "^1.3.0",
+    "husky": "^0.14.3",
     "idna-uts46": "^1.0.1",
     "install": "^0.10.1",
+    "lint-staged": "^7.2.0",
     "marked": "^0.3.6",
     "open": "0.0.5",
+    "prettier": "^1.14.0",
     "scryptsy": "^2.0.0",
     "string-format": "^0.5.0",
     "utf8": "^2.1.2",

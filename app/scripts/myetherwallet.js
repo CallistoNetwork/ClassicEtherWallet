@@ -192,7 +192,7 @@ Wallet.prototype.toJSON = function () {
         checksumAddress: this.getChecksumAddressString(),
         privKey: this.getPrivateKeyString(),
         pubKey: this.getPublicKeyString(),
-        publisher: "MyEtherWallet",
+        publisher: "ClassicEtherWallet",
         encrypted: false,
         version: 2
     }

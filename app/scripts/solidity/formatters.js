@@ -20,11 +20,10 @@
  * @date 2015
  */
 
-var BigNumber = require('bignumber.js');
-var utils = require('./utils');
-var c = require('./config');
-var SolidityParam = require('./param');
-
+var BigNumber = require("bignumber.js");
+var utils = require("./utils");
+var c = require("./config");
+var SolidityParam = require("./param");
 
 /**
  * Formats input value to byte representation of int
@@ -35,10 +34,10 @@ var SolidityParam = require('./param');
  * @param {String|Number|BigNumber} value that needs to be formatted
  * @returns {SolidityParam}
  */
-var formatInputInt = function (value) {
-    BigNumber.config(c.ETH_BIGNUMBER_ROUNDING_MODE);
-    var result = utils.padLeft(utils.toTwosComplement(value).toString(16), 64);
-    return new SolidityParam(result);
+var formatInputInt = function(value) {
+  BigNumber.config(c.ETH_BIGNUMBER_ROUNDING_MODE);
+  var result = utils.padLeft(utils.toTwosComplement(value).toString(16), 64);
+  return new SolidityParam(result);
 };
 
 /**
@@ -48,11 +47,11 @@ var formatInputInt = function (value) {
  * @param {String}
  * @returns {SolidityParam}
  */
-var formatInputBytes = function (value) {
-    var result = utils.toHex(value).substr(2);
-    var l = Math.floor((result.length + 63) / 64);
-    result = utils.padRight(result, l * 64);
-    return new SolidityParam(result);
+var formatInputBytes = function(value) {
+  var result = utils.toHex(value).substr(2);
+  var l = Math.floor((result.length + 63) / 64);
+  result = utils.padRight(result, l * 64);
+  return new SolidityParam(result);
 };
 
 /**
@@ -62,12 +61,12 @@ var formatInputBytes = function (value) {
  * @param {String}
  * @returns {SolidityParam}
  */
-var formatInputDynamicBytes = function (value) {
-    var result = utils.toHex(value).substr(2);
-    var length = result.length / 2;
-    var l = Math.floor((result.length + 63) / 64);
-    result = utils.padRight(result, l * 64);
-    return new SolidityParam(formatInputInt(length).value + result);
+var formatInputDynamicBytes = function(value) {
+  var result = utils.toHex(value).substr(2);
+  var length = result.length / 2;
+  var l = Math.floor((result.length + 63) / 64);
+  result = utils.padRight(result, l * 64);
+  return new SolidityParam(formatInputInt(length).value + result);
 };
 
 /**
@@ -77,12 +76,12 @@ var formatInputDynamicBytes = function (value) {
  * @param {String}
  * @returns {SolidityParam}
  */
-var formatInputString = function (value) {
-    var result = utils.fromUtf8(value).substr(2);
-    var length = result.length / 2;
-    var l = Math.floor((result.length + 63) / 64);
-    result = utils.padRight(result, l * 64);
-    return new SolidityParam(formatInputInt(length).value + result);
+var formatInputString = function(value) {
+  var result = utils.fromUtf8(value).substr(2);
+  var length = result.length / 2;
+  var l = Math.floor((result.length + 63) / 64);
+  result = utils.padRight(result, l * 64);
+  return new SolidityParam(formatInputInt(length).value + result);
 };
 
 /**
@@ -92,9 +91,11 @@ var formatInputString = function (value) {
  * @param {Boolean}
  * @returns {SolidityParam}
  */
-var formatInputBool = function (value) {
-    var result = '000000000000000000000000000000000000000000000000000000000000000' + (value ?  '1' : '0');
-    return new SolidityParam(result);
+var formatInputBool = function(value) {
+  var result =
+    "000000000000000000000000000000000000000000000000000000000000000" +
+    (value ? "1" : "0");
+  return new SolidityParam(result);
 };
 
 /**
@@ -105,8 +106,8 @@ var formatInputBool = function (value) {
  * @param {String|Number|BigNumber}
  * @returns {SolidityParam}
  */
-var formatInputReal = function (value) {
-    return formatInputInt(new BigNumber(value).times(new BigNumber(2).pow(128)));
+var formatInputReal = function(value) {
+  return formatInputInt(new BigNumber(value).times(new BigNumber(2).pow(128)));
 };
 
 /**
@@ -116,8 +117,8 @@ var formatInputReal = function (value) {
  * @param {String} value is hex format
  * @returns {Boolean} true if it is negative, otherwise false
  */
-var signedIsNegative = function (value) {
-    return (new BigNumber(value.substr(0, 1), 16).toString(2).substr(0, 1)) === '1';
+var signedIsNegative = function(value) {
+  return new BigNumber(value.substr(0, 1), 16).toString(2).substr(0, 1) === "1";
 };
 
 /**
@@ -127,15 +128,22 @@ var signedIsNegative = function (value) {
  * @param {SolidityParam} param
  * @returns {BigNumber} right-aligned output bytes formatted to big number
  */
-var formatOutputInt = function (param) {
-    var value = param.staticPart() || "0";
+var formatOutputInt = function(param) {
+  var value = param.staticPart() || "0";
 
-    // check if it's negative number
-    // it it is, return two's complement
-    if (signedIsNegative(value)) {
-        return new BigNumber(value, 16).minus(new BigNumber('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff', 16)).minus(1);
-    }
-    return new BigNumber(value, 16);
+  // check if it's negative number
+  // it it is, return two's complement
+  if (signedIsNegative(value)) {
+    return new BigNumber(value, 16)
+      .minus(
+        new BigNumber(
+          "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          16
+        )
+      )
+      .minus(1);
+  }
+  return new BigNumber(value, 16);
 };
 
 /**
@@ -145,9 +153,9 @@ var formatOutputInt = function (param) {
  * @param {SolidityParam}
  * @returns {BigNumeber} right-aligned output bytes formatted to uint
  */
-var formatOutputUInt = function (param) {
-    var value = param.staticPart() || "0";
-    return new BigNumber(value, 16);
+var formatOutputUInt = function(param) {
+  var value = param.staticPart() || "0";
+  return new BigNumber(value, 16);
 };
 
 /**
@@ -157,8 +165,8 @@ var formatOutputUInt = function (param) {
  * @param {SolidityParam}
  * @returns {BigNumber} input bytes formatted to real
  */
-var formatOutputReal = function (param) {
-    return formatOutputInt(param).dividedBy(new BigNumber(2).pow(128));
+var formatOutputReal = function(param) {
+  return formatOutputInt(param).dividedBy(new BigNumber(2).pow(128));
 };
 
 /**
@@ -168,8 +176,8 @@ var formatOutputReal = function (param) {
  * @param {SolidityParam}
  * @returns {BigNumber} input bytes formatted to ureal
  */
-var formatOutputUReal = function (param) {
-    return formatOutputUInt(param).dividedBy(new BigNumber(2).pow(128));
+var formatOutputUReal = function(param) {
+  return formatOutputUInt(param).dividedBy(new BigNumber(2).pow(128));
 };
 
 /**
@@ -179,8 +187,11 @@ var formatOutputUReal = function (param) {
  * @param {SolidityParam}
  * @returns {Boolean} right-aligned input bytes formatted to bool
  */
-var formatOutputBool = function (param) {
-    return param.staticPart() === '0000000000000000000000000000000000000000000000000000000000000001' ? true : false;
+var formatOutputBool = function(param) {
+  return param.staticPart() ===
+    "0000000000000000000000000000000000000000000000000000000000000001"
+    ? true
+    : false;
 };
 
 /**
@@ -191,10 +202,10 @@ var formatOutputBool = function (param) {
  * @param {String} name type name
  * @returns {String} hex string
  */
-var formatOutputBytes = function (param, name) {
-    var matches = name.match(/^bytes([0-9]*)/);
-    var size = parseInt(matches[1]);
-    return '0x' + param.staticPart().slice(0, 2 * size);
+var formatOutputBytes = function(param, name) {
+  var matches = name.match(/^bytes([0-9]*)/);
+  var size = parseInt(matches[1]);
+  return "0x" + param.staticPart().slice(0, 2 * size);
 };
 
 /**
@@ -204,9 +215,10 @@ var formatOutputBytes = function (param, name) {
  * @param {SolidityParam} left-aligned hex representation of string
  * @returns {String} hex string
  */
-var formatOutputDynamicBytes = function (param) {
-    var length = (new BigNumber(param.dynamicPart().slice(0, 64), 16)).toNumber() * 2;
-    return '0x' + param.dynamicPart().substr(64, length);
+var formatOutputDynamicBytes = function(param) {
+  var length =
+    new BigNumber(param.dynamicPart().slice(0, 64), 16).toNumber() * 2;
+  return "0x" + param.dynamicPart().substr(64, length);
 };
 
 /**
@@ -216,9 +228,10 @@ var formatOutputDynamicBytes = function (param) {
  * @param {SolidityParam} left-aligned hex representation of string
  * @returns {String} ascii string
  */
-var formatOutputString = function (param) {
-    var length = (new BigNumber(param.dynamicPart().slice(0, 64), 16)).toNumber() * 2;
-    return utils.toUtf8(param.dynamicPart().substr(64, length));
+var formatOutputString = function(param) {
+  var length =
+    new BigNumber(param.dynamicPart().slice(0, 64), 16).toNumber() * 2;
+  return utils.toUtf8(param.dynamicPart().substr(64, length));
 };
 
 /**
@@ -228,25 +241,25 @@ var formatOutputString = function (param) {
  * @param {SolidityParam} right-aligned input bytes
  * @returns {String} address
  */
-var formatOutputAddress = function (param) {
-    var value = param.staticPart();
-    return "0x" + value.slice(value.length - 40, value.length);
+var formatOutputAddress = function(param) {
+  var value = param.staticPart();
+  return "0x" + value.slice(value.length - 40, value.length);
 };
 
 module.exports = {
-    formatInputInt: formatInputInt,
-    formatInputBytes: formatInputBytes,
-    formatInputDynamicBytes: formatInputDynamicBytes,
-    formatInputString: formatInputString,
-    formatInputBool: formatInputBool,
-    formatInputReal: formatInputReal,
-    formatOutputInt: formatOutputInt,
-    formatOutputUInt: formatOutputUInt,
-    formatOutputReal: formatOutputReal,
-    formatOutputUReal: formatOutputUReal,
-    formatOutputBool: formatOutputBool,
-    formatOutputBytes: formatOutputBytes,
-    formatOutputDynamicBytes: formatOutputDynamicBytes,
-    formatOutputString: formatOutputString,
-    formatOutputAddress: formatOutputAddress
+  formatInputInt: formatInputInt,
+  formatInputBytes: formatInputBytes,
+  formatInputDynamicBytes: formatInputDynamicBytes,
+  formatInputString: formatInputString,
+  formatInputBool: formatInputBool,
+  formatInputReal: formatInputReal,
+  formatOutputInt: formatOutputInt,
+  formatOutputUInt: formatOutputUInt,
+  formatOutputReal: formatOutputReal,
+  formatOutputUReal: formatOutputUReal,
+  formatOutputBool: formatOutputBool,
+  formatOutputBytes: formatOutputBytes,
+  formatOutputDynamicBytes: formatOutputDynamicBytes,
+  formatOutputString: formatOutputString,
+  formatOutputAddress: formatOutputAddress
 };

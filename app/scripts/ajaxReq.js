@@ -1,5 +1,5 @@
-'use strict';
-var ajaxReq = function() {}
+"use strict";
+var ajaxReq = function() {};
 ajaxReq.http = null;
 ajaxReq.postSerializer = null;
 ajaxReq.getCoinPrice = null;

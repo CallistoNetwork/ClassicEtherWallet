@@ -1,5 +1,5 @@
-var f = require('./formatters');
-var SolidityType = require('./type');
+var f = require("./formatters");
+var SolidityType = require("./type");
 
 /**
  * SolidityTypeReal is a prootype that represents real type
@@ -17,16 +17,16 @@ var SolidityType = require('./type');
  * real[3][]
  * real64[][6][], ...
  */
-var SolidityTypeReal = function () {
-    this._inputFormatter = f.formatInputReal;
-    this._outputFormatter = f.formatOutputReal;
+var SolidityTypeReal = function() {
+  this._inputFormatter = f.formatInputReal;
+  this._outputFormatter = f.formatOutputReal;
 };
 
 SolidityTypeReal.prototype = new SolidityType({});
 SolidityTypeReal.prototype.constructor = SolidityTypeReal;
 
-SolidityTypeReal.prototype.isType = function (name) {
-    return !!name.match(/real([0-9]*)?(\[([0-9]*)\])?/);
+SolidityTypeReal.prototype.isType = function(name) {
+  return !!name.match(/real([0-9]*)?(\[([0-9]*)\])?/);
 };
 
 module.exports = SolidityTypeReal;

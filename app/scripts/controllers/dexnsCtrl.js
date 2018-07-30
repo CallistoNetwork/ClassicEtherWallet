@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /* 0 -> nothing
  *  1 -> user
  *  2 -> token
@@ -9,194 +9,173 @@
  *  7 -> confirmation
  */
 const statusCodes = {
-    nothing: 0,
-    'user': 1,
-    'token': 2,
-    'contract': 3,
-    'update Name': 4,
-    'access Name content': 5,
-    'step 2 register Name': 6,
-    'confirmation': 7,
+  nothing: 0,
+  user: 1,
+  token: 2,
+  contract: 3,
+  "update Name": 4,
+  "access Name content": 5,
+  "step 2 register Name": 6,
+  confirmation: 7
 };
 
 // visible function list
 
 const feContracts = [
-    // 'registerName',
-    'endtimeOf',
-    'extend_Name_Binding_Time',
-    'unassignName',
-    'updateName',
-    'appendNameMetadata',
-    'hideNameOwner',
-    'assignName',
-    'changeNameOwner',
+  // 'registerName',
+  "endtimeOf",
+  "extend_Name_Binding_Time",
+  "unassignName",
+  "updateName",
+  "appendNameMetadata",
+  "hideNameOwner",
+  "assignName",
+  "changeNameOwner"
 ];
 
 const storageContracts = [
-    'metadataOf',
-    'ownerOf',
-    'getName',
-    'name_assignation',
-    'assignation'
+  "metadataOf",
+  "ownerOf",
+  "getName",
+  "name_assignation",
+  "assignation"
 ];
 
-
-const dexnsCtrl = function (
-    $scope,
-    $sce,
-    $rootScope,
-    walletService,
-    backgroundNodeService,
-    dexnsService
+const dexnsCtrl = function(
+  $scope,
+  $sce,
+  $rootScope,
+  walletService,
+  backgroundNodeService,
+  dexnsService
 ) {
+  $scope.etherUnits = etherUnits;
 
-    $scope.etherUnits = etherUnits;
+  $scope.dexnsService = dexnsService;
+  walletService.wallet = null;
 
-    $scope.dexnsService = dexnsService;
-    walletService.wallet = null;
+  $scope.contract = dexnsService.feContract;
 
-    $scope.contract = dexnsService.feContract;
+  $scope.walletService = walletService;
 
-    $scope.walletService = walletService;
+  if (nodes.nodeList[globalFuncs.getCurNode()].type !== "ETC") {
+    $rootScope.$broadcast("ChangeNode", globalFuncs.networks["ETC"] || 0);
+  }
+  $scope.networks = globalFuncs.networks;
 
+  $scope.dexnsConfirmModalModal = new Modal(
+    document.getElementById("dexnsConfirmModal")
+  );
+  $scope.sendTransactionContractModal = new Modal(
+    document.getElementById("sendTransactionContract")
+  );
 
-    if (nodes.nodeList[globalFuncs.getCurNode()].type !== 'ETC') {
-
-        $rootScope.$broadcast('ChangeNode', globalFuncs.networks['ETC'] || 0);
-
+  // TODO
+  $scope.$watch(
+    function() {
+      if (walletService.wallet == null) return null;
+      return walletService.wallet.getAddressString();
+    },
+    function() {
+      if (walletService.wallet == null) return;
+      $scope.wallet = walletService.wallet;
+      $scope.wd = true;
+      $scope.wallet.setBalance();
+      $scope.wallet.setTokens();
     }
-    $scope.networks = globalFuncs.networks;
+  );
 
+  $scope.handleRegisterAndUpdateName = function(event) {
+    event.preventDefault();
 
-    $scope.dexnsConfirmModalModal = new Modal(document.getElementById('dexnsConfirmModal'));
-    $scope.sendTransactionContractModal = new Modal(document.getElementById('sendTransactionContract'));
+    if (!walletUnlocked()) return false;
 
+    const {
+      tokenName,
+      owner,
+      destination,
+      abi,
+      link,
+      sourceCode,
+      info,
+      tokenNetwork,
+      hideOwner,
+      assign
+    } = $scope.input;
 
-    // TODO
-    $scope.$watch(function () {
-        if (walletService.wallet == null) return null;
-        return walletService.wallet.getAddressString();
-    }, function () {
-        if (walletService.wallet == null) return;
-        $scope.wallet = walletService.wallet;
-        $scope.wd = true;
-        $scope.wallet.setBalance();
-        $scope.wallet.setTokens();
-    });
+    // fixme: hideOwner, owner
 
+    const _metadata = dexnsService.stringifyMetadata($scope.input);
 
-    $scope.handleRegisterAndUpdateName = function (event) {
+    const _owner = walletService.wallet.getAddressString();
 
-        event.preventDefault();
+    const _destination = _owner;
 
-        if (!walletUnlocked()) return false;
+    const _hideOwner = true;
 
-        const {tokenName, owner, destination, abi, link, sourceCode, info, tokenNetwork, hideOwner, assign} = $scope.input;
+    const _assign = false;
 
-
-        // fixme: hideOwner, owner
-
-        const _metadata = dexnsService.stringifyMetadata($scope.input);
-
-        const _owner = walletService.wallet.getAddressString();
-
-        const _destination = _owner;
-
-        const _hideOwner = true;
-
-        const _assign = false;
-
-
-        $scope.tx = {
-            inputs: [tokenName, _owner, _destination, _metadata, _hideOwner, _assign],
-            value: dexnsService.feContract.namePrice[0].value,
-            unit: 'wei',
-            from: _owner,
-        };
-
-        const wallet = walletService.wallet;
-
-        dexnsService.feContract.genTxContract(
-            'registerAndUpdateName',
-            wallet,
-            $scope.tx,
-        ).then((result) => openModal(result))
-
+    $scope.tx = {
+      inputs: [tokenName, _owner, _destination, _metadata, _hideOwner, _assign],
+      value: dexnsService.feContract.namePrice[0].value,
+      unit: "wei",
+      from: _owner
     };
 
+    const wallet = walletService.wallet;
 
-    $scope.getOwningTime = function () {
+    dexnsService.feContract
+      .genTxContract("registerAndUpdateName", wallet, $scope.tx)
+      .then(result => openModal(result));
+  };
 
-        dexnsService.feContract.call('owningTime');
+  $scope.getOwningTime = function() {
+    dexnsService.feContract.call("owningTime");
+  };
 
-    };
+  $scope.call = async function(_function) {
+    const tx = { inputs: _function.inputs.map(i => i.value) };
 
+    if (_function.contract === "storageContract") {
+      if (_function.name === "metadataOf") {
+        $scope.raw = "";
+      }
 
-    $scope.call = async function (_function) {
+      const result = await dexnsService.storageContract.call(
+        _function.name,
+        tx
+      );
 
+      $scope.$apply(function() {
+        if (_function.name === "metadataOf") {
+          const { value } = result[0];
 
-        const tx = {inputs: _function.inputs.map(i => i.value)};
-
-
-        if (_function.contract === 'storageContract') {
-
-            if (_function.name === 'metadataOf') {
-                $scope.raw = '';
-
-            }
-
-
-            const result = await dexnsService.storageContract.call(_function.name, tx);
-
-
-            $scope.$apply(function () {
-
-                if (_function.name === 'metadataOf') {
-
-                    const {value} = result[0];
-
-                    $scope.outputs[_function.name] = dexnsService.parseMetadata(value);
-                    $scope.raw = value;
-                } else {
-
-                    $scope.outputs[_function.name] = result;
-                }
-
-
-            })
-
-
+          $scope.outputs[_function.name] = dexnsService.parseMetadata(value);
+          $scope.raw = value;
         } else {
-
-
-            const result = await dexnsService.feContract.call(_function.name, tx);
-
-            $scope.$apply(function () {
-
-                $scope.outputs[_function.name] = result;
-            })
-
+          $scope.outputs[_function.name] = result;
         }
+      });
+    } else {
+      const result = await dexnsService.feContract.call(_function.name, tx);
 
+      $scope.$apply(function() {
+        $scope.outputs[_function.name] = result;
+      });
+    }
 
-        // });
+    // });
+  };
 
-    };
+  $scope.handleSubmit = function(_function) {
+    if (_function.stateMutability === "view") {
+      $scope.call(_function);
+    } else {
+      $scope.genTxOpenModal(_function);
+    }
+  };
 
-    $scope.handleSubmit = function (_function) {
-
-        if (_function.stateMutability === 'view') {
-
-            $scope.call(_function);
-        }
-
-        else {
-            $scope.genTxOpenModal(_function);
-        }
-    };
-
-    /*
+  /*
 
 
         generate tx to contract
@@ -204,240 +183,205 @@ const dexnsCtrl = function (
         open modal to confirm
      */
 
-    $scope.genTxOpenModal = function (_function) {
-
-        if (!walletUnlocked()) {
-
-            return false;
-        }
-
-        let value = 0;
-
-        if (['registerName', 'registerAndUpDateName'].includes(_function.name)) {
-
-            value = dexnsService.feContract.namePrice[0].value;
-
-        }
-
-        $scope._function = _function;
-        dexnsService.feContract.genTxContract(_function.name,
-            walletService.wallet,
-            {
-                inputs: _function.inputs.map(i => i.value),
-                from: walletService.wallet.getAddressString(),
-                value,
-                unit: 'wei',
-            }).then((result) => openModal(result))
-    };
-
-
-    function openModal(signedTx) {
-
-
-        $scope.$apply(function () {
-
-            $scope.tx = signedTx;
-        });
-        $scope.sendTransactionContractModal.open();
-
+  $scope.genTxOpenModal = function(_function) {
+    if (!walletUnlocked()) {
+      return false;
     }
 
-    /*
+    let value = 0;
+
+    if (["registerName", "registerAndUpDateName"].includes(_function.name)) {
+      value = dexnsService.feContract.namePrice[0].value;
+    }
+
+    $scope._function = _function;
+    dexnsService.feContract
+      .genTxContract(_function.name, walletService.wallet, {
+        inputs: _function.inputs.map(i => i.value),
+        from: walletService.wallet.getAddressString(),
+        value,
+        unit: "wei"
+      })
+      .then(result => openModal(result));
+  };
+
+  function openModal(signedTx) {
+    $scope.$apply(function() {
+      $scope.tx = signedTx;
+    });
+    $scope.sendTransactionContractModal.open();
+  }
+
+  /*
 
         send the tx to contract after user confirms
      */
 
-    $scope.sendTxContract = function () {
+  $scope.sendTxContract = function() {
+    dexnsService.feContract.sendTx($scope.tx).finally(result => {
+      $scope.sendTransactionContractModal.close();
 
-        dexnsService.feContract.sendTx($scope.tx).finally((result) => {
+      // todo: save result and display
+    });
+  };
 
-            $scope.sendTransactionContractModal.close();
+  $scope.openRegisterName = function() {
+    $scope.dexns_status = statusCodes.user; // 1 -> user
+  };
 
-            // todo: save result and display
-        });
-    };
+  $scope.openRegisterToken = function() {
+    $scope.dexns_status = statusCodes.token;
+  };
 
+  $scope.checkDexNSName = function() {
+    dexnsService.feContract
+      .call("endtimeOf", { inputs: [$scope.DexNSName] })
+      .then(data => {
+        const { value } = data[0];
 
-    $scope.openRegisterName = function () {
-        $scope.dexns_status = statusCodes.user; // 1 -> user
-    }
+        const _time = new Date().getTime();
+        const _renderedTime = new BigNumber(_time);
 
-    $scope.openRegisterToken = function () {
-
-        $scope.dexns_status = statusCodes.token;
-    }
-
-    $scope.checkDexNSName = function () {
-
-
-        dexnsService.feContract.call('endtimeOf', {inputs: [$scope.DexNSName]})
-            .then(data => {
-
-                const {value} = data[0];
-
-                const _time = new Date().getTime();
-                const _renderedTime = new BigNumber(_time);
-
-
-                if (ajaxReq.type !== "ETC") {
-                    $scope.notifier.danger("DexNS accepts only $ETC for gas payments! You should switch to ETC node first to register your name.");
-                }
-                if (_renderedTime.gt(value * 1000)) {
-                    $scope.dexns_status = statusCodes['step 2 register Name'];
-                    $scope.notifier.info("This name is available for registration.");
-                } else {
-                    uiFuncs.notifier.danger("This name is already registered! You should try to register another name.");
-                }
-
-            })
-
-    }
-
-
-    function walletUnlocked() {
-
-        if ($scope.wallet === undefined) {
-            $scope.notifier.danger("Unlock your wallet first!");
-
-            return false;
+        if (ajaxReq.type !== "ETC") {
+          $scope.notifier.danger(
+            "DexNS accepts only $ETC for gas payments! You should switch to ETC node first to register your name."
+          );
         }
-
-        return true;
-    }
-
-    $scope.registerDexNSName = function () {
-
-        if (walletUnlocked()) {
-
-            $scope.dexns_status = statusCodes.confirmation;
-
-            Object.assign($scope.tx, {
-                value: dexnsService.feContract.namePrice[0].value,
-                unit: 'wei',
-                to: dexnsService.feContract.address
-            });
-
-            $scope.dexnsConfirmModalModal.open();
+        if (_renderedTime.gt(value * 1000)) {
+          $scope.dexns_status = statusCodes["step 2 register Name"];
+          $scope.notifier.info("This name is available for registration.");
+        } else {
+          uiFuncs.notifier.danger(
+            "This name is already registered! You should try to register another name."
+          );
         }
+      });
+  };
+
+  function walletUnlocked() {
+    if ($scope.wallet === undefined) {
+      $scope.notifier.danger("Unlock your wallet first!");
+
+      return false;
     }
 
+    return true;
+  }
 
-    $scope.visibleFuncList = [].concat(
-        dexnsService.storageContract.abi
-            .filter(i => storageContracts.includes(i.name))
-            .map(i => Object.assign(i, {contract: 'storageContract'})),
-        dexnsService.feContract.abi
-            .filter(i => feContracts.includes(i.name))
-            .map(i => Object.assign(i, {contract: 'feContract'}))
+  $scope.registerDexNSName = function() {
+    if (walletUnlocked()) {
+      $scope.dexns_status = statusCodes.confirmation;
+
+      Object.assign($scope.tx, {
+        value: dexnsService.feContract.namePrice[0].value,
+        unit: "wei",
+        to: dexnsService.feContract.address
+      });
+
+      $scope.dexnsConfirmModalModal.open();
+    }
+  };
+
+  $scope.visibleFuncList = []
+    .concat(
+      dexnsService.storageContract.abi
+        .filter(i => storageContracts.includes(i.name))
+        .map(i => Object.assign(i, { contract: "storageContract" })),
+      dexnsService.feContract.abi
+        .filter(i => feContracts.includes(i.name))
+        .map(i => Object.assign(i, { contract: "feContract" }))
     )
-        .map(i => Object.assign(i, {sortBy: i.type === 'view' ? 10 : 1}))
-        .sort((a, b) => b.sortBy - a.sortBy);
+    .map(i => Object.assign(i, { sortBy: i.type === "view" ? 10 : 1 }))
+    .sort((a, b) => b.sortBy - a.sortBy);
 
-
-    $scope._registerName = function () {
-
-        const tx = {
-            value: dexnsService.feContract.namePrice[0].value,
-            unit: 'wei',
-            from: walletService.wallet.getAddressString(),
-            inputs: [$scope.DexNSName],
-        };
-
-        return uiFuncs.genTxContract('registerName', dexnsService.feContract, walletService.wallet, tx)
-            .then(_tx => {
-
-
-                $scope.tx = _tx;
-                return uiFuncs.sendTxContract(dexnsService.feContract, $scope.tx);
-
-
-            })
-            .finally(() => {
-
-                $scope.dexnsConfirmModalModal.close();
-
-            })
+  $scope._registerName = function() {
+    const tx = {
+      value: dexnsService.feContract.namePrice[0].value,
+      unit: "wei",
+      from: walletService.wallet.getAddressString(),
+      inputs: [$scope.DexNSName]
     };
 
+    return uiFuncs
+      .genTxContract(
+        "registerName",
+        dexnsService.feContract,
+        walletService.wallet,
+        tx
+      )
+      .then(_tx => {
+        $scope.tx = _tx;
+        return uiFuncs.sendTxContract(dexnsService.feContract, $scope.tx);
+      })
+      .finally(() => {
+        $scope.dexnsConfirmModalModal.close();
+      });
+  };
 
-    $scope.toTimestamp = function (date) {
-        var dateSplitted = date.split('-'); // date must be in DD-MM-YYYY format
-        var formattedDate = dateSplitted[1] + '/' + dateSplitted[0] + '/' + dateSplitted[2];
-        return new Date(formattedDate).getTime();
-    };
+  $scope.toTimestamp = function(date) {
+    var dateSplitted = date.split("-"); // date must be in DD-MM-YYYY format
+    var formattedDate =
+      dateSplitted[1] + "/" + dateSplitted[0] + "/" + dateSplitted[2];
+    return new Date(formattedDate).getTime();
+  };
 
-    function main() {
+  function main() {
+    init();
 
-        init();
+    Promise.all([
+      dexnsService.feContract.call("namePrice"),
+      dexnsService.feContract.call("owningTime")
+    ]);
+  }
 
-        Promise.all([
-            dexnsService.feContract.call('namePrice'),
-            dexnsService.feContract.call('owningTime'),
-        ]);
+  $scope.selectFunc = function(_func) {
+    $scope.dropdownContracts = !$scope.dropdownContracts;
+    $scope.selectedFunc = _func.name;
 
-
+    if (_func.inputs.length === 0) {
+      $scope.call(_func);
     }
+  };
 
+  function init() {
+    Object.assign($scope, {
+      nodeList: Object.values(nodes.nodeTypes),
+      raw: "",
+      outputs: [],
+      dexns_status: statusCodes.nothing, //0,
+      // user input of name to register
+      DexNSName: "",
+      input: {
+        abi: "",
+        link: "",
+        sourceCode: "",
+        info: "",
+        tokenName: "",
+        tokenNetwork: ajaxReq.type,
+        owner: "",
+        destination: "",
+        hideOwner: false,
+        assign: false
+      },
+      hideEnsInfoPanel: false,
+      tx: {
+        gasLimit: "200000",
+        data: "",
+        to: "",
+        unit: "ether",
+        value: 0,
+        gasPrice: ""
+      },
+      sendTxStatus: "",
+      _function: null,
+      dropdownContracts: false,
+      selectedFunc: null
+    });
+  }
 
-    $scope.selectFunc = function (_func) {
+  $scope.init = init;
 
-        $scope.dropdownContracts = !$scope.dropdownContracts;
-        $scope.selectedFunc = _func.name;
-
-        if (_func.inputs.length === 0) {
-
-            $scope.call(_func);
-        }
-
-
-    };
-
-    function init() {
-
-
-        Object.assign($scope, {
-            nodeList: Object.values(nodes.nodeTypes),
-            raw: '',
-            outputs: [],
-            dexns_status: statusCodes.nothing, //0,
-            // user input of name to register
-            DexNSName: '',
-            input: {
-                abi: '',
-                link: '',
-                sourceCode: '',
-                info: '',
-                tokenName: '',
-                tokenNetwork: ajaxReq.type,
-                owner: '',
-                destination: '',
-                hideOwner: false,
-                assign: false,
-            },
-            hideEnsInfoPanel: false,
-            tx: {
-                gasLimit: '200000',
-                data: '',
-                to: '',
-                unit: "ether",
-                value: 0,
-                gasPrice: ''
-            },
-            sendTxStatus: "",
-            _function: null,
-            dropdownContracts: false,
-            selectedFunc: null,
-        });
-
-
-    }
-
-
-    $scope.init = init;
-
-
-    main();
-
-}
+  main();
+};
 
 module.exports = dexnsCtrl;

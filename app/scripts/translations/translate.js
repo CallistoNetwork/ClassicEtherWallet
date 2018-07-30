@@ -1,29 +1,29 @@
- 'use strict';
-  var de = require('./de');
-  var el = require('./el');
-  var en = require('./en');
-  var es = require('./es');
-  var fi = require('./fi');
-  var fr = require('./fr');
-  var hu = require('./hu');
-  var id = require('./id');
-  var it = require('./it');
-  var ja = require('./ja');
-  var nl = require('./nl');
-  var no = require('./no');
-  var pl = require('./pl');
-  var pt = require('./pt');
-  var ru = require('./ru');
-  var ko = require('./ko');
-  //var sk = require('./sk');
-  //var sl = require('./sl');
-  //var sv = require('./sv');
-  var tr = require('./tr');
-  var vi = require('./vi');
-  var zhcn = require('./zhcn');
-  var zhtw = require('./zhtw');
+"use strict";
+var de = require("./de");
+var el = require("./el");
+var en = require("./en");
+var es = require("./es");
+var fi = require("./fi");
+var fr = require("./fr");
+var hu = require("./hu");
+var id = require("./id");
+var it = require("./it");
+var ja = require("./ja");
+var nl = require("./nl");
+var no = require("./no");
+var pl = require("./pl");
+var pt = require("./pt");
+var ru = require("./ru");
+var ko = require("./ko");
+//var sk = require('./sk');
+//var sl = require('./sl');
+//var sv = require('./sv');
+var tr = require("./tr");
+var vi = require("./vi");
+var zhcn = require("./zhcn");
+var zhtw = require("./zhtw");
 
- var translate = function($translateProvider) {
+var translate = function($translateProvider) {
   $translateProvider.translations(de.code, translate.marked(de.data));
   $translateProvider.translations(el.code, translate.marked(el.data));
   $translateProvider.translations(en.code, translate.marked(en.data));
@@ -47,14 +47,15 @@
   $translateProvider.translations(vi.code, translate.marked(vi.data));
   $translateProvider.translations(zhcn.code, translate.marked(zhcn.data));
   $translateProvider.translations(zhtw.code, translate.marked(zhtw.data));
-  $translateProvider.preferredLanguage('en');
-  $translateProvider.fallbackLanguage('en');
+  $translateProvider.preferredLanguage("en");
+  $translateProvider.fallbackLanguage("en");
   $translateProvider.useSanitizeValueStrategy(null);
- }
+};
 
 translate.marked = function(data) {
-    var tData = data;
-	for (var key in tData) if (tData.hasOwnProperty(key)) tData[key] = marked(tData[key]);
-    return tData;
-}
+  var tData = data;
+  for (var key in tData)
+    if (tData.hasOwnProperty(key)) tData[key] = marked(tData[key]);
+  return tData;
+};
 module.exports = translate;

@@ -7,8 +7,7 @@
 /**
  * @fileoverview The U2F api.
  */
-'use strict';
-
+"use strict";
 
 /**
  * Namespace for the U2F api.
@@ -29,12 +28,11 @@ var js_api_version;
 // The Chrome packaged app extension ID.
 // Uncomment this if you want to deploy a server instance that uses
 // the package Chrome app and does not require installing the U2F Chrome extension.
- u2f.EXTENSION_ID = 'kmendfapggjehodndflmmgagdbamhnfd';
+u2f.EXTENSION_ID = "kmendfapggjehodndflmmgagdbamhnfd";
 // The U2F Chrome extension ID.
 // Uncomment this if you want to deploy a server instance that uses
 // the U2F Chrome extension to authenticate.
 // u2f.EXTENSION_ID = 'pfboblefjcgdjicmnffhdgionmgcdmne';
-
 
 /**
  * Message types for messsages to/from the extension
@@ -42,12 +40,12 @@ var js_api_version;
  * @enum {string}
  */
 u2f.MessageTypes = {
-    'U2F_REGISTER_REQUEST': 'u2f_register_request',
-    'U2F_REGISTER_RESPONSE': 'u2f_register_response',
-    'U2F_SIGN_REQUEST': 'u2f_sign_request',
-    'U2F_SIGN_RESPONSE': 'u2f_sign_response',
-    'U2F_GET_API_VERSION_REQUEST': 'u2f_get_api_version_request',
-    'U2F_GET_API_VERSION_RESPONSE': 'u2f_get_api_version_response'
+  U2F_REGISTER_REQUEST: "u2f_register_request",
+  U2F_REGISTER_RESPONSE: "u2f_register_response",
+  U2F_SIGN_REQUEST: "u2f_sign_request",
+  U2F_SIGN_RESPONSE: "u2f_sign_response",
+  U2F_GET_API_VERSION_REQUEST: "u2f_get_api_version_request",
+  U2F_GET_API_VERSION_RESPONSE: "u2f_get_api_version_response"
 };
 
 /**
@@ -56,22 +54,21 @@ u2f.MessageTypes = {
  * @enum {number}
  */
 u2f.ErrorCodes = {
-    'OK': 0,
-    'OTHER_ERROR': 1,
-    'BAD_REQUEST': 2,
-    'CONFIGURATION_UNSUPPORTED': 3,
-    'DEVICE_INELIGIBLE': 4,
-    'TIMEOUT': 5
+  OK: 0,
+  OTHER_ERROR: 1,
+  BAD_REQUEST: 2,
+  CONFIGURATION_UNSUPPORTED: 3,
+  DEVICE_INELIGIBLE: 4,
+  TIMEOUT: 5
 };
 
-u2f.getErrorByCode = function( code ) {
-    for( var prop in u2f.ErrorCodes ) {
-        if( u2f.ErrorCodes.hasOwnProperty( prop ) ) {
-             if( u2f.ErrorCodes[ prop ] === code )
-                 return prop;
-        }
+u2f.getErrorByCode = function(code) {
+  for (var prop in u2f.ErrorCodes) {
+    if (u2f.ErrorCodes.hasOwnProperty(prop)) {
+      if (u2f.ErrorCodes[prop] === code) return prop;
     }
-}
+  }
+};
 
 /**
  * A message for registration requests
@@ -84,7 +81,6 @@ u2f.getErrorByCode = function( code ) {
  */
 u2f.U2fRequest;
 
-
 /**
  * A message for registration responses
  * @typedef {{
@@ -94,7 +90,6 @@ u2f.U2fRequest;
  * }}
  */
 u2f.U2fResponse;
-
 
 /**
  * An error object for responses
@@ -110,7 +105,6 @@ u2f.Error;
  * @typedef {enum {BLUETOOTH_RADIO, BLUETOOTH_LOW_ENERGY, USB, NFC}}
  */
 u2f.Transport;
-
 
 /**
  * Data object for a single sign request.
@@ -129,7 +123,6 @@ u2f.Transports;
  */
 u2f.SignRequest;
 
-
 /**
  * Data object for a sign response.
  * @typedef {{
@@ -140,7 +133,6 @@ u2f.SignRequest;
  */
 u2f.SignResponse;
 
-
 /**
  * Data object for a registration request.
  * @typedef {{
@@ -149,7 +141,6 @@ u2f.SignResponse;
  * }}
  */
 u2f.RegisterRequest;
-
 
 /**
  * Data object for a registration response.
@@ -162,7 +153,6 @@ u2f.RegisterRequest;
  */
 u2f.RegisterResponse;
 
-
 /**
  * Data object for a registered key.
  * @typedef {{
@@ -174,7 +164,6 @@ u2f.RegisterResponse;
  */
 u2f.RegisteredKey;
 
-
 /**
  * Data object for a get API register response.
  * @typedef {{
@@ -182,7 +171,6 @@ u2f.RegisteredKey;
  * }}
  */
 u2f.GetJsApiVersionResponse;
-
 
 //Low level MessagePort API support
 
@@ -192,13 +180,13 @@ u2f.GetJsApiVersionResponse;
  * @param {function((MessagePort|u2f.WrappedChromeRuntimePort_))} callback
  */
 u2f.getMessagePort = function(callback) {
-  if (typeof chrome != 'undefined' && chrome.runtime) {
+  if (typeof chrome != "undefined" && chrome.runtime) {
     // The actual message here does not matter, but we need to get a reply
     // for the callback to run. Thus, send an empty signature request
     // in order to get a failure response.
     var msg = {
-        type: u2f.MessageTypes.U2F_SIGN_REQUEST,
-        signRequests: []
+      type: u2f.MessageTypes.U2F_SIGN_REQUEST,
+      signRequests: []
     };
     chrome.runtime.sendMessage(u2f.EXTENSION_ID, msg, function() {
       if (!chrome.runtime.lastError) {
@@ -228,8 +216,9 @@ u2f.getMessagePort = function(callback) {
  */
 u2f.isAndroidChrome_ = function() {
   var userAgent = navigator.userAgent;
-  return userAgent.indexOf('Chrome') != -1 &&
-  userAgent.indexOf('Android') != -1;
+  return (
+    userAgent.indexOf("Chrome") != -1 && userAgent.indexOf("Android") != -1
+  );
 };
 
 /**
@@ -246,8 +235,10 @@ u2f.isIosChrome_ = function() {
  * @private
  */
 u2f.getChromeRuntimePort_ = function(callback) {
-  var port = chrome.runtime.connect(u2f.EXTENSION_ID,
-      {'includeTlsChannelId': true});
+  var port = chrome.runtime.connect(
+    u2f.EXTENSION_ID,
+    { includeTlsChannelId: true }
+  );
   setTimeout(function() {
     callback(new u2f.WrappedChromeRuntimePort_(port));
   }, 0);
@@ -292,17 +283,22 @@ u2f.WrappedChromeRuntimePort_ = function(port) {
  * @param {number} reqId
  * @return {Object}
  */
-u2f.formatSignRequest_ =
-  function(appId, challenge, registeredKeys, timeoutSeconds, reqId) {
+u2f.formatSignRequest_ = function(
+  appId,
+  challenge,
+  registeredKeys,
+  timeoutSeconds,
+  reqId
+) {
   if (js_api_version === undefined || js_api_version < 1.1) {
     // Adapt request to the 1.0 JS API
     var signRequests = [];
     for (var i = 0; i < registeredKeys.length; i++) {
       signRequests[i] = {
-          version: registeredKeys[i].version,
-          challenge: challenge,
-          keyHandle: registeredKeys[i].keyHandle,
-          appId: appId
+        version: registeredKeys[i].version,
+        challenge: challenge,
+        keyHandle: registeredKeys[i].keyHandle,
+        appId: appId
       };
     }
     return {
@@ -331,8 +327,13 @@ u2f.formatSignRequest_ =
  * @param {number} reqId
  * @return {Object}
  */
-u2f.formatRegisterRequest_ =
-  function(appId, registeredKeys, registerRequests, timeoutSeconds, reqId) {
+u2f.formatRegisterRequest_ = function(
+  appId,
+  registeredKeys,
+  registerRequests,
+  timeoutSeconds,
+  reqId
+) {
   if (js_api_version === undefined || js_api_version < 1.1) {
     // Adapt request to the 1.0 JS API
     for (var i = 0; i < registerRequests.length; i++) {
@@ -341,10 +342,10 @@ u2f.formatRegisterRequest_ =
     var signRequests = [];
     for (var i = 0; i < registeredKeys.length; i++) {
       signRequests[i] = {
-          version: registeredKeys[i].version,
-          challenge: registerRequests[0],
-          keyHandle: registeredKeys[i].keyHandle,
-          appId: appId
+        version: registeredKeys[i].version,
+        challenge: registerRequests[0],
+        keyHandle: registeredKeys[i].keyHandle,
+        appId: appId
       };
     }
     return {
@@ -366,7 +367,6 @@ u2f.formatRegisterRequest_ =
   };
 };
 
-
 /**
  * Posts a message on the underlying channel.
  * @param {Object} message
@@ -375,23 +375,24 @@ u2f.WrappedChromeRuntimePort_.prototype.postMessage = function(message) {
   this.port_.postMessage(message);
 };
 
-
 /**
  * Emulates the HTML 5 addEventListener interface. Works only for the
  * onmessage event, which is hooked up to the chrome.runtime.Port.onMessage.
  * @param {string} eventName
  * @param {function({data: Object})} handler
  */
-u2f.WrappedChromeRuntimePort_.prototype.addEventListener =
-    function(eventName, handler) {
+u2f.WrappedChromeRuntimePort_.prototype.addEventListener = function(
+  eventName,
+  handler
+) {
   var name = eventName.toLowerCase();
-  if (name == 'message' || name == 'onmessage') {
+  if (name == "message" || name == "onmessage") {
     this.port_.onMessage.addListener(function(message) {
       // Emulate a minimal MessageEvent object
-      handler({'data': message});
+      handler({ data: message });
     });
   } else {
-    console.error('WrappedChromeRuntimePort only supports onMessage');
+    console.error("WrappedChromeRuntimePort only supports onMessage");
   }
 };
 
@@ -403,7 +404,7 @@ u2f.WrappedChromeRuntimePort_.prototype.addEventListener =
 u2f.WrappedAuthenticatorPort_ = function() {
   this.requestId_ = -1;
   this.requestObject_ = null;
-}
+};
 
 /**
  * Launch the Authenticator intent.
@@ -412,8 +413,9 @@ u2f.WrappedAuthenticatorPort_ = function() {
 u2f.WrappedAuthenticatorPort_.prototype.postMessage = function(message) {
   var intentUrl =
     u2f.WrappedAuthenticatorPort_.INTENT_URL_BASE_ +
-    ';S.request=' + encodeURIComponent(JSON.stringify(message)) +
-    ';end';
+    ";S.request=" +
+    encodeURIComponent(JSON.stringify(message)) +
+    ";end";
   document.location = intentUrl;
 };
 
@@ -425,22 +427,27 @@ u2f.WrappedAuthenticatorPort_.prototype.getPortType = function() {
   return "WrappedAuthenticatorPort_";
 };
 
-
 /**
  * Emulates the HTML 5 addEventListener interface.
  * @param {string} eventName
  * @param {function({data: Object})} handler
  */
-u2f.WrappedAuthenticatorPort_.prototype.addEventListener = function(eventName, handler) {
+u2f.WrappedAuthenticatorPort_.prototype.addEventListener = function(
+  eventName,
+  handler
+) {
   var name = eventName.toLowerCase();
-  if (name == 'message') {
+  if (name == "message") {
     var self = this;
     /* Register a callback to that executes when
      * chrome injects the response. */
     window.addEventListener(
-        'message', self.onRequestUpdate_.bind(self, handler), false);
+      "message",
+      self.onRequestUpdate_.bind(self, handler),
+      false
+    );
   } else {
-    console.error('WrappedAuthenticatorPort only supports message');
+    console.error("WrappedAuthenticatorPort only supports message");
   }
 };
 
@@ -449,19 +456,20 @@ u2f.WrappedAuthenticatorPort_.prototype.addEventListener = function(eventName, h
  * @param function({data: Object}) callback
  * @param {Object} message message Object
  */
-u2f.WrappedAuthenticatorPort_.prototype.onRequestUpdate_ =
-    function(callback, message) {
+u2f.WrappedAuthenticatorPort_.prototype.onRequestUpdate_ = function(
+  callback,
+  message
+) {
   var messageObject = JSON.parse(message.data);
-  var intentUrl = messageObject['intentURL'];
+  var intentUrl = messageObject["intentURL"];
 
-  var errorCode = messageObject['errorCode'];
+  var errorCode = messageObject["errorCode"];
   var responseObject = null;
-  if (messageObject.hasOwnProperty('data')) {
-    responseObject = /** @type {Object} */ (
-        JSON.parse(messageObject['data']));
+  if (messageObject.hasOwnProperty("data")) {
+    responseObject = /** @type {Object} */ (JSON.parse(messageObject["data"]));
   }
 
-  callback({'data': responseObject});
+  callback({ data: responseObject });
 };
 
 /**
@@ -470,7 +478,7 @@ u2f.WrappedAuthenticatorPort_.prototype.onRequestUpdate_ =
  * @private
  */
 u2f.WrappedAuthenticatorPort_.INTENT_URL_BASE_ =
-  'intent:#Intent;action=com.google.android.apps.authenticator.AUTHENTICATE';
+  "intent:#Intent;action=com.google.android.apps.authenticator.AUTHENTICATE";
 
 /**
  * Wrap the iOS client app with a MessagePort interface.
@@ -504,8 +512,8 @@ u2f.WrappedIosPort_.prototype.getPortType = function() {
  */
 u2f.WrappedIosPort_.prototype.addEventListener = function(eventName, handler) {
   var name = eventName.toLowerCase();
-  if (name !== 'message') {
-    console.error('WrappedIosPort only supports message');
+  if (name !== "message") {
+    console.error("WrappedIosPort only supports message");
   }
 };
 
@@ -516,30 +524,29 @@ u2f.WrappedIosPort_.prototype.addEventListener = function(eventName, handler) {
  */
 u2f.getIframePort_ = function(callback) {
   // Create the iframe
-  var iframeOrigin = 'chrome-extension://' + u2f.EXTENSION_ID;
-  var iframe = document.createElement('iframe');
-  iframe.src = iframeOrigin + '/u2f-comms.html';
-  iframe.setAttribute('style', 'display:none');
+  var iframeOrigin = "chrome-extension://" + u2f.EXTENSION_ID;
+  var iframe = document.createElement("iframe");
+  iframe.src = iframeOrigin + "/u2f-comms.html";
+  iframe.setAttribute("style", "display:none");
   document.body.appendChild(iframe);
 
   var channel = new MessageChannel();
   var ready = function(message) {
-    if (message.data == 'ready') {
-      channel.port1.removeEventListener('message', ready);
+    if (message.data == "ready") {
+      channel.port1.removeEventListener("message", ready);
       callback(channel.port1);
     } else {
       console.error('First event on iframe port was not "ready"');
     }
   };
-  channel.port1.addEventListener('message', ready);
+  channel.port1.addEventListener("message", ready);
   channel.port1.start();
 
-  iframe.addEventListener('load', function() {
+  iframe.addEventListener("load", function() {
     // Deliver the port to the iframe and initialize
-    iframe.contentWindow.postMessage('init', iframeOrigin, [channel.port2]);
+    iframe.contentWindow.postMessage("init", iframeOrigin, [channel.port2]);
   });
 };
-
 
 //High-level JS API
 
@@ -590,8 +597,10 @@ u2f.getPortSingleton_ = function(callback) {
     if (u2f.waitingForPort_.length == 0) {
       u2f.getMessagePort(function(port) {
         u2f.port_ = port;
-        u2f.port_.addEventListener('message',
-            /** @type {function(Event)} */ (u2f.responseHandler_));
+        u2f.port_.addEventListener(
+          "message",
+          /** @type {function(Event)} */ (u2f.responseHandler_)
+        );
 
         // Careful, here be async callbacks. Maybe.
         while (u2f.waitingForPort_.length)
@@ -609,14 +618,14 @@ u2f.getPortSingleton_ = function(callback) {
  */
 u2f.responseHandler_ = function(message) {
   var response = message.data;
-  var reqId = response['requestId'];
+  var reqId = response["requestId"];
   if (!reqId || !u2f.callbackMap_[reqId]) {
-    console.error('Unknown or missing requestId in response.');
+    console.error("Unknown or missing requestId in response.");
     return;
   }
   var cb = u2f.callbackMap_[reqId];
   delete u2f.callbackMap_[reqId];
-  cb(response['responseData']);
+  cb(response["responseData"]);
 };
 
 /**
@@ -630,18 +639,38 @@ u2f.responseHandler_ = function(message) {
  * @param {function((u2f.Error|u2f.SignResponse))} callback
  * @param {number=} opt_timeoutSeconds
  */
-u2f.sign = function(appId, challenge, registeredKeys, callback, opt_timeoutSeconds) {
+u2f.sign = function(
+  appId,
+  challenge,
+  registeredKeys,
+  callback,
+  opt_timeoutSeconds
+) {
   if (js_api_version === undefined) {
     // Send a message to get the extension to JS API version, then send the actual sign request.
-    u2f.getApiVersion(
-        function (response) {
-          js_api_version = response['js_api_version'] === undefined ? 0 : response['js_api_version'];
-          console.log("Extension JS API Version: ", js_api_version);
-          u2f.sendSignRequest(appId, challenge, registeredKeys, callback, opt_timeoutSeconds);
-        });
+    u2f.getApiVersion(function(response) {
+      js_api_version =
+        response["js_api_version"] === undefined
+          ? 0
+          : response["js_api_version"];
+      console.log("Extension JS API Version: ", js_api_version);
+      u2f.sendSignRequest(
+        appId,
+        challenge,
+        registeredKeys,
+        callback,
+        opt_timeoutSeconds
+      );
+    });
   } else {
     // We know the JS API version. Send the actual sign request in the supported API version.
-    u2f.sendSignRequest(appId, challenge, registeredKeys, callback, opt_timeoutSeconds);
+    u2f.sendSignRequest(
+      appId,
+      challenge,
+      registeredKeys,
+      callback,
+      opt_timeoutSeconds
+    );
   }
 };
 
@@ -653,13 +682,27 @@ u2f.sign = function(appId, challenge, registeredKeys, callback, opt_timeoutSecon
  * @param {function((u2f.Error|u2f.SignResponse))} callback
  * @param {number=} opt_timeoutSeconds
  */
-u2f.sendSignRequest = function(appId, challenge, registeredKeys, callback, opt_timeoutSeconds) {
+u2f.sendSignRequest = function(
+  appId,
+  challenge,
+  registeredKeys,
+  callback,
+  opt_timeoutSeconds
+) {
   u2f.getPortSingleton_(function(port) {
     var reqId = ++u2f.reqCounter_;
     u2f.callbackMap_[reqId] = callback;
-    var timeoutSeconds = (typeof opt_timeoutSeconds !== 'undefined' ?
-        opt_timeoutSeconds : u2f.EXTENSION_TIMEOUT_SEC);
-    var req = u2f.formatSignRequest_(appId, challenge, registeredKeys, timeoutSeconds, reqId);
+    var timeoutSeconds =
+      typeof opt_timeoutSeconds !== "undefined"
+        ? opt_timeoutSeconds
+        : u2f.EXTENSION_TIMEOUT_SEC;
+    var req = u2f.formatSignRequest_(
+      appId,
+      challenge,
+      registeredKeys,
+      timeoutSeconds,
+      reqId
+    );
     port.postMessage(req);
   });
 };
@@ -676,20 +719,38 @@ u2f.sendSignRequest = function(appId, challenge, registeredKeys, callback, opt_t
  * @param {function((u2f.Error|u2f.RegisterResponse))} callback
  * @param {number=} opt_timeoutSeconds
  */
-u2f.register = function(appId, registerRequests, registeredKeys, callback, opt_timeoutSeconds) {
+u2f.register = function(
+  appId,
+  registerRequests,
+  registeredKeys,
+  callback,
+  opt_timeoutSeconds
+) {
   if (js_api_version === undefined) {
     // Send a message to get the extension to JS API version, then send the actual register request.
-    u2f.getApiVersion(
-        function (response) {
-          js_api_version = response['js_api_version'] === undefined ? 0: response['js_api_version'];
-          console.log("Extension JS API Version: ", js_api_version);
-          u2f.sendRegisterRequest(appId, registerRequests, registeredKeys,
-              callback, opt_timeoutSeconds);
-        });
+    u2f.getApiVersion(function(response) {
+      js_api_version =
+        response["js_api_version"] === undefined
+          ? 0
+          : response["js_api_version"];
+      console.log("Extension JS API Version: ", js_api_version);
+      u2f.sendRegisterRequest(
+        appId,
+        registerRequests,
+        registeredKeys,
+        callback,
+        opt_timeoutSeconds
+      );
+    });
   } else {
     // We know the JS API version. Send the actual register request in the supported API version.
-    u2f.sendRegisterRequest(appId, registerRequests, registeredKeys,
-        callback, opt_timeoutSeconds);
+    u2f.sendRegisterRequest(
+      appId,
+      registerRequests,
+      registeredKeys,
+      callback,
+      opt_timeoutSeconds
+    );
   }
 };
 
@@ -702,18 +763,30 @@ u2f.register = function(appId, registerRequests, registeredKeys, callback, opt_t
  * @param {function((u2f.Error|u2f.RegisterResponse))} callback
  * @param {number=} opt_timeoutSeconds
  */
-u2f.sendRegisterRequest = function(appId, registerRequests, registeredKeys, callback, opt_timeoutSeconds) {
+u2f.sendRegisterRequest = function(
+  appId,
+  registerRequests,
+  registeredKeys,
+  callback,
+  opt_timeoutSeconds
+) {
   u2f.getPortSingleton_(function(port) {
     var reqId = ++u2f.reqCounter_;
     u2f.callbackMap_[reqId] = callback;
-    var timeoutSeconds = (typeof opt_timeoutSeconds !== 'undefined' ?
-        opt_timeoutSeconds : u2f.EXTENSION_TIMEOUT_SEC);
+    var timeoutSeconds =
+      typeof opt_timeoutSeconds !== "undefined"
+        ? opt_timeoutSeconds
+        : u2f.EXTENSION_TIMEOUT_SEC;
     var req = u2f.formatRegisterRequest_(
-        appId, registeredKeys, registerRequests, timeoutSeconds, reqId);
+      appId,
+      registeredKeys,
+      registerRequests,
+      timeoutSeconds,
+      reqId
+    );
     port.postMessage(req);
   });
 };
-
 
 /**
  * Dispatches a message to the extension to find out the supported
@@ -724,30 +797,32 @@ u2f.sendRegisterRequest = function(appId, registerRequests, registeredKeys, call
  * @param {number=} opt_timeoutSeconds
  */
 u2f.getApiVersion = function(callback, opt_timeoutSeconds) {
- u2f.getPortSingleton_(function(port) {
-   // If we are using Android Google Authenticator or iOS client app,
-   // do not fire an intent to ask which JS API version to use.
-   if (port.getPortType) {
-     var apiVersion;
-     switch (port.getPortType()) {
-       case 'WrappedIosPort_':
-       case 'WrappedAuthenticatorPort_':
-         apiVersion = 1.1;
-         break;
+  u2f.getPortSingleton_(function(port) {
+    // If we are using Android Google Authenticator or iOS client app,
+    // do not fire an intent to ask which JS API version to use.
+    if (port.getPortType) {
+      var apiVersion;
+      switch (port.getPortType()) {
+        case "WrappedIosPort_":
+        case "WrappedAuthenticatorPort_":
+          apiVersion = 1.1;
+          break;
 
-       default:
-         apiVersion = 0;
-         break;
-     }
-     callback({ 'js_api_version': apiVersion });
-     return;
-   }
+        default:
+          apiVersion = 0;
+          break;
+      }
+      callback({ js_api_version: apiVersion });
+      return;
+    }
     var reqId = ++u2f.reqCounter_;
     u2f.callbackMap_[reqId] = callback;
     var req = {
       type: u2f.MessageTypes.U2F_GET_API_VERSION_REQUEST,
-      timeoutSeconds: (typeof opt_timeoutSeconds !== 'undefined' ?
-          opt_timeoutSeconds : u2f.EXTENSION_TIMEOUT_SEC),
+      timeoutSeconds:
+        typeof opt_timeoutSeconds !== "undefined"
+          ? opt_timeoutSeconds
+          : u2f.EXTENSION_TIMEOUT_SEC,
       requestId: reqId
     };
     port.postMessage(req);

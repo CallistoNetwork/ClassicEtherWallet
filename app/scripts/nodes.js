@@ -177,8 +177,8 @@ nodes.nodeList = {
     chainId: 1,
     tokenList: require("./tokens/ethTokens.json"),
     abiList: require("./abiDefinitions/ethAbi.json"),
-    service: "MyEtherWallet",
-    lib: new nodes.customNode("https://api.myetherapi.com/eth", "")
+    service: "myetherwallet.com",
+    lib: new nodes.customNode("https://api.myetherwallet.com/eth", "")
   },
   eth_ethscan: {
     name: "ETH",
@@ -330,16 +330,16 @@ nodes.nodeList = {
   },
   poa: {
     name: "POA",
-    blockExplorerTX: "https://core-explorer.poa.network/tx/[[txHash]]",
-    blockExplorerAddr: "https://core-explorer.poa.network/account/[[address]]",
+    blockExplorerTX: "https://poaexplorer.com/tx/[[txHash]]",
+    blockExplorerAddr: "https://poaexplorer.com/account/[[address]]",
     type: nodes.nodeTypes.POA,
     eip155: true,
     chainId: 99,
     tokenList: [],
     abiList: [],
     estimateGas: true,
-    service: "core.poa.network",
-    lib: new nodes.customNode("https://core.poa.network", "")
+    service: "poa.infura.io",
+    lib: new nodes.infuraNode("https://poa.infura.io", "")
   },
   tomo: {
     name: "TOMO",

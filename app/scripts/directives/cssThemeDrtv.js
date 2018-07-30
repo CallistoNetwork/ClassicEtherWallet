@@ -13,7 +13,7 @@ const cssThemeDrtv = function () {
 
             const theme = globalFuncs.localStorage.getItem(localStorageKey, 'day');
 
-            if (['night', 'day'].includes(theme)) {
+            if (_validTheme(theme)) {
 
                 $scope.currentTheme = theme;
 
@@ -22,11 +22,21 @@ const cssThemeDrtv = function () {
                 $scope.currentTheme = 'day';
             }
 
-            angular.element(window).bind('beforeunload', function () {
 
-                globalFuncs.localStorage.setItem(localStorageKey, $scope.currentTheme);
-            });
+            function _validTheme(theme) {
 
+                return ['night', 'day'].includes(theme);
+            }
+
+            $scope.handleChangeTheme = function handleChangeTheme(currentTheme) {
+
+                if (_validTheme(currentTheme)) {
+
+                    globalFuncs.localStorage.setItem(localStorageKey, currentTheme);
+
+                }
+
+            }
 
         }
     };

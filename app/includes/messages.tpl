@@ -33,14 +33,14 @@
     <!-- Title -->
     <div class="block text-center">
         <h1>
-            <a translate="NAV_LIST" ng-class="{'text-info': visibility === VISIBILITY.LIST}"
+            <a translate="NAV_LIST" ng-class="{'isActive': visibility === VISIBILITY.LIST}"
                ng-click="setVisibility(VISIBILITY.LIST)"> List </a>
             <span>
                 or
                 <a
 
                         translate="NAV_NEW_MESSAGE"
-                        ng-class="{'text-info': visibility === VISIBILITY.NEW}"
+                        ng-class="{'isActive': visibility === VISIBILITY.NEW}"
                         ng-click="setVisibility(VISIBILITY.NEW)"> New Message </a>
 
                 </span>

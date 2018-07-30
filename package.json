@@ -1,12 +1,20 @@
 {
   "name": "classicetherwallet",
-  "version": "1.1.0",
-  "description": "",
+  "version": "3.12.2",
+  "description": "Ethereum Classic blockchain interaction web tool",
   "contributors": [
     "jchimien@gmail.com"
   ],
   "main": "gulpfile.js",
   "author": "ClassicEtherWallet",
+  "homepage": "https://ethereumproject.github.io/etherwallet/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EthereumCommonwealth/etherwallet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ethereumcommonwealth/etherwallet/issues"
+  },
   "license": "ISC",
   "scripts": {
     "dev": "gulp",

@@ -491,6 +491,18 @@
 
                         <div class="col-sm-4">
                             <label class="radio small">
+                                <input aria-describedby="Path: Ledger (PIRL) {{HDWallet.hwPirlPath}}"
+                                       ng-change="onHDDPathChange()"
+                                       ng-model="HDWallet.dPath"
+                                       type="radio"
+                                       value="{{HDWallet.hwPirlPath}}"/>
+                                <span ng-bind="HDWallet.hwPirlPath"></span>
+                                <p class="small">Network: PIRL</p>
+                            </label>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label class="radio small">
                                 <input aria-describedby="Path: TREZOR (CLO) {{HDWallet.hwCallistoPath}}"
                                        ng-change="onHDDPathChange()"
                                        ng-model="HDWallet.dPath"

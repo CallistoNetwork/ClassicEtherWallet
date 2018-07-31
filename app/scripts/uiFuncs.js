@@ -29,18 +29,6 @@ uiFuncs.isTxDataValid = function (txData) {
 
 }
 
-/*
-    there are errors w/ passing 820 as chainId w/ trezor, and signing tx w/ null chainId is ok.
-
-
-
-    @param chainId: int. the chainId of tx 1 eth, 8 ubq, 61 etc, 820 clo
-    @returns int || null
-
-
- */
-const removeChainIdIfCLO = (chainId) => parseInt(chainId) === 820 ? null : chainId;
-
 
 uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
     var localCallback = function (result) {
@@ -65,9 +53,6 @@ uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
     }
 
 
-    const chainId = removeChainIdIfCLO(rawTx.chainId);
-
-
     TrezorConnect.signEthereumTx(
         txData.path,
         ethFuncs.getNakedAddress(rawTx.nonce),
@@ -76,7 +61,7 @@ uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
         ethFuncs.getNakedAddress(rawTx.to),
         ethFuncs.getNakedAddress(rawTx.value),
         ethFuncs.getNakedAddress(rawTx.data),
-        chainId, // chain id for EIP-155 - is only used in fw 1.4.2 and newer, older will ignore it
+        rawTx.chainId, // chain id for EIP-155 - is only used in fw 1.4.2 and newer, older will ignore it
         localCallback
     );
 }
@@ -231,10 +216,6 @@ uiFuncs.genTxWithInfo = function (data, callback) {
                     isError: true,
                     error: error
                 });
-
-            } else if (rawTx.chainId === 820) {
-
-                EIP155Supported = false;
 
             } else {
 

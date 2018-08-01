@@ -36,7 +36,7 @@ Web3Wallet.prototype.getPublicKey = function() {
 Web3Wallet.prototype.getPublicKeyString = function() {
   throw new Error("Web3Wallet - method not supported");
 };
-Web3Wallet.prototype.toV3 = function(password, opts) {
+Web3Wallet.prototype.toV3 = function() {
   throw new Error("Web3Wallet - method not supported");
 };
 Web3Wallet.prototype.toJSON = function() {

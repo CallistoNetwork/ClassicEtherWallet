@@ -23,7 +23,7 @@ Wallet.generate = function(icapDirect) {
 };
 Wallet.prototype.setTokens = function() {
   const { popTokens } = Token;
-  let storedTokens = !!globalFuncs.localStorage.getItem("localTokens", null)
+  let storedTokens = globalFuncs.localStorage.getItem("localTokens", null)
     ? JSON.parse(globalFuncs.localStorage.getItem("localTokens"))
     : [];
 

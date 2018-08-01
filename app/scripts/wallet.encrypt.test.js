@@ -1,3 +1,4 @@
+/* eslint-disable */
 describe("wallet encryption", function() {
   it("can update password", function() {
     var wallet = Wallet.generate(false);

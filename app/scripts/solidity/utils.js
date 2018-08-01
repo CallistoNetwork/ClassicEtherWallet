@@ -38,33 +38,33 @@ var sha3 = require("ethereumjs-util").sha3;
 var utf8 = require("utf8");
 
 var unitMap = {
-  noether: "0",
-  wei: "1",
-  kwei: "1000",
-  Kwei: "1000",
-  babbage: "1000",
-  femtoether: "1000",
-  mwei: "1000000",
-  Mwei: "1000000",
-  lovelace: "1000000",
-  picoether: "1000000",
-  gwei: "1000000000",
-  Gwei: "1000000000",
-  shannon: "1000000000",
-  nanoether: "1000000000",
-  nano: "1000000000",
-  szabo: "1000000000000",
-  microether: "1000000000000",
-  micro: "1000000000000",
-  finney: "1000000000000000",
-  milliether: "1000000000000000",
-  milli: "1000000000000000",
-  ether: "1000000000000000000",
-  kether: "1000000000000000000000",
-  grand: "1000000000000000000000",
-  mether: "1000000000000000000000000",
-  gether: "1000000000000000000000000000",
-  tether: "1000000000000000000000000000000"
+    noether: "0",
+    wei: "1",
+    kwei: "1000",
+    Kwei: "1000",
+    babbage: "1000",
+    femtoether: "1000",
+    mwei: "1000000",
+    Mwei: "1000000",
+    lovelace: "1000000",
+    picoether: "1000000",
+    gwei: "1000000000",
+    Gwei: "1000000000",
+    shannon: "1000000000",
+    nanoether: "1000000000",
+    nano: "1000000000",
+    szabo: "1000000000000",
+    microether: "1000000000000",
+    micro: "1000000000000",
+    finney: "1000000000000000",
+    milliether: "1000000000000000",
+    milli: "1000000000000000",
+    ether: "1000000000000000000",
+    kether: "1000000000000000000000",
+    grand: "1000000000000000000000",
+    mether: "1000000000000000000000000",
+    gether: "1000000000000000000000000000",
+    tether: "1000000000000000000000000000000"
 };
 
 /**
@@ -77,7 +77,9 @@ var unitMap = {
  * @returns {String} right aligned string
  */
 var padLeft = function(string, chars, sign) {
-  return new Array(chars - string.length + 1).join(sign ? sign : "0") + string;
+    return (
+        new Array(chars - string.length + 1).join(sign ? sign : "0") + string
+    );
 };
 
 /**
@@ -90,7 +92,9 @@ var padLeft = function(string, chars, sign) {
  * @returns {String} right aligned string
  */
 var padRight = function(string, chars, sign) {
-  return string + new Array(chars - string.length + 1).join(sign ? sign : "0");
+    return (
+        string + new Array(chars - string.length + 1).join(sign ? sign : "0")
+    );
 };
 
 /**
@@ -101,20 +105,20 @@ var padRight = function(string, chars, sign) {
  * @returns {String} ascii string representation of hex value
  */
 var toUtf8 = function(hex) {
-  // Find termination
-  var str = "";
-  var i = 0,
-    l = hex.length;
-  if (hex.substring(0, 2) === "0x") {
-    i = 2;
-  }
-  for (; i < l; i += 2) {
-    var code = parseInt(hex.substr(i, 2), 16);
-    if (code === 0) break;
-    str += String.fromCharCode(code);
-  }
+    // Find termination
+    var str = "";
+    var i = 0,
+        l = hex.length;
+    if (hex.substring(0, 2) === "0x") {
+        i = 2;
+    }
+    for (; i < l; i += 2) {
+        var code = parseInt(hex.substr(i, 2), 16);
+        if (code === 0) break;
+        str += String.fromCharCode(code);
+    }
 
-  return utf8.decode(str);
+    return utf8.decode(str);
 };
 
 /**
@@ -125,19 +129,19 @@ var toUtf8 = function(hex) {
  * @returns {String} ascii string representation of hex value
  */
 var toAscii = function(hex) {
-  // Find termination
-  var str = "";
-  var i = 0,
-    l = hex.length;
-  if (hex.substring(0, 2) === "0x") {
-    i = 2;
-  }
-  for (; i < l; i += 2) {
-    var code = parseInt(hex.substr(i, 2), 16);
-    str += String.fromCharCode(code);
-  }
+    // Find termination
+    var str = "";
+    var i = 0,
+        l = hex.length;
+    if (hex.substring(0, 2) === "0x") {
+        i = 2;
+    }
+    for (; i < l; i += 2) {
+        var code = parseInt(hex.substr(i, 2), 16);
+        str += String.fromCharCode(code);
+    }
 
-  return str;
+    return str;
 };
 
 /**
@@ -149,16 +153,16 @@ var toAscii = function(hex) {
  * @returns {String} hex representation of input string
  */
 var fromUtf8 = function(str) {
-  str = utf8.encode(str);
-  var hex = "";
-  for (var i = 0; i < str.length; i++) {
-    var code = str.charCodeAt(i);
-    if (code === 0) break;
-    var n = code.toString(16);
-    hex += n.length < 2 ? "0" + n : n;
-  }
+    str = utf8.encode(str);
+    var hex = "";
+    for (var i = 0; i < str.length; i++) {
+        var code = str.charCodeAt(i);
+        if (code === 0) break;
+        var n = code.toString(16);
+        hex += n.length < 2 ? "0" + n : n;
+    }
 
-  return "0x" + hex;
+    return "0x" + hex;
 };
 
 /**
@@ -170,14 +174,14 @@ var fromUtf8 = function(str) {
  * @returns {String} hex representation of input string
  */
 var fromAscii = function(str) {
-  var hex = "";
-  for (var i = 0; i < str.length; i++) {
-    var code = str.charCodeAt(i);
-    var n = code.toString(16);
-    hex += n.length < 2 ? "0" + n : n;
-  }
+    var hex = "";
+    for (var i = 0; i < str.length; i++) {
+        var code = str.charCodeAt(i);
+        var n = code.toString(16);
+        hex += n.length < 2 ? "0" + n : n;
+    }
 
-  return "0x" + hex;
+    return "0x" + hex;
 };
 
 /**
@@ -188,16 +192,16 @@ var fromAscii = function(str) {
  * @return {String} full fnction/event name
  */
 var transformToFullName = function(json) {
-  if (json.name.indexOf("(") !== -1) {
-    return json.name;
-  }
+    if (json.name.indexOf("(") !== -1) {
+        return json.name;
+    }
 
-  var typeName = json.inputs
-    .map(function(i) {
-      return i.type;
-    })
-    .join();
-  return json.name + "(" + typeName + ")";
+    var typeName = json.inputs
+        .map(function(i) {
+            return i.type;
+        })
+        .join();
+    return json.name + "(" + typeName + ")";
 };
 
 /**
@@ -208,17 +212,19 @@ var transformToFullName = function(json) {
  * @returns {String} display name for function/event eg. multiply(uint256) -> multiply
  */
 var extractDisplayName = function(name) {
-  var length = name.indexOf("(");
-  return length !== -1 ? name.substr(0, length) : name;
+    var length = name.indexOf("(");
+    return length !== -1 ? name.substr(0, length) : name;
 };
 
 /// @returns overloaded part of function/event name
 var extractTypeName = function(name) {
-  /// TODO: make it invulnerable
-  var length = name.indexOf("(");
-  return length !== -1
-    ? name.substr(length + 1, name.length - 1 - (length + 1)).replace(" ", "")
-    : "";
+    /// TODO: make it invulnerable
+    var length = name.indexOf("(");
+    return length !== -1
+        ? name
+              .substr(length + 1, name.length - 1 - (length + 1))
+              .replace(" ", "")
+        : "";
 };
 
 /**
@@ -229,7 +235,7 @@ var extractTypeName = function(name) {
  * @return {String}
  */
 var toDecimal = function(value) {
-  return toBigNumber(value).toNumber();
+    return toBigNumber(value).toNumber();
 };
 
 /**
@@ -240,10 +246,10 @@ var toDecimal = function(value) {
  * @return {String}
  */
 var fromDecimal = function(value) {
-  var number = toBigNumber(value);
-  var result = number.toString(16);
+    var number = toBigNumber(value);
+    var result = number.toString(16);
 
-  return number.lessThan(0) ? "-0x" + result.substr(1) : "0x" + result;
+    return number.lessThan(0) ? "-0x" + result.substr(1) : "0x" + result;
 };
 
 /**
@@ -256,22 +262,22 @@ var fromDecimal = function(value) {
  * @return {String}
  */
 var toHex = function(val) {
-  /*jshint maxcomplexity: 8 */
+    /*jshint maxcomplexity: 8 */
 
-  if (isBoolean(val)) return fromDecimal(+val);
+    if (isBoolean(val)) return fromDecimal(+val);
 
-  if (isBigNumber(val)) return fromDecimal(val);
+    if (isBigNumber(val)) return fromDecimal(val);
 
-  if (isObject(val)) return fromUtf8(JSON.stringify(val));
+    if (isObject(val)) return fromUtf8(JSON.stringify(val));
 
-  // if its a negative number, pass it through fromDecimal
-  if (isString(val)) {
-    if (val.indexOf("-0x") === 0) return fromDecimal(val);
-    else if (val.indexOf("0x") === 0) return val;
-    else if (!isFinite(val)) return fromAscii(val);
-  }
+    // if its a negative number, pass it through fromDecimal
+    if (isString(val)) {
+        if (val.indexOf("-0x") === 0) return fromDecimal(val);
+        else if (val.indexOf("0x") === 0) return val;
+        else if (!isFinite(val)) return fromAscii(val);
+    }
 
-  return fromDecimal(val);
+    return fromDecimal(val);
 };
 
 /**
@@ -283,15 +289,15 @@ var toHex = function(val) {
  * @throws error if the unit is not correct:w
  */
 var getValueOfUnit = function(unit) {
-  unit = unit ? unit.toLowerCase() : "ether";
-  var unitValue = unitMap[unit];
-  if (unitValue === undefined) {
-    throw new Error(
-      "This unit doesn't exists, please use the one of the following units" +
-        JSON.stringify(unitMap, null, 2)
-    );
-  }
-  return new BigNumber(unitValue, 10);
+    unit = unit ? unit.toLowerCase() : "ether";
+    var unitValue = unitMap[unit];
+    if (unitValue === undefined) {
+        throw new Error(
+            "This unit doesn't exists, please use the one of the following units" +
+                JSON.stringify(unitMap, null, 2)
+        );
+    }
+    return new BigNumber(unitValue, 10);
 };
 
 /**
@@ -316,9 +322,9 @@ var getValueOfUnit = function(unit) {
  * @return {String|Object} When given a BigNumber object it returns one as well, otherwise a number
  */
 var fromWei = function(number, unit) {
-  var returnValue = toBigNumber(number).dividedBy(getValueOfUnit(unit));
+    var returnValue = toBigNumber(number).dividedBy(getValueOfUnit(unit));
 
-  return isBigNumber(number) ? returnValue : returnValue.toString(10);
+    return isBigNumber(number) ? returnValue : returnValue.toString(10);
 };
 
 /**
@@ -344,9 +350,9 @@ var fromWei = function(number, unit) {
  * @return {String|Object} When given a BigNumber object it returns one as well, otherwise a number
  */
 var toWei = function(number, unit) {
-  var returnValue = toBigNumber(number).times(getValueOfUnit(unit));
+    var returnValue = toBigNumber(number).times(getValueOfUnit(unit));
 
-  return isBigNumber(number) ? returnValue : returnValue.toString(10);
+    return isBigNumber(number) ? returnValue : returnValue.toString(10);
 };
 
 /**
@@ -357,18 +363,18 @@ var toWei = function(number, unit) {
  * @return {BigNumber} BigNumber
  */
 var toBigNumber = function(number) {
-  /*jshint maxcomplexity:5 */
-  number = number || 0;
-  if (isBigNumber(number)) return number;
+    /*jshint maxcomplexity:5 */
+    number = number || 0;
+    if (isBigNumber(number)) return number;
 
-  if (
-    isString(number) &&
-    (number.indexOf("0x") === 0 || number.indexOf("-0x") === 0)
-  ) {
-    return new BigNumber(number.replace("0x", ""), 16);
-  }
+    if (
+        isString(number) &&
+        (number.indexOf("0x") === 0 || number.indexOf("-0x") === 0)
+    ) {
+        return new BigNumber(number.replace("0x", ""), 16);
+    }
 
-  return new BigNumber(number.toString(10), 10);
+    return new BigNumber(number.toString(10), 10);
 };
 
 /**
@@ -379,16 +385,16 @@ var toBigNumber = function(number) {
  * @return {BigNumber}
  */
 var toTwosComplement = function(number) {
-  var bigNumber = toBigNumber(number).round();
-  if (bigNumber.lessThan(0)) {
-    return new BigNumber(
-      "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-      16
-    )
-      .plus(bigNumber)
-      .plus(1);
-  }
-  return bigNumber;
+    var bigNumber = toBigNumber(number).round();
+    if (bigNumber.lessThan(0)) {
+        return new BigNumber(
+            "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+            16
+        )
+            .plus(bigNumber)
+            .plus(1);
+    }
+    return bigNumber;
 };
 
 /**
@@ -399,7 +405,7 @@ var toTwosComplement = function(number) {
  * @return {Boolean}
  */
 var isStrictAddress = function(address) {
-  return /^0x[0-9a-f]{40}$/i.test(address);
+    return /^0x[0-9a-f]{40}$/i.test(address);
 };
 
 /**
@@ -410,19 +416,19 @@ var isStrictAddress = function(address) {
  * @return {Boolean}
  */
 var isAddress = function(address) {
-  if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
-    // check if it has the basic requirements of an address
-    return false;
-  } else if (
-    /^(0x)?[0-9a-f]{40}$/.test(address) ||
-    /^(0x)?[0-9A-F]{40}$/.test(address)
-  ) {
-    // If it's all small caps or all all caps, return true
-    return true;
-  } else {
-    // Otherwise check each case
-    return isChecksumAddress(address);
-  }
+    if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
+        // check if it has the basic requirements of an address
+        return false;
+    } else if (
+        /^(0x)?[0-9a-f]{40}$/.test(address) ||
+        /^(0x)?[0-9A-F]{40}$/.test(address)
+    ) {
+        // If it's all small caps or all all caps, return true
+        return true;
+    } else {
+        // Otherwise check each case
+        return isChecksumAddress(address);
+    }
 };
 
 /**
@@ -433,21 +439,21 @@ var isAddress = function(address) {
  * @return {Boolean}
  */
 var isChecksumAddress = function(address) {
-  // Check each case
-  address = address.replace("0x", "");
-  var addressHash = sha3(address.toLowerCase()).toString("hex");
-  for (var i = 0; i < 40; i++) {
-    // the nth letter should be uppercase if the nth digit of casemap is 1
-    if (
-      (parseInt(addressHash[i], 16) > 7 &&
-        address[i].toUpperCase() !== address[i]) ||
-      (parseInt(addressHash[i], 16) <= 7 &&
-        address[i].toLowerCase() !== address[i])
-    ) {
-      return false;
+    // Check each case
+    address = address.replace("0x", "");
+    var addressHash = sha3(address.toLowerCase()).toString("hex");
+    for (var i = 0; i < 40; i++) {
+        // the nth letter should be uppercase if the nth digit of casemap is 1
+        if (
+            (parseInt(addressHash[i], 16) > 7 &&
+                address[i].toUpperCase() !== address[i]) ||
+            (parseInt(addressHash[i], 16) <= 7 &&
+                address[i].toLowerCase() !== address[i])
+        ) {
+            return false;
+        }
     }
-  }
-  return true;
+    return true;
 };
 
 /**
@@ -458,21 +464,21 @@ var isChecksumAddress = function(address) {
  * @return {String}
  */
 var toChecksumAddress = function(address) {
-  if (typeof address === "undefined") return "";
+    if (typeof address === "undefined") return "";
 
-  address = address.toLowerCase().replace("0x", "");
-  var addressHash = sha3(address).toString("hex");
-  var checksumAddress = "0x";
+    address = address.toLowerCase().replace("0x", "");
+    var addressHash = sha3(address).toString("hex");
+    var checksumAddress = "0x";
 
-  for (var i = 0; i < address.length; i++) {
-    // If ith character is 9 to f then make it uppercase
-    if (parseInt(addressHash[i], 16) > 7) {
-      checksumAddress += address[i].toUpperCase();
-    } else {
-      checksumAddress += address[i];
+    for (var i = 0; i < address.length; i++) {
+        // If ith character is 9 to f then make it uppercase
+        if (parseInt(addressHash[i], 16) > 7) {
+            checksumAddress += address[i].toUpperCase();
+        } else {
+            checksumAddress += address[i];
+        }
     }
-  }
-  return checksumAddress;
+    return checksumAddress;
 };
 
 /**
@@ -483,15 +489,15 @@ var toChecksumAddress = function(address) {
  * @return {String} formatted address
  */
 var toAddress = function(address) {
-  if (isStrictAddress(address)) {
-    return address;
-  }
+    if (isStrictAddress(address)) {
+        return address;
+    }
 
-  if (/^[0-9a-f]{40}$/.test(address)) {
-    return "0x" + address;
-  }
+    if (/^[0-9a-f]{40}$/.test(address)) {
+        return "0x" + address;
+    }
 
-  return "0x" + padLeft(toHex(address).substr(2), 40);
+    return "0x" + padLeft(toHex(address).substr(2), 40);
 };
 
 /**
@@ -502,10 +508,12 @@ var toAddress = function(address) {
  * @return {Boolean}
  */
 var isBigNumber = function(object) {
-  return (
-    object instanceof BigNumber ||
-    (object && object.constructor && object.constructor.name === "BigNumber")
-  );
+    return (
+        object instanceof BigNumber ||
+        (object &&
+            object.constructor &&
+            object.constructor.name === "BigNumber")
+    );
 };
 
 /**
@@ -516,10 +524,10 @@ var isBigNumber = function(object) {
  * @return {Boolean}
  */
 var isString = function(object) {
-  return (
-    typeof object === "string" ||
-    (object && object.constructor && object.constructor.name === "String")
-  );
+    return (
+        typeof object === "string" ||
+        (object && object.constructor && object.constructor.name === "String")
+    );
 };
 
 /**
@@ -530,7 +538,7 @@ var isString = function(object) {
  * @return {Boolean}
  */
 var isFunction = function(object) {
-  return typeof object === "function";
+    return typeof object === "function";
 };
 
 /**
@@ -541,7 +549,7 @@ var isFunction = function(object) {
  * @return {Boolean}
  */
 var isObject = function(object) {
-  return typeof object === "object";
+    return typeof object === "object";
 };
 
 /**
@@ -552,7 +560,7 @@ var isObject = function(object) {
  * @return {Boolean}
  */
 var isBoolean = function(object) {
-  return typeof object === "boolean";
+    return typeof object === "boolean";
 };
 
 /**
@@ -563,7 +571,7 @@ var isBoolean = function(object) {
  * @return {Boolean}
  */
 var isArray = function(object) {
-  return object instanceof Array;
+    return object instanceof Array;
 };
 
 /**
@@ -574,40 +582,40 @@ var isArray = function(object) {
  * @return {Boolean}
  */
 var isJson = function(str) {
-  try {
-    return !!JSON.parse(str);
-  } catch (e) {
-    return false;
-  }
+    try {
+        return !!JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
 };
 
 module.exports = {
-  padLeft: padLeft,
-  padRight: padRight,
-  toHex: toHex,
-  toDecimal: toDecimal,
-  fromDecimal: fromDecimal,
-  toUtf8: toUtf8,
-  toAscii: toAscii,
-  fromUtf8: fromUtf8,
-  fromAscii: fromAscii,
-  transformToFullName: transformToFullName,
-  extractDisplayName: extractDisplayName,
-  extractTypeName: extractTypeName,
-  toWei: toWei,
-  fromWei: fromWei,
-  toBigNumber: toBigNumber,
-  toTwosComplement: toTwosComplement,
-  toAddress: toAddress,
-  isBigNumber: isBigNumber,
-  isStrictAddress: isStrictAddress,
-  isAddress: isAddress,
-  isChecksumAddress: isChecksumAddress,
-  toChecksumAddress: toChecksumAddress,
-  isFunction: isFunction,
-  isString: isString,
-  isObject: isObject,
-  isBoolean: isBoolean,
-  isArray: isArray,
-  isJson: isJson
+    padLeft: padLeft,
+    padRight: padRight,
+    toHex: toHex,
+    toDecimal: toDecimal,
+    fromDecimal: fromDecimal,
+    toUtf8: toUtf8,
+    toAscii: toAscii,
+    fromUtf8: fromUtf8,
+    fromAscii: fromAscii,
+    transformToFullName: transformToFullName,
+    extractDisplayName: extractDisplayName,
+    extractTypeName: extractTypeName,
+    toWei: toWei,
+    fromWei: fromWei,
+    toBigNumber: toBigNumber,
+    toTwosComplement: toTwosComplement,
+    toAddress: toAddress,
+    isBigNumber: isBigNumber,
+    isStrictAddress: isStrictAddress,
+    isAddress: isAddress,
+    isChecksumAddress: isChecksumAddress,
+    toChecksumAddress: toChecksumAddress,
+    isFunction: isFunction,
+    isString: isString,
+    isObject: isObject,
+    isBoolean: isBoolean,
+    isArray: isArray,
+    isJson: isJson
 };

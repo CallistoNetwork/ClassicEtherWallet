@@ -2,7 +2,7 @@
 require("./localStoragePolyfill");
 var IS_CX = false;
 if (typeof chrome != "undefined")
-  IS_CX = chrome.windows === undefined ? false : true;
+    IS_CX = chrome.windows === undefined ? false : true;
 var angular = require("angular");
 var angularTranslate = require("angular-translate");
 var angularTranslateErrorLog = require("angular-translate-handler-log");
@@ -68,21 +68,21 @@ var ens = require("./ens");
 window.ens = ens;
 var translate = require("./translations/translate.js");
 if (IS_CX) {
-  var cxFuncs = require("./cxFuncs");
-  window.cxFuncs = cxFuncs;
+    var cxFuncs = require("./cxFuncs");
+    window.cxFuncs = cxFuncs;
 } else {
-  var u2f = require("./staticJS/u2f-api");
-  var ledger3 = require("./staticJS/ledger3");
-  var ledgerEth = require("./staticJS/ledger-eth");
-  var trezorConnect = require("./staticJS/trezorConnect");
-  var digitalBitboxUsb = require("./staticJS/digitalBitboxUsb");
-  var digitalBitboxEth = require("./staticJS/digitalBitboxEth");
-  window.u2f = u2f;
-  window.Ledger3 = ledger3;
-  window.ledgerEth = ledgerEth;
-  window.TrezorConnect = trezorConnect.TrezorConnect;
-  window.DigitalBitboxUsb = digitalBitboxUsb;
-  window.DigitalBitboxEth = digitalBitboxEth;
+    var u2f = require("./staticJS/u2f-api");
+    var ledger3 = require("./staticJS/ledger3");
+    var ledgerEth = require("./staticJS/ledger-eth");
+    var trezorConnect = require("./staticJS/trezorConnect");
+    var digitalBitboxUsb = require("./staticJS/digitalBitboxUsb");
+    var digitalBitboxEth = require("./staticJS/digitalBitboxEth");
+    window.u2f = u2f;
+    window.Ledger3 = ledger3;
+    window.ledgerEth = ledgerEth;
+    window.TrezorConnect = trezorConnect.TrezorConnect;
+    window.DigitalBitboxUsb = digitalBitboxUsb;
+    window.DigitalBitboxEth = digitalBitboxEth;
 }
 var CustomGasMessages = require("./customGas.js");
 window.CustomGasMessages = CustomGasMessages;
@@ -139,41 +139,43 @@ var balanceDrtv = require("./directives/balanceDrtv");
 var arrayInputDrtv = require("./directives/arrayInputDrtv");
 var newMessagesDrtv = require("./directives/newMessagesDrtv");
 if (IS_CX) {
-  var addWalletCtrl = require("./controllers/CX/addWalletCtrl");
-  var cxDecryptWalletCtrl = require("./controllers/CX/cxDecryptWalletCtrl");
-  var myWalletsCtrl = require("./controllers/CX/myWalletsCtrl");
-  var mainPopCtrl = require("./controllers/CX/mainPopCtrl");
-  var quickSendCtrl = require("./controllers/CX/quickSendCtrl");
+    var addWalletCtrl = require("./controllers/CX/addWalletCtrl");
+    var cxDecryptWalletCtrl = require("./controllers/CX/cxDecryptWalletCtrl");
+    var myWalletsCtrl = require("./controllers/CX/myWalletsCtrl");
+    var mainPopCtrl = require("./controllers/CX/mainPopCtrl");
+    var quickSendCtrl = require("./controllers/CX/quickSendCtrl");
 }
 
 var app = angular.module("mewApp", [
-  "pascalprecht.translate",
-  "ngSanitize",
-  "ngAnimate"
+    "pascalprecht.translate",
+    "ngSanitize",
+    "ngAnimate"
 ]);
 app.config([
-  "$compileProvider",
-  function($compileProvider) {
-    $compileProvider.aHrefSanitizationWhitelist(/^\s*(|blob|https|mailto):/);
-  }
+    "$compileProvider",
+    function($compileProvider) {
+        $compileProvider.aHrefSanitizationWhitelist(
+            /^\s*(|blob|https|mailto):/
+        );
+    }
 ]);
 app.config([
-  "$translateProvider",
-  function($translateProvider) {
-    $translateProvider.useMissingTranslationHandlerLog();
-    new translate($translateProvider);
-  }
+    "$translateProvider",
+    function($translateProvider) {
+        $translateProvider.useMissingTranslationHandlerLog();
+        new translate($translateProvider);
+    }
 ]);
 app.config([
-  "$animateProvider",
-  function($animateProvider) {
-    $animateProvider.classNameFilter(/^no-animate$/);
-  }
+    "$animateProvider",
+    function($animateProvider) {
+        $animateProvider.classNameFilter(/^no-animate$/);
+    }
 ]);
 app.factory("globalService", [
-  "$http",
-  "$httpParamSerializerJQLike",
-  globalService
+    "$http",
+    "$httpParamSerializerJQLike",
+    globalService
 ]);
 app.factory("walletService", walletService);
 app.factory("backgroundNodeService", backgroundNodeService);
@@ -189,18 +191,18 @@ app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
 
 app.directive("dexnsNameDisplay", [
-  "dexnsService",
-  "walletService",
-  "globalService",
-  dexnsNameDisplay
+    "dexnsService",
+    "walletService",
+    "globalService",
+    dexnsNameDisplay
 ]);
 
 app.directive("blockieAddress", blockiesDrtv);
 app.directive("cssThemeDrtv", cssThemeDrtv);
 app.directive("addressField", [
-  "$compile",
-  "backgroundNodeService",
-  addressFieldDrtv
+    "$compile",
+    "backgroundNodeService",
+    addressFieldDrtv
 ]);
 app.directive("qrCode", QRCodeDrtv);
 app.directive("onReadFile", fileReaderDrtv);
@@ -208,145 +210,145 @@ app.directive("walletBalanceDrtv", balanceDrtv);
 app.directive("walletDecryptDrtv", walletDecryptDrtv);
 app.directive("cxWalletDecryptDrtv", cxWalletDecryptDrtv);
 app.directive("messagesOverviewDrtv", [
-  "globalService",
-  "walletService",
-  "messageService",
-  messagesOverviewDrtv
+    "globalService",
+    "walletService",
+    "messageService",
+    messagesOverviewDrtv
 ]);
 app.directive("arrayInputDrtv", arrayInputDrtv);
 app.directive("newMessagesDrtv", ["globalService", newMessagesDrtv]);
 app.directive("transactionCost", transactionCost);
 app.controller("tabsCtrl", [
-  "$scope",
-  "globalService",
-  "$translate",
-  "$sce",
-  "backgroundNodeService",
-  tabsCtrl
+    "$scope",
+    "globalService",
+    "$translate",
+    "$sce",
+    "backgroundNodeService",
+    tabsCtrl
 ]);
 app.controller("switchNetworkCtrl", [
-  "$scope",
-  "$rootScope",
-  "globalService",
-  switchNetworkCtrl
+    "$scope",
+    "$rootScope",
+    "globalService",
+    switchNetworkCtrl
 ]);
 app.controller("viewCtrl", ["$scope", "globalService", "$sce", viewCtrl]);
 app.controller("walletGenCtrl", ["$rootScope", "$scope", walletGenCtrl]);
 app.controller("bulkGenCtrl", ["$scope", bulkGenCtrl]);
 app.controller("decryptWalletCtrl", [
-  "$scope",
-  "$sce",
-  "walletService",
-  decryptWalletCtrl
+    "$scope",
+    "$sce",
+    "walletService",
+    decryptWalletCtrl
 ]);
 app.controller("viewWalletCtrl", [
-  "$scope",
-  "$rootScope",
-  "walletService",
-  "coldStakingService",
-  viewWalletCtrl
+    "$scope",
+    "$rootScope",
+    "walletService",
+    "coldStakingService",
+    viewWalletCtrl
 ]);
 app.controller("txStatusCtrl", ["$scope", "$rootScope", txStatusCtrl]);
 app.controller("sendTxCtrl", [
-  "$scope",
-  "$sce",
-  "$rootScope",
-  "walletService",
-  sendTxCtrl
+    "$scope",
+    "$sce",
+    "$rootScope",
+    "walletService",
+    sendTxCtrl
 ]);
 
 app.controller("swapCtrl", [
-  "$scope",
-  "$rootScope",
-  "$interval",
-  "walletService",
-  swapCtrl
+    "$scope",
+    "$rootScope",
+    "$interval",
+    "walletService",
+    swapCtrl
 ]);
 app.controller("signMsgCtrl", ["$scope", "$sce", "walletService", signMsgCtrl]);
 app.controller("contractsCtrl", [
-  "$scope",
-  "$sce",
-  "$rootScope",
-  "walletService",
-  contractsCtrl
+    "$scope",
+    "$sce",
+    "$rootScope",
+    "walletService",
+    contractsCtrl
 ]);
 app.controller("ensCtrl", [
-  "$scope",
-  "$sce",
-  "$rootScope",
-  "walletService",
-  ensCtrl
+    "$scope",
+    "$sce",
+    "$rootScope",
+    "walletService",
+    ensCtrl
 ]);
 app.controller("dexnsCtrl", [
-  "$scope",
-  "$sce",
-  "$rootScope",
-  "walletService",
-  "backgroundNodeService",
-  "dexnsService",
-  dexnsCtrl
+    "$scope",
+    "$sce",
+    "$rootScope",
+    "walletService",
+    "backgroundNodeService",
+    "dexnsService",
+    dexnsCtrl
 ]);
 app.controller("footerCtrl", ["$scope", footerCtrl]);
 app.controller("offlineTxCtrl", [
-  "$scope",
-  "$sce",
-  "$rootScope",
-  "walletService",
-  offlineTxCtrl
+    "$scope",
+    "$sce",
+    "$rootScope",
+    "walletService",
+    offlineTxCtrl
 ]);
 app.controller("walletBalanceCtrl", [
-  "$scope",
-  "$sce",
-  "walletService",
-  "backgroundNodeService",
-  "modalService",
-  "coldStakingService",
-  "messageService",
-  walletBalanceCtrl
+    "$scope",
+    "$sce",
+    "walletService",
+    "backgroundNodeService",
+    "modalService",
+    "coldStakingService",
+    "messageService",
+    walletBalanceCtrl
 ]);
 app.controller("helpersCtrl", ["$scope", helpersCtrl]);
 app.controller("messagesCtrl", [
-  "$scope",
-  "$rootScope",
-  "$interval",
-  "globalService",
-  "messageService",
-  "walletService",
-  "backgroundNodeService",
-  messagesControl
+    "$scope",
+    "$rootScope",
+    "$interval",
+    "globalService",
+    "messageService",
+    "walletService",
+    "backgroundNodeService",
+    messagesControl
 ]);
 app.controller("encryptCtrl", ["$scope", "walletService", encryptCtrl]);
 app.controller("backgroundNodeCtrl", [
-  "$scope",
-  "backgroundNodeService",
-  "$interval",
-  backgroundNodeCtrl
+    "$scope",
+    "backgroundNodeService",
+    "$interval",
+    backgroundNodeCtrl
 ]);
 
 app.controller("broadcastTxCtrl", ["$scope", broadcastTxCtrl]);
 
 app.controller("coldStakingCtrl", [
-  "$scope",
-  "$rootScope",
-  "walletService",
-  "modalService",
-  "coldStakingService",
-  coldStakingCtrl
+    "$scope",
+    "$rootScope",
+    "walletService",
+    "modalService",
+    "coldStakingService",
+    coldStakingCtrl
 ]);
 if (IS_CX) {
-  app.controller("addWalletCtrl", ["$scope", "$sce", addWalletCtrl]);
-  app.controller("myWalletsCtrl", [
-    "$scope",
-    "$sce",
-    "walletService",
-    myWalletsCtrl
-  ]);
-  app.controller("mainPopCtrl", ["$scope", "$sce", mainPopCtrl]);
-  app.controller("quickSendCtrl", ["$scope", "$sce", quickSendCtrl]);
-  app.controller("cxDecryptWalletCtrl", [
-    "$scope",
-    "$sce",
-    "walletService",
-    cxDecryptWalletCtrl
-  ]);
+    app.controller("addWalletCtrl", ["$scope", "$sce", addWalletCtrl]);
+    app.controller("myWalletsCtrl", [
+        "$scope",
+        "$sce",
+        "walletService",
+        myWalletsCtrl
+    ]);
+    app.controller("mainPopCtrl", ["$scope", "$sce", mainPopCtrl]);
+    app.controller("quickSendCtrl", ["$scope", "$sce", quickSendCtrl]);
+    app.controller("cxDecryptWalletCtrl", [
+        "$scope",
+        "$sce",
+        "walletService",
+        cxDecryptWalletCtrl
+    ]);
 }

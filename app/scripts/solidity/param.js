@@ -27,8 +27,8 @@ var utils = require("./utils");
  * Should be used when encoding, decoding solidity bytes
  */
 var SolidityParam = function(value, offset) {
-  this.value = value || "";
-  this.offset = offset; // offset in bytes
+    this.value = value || "";
+    this.offset = offset; // offset in bytes
 };
 
 /**
@@ -38,7 +38,7 @@ var SolidityParam = function(value, offset) {
  * @returns {Number} length of dynamic part (in bytes)
  */
 SolidityParam.prototype.dynamicPartLength = function() {
-  return this.dynamicPart().length / 2;
+    return this.dynamicPart().length / 2;
 };
 
 /**
@@ -49,7 +49,7 @@ SolidityParam.prototype.dynamicPartLength = function() {
  * @returns {SolidityParam} new solidity param with applied offset
  */
 SolidityParam.prototype.withOffset = function(offset) {
-  return new SolidityParam(this.value, offset);
+    return new SolidityParam(this.value, offset);
 };
 
 /**
@@ -61,7 +61,7 @@ SolidityParam.prototype.withOffset = function(offset) {
  * @param {SolidityParam} result of combination
  */
 SolidityParam.prototype.combine = function(param) {
-  return new SolidityParam(this.value + param.value);
+    return new SolidityParam(this.value + param.value);
 };
 
 /**
@@ -72,7 +72,7 @@ SolidityParam.prototype.combine = function(param) {
  * @returns {Boolean}
  */
 SolidityParam.prototype.isDynamic = function() {
-  return this.offset !== undefined;
+    return this.offset !== undefined;
 };
 
 /**
@@ -82,9 +82,9 @@ SolidityParam.prototype.isDynamic = function() {
  * @returns {String} bytes representation of offset
  */
 SolidityParam.prototype.offsetAsBytes = function() {
-  return !this.isDynamic()
-    ? ""
-    : utils.padLeft(utils.toTwosComplement(this.offset).toString(16), 64);
+    return !this.isDynamic()
+        ? ""
+        : utils.padLeft(utils.toTwosComplement(this.offset).toString(16), 64);
 };
 
 /**
@@ -94,10 +94,10 @@ SolidityParam.prototype.offsetAsBytes = function() {
  * @returns {String} offset if it is a dynamic param, otherwise value
  */
 SolidityParam.prototype.staticPart = function() {
-  if (!this.isDynamic()) {
-    return this.value;
-  }
-  return this.offsetAsBytes();
+    if (!this.isDynamic()) {
+        return this.value;
+    }
+    return this.offsetAsBytes();
 };
 
 /**
@@ -107,7 +107,7 @@ SolidityParam.prototype.staticPart = function() {
  * @returns {String} returns a value if it is a dynamic param, otherwise empty string
  */
 SolidityParam.prototype.dynamicPart = function() {
-  return this.isDynamic() ? this.value : "";
+    return this.isDynamic() ? this.value : "";
 };
 
 /**
@@ -117,7 +117,7 @@ SolidityParam.prototype.dynamicPart = function() {
  * @returns {String}
  */
 SolidityParam.prototype.encode = function() {
-  return this.staticPart() + this.dynamicPart();
+    return this.staticPart() + this.dynamicPart();
 };
 
 /**
@@ -128,26 +128,26 @@ SolidityParam.prototype.encode = function() {
  * @returns {String}
  */
 SolidityParam.encodeList = function(params) {
-  // updating offsets
-  var totalOffset = params.length * 32;
-  var offsetParams = params.map(function(param) {
-    if (!param.isDynamic()) {
-      return param;
-    }
-    var offset = totalOffset;
-    totalOffset += param.dynamicPartLength();
-    return param.withOffset(offset);
-  });
+    // updating offsets
+    var totalOffset = params.length * 32;
+    var offsetParams = params.map(function(param) {
+        if (!param.isDynamic()) {
+            return param;
+        }
+        var offset = totalOffset;
+        totalOffset += param.dynamicPartLength();
+        return param.withOffset(offset);
+    });
 
-  // encode everything!
-  return offsetParams.reduce(
-    function(result, param) {
-      return result + param.dynamicPart();
-    },
-    offsetParams.reduce(function(result, param) {
-      return result + param.staticPart();
-    }, "")
-  );
+    // encode everything!
+    return offsetParams.reduce(
+        function(result, param) {
+            return result + param.dynamicPart();
+        },
+        offsetParams.reduce(function(result, param) {
+            return result + param.staticPart();
+        }, "")
+    );
 };
 
 module.exports = SolidityParam;

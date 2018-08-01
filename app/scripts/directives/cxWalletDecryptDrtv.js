@@ -1,9 +1,9 @@
 "use strict";
 var cxWalletDecryptDrtv = function() {
-  return {
-    restrict: "E",
-    template:
-      '<div class="row" ng-controller=\'cxDecryptWalletCtrl\'>\n \
+    return {
+        restrict: "E",
+        template:
+            '<div class="row" ng-controller=\'cxDecryptWalletCtrl\'>\n \
       <div class="col-md-4 col-sm-6">\n \
         <h4 translate="decrypt_Select"> Select a Wallet: </h4>\n \
         <div class="radio" ng-repeat="twallet in allWallets  track by $index">\n \
@@ -19,6 +19,6 @@ var cxWalletDecryptDrtv = function() {
         <div class="form-group"><a ng-click="decryptWallet()" class="btn btn-primary btn-block" translate="ADD_Label_6_short">UNLOCK</a></div>\n \
       </div>\n \
     </div>'
-  };
+    };
 };
 module.exports = cxWalletDecryptDrtv;

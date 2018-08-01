@@ -158,7 +158,7 @@
                     ng-class="{active: $index==gService.currentTab}" ng-show="tab.cx" ng-click="tabClick($index)"><a
                         tabindex="0" aria-label="nav item: {{tab.name | translate}}" translate="{{tab.name}}"></a></li>
                 }
-                <li class="nav-item help"><a href="https://myetherwallet.groovehq.com/help_center" target="_blank"
+                <li class="nav-item help"><a href="http://support.ethereumcommonwealth.io" target="_blank"
                                              rel="noopener">Help</a></li>
             </ul>
         </div>

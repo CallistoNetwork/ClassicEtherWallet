@@ -16,7 +16,7 @@
             <p><span translate="FOOTER_1">Free, open-source, client-side interface for generating Ethereum Classic wallets &amp; more. Interact with the Ethereum-compatible blockchains such are ETH, ETC, UBQ and EXP easily &amp; securely. Double-check the URL ( https://ethereumproject.github.io/etherwallet/ ) before unlocking your wallet.</span>
             </p>
             <!-- Commented out due to stale link
-            <p><a aria-label="knowledge base" href="https://myetherwallet.groovehq.com/help_center" target="_blank" rel="noopener" role="link" tabindex="0">
+            <p><a aria-label="knowledge base" href="http://support.ethereumcommonwealth.io" target="_blank" rel="noopener" role="link" tabindex="0">
               Knowledge Base
             </a></p> -->
             <p><a href="https://ethereumproject.github.io/etherwallet/helpers.html" target="_blank" rel="noopener"

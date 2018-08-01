@@ -2,7 +2,6 @@
 // Dropdown menus
 // --------------------------------------------------
 
-
 // Dropdown arrow/caret
 .caret {
   display: inline-block;
@@ -10,9 +9,9 @@
   height: 0;
   margin-left: @space-sm;
   vertical-align: middle;
-  border-top:   @caret-width-base dashed;
+  border-top: @caret-width-base dashed;
   border-right: @caret-width-base solid transparent;
-  border-left:  @caret-width-base solid transparent;
+  border-left: @caret-width-base solid transparent;
 }
 
 // The dropdown wrapper (div)
@@ -28,10 +27,10 @@
   padding: @space-sm @space;
 }
 .dropdown:hover {
-    .dropdown-menu {
-      display: block;
-    }
+  .dropdown-menu {
+    display: block;
   }
+}
 
 // The dropdown menu (ul)
 .dropdown-menu {
@@ -48,7 +47,7 @@
   text-align: left; // Ensures proper alignment if parent has it changed (e.g., modal footer)
   background-color: @dropdown-bg;
   border-radius: @border-radius;
-  .box-shadow(0 6px 10px rgba(0,0,0,.175));
+  .box-shadow(0 6px 10px rgba(0, 0, 0, 0.175));
   background-clip: padding-box;
 
   // Aligns the dropdown menu to right
@@ -69,10 +68,10 @@
   }
   // Links within the dropdown menu
 
-  >li:first-child {
+  > li:first-child {
     padding-top: 4px;
   }
-  >li:last-child {
+  > li:last-child {
     padding-bottom: 4px;
   }
   > li > a {
@@ -208,7 +207,6 @@
     margin-bottom: 2px;
   }
 }
-
 
 // Component alignment
 //

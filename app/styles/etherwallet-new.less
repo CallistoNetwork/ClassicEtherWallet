@@ -14,7 +14,7 @@
 .block {
   //background-color: white;
 
-  box-shadow: 16px 16px 47px 2px rgba(0, 0, 0, .07);
+  box-shadow: 16px 16px 47px 2px rgba(0, 0, 0, 0.07);
   padding: @space-lg @space-xl;
   min-height: @space-lg;
   margin: @space auto;
@@ -33,14 +33,14 @@
 
 .block--text-white {
   * {
-    color: white
+    color: white;
   }
   a {
-    color: white
+    color: white;
   }
   a:hover,
   a:focus {
-    color: rgba(255, 255, 255, .9)
+    color: rgba(255, 255, 255, 0.9);
   }
 }
 
@@ -74,7 +74,7 @@
   text-align: left;
   padding: @space-md;
   flex-basis: 98%;
-  margin: @space @cont-padding/2;
+  margin: @space @cont-padding / 2;
   @media screen and (min-width: @screen-sm) {
     flex-basis: 68%;
   }
@@ -110,7 +110,8 @@
   ul {
     list-style: circle;
   }
-  ul, ol {
+  ul,
+  ol {
     padding-left: @space;
   }
   h2 {
@@ -141,16 +142,16 @@
 .gen__1--inner {
   text-align: center;
   h1 {
-    margin: @space auto @space*2
+    margin: @space auto @space*2;
   }
   h4 {
-    margin: @space*3 auto @space
+    margin: @space*3 auto @space;
   }
   p {
-    margin: 0 0    @space*2
+    margin: 0 0 @space*2;
   }
   .btn {
-    margin: 0 auto @space*3
+    margin: 0 auto @space*3;
   }
 }
 
@@ -160,31 +161,31 @@
 .gen__2--inner {
   text-align: center;
   h1 {
-    margin: @space auto
+    margin: @space auto;
   }
   > .btn {
-    margin: @space auto  @space*2
+    margin: @space auto @space*2;
   }
   .warn {
-    margin: @space*2 auto
+    margin: @space*2 auto;
   }
 }
 
 .gen__3--inner {
   text-align: center;
   h1 {
-    margin: @space*2   auto @space
+    margin: @space*2 auto @space;
   }
   > .btn,
   > .form-control {
-    margin: 0 auto @space*3
+    margin: 0 auto @space*3;
   }
 }
 
 // footer
 .pre-footer {
   padding: 1rem;
-  box-shadow: 16px 16px 47px 0px rgba(0, 0, 0, .07);
+  box-shadow: 16px 16px 47px 0px rgba(0, 0, 0, 0.07);
   margin-top: 5rem;
   text-align: center;
   p {
@@ -195,13 +196,13 @@
 .footer {
   background-color: @ether-navy;
   color: white;
-  font-size: .8rem;
+  font-size: 0.8rem;
   h5 {
-    font-size: .95rem;
-    margin: .25em 0 0;
+    font-size: 0.95rem;
+    margin: 0.25em 0 0;
     i {
       margin-left: -1.5em;
-      margin-right: .25em;
+      margin-right: 0.25em;
     }
     &:first-child {
       margin-top: 0;
@@ -216,9 +217,10 @@
     padding-left: 0;
     margin: 0;
   }
-  li, p {
-    font-size: .8rem;
-    margin: .25em 0;
+  li,
+  p {
+    font-size: 0.8rem;
+    margin: 0.25em 0;
   }
   a {
     color: #7fe5ff;
@@ -229,13 +231,12 @@
     }
   }
   small {
-    font-size: .6rem;
+    font-size: 0.6rem;
   }
 
   .background-node {
     color: #163151;
   }
-
 }
 
 .footer--logo {
@@ -251,7 +252,10 @@
     font-weight: 400;
     margin: @space-sm 0 0;
   }
-  a, a:hover, a:focus, a:visited {
+  a,
+  a:hover,
+  a:focus,
+  a:visited {
     color: @brand-primary;
   }
 }
@@ -276,7 +280,8 @@
   .footer--col();
   max-width: 34rem;
   flex-grow: 2;
-  ul, li:last-child {
+  ul,
+  li:last-child {
     margin-bottom: 0;
   }
 }
@@ -295,7 +300,6 @@
 }
 
 .ad-wrapper {
-
   height: 6rem;
   overflow: hidden;
   align-items: center;
@@ -306,7 +310,7 @@
 .swap--hw {
   text-align: center;
   display: flex;
-  padding: 1rem .15rem;
+  padding: 1rem 0.15rem;
   .col-sm-7 {
     display: flex;
     flex-direction: column;
@@ -316,17 +320,15 @@
 
 .swap--usd {
   .block--text-white();
-  background-color: #2B71B1;
+  background-color: #2b71b1;
   .swap-flag--bal,
   .swap-flag--price {
-    background-color: lighten(saturate(#2B71B1, 7%), 8%);
+    background-color: lighten(saturate(#2b71b1, 7%), 8%);
   }
 }
 
 .swap--btc {
-
   div {
-
     padding: 0;
   }
 
@@ -339,20 +341,14 @@
   }
 }
 
-
-
 .change-now-btn {
-
   background: url(../images/changeNow.svg);
   background-repeat: no-repeat;
   background-position: center;
   color: @change-now-green;
   width: 6rem;
   height: 4rem;
-
 }
-
-
 
 .swap--hw {
   .block--text-white();
@@ -362,7 +358,7 @@
     background-color: lighten(saturate(#6e9a3e, 7%), 7%);
   }
   .swap__logo {
-    margin: .45rem 0;
+    margin: 0.45rem 0;
   }
 }
 
@@ -370,22 +366,22 @@
 .swap-flag--price {
   background-color: @brand-success;
   color: white;
-  padding: .1rem .5rem;
-  font-size: .7rem;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.7rem;
   border-radius: 5rem;
-  margin: .7rem 0 0;
+  margin: 0.7rem 0 0;
   line-height: 1.4;
   font-family: @font-family-monospace;
 }
 
 .swap__subhead {
-  font-size: .8rem;
-  margin: .15rem 0;
+  font-size: 0.8rem;
+  margin: 0.15rem 0;
 }
 
 .swap__cta {
   font-size: 1.25rem;
-  margin: .15rem 0;
+  margin: 0.15rem 0;
 }
 
 .swap__logo {
@@ -394,11 +390,11 @@
 
 .swap__nav {
   margin-top: -1.1rem;
-  margin-bottom: .7rem;
+  margin-bottom: 0.7rem;
   text-align: center;
   a {
     color: @gray-light;
-    padding: 0 .2rem .6rem;
+    padding: 0 0.2rem 0.6rem;
   }
 }
 

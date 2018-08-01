@@ -13,7 +13,7 @@ textarea {
   text-align: center;
   font-weight: 300;
   display: block;
-  background-color: #A00000;
+  background-color: #a00000;
   color: #fff;
   a {
     font-size: 18px;
@@ -37,7 +37,8 @@ textarea {
   &:hover,
   &:focus {
     background-color: darken(@brand-orangered, 5%);
-    a, a:hover {
+    a,
+    a:hover {
       text-decoration: none;
     }
   }
@@ -51,7 +52,8 @@ textarea {
   a:hover,
   a:focus {
     color: darken(white, 5%);
-    a, a:hover {
+    a,
+    a:hover {
       text-decoration: none;
     }
   }
@@ -62,8 +64,8 @@ textarea {
   padding: 0;
   text-align: left;
   max-width: 4.5rem;
-  margin-left: -.5rem;
-  margin-top: .5rem;
+  margin-left: -0.5rem;
+  margin-top: 0.5rem;
 }
 
 .address-identicon-container-right {
@@ -85,7 +87,8 @@ textarea {
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 50%;
-  box-shadow: inset rgba(255, 255, 255, 0.5) 0 2px 2px, inset rgba(0, 0, 0, 0.6) 0 -1px 8px;
+  box-shadow: inset rgba(255, 255, 255, 0.5) 0 2px 2px,
+    inset rgba(0, 0, 0, 0.6) 0 -1px 8px;
 }
 
 .addressIdenticon.med {
@@ -129,7 +132,11 @@ textarea {
 }
 
 .account-help-icon {
-  h3, h4, h5, h6, img {
+  h3,
+  h4,
+  h5,
+  h6,
+  img {
     display: inline-block;
   }
   img:hover + .account-help-text {
@@ -149,13 +156,13 @@ textarea {
 .account-help-text {
   background: white;
   border-radius: @border-radius;
-  border: 1px solid #CDCDCD;
-  box-shadow: 0 0 @space-sm rgba(100, 100, 100, .2);
+  border: 1px solid #cdcdcd;
+  box-shadow: 0 0 @space-sm rgba(100, 100, 100, 0.2);
   display: none;
   font-size: @font-size-xs;
   font-weight: 400;
   padding: @space-xs;
-  position: absolute;;
+  position: absolute;
   width: 18rem;
   z-index: 999;
   color: @text-color;
@@ -189,7 +196,7 @@ textarea {
 #accountAddressMainTbl-1 {
   font-family: @font-family-monospace;
   font-weight: normal;
-  letter-spacing: .02em;
+  letter-spacing: 0.02em;
 }
 
 // QR Code on Offline Transactions Page
@@ -219,7 +226,7 @@ textarea {
     min-width: 200px;
     width: 100%;
     td {
-      padding: .4rem;
+      padding: 0.4rem;
       line-height: 1;
     }
     td:first-child {
@@ -267,14 +274,14 @@ input[type="password"] + .eye {
 // collapsable containers
 .collapse-container {
   h1 {
-    margin: .25rem 0;
+    margin: 0.25rem 0;
   }
   .collapse-button {
     float: left;
     font-weight: 500;
     user-select: none;
-    padding: .25rem;
-    margin: .25rem -30px;
+    padding: 0.25rem;
+    margin: 0.25rem -30px;
     font-size: 1.6rem;
     line-height: 1.6;
   }
@@ -336,18 +343,18 @@ h2 a.isActive {
 
 .output {
   padding: @space-sm @space;
-  margin-top: -@space/2;
+  margin-top: -@space / 2;
   p {
     margin: @space-md 0 0;
   }
 }
 
 label .small {
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 label small {
-  color: @gray-light
+  color: @gray-light;
 }
 
 .write-address {
@@ -367,7 +374,7 @@ label small {
   padding: @space 0;
   label.radio {
     padding: 0 @space-lg;
-    margin: .5rem 0;
+    margin: 0.5rem 0;
   }
   h4 {
     margin-top: 0;
@@ -393,7 +400,6 @@ label small {
 }
 
 .contracts {
-
   .dropdown-toggle {
     display: block;
     text-align: left;
@@ -419,7 +425,6 @@ label small {
   h5 {
     margin-bottom: @space-xs;
   }
-
 }
 
 #selectedTypeLedger ol {
@@ -452,7 +457,8 @@ label small {
   }
 
   @keyframes opacity {
-    from, to {
+    from,
+    to {
       opacity: 0;
     }
     50% {
@@ -465,21 +471,21 @@ label small {
   height: auto;
   width: 100%;
   max-width: 290px;
-  padding: .5rem 0;
+  padding: 0.5rem 0;
 }
 
 .ens-response {
   color: @gray;
 }
 
-.messagesConversation, .messagesList {
+.messagesConversation,
+.messagesList {
   li {
     list-style-type: none !important;
   }
 }
 
 .messagesList {
-
   .dot {
     width: 6px;
     height: 6px;
@@ -493,12 +499,10 @@ label small {
   }
 
   .dot-success {
-
     background: green;
   }
 
   .dot-info {
-
     background: blue;
   }
   .from {
@@ -507,12 +511,10 @@ label small {
   }
 
   .message_text {
-
     font-size: 1.3rem;
   }
 
   .justify_row {
-
     display: flex;
     justify-content: flex-start;
     align-content: center;
@@ -529,7 +531,7 @@ label small {
 @brand-eth-dark: #025b76;
 @brand-etc: #009241;
 @brand-etc-dark: #015125;
-@brand-test: #C4C4C4;
+@brand-test: #c4c4c4;
 @brand-test-dark: #919191;
 @brand-rsk: #ff794f;
 @brand-rsk-dark: #cc5530;
@@ -633,7 +635,6 @@ header {
 }
 
 header.ETH {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-eth;
   }
@@ -642,7 +643,7 @@ header.ETH {
   }
   & + .container .btn-primary {
     background: @brand-eth;
-    border-color: @brand-eth
+    border-color: @brand-eth;
   }
   & + .container .btn-info {
     background: @brand-eth-dark;
@@ -655,7 +656,6 @@ header.ETH {
 }
 
 header.ETC {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-etc;
   }
@@ -664,7 +664,7 @@ header.ETC {
   }
   & + .container .btn-primary {
     background: @brand-etc;
-    border-color: @brand-etc
+    border-color: @brand-etc;
   }
   & + .container .btn-info {
     background: @brand-etc-dark;
@@ -681,7 +681,6 @@ header.ETC {
 }
 
 header.Ropsten {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-test;
   }
@@ -703,7 +702,6 @@ header.Ropsten {
 }
 
 header.Kovan {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-test;
   }
@@ -725,7 +723,6 @@ header.Kovan {
 }
 
 header.Rinkeby {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-test;
   }
@@ -747,7 +744,6 @@ header.Rinkeby {
 }
 
 header.RSK {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-rsk;
   }
@@ -769,7 +765,6 @@ header.RSK {
 }
 
 header.EXP {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-exp;
   }
@@ -791,7 +786,6 @@ header.EXP {
 }
 
 header.MUSIC {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-music;
   }
@@ -813,7 +807,6 @@ header.MUSIC {
 }
 
 header.UBQ {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-ubq;
   }
@@ -835,7 +828,6 @@ header.UBQ {
 }
 
 header.PIRL {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-pirl;
   }
@@ -857,7 +849,6 @@ header.PIRL {
 }
 
 header.POA {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-poa;
   }
@@ -879,7 +870,6 @@ header.POA {
 }
 
 header.TOMO {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-tomo;
   }
@@ -901,7 +891,6 @@ header.TOMO {
 }
 
 header.ELLA {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-ella;
   }
@@ -923,7 +912,6 @@ header.ELLA {
 }
 
 header.ETSC {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-etsc;
   }
@@ -945,7 +933,6 @@ header.ETSC {
 }
 
 header.CLO {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-etc;
   }
@@ -954,7 +941,7 @@ header.CLO {
   }
   & + .container .btn-primary {
     background: @brand-etc;
-    border-color: @brand-etc
+    border-color: @brand-etc;
   }
   & + .container .btn-info {
     background: @brand-etc-dark;
@@ -971,7 +958,6 @@ header.CLO {
 }
 
 header.CLOT {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-etc;
   }
@@ -980,7 +966,7 @@ header.CLOT {
   }
   & + .container .btn-primary {
     background: @brand-etc;
-    border-color: @brand-etc
+    border-color: @brand-etc;
   }
   & + .container .btn-info {
     background: @brand-etc-dark;
@@ -997,7 +983,6 @@ header.CLOT {
 }
 
 header.ESN {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-esn;
   }
@@ -1023,7 +1008,6 @@ header.ESN {
 }
 
 header.Custom {
-
   & + .container .modal-content {
     border: 0.25rem solid @brand-cust;
   }
@@ -1045,68 +1029,56 @@ header.Custom {
 }
 
 footer {
-
   border-top: 0.25rem solid @brand-etc;
 
   &.ETH {
-
     border-top: 0.25rem solid @brand-eth;
-
   }
 
   &.Custom {
-
     border-top: 0.25rem solid @brand-cust;
   }
-
 }
 
 .row-justify {
-
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .btn-teeny {
-
   font-size: 0.8rem;
   padding: 0.2rem;
 }
 
 .account-info {
-
   .col-xs-4 {
     padding: @space-xs;
   }
 }
 
 .table-no-border {
-
-  td, th {
-
+  td,
+  th {
     border: none !important;
   }
 
-  tr, td {
-
+  tr,
+  td {
     padding: @space-xs !important;
   }
   border: none !important;
 }
 
 .btn-read {
-
   color: rgb(0, 0, 0);
 
-  background-color: hsla(229, 75%, 87%, .5);
-  border: .3px solid hsla(229, 75%, 87%, .5);
+  background-color: hsla(229, 75%, 87%, 0.5);
+  border: 0.3px solid hsla(229, 75%, 87%, 0.5);
 }
 
 .btn-write {
-
   color: rgb(0, 0, 0);
-  background-color: hsla(0, 82%, 82%, .5);
-  border: .3px solid hsla(0, 82%, 82%, .5);
-
+  background-color: hsla(0, 82%, 82%, 0.5);
+  border: 0.3px solid hsla(0, 82%, 82%, 0.5);
 }

@@ -2,7 +2,6 @@
 // Forms
 // --------------------------------------------------
 
-
 // Normalize non-controls
 //
 // Restyle and baseline non-control form elements.
@@ -95,7 +94,6 @@ output {
   color: @input-color;
 }
 
-
 // Common form controls
 label + .form-control,
 label + input,
@@ -110,7 +108,7 @@ label + textarea,
   display: block;
   width: 100%;
   height: @input-height-base; // Make inputs at least the height of their button counterpart (base line-height + padding + border)
-  padding: .25rem 1rem;
+  padding: 0.25rem 1rem;
   font-size: @font-size-base;
   line-height: 2;
   color: @input-color;
@@ -119,13 +117,14 @@ label + textarea,
   border: 1px solid @input-border;
   margin-top: @space-sm;
   margin-bottom: @space-sm;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   transition: @transition;
 
   &:focus {
     border-color: @input-border-focus;
     outline: 0;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 2px fadeout(@brand-primary, 50%);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+      0 0 2px fadeout(@brand-primary, 50%);
   }
 
   // Placeholder
@@ -141,8 +140,8 @@ label + textarea,
   fieldset[disabled] & {
     background-color: #ececec;
     opacity: 1; // iOS fix for unreadable disabled content; see https://github.com/twbs/bootstrap/issues/11655
-    cursor: text!important;
-    box-shadow: none!important;
+    cursor: text !important;
+    box-shadow: none !important;
   }
 
   &[disabled],
@@ -161,11 +160,10 @@ textarea.form-control {
   line-height: 1.4;
 }
 
-input[readonly]  {
+input[readonly] {
   background-color: #fafafa;
   cursor: text !important;
 }
-
 
 // Search inputs in iOS
 //
@@ -177,7 +175,6 @@ input[readonly]  {
 input[type="search"] {
   -webkit-appearance: none;
 }
-
 
 // Special styles for iOS temporal inputs
 //
@@ -209,7 +206,6 @@ input[type="search"] {
   }
 }
 
-
 // Form groups
 //
 // Designed to help with the organization and spacing of vertical forms. For
@@ -220,7 +216,6 @@ input[type="search"] {
   margin-bottom: @form-group-margin-bottom;
   display: block;
 }
-
 
 // Checkboxes and radios
 //
@@ -241,7 +236,7 @@ input[type="search"] {
     cursor: pointer;
   }
   &.small {
-    margin: .2rem 0;
+    margin: 0.2rem 0;
   }
 }
 .radio input[type="radio"],
@@ -251,7 +246,7 @@ input[type="search"] {
   margin-left: -20px;
 }
 
-input[type=radio] {
+input[type="radio"] {
   margin-right: 5px;
 }
 
@@ -303,7 +298,6 @@ input[type="checkbox"] {
   }
 }
 
-
 // Static form control text
 //
 // Apply class to a `p` element to make any string of text align with labels in
@@ -322,7 +316,6 @@ input[type="checkbox"] {
   }
 }
 
-
 // Form control sizing
 //
 // Build on `.form-control` with modifier classes to decrease or increase the
@@ -332,7 +325,10 @@ input[type="checkbox"] {
 // issue documented in https://github.com/twbs/bootstrap/issues/15074.
 
 .input-sm {
-  .input-size(@input-height-small; @padding-small-vertical; @padding-small-horizontal; @font-size-small; @line-height-small; @border-radius);
+  .input-size(
+    @input-height-small; @padding-small-vertical; @padding-small-horizontal;
+      @font-size-small; @line-height-small; @border-radius
+  );
 }
 .form-group-sm {
   .form-control {
@@ -340,7 +336,6 @@ input[type="checkbox"] {
     padding: @padding-small-vertical @padding-small-horizontal;
     font-size: @font-size-small;
     line-height: @line-height-small;
-
   }
   select.form-control {
     height: @input-height-small;
@@ -360,7 +355,10 @@ input[type="checkbox"] {
 }
 
 .input-lg {
-  .input-size(@input-height-large; @padding-large-vertical; @padding-large-horizontal; @font-size-large; @line-height-large; @border-radius);
+  .input-size(
+    @input-height-large; @padding-large-vertical; @padding-large-horizontal;
+      @font-size-large; @line-height-large; @border-radius
+  );
 }
 .form-group-lg {
   .form-control {
@@ -368,7 +366,6 @@ input[type="checkbox"] {
     padding: @padding-large-vertical @padding-large-horizontal;
     font-size: @font-size-large;
     line-height: @line-height-large;
-
   }
   select.form-control {
     height: @input-height-large;
@@ -391,32 +388,38 @@ input[type="checkbox"] {
 .form-control.is-valid {
   border-color: lighten(@brand-success, 25%);
   outline: 0;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 1px fadeout(@brand-success, 50%);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+    0 0 1px fadeout(@brand-success, 50%);
   &:focus {
     border-color: lighten(@brand-success, 15%);
     outline: 0;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 3px fadeout(@brand-success, 50%);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+      0 0 3px fadeout(@brand-success, 50%);
   }
 }
 
 .form-control.is-invalid {
   border-color: lighten(@brand-danger, 25%);
   outline: 0;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 1px fadeout(@brand-danger, 50%);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+    0 0 1px fadeout(@brand-danger, 50%);
   &:focus {
     border-color: lighten(@brand-danger, 15%);
     outline: 0;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 3px fadeout(@brand-danger, 50%);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+      0 0 3px fadeout(@brand-danger, 50%);
   }
 }
 
 .form-control.is-semivalid {
   border-color: lighten(@brand-warning, 25%);
   outline: 0;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 1px fadeout(@brand-warning, 50%);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+    0 0 1px fadeout(@brand-warning, 50%);
   &:focus {
     border-color: lighten(@brand-warning, 15%);
     outline: 0;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 3px fadeout(@brand-warning, 50%);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+      0 0 3px fadeout(@brand-warning, 50%);
   }
 }

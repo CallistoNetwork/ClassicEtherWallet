@@ -27,6 +27,10 @@
     "app/**/*.js": [
       "prettier --write",
       "git add"
+    ],
+    "app/**/*.less": [
+      "prettier --write",
+      "git add"
     ]
   },
   "devDependencies": {

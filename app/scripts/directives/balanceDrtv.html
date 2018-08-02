@@ -8,14 +8,12 @@
             <span
                     id="addr"
                     class="mono wrap"
-            >
-                {{wallet.getChecksumAddressString()}}
-            </span>
+            >{{wallet.getChecksumAddressString()}}</span>
             <br/>
             <span style="cursor: pointer" ng-click="copyToClipboard('addr')" translate="COPY_TO_CLIPBOARD">
 
             </span>
-            <span ng-show="displayTime > 0" class="text-success">
+            <span ng-show="displaySuccess > 0" class="text-success">
                 success
             </span>
             <!--<label class="ens-response" ng-show="showEns()">-->

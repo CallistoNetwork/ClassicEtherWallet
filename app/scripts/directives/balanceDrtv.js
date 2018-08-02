@@ -6,43 +6,31 @@ var balanceDrtv = function (walletService, $timeout) {
         template: require('./balanceDrtv.html'),
         link: function (scope) {
 
-            scope.displayTime = 0;
+            scope.displaySuccess = 0;
 
             function displaySuccess() {
 
-                scope.displayTime = 1;
+                scope.displaySuccess = 1;
 
                 $timeout(function () {
 
-                    scope.displayTime = 0;
+                    scope.displaySuccess = 0;
                 }, 3000)
 
             }
 
-            scope.copyToClipboard = function copyToClipboard(elementId = 'addr') {
+            scope.copyToClipboard = function handleCopyToClipboard(elementId) {
 
-                // Create a "hidden" input
-                var aux = document.createElement("input");
-                // Assign it the value of the specified element
-                aux.setAttribute("value", document.getElementById(elementId).innerHTML);
-                // Append it to the body
-                document.body.appendChild(aux);
-                // Highlight its content
-                aux.select();
-                // Copy the highlighted text
-                const result = document.execCommand("copy");
-                // Remove it from the body
-                document.body.removeChild(aux);
+                const success = globalFuncs.copyToClipboard(elementId);
 
-                if (result) {
-
+                if (success) {
 
                     displaySuccess();
                 }
 
             }
-        }
 
-    };
+        }
+    }
 };
 module.exports = balanceDrtv;

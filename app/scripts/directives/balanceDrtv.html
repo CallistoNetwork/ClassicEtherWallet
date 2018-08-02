@@ -13,17 +13,17 @@
                         ng-click="copyToClipboard('addr')"
                 >{{wallet.getChecksumAddressString()}}</span>
 
-                <div class="displayer">
+                <div class="transition-display">
                     <img src="images/clipboard.png" width="16" height="16"/>
                     <span translate="COPY_TO_CLIPBOARD"></span>
                 </div>
             </div>
-            <span ng-show="displaySuccess > 0" class="text-success" translate="ADDR_COPY">
-
+            <span
+                    ng-class="displaySuccess > 0 ? 'show-viz' : ''"
+                    class="text-success transition-display"
+                    translate="ADDR_COPY"
+            >
             </span>
-            <!--<label class="ens-response" ng-show="showEns()">-->
-            <!--↳ <span class="mono ng-binding"> {{ensAddress}} </span>-->
-            <!--</label>-->
         </div>
 
         <div ng-if="walletService && walletService.wallet && walletService.wallet.getAddressString();">

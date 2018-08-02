@@ -1111,11 +1111,19 @@ footer {
 
 }
 
-.displayer {
-  transition: all 0.2s ease-in-out;
+.transition-display {
+  transition: visibility 0s, opacity 0.2s ease-in-out;
   opacity: 0;
+  visibility: hidden;
 }
 
-.copier:hover div.displayer {
+.copier:hover div.transition-display {
+  opacity: 1;
+  visibility: visible;
+}
+
+.transition-display.show-viz {
+
+  visibility: visible;
   opacity: 1;
 }

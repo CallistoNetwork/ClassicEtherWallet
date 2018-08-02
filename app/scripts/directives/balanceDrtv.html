@@ -2,24 +2,29 @@
 
     <li class="block" style="list-style: none;">
         <h5 translate="sidebar_AccountAddr">Account Address</h5>
-        <ul class="account-info">
-            <div class="addressIdenticon med float" blockie-address="{{wallet.getAddressString()}}"
-                 watch-var="wallet"></div>
-            <span
-                    id="addr"
-                    class="mono wrap"
-            >{{wallet.getChecksumAddressString()}}</span>
-            <br/>
-            <span style="cursor: pointer" ng-click="copyToClipboard('addr')" translate="COPY_TO_CLIPBOARD">
+        <div class="account-info">
+            <div ng-click="copyToClipboard('addr')" class="pointer copier">
 
-            </span>
-            <span ng-show="displaySuccess > 0" class="text-success">
-                success
+                <div class="addressIdenticon med float" blockie-address="{{wallet.getAddressString()}}"
+                     watch-var="wallet"></div>
+                <span
+                        id="addr"
+                        class="mono wrap"
+                        ng-click="copyToClipboard('addr')"
+                >{{wallet.getChecksumAddressString()}}</span>
+
+                <div class="displayer">
+                    <img src="images/clipboard.png" width="16" height="16"/>
+                    <span translate="COPY_TO_CLIPBOARD"></span>
+                </div>
+            </div>
+            <span ng-show="displaySuccess > 0" class="text-success" translate="ADDR_COPY">
+
             </span>
             <!--<label class="ens-response" ng-show="showEns()">-->
             <!--↳ <span class="mono ng-binding"> {{ensAddress}} </span>-->
             <!--</label>-->
-        </ul>
+        </div>
 
         <div ng-if="walletService && walletService.wallet && walletService.wallet.getAddressString();">
 

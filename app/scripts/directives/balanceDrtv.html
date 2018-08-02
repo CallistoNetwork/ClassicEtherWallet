@@ -5,10 +5,22 @@
         <ul class="account-info">
             <div class="addressIdenticon med float" blockie-address="{{wallet.getAddressString()}}"
                  watch-var="wallet"></div>
-            <span class="mono wrap">{{wallet.getChecksumAddressString()}}</span>
-            <label class="ens-response" ng-show="showEns()">
-                ↳ <span class="mono ng-binding"> {{ensAddress}} </span>
-            </label>
+            <span
+                    id="addr"
+                    class="mono wrap"
+            >
+                {{wallet.getChecksumAddressString()}}
+            </span>
+            <br/>
+            <span style="cursor: pointer" ng-click="copyToClipboard('addr')" translate="COPY_TO_CLIPBOARD">
+
+            </span>
+            <span ng-show="displayTime > 0" class="text-success">
+                success
+            </span>
+            <!--<label class="ens-response" ng-show="showEns()">-->
+            <!--↳ <span class="mono ng-binding"> {{ensAddress}} </span>-->
+            <!--</label>-->
         </ul>
 
         <div ng-if="walletService && walletService.wallet && walletService.wallet.getAddressString();">

@@ -5,6 +5,7 @@ var en = function () {
 en.code = 'en';
 en.data = {
 
+    Network: "Network:",
     DEXNS_href: 'You don\'t have a Name yet.\n' +
     'You can register one for your address',
     DEXNS_name: "DexNS Name",

@@ -1111,10 +1111,11 @@ footer {
 
 }
 
-.copier div.displayer {
-  display: none;
+.displayer {
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
 }
 
 .copier:hover div.displayer {
-  display: block;
+  opacity: 1;
 }

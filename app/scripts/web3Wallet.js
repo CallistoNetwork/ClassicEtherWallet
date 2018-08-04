@@ -3,10 +3,9 @@ var Wallet = require('./myetherwallet.js')
 
 var Web3Wallet = function (addressBuffer) {
     Wallet.call(this)
-    this.addressBuffer = addressBuffer
+    this.addressBuffer = addressBuffer;
     this.type = "web3";
     this.hwType = "web3";
-
     this.getNetwork();
 }
 // subclass Wallet
@@ -16,16 +15,16 @@ Web3Wallet.prototype = Object.create(Wallet.prototype);
 Web3Wallet.prototype.getAddress = function () {
     return this.addressBuffer
 }
-
-Web3Wallet.prototype.getPath = function () {
-    throw new Error('Web3Wallet - method not supported')
-}
-Web3Wallet.prototype.getHWType = function () {
-    throw new Error('Web3Wallet - method not supported')
-}
-Web3Wallet.prototype.getHWTransport = function () {
-    throw new Error('Web3Wallet - method not supported')
-}
+//
+// Web3Wallet.prototype.getPath = function () {
+//     throw new Error('Web3Wallet - method not supported')
+// }
+// Web3Wallet.prototype.getHWType = function() {
+//     throw new Error('Web3Wallet - method not supported')
+// }
+// Web3Wallet.prototype.getHWTransport = function() {
+//     throw new Error('Web3Wallet - method not supported')
+// }
 Web3Wallet.prototype.getPrivateKey = function () {
     throw new Error('Web3Wallet - method not supported')
 }

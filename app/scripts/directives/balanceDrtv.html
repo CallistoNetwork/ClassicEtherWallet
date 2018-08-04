@@ -7,6 +7,29 @@
                  watch-var="wallet"></div>
             <span class="mono wrap">{{wallet.getChecksumAddressString()}}</span>
         </ul>
+        <div class="account-info">
+            <div ng-click="copyToClipboard('addr')" class="pointer copier">
+
+                <div class="addressIdenticon med float" blockie-address="{{wallet.getAddressString()}}"
+                     watch-var="wallet"></div>
+                <span
+                        id="addr"
+                        class="mono wrap"
+                        ng-click="copyToClipboard('addr')"
+                >{{wallet.getChecksumAddressString()}}</span>
+
+                <div class="transition-display">
+                    <img src="images/clipboard.png" width="16" height="16"/>
+                    <span translate="COPY_TO_CLIPBOARD"></span>
+                </div>
+            </div>
+            <span
+                    ng-class="displaySuccess > 0 ? 'show-viz' : ''"
+                    class="text-success transition-display"
+                    translate="ADDR_COPY"
+            >
+            </span>
+        </div>
 
         <div ng-if="walletService && walletService.wallet && walletService.wallet.getAddressString();">
 

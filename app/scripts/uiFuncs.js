@@ -81,7 +81,7 @@ uiFuncs.signTxTrezor = function (rawTx, {path}, callback) {
 uiFuncs.signTxLedger = function (app, eTx, rawTx, txData, old, callback) {
 
 
-    eTx.raw[6] = Buffer.from([rawTx.chainId]);
+    eTx.raw[6] = rawTx.chainId;
 
 
     eTx.raw[7] = eTx.raw[8] = 0;
@@ -98,7 +98,17 @@ uiFuncs.signTxLedger = function (app, eTx, rawTx, txData, old, callback) {
             });
             return;
         }
-        rawTx.v = "0x" + result['v'];
+        var v = result['v'].toString(16);
+        if (!old) {
+            // EIP155 support. check/recalc signature v value.
+            var rv = parseInt(v, 16);
+            var cv = rawTx.chainId * 2 + 35;
+            if (rv !== cv && (rv & cv) !== rv) {
+                cv += 1; // add signature v bit.
+            }
+            v = cv.toString(16);
+        }
+        rawTx.v = "0x" + v;
         rawTx.r = "0x" + result['r'];
         rawTx.s = "0x" + result['s'];
         eTx = new ethUtil.Tx(rawTx);
@@ -232,10 +242,6 @@ uiFuncs.genTxWithInfo = function (data, callback) {
                     isError: true,
                     error: error
                 });
-
-            } else if (rawTx.chainId === 820) {
-
-                EIP155Supported = false;
 
             } else {
 

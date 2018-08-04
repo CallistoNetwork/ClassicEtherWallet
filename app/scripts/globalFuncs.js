@@ -6,6 +6,33 @@ var globalFuncs = function () {
 globalFuncs.lightMode = false;
 
 
+globalFuncs.timeRem = function timeRem(timeUntil) {
+    var rem = timeUntil - new Date();
+
+    var _second = 1000;
+    var _minute = _second * 60;
+    var _hour = _minute * 60;
+    var _day = _hour * 24;
+    var days = Math.floor(rem / _day);
+    var hours = Math.floor((rem % _day) / _hour);
+    var minutes = Math.floor((rem % _hour) / _minute);
+    var seconds = Math.floor((rem % _minute) / _second);
+    days = days < 10 ? '0' + days : days;
+    hours = hours < 10 ? '0' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    const timeRemaining = days + ' days ' + hours + ' hours ' + minutes + ' minutes ' + seconds + ' seconds ';
+
+    return {
+        days,
+        hours,
+        minutes,
+        seconds,
+        timeRemaining,
+    }
+};
+
+
 // default nodes to connect to
 globalFuncs.networks = {
     ETH: "eth_ethscan",

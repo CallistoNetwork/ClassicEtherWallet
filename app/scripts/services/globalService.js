@@ -3,7 +3,6 @@ var globalService = function ($http, $httpParamSerializerJQLike) {
     globalFuncs.checkAndRedirectHTTPS();
     ajaxReq.http = $http;
     ajaxReq.postSerializer = $httpParamSerializerJQLike;
-    ajaxReq.getCoinPrice = nodes.coinPrice.getCoinPrice;
     var tabs = {
         generateWallet: {
             id: 0,

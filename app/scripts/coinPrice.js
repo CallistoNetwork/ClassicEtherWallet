@@ -9,30 +9,24 @@
 const CCRATEAPI = (sym = 'ETC') => `https://min-api.cryptocompare.com/data/price?fsym=${sym}&tsyms=USD,EUR,GBP,BTC,CHF,REP`;
 
 
-var coinPrice = function () {
-
-
-};
-
-
 /*
 
-    get coin price based on ajaxReq
+    @param coin
+    @returns Promise< priceObj | error>
  */
 
-coinPrice.getCoinPrice = function (callback) {
+module.exports = function coinPrice(coin = nodes.nodeList[globalFuncs.getCurNode()].type) {
 
-    const coin = nodes.nodeList[globalFuncs.getCurNode()].type;
 
     const uri = CCRATEAPI(coin);
 
-    ajaxReq.http.get(uri).then(function (_data) {
+    return ajaxReq.http.get(uri).then(function (_data) {
 
 
         if (_data.hasOwnProperty('Response') && _data.Response === 'Error' ||
             _data.hasOwnProperty('data') && _data.data.Response === 'Error') {
 
-            callback(Object.assign({}, _data, {error: true}));
+            return (Object.assign({}, _data, {error: true}));
 
         } else {
 
@@ -46,13 +40,14 @@ coinPrice.getCoinPrice = function (callback) {
                 rep: parseFloat(data['REP']).toFixed(6),
                 gbp: parseFloat(data['GBP']).toFixed(6),
             };
-            callback(priceObj);
+            return priceObj;
 
         }
 
     }).catch(err => {
 
-        callback(Object.assign({}, err, {error: true}));
+        return Object.assign({}, err, {error: true});
     })
 }
-module.exports = coinPrice;
+
+

@@ -2,6 +2,11 @@
 
     <li class="block" style="list-style: none;">
         <h5 translate="sidebar_AccountAddr">Account Address</h5>
+        <ul class="account-info">
+            <div class="addressIdenticon med float" blockie-address="{{wallet.getAddressString()}}"
+                 watch-var="wallet"></div>
+            <span class="mono wrap">{{wallet.getChecksumAddressString()}}</span>
+        </ul>
         <div class="account-info">
             <div ng-click="copyToClipboard('addr')" class="pointer copier">
 
@@ -177,6 +182,10 @@
         <h5>Messages:</h5>
         <messages-overview-drtv></messages-overview-drtv>
 
+
+        <!-- Navigation Ads -->
+
+
         <a
 
                 ng-click="globalService.currentTab = globalService.tabs.swap.id"
@@ -233,18 +242,24 @@
             <a ng-click="slide=2"> &bull; </a>
             <a ng-click="slide=3"> &bull; </a>
         </div>
+        <!-- Navigation Ads -->
 
         <div class="block token-balances">
             <h5 translate="sidebar_TokenBal">Token Balances:</h5>
             <table class="account-info">
                 <tr ng-repeat="token in wallet.tokenObjs track by $index"
-                    ng-show="token.balance!=0 && token.balance!='loading' || token.type!=='default' || tokenVisibility=='shown'">
+                    ng-show="token.balance !== 0 && token.balance !== 'loading' || token.type !== 'default' || tokenVisibility === 'shown'">
                     <td class="mono wrap point">
-                        <img src="images/icon-remove.svg" class="token-remove" title="Remove Token"
-                             ng-click="removeTokenFromLocal(token.symbol)" ng-show="token.type!=='default'"/>
+                        <img src="images/icon-remove.svg"
+                             class="token-remove" title="Remove Token"
+                             ng-click="removeTokenFromLocal(token.symbol)"
+                             ng-show="token.type!=='default'"/>
                         {{token.getBalance() }}
                     </td>
                     <td>{{token.getSymbol()}}</td>
+                    <td ng-if="token.dexns.name && token.dexns.info">
+                        {{token.dexns.info}}
+                    </td>
                 </tr>
             </table>
             <a class="btn btn-default btn-xs" ng-click="wallet.setTokens(); tokensLoaded=true" ng-hide="tokensLoaded">
@@ -326,7 +341,7 @@
                     </div>
                 </div>
 
-                <div class="block" ng-show="ajaxReq.type=='ETH'">
+                <div class="block" ng-show="wallet.usdBalance">
                     <h5 translate="sidebar_Equiv">Equivalent Values:</h5>
                     <div class="row">
                         <ul class="account-info col-xs-6">

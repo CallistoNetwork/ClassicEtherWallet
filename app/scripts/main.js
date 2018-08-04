@@ -211,12 +211,7 @@ app.directive("dexnsNameDisplay", [
 app.directive("lookup", ["$rootScope", "lookupService", lookup]);
 app.directive("blockieAddress", blockiesDrtv);
 app.directive("cssThemeDrtv", cssThemeDrtv);
-app.directive("addressField", [
-    "$compile",
-    "backgroundNodeService",
-    "lookupService",
-    addressFieldDrtv
-]);
+app.directive("addressField", ["lookupService", addressFieldDrtv]);
 app.directive("qrCode", QRCodeDrtv);
 app.directive("onReadFile", fileReaderDrtv);
 app.directive("walletBalanceDrtv", ["walletService", "$timeout", balanceDrtv]);
@@ -235,6 +230,7 @@ app.directive("transactionCost", [transactionCost]);
 app.controller("tabsCtrl", [
     "$scope",
     "globalService",
+    "walletService",
     "$translate",
     "$sce",
     "backgroundNodeService",

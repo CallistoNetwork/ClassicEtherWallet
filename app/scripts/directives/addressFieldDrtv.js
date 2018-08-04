@@ -1,12 +1,7 @@
 "use strict";
 
-var _debounce = require("lodash/debounce");
-
-var addressFieldDrtv = function(
-    $compile,
-    backgroundNodeService,
-    lookupService
-) {
+const _debounce = require("lodash/debounce");
+const addressFieldDrtv = function(lookupService) {
     return {
         restrict: "E",
         template: require("./addressFieldDrtv.html"),
@@ -64,7 +59,9 @@ var addressFieldDrtv = function(
             };
 
             scope.$watch("addressDrtv.ensAddressField", _val => {
-                scope.tx.to = _val;
+                if (_val) {
+                    scope.tx.to = _val;
+                }
                 scope.lookupNameDelay(_val);
             });
 

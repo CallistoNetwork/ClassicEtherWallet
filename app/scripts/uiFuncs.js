@@ -242,10 +242,6 @@ uiFuncs.genTxWithInfo = function (data, callback) {
                     error: error
                 });
 
-            } else if (rawTx.chainId === 820) {
-
-                EIP155Supported = false;
-
             } else {
 
                 var splitVersion = result['version'].split('.');

@@ -1082,3 +1082,19 @@ footer {
     background-color: hsla(0, 82%, 82%, 0.5);
     border: 0.3px solid hsla(0, 82%, 82%, 0.5);
 }
+
+.transition-display {
+    transition: visibility 0s, opacity 0.2s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.copier:hover div.transition-display {
+    opacity: 1;
+    visibility: visible;
+}
+
+.transition-display.show-viz {
+    visibility: visible;
+    opacity: 1;
+}

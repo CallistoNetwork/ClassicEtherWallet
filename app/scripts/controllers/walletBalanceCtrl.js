@@ -6,7 +6,8 @@ var walletBalanceCtrl = function(
     backgroundNodeService,
     modalService,
     coldStakingService,
-    messageService
+    messageService,
+    lookupService
 ) {
     $scope.ajaxReq = ajaxReq;
     $scope.erc20Abi = require("../abiDefinitions/erc20abi.json");

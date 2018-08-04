@@ -341,13 +341,12 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
             $scope.notifier.danger("ClassicMask / Metamask / Mist not found");
         } else {
             web3.eth.getAccounts(function(err, accounts) {
-                if (err)
+                if (err) {
                     $scope.notifier.danger(
                         err +
                             ". Are you sure you are on a secure (SSL / HTTPS) connection?"
                     );
-
-                if (!(Array.isArray(accounts) && accounts.length > 0)) {
+                } else if (!(Array.isArray(accounts) && accounts.length > 0)) {
                     $scope.notifier.danger("Unlock Account");
                 } else {
                     var address = accounts[0];

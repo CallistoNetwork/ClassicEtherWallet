@@ -1,10 +1,14 @@
 "use strict";
 
-const feContract = require("./abiDefinitions/etcAbi.json").find(
+const storageContract = require("./abiDefinitions/etcAbi.json").find(
     i => i.name === "DexNS State storage"
 );
 
-const dexnsStorageContract = new JsonContract(feContract, "ETC");
+const dexnsStorageContract = new InitContract(
+    storageContract.abi,
+    storageContract.address,
+    "ETC"
+);
 
 var Token = function(
     contractAddress,
@@ -65,14 +69,16 @@ Token.prototype.initDexns = function() {
     dexnsStorageContract
         .call("assignation", { inputs: [this.contractAddress] })
         .then(result => {
-            const [_name] = result.data;
-            this.dexns.name = _name;
+            const _name = result[0].value;
 
             if (_name) {
+                this.dexns.name = _name;
+                console.log(this.contractAddress, _name);
+
                 dexnsStorageContract
                     .call("getName", { inputs: [_name] })
                     .then(result => {
-                        const [_info] = result.data;
+                        const _info = result[0].value;
                         this.dexns.info = _info;
                     });
             }

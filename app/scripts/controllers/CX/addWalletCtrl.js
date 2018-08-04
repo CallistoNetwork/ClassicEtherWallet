@@ -310,7 +310,7 @@ var addWalletCtrl = function($scope, $sce) {
                     data.data.balance,
                     "wei"
                 );
-                ajaxReq.getCoinPrice(function(data) {
+                _coinPrice().then(function(data) {
                     $scope.usdBalance = etherUnits.toFiat(
                         $scope.etherBalance,
                         "ether",

@@ -3,7 +3,7 @@ var registryInterface = require("./ensConfigs/registryABI.json");
 var resolverInterface = require("./ensConfigs/resolverABI.json");
 var auctionInterface = require("./ensConfigs/auctionABI.json");
 var deedInterface = require("./ensConfigs/deedABI.json");
-var ens = function() {
+var ens = function(network = "ETH") {
     var _this = this;
     this.registryABI = {};
     for (var i in registryInterface)
@@ -17,7 +17,12 @@ var ens = function() {
     this.deedABI = {};
     for (var i in deedInterface)
         this.deedABI[deedInterface[i].name] = deedInterface[i];
-    switch (ajaxReq.type) {
+
+    this.node = Object.values(nodes.nodeList).find(
+        _node => _node.type === network
+    );
+
+    switch (network) {
         case nodes.nodeTypes.ETH:
             _this.setCurrentRegistry(ens.registry.ETH);
             break;
@@ -96,6 +101,7 @@ function subnodehash(name) {
     name = ens.normalise(name);
     return "0x" + ethUtil.sha3(name).toString("hex");
 }
+
 ens.getNameHash = function(name) {
     return namehash(name);
 };
@@ -104,8 +110,10 @@ ens.getSubNodeHash = function(name) {
 };
 ens.prototype.getOwnerResolverAddress = function(funcABI, to, name, callback) {
     var _this = this;
-    ajaxReq.getEthCall(
-        { to: to, data: _this.getDataString(funcABI, [namehash(name)]) },
+    const _hash = namehash(name);
+
+    _this.node.lib.getEthCall(
+        { to: to, data: _this.getDataString(funcABI, [_hash]) },
         function(data) {
             if (data.error) callback(data);
             else {
@@ -160,7 +168,7 @@ ens.prototype.getName = function(name, callback) {
     _this.getResolver(name, function(data) {
         if (data.error || data.data == "0x") callback(data);
         else {
-            ajaxReq.getEthCall(
+            _this.node.lib.getEthCall(
                 {
                     to: data.data,
                     data: _this.getDataString(_this.resolverABI.name, [
@@ -250,7 +258,7 @@ ens.prototype.getAuctionEntries = function(name, callback) {
     var _this = this;
     name = _this.getSHA3(ens.normalise(name));
     var funcABI = _this.auctionABI.entries;
-    ajaxReq.getEthCall(
+    _this.node.lib.getEthCall(
         {
             to: _this.getAuctionAddress(),
             data: _this.getDataString(funcABI, [name])
@@ -280,7 +288,7 @@ ens.prototype.getAuctionEntries = function(name, callback) {
 ens.prototype.shaBid = function(hash, owner, value, saltHash, callback) {
     var _this = this;
     var funcABI = _this.auctionABI.shaBid;
-    ajaxReq.getEthCall(
+    _this.node.lib.getEthCall(
         {
             to: _this.getAuctionAddress(),
             data: _this.getDataString(funcABI, [hash, owner, value, saltHash])
@@ -304,7 +312,7 @@ ens.prototype.getAllowedTime = function(name, callback) {
     var _this = this;
     var funcABI = _this.auctionABI.getAllowedTime;
     name = _this.getSHA3(ens.normalise(name));
-    ajaxReq.getEthCall(
+    _this.node.lib.getEthCall(
         {
             to: _this.getAuctionAddress(),
             data: _this.getDataString(funcABI, [name])

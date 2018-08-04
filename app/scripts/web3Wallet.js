@@ -6,6 +6,8 @@ var Web3Wallet = function(addressBuffer) {
     this.addressBuffer = addressBuffer;
     this.type = "web3";
     this.hwType = "web3";
+
+    this.getNetwork();
 };
 // subclass Wallet
 Web3Wallet.super_ = Wallet;
@@ -15,15 +17,15 @@ Web3Wallet.prototype.getAddress = function() {
     return this.addressBuffer;
 };
 
-// Web3Wallet.prototype.getPath = function() {
-//     throw new Error('Web3Wallet - method not supported')
-// }
-// Web3Wallet.prototype.getHWType = function() {
-//     throw new Error('Web3Wallet - method not supported')
-// }
-// Web3Wallet.prototype.getHWTransport = function() {
-//     throw new Error('Web3Wallet - method not supported')
-// }
+Web3Wallet.prototype.getPath = function() {
+    throw new Error("Web3Wallet - method not supported");
+};
+Web3Wallet.prototype.getHWType = function() {
+    throw new Error("Web3Wallet - method not supported");
+};
+Web3Wallet.prototype.getHWTransport = function() {
+    throw new Error("Web3Wallet - method not supported");
+};
 Web3Wallet.prototype.getPrivateKey = function() {
     throw new Error("Web3Wallet - method not supported");
 };
@@ -53,6 +55,20 @@ Web3Wallet.prototype.getV3Filename = function(timestamp) {
         "--",
         this.getAddress().toString("hex")
     ].join("");
+};
+
+Web3Wallet.prototype.getNetwork = function() {
+    const web3 = window.web3;
+
+    this.chainId = parseInt(web3.version.network);
+
+    const node = Object.values(nodes.nodeList).find(
+        node => node.chainId === this.chainId
+    );
+
+    if (node) {
+        this.network = node.type;
+    }
 };
 
 module.exports = Web3Wallet;

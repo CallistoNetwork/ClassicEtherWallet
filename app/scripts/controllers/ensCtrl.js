@@ -95,27 +95,14 @@ var ensCtrl = function($scope, $sce, $rootScope, walletService) {
             $scope.objENS.timeRemaining = "EXPIRED";
             return;
         }
-        var _second = 1000;
-        var _minute = _second * 60;
-        var _hour = _minute * 60;
-        var _day = _hour * 24;
-        var days = Math.floor(rem / _day);
-        var hours = Math.floor((rem % _day) / _hour);
-        var minutes = Math.floor((rem % _hour) / _minute);
-        var seconds = Math.floor((rem % _minute) / _second);
-        days = days < 10 ? "0" + days : days;
-        hours = hours < 10 ? "0" + hours : hours;
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-        $scope.objENS.timeRemaining =
-            days +
-            " days " +
-            hours +
-            " hours " +
-            minutes +
-            " minutes " +
-            seconds +
-            " seconds ";
+        const {
+            timeRemaining,
+            days,
+            hours,
+            minutes,
+            seconds
+        } = globalFuncs.timeRem(timeUntil);
+
         $scope.objENS.timeRemainingReveal =
             days -
             2 +
@@ -126,6 +113,8 @@ var ensCtrl = function($scope, $sce, $rootScope, walletService) {
             " minutes " +
             seconds +
             " seconds ";
+        $scope.objENS.timeRemaining = timeRemaining;
+
         updateScope();
     };
     $scope.nameOnChange = function() {

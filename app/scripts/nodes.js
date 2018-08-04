@@ -399,6 +399,4 @@ nodes.nodeList = {
         lib: new nodes.customNode("https://api.esn.gonspool.com", "")
     }
 };
-
-nodes.coinPrice = require("./nodeHelpers/coinPrice");
 module.exports = nodes;

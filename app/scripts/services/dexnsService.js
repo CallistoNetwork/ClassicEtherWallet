@@ -81,7 +81,7 @@ function parseMetadata(_metadata) {
     return [].concat([{ key: "network", value: network }], params);
 }
 
-const dexnsService = function(walletService) {
+const dexnsService = function() {
     this.parseMetadata = parseMetadata;
 
     this.feContract = new InitContract(
@@ -106,6 +106,7 @@ const dexnsService = function(walletService) {
     ]; // 1 year
 
     this.stringifyMetadata = stringifyMetadata;
+
     return this;
 };
 

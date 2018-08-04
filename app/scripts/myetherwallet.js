@@ -23,18 +23,15 @@ Wallet.generate = function(icapDirect) {
 };
 Wallet.prototype.setTokens = function() {
     const { popTokens } = Token;
-    let storedTokens = globalFuncs.localStorage.getItem("localTokens", null)
+    let storedTokens = !!globalFuncs.localStorage.getItem("localTokens", null)
         ? JSON.parse(globalFuncs.localStorage.getItem("localTokens"))
         : [];
-
     storedTokens = storedTokens.map(token =>
         Object.assign(token, { address: token.contractAddress })
     );
 
     let node_ = globalFuncs.getCurNode();
-
-    let network = nodes.nodeList[node_];
-
+    const network = nodes.nodeList[node_];
     const tokens = []
         .concat(popTokens, storedTokens)
         .map(
@@ -51,7 +48,7 @@ Wallet.prototype.setTokens = function() {
         );
 
     this.tokenObjs = tokens.map(token => {
-        if (token.network === network.name) {
+        if (token.network === network.type) {
             token.fetchBalance();
         } else {
             token.setBalance(`SWITCH TO ${token.network} NETWORK`);
@@ -68,7 +65,7 @@ Wallet.prototype.setBalance = function(callback) {
         if (data.error) this.balance = data.msg;
         else {
             this.balance = etherUnits.toEther(data.data.balance, "wei");
-            ajaxReq.getCoinPrice(data => {
+            _coinPrice().then(data => {
                 if (!data.error) {
                     this.usdPrice = etherUnits.toFiat("1", "ether", data.usd);
                     this.gbpPrice = etherUnits.toFiat("1", "ether", data.gbp);

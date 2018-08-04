@@ -51,7 +51,6 @@ uiFuncs.signTxTrezor = function (rawTx, {path}, callback) {
         if (callback !== undefined) callback(rawTx);
     }
 
-    const chainId = removeChainIdIfCLO(rawTx.chainId);// rawTx.chainId;
     TrezorConnect.signEthereumTx(
         path,
         ethFuncs.getNakedAddress(rawTx.nonce),

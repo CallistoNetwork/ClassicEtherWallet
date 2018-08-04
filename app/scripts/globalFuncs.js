@@ -18,6 +18,25 @@ globalFuncs.networks = {
     CLOT: 'clo_testnet3'
 };
 
+globalFuncs.copyToClipboard = function copyToClipboard(elementId = 'addr') {
+
+    // Create a "hidden" input
+    var aux = document.createElement("input");
+    // Assign it the value of the specified element
+    aux.setAttribute("value", document.getElementById(elementId).innerHTML);
+    // Append it to the body
+    document.body.appendChild(aux);
+    // Highlight its content
+    aux.select();
+    // Copy the highlighted text
+    const result = document.execCommand("copy");
+    // Remove it from the body
+    document.body.removeChild(aux);
+
+    return result;
+
+
+}
 globalFuncs.getBlockie = function (address) {
     return blockies.create({
         seed: address.toLowerCase(),

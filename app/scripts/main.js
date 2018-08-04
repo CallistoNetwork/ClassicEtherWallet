@@ -187,7 +187,7 @@ app.directive('cssThemeDrtv', cssThemeDrtv);
 app.directive('addressField', ['$compile', 'backgroundNodeService', addressFieldDrtv]);
 app.directive('qrCode', QRCodeDrtv);
 app.directive('onReadFile', fileReaderDrtv);
-app.directive('walletBalanceDrtv', balanceDrtv);
+app.directive('walletBalanceDrtv', ['walletService', '$timeout', balanceDrtv]);
 app.directive('walletDecryptDrtv', walletDecryptDrtv);
 app.directive('cxWalletDecryptDrtv', cxWalletDecryptDrtv);
 app.directive('messagesOverviewDrtv', ['globalService', 'walletService', 'messageService', messagesOverviewDrtv]);

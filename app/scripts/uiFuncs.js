@@ -30,8 +30,8 @@ uiFuncs.isTxDataValid = function (txData) {
 }
 
 
-uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
-    var localCallback = function (result) {
+uiFuncs.signTxTrezor = function (rawTx, {path}, callback) {
+    function localCallback(result) {
         if (!result.success) {
             if (callback !== undefined) {
                 callback({
@@ -39,7 +39,6 @@ uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
                     error: result.error
                 });
             }
-            return;
         }
 
         rawTx.v = "0x" + ethFuncs.decimalToHex(result.v);
@@ -52,9 +51,9 @@ uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
         if (callback !== undefined) callback(rawTx);
     }
 
-
+    const chainId = removeChainIdIfCLO(rawTx.chainId);// rawTx.chainId;
     TrezorConnect.signEthereumTx(
-        txData.path,
+        path,
         ethFuncs.getNakedAddress(rawTx.nonce),
         ethFuncs.getNakedAddress(rawTx.gasPrice),
         ethFuncs.getNakedAddress(rawTx.gasLimit),
@@ -68,7 +67,7 @@ uiFuncs.signTxTrezor = function (rawTx, txData, callback) {
 uiFuncs.signTxLedger = function (app, eTx, rawTx, txData, old, callback) {
 
 
-    eTx.raw[6] = Buffer.from([rawTx.chainId]);
+    eTx.raw[6] = rawTx.chainId;
 
 
     eTx.raw[7] = eTx.raw[8] = 0;
@@ -85,7 +84,17 @@ uiFuncs.signTxLedger = function (app, eTx, rawTx, txData, old, callback) {
             });
             return;
         }
-        rawTx.v = "0x" + result['v'];
+        var v = result['v'].toString(16);
+        if (!old) {
+            // EIP155 support. check/recalc signature v value.
+            var rv = parseInt(v, 16);
+            var cv = rawTx.chainId * 2 + 35;
+            if (rv !== cv && (rv & cv) !== rv) {
+                cv += 1; // add signature v bit.
+            }
+            v = cv.toString(16);
+        }
+        rawTx.v = "0x" + v;
         rawTx.r = "0x" + result['r'];
         rawTx.s = "0x" + result['s'];
         eTx = new ethUtil.Tx(rawTx);
@@ -120,18 +129,21 @@ uiFuncs.signTxDigitalBitbox = function (eTx, rawTx, txData, callback) {
     var app = new DigitalBitboxEth(txData.hwTransport, '');
     app.signTransaction(txData.path, eTx, localCallback);
 }
-uiFuncs.trezorUnlockCallback = function (txData, callback) {
-    TrezorConnect.open(function (error) {
-        if (error) {
-            if (callback !== undefined) callback({
-                isError: true,
-                error: error
-            });
-        } else {
-            txData.trezorUnlocked = true;
-            uiFuncs.generateTx(txData, callback);
-        }
-    });
+uiFuncs.trezorUnlock = function () {
+
+    return new Promise((resolve, reject) => {
+
+        TrezorConnect.open(function (error) {
+            if (error) {
+                reject({
+                    isError: true,
+                    error: error
+                });
+            } else {
+                resolve(true);
+            }
+        });
+    })
 };
 
 /*
@@ -242,7 +254,13 @@ uiFuncs.genTxWithInfo = function (data, callback) {
 
         if (!data.trezorUnlocked) {
 
-            uiFuncs.trezorUnlockCallback(data, callback);
+            uiFuncs.trezorUnlock().then(() => {
+
+                data.trezorUnlocked = true;
+
+
+                uiFuncs.signTxTrezor(rawTx, data, callback);
+            });
 
         } else {
 

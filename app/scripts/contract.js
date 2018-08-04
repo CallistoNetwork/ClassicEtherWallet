@@ -212,21 +212,6 @@ class Contract {
   */
 
 
-/*
-
-load contract from abiDefinitions
- */
-
-class JsonContract extends Contract {
-
-
-    constructor({abi, address, name = ''}, network) {
-
-        super(abi, address, network);
-        this.name = name;
-    }
-}
-
 class InitContract extends Contract {
 
 
@@ -237,12 +222,17 @@ class InitContract extends Contract {
 
         this.abi.forEach(func => {
 
-            this[func.name] = '';
+            // types function, event, constructor
+            if (func.type === 'function') {
 
-            func.inputs.forEach(input => {
 
-                input.value = '';
-            })
+                this[func.name] = '';
+
+                func.inputs.forEach(input => {
+
+                    input.value = '';
+                })
+            }
         });
 
         if (_bootstrap) {
@@ -325,6 +315,12 @@ class InitContract extends Contract {
 
 
 }
+
+
+/*
+
+load contract from abiDefinitions
+ */
 
 
 //
@@ -449,8 +445,19 @@ class InitContract extends Contract {
 // }
 
 
+function parseJsonContract(contract, network, _bootstrap) {
+
+    if (!(contract.hasOwnProperty('address') && contract.hasOwnProperty('abi'))) {
+
+        throw new Error('Invalid Request');
+    }
+    const {address, abi} = contract;
+
+    return new InitContract(abi, address, network, _bootstrap);
+}
+
 module.exports = {
     Contract,
     InitContract,
-    JsonContract,
+    parseJsonContract
 };

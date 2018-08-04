@@ -28,16 +28,25 @@ window.format = format;
 var browser = require('detect-browser');
 window.browser = browser;
 
+
+// fixme: window variables should be accessed as services for dependency injection
+
+// we can keep winow vars for useage in conosole, but pain to keep handling order right
+
 var nodes = require('./nodes');
 window.nodes = nodes;
 
 var contracts = require('./contract');
 
-const {Contract, InitContract, JsonContract} = contracts;
+const {Contract, InitContract, parseJsonContract} = contracts;
 
 window.Contract = Contract;
-window.JsonContract = JsonContract;
 window.InitContract = InitContract;
+window.parseJsonContract = parseJsonContract;
+
+const coinPrice = require('./coinPrice');
+
+window._coinPrice = coinPrice;
 
 
 var Wallet = require('./myetherwallet');
@@ -65,12 +74,11 @@ var changeNow = require('./changeNow');
 window.changeNow = changeNow;
 
 
-
-
-
 var ens = require('./ens');
 window.ens = ens;
 var translate = require('./translations/translate.js');
+
+
 if (IS_CX) {
     var cxFuncs = require('./cxFuncs');
     window.cxFuncs = cxFuncs;
@@ -120,7 +128,7 @@ var switchNetworkCtrl = require('./controllers/switchNetworkCtrl');
 
 // SERVICES
 
-
+var lookupService = require('./services/lookup');
 var globalService = require('./services/globalService');
 var coldStakingService = require('./services/coldStakingService');
 var modalService = require('./services/modalService');
@@ -131,7 +139,7 @@ var backgroundNodeService = require('./services/backgroundNodeService');
 
 
 // DIRECTIVES
-
+var lookup = require('./directives/crosschain-lookup');
 var dexnsNameDisplay = require('./directives/dexns-name-display');
 var blockiesDrtv = require('./directives/blockiesDrtv');
 var addressFieldDrtv = require('./directives/addressFieldDrtv');
@@ -176,24 +184,28 @@ app.factory('messageService', messageService);
 
 app.factory('dexnsService', dexnsService);
 
+app.factory('lookupService', ['dexnsService', 'walletService', lookupService]);
+
 app.factory('messageService', messageService);
 app.factory('coldStakingService', ['walletService', coldStakingService]);
 
 
 app.directive('dexnsNameDisplay', ['dexnsService', 'walletService', 'globalService', dexnsNameDisplay]);
-
+app.directive('lookup', ['$rootScope', 'lookupService', lookup])
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('cssThemeDrtv', cssThemeDrtv);
-app.directive('addressField', ['$compile', 'backgroundNodeService', addressFieldDrtv]);
+app.directive('addressField', ['$compile', 'backgroundNodeService', 'lookupService', addressFieldDrtv]);
 app.directive('qrCode', QRCodeDrtv);
 app.directive('onReadFile', fileReaderDrtv);
-app.directive('walletBalanceDrtv', balanceDrtv);
+app.directive('walletBalanceDrtv', ['walletService', '$timeout', balanceDrtv]);
 app.directive('walletDecryptDrtv', walletDecryptDrtv);
 app.directive('cxWalletDecryptDrtv', cxWalletDecryptDrtv);
 app.directive('messagesOverviewDrtv', ['globalService', 'walletService', 'messageService', messagesOverviewDrtv]);
 app.directive('arrayInputDrtv', arrayInputDrtv);
 app.directive('newMessagesDrtv', ['globalService', newMessagesDrtv]);
-app.directive('transactionCost', transactionCost);
+app.directive('transactionCost', [transactionCost]);
+
+
 app.controller('tabsCtrl', ['$scope', 'globalService', '$translate', '$sce', 'backgroundNodeService', tabsCtrl]);
 app.controller('switchNetworkCtrl', ['$scope', '$rootScope', 'globalService', switchNetworkCtrl]);
 app.controller('viewCtrl', ['$scope', 'globalService', '$sce', viewCtrl]);
@@ -211,7 +223,7 @@ app.controller('ensCtrl', ['$scope', '$sce', '$rootScope', 'walletService', ensC
 app.controller('dexnsCtrl', ['$scope', '$sce', '$rootScope', 'walletService', 'backgroundNodeService', 'dexnsService', dexnsCtrl]);
 app.controller('footerCtrl', ['$scope', footerCtrl]);
 app.controller('offlineTxCtrl', ['$scope', '$sce', '$rootScope', 'walletService', offlineTxCtrl]);
-app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', 'backgroundNodeService', 'modalService', 'coldStakingService', 'messageService', walletBalanceCtrl]);
+app.controller('walletBalanceCtrl', ['$scope', '$sce', 'walletService', 'backgroundNodeService', 'modalService', 'coldStakingService', 'messageService', 'lookupService', walletBalanceCtrl]);
 app.controller('helpersCtrl', ['$scope', helpersCtrl]);
 app.controller('messagesCtrl', ['$scope', '$rootScope', '$interval', 'globalService', 'messageService', 'walletService', 'backgroundNodeService', messagesControl]);
 app.controller('encryptCtrl', ['$scope', 'walletService', encryptCtrl]);

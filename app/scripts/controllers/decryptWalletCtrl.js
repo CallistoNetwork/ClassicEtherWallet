@@ -252,11 +252,9 @@ var decryptWalletCtrl = function ($scope, $sce, walletService) {
         } else {
 
             web3.eth.getAccounts(function (err, accounts) {
-                if (err) $scope.notifier.danger(err + '. Are you sure you are on a secure (SSL / HTTPS) connection?');
-
-
-                if (!(Array.isArray(accounts) && accounts.length > 0)) {
-
+                if (err) {
+                    $scope.notifier.danger(err + '. Are you sure you are on a secure (SSL / HTTPS) connection?');
+                } else if (!(Array.isArray(accounts) && accounts.length > 0)) {
                     $scope.notifier.danger('Unlock Account');
                 } else {
 

@@ -6,6 +6,33 @@ var globalFuncs = function () {
 globalFuncs.lightMode = false;
 
 
+globalFuncs.timeRem = function timeRem(timeUntil) {
+    var rem = timeUntil - new Date();
+
+    var _second = 1000;
+    var _minute = _second * 60;
+    var _hour = _minute * 60;
+    var _day = _hour * 24;
+    var days = Math.floor(rem / _day);
+    var hours = Math.floor((rem % _day) / _hour);
+    var minutes = Math.floor((rem % _hour) / _minute);
+    var seconds = Math.floor((rem % _minute) / _second);
+    days = days < 10 ? '0' + days : days;
+    hours = hours < 10 ? '0' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    const timeRemaining = days + ' days ' + hours + ' hours ' + minutes + ' minutes ' + seconds + ' seconds ';
+
+    return {
+        days,
+        hours,
+        minutes,
+        seconds,
+        timeRemaining,
+    }
+};
+
+
 // default nodes to connect to
 globalFuncs.networks = {
     ETH: "eth_ethscan",
@@ -18,6 +45,25 @@ globalFuncs.networks = {
     CLOT: 'clo_testnet3'
 };
 
+globalFuncs.copyToClipboard = function copyToClipboard(elementId = 'addr') {
+
+    // Create a "hidden" input
+    var aux = document.createElement("input");
+    // Assign it the value of the specified element
+    aux.setAttribute("value", document.getElementById(elementId).innerHTML);
+    // Append it to the body
+    document.body.appendChild(aux);
+    // Highlight its content
+    aux.select();
+    // Copy the highlighted text
+    const result = document.execCommand("copy");
+    // Remove it from the body
+    document.body.removeChild(aux);
+
+    return result;
+
+
+}
 globalFuncs.getBlockie = function (address) {
     return blockies.create({
         seed: address.toLowerCase(),
@@ -372,6 +418,7 @@ globalFuncs.HDWallet = {
     hwMusicoinPath: "m/44'/184'/0'/0",      // first address: m/44'/184'/0'/0/0
     hwRskPath: "m/44'/137'/0'/0",      // first address : m/44'/137'/0'/0/0
     hwESNetworkPath: "m/44'/31102'/0'/0",      // first address : m/44'/31102'/0'/0/0
+    hwPirlPath: "m/44'/164'/0'/0",      // first address: m/44'/164'/0'/0/0
 };
 
 globalFuncs.getWalletPath = function (walletType = 'trezor', nodeType = nodes.nodeTypes.CLO) {
@@ -386,6 +433,8 @@ globalFuncs.getWalletPath = function (walletType = 'trezor', nodeType = nodes.no
                 return globalFuncs.HDWallet.hwExpansePath;
             case nodes.nodeTypes.UBQ:
                 return globalFuncs.HDWallet.hwUbqPath;
+            case nodes.nodeTypes.PIRL:
+                return globalFuncs.HDWallet.hwPirlPath;
             default:
                 return globalFuncs.HDWallet.ledgerPath;
         }
@@ -421,6 +470,8 @@ globalFuncs.getWalletPath = function (walletType = 'trezor', nodeType = nodes.no
                 return globalFuncs.HDWallet.hwMusicoinPath;
             case nodes.nodeTypes.ESN:
                 return globalFuncs.HDWallet.hwESNetworkPath;
+            case nodes.nodeTypes.PIRL:
+                return globalFuncs.HDWallet.hwPirlPath;
             default:
                 return globalFuncs.HDWallet.defaultDPath;
         }
@@ -452,6 +503,8 @@ globalFuncs.getWalletPath = function (walletType = 'trezor', nodeType = nodes.no
                 return globalFuncs.HDWallet.hwMusicoinPath;
             case nodes.nodeTypes.ESN:
                 return globalFuncs.HDWallet.hwESNetworkPath;
+            case nodes.nodeTypes.PIRL:
+                return globalFuncs.HDWallet.hwPirlPath;
             default:
                 return globalFuncs.HDWallet.defaultDPath;
         }

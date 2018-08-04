@@ -25,14 +25,10 @@ Wallet.prototype.setTokens = function () {
 
     const {popTokens} = Token;
     let storedTokens = !!globalFuncs.localStorage.getItem("localTokens", null) ? JSON.parse(globalFuncs.localStorage.getItem("localTokens")) : [];
-
     storedTokens = storedTokens.map(token => Object.assign(token, {address: token.contractAddress}));
 
-
     let node_ = globalFuncs.getCurNode();
-
-    let network = nodes.nodeList[node_];
-
+    const network = nodes.nodeList[node_];
     const tokens = [].concat(popTokens, storedTokens).map(token =>
 
         new Token(token.address, this.getAddressString(), globalFuncs.stripTags(token.symbol), token.decimal, token.type, token.network, token.node)
@@ -40,7 +36,7 @@ Wallet.prototype.setTokens = function () {
 
 
     this.tokenObjs = tokens.map(token => {
-        if (token.network === network.name) {
+        if (token.network === network.type) {
             token.fetchBalance();
         } else {
 
@@ -61,7 +57,7 @@ Wallet.prototype.setBalance = function (callback) {
         if (data.error) this.balance = data.msg;
         else {
             this.balance = etherUnits.toEther(data.data.balance, 'wei');
-            ajaxReq.getCoinPrice((data) => {
+            _coinPrice().then((data) => {
 
 
                 if (!data.error) {

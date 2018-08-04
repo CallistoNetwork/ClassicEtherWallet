@@ -5,23 +5,29 @@ var en = function () {
 en.code = 'en';
 en.data = {
 
+    Network: "Network:",
+    ADDR_COPY: 'Address copied to clipboard!',
+    COPY_TO_CLIPBOARD: 'copy to clipboard',
     DEXNS_href: 'You don\'t have a Name yet.\n' +
-    'You can register one for your address',
+        'You can register one for your address',
     DEXNS_name: "DexNS Name",
+    DEXNS_ownership_expires: 'Ownership Expires',
+    DEXNS_end_time: 'End Time',
+    LOOKUP_SERVICE: 'Lookup Service:',
     COLD_STAKING_NO_WITHDRAW: 'You do not have any deposit to withdraw.',
     COLD_STAKING_START_STAKING_WARNING: 'You already have funds in staking contract.\n' +
-    '                            You will lose your staking reward if you make a new deposit into the contract.\n' +
-    '                            You should withdraw your staking reward first or use a another account for a new staking\n' +
-    '                            deposit.',
+        '                            You will lose your staking reward if you make a new deposit into the contract.\n' +
+        '                            You should withdraw your staking reward first or use a another account for a new staking\n' +
+        '                            deposit.',
     COLD_STAKING_LOCKED_WARNING: 'Your funds will be locked for 172,800 blocks (approximately 1 month)\n' +
-    '                        and you will be unable to withdraw within the locking period',
+        '                        and you will be unable to withdraw within the locking period',
 
     COLD_STAKING_PAY_TX_FEE_WARNING: 'You need to pay transaction fees to start staking,\n' +
-    '                        withdraw your stake, or claim staking rewards! Make sure that you have enough\n' +
-    '                        funds left on your balance to perform these transactions.',
+        '                        withdraw your stake, or claim staking rewards! Make sure that you have enough\n' +
+        '                        funds left on your balance to perform these transactions.',
 
     COLD_STAKING_UNPRED_WARNING: 'Staking rewards are very unpredictable and the amount of reward\n' +
-    '                        depends on the time when you are claiming it.',
+        '                        depends on the time when you are claiming it.',
 
     COLD_STAKING_UNDERSTAND: 'I Understand, proceed anyway',
 

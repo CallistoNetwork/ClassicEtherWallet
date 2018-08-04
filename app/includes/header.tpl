@@ -113,28 +113,41 @@
 
         </span>
 
-                <!-- Warning: The separators you see on the frontend are in styles/etherwallet-custom.less. If you add / change a node, you have to adjust these. Ping tayvano if you're not a CSS wizard -->
-                <span class="dropdown dropdown-node" ng-cloak>
-          <a tabindex="0" aria-haspopup="true"
-             aria-label="change node. current node {{curNode.name}} node by {{curNode.service}}"
-             class="dropdown-toggle  btn btn-white" ng-click="dropdownNode = !dropdownNode">
-            Network: {{curNode.name}} <small>({{curNode.service}})</small>
-            <i class="caret"></i>
-          </a>
-          <ul class="dropdown-menu" ng-show="dropdownNode">
-            <li ng-repeat="(key, value) in nodeList"><a ng-class="{true:'active'}[curNode == key]"
-                                                        ng-click="changeNode(key)">
-              {{value.name}}
-              <small> ({{value.service}}) </small>
-              <img ng-show="value.service=='Custom'" src="images/icon-remove.svg" class="node-remove"
-                   title="Remove Custom Node" ng-click="removeNodeFromLocal(value.name)"/>
-            </a></li>
-            <li><a ng-click="customNodeModal.open(); dropdownNode = !dropdownNode;"> Add Custom Node </a></li>
-          </ul>
-        </span>
+                <div ng-switch="walletService.wallet.type === 'web3' || walletService.wallet.hwType === 'web3'">
+                    <div ng-switch-when="true" class="dropdown dropdown-node">
+                        <a tabindex="0" aria-haspopup="true"
+                           class="dropdown-toggle btn btn-white"
+                        >
+                            <span translate="Network"></span>
+                            {{walletService.wallet.network}}
+                        </a>
+                    </div>
+
+                    <div ng-switch-default class="dropdown dropdown-node" ng-cloak>
+                        <a tabindex="0" aria-haspopup="true"
+                           aria-label="change node. current node {{curNode.name}} node by {{curNode.service}}"
+                           class="dropdown-toggle  btn btn-white" ng-click="dropdownNode = !dropdownNode">
+                            Network: {{curNode.name}}
+                            <small>({{curNode.service}})</small>
+                            <i class="caret"></i>
+                        </a>
+                        <ul class="dropdown-menu" ng-show="dropdownNode">
+                            <li ng-repeat="(key, value) in nodeList"><a ng-class="{true:'active'}[curNode == key]"
+                                                                        ng-click="changeNode(key)">
+                                {{value.name}}
+                                <small> ({{value.service}})</small>
+                                <img ng-show="value.service=='Custom'" src="images/icon-remove.svg" class="node-remove"
+                                     title="Remove Custom Node" ng-click="removeNodeFromLocal(value.name)"/>
+                            </a></li>
+                            <li><a ng-click="customNodeModal.open(); dropdownNode = !dropdownNode;"> Add Custom
+                                Node </a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Note: The separator colors you see on the frontend are in styles/etherwallet-custom.less. If you add / change a node, you have to adjust these. Ping j-chimienti if you're not a CSS wizard -->
+
 
                 <css-theme-drtv></css-theme-drtv>
-
 
 
             </div>

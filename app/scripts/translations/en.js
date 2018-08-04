@@ -5,6 +5,7 @@ var en = function () {
 en.code = 'en';
 en.data = {
 
+    Network: "Network:",
     ADDR_COPY: 'Address copied to clipboard!',
     COPY_TO_CLIPBOARD: 'copy to clipboard',
     DEXNS_href: 'You don\'t have a Name yet.\n' +

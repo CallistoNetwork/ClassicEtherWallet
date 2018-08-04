@@ -194,7 +194,7 @@ app.directive('dexnsNameDisplay', ['dexnsService', 'walletService', 'globalServi
 app.directive('lookup', ['$rootScope', 'lookupService', lookup])
 app.directive('blockieAddress', blockiesDrtv);
 app.directive('cssThemeDrtv', cssThemeDrtv);
-app.directive('addressField', ['$compile', 'backgroundNodeService', 'lookupService', addressFieldDrtv]);
+app.directive('addressField', ['lookupService', addressFieldDrtv]);
 app.directive('qrCode', QRCodeDrtv);
 app.directive('onReadFile', fileReaderDrtv);
 app.directive('walletBalanceDrtv', ['walletService', '$timeout', balanceDrtv]);
@@ -206,7 +206,7 @@ app.directive('newMessagesDrtv', ['globalService', newMessagesDrtv]);
 app.directive('transactionCost', [transactionCost]);
 
 
-app.controller('tabsCtrl', ['$scope', 'globalService', '$translate', '$sce', 'backgroundNodeService', tabsCtrl]);
+app.controller('tabsCtrl', ['$scope', 'globalService', 'walletService', '$translate', '$sce', 'backgroundNodeService', tabsCtrl]);
 app.controller('switchNetworkCtrl', ['$scope', '$rootScope', 'globalService', switchNetworkCtrl]);
 app.controller('viewCtrl', ['$scope', 'globalService', '$sce', viewCtrl]);
 app.controller('walletGenCtrl', ['$rootScope', '$scope', walletGenCtrl]);

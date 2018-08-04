@@ -63,7 +63,11 @@ const addressFieldDrtv = function (lookupService) {
 
             scope.$watch('addressDrtv.ensAddressField', (_val) => {
 
-                scope.tx.to = ethUtil.toChecksumAddress(_val || '');
+                if (_val) {
+
+                    scope.tx.to = _val;
+
+                }
                 scope.lookupNameDelay(_val);
             });
 

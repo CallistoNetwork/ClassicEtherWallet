@@ -1,20 +1,14 @@
 "use strict";
-var tabsCtrl = function(
-    $scope,
-    globalService,
-    walletService,
-    $translate,
-    $sce
-) {
-    const isValidPrice = price => 0.1 <= price && price <= 100;
-
-    var gasPriceKey = "gasPrice";
-
-    const defaultValue = 21;
-
-    const gasValue =
-        parseFloat(globalFuncs.localStorage.getItem(gasPriceKey)) ||
-        defaultValue;
+var tabsCtrl = function($scope, globalService, $translate, $sce) {
+    $scope.gService = globalService;
+    $scope.tabNames = $scope.gService.tabs;
+    $scope.curLang = "English";
+    $scope.customNodeModal = document.getElementById("customNodeModal")
+        ? new Modal(document.getElementById("customNodeModal"))
+        : null;
+    $scope.Validator = Validator;
+    $scope.nodeList = nodes.nodeList;
+    $scope.defaultNodeKey = globalFuncs.networks.ETC; // 'etc_ethereumcommonwealth_parity';
 
     const initNode = () => {
         $scope.customNode = {
@@ -29,62 +23,49 @@ var tabsCtrl = function(
         };
     };
 
-    function main() {
-        $scope.gService = globalService;
-        $scope.tabNames = $scope.gService.tabs;
-        $scope.walletService = walletService;
-        $scope.curLang = "English";
-        $scope.customNodeModal = document.getElementById("customNodeModal")
-            ? new Modal(document.getElementById("customNodeModal"))
-            : null;
-        $scope.Validator = Validator;
-        $scope.nodeList = nodes.nodeList;
-        $scope.defaultNodeKey = Object.values(nodes.nodeList).find(
-            node => node.type === "ETC"
-        );
-        $scope.gas = {
-            defaultValue,
-            curVal: gasValue,
-            value: gasValue,
-            max: 100,
-            min: 0.1,
-            step: 0.1,
-            recommendedGas: {
-                low: 10,
-                high: 20
+    $scope.customNodeCount = 0;
+    $scope.nodeIsConnected = true;
+    $scope.browserProtocol = window.location.protocol;
+    var hval = window.location.hash;
+    $scope.notifier = uiFuncs.notifier;
+    $scope.notifier.sce = $sce;
+    $scope.notifier.scope = $scope;
+    $scope.ajaxReq = ajaxReq;
+    $scope.nodeType = $scope.ajaxReq.type;
+    $scope.nodeService = $scope.ajaxReq.service;
+
+    initNode();
+
+    $scope.$watch("customNode.options", function(val) {
+        if (val) {
+            const node = Object.keys(nodes.nodeList).find(
+                node =>
+                    nodes.nodeList[node].name.toLowerCase() ===
+                    val.toLowerCase()
+            );
+
+            if (node) {
+                const { eip155, chainId } = nodes.nodeList[node];
+
+                Object.assign($scope.customNode, {
+                    eip155,
+                    chainId
+                });
+            } else {
+                Object.assign($scope.customNode, {
+                    eip155: false,
+                    chainId: ""
+                });
             }
-        };
-
-        $scope.customNodeCount = 0;
-        $scope.nodeIsConnected = true;
-        $scope.browserProtocol = window.location.protocol;
-        var hval = window.location.hash;
-        $scope.notifier = uiFuncs.notifier;
-        $scope.notifier.sce = $sce;
-        $scope.notifier.scope = $scope;
-        $scope.ajaxReq = ajaxReq;
-        $scope.nodeType = $scope.ajaxReq.type;
-        $scope.nodeService = $scope.ajaxReq.service;
-        initNode();
-        $scope.setGasPrice();
-        $scope.setLanguageFromStorage();
-        $scope.setArrowVisibility();
-
-        var network = globalFuncs.urlGet("network", "");
-
-        if (!network) {
-            $scope.getCustomNodesFromStorage();
-            $scope.setCurNodeFromStorage();
-        } else {
-            $scope.changeNode(globalFuncs.networks[network.toUpperCase()] || 0);
         }
+    });
 
-        $scope.setTab(hval);
-        angular
-            .element(document.querySelectorAll(".nav-scroll")[0])
-            .bind("scroll", $scope.setOnScrollArrows);
-        globalFuncs.changeHash = $scope.setHash;
-    }
+    $scope.$watch("ajaxReq.type", function() {
+        $scope.nodeType = $scope.ajaxReq.type;
+    });
+    $scope.$watch("ajaxReq.service", function() {
+        $scope.nodeService = $scope.ajaxReq.service;
+    });
 
     $scope.setArrowVisibility = function() {
         setTimeout(function() {
@@ -102,8 +83,34 @@ var tabsCtrl = function(
         }, 200);
     };
 
+    var network = globalFuncs.urlGet("network", "");
+
+    var gasPriceKey = "gasPrice";
+
+    const defaultValue = 21;
+
+    const gasValue =
+        parseFloat(globalFuncs.localStorage.getItem(gasPriceKey)) ||
+        defaultValue;
+
+    $scope.gas = {
+        defaultValue,
+        curVal: gasValue,
+        value: gasValue,
+        max: 100,
+        min: 0.1,
+        step: 0.1,
+        recommendedGas: {
+            low: 10,
+            high: 20
+        }
+    };
+
+    const isValidPrice = price => 0.1 <= price && price <= 100;
+
     $scope.validateGasPrice = function validateGasPrice() {
         if (!isValidPrice($scope.gas.value)) {
+            // $scope.notifier.danger(globalFuncs.errorMsgs[38]);
             $scope.notifier.danger(
                 "Invalid gas price! Min gasPrice is 0.1 GWei. Max gasPrice is 100 GWei. GasPrice is resetted to 21GWei default value!"
             );
@@ -113,6 +120,7 @@ var tabsCtrl = function(
                 $scope.gas.defaultValue
             );
         }
+        // console.log($scope.gas.value, globalFuncs.localStorage.getItem(gasPriceKey), $scope.gas.curVal);
     };
 
     $scope.gasChanged = function() {
@@ -134,6 +142,8 @@ var tabsCtrl = function(
     $scope.$watch("keyNode", function() {
         $scope.setGasPrice();
     });
+
+    $scope.setGasPrice();
 
     $scope.changeNode = function(key) {
         if ($scope.nodeList[key]) {
@@ -208,19 +218,19 @@ var tabsCtrl = function(
     };
     $scope.addCustomNodeToList = function(nodeInfo) {
         var tempObj = null;
-        if (nodeInfo.options === "etc")
+        if (nodeInfo.options == "etc")
             tempObj = JSON.parse(
                 JSON.stringify(nodes.nodeList.etc_ethereumcommonwealth_parity)
             );
-        else if (nodeInfo.options === "eth")
+        else if (nodeInfo.options == "eth")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.eth_ethscan));
-        else if (nodeInfo.options === "rop")
+        else if (nodeInfo.options == "rop")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.rop_mew));
-        else if (nodeInfo.options === "kov")
+        else if (nodeInfo.options == "kov")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.kov_ethscan));
-        else if (nodeInfo.options === "rin")
+        else if (nodeInfo.options == "rin")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.rin_ethscan));
-        else if (nodeInfo.options === "cus") {
+        else if (nodeInfo.options == "cus") {
             tempObj = JSON.parse(JSON.stringify(nodes.customNodeObj));
             tempObj.eip155 = nodeInfo.eip155;
             tempObj.chainId = parseInt(nodeInfo.chainId);
@@ -404,6 +414,7 @@ var tabsCtrl = function(
         var value = globalFuncs.stripTags(lang.value);
         $scope.changeLanguage(key, value);
     };
+    $scope.setLanguageFromStorage();
 
     $scope.setHash = function(hash) {
         location.hash = hash;
@@ -442,39 +453,6 @@ var tabsCtrl = function(
         ele.scrollLeft += val;
     };
 
-    main();
-
-    $scope.$watch("customNode.options", function(val) {
-        if (val) {
-            const node = Object.keys(nodes.nodeList).find(
-                node =>
-                    nodes.nodeList[node].name.toLowerCase() ===
-                    val.toLowerCase()
-            );
-
-            if (node) {
-                const { eip155, chainId } = nodes.nodeList[node];
-
-                Object.assign($scope.customNode, {
-                    eip155,
-                    chainId
-                });
-            } else {
-                Object.assign($scope.customNode, {
-                    eip155: false,
-                    chainId: ""
-                });
-            }
-        }
-    });
-
-    $scope.$watch("ajaxReq.type", function() {
-        $scope.nodeType = $scope.ajaxReq.type;
-    });
-    $scope.$watch("ajaxReq.service", function() {
-        $scope.nodeService = $scope.ajaxReq.service;
-    });
-
     $scope.$on("ChangeNode", function(event, nodeId) {
         $scope.changeNode(nodeId);
     });
@@ -483,5 +461,20 @@ var tabsCtrl = function(
         $scope.gas.value = gasPrice;
         $scope.validateGasPrice();
     });
+
+    $scope.setArrowVisibility();
+
+    if (!network) {
+        $scope.getCustomNodesFromStorage();
+        $scope.setCurNodeFromStorage();
+    } else {
+        $scope.changeNode(globalFuncs.networks[network.toUpperCase()] || 0);
+    }
+
+    $scope.setTab(hval);
+    angular
+        .element(document.querySelectorAll(".nav-scroll")[0])
+        .bind("scroll", $scope.setOnScrollArrows);
+    globalFuncs.changeHash = $scope.setHash;
 };
 module.exports = tabsCtrl;

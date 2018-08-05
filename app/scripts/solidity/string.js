@@ -1,7 +1,7 @@
-var f = require('./formatters');
-var SolidityType = require('./type');
+var f = require("./formatters");
+var SolidityType = require("./type");
 
-var SolidityTypeString = function () {
+var SolidityTypeString = function() {
     this._inputFormatter = f.formatInputString;
     this._outputFormatter = f.formatOutputString;
 };
@@ -9,11 +9,11 @@ var SolidityTypeString = function () {
 SolidityTypeString.prototype = new SolidityType({});
 SolidityTypeString.prototype.constructor = SolidityTypeString;
 
-SolidityTypeString.prototype.isType = function (name) {
+SolidityTypeString.prototype.isType = function(name) {
     return !!name.match(/^string(\[([0-9]*)\])*$/);
 };
 
-SolidityTypeString.prototype.isDynamicType = function () {
+SolidityTypeString.prototype.isDynamicType = function() {
     return true;
 };
 

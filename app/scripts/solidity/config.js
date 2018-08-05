@@ -22,49 +22,48 @@
 
 /**
  * Utils
- * 
+ *
  * @module utils
  */
 
 /**
  * Utility functions
- * 
+ *
  * @class [utils] config
  * @constructor
  */
 
-
 /// required to define ETH_BIGNUMBER_ROUNDING_MODE
-var BigNumber = require('bignumber.js');
+var BigNumber = require("bignumber.js");
 
 var ETH_UNITS = [
-    'wei',
-    'kwei',
-    'Mwei',
-    'Gwei',
-    'szabo',
-    'finney',
-    'femtoether',
-    'picoether',
-    'nanoether',
-    'microether',
-    'milliether',
-    'nano',
-    'micro',
-    'milli',
-    'ether',
-    'grand',
-    'Mether',
-    'Gether',
-    'Tether',
-    'Pether',
-    'Eether',
-    'Zether',
-    'Yether',
-    'Nether',
-    'Dether',
-    'Vether',
-    'Uether'
+    "wei",
+    "kwei",
+    "Mwei",
+    "Gwei",
+    "szabo",
+    "finney",
+    "femtoether",
+    "picoether",
+    "nanoether",
+    "microether",
+    "milliether",
+    "nano",
+    "micro",
+    "milli",
+    "ether",
+    "grand",
+    "Mether",
+    "Gether",
+    "Tether",
+    "Pether",
+    "Eether",
+    "Zether",
+    "Yether",
+    "Nether",
+    "Dether",
+    "Vether",
+    "Uether"
 ];
 
 module.exports = {
@@ -72,8 +71,7 @@ module.exports = {
     ETH_SIGNATURE_LENGTH: 4,
     ETH_UNITS: ETH_UNITS,
     ETH_BIGNUMBER_ROUNDING_MODE: { ROUNDING_MODE: BigNumber.ROUND_DOWN },
-    ETH_POLLING_TIMEOUT: 1000/2,
-    defaultBlock: 'latest',
+    ETH_POLLING_TIMEOUT: 1000 / 2,
+    defaultBlock: "latest",
     defaultAccount: undefined
 };
-

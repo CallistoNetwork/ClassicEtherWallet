@@ -1,52 +1,49 @@
-describe('wallet encryption', function () {
+/* eslint-disable */
+describe("wallet encryption", function() {
+  it("can update password", function() {
+    var wallet = Wallet.generate(false);
 
-    it('can update password', function () {
+    var password = "testing123";
 
-        var wallet = Wallet.generate(false);
+    var opts = {
+      kdf: globalFuncs.kdf,
+      n: globalFuncs.scrypt.n
+    };
 
-        var password = 'testing123';
+    var wStr = wallet.toV3(password, opts);
 
-        var opts = {
-            kdf: globalFuncs.kdf,
-            n: globalFuncs.scrypt.n
-        };
+    var privKey = wallet.toJSON().privKey;
 
+    var wallet_ = new Wallet(privKey);
 
-        var wStr = wallet.toV3(password, opts);
+    var newPassword = "NEW PASSWORD 123456";
 
-        var privKey = wallet.toJSON().privKey;
+    var wStr_ = wallet_.toV3(newPassword, opts);
 
-        var wallet_ = new Wallet(privKey);
+    console.log(JSON.stringify(wStr));
+    console.log(JSON.stringify(wStr_));
 
-        var newPassword = 'NEW PASSWORD 123456';
+    var unlocked_wallet = Wallet.getWalletFromPrivKeyFile(
+      JSON.stringify(wStr),
+      password
+    );
+    var unlocked_wallet_ = Wallet.getWalletFromPrivKeyFile(
+      JSON.stringify(wStr_),
+      newPassword
+    );
 
-        var wStr_ = wallet_.toV3(newPassword, opts);
+    var wJson = unlocked_wallet.toJSON();
+    var wJson_ = unlocked_wallet_.toJSON();
 
+    assert.equal(wJson.privKey, wJson_.privKey);
+    assert.equal(wJson.pubKey, wJson_.pubKey);
 
-        console.log(JSON.stringify(wStr));
-        console.log(JSON.stringify(wStr_));
+    assert.equal(wJson.address, wJson_.address);
 
+    // i manually un
 
-        var unlocked_wallet = Wallet.getWalletFromPrivKeyFile(JSON.stringify(wStr), password);
-        var unlocked_wallet_ = Wallet.getWalletFromPrivKeyFile(JSON.stringify(wStr_), newPassword);
-
-
-        var wJson = unlocked_wallet.toJSON();
-        var wJson_ = unlocked_wallet_.toJSON();
-
-
-        assert.equal(wJson.privKey, wJson_.privKey);
-        assert.equal(wJson.pubKey, wJson_.pubKey);
-
-        assert.equal(wJson.address, wJson_.address);
-
-
-        // i manually un
-
-        // wJson.privKey == wJson_.privKey;
-        // wJson.pubKey == wJson_.pubKey;
-        // wJson.address == wJson_.address;
-
-
-    })
-})
+    // wJson.privKey == wJson_.privKey;
+    // wJson.pubKey == wJson_.pubKey;
+    // wJson.address == wJson_.address;
+  });
+});

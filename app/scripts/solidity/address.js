@@ -1,5 +1,5 @@
-var f = require('./formatters');
-var SolidityType = require('./type');
+var f = require("./formatters");
+var SolidityType = require("./type");
 
 /**
  * SolidityTypeAddress is a prootype that represents address type
@@ -11,7 +11,7 @@ var SolidityType = require('./type');
  * address[3][]
  * address[][6][], ...
  */
-var SolidityTypeAddress = function () {
+var SolidityTypeAddress = function() {
     this._inputFormatter = f.formatInputInt;
     this._outputFormatter = f.formatOutputAddress;
 };
@@ -19,7 +19,7 @@ var SolidityTypeAddress = function () {
 SolidityTypeAddress.prototype = new SolidityType({});
 SolidityTypeAddress.prototype.constructor = SolidityTypeAddress;
 
-SolidityTypeAddress.prototype.isType = function (name) {
+SolidityTypeAddress.prototype.isType = function(name) {
     return !!name.match(/address(\[([0-9]*)\])?/);
 };
 

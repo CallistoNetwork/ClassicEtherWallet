@@ -1,8 +1,8 @@
-'use strict';
-var walletService = function () {
+"use strict";
+var walletService = function() {
     return {
         wallet: null,
-        password: '',
+        password: "",
         privKey: null,
         pubKey: null,
         path: null,
@@ -23,6 +23,6 @@ var walletService = function () {
         btcPrice: null,
         chfPrice: null,
         repPrice: null
-    }
+    };
 };
 module.exports = walletService;

@@ -1,8 +1,6 @@
-
 //
 // Tables
 // --------------------------------------------------
-
 
 table {
   background-color: @table-bg;
@@ -18,7 +16,6 @@ caption {
 th {
   text-align: left;
 }
-
 
 // Baseline styles
 
@@ -67,7 +64,6 @@ th {
   }
 }
 
-
 // Condensed table w/ half padding
 
 .table-condensed {
@@ -82,7 +78,6 @@ th {
     }
   }
 }
-
 
 // Bordered version
 //
@@ -108,7 +103,6 @@ th {
   }
 }
 
-
 // Zebra-striping
 //
 // Default zebra-stripe styles (alternating gray and transparent backgrounds)
@@ -117,7 +111,12 @@ th {
   > tbody > tr:nth-of-type(odd) {
     background-color: #f5f5f5;
   }
-  &>tbody>tr>td, &>tbody>tr>th, &>tfoot>tr>td, &>tfoot>tr>th, &>thead>tr>td, &>thead>tr>th {
+  & > tbody > tr > td,
+  & > tbody > tr > th,
+  & > tfoot > tr > td,
+  & > tfoot > tr > th,
+  & > thead > tr > td,
+  & > thead > tr > th {
     border-top: 0;
   }
 }
@@ -136,13 +135,18 @@ th {
   }
   tr:last-child:not(.mnemonic-custom-row),
   tr:first-child {
-    background-color: white!important;
+    background-color: white !important;
   }
-  &.table>tbody>tr>td, &.table>tbody>tr>th, &.table>tfoot>tr>td, &.table>tfoot>tr>th, &.table>thead>tr>td, &.table>thead>tr>th {
-    padding: .25rem;
+  &.table > tbody > tr > td,
+  &.table > tbody > tr > th,
+  &.table > tfoot > tr > td,
+  &.table > tfoot > tr > th,
+  &.table > thead > tr > td,
+  &.table > thead > tr > th {
+    padding: 0.25rem;
   }
   .mnemonic-custom-row {
-    input[type="text"]  {
+    input[type="text"] {
       margin: -5px;
       display: inline;
       width: 70%;
@@ -150,11 +154,9 @@ th {
     }
   }
   label {
-    margin: .15rem;
+    margin: 0.15rem;
   }
-
 }
-
 
 // Hover effect
 //
@@ -165,7 +167,6 @@ th {
     background-color: @table-bg-hover;
   }
 }
-
 
 // Table cell sizing
 //
@@ -187,7 +188,6 @@ table {
   }
 }
 
-
 // Table backgrounds
 //
 // Exact selectors below required to override `.table-striped` and prevent
@@ -199,7 +199,6 @@ table {
 .table-row-variant(info; @state-info-bg);
 .table-row-variant(warning; @state-warning-bg);
 .table-row-variant(danger; @state-danger-bg);
-
 
 // Responsive tables
 //
@@ -267,18 +266,16 @@ table {
           }
         }
       }
-
     }
   }
 }
 
-
 .table-ens-modal {
-    font-weight: 400;
-    font-size: 16px;
-    textarea {
-      font-size: 11px;
-      word-break: break-all;
-      padding: .5rem;
-    }
+  font-weight: 400;
+  font-size: 16px;
+  textarea {
+    font-size: 11px;
+    word-break: break-all;
+    padding: 0.5rem;
+  }
 }

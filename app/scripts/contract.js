@@ -1,5 +1,4 @@
-const {WAValidator} = ethUtil;
-
+const { WAValidator } = ethUtil;
 
 /*
 
@@ -11,18 +10,12 @@ const {WAValidator} = ethUtil;
 
  */
 
-
 class Contract {
-
-
     constructor(abi, address, network) {
-
-
         this.init(abi, address, network);
     }
 
     init(abi, address, network) {
-
         this.setNetwork(network);
         this.setNode();
         this.setAbi(abi);
@@ -30,68 +23,46 @@ class Contract {
     }
 
     get contract() {
-
         return {
             abi: this.abi,
             address: this.address,
             network: this.network,
-            node: this.node,
-
+            node: this.node
         };
     }
 
-
     setNetwork(_network) {
-
         this.network = _network.toUpperCase();
     }
 
     setNode(network = this.network) {
-
-
-        const node = Object.values(nodes.nodeList).find(_node => _node.type === network);
+        const node = Object.values(nodes.nodeList).find(
+            _node => _node.type === network
+        );
 
         if (!node) {
-
-            throw new Error('Invalid Request');
+            throw new Error("Invalid Request");
         } else {
-
             this.node = node;
         }
     }
 
-
     setAbi(_abi) {
-
-        if (typeof _abi === 'string') {
-
-
+        if (typeof _abi === "string") {
             try {
-
                 this.abi = JSON.parse(_abi);
-
             } catch (e) {
-
-
                 throw new Error(`Invalid Abi \n Abi: ${_abi}`);
             }
         } else {
-
             if (!Array.isArray(_abi)) {
-
                 throw new Error(`Invalid Abi, Abi is not an array: ${_abi}`);
             }
             this.abi = _abi;
-
         }
-
-
     }
 
-
     at(address) {
-
-
         // const validAddr = WAValidator.validate(address, this.network);
         //
         // if (!validAddr) {
@@ -103,11 +74,9 @@ class Contract {
 
         // todo: remove for other networks besides eth
         this.address = ethUtil.toChecksumAddress(address);
-
     }
 
     setAddress(address) {
-
         this.at(address);
     }
 
@@ -119,37 +88,28 @@ class Contract {
     */
 
     getBalance() {
-
         return new Promise((resolve, reject) => {
-
-
-            this.node.lib.getBalance(this.address, (result) => {
-
-
+            this.node.lib.getBalance(this.address, result => {
                 if (result.error) {
-
                     reject(result);
-
                 } else {
-
-                    const {data: {address, balance}} = result;
+                    const {
+                        data: { address, balance }
+                    } = result;
 
                     this.balance = balance;
 
                     resolve(this.balance);
                 }
-            })
-        })
+            });
+        });
     }
 
     toString() {
-
         return JSON.stringify(this.contract);
     }
 
-
     // Wrapper functions for network calls
-
 
     /*
 
@@ -161,46 +121,68 @@ class Contract {
 
 
      */
-    call(funcName, {inputs = [], value = 0, unit = 'ether', from = null} = {}) {
-
-        const tx_ = {inputs, to: this.address, network: this.network, value, unit, from};
+    call(
+        funcName,
+        { inputs = [], value = 0, unit = "ether", from = null } = {}
+    ) {
+        const tx_ = {
+            inputs,
+            to: this.address,
+            network: this.network,
+            value,
+            unit,
+            from
+        };
 
         return ethFuncs.call(funcName, this, tx_);
-
     }
 
-    genTxContract(funcName, wallet, {inputs = [], value = 0, unit = 'ether', from = null} = {}) {
-
-
+    genTxContract(
+        funcName,
+        wallet,
+        { inputs = [], value = 0, unit = "ether", from = null } = {}
+    ) {
         return uiFuncs.genTxContract(
             funcName,
             this,
             wallet,
-            Object.assign({}, {inputs, network: this.network, to: this.address, value, unit, from})
+            Object.assign(
+                {},
+                {
+                    inputs,
+                    network: this.network,
+                    to: this.address,
+                    value,
+                    unit,
+                    from
+                }
+            )
         );
-
-
     }
-
 
     sendTx(tx) {
-
-        return uiFuncs.sendTxContract({node: this.node, network: this.network}, tx);
+        return uiFuncs.sendTxContract(
+            { node: this.node, network: this.network },
+            tx
+        );
     }
 
-    handleSendTx(funcName, wallet, {inputs = [], value = 0, unit = 'ether', from = null} = {}) {
-
-        return this.genTxContract(funcName, wallet, {inputs, value, unit, from})
-            .then(tx => this.sendTx(tx));
-
+    handleSendTx(
+        funcName,
+        wallet,
+        { inputs = [], value = 0, unit = "ether", from = null } = {}
+    ) {
+        return this.genTxContract(funcName, wallet, {
+            inputs,
+            value,
+            unit,
+            from
+        }).then(tx => this.sendTx(tx));
     }
 
     estGasLimit(funcName, tx) {
-
         return ethFuncs.estGasContract(funcName, this, tx);
     }
-
-
 }
 
 /*
@@ -211,51 +193,39 @@ class Contract {
 
   */
 
-
 class InitContract extends Contract {
-
-
     constructor(abi = [], addr, network, _bootstrap = false) {
-
         super(abi, addr, network);
 
-
         this.abi.forEach(func => {
-
             // types function, event, constructor
-            if (func.type === 'function') {
-
-
-                this[func.name] = '';
+            if (func.type === "function") {
+                this[func.name] = "";
 
                 func.inputs.forEach(input => {
-
-                    input.value = '';
-                })
+                    input.value = "";
+                });
             }
         });
 
         if (_bootstrap) {
-
             this._bootstrap();
         }
     }
 
-
     // if view function and has no inputs, call function and save result
 
-
     _bootstrap() {
-
         return Promise.all(
             this.abi.map(_func => {
-                if (_func.stateMutability === 'view' && _func.inputs.length === 0) {
-
+                if (
+                    _func.stateMutability === "view" &&
+                    _func.inputs.length === 0
+                ) {
                     return this.call(_func.name);
                 }
             })
-        )
-
+        );
     }
 
     /*
@@ -266,36 +236,28 @@ class InitContract extends Contract {
 
      */
 
-
     call(funcName, tx) {
-
         const func = this.abi.find(a => a.name === funcName);
 
         if (!func) {
-
-            throw new Error('Invalid Request');
+            throw new Error("Invalid Request");
         }
 
-        return super.call(funcName, tx)
-            .then(result => {
+        return super.call(funcName, tx).then(result => {
+            const { outputs } = func;
 
+            this[funcName] = outputs.map((out, idx) => {
+                const name = out.name || funcName;
 
-                const {outputs} = func;
-
-
-                this[funcName] = outputs.map((out, idx) => {
-
-                    const name = out.name || funcName;
-
-                    return Object.assign({}, out, {value: result.data[idx], name});
-
+                return Object.assign({}, out, {
+                    value: result.data[idx],
+                    name
                 });
-
-                return this[funcName];
-
             });
-    }
 
+            return this[funcName];
+        });
+    }
 
     // sendTx(funcName, wallet, tx) {
     //
@@ -312,16 +274,12 @@ class InitContract extends Contract {
     //         });
     //
     // }
-
-
 }
-
 
 /*
 
 load contract from abiDefinitions
  */
-
 
 //
 // class OfficialityContract extends InitContract {
@@ -444,14 +402,13 @@ load contract from abiDefinitions
 //     }
 // }
 
-
 function parseJsonContract(contract, network, _bootstrap) {
-
-    if (!(contract.hasOwnProperty('address') && contract.hasOwnProperty('abi'))) {
-
-        throw new Error('Invalid Request');
+    if (
+        !(contract.hasOwnProperty("address") && contract.hasOwnProperty("abi"))
+    ) {
+        throw new Error("Invalid Request");
     }
-    const {address, abi} = contract;
+    const { address, abi } = contract;
 
     return new InitContract(abi, address, network, _bootstrap);
 }

@@ -1,5 +1,5 @@
-var f = require('./formatters');
-var SolidityType = require('./type');
+var f = require("./formatters");
+var SolidityType = require("./type");
 
 /**
  * SolidityTypeBool is a prootype that represents bool type
@@ -11,7 +11,7 @@ var SolidityType = require('./type');
  * bool[3][]
  * bool[][6][], ...
  */
-var SolidityTypeBool = function () {
+var SolidityTypeBool = function() {
     this._inputFormatter = f.formatInputBool;
     this._outputFormatter = f.formatOutputBool;
 };
@@ -19,7 +19,7 @@ var SolidityTypeBool = function () {
 SolidityTypeBool.prototype = new SolidityType({});
 SolidityTypeBool.prototype.constructor = SolidityTypeBool;
 
-SolidityTypeBool.prototype.isType = function (name) {
+SolidityTypeBool.prototype.isType = function(name) {
     return !!name.match(/^bool(\[([0-9]*)\])*$/);
 };
 

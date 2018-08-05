@@ -1,5 +1,5 @@
-var f = require('./formatters');
-var SolidityType = require('./type');
+var f = require("./formatters");
+var SolidityType = require("./type");
 
 /**
  * SolidityTypeBytes is a prototype that represents the bytes type.
@@ -14,7 +14,7 @@ var SolidityType = require('./type');
  * bytes8[4]
  * bytes[3][]
  */
-var SolidityTypeBytes = function () {
+var SolidityTypeBytes = function() {
     this._inputFormatter = f.formatInputBytes;
     this._outputFormatter = f.formatOutputBytes;
 };
@@ -22,7 +22,7 @@ var SolidityTypeBytes = function () {
 SolidityTypeBytes.prototype = new SolidityType({});
 SolidityTypeBytes.prototype.constructor = SolidityTypeBytes;
 
-SolidityTypeBytes.prototype.isType = function (name) {
+SolidityTypeBytes.prototype.isType = function(name) {
     return !!name.match(/^bytes([0-9]{1,})(\[([0-9]*)\])*$/);
 };
 

@@ -20,28 +20,29 @@
  * @date 2015
  */
 
-var f = require('./formatters');
+var f = require("./formatters");
 
-var SolidityTypeAddress = require('./address');
-var SolidityTypeBool = require('./bool');
-var SolidityTypeInt = require('./int');
-var SolidityTypeUInt = require('./uint');
-var SolidityTypeDynamicBytes = require('./dynamicbytes');
-var SolidityTypeString = require('./string');
-var SolidityTypeReal = require('./real');
-var SolidityTypeUReal = require('./ureal');
-var SolidityTypeBytes = require('./bytes');
-var utils = require('./utils');
+var SolidityTypeAddress = require("./address");
+var SolidityTypeBool = require("./bool");
+var SolidityTypeInt = require("./int");
+var SolidityTypeUInt = require("./uint");
+var SolidityTypeDynamicBytes = require("./dynamicbytes");
+var SolidityTypeString = require("./string");
+var SolidityTypeReal = require("./real");
+var SolidityTypeUReal = require("./ureal");
+var SolidityTypeBytes = require("./bytes");
+var utils = require("./utils");
 
-var isDynamic = function (solidityType, type) {
-   return solidityType.isDynamicType(type) ||
-          solidityType.isDynamicArray(type);
+var isDynamic = function(solidityType, type) {
+    return (
+        solidityType.isDynamicType(type) || solidityType.isDynamicArray(type)
+    );
 };
 
 /**
  * SolidityCoder prototype should be used to encode/decode solidity params of any type
  */
-var SolidityCoder = function (types) {
+var SolidityCoder = function(types) {
     this._types = types;
 };
 
@@ -53,13 +54,13 @@ var SolidityCoder = function (types) {
  * @returns {SolidityType}
  * @throws {Error} throws if no matching type is found
  */
-SolidityCoder.prototype._requireType = function (type) {
-    var solidityType = this._types.filter(function (t) {
+SolidityCoder.prototype._requireType = function(type) {
+    var solidityType = this._types.filter(function(t) {
         return t.isType(type);
     })[0];
 
     if (!solidityType) {
-        throw Error('invalid solidity type!: ' + type);
+        throw Error("invalid solidity type!: " + type);
     }
 
     return solidityType;
@@ -73,7 +74,7 @@ SolidityCoder.prototype._requireType = function (type) {
  * @param {Object} plain param
  * @return {String} encoded plain param
  */
-SolidityCoder.prototype.encodeParam = function (type, param) {
+SolidityCoder.prototype.encodeParam = function(type, param) {
     return this.encodeParams([type], [param]);
 };
 
@@ -85,47 +86,81 @@ SolidityCoder.prototype.encodeParam = function (type, param) {
  * @param {Array} params
  * @return {String} encoded list of params
  */
-SolidityCoder.prototype.encodeParams = function (types, params) {
+SolidityCoder.prototype.encodeParams = function(types, params) {
     var solidityTypes = this.getSolidityTypes(types);
 
-    var encodeds = solidityTypes.map(function (solidityType, index) {
+    var encodeds = solidityTypes.map(function(solidityType, index) {
         return solidityType.encode(params[index], types[index]);
     });
 
-    var dynamicOffset = solidityTypes.reduce(function (acc, solidityType, index) {
+    var dynamicOffset = solidityTypes.reduce(function(
+        acc,
+        solidityType,
+        index
+    ) {
         var staticPartLength = solidityType.staticPartLength(types[index]);
-        var roundedStaticPartLength = Math.floor((staticPartLength + 31) / 32) * 32;
+        var roundedStaticPartLength =
+            Math.floor((staticPartLength + 31) / 32) * 32;
 
-        return acc + (isDynamic(solidityTypes[index], types[index]) ?
-            32 :
-            roundedStaticPartLength);
-    }, 0);
+        return (
+            acc +
+            (isDynamic(solidityTypes[index], types[index])
+                ? 32
+                : roundedStaticPartLength)
+        );
+    },
+    0);
 
-    var result = this.encodeMultiWithOffset(types, solidityTypes, encodeds, dynamicOffset);
+    var result = this.encodeMultiWithOffset(
+        types,
+        solidityTypes,
+        encodeds,
+        dynamicOffset
+    );
 
     return result;
 };
 
-SolidityCoder.prototype.encodeMultiWithOffset = function (types, solidityTypes, encodeds, dynamicOffset) {
+SolidityCoder.prototype.encodeMultiWithOffset = function(
+    types,
+    solidityTypes,
+    encodeds,
+    dynamicOffset
+) {
     var result = "";
     var self = this;
 
-    types.forEach(function (type, i) {
+    types.forEach(function(type, i) {
         if (isDynamic(solidityTypes[i], types[i])) {
             result += f.formatInputInt(dynamicOffset).encode();
-            var e = self.encodeWithOffset(types[i], solidityTypes[i], encodeds[i], dynamicOffset);
+            var e = self.encodeWithOffset(
+                types[i],
+                solidityTypes[i],
+                encodeds[i],
+                dynamicOffset
+            );
             dynamicOffset += e.length / 2;
         } else {
             // don't add length to dynamicOffset. it's already counted
-            result += self.encodeWithOffset(types[i], solidityTypes[i], encodeds[i], dynamicOffset);
+            result += self.encodeWithOffset(
+                types[i],
+                solidityTypes[i],
+                encodeds[i],
+                dynamicOffset
+            );
         }
 
         // TODO: figure out nested arrays
     });
 
-    types.forEach(function (type, i) {
+    types.forEach(function(type, i) {
         if (isDynamic(solidityTypes[i], types[i])) {
-            var e = self.encodeWithOffset(types[i], solidityTypes[i], encodeds[i], dynamicOffset);
+            var e = self.encodeWithOffset(
+                types[i],
+                solidityTypes[i],
+                encodeds[i],
+                dynamicOffset
+            );
             dynamicOffset += e.length / 2;
             result += e;
         }
@@ -134,58 +169,87 @@ SolidityCoder.prototype.encodeMultiWithOffset = function (types, solidityTypes, 
 };
 
 // TODO: refactor whole encoding!
-SolidityCoder.prototype.encodeWithOffset = function (type, solidityType, encoded, offset) {
+SolidityCoder.prototype.encodeWithOffset = function(
+    type,
+    solidityType,
+    encoded,
+    offset
+) {
     var self = this;
     if (solidityType.isDynamicArray(type)) {
-        return (function () {
+        return (function() {
             // offset was already set
             var nestedName = solidityType.nestedName(type);
-            var nestedStaticPartLength = solidityType.staticPartLength(nestedName);
+            var nestedStaticPartLength = solidityType.staticPartLength(
+                nestedName
+            );
             var result = encoded[0];
 
-            (function () {
+            (function() {
                 var previousLength = 2; // in int
                 if (solidityType.isDynamicArray(nestedName)) {
                     for (var i = 1; i < encoded.length; i++) {
-                        previousLength += +(encoded[i - 1])[0] || 0;
-                        result += f.formatInputInt(offset + i * nestedStaticPartLength + previousLength * 32).encode();
+                        previousLength += +encoded[i - 1][0] || 0;
+                        result += f
+                            .formatInputInt(
+                                offset +
+                                    i * nestedStaticPartLength +
+                                    previousLength * 32
+                            )
+                            .encode();
                     }
                 }
             })();
 
             // first element is length, skip it
-            (function () {
+            (function() {
                 for (var i = 0; i < encoded.length - 1; i++) {
                     var additionalOffset = result / 2;
-                    result += self.encodeWithOffset(nestedName, solidityType, encoded[i + 1], offset +  additionalOffset);
+                    result += self.encodeWithOffset(
+                        nestedName,
+                        solidityType,
+                        encoded[i + 1],
+                        offset + additionalOffset
+                    );
                 }
             })();
 
             return result;
         })();
-
     } else if (solidityType.isStaticArray(type)) {
-        return (function () {
+        return (function() {
             var nestedName = solidityType.nestedName(type);
-            var nestedStaticPartLength = solidityType.staticPartLength(nestedName);
+            var nestedStaticPartLength = solidityType.staticPartLength(
+                nestedName
+            );
             var result = "";
 
-
             if (solidityType.isDynamicArray(nestedName)) {
-                (function () {
+                (function() {
                     var previousLength = 0; // in int
                     for (var i = 0; i < encoded.length; i++) {
                         // calculate length of previous item
                         previousLength += +(encoded[i - 1] || [])[0] || 0;
-                        result += f.formatInputInt(offset + i * nestedStaticPartLength + previousLength * 32).encode();
+                        result += f
+                            .formatInputInt(
+                                offset +
+                                    i * nestedStaticPartLength +
+                                    previousLength * 32
+                            )
+                            .encode();
                     }
                 })();
             }
 
-            (function () {
+            (function() {
                 for (var i = 0; i < encoded.length; i++) {
                     var additionalOffset = result / 2;
-                    result += self.encodeWithOffset(nestedName, solidityType, encoded[i], offset + additionalOffset);
+                    result += self.encodeWithOffset(
+                        nestedName,
+                        solidityType,
+                        encoded[i],
+                        offset + additionalOffset
+                    );
                 }
             })();
 
@@ -204,7 +268,7 @@ SolidityCoder.prototype.encodeWithOffset = function (type, solidityType, encoded
  * @param {String} bytes
  * @return {Object} plain param
  */
-SolidityCoder.prototype.decodeParam = function (type, bytes) {
+SolidityCoder.prototype.decodeParam = function(type, bytes) {
     return this.decodeParams([type], bytes)[0];
 };
 
@@ -216,35 +280,37 @@ SolidityCoder.prototype.decodeParam = function (type, bytes) {
  * @param {String} bytes
  * @return {Array} array of plain params
  */
-SolidityCoder.prototype.decodeParams = function (types, bytes) {
+SolidityCoder.prototype.decodeParams = function(types, bytes) {
     var solidityTypes = this.getSolidityTypes(types);
     var offsets = this.getOffsets(types, solidityTypes);
 
-    return solidityTypes.map(function (solidityType, index) {
-        return solidityType.decode(bytes, offsets[index],  types[index], index);
+    return solidityTypes.map(function(solidityType, index) {
+        return solidityType.decode(bytes, offsets[index], types[index], index);
     });
 };
 
-SolidityCoder.prototype.getOffsets = function (types, solidityTypes) {
-    var lengths =  solidityTypes.map(function (solidityType, index) {
+SolidityCoder.prototype.getOffsets = function(types, solidityTypes) {
+    var lengths = solidityTypes.map(function(solidityType, index) {
         return solidityType.staticPartLength(types[index]);
     });
 
     for (var i = 1; i < lengths.length; i++) {
-         // sum with length of previous element
+        // sum with length of previous element
         lengths[i] += lengths[i - 1];
     }
 
-    return lengths.map(function (length, index) {
+    return lengths.map(function(length, index) {
         // remove the current length, so the length is sum of previous elements
-        var staticPartLength = solidityTypes[index].staticPartLength(types[index]);
+        var staticPartLength = solidityTypes[index].staticPartLength(
+            types[index]
+        );
         return length - staticPartLength;
     });
 };
 
-SolidityCoder.prototype.getSolidityTypes = function (types) {
+SolidityCoder.prototype.getSolidityTypes = function(types) {
     var self = this;
-    return types.map(function (type) {
+    return types.map(function(type) {
         return self._requireType(type);
     });
 };

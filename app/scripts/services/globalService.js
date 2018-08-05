@@ -1,5 +1,5 @@
-'use strict';
-var globalService = function ($http, $httpParamSerializerJQLike) {
+"use strict";
+var globalService = function($http, $httpParamSerializerJQLike) {
     globalFuncs.checkAndRedirectHTTPS();
     ajaxReq.http = $http;
     ajaxReq.postSerializer = $httpParamSerializerJQLike;
@@ -93,7 +93,7 @@ var globalService = function ($http, $httpParamSerializerJQLike) {
             name: "NAV_Messages",
             url: "messages",
             mew: true,
-            cx: true,
+            cx: true
         },
         reEncrypt: {
             id: 13,
@@ -108,10 +108,10 @@ var globalService = function ($http, $httpParamSerializerJQLike) {
             url: "broadcast-tx",
             mew: true,
             cx: true
-        },
+        }
     };
     var currentTab = 0;
-    if (typeof chrome != 'undefined')
+    if (typeof chrome != "undefined")
         currentTab = chrome.windows === undefined ? 0 : 3;
     return {
         tabs: tabs,
@@ -119,5 +119,3 @@ var globalService = function ($http, $httpParamSerializerJQLike) {
     };
 };
 module.exports = globalService;
-
-

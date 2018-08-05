@@ -1,179 +1,186 @@
 img {
-  max-width: 100%;
-  height: auto;
+    max-width: 100%;
+    height: auto;
 }
 
 textarea {
-  resize: vertical;
+    resize: vertical;
 }
 
 // anouncement bars
 .announcement {
-  padding: 3px 10px;
-  text-align: center;
-  font-weight: 300;
-  display: block;
-  background-color: #A00000;
-  color: #fff;
-  a {
-    font-size: 18px;
-    text-decoration: underline;
-    transition: 250ms all ease;
-  }
-  &:hover,
-  &:focus {
-    transition: 250ms all ease;
-    color: darken(white, 5%);
-    text-decoration: none;
-    background-color: darken(@brand-primary, 5%);
-  }
-  strong {
-    font-weight: 400;
-  }
+    padding: 3px 10px;
+    text-align: center;
+    font-weight: 300;
+    display: block;
+    background-color: #a00000;
+    color: #fff;
+    a {
+        font-size: 18px;
+        text-decoration: underline;
+        transition: 250ms all ease;
+    }
+    &:hover,
+    &:focus {
+        transition: 250ms all ease;
+        color: darken(white, 5%);
+        text-decoration: none;
+        background-color: darken(@brand-primary, 5%);
+    }
+    strong {
+        font-weight: 400;
+    }
 }
 
 .annoucement-warning {
-  background-color: @brand-orangered;
-  &:hover,
-  &:focus {
-    background-color: darken(@brand-orangered, 5%);
-    a, a:hover {
-      text-decoration: none;
+    background-color: @brand-orangered;
+    &:hover,
+    &:focus {
+        background-color: darken(@brand-orangered, 5%);
+        a,
+        a:hover {
+            text-decoration: none;
+        }
     }
-  }
 }
 
 .annoucement-danger {
-  background-color: @brand-danger;
-  .container {
-    font-size: 16px;
-  }
-  a:hover,
-  a:focus {
-    color: darken(white, 5%);
-    a, a:hover {
-      text-decoration: none;
+    background-color: @brand-danger;
+    .container {
+        font-size: 16px;
     }
-  }
+    a:hover,
+    a:focus {
+        color: darken(white, 5%);
+        a,
+        a:hover {
+            text-decoration: none;
+        }
+    }
 }
 
 // address icenticons
 .address-identicon-container {
-  padding: 0;
-  text-align: left;
-  max-width: 4.5rem;
-  margin-left: -.5rem;
-  margin-top: .5rem;
+    padding: 0;
+    text-align: left;
+    max-width: 4.5rem;
+    margin-left: -0.5rem;
+    margin-top: 0.5rem;
 }
 
 .address-identicon-container-right {
-  text-align: right;
-  .addressIdenticon {
-    float: right;
-  }
+    text-align: right;
+    .addressIdenticon {
+        float: right;
+    }
 }
 
 .address-identicon-container-offline {
-  padding: 0;
-  margin-left: -15px;
+    padding: 0;
+    margin-left: -15px;
 }
 
 .addressIdenticon {
-  width: 100%;
-  height: auto;
-  padding-bottom: 100%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  border-radius: 50%;
-  box-shadow: inset rgba(255, 255, 255, 0.5) 0 2px 2px, inset rgba(0, 0, 0, 0.6) 0 -1px 8px;
+    width: 100%;
+    height: auto;
+    padding-bottom: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    box-shadow: inset rgba(255, 255, 255, 0.5) 0 2px 2px,
+        inset rgba(0, 0, 0, 0.6) 0 -1px 8px;
 }
 
 .addressIdenticon.med {
-  width: 3rem;
-  height: 3rem;
-  padding: 0;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
 }
 
 .addressIdenticon.small {
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
 }
 
 .addressIdenticon.inline {
-  display: inline-block;
+    display: inline-block;
 }
 
 .addressIdenticon.float {
-  float: left;
-  margin-right: @space-sm;
+    float: left;
+    margin-right: @space-sm;
 }
 
 // helpers
 .wrap {
-  word-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .bigger-on-mobile.form-control[readonly] {
-  height: 60px;
-  @media screen and (max-width: 767px) {
-    height: 100px;
-  }
+    height: 60px;
+    @media screen and (max-width: 767px) {
+        height: 100px;
+    }
 }
 
 // help page
 #paneHelp {
-  h3 {
-    margin-top: 2em;
-  }
+    h3 {
+        margin-top: 2em;
+    }
 }
 
 .account-help-icon {
-  h3, h4, h5, h6, img {
-    display: inline-block;
-  }
-  img:hover + .account-help-text {
-    display: block;
-    opacity: 1;
-    z-index: 999;
-  }
-  img {
-    margin-left: -30px;
-    margin-right: 3px;
-  }
-  &:hover {
-    opacity: 1;
-  }
+    h3,
+    h4,
+    h5,
+    h6,
+    img {
+        display: inline-block;
+    }
+    img:hover + .account-help-text {
+        display: block;
+        opacity: 1;
+        z-index: 999;
+    }
+    img {
+        margin-left: -30px;
+        margin-right: 3px;
+    }
+    &:hover {
+        opacity: 1;
+    }
 }
 
 .account-help-text {
-  background: white;
-  border-radius: @border-radius;
-  border: 1px solid #CDCDCD;
-  box-shadow: 0 0 @space-sm rgba(100, 100, 100, .2);
-  display: none;
-  font-size: @font-size-xs;
-  font-weight: 400;
-  padding: @space-xs;
-  position: absolute;;
-  width: 18rem;
-  z-index: 999;
-  color: @text-color;
-  ul& {
-    padding-left: 1.6rem;
-  }
-  li {
+    background: white;
+    border-radius: @border-radius;
+    border: 1px solid #cdcdcd;
+    box-shadow: 0 0 @space-sm rgba(100, 100, 100, 0.2);
+    display: none;
     font-size: @font-size-xs;
     font-weight: 400;
-  }
+    padding: @space-xs;
+    position: absolute;
+    width: 18rem;
+    z-index: 999;
+    color: @text-color;
+    ul& {
+        padding-left: 1.6rem;
+    }
+    li {
+        font-size: @font-size-xs;
+        font-weight: 400;
+    }
 }
 
 @media screen and (max-width: 767px) {
-  .account-help-icon li,
-  .account-help-icon img,
-  .account-help-icon p {
-    display: none;
-  }
+    .account-help-icon li,
+    .account-help-icon img,
+    .account-help-icon p {
+        display: none;
+    }
 }
 
 // monospace things
@@ -187,341 +194,336 @@ textarea {
 #accountBalancePopMB-0,
 #accountBalancePopMB-2,
 #accountAddressMainTbl-1 {
-  font-family: @font-family-monospace;
-  font-weight: normal;
-  letter-spacing: .02em;
+    font-family: @font-family-monospace;
+    font-weight: normal;
+    letter-spacing: 0.02em;
 }
 
 // QR Code on Offline Transactions Page
 .offline-qrcode {
-  margin-top: -150px;
-  max-width: 300px;
-  @media screen and (max-width: 942px) {
-    margin-top: -78px;
-  }
-  @media screen and (max-width: 769px) {
-    margin-top: 0;
-  }
+    margin-top: -150px;
+    max-width: 300px;
+    @media screen and (max-width: 942px) {
+        margin-top: -78px;
+    }
+    @media screen and (max-width: 769px) {
+        margin-top: 0;
+    }
 }
 
 .account-info {
-  .clearfix;
-  padding-left: 1em;
-  margin: 0;
-  li {
-    margin-bottom: 0;
-    list-style-type: none;
-    word-break: break-all;
-  }
-  table& {
-    font-weight: 200;
-    border-bottom: 0;
-    min-width: 200px;
-    width: 100%;
-    td {
-      padding: .4rem;
-      line-height: 1;
+    .clearfix;
+    padding-left: 1em;
+    margin: 0;
+    li {
+        margin-bottom: 0;
+        list-style-type: none;
+        word-break: break-all;
     }
-    td:first-child {
-      word-wrap: break-word;
-      padding-left: 1em;
+    table& {
+        font-weight: 200;
+        border-bottom: 0;
+        min-width: 200px;
+        width: 100%;
+        td {
+            padding: 0.4rem;
+            line-height: 1;
+        }
+        td:first-child {
+            word-wrap: break-word;
+            padding-left: 1em;
+        }
+        tr {
+            border-bottom: 1px solid #f3f3f3;
+        }
+        tr:nth-last-child(2),
+        tr:last-child {
+            border-bottom: 0 solid #f3f3f3;
+        }
     }
-    tr {
-      border-bottom: 1px solid #f3f3f3;
-    }
-    tr:nth-last-child(2),
-    tr:last-child {
-      border-bottom: 0 solid #f3f3f3;
-    }
-  }
 }
 
 input[type="text"] + .eye {
-  cursor: pointer;
-  &:before {
-    content: "";
-    width: 20px;
-    height: 20px;
-    margin-left: 6px;
-    margin-right: 6px;
-    display: inline-block;
-    vertical-align: middle;
-    background: url("../images/icon-eye.svg");
-  }
+    cursor: pointer;
+    &:before {
+        content: "";
+        width: 20px;
+        height: 20px;
+        margin-left: 6px;
+        margin-right: 6px;
+        display: inline-block;
+        vertical-align: middle;
+        background: url("../images/icon-eye.svg");
+    }
 }
 
 input[type="password"] + .eye {
-  cursor: pointer;
-  &:before {
-    content: "";
-    width: 20px;
-    height: 20px;
-    margin-left: 6px;
-    margin-right: 6px;
-    display: inline-block;
-    vertical-align: middle;
-    background: url("../images/icon-eye-closed.svg");
-  }
+    cursor: pointer;
+    &:before {
+        content: "";
+        width: 20px;
+        height: 20px;
+        margin-left: 6px;
+        margin-right: 6px;
+        display: inline-block;
+        vertical-align: middle;
+        background: url("../images/icon-eye-closed.svg");
+    }
 }
 
 // collapsable containers
 .collapse-container {
-  h1 {
-    margin: .25rem 0;
-  }
-  .collapse-button {
-    float: left;
-    font-weight: 500;
-    user-select: none;
-    padding: .25rem;
-    margin: .25rem -30px;
-    font-size: 1.6rem;
-    line-height: 1.6;
-  }
+    h1 {
+        margin: 0.25rem 0;
+    }
+    .collapse-button {
+        float: left;
+        font-weight: 500;
+        user-select: none;
+        padding: 0.25rem;
+        margin: 0.25rem -30px;
+        font-size: 1.6rem;
+        line-height: 1.6;
+    }
 }
 
 // help collapsable containers
 .help .collapse-container {
-  margin: 40px 0;
-  .collapse-button {
-    margin: -10px -30px;
-    font-size: 20px;
-    line-height: 1;
-  }
+    margin: 40px 0;
+    .collapse-button {
+        margin: -10px -30px;
+        font-size: 20px;
+        line-height: 1;
+    }
 }
 
 // little x image next to custom tokens
 .token-remove {
-  width: @font-size-small;
-  height: @font-size-small;
-  position: absolute;
-  left: 18px;
-  cursor: pointer;
+    width: @font-size-small;
+    height: @font-size-small;
+    position: absolute;
+    left: 18px;
+    cursor: pointer;
 }
 
 .node-remove {
-  width: 16px;
-  height: 16px;
-  position: absolute;
-  right: 6px;
-  top: 8px;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    right: 6px;
+    top: 8px;
 }
 
 .m-addresses td:first-child {
-  max-width: 50px;
-  min-widht: 50px;
+    max-width: 50px;
+    min-widht: 50px;
 }
 
 .m-addresses td:last-child {
-  text-align: right;
+    text-align: right;
 }
 
 .token-balances {
-  margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 h2 a.isActive {
-  color: #333;
-  cursor: default;
-  &:hover,
-  &:active {
     color: #333;
     cursor: default;
-  }
+    &:hover,
+    &:active {
+        color: #333;
+        cursor: default;
+    }
 }
 
 .item {
-  margin: 6px 0;
+    margin: 6px 0;
 }
 
 .output {
-  padding: @space-sm @space;
-  margin-top: -@space/2;
-  p {
-    margin: @space-md 0 0;
-  }
+    padding: @space-sm @space;
+    margin-top: -@space / 2;
+    p {
+        margin: @space-md 0 0;
+    }
 }
 
 label .small {
-  font-size: .9rem;
+    font-size: 0.9rem;
 }
 
 label small {
-  color: @gray-light
+    color: @gray-light;
 }
 
 .write-address {
-  .col-xs-1 {
-    padding: 0;
-  }
-  .col-xs-11 {
-    padding-right: 10px;
-  }
+    .col-xs-1 {
+        padding: 0;
+    }
+    .col-xs-11 {
+        padding-right: 10px;
+    }
 }
 
 .write-boolean label {
-  display: block;
+    display: block;
 }
 
 .decrypt-drtv {
-  padding: @space 0;
-  label.radio {
-    padding: 0 @space-lg;
-    margin: .5rem 0;
-  }
-  h4 {
-    margin-top: 0;
-  }
+    padding: @space 0;
+    label.radio {
+        padding: 0 @space-lg;
+        margin: 0.5rem 0;
+    }
+    h4 {
+        margin-top: 0;
+    }
 }
 
 .qr-code {
-  max-width: 17rem;
-  margin: auto;
+    max-width: 17rem;
+    margin: auto;
 }
 
 .qr-pkey-container {
-  position: relative;
+    position: relative;
 }
 
 .qr-overlay {
-  background-color: black;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+    background-color: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .contracts {
-
-  .dropdown-toggle {
-    display: block;
-    text-align: left;
-    white-space: normal;
-    .caret {
-      position: absolute;
-      right: @space;
-      top: 1.25rem;
+    .dropdown-toggle {
+        display: block;
+        text-align: left;
+        white-space: normal;
+        .caret {
+            position: absolute;
+            right: @space;
+            top: 1.25rem;
+        }
     }
-  }
-  .dropdown-menu-left {
-    font-size: @font-size-small;
-    left: auto;
-    right: 0;
-    min-width: 37rem;
-    small {
-      float: right;
+    .dropdown-menu-left {
+        font-size: @font-size-small;
+        left: auto;
+        right: 0;
+        min-width: 37rem;
+        small {
+            float: right;
+        }
     }
-  }
 }
 
 .view-wallet-content {
-  h5 {
-    margin-bottom: @space-xs;
-  }
-
+    h5 {
+        margin-bottom: @space-xs;
+    }
 }
 
 #selectedTypeLedger ol {
-  padding-left: 1rem;
+    padding-left: 1rem;
 }
 
 .loading-wrap {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: fadeOut(black, 30%);
-  z-index: 999;
-  text-align: center;
-
-  .loading {
-    position: absolute;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: fadeOut(black, 30%);
+    z-index: 999;
     text-align: center;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -60%);
-  }
-  img {
-    border-radius: 50%;
-  }
-  h1 {
-    animation: opacity 2000ms infinite ease-in-out;
-    color: white;
-  }
 
-  @keyframes opacity {
-    from, to {
-      opacity: 0;
+    .loading {
+        position: absolute;
+        text-align: center;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -60%);
     }
-    50% {
-      opacity: 1;
+    img {
+        border-radius: 50%;
     }
-  }
+    h1 {
+        animation: opacity 2000ms infinite ease-in-out;
+        color: white;
+    }
+
+    @keyframes opacity {
+        from,
+        to {
+            opacity: 0;
+        }
+        50% {
+            opacity: 1;
+        }
+    }
 }
 
 .embedded-logo {
-  height: auto;
-  width: 100%;
-  max-width: 290px;
-  padding: .5rem 0;
+    height: auto;
+    width: 100%;
+    max-width: 290px;
+    padding: 0.5rem 0;
 }
 
 .ens-response {
-  color: @gray;
+    color: @gray;
 }
 
-.messagesConversation, .messagesList {
-  li {
-    list-style-type: none !important;
-  }
+.messagesConversation,
+.messagesList {
+    li {
+        list-style-type: none !important;
+    }
 }
 
 .messagesList {
+    .dot {
+        width: 6px;
+        height: 6px;
+        background: #cdcdcd;
+        border-radius: 100%;
+        display: inline-block;
+        position: relative;
+        top: -1px;
+        z-index: -0;
+        left: 3px;
+    }
 
-  .dot {
-    width: 6px;
-    height: 6px;
-    background: #cdcdcd;
-    border-radius: 100%;
-    display: inline-block;
-    position: relative;
-    top: -1px;
-    z-index: -0;
-    left: 3px;
-  }
+    .dot-success {
+        background: green;
+    }
 
-  .dot-success {
+    .dot-info {
+        background: blue;
+    }
+    .from {
+        font-size: 1.1rem;
+        line-height: 47px;
+    }
 
-    background: green;
-  }
+    .message_text {
+        font-size: 1.3rem;
+    }
 
-  .dot-info {
-
-    background: blue;
-  }
-  .from {
-    font-size: 1.1rem;
-    line-height: 47px;
-  }
-
-  .message_text {
-
-    font-size: 1.3rem;
-  }
-
-  .justify_row {
-
-    display: flex;
-    justify-content: flex-start;
-    align-content: center;
-    margin-bottom: 1rem;
-  }
+    .justify_row {
+        display: flex;
+        justify-content: flex-start;
+        align-content: center;
+        margin-bottom: 1rem;
+    }
 }
 
 .pointer {
-  cursor: pointer !important;
+    cursor: pointer !important;
 }
 
 // color code the nodes
@@ -529,7 +531,7 @@ label small {
 @brand-eth-dark: #025b76;
 @brand-etc: #009241;
 @brand-etc-dark: #015125;
-@brand-test: #C4C4C4;
+@brand-test: #c4c4c4;
 @brand-test-dark: #919191;
 @brand-rsk: #ff794f;
 @brand-rsk-dark: #cc5530;
@@ -551,579 +553,548 @@ label small {
 @brand-cust-dark: #66054c;
 
 .dropdown-node .dropdown-menu {
-  li {
-    border-left: 2px solid @brand-cust;
-  }
-  li:last-child {
-    border-top: 1px solid @gray-lighter;
-    padding-top: 5px;
-  }
-  li:nth-child(1),
-  li:nth-child(2),
-  li:nth-child(3),
-  li:nth-child(4),
-  li:nth-child(5),
-  li:nth-child(6) {
-    border-left: 2px solid @brand-etc;
-  }
-  li:nth-child(7),
-  li:nth-child(8),
-  li:nth-child(9) {
-    border-left: 2px solid @brand-eth;
-  }
-  li:nth-child(10),
-  li:nth-child(11),
-  li:nth-child(12),
-  li:nth-child(13),
-  li:nth-child(14) {
-    border-left: 2px solid @brand-test;
-  }
-  li:nth-child(15) {
-    border-left: 2px solid @brand-rsk;
-  }
-  li:nth-child(16) {
-    border-left: 2px solid @brand-exp;
-  }
-  li:nth-child(17) {
-    border-left: 2px solid @brand-music;
-  }
-  li:nth-child(18) {
-    border-left: 2px solid @brand-ubq;
-  }
-  li:nth-child(19) {
-    border-left: 2px solid @brand-pirl;
-  }
-  li:nth-child(20) {
-    border-left: 2px solid @brand-poa;
-  }
-  li:nth-child(21) {
-    border-left: 2px solid @brand-tomo;
-  }
-  li:nth-child(22) {
-    border-left: 2px solid @brand-ella;
-  }
-  li:nth-child(23) {
-    border-left: 2px solid @brand-etsc;
-  }
-  li:nth-child(24) {
-    border-left: 2px solid @brand-esn;
-  }
-  li:last-child {
-    border-left: 2px solid @brand-cust;
-  }
-  li:nth-child(3),
-  li:nth-child(6),
-  li:nth-child(9),
-  li:nth-child(14),
-  li:nth-child(15),
-  li:nth-child(16),
-  li:nth-child(17),
-  li:nth-child(18),
-  li:nth-child(19),
-  li:nth-child(20),
-  li:nth-child(21),
-  li:nth-child(22),
-  li:nth-child(23) {
-    border-bottom: 1px solid @gray-lighter;
-  }
+    li {
+        border-left: 2px solid @brand-cust;
+    }
+    li:last-child {
+        border-top: 1px solid @gray-lighter;
+        padding-top: 5px;
+    }
+    li:nth-child(1),
+    li:nth-child(2),
+    li:nth-child(3),
+    li:nth-child(4),
+    li:nth-child(5),
+    li:nth-child(6) {
+        border-left: 2px solid @brand-etc;
+    }
+    li:nth-child(7),
+    li:nth-child(8),
+    li:nth-child(9) {
+        border-left: 2px solid @brand-eth;
+    }
+    li:nth-child(10),
+    li:nth-child(11),
+    li:nth-child(12),
+    li:nth-child(13),
+    li:nth-child(14) {
+        border-left: 2px solid @brand-test;
+    }
+    li:nth-child(15) {
+        border-left: 2px solid @brand-rsk;
+    }
+    li:nth-child(16) {
+        border-left: 2px solid @brand-exp;
+    }
+    li:nth-child(17) {
+        border-left: 2px solid @brand-music;
+    }
+    li:nth-child(18) {
+        border-left: 2px solid @brand-ubq;
+    }
+    li:nth-child(19) {
+        border-left: 2px solid @brand-pirl;
+    }
+    li:nth-child(20) {
+        border-left: 2px solid @brand-poa;
+    }
+    li:nth-child(21) {
+        border-left: 2px solid @brand-tomo;
+    }
+    li:nth-child(22) {
+        border-left: 2px solid @brand-ella;
+    }
+    li:nth-child(23) {
+        border-left: 2px solid @brand-etsc;
+    }
+    li:nth-child(24) {
+        border-left: 2px solid @brand-esn;
+    }
+    li:last-child {
+        border-left: 2px solid @brand-cust;
+    }
+    li:nth-child(3),
+    li:nth-child(6),
+    li:nth-child(9),
+    li:nth-child(14),
+    li:nth-child(15),
+    li:nth-child(16),
+    li:nth-child(17),
+    li:nth-child(18),
+    li:nth-child(19),
+    li:nth-child(20),
+    li:nth-child(21),
+    li:nth-child(22),
+    li:nth-child(23) {
+        border-bottom: 1px solid @gray-lighter;
+    }
 }
 
 header {
-  margin-bottom: 1em;
+    margin-bottom: 1em;
 }
 
 header.ETH {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-eth;
-  }
-  & + .container .alert-info {
-    background-color: @brand-eth;
-  }
-  & + .container .btn-primary {
-    background: @brand-eth;
-    border-color: @brand-eth
-  }
-  & + .container .btn-info {
-    background: @brand-eth-dark;
-    border-color: @brand-eth-dark;
-  }
-  .header-branding {
-    background: linear-gradient(130deg, @brand-eth, @brand-eth-dark);
-    border-bottom: 0.25rem solid @brand-eth;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-eth;
+    }
+    & + .container .alert-info {
+        background-color: @brand-eth;
+    }
+    & + .container .btn-primary {
+        background: @brand-eth;
+        border-color: @brand-eth;
+    }
+    & + .container .btn-info {
+        background: @brand-eth-dark;
+        border-color: @brand-eth-dark;
+    }
+    .header-branding {
+        background: linear-gradient(130deg, @brand-eth, @brand-eth-dark);
+        border-bottom: 0.25rem solid @brand-eth;
+    }
 }
 
 header.ETC {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-etc;
-  }
-  & + .container .alert-info {
-    background-color: @brand-etc;
-  }
-  & + .container .btn-primary {
-    background: @brand-etc;
-    border-color: @brand-etc
-  }
-  & + .container .btn-info {
-    background: @brand-etc-dark;
-    border-color: @brand-etc-dark;
-  }
-  .header-branding {
-    background: linear-gradient(130deg, @brand-etc, @brand-etc-dark);
-    border-bottom: 0.25rem solid @brand-etc;
-  }
-  & + .btn-primary {
-    background: @brand-etc;
-    border-color: @brand-etc;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-etc;
+    }
+    & + .container .alert-info {
+        background-color: @brand-etc;
+    }
+    & + .container .btn-primary {
+        background: @brand-etc;
+        border-color: @brand-etc;
+    }
+    & + .container .btn-info {
+        background: @brand-etc-dark;
+        border-color: @brand-etc-dark;
+    }
+    .header-branding {
+        background: linear-gradient(130deg, @brand-etc, @brand-etc-dark);
+        border-bottom: 0.25rem solid @brand-etc;
+    }
+    & + .btn-primary {
+        background: @brand-etc;
+        border-color: @brand-etc;
+    }
 }
 
 header.Ropsten {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-test;
-  }
-  & + .container .alert-info {
-    background-color: @brand-test;
-  }
-  & + .container .btn-primary {
-    background: @brand-test;
-    border-color: @brand-test;
-  }
-  & + .container .btn-info {
-    background: @brand-test-dark;
-    border-color: @brand-test-dark;
-  }
-  .header-branding {
-    background: linear-gradient(130deg, @brand-test, @brand-test-dark);
-    border-bottom: 0.25rem solid @brand-test;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-test;
+    }
+    & + .container .alert-info {
+        background-color: @brand-test;
+    }
+    & + .container .btn-primary {
+        background: @brand-test;
+        border-color: @brand-test;
+    }
+    & + .container .btn-info {
+        background: @brand-test-dark;
+        border-color: @brand-test-dark;
+    }
+    .header-branding {
+        background: linear-gradient(130deg, @brand-test, @brand-test-dark);
+        border-bottom: 0.25rem solid @brand-test;
+    }
 }
 
 header.Kovan {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-test;
-  }
-  & + .container .alert-info {
-    background-color: @brand-test;
-  }
-  & + .container .btn-primary {
-    background: @brand-test;
-    border-color: @brand-test;
-  }
-  & + .container .btn-info {
-    background: @brand-test-dark;
-    border-color: @brand-test-dark;
-  }
-  .header-branding {
-    background: @brand-test;
-    border-bottom: 0.25rem solid @brand-test;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-test;
+    }
+    & + .container .alert-info {
+        background-color: @brand-test;
+    }
+    & + .container .btn-primary {
+        background: @brand-test;
+        border-color: @brand-test;
+    }
+    & + .container .btn-info {
+        background: @brand-test-dark;
+        border-color: @brand-test-dark;
+    }
+    .header-branding {
+        background: @brand-test;
+        border-bottom: 0.25rem solid @brand-test;
+    }
 }
 
 header.Rinkeby {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-test;
-  }
-  & + .container .alert-info {
-    background-color: @brand-test;
-  }
-  & + .container .btn-primary {
-    background: @brand-test;
-    border-color: @brand-test;
-  }
-  & + .container .btn-info {
-    background: @brand-test-dark;
-    border-color: @brand-test-dark;
-  }
-  .header-branding {
-    background: @brand-test;
-    border-bottom: 0.25rem solid @brand-test;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-test;
+    }
+    & + .container .alert-info {
+        background-color: @brand-test;
+    }
+    & + .container .btn-primary {
+        background: @brand-test;
+        border-color: @brand-test;
+    }
+    & + .container .btn-info {
+        background: @brand-test-dark;
+        border-color: @brand-test-dark;
+    }
+    .header-branding {
+        background: @brand-test;
+        border-bottom: 0.25rem solid @brand-test;
+    }
 }
 
 header.RSK {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-rsk;
-  }
-  & + .container .alert-info {
-    background-color: @brand-rsk;
-  }
-  & + .container .btn-primary {
-    background: @brand-rsk;
-    border-color: @brand-rsk;
-  }
-  & + .container .btn-info {
-    background: @brand-rsk-dark;
-    border-color: @brand-rsk-dark;
-  }
-  .header-branding {
-    background: @brand-rsk;
-    border-bottom: 0.25rem solid @brand-rsk;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-rsk;
+    }
+    & + .container .alert-info {
+        background-color: @brand-rsk;
+    }
+    & + .container .btn-primary {
+        background: @brand-rsk;
+        border-color: @brand-rsk;
+    }
+    & + .container .btn-info {
+        background: @brand-rsk-dark;
+        border-color: @brand-rsk-dark;
+    }
+    .header-branding {
+        background: @brand-rsk;
+        border-bottom: 0.25rem solid @brand-rsk;
+    }
 }
 
 header.EXP {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-exp;
-  }
-  & + .container .alert-info {
-    background-color: @brand-exp;
-  }
-  & + .container .btn-primary {
-    background: @brand-exp;
-    border-color: @brand-exp;
-  }
-  & + .container .btn-info {
-    background: @brand-exp-dark;
-    border-color: @brand-exp-dark;
-  }
-  .header-branding {
-    background: linear-gradient(130deg, @brand-exp, @brand-exp-dark);
-    border-bottom: 0.25rem solid @brand-exp;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-exp;
+    }
+    & + .container .alert-info {
+        background-color: @brand-exp;
+    }
+    & + .container .btn-primary {
+        background: @brand-exp;
+        border-color: @brand-exp;
+    }
+    & + .container .btn-info {
+        background: @brand-exp-dark;
+        border-color: @brand-exp-dark;
+    }
+    .header-branding {
+        background: linear-gradient(130deg, @brand-exp, @brand-exp-dark);
+        border-bottom: 0.25rem solid @brand-exp;
+    }
 }
 
 header.MUSIC {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-music;
-  }
-  & + .container .alert-info {
-    background-color: @brand-music;
-  }
-  & + .container .btn-primary {
-    background: @brand-music;
-    border-color: @brand-music;
-  }
-  & + .container .btn-info {
-    background: @brand-music-dark;
-    border-color: @brand-music-dark;
-  }
-  .header-branding {
-    background: linear-gradient(130deg, @brand-music, @brand-music-dark);
-    border-bottom: 0.25rem solid @brand-music;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-music;
+    }
+    & + .container .alert-info {
+        background-color: @brand-music;
+    }
+    & + .container .btn-primary {
+        background: @brand-music;
+        border-color: @brand-music;
+    }
+    & + .container .btn-info {
+        background: @brand-music-dark;
+        border-color: @brand-music-dark;
+    }
+    .header-branding {
+        background: linear-gradient(130deg, @brand-music, @brand-music-dark);
+        border-bottom: 0.25rem solid @brand-music;
+    }
 }
 
 header.UBQ {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-ubq;
-  }
-  & + .container .alert-info {
-    background-color: @brand-ubq;
-  }
-  & + .container .btn-primary {
-    background: @brand-ubq;
-    border-color: @brand-ubq;
-  }
-  & + .container .btn-info {
-    background: @brand-ubq-dark;
-    border-color: @brand-ubq-dark;
-  }
-  .header-branding {
-    background: linear-gradient(130deg, @brand-ubq, @brand-ubq-dark);
-    border-bottom: 0.25rem solid @brand-ubq;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-ubq;
+    }
+    & + .container .alert-info {
+        background-color: @brand-ubq;
+    }
+    & + .container .btn-primary {
+        background: @brand-ubq;
+        border-color: @brand-ubq;
+    }
+    & + .container .btn-info {
+        background: @brand-ubq-dark;
+        border-color: @brand-ubq-dark;
+    }
+    .header-branding {
+        background: linear-gradient(130deg, @brand-ubq, @brand-ubq-dark);
+        border-bottom: 0.25rem solid @brand-ubq;
+    }
 }
 
 header.PIRL {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-pirl;
-  }
-  & + .container .alert-info {
-    background-color: @brand-pirl;
-  }
-  & + .container .btn-primary {
-    background: @brand-pirl;
-    border-color: @brand-pirl;
-  }
-  & + .container .btn-info {
-    background: @brand-pirl;
-    border-color: @brand-pirl;
-  }
-  .header-branding {
-    background: @brand-pirl;
-    border-bottom: 0.25rem solid @brand-pirl;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-pirl;
+    }
+    & + .container .alert-info {
+        background-color: @brand-pirl;
+    }
+    & + .container .btn-primary {
+        background: @brand-pirl;
+        border-color: @brand-pirl;
+    }
+    & + .container .btn-info {
+        background: @brand-pirl;
+        border-color: @brand-pirl;
+    }
+    .header-branding {
+        background: @brand-pirl;
+        border-bottom: 0.25rem solid @brand-pirl;
+    }
 }
 
 header.POA {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-poa;
-  }
-  & + .container .alert-info {
-    background-color: @brand-poa;
-  }
-  & + .container .btn-primary {
-    background: @brand-poa;
-    border-color: @brand-poa;
-  }
-  & + .container .btn-info {
-    background: @brand-poa;
-    border-color: @brand-poa;
-  }
-  .header-branding {
-    background: @brand-poa;
-    border-bottom: 0.25rem solid @brand-poa;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-poa;
+    }
+    & + .container .alert-info {
+        background-color: @brand-poa;
+    }
+    & + .container .btn-primary {
+        background: @brand-poa;
+        border-color: @brand-poa;
+    }
+    & + .container .btn-info {
+        background: @brand-poa;
+        border-color: @brand-poa;
+    }
+    .header-branding {
+        background: @brand-poa;
+        border-bottom: 0.25rem solid @brand-poa;
+    }
 }
 
 header.TOMO {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-tomo;
-  }
-  & + .container .alert-info {
-    background-color: @brand-tomo;
-  }
-  & + .container .btn-primary {
-    background: @brand-tomo;
-    border-color: @brand-tomo;
-  }
-  & + .container .btn-info {
-    background: @brand-tomo;
-    border-color: @brand-tomo;
-  }
-  .header-branding {
-    background: @brand-tomo;
-    border-bottom: 0.25rem solid @brand-tomo;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-tomo;
+    }
+    & + .container .alert-info {
+        background-color: @brand-tomo;
+    }
+    & + .container .btn-primary {
+        background: @brand-tomo;
+        border-color: @brand-tomo;
+    }
+    & + .container .btn-info {
+        background: @brand-tomo;
+        border-color: @brand-tomo;
+    }
+    .header-branding {
+        background: @brand-tomo;
+        border-bottom: 0.25rem solid @brand-tomo;
+    }
 }
 
 header.ELLA {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-ella;
-  }
-  & + .container .alert-info {
-    background-color: @brand-ella;
-  }
-  & + .container .btn-primary {
-    background: @brand-ella;
-    border-color: @brand-ella;
-  }
-  & + .container .btn-info {
-    background: @brand-ella;
-    border-color: @brand-ella;
-  }
-  .header-branding {
-    background: @brand-ella;
-    border-bottom: 0.25rem solid @brand-ella;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-ella;
+    }
+    & + .container .alert-info {
+        background-color: @brand-ella;
+    }
+    & + .container .btn-primary {
+        background: @brand-ella;
+        border-color: @brand-ella;
+    }
+    & + .container .btn-info {
+        background: @brand-ella;
+        border-color: @brand-ella;
+    }
+    .header-branding {
+        background: @brand-ella;
+        border-bottom: 0.25rem solid @brand-ella;
+    }
 }
 
 header.ETSC {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-etsc;
-  }
-  & + .container .alert-info {
-    background-color: @brand-etsc;
-  }
-  & + .container .btn-primary {
-    background: @brand-etsc;
-    border-color: @brand-etsc;
-  }
-  & + .container .btn-info {
-    background: @brand-etsc-dark;
-    border-color: @brand-etsc-dark;
-  }
-  .header-branding {
-    background: linear-gradient(130deg, @brand-etsc, @brand-etsc-dark);
-    border-bottom: 0.25rem solid @brand-etsc;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-etsc;
+    }
+    & + .container .alert-info {
+        background-color: @brand-etsc;
+    }
+    & + .container .btn-primary {
+        background: @brand-etsc;
+        border-color: @brand-etsc;
+    }
+    & + .container .btn-info {
+        background: @brand-etsc-dark;
+        border-color: @brand-etsc-dark;
+    }
+    .header-branding {
+        background: linear-gradient(130deg, @brand-etsc, @brand-etsc-dark);
+        border-bottom: 0.25rem solid @brand-etsc;
+    }
 }
 
 header.CLO {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-etc;
-  }
-  & + .container .alert-info {
-    background-color: @brand-etc;
-  }
-  & + .container .btn-primary {
-    background: @brand-etc;
-    border-color: @brand-etc
-  }
-  & + .container .btn-info {
-    background: @brand-etc-dark;
-    border-color: @brand-etc-dark;
-  }
-  .header-branding {
-    background: linear-gradient(130deg, @brand-etc, @brand-etc-dark);
-    border-bottom: 0.25rem solid @brand-etc;
-  }
-  & + .btn-primary {
-    background: @brand-etc;
-    border-color: @brand-etc;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-etc;
+    }
+    & + .container .alert-info {
+        background-color: @brand-etc;
+    }
+    & + .container .btn-primary {
+        background: @brand-etc;
+        border-color: @brand-etc;
+    }
+    & + .container .btn-info {
+        background: @brand-etc-dark;
+        border-color: @brand-etc-dark;
+    }
+    .header-branding {
+        background: linear-gradient(130deg, @brand-etc, @brand-etc-dark);
+        border-bottom: 0.25rem solid @brand-etc;
+    }
+    & + .btn-primary {
+        background: @brand-etc;
+        border-color: @brand-etc;
+    }
 }
 
 header.CLOT {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-etc;
-  }
-  & + .container .alert-info {
-    background-color: @brand-etc;
-  }
-  & + .container .btn-primary {
-    background: @brand-etc;
-    border-color: @brand-etc
-  }
-  & + .container .btn-info {
-    background: @brand-etc-dark;
-    border-color: @brand-etc-dark;
-  }
-  .header-branding {
-    background: linear-gradient(130deg, @brand-etc, @brand-etc-dark);
-    border-bottom: 0.25rem solid @brand-etc;
-  }
-  & + .btn-primary {
-    background: @brand-etc;
-    border-color: @brand-etc;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-etc;
+    }
+    & + .container .alert-info {
+        background-color: @brand-etc;
+    }
+    & + .container .btn-primary {
+        background: @brand-etc;
+        border-color: @brand-etc;
+    }
+    & + .container .btn-info {
+        background: @brand-etc-dark;
+        border-color: @brand-etc-dark;
+    }
+    .header-branding {
+        background: linear-gradient(130deg, @brand-etc, @brand-etc-dark);
+        border-bottom: 0.25rem solid @brand-etc;
+    }
+    & + .btn-primary {
+        background: @brand-etc;
+        border-color: @brand-etc;
+    }
 }
 
 header.ESN {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-esn;
-  }
-  & + .container .alert-info {
-    background-color: @brand-esn;
-  }
-  & + .container .btn-primary {
-    background: @brand-esn;
-    border-color: @brand-esn;
-  }
-  & + .container .btn-info {
-    background: @brand-esn-dark;
-    border-color: @brand-esn-dark;
-  }
-  .header-branding {
-    background: linear-gradient(130deg, @brand-esn, @brand-esn-dark);
-    border-bottom: 0.25rem solid @brand-esn;
-  }
-  & + .btn-primary {
-    background: @brand-esn;
-    border-color: @brand-esn;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-esn;
+    }
+    & + .container .alert-info {
+        background-color: @brand-esn;
+    }
+    & + .container .btn-primary {
+        background: @brand-esn;
+        border-color: @brand-esn;
+    }
+    & + .container .btn-info {
+        background: @brand-esn-dark;
+        border-color: @brand-esn-dark;
+    }
+    .header-branding {
+        background: linear-gradient(130deg, @brand-esn, @brand-esn-dark);
+        border-bottom: 0.25rem solid @brand-esn;
+    }
+    & + .btn-primary {
+        background: @brand-esn;
+        border-color: @brand-esn;
+    }
 }
 
 header.Custom {
-
-  & + .container .modal-content {
-    border: 0.25rem solid @brand-cust;
-  }
-  & + .container .alert-info {
-    background-color: @brand-cust;
-  }
-  & + .container .btn-primary {
-    background: @brand-cust;
-    border-color: @brand-cust;
-  }
-  & + .container .btn-info {
-    background: @brand-cust-dark;
-    border-color: @brand-cust-dark;
-  }
-  .header-branding {
-    background: linear-gradient(130deg, @brand-cust, @brand-cust-dark);
-    border-bottom: 0.25rem solid @brand-cust;
-  }
+    & + .container .modal-content {
+        border: 0.25rem solid @brand-cust;
+    }
+    & + .container .alert-info {
+        background-color: @brand-cust;
+    }
+    & + .container .btn-primary {
+        background: @brand-cust;
+        border-color: @brand-cust;
+    }
+    & + .container .btn-info {
+        background: @brand-cust-dark;
+        border-color: @brand-cust-dark;
+    }
+    .header-branding {
+        background: linear-gradient(130deg, @brand-cust, @brand-cust-dark);
+        border-bottom: 0.25rem solid @brand-cust;
+    }
 }
 
 footer {
+    border-top: 0.25rem solid @brand-etc;
 
-  border-top: 0.25rem solid @brand-etc;
+    &.ETH {
+        border-top: 0.25rem solid @brand-eth;
+    }
 
-  &.ETH {
-
-    border-top: 0.25rem solid @brand-eth;
-
-  }
-
-  &.Custom {
-
-    border-top: 0.25rem solid @brand-cust;
-  }
-
+    &.Custom {
+        border-top: 0.25rem solid @brand-cust;
+    }
 }
 
 .row-justify {
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-teeny {
-
-  font-size: 0.8rem;
-  padding: 0.2rem;
+    font-size: 0.8rem;
+    padding: 0.2rem;
 }
 
 .account-info {
-
-  .col-xs-4 {
-    padding: @space-xs;
-  }
+    .col-xs-4 {
+        padding: @space-xs;
+    }
 }
 
 .table-no-border {
+    td,
+    th {
+        border: none !important;
+    }
 
-  td, th {
-
+    tr,
+    td {
+        padding: @space-xs !important;
+    }
     border: none !important;
-  }
-
-  tr, td {
-
-    padding: @space-xs !important;
-  }
-  border: none !important;
 }
 
 .btn-read {
+    color: rgb(0, 0, 0);
 
-  color: rgb(0, 0, 0);
-
-  background-color: hsla(229, 75%, 87%, .5);
-  border: .3px solid hsla(229, 75%, 87%, .5);
+    background-color: hsla(229, 75%, 87%, 0.5);
+    border: 0.3px solid hsla(229, 75%, 87%, 0.5);
 }
 
 .btn-write {
-
-  color: rgb(0, 0, 0);
-  background-color: hsla(0, 82%, 82%, .5);
-  border: .3px solid hsla(0, 82%, 82%, .5);
-
+    color: rgb(0, 0, 0);
+    background-color: hsla(0, 82%, 82%, 0.5);
+    border: 0.3px solid hsla(0, 82%, 82%, 0.5);
 }
 
 .transition-display {
-  transition: visibility 0s, opacity 0.2s ease-in-out;
-  opacity: 0;
-  visibility: hidden;
+    transition: visibility 0s, opacity 0.2s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
 }
 
 .copier:hover div.transition-display {
-  opacity: 1;
-  visibility: visible;
+    opacity: 1;
+    visibility: visible;
 }
 
 .transition-display.show-viz {
-
-  visibility: visible;
-  opacity: 1;
+    visibility: visible;
+    opacity: 1;
 }

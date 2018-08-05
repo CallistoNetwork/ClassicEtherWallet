@@ -1,15 +1,10 @@
-'use strict';
+"use strict";
 
-
-
-var backgroundNodeService = function () {
-
+var backgroundNodeService = function() {
     return {
         backgroundNode: null,
-        availableNodes: [],
-    }
-
+        availableNodes: []
+    };
 };
-
 
 module.exports = backgroundNodeService;

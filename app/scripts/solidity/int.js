@@ -1,5 +1,5 @@
-var f = require('./formatters');
-var SolidityType = require('./type');
+var f = require("./formatters");
+var SolidityType = require("./type");
 
 /**
  * SolidityTypeInt is a prootype that represents int type
@@ -17,7 +17,7 @@ var SolidityType = require('./type');
  * int[3][]
  * int64[][6][], ...
  */
-var SolidityTypeInt = function () {
+var SolidityTypeInt = function() {
     this._inputFormatter = f.formatInputInt;
     this._outputFormatter = f.formatOutputInt;
 };
@@ -25,7 +25,7 @@ var SolidityTypeInt = function () {
 SolidityTypeInt.prototype = new SolidityType({});
 SolidityTypeInt.prototype.constructor = SolidityTypeInt;
 
-SolidityTypeInt.prototype.isType = function (name) {
+SolidityTypeInt.prototype.isType = function(name) {
     return !!name.match(/^int([0-9]*)?(\[([0-9]*)\])*$/);
 };
 

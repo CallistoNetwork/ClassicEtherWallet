@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 var viewCtrl = function($scope, globalService, $sce) {
     $scope.globalService = globalService;
     $scope.notifier = uiFuncs.notifier;

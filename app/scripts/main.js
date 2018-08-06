@@ -233,7 +233,6 @@ app.controller("tabsCtrl", [
     "walletService",
     "$translate",
     "$sce",
-    "backgroundNodeService",
     tabsCtrl
 ]);
 app.controller("switchNetworkCtrl", [

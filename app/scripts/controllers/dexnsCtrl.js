@@ -113,7 +113,7 @@ const dexnsCtrl = function(
 
     const _hideOwner = true;
 
-    const _assign = false;
+    const _assign = true;
 
     $scope.tx = {
       inputs: [tokenName, _owner, _destination, _metadata, _hideOwner, _assign],

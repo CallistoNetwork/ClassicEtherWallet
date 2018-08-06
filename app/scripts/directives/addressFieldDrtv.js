@@ -1,6 +1,8 @@
 "use strict";
 
 const _debounce = require("lodash/debounce");
+const _set = require("lodash/set");
+
 const addressFieldDrtv = function(lookupService) {
     return {
         restrict: "E",
@@ -17,6 +19,8 @@ const addressFieldDrtv = function(lookupService) {
                 readOnly: false,
                 NAME: ""
             };
+
+            const varName = attrs.varName || "tx.to";
 
             scope.lookupNameDelay = _debounce(lookupName, 500);
 
@@ -60,7 +64,7 @@ const addressFieldDrtv = function(lookupService) {
 
             scope.$watch("addressDrtv.ensAddressField", _val => {
                 if (_val) {
-                    scope.tx.to = _val;
+                    _set(scope, varName, _val);
                 }
                 scope.lookupNameDelay(_val);
             });

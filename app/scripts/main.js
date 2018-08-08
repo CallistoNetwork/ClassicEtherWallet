@@ -202,6 +202,8 @@ app.factory("lookupService", ["dexnsService", "walletService", lookupService]);
 app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
 
+const dexnsTokenRegistrationForm = require("./directives/dexns-token-registration");
+app.directive("dexnsTokenRegistrationForm", dexnsTokenRegistrationForm);
 app.directive("dexnsNameDisplay", [
     "dexnsService",
     "walletService",

@@ -3,6 +3,9 @@
 var en = function() {};
 en.code = "en";
 en.data = {
+    DEXNS_AVAILABLE_RESPONSE_TEXT: "This name is available for registration.",
+    DEXNS_UNAVAILABLE_RESPONSE_TEXT:
+        "This name is already registered! You should try to register another name.",
     Network: "Network:",
     ADDR_COPY: "Address copied to clipboard!",
     COPY_TO_CLIPBOARD: "copy to clipboard",

@@ -69,45 +69,47 @@ uiFuncs.signTxTrezor = function(rawTx, { path }, callback) {
         localCallback
     );
 };
-uiFuncs.signTxLedger = function(app, eTx, rawTx, txData, old, callback) {
+
+uiFuncs.signTxLedger = function(app, eTx, rawTx, { path }, old, callback) {
     eTx.raw[6] = rawTx.chainId;
 
     eTx.raw[7] = eTx.raw[8] = 0;
 
-    var toHash = old ? eTx.raw.slice(0, 6) : eTx.raw;
-    var txToSign = ethUtil.rlp.encode(toHash);
-    var localCallback = function(result, error) {
-        if (typeof error != "undefined") {
-            error = error.errorCode
-                ? u2f.getErrorByCode(error.errorCode)
-                : error;
-            if (callback !== undefined)
+    const toHash = old ? eTx.raw.slice(0, 6) : eTx.raw;
+    const txToSign = ethUtil.rlp.encode(toHash);
+    const localCallback = function(result, error) {
+        if (error) {
+            if (callback) {
                 callback({
                     isError: true,
-                    error: error
+                    error,
+                    msg: error
                 });
-            return;
-        }
-        var v = result["v"].toString(16);
-        if (!old) {
-            // EIP155 support. check/recalc signature v value.
-            var rv = parseInt(v, 16);
-            var cv = rawTx.chainId * 2 + 35;
-            if (rv !== cv && (rv & cv) !== rv) {
-                cv += 1; // add signature v bit.
             }
-            v = cv.toString(16);
+        } else {
+            let v = result["v"].toString(16);
+            if (!old) {
+                // EIP155 support. check/recalc signature v value.
+                const rv = parseInt(v, 16);
+                let cv = rawTx.chainId * 2 + 35;
+                if (rv !== cv && (rv & cv) !== rv) {
+                    cv += 1; // add signature v bit.
+                }
+                v = cv.toString(16);
+            }
+            rawTx.v = "0x" + v;
+            rawTx.r = "0x" + result["r"];
+            rawTx.s = "0x" + result["s"];
+            eTx = new ethUtil.Tx(rawTx);
+            rawTx.rawTx = JSON.stringify(rawTx);
+            rawTx.signedTx = "0x" + eTx.serialize().toString("hex");
+            rawTx.isError = false;
+            if (callback) {
+                callback(rawTx);
+            }
         }
-        rawTx.v = "0x" + v;
-        rawTx.r = "0x" + result["r"];
-        rawTx.s = "0x" + result["s"];
-        eTx = new ethUtil.Tx(rawTx);
-        rawTx.rawTx = JSON.stringify(rawTx);
-        rawTx.signedTx = "0x" + eTx.serialize().toString("hex");
-        rawTx.isError = false;
-        if (callback !== undefined) callback(rawTx);
     };
-    app.signTransaction(txData.path, txToSign.toString("hex"), localCallback);
+    app.signTransaction(path, txToSign.toString("hex"), localCallback);
 };
 uiFuncs.signTxDigitalBitbox = function(eTx, rawTx, txData, callback) {
     var localCallback = function(result, error) {
@@ -482,7 +484,7 @@ uiFuncs.genTxContract = function(
                             (error && error.msg) || "error generating tx"
                         );
 
-                        reject(false);
+                        reject(error);
                     })
                     .then(rawTx => {
                         if (!rawTx) {

@@ -37,7 +37,7 @@ class Contract {
 
     setNode(network = this.network) {
         const node = Object.values(nodes.nodeList).find(
-            _node => _node.type === network
+            _node => _node.type.toUpperCase() === network.toUpperCase()
         );
 
         if (!node) {

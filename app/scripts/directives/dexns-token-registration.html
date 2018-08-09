@@ -9,6 +9,7 @@
         <input
             required
             autocomplete="off"
+            spellcheck="false"
             ng-model-options="{ debounce: 500 }"
             id="tokenName"
             name="tokenName"
@@ -41,7 +42,6 @@
     <div class="col-xs-11">
 
         <input
-
             ng-model="input.destination"
             class="form-control"
             name="destination"
@@ -50,7 +50,7 @@
             id="destination"
             type="text"
             placeholder="0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8"
-            ng-class="Validator.isValidAddress(input.destination) ? 'is-valid' : 'is-invalid'"
+            ng-class="tokenRegistration.destination.$valid ? 'is-valid' : 'is-invalid'"
             required
         />
 
@@ -115,7 +115,7 @@
     id="link"
     ng-model="input.link"
     class="form-control"
-    ng-class="Validator.isValidURL(input.link) ? 'is-valid' : 'is-invalid'"
+    ng-class="tokenRegistration.link.$valid ? 'is-valid' : 'is-invalid'"
 />
 <label for="sourceCode">
     sourceCode
@@ -128,7 +128,7 @@
     id="sourceCode"
     ng-model="input.sourceCode"
     class="form-control"
-    ng-class="Validator.isValidURL(input.sourceCode) ? 'is-valid' : 'is-invalid'"
+    ng-class="tokenRegistration.sourceCode.$valid ? 'is-valid' : 'is-invalid'"
 
 />
 <label for="info">

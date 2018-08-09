@@ -1,6 +1,5 @@
 "use strict";
 
-const _debounce = require("lodash/debounce");
 const _set = require("lodash/set");
 
 const addressFieldDrtv = function(lookupService) {
@@ -21,8 +20,6 @@ const addressFieldDrtv = function(lookupService) {
             };
 
             const varName = attrs.varName || "tx.to";
-
-            scope.lookupNameDelay = _debounce(lookupName, 500);
 
             function lookupName(_val) {
                 if (
@@ -66,7 +63,7 @@ const addressFieldDrtv = function(lookupService) {
                 if (_val) {
                     _set(scope, varName, _val);
                 }
-                scope.lookupNameDelay(_val);
+                lookupName(_val);
             });
 
             // when viewing wallet info tab / fire lookup name after unlocking wallet

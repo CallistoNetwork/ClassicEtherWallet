@@ -3,14 +3,10 @@
 module.exports = function dexnsTokenRegistrationForm() {
     return {
         require: "form",
-        restrict: "E",
+        restrict: "A",
         template: require("./dexns-token-registration.html"),
         link: function linkToken(scope, elem, attrs, form) {
-            const { tokenRegistration } = form;
-
-            tokenRegistration.tokenName.$asyncValidators.tokenName = async function(
-                _val
-            ) {
+            form.tokenName.$asyncValidators.tokenName = async function(_val) {
                 let result = false;
                 if (_val) {
                     const { available } = await scope.checkDexNSName(_val);
@@ -23,7 +19,7 @@ module.exports = function dexnsTokenRegistrationForm() {
                 return Promise.reject(result);
             };
 
-            tokenRegistration.abi.$validators.abi = function(_val) {
+            form.abi.$validators.abi = function(_val) {
                 if (!_val) return true;
 
                 try {
@@ -33,11 +29,8 @@ module.exports = function dexnsTokenRegistrationForm() {
                 }
             };
 
-            tokenRegistration.destination.$validators.destination = function(
-                _val
-            ) {
-                return Validator.isValidAddress(_val);
-            };
+            form.destination.$validators.destination = _addr =>
+                Validator.isValidAddress(_addr);
         }
     };
 };

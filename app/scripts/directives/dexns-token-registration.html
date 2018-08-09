@@ -1,159 +1,147 @@
-<form
-    ng-show="dexns_status === 2"
-    ng-submit="handleRegisterAndUpdateName(tokenRegistration)"
-    class="capitalize-form-label"
-    name="tokenRegistration"
->
+<label for="tokenName">
+    Token Name (DexNS name)
+</label>
+<!-- TOKEN NAME -->
 
-    <label for="tokenName">
-        Token Name (DexNS name)
-    </label>
-    <!-- TOKEN NAME -->
+<div class="row row-justify">
 
-    <div class="row row-justify">
+    <div class="col-sm-8">
+        <input
+            required
+            autocomplete="off"
+            ng-model-options="{ debounce: 500 }"
+            id="tokenName"
+            name="tokenName"
+            type="text"
+            class="form-control"
+            ng-class="tokenRegistration.tokenName.$valid ? 'is-valid' : 'is-invalid'"
+            ng-model="input.tokenName"
+        />
+    </div>
 
-        <div class="col-sm-8">
-            <input
-                required
-                autocomplete="off"
-                ng-model-options="{ debounce: 500 }"
-                id="tokenName"
-                name="tokenName"
-                type="text"
-                class="form-control"
-                ng-class="tokenRegistration.tokenName.$valid ? 'is-valid' : 'is-invalid'"
-                ng-model="input.tokenName"
-            />
-        </div>
+    <div class="col-sm-4">
+        <h3 class="text-info" ng-show="!!tokenRegistration.$pending.tokenName">
+            checking {{input.tokenName}}
+        </h3>
 
-        <div class="col-sm-4">
-            <h3 class="text-info" ng-show="!!tokenRegistration.$pending.tokenName">
-                checking {{input.tokenName}}
+        <div ng-show="tokenRegistration.tokenName.$dirty && !tokenRegistration.$pending.tokenName"
+             ng-switch="tokenRegistration.tokenName.$valid"
+        >
+            <h3 ng-switch-when="true" class="text-success" translate="DEXNS_AVAILABLE_RESPONSE_TEXT">
             </h3>
-
-            <div ng-show="tokenRegistration.tokenName.$dirty && !tokenRegistration.$pending.tokenName"
-                 ng-switch="tokenRegistration.tokenName.$valid"
-            >
-                <h3 ng-switch-when="true" class="text-success" translate="DEXNS_AVAILABLE_RESPONSE_TEXT">
-                </h3>
-                <h3 ng-switch-default="false" class="text-danger" translate="DEXNS_UNAVAILABLE_RESPONSE_TEXT"></h3>
-            </div>
+            <h3 ng-switch-default="false" class="text-danger" translate="DEXNS_UNAVAILABLE_RESPONSE_TEXT"></h3>
         </div>
     </div>
+</div>
 
-    <!-- TOKEN NAME -->
+<!-- TOKEN NAME -->
 
-    <label for="destination">Destination</label>
-    <div class="row">
-        <div class="col-xs-11">
+<label for="destination">Destination</label>
+<div class="row">
+    <div class="col-xs-11">
 
-            <input
+        <input
 
-                ng-model="input.destination"
-                class="form-control"
-                name="destination"
-                autocomplete="off"
-                spellcheck="false"
-                id="destination"
-                type="text"
-                placeholder="0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8"
-                ng-class="Validator.isValidAddress(input.destination) ? 'is-valid' : 'is-invalid'"
-                required
-            />
+            ng-model="input.destination"
+            class="form-control"
+            name="destination"
+            autocomplete="off"
+            spellcheck="false"
+            id="destination"
+            type="text"
+            placeholder="0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8"
+            ng-class="Validator.isValidAddress(input.destination) ? 'is-valid' : 'is-invalid'"
+            required
+        />
 
-        </div>
-        <div class="col-xs-1 address-identicon-container">
-            <div class="addressIdenticon"
-                 blockie-address="{{input.destination}}"
-                 watch-var="input.destination"></div>
-        </div>
     </div>
+    <div class="col-xs-1 address-identicon-container">
+        <div class="addressIdenticon"
+             blockie-address="{{input.destination}}"
+             watch-var="input.destination"></div>
+    </div>
+</div>
 
 
-    <label for="tokenNetwork">token network</label>
+<label for="tokenNetwork">token network</label>
 
-    <select class="form-control" id="tokenNetwork" name="tokenNetwork" ng-model="input.tokenNetwork">
-        <option ng-repeat="node in nodeList"
-                value="{{node}}"
-        >{{node}}
-        </option>
-    </select>
-
-
-    <!--<label for="owner">-->
-    <!--owner-->
-    <!--</label>-->
-    <!--<input name="owner" id="owner" ng-model="input.owner" class="form-control"/>-->
+<select class="form-control" id="tokenNetwork" name="tokenNetwork" ng-model="input.tokenNetwork">
+    <option ng-repeat="node in nodeList"
+            value="{{node}}"
+    >{{node}}
+    </option>
+</select>
 
 
-    <!--<label for="hideOwner">-->
-    <!--hideOwner-->
-    <!--</label>-->
-
-    <!--<input type="checkbox" name="hideOwner" id="hideOwner" ng-model="input.hideOwner" class="form-control"/>-->
-
-    <!--<label for="assign">-->
-    <!--assign-->
-    <!--</label>-->
-    <!--<input type="checkbox" name="assign" id="assign" ng-model="input.assign" class="form-control"/>-->
-
-    <hr/>
-
-    <h5>Optional token parameters</h5>
-
-    <label for="abi">
-        abi
-    </label>
-    <textarea
-        placeholder='[{ "type":"contructor", "inputs": [{ "name":"param1", "type":"uint256", "indexed":true }], "name":"Event" }, { "type":"function", "inputs": [{"name":"a", "type":"uint256"}], "name":"foo", "outputs": [] }] '
-        rows="5"
-        name="abi"
-        id="abi"
-        ng-model="input.abi"
-        class="form-control"
-        ng-class="tokenRegistration.abi.$valid ? 'is-valid' : 'is-invalid'"
-    ></textarea>
-    <label for="link">
-        link
-    </label>
-    <input
-        placeholder="https://bitcointalk.org/"
-        type="url" name="link"
-        id="link"
-        ng-model="input.link"
-        class="form-control"
-        ng-class="Validator.isValidURL(input.link) ? 'is-valid' : 'is-invalid'"
-    />
-    <label for="sourceCode">
-        sourceCode
-    </label>
-    <input
-
-        placeholder="https://github.com/"
-        type="url"
-        name="sourceCode"
-        id="sourceCode"
-        ng-model="input.sourceCode"
-        class="form-control"
-        ng-class="Validator.isValidURL(input.sourceCode) ? 'is-valid' : 'is-invalid'"
-
-    />
-    <label for="info">
-        info
-    </label>
-    <input name="info" id="info"
-           ng-model="input.info"
-           class="form-control"
-           placeholder="brief description of the token"
-    />
+<!--<label for="owner">-->
+<!--owner-->
+<!--</label>-->
+<!--<input name="owner" id="owner" ng-model="input.owner" class="form-control"/>-->
 
 
-    <button
-        ng-disabled="tokenRegistration.$invalid"
-        type="submit" class="btn btn-primary">Register Token
-    </button>
-</form>
+<!--<label for="hideOwner">-->
+<!--hideOwner-->
+<!--</label>-->
+
+<!--<input type="checkbox" name="hideOwner" id="hideOwner" ng-model="input.hideOwner" class="form-control"/>-->
+
+<!--<label for="assign">-->
+<!--assign-->
+<!--</label>-->
+<!--<input type="checkbox" name="assign" id="assign" ng-model="input.assign" class="form-control"/>-->
+
+<hr/>
+
+<h5>Optional token parameters</h5>
+
+<label for="abi">
+    abi
+</label>
+<textarea
+    placeholder='[{ "type":"contructor", "inputs": [{ "name":"param1", "type":"uint256", "indexed":true }], "name":"Event" }, { "type":"function", "inputs": [{"name":"a", "type":"uint256"}], "name":"foo", "outputs": [] }] '
+    rows="5"
+    name="abi"
+    id="abi"
+    ng-model="input.abi"
+    class="form-control"
+    ng-class="tokenRegistration.abi.$valid ? 'is-valid' : 'is-invalid'"
+></textarea>
+<label for="link">
+    link
+</label>
+<input
+    placeholder="https://bitcointalk.org/"
+    type="url" name="link"
+    id="link"
+    ng-model="input.link"
+    class="form-control"
+    ng-class="Validator.isValidURL(input.link) ? 'is-valid' : 'is-invalid'"
+/>
+<label for="sourceCode">
+    sourceCode
+</label>
+<input
+
+    placeholder="https://github.com/"
+    type="url"
+    name="sourceCode"
+    id="sourceCode"
+    ng-model="input.sourceCode"
+    class="form-control"
+    ng-class="Validator.isValidURL(input.sourceCode) ? 'is-valid' : 'is-invalid'"
+
+/>
+<label for="info">
+    info
+</label>
+<input name="info" id="info"
+       ng-model="input.info"
+       class="form-control"
+       placeholder="brief description of the token"
+/>
 
 
-
-
+<button
+    ng-disabled="tokenRegistration.$invalid"
+    type="submit" class="btn btn-primary">Register Token
+</button>

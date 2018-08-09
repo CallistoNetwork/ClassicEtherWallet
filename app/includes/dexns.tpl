@@ -115,9 +115,14 @@
         </article>
 
 
-        <dexns-token-registration-form ng-form="tokenRegistration">
-        </dexns-token-registration-form>
-
+        <form
+            ng-show="dexns_status === 2"
+            ng-submit="handleRegisterAndUpdateName(tokenRegistration)"
+            class="capitalize-form-label"
+            name="tokenRegistration"
+            dexns-token-registration-form
+        >
+        </form>
 
         <!-- Unlock Directive: Everything but notAvailable & forbidden -->
         <article class="row" ng-show="(dexns_status === 6 || dexns_status === 7)">

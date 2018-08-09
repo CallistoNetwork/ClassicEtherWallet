@@ -1,13 +1,4 @@
 "use strict";
-/* 0 -> nothing
- *  1 -> user
- *  2 -> token
- *  3 -> contract
- *  4 -> update Name
- *  5 -> access Name content
- *  6 -> step 2 register Name
- *  7 -> confirmation
- */
 const statusCodes = {
     nothing: 0,
     user: 1,
@@ -67,9 +58,6 @@ const dexnsCtrl = function(
 
     $scope.walletService = walletService;
 
-    if (nodes.nodeList[globalFuncs.getCurNode()].type !== "ETC") {
-        $rootScope.$broadcast("ChangeNode", globalFuncs.networks["ETC"] || 0);
-    }
     $scope.networks = globalFuncs.networks;
 
     $scope.dexnsConfirmModalModal = new Modal(
@@ -79,7 +67,6 @@ const dexnsCtrl = function(
         document.getElementById("sendTransactionContract")
     );
 
-    // TODO
     $scope.$watch(
         function() {
             if (walletService.wallet == null) return null;
@@ -94,7 +81,7 @@ const dexnsCtrl = function(
         }
     );
 
-    $scope.handleRegisterAndUpdateName = async function(_form) {
+    $scope.handleRegisterAndUpdateName = function(_form) {
         if (!_form.$valid) {
             return uiFuncs.notifier.danger("Invalid Request");
         }
@@ -252,12 +239,6 @@ const dexnsCtrl = function(
         return $scope
             .checkDexNSName($scope.DexNSName)
             .then(({ time, available }) => {
-                if (ajaxReq.type !== "ETC") {
-                    $scope.notifier.danger(
-                        "DexNS accepts only $ETC for gas payments! You should switch to ETC node first to register your name."
-                    );
-                }
-
                 if (available) {
                     $scope.dexns_status = statusCodes["step 2 register Name"];
                     $scope.notifier.info(AVAILABLE_RESPONSE_TEXT);
@@ -343,13 +324,6 @@ const dexnsCtrl = function(
             .finally(() => {
                 $scope.dexnsConfirmModalModal.close();
             });
-    };
-
-    $scope.toTimestamp = function(date) {
-        var dateSplitted = date.split("-"); // date must be in DD-MM-YYYY format
-        var formattedDate =
-            dateSplitted[1] + "/" + dateSplitted[0] + "/" + dateSplitted[2];
-        return new Date(formattedDate).getTime();
     };
 
     function main() {

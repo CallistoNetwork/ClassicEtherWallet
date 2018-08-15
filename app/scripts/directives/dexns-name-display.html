@@ -21,9 +21,10 @@
             type="text"
             name="dexnsName"
             id="dexnsName"
+            disabled
             required
             ng-model="input.dexnsName"
-            class="mono wrap remove-format"
+            class="form-control disabled mono wrap"
         />
 
 
@@ -39,30 +40,33 @@
             <label for="endTime" translate="DEXNS_end_time"></label>
             <input
                 name="endTime"
-                type="number"
-                min="1"
                 required
                 disabled
+                hidden
                 ng-model="input.endTime"
                 id="endTime"
-                class="disabled mono wrap remove-format"
+                class="form-control disabled mono wrap"
                 title="{{endTime}}"
             />
-
+            <input value="{{input.endTime | date}}" title="expiration date" disabled
+                   class="form-control disabled mono wrap"/>
 
             <label for="timeRemainingText" translate="DEXNS_ownership_expires"></label>
-
             <input
-                style="height: 5em;"
                 id="timeRemainingText"
                 type="text"
                 disabled
+                hidden
                 required
-                class="mono wrap remove-format"
+                class="form-control disabled mono wrap"
                 title="{{timeRemainingText}}"
                 name="timeRemainingText"
                 ng-model="input.timeRemainingText"
             />
+
+            <span class="mono wrap" style="height: 5rem;">
+                {{input.timeRemaining}}
+            </span>
         </div>
 
     </div>

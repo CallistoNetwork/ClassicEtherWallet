@@ -74,6 +74,8 @@ const dexnsNameDisplay = function(dexnsService, walletService, globalService) {
                 globalService.navigate(globalService.tabs.dexns.id);
             };
 
+            // todo: replace listener with $on when unlocking new wallet
+
             $scope.$watch(
                 () => walletService.wallet.getAddressString(),
                 (_val, oldVal) => {
@@ -82,8 +84,6 @@ const dexnsNameDisplay = function(dexnsService, walletService, globalService) {
                     }
                 }
             );
-
-            // getAssignation(walletService.wallet.getAddressString());
         }
     };
 };

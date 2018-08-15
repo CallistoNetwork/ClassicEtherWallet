@@ -1,6 +1,6 @@
 "use strict";
 
-import * as globalFuncs from "../globalFuncs";
+const globalFuncs = require("../globalFuncs");
 
 const dexnsNameDisplay = function(dexnsService, walletService, globalService) {
     return {

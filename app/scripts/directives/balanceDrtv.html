@@ -169,9 +169,11 @@
             </tbody>
             <tfoot>
             <tr>
-                <td class="text-right">BTC: <span class="mono wrap">{{walletService.wallet.btcBalance | number}}</span>
+                <td colspan="2" class="text-right">BTC: <span class="mono wrap">{{walletService.wallet.btcBalance | number}}</span>
                 </td>
-                <td class="text-right">USD: <span
+            </tr>
+            <tr>
+                <td colspan="2" class="text-right">USD: <span
                     class="mono wrap">{{walletService.wallet.usdBalance | currency:"$"}}</span></td>
             </tr>
             </tfoot>

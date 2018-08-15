@@ -1,6 +1,6 @@
 "use strict";
 
-import AddressOnlyWallet from "../AddressOnlyWallet";
+var AddressOnlyWallet = require("../AddressOnlyWallet");
 
 const decryptWalletCtrl = function($scope, $sce, walletService, globalService) {
     $scope.walletType = "";
@@ -8,8 +8,7 @@ const decryptWalletCtrl = function($scope, $sce, walletService, globalService) {
     $scope.filePassword = "";
     $scope.fileContent = "";
     $scope.isSSL = window.location.protocol === "https:";
-    $scope.ajaxReq = ajaxReq;
-    $scope.nodeType = $scope.ajaxReq.type;
+    $scope.nodeType = ajaxReq.type;
 
     $scope.HDWallet = Object.assign({}, globalFuncs.HDWallet, {
         numWallets: 0,
@@ -20,21 +19,9 @@ const decryptWalletCtrl = function($scope, $sce, walletService, globalService) {
         dPath: globalFuncs.HDWallet.defaultDPath
     });
 
-    if (globalService.currentTab === globalService.tabs.viewWalletInfo.id) {
-        const addr = [
-            globalFuncs.urlGet("address", null),
-            globalFuncs.urlGet("addr", null)
-        ].find(i => i);
-
-        if (addr) {
-            $scope.addressOnly = addr;
-
-            $scope.decryptAddressOnly();
-        }
-    }
     $scope.mnemonicModel = new Modal(document.getElementById("mnemonicModel"));
     $scope.$watch("ajaxReq.type", function() {
-        $scope.nodeType = $scope.ajaxReq.type;
+        $scope.nodeType = ajaxReq.type;
         $scope.setdPath();
     });
     $scope.$watch("walletType", function() {
@@ -375,6 +362,18 @@ const decryptWalletCtrl = function($scope, $sce, walletService, globalService) {
             return key.slice(2);
         }
         return key;
+    }
+
+    if (globalService.currentTab === globalService.tabs.viewWalletInfo.id) {
+        const addr =
+            globalFuncs.urlGet("address", null) ||
+            globalFuncs.urlGet("addr", null);
+
+        if (addr && Validator.isValidAddress(addr)) {
+            $scope.addressOnly = addr;
+
+            $scope.decryptAddressOnly();
+        }
     }
 };
 module.exports = decryptWalletCtrl;

@@ -1,7 +1,6 @@
 <aside ng-controller="walletBalanceCtrl">
-
-    <ul>
-        <li class="block" style="list-style: none;">
+    <div ng-if="walletService && walletService.wallet && walletService.wallet.getAddressString();">
+        <div class="block">
             <h5 translate="sidebar_AccountAddr">Account Address</h5>
             <div class="account-info">
                 <div ng-click="copyToClipboard('addr')" class="pointer copier">
@@ -9,9 +8,9 @@
                     <div class="addressIdenticon med float" blockie-address="{{wallet.getAddressString()}}"
                          watch-var="wallet"></div>
                     <span
-                            id="addr"
-                            class="mono wrap"
-                            ng-click="copyToClipboard('addr')"
+                        id="addr"
+                        class="mono wrap"
+                        ng-click="copyToClipboard('addr')"
                     >{{wallet.getChecksumAddressString()}}</span>
 
                     <div class="transition-display">
@@ -20,30 +19,30 @@
                     </div>
                 </div>
                 <span
-                        ng-class="displaySuccess > 0 ? 'show-viz' : ''"
-                        class="text-success transition-display"
-                        translate="ADDR_COPY"
+                    ng-class="displaySuccess > 0 ? 'show-viz' : ''"
+                    class="text-success transition-display"
+                    translate="ADDR_COPY"
                 >
             </span>
             </div>
 
-            <div ng-if="walletService && walletService.wallet && walletService.wallet.getAddressString();">
 
-                <dexns-name-display></dexns-name-display>
-
-            </div>
+            <form name="dexnsNameDisplay" dexns-name-display>
+            </form>
 
             <div ng-show="showDisplayOnTrezor()">
                 <h5 translate="sidebar_DisplayOnTrezor">Display address on TREZOR</h5>
                 <ul class="account-info">
-                    <li><a href="" ng-click="displayOnTrezor()" translate="sidebar_DisplayOnTrezor">Display address on
+                    <li><a href="" ng-click="displayOnTrezor()" translate="sidebar_DisplayOnTrezor">Display address
+                        on
                         TREZOR</a></li>
                 </ul>
             </div>
             <div ng-show="showDisplayOnLedger()">
                 <h5 translate="sidebar_DisplayOnLedger">Display address on Ledger</h5>
                 <ul class="account-info">
-                    <li><a href="" ng-click="displayOnLedger()" translate="sidebar_DisplayOnLedger">Display address on
+                    <li><a href="" ng-click="displayOnLedger()" translate="sidebar_DisplayOnLedger">Display address
+                        on
                         Ledger</a></li>
                 </ul>
             </div>
@@ -171,7 +170,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="https://ethplorer.io/address/{{wallet.getAddressString()}}" target="_blank" rel="noopener">
+                    <a href="https://ethplorer.io/address/{{wallet.getAddressString()}}" target="_blank"
+                       rel="noopener">
                         Tokens (Ethplorer.io)
                     </a>
                 </li>
@@ -186,9 +186,9 @@
 
             <a
 
-                    ng-click="globalService.currentTab = globalService.tabs.swap.id"
-                    ng-show="slide === 1"
-                    class="block swap--btc ad-wrapper"
+                ng-click="globalService.currentTab = globalService.tabs.swap.id"
+                ng-show="slide === 1"
+                class="block swap--btc ad-wrapper"
 
             >
 
@@ -278,9 +278,9 @@
                 <div class="custom-token-fields" ng-show="customTokenField">
                     <div class="row">
                         <address-field
-                                placeholder="mewsupport.eth"
-                                var-name="localToken.contractAdd"
-                                labelTranslated="TOKEN_Addr"
+                            placeholder="mewsupport.eth"
+                            var-name="localToken.contractAdd"
+                            labelTranslated="TOKEN_Addr"
                         >
                         </address-field>
                     </div>
@@ -330,14 +330,15 @@
                             <li><strong>Network:</strong> {{ localToken.network }}</li>
                             <li><strong>Decimals:</strong> {{ localToken.decimals }}</li>
                             <li class="wrap"><strong>Contract Address:</strong> <a
-                                    href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', localToken.contractAdd)}}"
-                                    target="_blank" rel="noopener">
+                                href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', localToken.contractAdd)}}"
+                                target="_blank" rel="noopener">
                                 {{ localToken.contractAdd }}
                             </a></li>
                         </ul>
                         </p>
                         <div>
-                            <button class="btn btn-primary btn-xs" ng-click="saveTokenToLocal()" translate="x_Save">Save
+                            <button class="btn btn-primary btn-xs" ng-click="saveTokenToLocal()" translate="x_Save">
+                                Save
                             </button>
                             <div ng-bind-html="validateLocalToken"></div>
                         </div>
@@ -360,6 +361,6 @@
                     </div>
                 </div>
             </div>
-        </li>
-    </ul>
+        </div>
+    </div>
 </aside>

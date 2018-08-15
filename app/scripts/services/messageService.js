@@ -7,7 +7,9 @@ const MESSAGE_STALING_PERIOD = 2160000; // 25 days
 
 const LOCAL_STORAGE_KEY = "@messages@";
 
-const CONTRACT_ADDRESS = "0x6A77417FFeef35ae6fe2E9d6562992bABA47a676";
+const CONTRACT_ADDRESS = ethUtil.toChecksumAddress(
+    "0x6A77417FFeef35ae6fe2E9d6562992bABA47a676"
+);
 
 class Message {
     constructor({ from, to, text, time, index }) {
@@ -21,6 +23,13 @@ class Message {
     }
 }
 
+const CONTRACT = require("../abiDefinitions/etcAbi").find(
+    contract => ethUtil.toChecksumAddress(contract.address) === CONTRACT_ADDRESS
+);
+
+if (!CONTRACT) {
+    throw new Error("ERROR FINDING CONTRACT: " + CONTRACT_ADDRESS);
+}
 const messageService = function() {
     this.MESSAGE_STALING_PERIOD = MESSAGE_STALING_PERIOD; // 25 days
 
@@ -28,18 +37,11 @@ const messageService = function() {
         new Date().getTime() - MESSAGE_STALING_PERIOD * 1000
     ).getTime();
 
-    var CONTRACT = nodes.nodeList.etc_ethereumcommonwealth_geth.abiList.find(
-        contract =>
-            contract.address.toLowerCase() === CONTRACT_ADDRESS.toLowerCase()
+    this.CONTRACT = new Contract(
+        CONTRACT.abi,
+        CONTRACT.address,
+        nodes.nodeTypes.ETC
     );
-
-    if (!CONTRACT) {
-        throw new Error("ERROR FINDING CONTRACT: " + CONTRACT_ADDRESS);
-    }
-
-    this.CONTRACT = Object.assign({}, CONTRACT, {
-        abi: JSON.parse(CONTRACT.abi)
-    });
 
     this.saveMessages = function saveMessages() {
         let messageSet_ = messageSet(this.messages);
@@ -121,10 +123,6 @@ const messageService = function() {
 
         return this.messages;
     };
-
-    this.message_staling_period = new Date(
-        new Date().getTime() - MESSAGE_STALING_PERIOD * 1000
-    ).getTime();
     this.openedModals = [];
     this.messages = [];
     this.messagesList = {};

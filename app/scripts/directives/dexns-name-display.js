@@ -1,17 +1,31 @@
 "use strict";
 
+import * as globalFuncs from "../globalFuncs";
+
 const dexnsNameDisplay = function(dexnsService, walletService, globalService) {
     return {
+        require: "form",
+        restrict: "A",
         template: require("./dexns-name-display.html"),
-        link: function($scope) {
-            $scope.dexnsName = "";
+        link: function($scope, e, attr, form) {
+            $scope.input = {
+                address: walletService.wallet.getAddressString(),
+                dexnsName: "",
+                endTime: 0,
+                timeRemainingText: ""
+            };
 
-            $scope.endTime = 0;
+            form.address.$asyncValidators.validDexnsName = getAssignation;
 
-            $scope.timeRemaining = "";
+            form.dexnsName.$asyncValidators.timeRemaining = endTimeOf;
+
+            form.endTime.$validators.endTime = _val =>
+                new Date() <= new Date(_val);
 
             function getAssignation(addr) {
-                dexnsService.storageContract
+                if (!addr) return Promise.reject(addr);
+
+                return dexnsService.storageContract
                     .call("assignation", {
                         inputs: [addr]
                     })
@@ -19,55 +33,57 @@ const dexnsNameDisplay = function(dexnsService, walletService, globalService) {
                         const addr = result[0].value;
 
                         if (
-                            !(
-                                addr ===
-                                    "0x0000000000000000000000000000000000000000" ||
-                                addr === "0x0"
-                            )
+                            ![
+                                "0x0000000000000000000000000000000000000000",
+                                "0x0",
+                                ""
+                            ].includes(addr)
                         ) {
-                            $scope.dexnsName = addr;
+                            $scope.input.dexnsName = addr;
+
+                            return Promise.resolve(addr);
+                        } else {
+                            return Promise.reject(addr);
                         }
                     });
             }
 
-            function endTimeOf(_name = "dexaran") {
-                dexnsService.feContract
+            function endTimeOf(_name) {
+                if (!_name) return Promise.reject(_name);
+
+                return dexnsService.feContract
                     .call("endtimeOf", { inputs: [_name] })
                     .then(result => {
-                        $scope.endTime = result[0].value * 1000;
+                        const endTime = result[0].value * 1000;
 
-                        return $scope.endTime;
+                        const { timeRemaining, rem } = globalFuncs.timeRem(
+                            endTime
+                        );
+
+                        Object.assign($scope.input, {
+                            timeRemainingText: timeRemaining,
+                            endTime
+                        });
+
+                        return rem ? Promise.resolve(rem) : Promise.reject(rem);
                     })
-                    .then(endTime => timeRem(endTime));
-            }
-
-            function timeRem(timeUntil) {
-                const { timeRemaining } = globalFuncs.timeRem(timeUntil);
-
-                $scope.timeRemaining = timeRemaining;
+                    .catch(Promise.reject);
             }
 
             $scope.goToDexns = function() {
-                globalService.currentTab = globalService.tabs.dexns.id;
-                location.hash = globalService.tabs.dexns.url;
+                globalService.navigate(globalService.tabs.dexns.id);
             };
 
-            $scope.$watch("dexnsName", function(val) {
-                if (val) {
-                    endTimeOf(val);
-                }
-            });
-
             $scope.$watch(
-                function() {
-                    return walletService.wallet.getAddressString();
-                },
-                function(val) {
-                    getAssignation(val);
+                () => walletService.wallet.getAddressString(),
+                (_val, oldVal) => {
+                    if (!angular.equals(_val, oldVal)) {
+                        Object.assign($scope.input, { address: _val });
+                    }
                 }
             );
 
-            getAssignation(walletService.wallet.getAddressString());
+            // getAssignation(walletService.wallet.getAddressString());
         }
     };
 };

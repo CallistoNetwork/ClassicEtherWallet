@@ -1,41 +1,73 @@
-<div>
-    <label for="dexnsName" translate="DEXNS_name">
-        DexNS Name
-    </label>
-    <div ng-show="dexnsName">
+<input
+    hidden
+    title="address"
+    id="address"
+    name="address"
+    required
+    ng-model="input.address"
+/>
+<div ng-show="dexnsNameDisplay.address.$pending.validDexnsName" class="alert alert-info">
+    loading dexns name....
+</div>
 
-        <span id="dexnsName" class="form-control disabled mono wrap">
-        {{dexnsName}}
-        </span>
+<div ng-show="!dexnsNameDisplay.address.$pending.validDexnsName">
+
+    <div ng-show="dexnsNameDisplay.address.$valid">
+
+        <label for="dexnsName" translate="DEXNS_name">
+            DexNS Name
+        </label>
+        <input
+            type="text"
+            name="dexnsName"
+            id="dexnsName"
+            required
+            ng-model="input.dexnsName"
+            class="mono wrap remove-format"
+        />
 
 
-        <div ng-show="endTime && timeRemaining">
-            <label for="endTime" translate="DEXNS_end_time"></label>
-
-            <span id="endTime" class="form-control disabled mono wrap" title="{{endTime}}">
-                {{endTime | date}}
-            </span>
-
-
-            <label for="timeRemaining" translate="DEXNS_ownership_expires"></label>
-
-            <span
-                    style="height: 5em;"
-                    id="timeRemaining"
-                    class="form-control mono wrap"
-                    title="{{timeRemaining}}"
-
-            >
-                <small>
-                    {{timeRemaining}}
-                </small>
-
-            </span>
+        <div ng-show="dexnsNameDisplay.dexnsName.$pending.timeRemaining" class="alert alert-info">
+            loading name details...
         </div>
+        <div ng-show="!dexnsNameDisplay.dexnsName.$pending.timeRemaining">
+
+            <div ng-show="dexnsNameDisplay.dexnsName.$error.timeRemaining"
+                 class="text-warning">
+                Warning! Expired name.
+            </div>
+            <label for="endTime" translate="DEXNS_end_time"></label>
+            <input
+                name="endTime"
+                type="number"
+                min="1"
+                required
+                disabled
+                ng-model="input.endTime"
+                id="endTime"
+                class="disabled mono wrap remove-format"
+                title="{{endTime}}"
+            />
+
+
+            <label for="timeRemainingText" translate="DEXNS_ownership_expires"></label>
+
+            <input
+                style="height: 5em;"
+                id="timeRemainingText"
+                type="text"
+                disabled
+                required
+                class="mono wrap remove-format"
+                title="{{timeRemainingText}}"
+                name="timeRemainingText"
+                ng-model="input.timeRemainingText"
+            />
+        </div>
+
     </div>
-
-
-    <div ng-show="!dexnsName">
+    <div ng-show="dexnsNameDisplay.address.$error.validDexnsName"
+         class="alert alert-warning">
         <span translate="DEXNS_href">
             You don't have a Name yet.
         You can register one for your address
@@ -48,3 +80,5 @@
     </div>
 </div>
 
+
+dexnsNameDisplay <code>{{dexnsNameDisplay | json}}</code>

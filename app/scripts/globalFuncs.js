@@ -480,6 +480,8 @@ globalFuncs.getWalletPath = function(
                 return globalFuncs.HDWallet.hwExpansePath;
             case nodes.nodeTypes.UBQ:
                 return globalFuncs.HDWallet.hwUbqPath;
+            case nodes.nodeTypes.MUSIC:
+                return globalFuncs.HDWallet.hwMusicoinPath;
             case nodes.nodeTypes.PIRL:
                 return globalFuncs.HDWallet.hwPirlPath;
             case nodes.nodeTypes.AKA:

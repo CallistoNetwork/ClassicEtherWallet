@@ -473,6 +473,8 @@ globalFuncs.getWalletPath = function(
                 return globalFuncs.HDWallet.ledgerPath;
             case nodes.nodeTypes.ETC:
                 return globalFuncs.HDWallet.ledgerClassicPath;
+            case nodes.nodeTypes.CLO:
+                return globalFuncs.HDWallet.hwCallistoPath;
             case nodes.nodeTypes.EXP:
                 return globalFuncs.HDWallet.hwExpansePath;
             case nodes.nodeTypes.UBQ:

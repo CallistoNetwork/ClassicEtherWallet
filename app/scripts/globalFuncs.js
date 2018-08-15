@@ -460,6 +460,7 @@ globalFuncs.HDWallet = {
     hwMusicoinPath: "m/44'/184'/0'/0", // first address: m/44'/184'/0'/0/0
     hwRskPath: "m/44'/137'/0'/0", // first address : m/44'/137'/0'/0/0
     hwESNetworkPath: "m/44'/31102'/0'/0", // first address : m/44'/31102'/0'/0/0
+    hwAkromaPath: "m/44'/200625'/0'/0", // first address: m/44'/200625'/0'/0/0
     hwPirlPath: "m/44'/164'/0'/0" // first address: m/44'/164'/0'/0/0
 };
 
@@ -481,6 +482,8 @@ globalFuncs.getWalletPath = function(
                 return globalFuncs.HDWallet.hwUbqPath;
             case nodes.nodeTypes.PIRL:
                 return globalFuncs.HDWallet.hwPirlPath;
+            case nodes.nodeTypes.AKA:
+                return globalFuncs.HDWallet.hwAkromaPath;
             default:
                 return globalFuncs.HDWallet.ledgerPath;
         }
@@ -518,6 +521,8 @@ globalFuncs.getWalletPath = function(
                 return globalFuncs.HDWallet.hwESNetworkPath;
             case nodes.nodeTypes.PIRL:
                 return globalFuncs.HDWallet.hwPirlPath;
+            case nodes.nodeTypes.AKA:
+                return globalFuncs.HDWallet.hwAkromaPath;
             default:
                 return globalFuncs.HDWallet.defaultDPath;
         }
@@ -551,6 +556,8 @@ globalFuncs.getWalletPath = function(
                 return globalFuncs.HDWallet.hwESNetworkPath;
             case nodes.nodeTypes.PIRL:
                 return globalFuncs.HDWallet.hwPirlPath;
+            case nodes.nodeTypes.AKA:
+                return globalFuncs.HDWallet.hwAkromaPath;
             default:
                 return globalFuncs.HDWallet.defaultDPath;
         }

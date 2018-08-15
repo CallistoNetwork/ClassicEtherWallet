@@ -23,6 +23,7 @@ nodes.nodeTypes = {
     ETSC: "ETSC",
     MUSIC: "MUSIC",
     ESN: "ESN",
+    AKA: "AKA",
     Custom: "CUSTOM ETH"
 };
 nodes.tldTypes = {
@@ -397,6 +398,19 @@ nodes.nodeList = {
         estimateGas: true,
         service: "ethersocial.org",
         lib: new nodes.customNode("https://api.esn.gonspool.com", "")
+    },
+    aka: {
+        name: "AKA",
+        blockExplorerTX: "https://akroma.io/explorer/transaction/[[txHash]]",
+        blockExplorerAddr: "https://akroma.io/explorer/address/[[address]]",
+        type: nodes.nodeTypes.AKA,
+        eip155: true,
+        chainId: 200625,
+        tokenList: require("./tokens/akromaTokens.json"),
+        abiList: require("./abiDefinitions/akromaAbi.json"),
+        estimateGas: true,
+        service: "akroma.io",
+        lib: new nodes.customNode("https://rpc.akroma.io", "")
     }
 };
 module.exports = nodes;

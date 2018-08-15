@@ -1,11 +1,13 @@
 "use strict";
-var decryptWalletCtrl = function($scope, $sce, walletService) {
+
+import AddressOnlyWallet from "../AddressOnlyWallet";
+
+const decryptWalletCtrl = function($scope, $sce, walletService, globalService) {
     $scope.walletType = "";
     $scope.requireFPass = $scope.requirePPass = $scope.showFDecrypt = $scope.showPDecrypt = $scope.showAOnly = $scope.showParityDecrypt = false;
     $scope.filePassword = "";
     $scope.fileContent = "";
-    $scope.Validator = Validator;
-    $scope.isSSL = window.location.protocol == "https:";
+    $scope.isSSL = window.location.protocol === "https:";
     $scope.ajaxReq = ajaxReq;
     $scope.nodeType = $scope.ajaxReq.type;
 
@@ -17,6 +19,19 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
         hdk: null,
         dPath: globalFuncs.HDWallet.defaultDPath
     });
+
+    if (globalService.currentTab === globalService.tabs.viewWalletInfo.id) {
+        const addr = [
+            globalFuncs.urlGet("address", null),
+            globalFuncs.urlGet("addr", null)
+        ].find(i => i);
+
+        if (addr) {
+            $scope.addressOnly = addr;
+
+            $scope.decryptAddressOnly();
+        }
+    }
     $scope.mnemonicModel = new Modal(document.getElementById("mnemonicModel"));
     $scope.$watch("ajaxReq.type", function() {
         $scope.nodeType = $scope.ajaxReq.type;
@@ -92,7 +107,7 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
         else $scope.showParityDecrypt = false;
     };
     $scope.onAddressChange = function() {
-        $scope.showAOnly = $scope.Validator.isValidAddress($scope.addressOnly);
+        $scope.showAOnly = Validator.isValidAddress($scope.addressOnly);
     };
     $scope.setHDAddresses = function(start, limit) {
         $scope.HDWallet.wallets = [];
@@ -201,7 +216,7 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
                 );
                 walletService.password = $scope.privPassword;
             } else if ($scope.showPDecrypt && !$scope.requirePPass) {
-                if (!$scope.Validator.isValidHex($scope.manualprivkey)) {
+                if (!Validator.isValidHex($scope.manualprivkey)) {
                     $scope.notifier.danger(globalFuncs.errorMsgs[37]);
                     return;
                 }
@@ -230,22 +245,14 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
             $scope.notifier.info(globalFuncs.successMsgs[1]);
     };
     $scope.decryptAddressOnly = function() {
-        if ($scope.Validator.isValidAddress($scope.addressOnly)) {
-            var tempWallet = new Wallet();
-            $scope.wallet = {
-                type: "addressOnly",
-                address: $scope.addressOnly,
-                getAddressString: function() {
-                    return this.address;
-                },
-                getChecksumAddressString: function() {
-                    return ethUtil.toChecksumAddress(this.getAddressString());
-                },
-                setBalance: tempWallet.setBalance,
-                setTokens: tempWallet.setTokens
-            };
-            $scope.notifier.info(globalFuncs.successMsgs[1]);
-            walletService.wallet = $scope.wallet;
+        if (Validator.isValidAddress($scope.addressOnly)) {
+            Object.assign(walletService, {
+                wallet: new AddressOnlyWallet($scope.addressOnly)
+            });
+
+            uiFuncs.notifier.info(globalFuncs.successMsgs[1]);
+        } else {
+            uiFuncs.notifier.danger(globalFuncs.errorMsgs[3]);
         }
     };
     $scope.HWWalletCreate = function(publicKey, chainCode, walletType, path) {

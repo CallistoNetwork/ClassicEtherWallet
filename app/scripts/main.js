@@ -248,6 +248,7 @@ app.controller("decryptWalletCtrl", [
     "$scope",
     "$sce",
     "walletService",
+    "globalService",
     decryptWalletCtrl
 ]);
 app.controller("viewWalletCtrl", [
@@ -313,7 +314,6 @@ app.controller("walletBalanceCtrl", [
     "modalService",
     "coldStakingService",
     "messageService",
-    "lookupService",
     walletBalanceCtrl
 ]);
 app.controller("helpersCtrl", ["$scope", helpersCtrl]);

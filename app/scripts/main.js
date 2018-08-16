@@ -148,6 +148,8 @@ var transactionCost = require("./directives/transactionCostDtrv");
 var balanceDrtv = require("./directives/balanceDrtv");
 var arrayInputDrtv = require("./directives/arrayInputDrtv");
 var newMessagesDrtv = require("./directives/newMessagesDrtv");
+const sendTransactionFormDrtv = require("./directives/sendTransactionForm");
+const dexnsTokenRegistrationForm = require("./directives/dexns-token-registration");
 if (IS_CX) {
     var addWalletCtrl = require("./controllers/CX/addWalletCtrl");
     var cxDecryptWalletCtrl = require("./controllers/CX/cxDecryptWalletCtrl");
@@ -202,7 +204,7 @@ app.factory("lookupService", ["dexnsService", "walletService", lookupService]);
 app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
 
-const dexnsTokenRegistrationForm = require("./directives/dexns-token-registration");
+app.directive("sendTransactionForm", sendTransactionFormDrtv);
 app.directive("dexnsTokenRegistrationForm", dexnsTokenRegistrationForm);
 app.directive("dexnsNameDisplay", [
     "dexnsService",

@@ -132,6 +132,18 @@ nodes.nodeList = {
         service: "gastracker.io",
         lib: new nodes.customNode("https://web3.gastracker.io/", "")
     },
+    etc_ethereumclassic_network: {
+        name: "ETC",
+        blockExplorerTX: "https://gastracker.io/tx/[[txHash]]",
+        blockExplorerAddr: "https://gastracker.io/addr/[[address]]",
+        type: nodes.nodeTypes.ETC,
+        eip155: true,
+        chainId: 61,
+        tokenList: require("./tokens/etcTokens.json"),
+        abiList: require("./abiDefinitions/etcAbi.json"),
+        service: "Ethereum Cooperative",
+        lib: new nodes.customNode("https://ethereumclassic.network/", "")
+    },
     etc_testnet: {
         name: "ETC Testnet",
         type: nodes.nodeTypes.ETCT,

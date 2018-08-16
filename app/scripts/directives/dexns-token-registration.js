@@ -29,6 +29,14 @@ module.exports = function dexnsTokenRegistrationForm() {
                 }
             };
 
+            form.tokenNetwork.$validators.tokenNetwork = val => {
+                const found = Object.values(nodes.nodeList).find(
+                    node => node.type === val
+                );
+
+                return Boolean(found);
+            };
+
             form.destination.$validators.destination = _addr =>
                 Validator.isValidAddress(_addr);
         }

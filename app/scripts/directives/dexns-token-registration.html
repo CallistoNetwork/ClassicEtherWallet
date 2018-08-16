@@ -1,4 +1,4 @@
-<label for="tokenName">
+<label for="tokenName" translate="DEXNS_TOKEN_NAME_LABEL">
     Token Name (DexNS name)
 </label>
 <!-- TOKEN NAME -->
@@ -22,7 +22,8 @@
 
     <div class="col-sm-4">
         <h3 class="text-info" ng-show="!!tokenRegistration.$pending.tokenName">
-            checking {{input.tokenName}}
+            <span translate="LOADING"></span>
+            {{input.tokenName}}
         </h3>
 
         <div ng-show="tokenRegistration.tokenName.$dirty && !tokenRegistration.$pending.tokenName"
@@ -37,7 +38,7 @@
 
 <!-- TOKEN NAME -->
 
-<label for="destination">Destination</label>
+<label for="destination" translate="Destination">Destination</label>
 <div class="row">
     <div class="col-xs-11">
 
@@ -63,9 +64,16 @@
 </div>
 
 
-<label for="tokenNetwork">token network</label>
+<label for="tokenNetwork" translate="TOKEN_NETWORK">token network</label>
 
-<select class="form-control" id="tokenNetwork" name="tokenNetwork" ng-model="input.tokenNetwork">
+<select class="form-control"
+        id="tokenNetwork"
+        name="tokenNetwork"
+        ng-model="input.tokenNetwork"
+        required
+        ng-class="tokenRegistration.tokenNetwork.$valid ? 'is-valid' : 'is-invalid'"
+>
+    <option value="">---Please Select---</option>
     <option ng-repeat="node in nodeList"
             value="{{node}}"
     >{{node}}
@@ -92,9 +100,9 @@
 
 <hr/>
 
-<h5>Optional token parameters</h5>
+<h5 translate="OPTIONAL_PARAMETERS">Optional parameters</h5>
 
-<label for="abi">
+<label for="abi" translate="CONTRACT_Json">
     abi
 </label>
 <textarea
@@ -106,18 +114,20 @@
     class="form-control"
     ng-class="tokenRegistration.abi.$valid ? 'is-valid' : 'is-invalid'"
 ></textarea>
-<label for="link">
+<label for="link" translate="LINK">
     link
 </label>
 <input
     placeholder="https://bitcointalk.org/"
-    type="url" name="link"
+    type="url"
+    name="link"
+    autocomplete="off"
     id="link"
     ng-model="input.link"
     class="form-control"
     ng-class="tokenRegistration.link.$valid ? 'is-valid' : 'is-invalid'"
 />
-<label for="sourceCode">
+<label for="sourceCode" translate="SOURCE_CODE">
     sourceCode
 </label>
 <input
@@ -125,23 +135,34 @@
     placeholder="https://github.com/"
     type="url"
     name="sourceCode"
+    autocomplete="off"
     id="sourceCode"
     ng-model="input.sourceCode"
     class="form-control"
     ng-class="tokenRegistration.sourceCode.$valid ? 'is-valid' : 'is-invalid'"
 
 />
-<label for="info">
+<label for="info" translate="INFO">
     info
 </label>
-<input name="info" id="info"
-       ng-model="input.info"
-       class="form-control"
-       placeholder="brief description of the token"
+<input
+    name="info"
+    type="text"
+    autocomplete="off"
+    spellcheck="true"
+    id="info"
+    ng-model="input.info"
+    class="form-control"
+    ng-class="tokenRegistration.info.$valid ? 'is-valid' : 'is-invalid'"
+    placeholder="brief description of the token"
 />
 
 
 <button
-    ng-disabled="tokenRegistration.$invalid"
-    type="submit" class="btn btn-primary">Register Token
+    ng-disabled="!tokenRegistration.$valid"
+    type="submit"
+    class="btn btn-primary"
+    translate="REGISTER_TOKEN"
+>
+    Register Token
 </button>

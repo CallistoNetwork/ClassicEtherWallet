@@ -3,6 +3,15 @@
 var en = function() {};
 en.code = "en";
 en.data = {
+    LINK: "Link",
+    INFO: "Info",
+    SOURCE_CODE: "Source Code",
+    LOADING: "Loading",
+    Destination: "Destination",
+    TOKEN_NETWORK: "Token Network",
+    OPTIONAL_PARAMETERS: "Optional parameters",
+    REGISTER_TOKEN: "Register Token",
+    DEXNS_TOKEN_NAME_LABEL: "Token Name (DexNS name)",
     DEXNS_AVAILABLE_RESPONSE_TEXT: "This name is available for registration.",
     DEXNS_UNAVAILABLE_RESPONSE_TEXT:
         "This name is already registered! You should try to register another name.",

@@ -119,6 +119,7 @@
             ng-show="dexns_status === 2"
             ng-submit="handleRegisterAndUpdateName(tokenRegistration)"
             class="capitalize-form-label"
+            novalidate
             name="tokenRegistration"
             dexns-token-registration-form
         >

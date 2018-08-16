@@ -17,9 +17,6 @@ const dexnsNameDisplay = function(dexnsService, walletService, globalService) {
 
             form.dexnsName.$asyncValidators.timeRemaining = endTimeOf;
 
-            form.endTime.$validators.endTime = _val =>
-                new Date() <= new Date(_val);
-
             function getAssignation(addr) {
                 if (!addr) return Promise.reject(addr);
 

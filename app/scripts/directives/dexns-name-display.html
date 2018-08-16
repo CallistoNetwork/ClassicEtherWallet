@@ -12,7 +12,6 @@
 
 
 <div ng-show="!dexnsNameDisplay.address.$pending.validDexnsName">
-
     <div ng-show="dexnsNameDisplay.address.$valid">
 
         <label for="dexnsName" translate="DEXNS_name">
@@ -28,23 +27,9 @@
             class="form-control form-control-sm mono wrap"
         />
 
-        <div ng-show="dexnsNameDisplay.dexnsName.$pending.timeRemaining" class="alert alert-info"
-             translate="DEXNS_DETAILS_LOADING">
-            Loading DexNS name details...
-        </div>
+        <div ng-show="!dexnsNameDisplay.dexnsName.$pending.timeRemaining &&
+        dexnsNameDisplay.dexnsName.$valid">
 
-
-        <div ng-show="!dexnsNameDisplay.dexnsName.$pending.timeRemaining">
-            <input
-                hidden
-                title=""
-                name="endTime"
-                required
-                disabled
-                ng-model="input.endTime"
-                id="endTime"
-                class="ng-hide"
-            />
             <label for="endTimeDisplay" translate="DEXNS_end_time"></label>
             <input
                 id="endTimeDisplay"
@@ -54,6 +39,7 @@
                 class="form-control form-control-sm mono wrap"/>
 
             <label for="timeRemainingText" translate="DEXNS_ownership_expires"></label>
+
             <input
                 id="timeRemainingText"
                 type="text"
@@ -67,8 +53,16 @@
             />
 
         </div>
-
     </div>
+
+    <!-- LOADING DISPLAYS -->
+    <div ng-show="dexnsNameDisplay.dexnsName.$pending.timeRemaining" class="alert alert-info"
+         translate="DEXNS_DETAILS_LOADING">
+        Loading DexNS name details...
+    </div>
+
+    <!-- /LOADING DISPLAYS -->
+    <!-- ERROR DISPLAYS -->
     <div ng-show="dexnsNameDisplay.address.$error.validDexnsName"
          class="alert alert-warning">
         <span translate="DEXNS_href">
@@ -81,9 +75,14 @@
             here
         </a>
     </div>
-
     <div ng-show="dexnsNameDisplay.dexnsName.$error.timeRemaining"
-         class="text-warning" translate="DEXNS_EXPIRED_NAME">
-        Warning! Expired name
+         class="alert alert-warning">
+        <span translate="DEXNS_EXPIRED_NAME">Warning! Expired name</span>
+        <span>{{input.endTime | date}} </span>
     </div>
+
+    <!--  / ERROR DISPLAYS -->
+
+
 </div>
+

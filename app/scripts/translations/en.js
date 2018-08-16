@@ -6,6 +6,9 @@ en.data = {
     Network: "Network:",
     ADDR_COPY: "Address copied to clipboard!",
     COPY_TO_CLIPBOARD: "copy to clipboard",
+    DEXNS_NAME_LOADING: "Loading DexNS name...",
+    DEXNS_DETAILS_LOADING: "Loading DexNS name details...",
+    DEXNS_EXPIRED_NAME: "Warning! Expired name",
     DEXNS_href:
         "You don't have a Name yet.\n" +
         "You can register one for your address",

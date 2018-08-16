@@ -30,7 +30,7 @@
         </div>
 
 
-        <form name="dexnsNameDisplay" dexns-name-display>
+        <form name="dexnsNameDisplay" dexns-name-display novalidate>
         </form>
 
         <div ng-show="showDisplayOnTrezor()">
@@ -51,7 +51,7 @@
         </div>
 
 
-        <table class="table table-responsive table-striped">
+        <table class="table table-responsive">
             <caption translate="sidebar_AccountBal">Account Balance</caption>
             <thead>
             <tr ng-if="coldStakingService.validNetwork();">
@@ -168,12 +168,17 @@
 
             </tbody>
             <tfoot>
-            <tr>
-                <td colspan="2" class="text-right">BTC: <span class="mono wrap">{{walletService.wallet.btcBalance | number}}</span>
+            <tr
+            >
+                <td><i>Equivalent Values:</i></td>
+                <td class="text-right">BTC: <span class="mono wrap">{{walletService.wallet.btcBalance | number}}</span>
                 </td>
             </tr>
-            <tr>
-                <td colspan="2" class="text-right">USD: <span
+            <tr
+            >
+                <td
+                    style="border: none;"
+                    colspan="2" class="text-right">USD: <span
                     class="mono wrap">{{walletService.wallet.usdBalance | currency:"$"}}</span></td>
             </tr>
             </tfoot>
@@ -368,7 +373,7 @@
 
 
             </div>
-            <table class="table table-striped table-responsive">
+            <table class="table table-responsive">
                 <caption translate="sidebar_Equiv">Equivalent Values:</caption>
                 <tbody>
                 <tr>

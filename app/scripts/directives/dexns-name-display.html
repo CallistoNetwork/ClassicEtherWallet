@@ -6,8 +6,12 @@
     required
     ng-model="input.address"
 />
-<div ng-show="dexnsNameDisplay.address.$pending.validDexnsName" class="alert alert-info">
-    loading dexns name....
+<div ng-show="dexnsNameDisplay.address.$pending.validDexnsName" class="alert alert-info" translate="DEXNS_NAME_LOADING">
+    Loading DexNS name...
+</div>
+
+<div ng-show="dexnsNameDisplay.dexnsName.$pending.timeRemaining" class="alert alert-info" translate="DEXNS_DETAILS_LOADING">
+    Loading DexNS name details...
 </div>
 
 <div ng-show="!dexnsNameDisplay.address.$pending.validDexnsName">
@@ -28,15 +32,9 @@
         />
 
 
-        <div ng-show="dexnsNameDisplay.dexnsName.$pending.timeRemaining" class="alert alert-info">
-            loading name details...
-        </div>
         <div ng-show="!dexnsNameDisplay.dexnsName.$pending.timeRemaining">
 
-            <div ng-show="dexnsNameDisplay.dexnsName.$error.timeRemaining"
-                 class="text-warning">
-                Warning! Expired name.
-            </div>
+
             <label for="endTime" translate="DEXNS_end_time"></label>
             <input
                 name="endTime"
@@ -81,5 +79,10 @@
         >
             here
         </a>
+    </div>
+
+    <div ng-show="dexnsNameDisplay.dexnsName.$error.timeRemaining"
+         class="text-warning" translate="DEXNS_EXPIRED_NAME">
+        Warning! Expired name
     </div>
 </div>

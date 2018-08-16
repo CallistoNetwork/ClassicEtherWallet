@@ -1,7 +1,5 @@
 "use strict";
 
-const globalFuncs = require("../globalFuncs");
-
 const dexnsNameDisplay = function(dexnsService, walletService, globalService) {
     return {
         require: "form",
@@ -45,7 +43,8 @@ const dexnsNameDisplay = function(dexnsService, walletService, globalService) {
                         } else {
                             return Promise.reject(addr);
                         }
-                    });
+                    })
+                    .catch(Promise.reject);
             }
 
             function endTimeOf(_name) {

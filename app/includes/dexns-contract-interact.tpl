@@ -6,31 +6,31 @@
     <div class="btn-group">
         <a class="btn btn-default" ng-click="dropdownContracts = !dropdownContracts">
             {{selectedFunc == null ? "Select a function" : selectedFunc}}<i
-                class="caret"></i></a>
+            class="caret"></i></a>
         <ul class="dropdown-menu" ng-show="dropdownContracts">
             <li ng-repeat="func in visibleFuncList track by $index"
                 ng-class="func.stateMutability === 'view' ? 'btn-read' : 'btn-write'"
             ><a
-                    style="color: rgb(0,0,0);"
-                    ng-click="selectFunc(func);">{{func.name}}</a></li>
+                style="color: rgb(0,0,0);"
+                ng-click="selectFunc(func);">{{func.name}}</a></li>
         </ul>
     </div>
 
     <!-- Contract Input & Output -->
 
     <div
-            class="row"
-            ng-repeat="_function in visibleFuncList track by $index"
-            ng-show="selectedFunc === _function.name"
+        class="row"
+        ng-repeat="_function in visibleFuncList track by $index"
+        ng-show="selectedFunc === _function.name"
 
     >
 
 
         <!-- Input -->
         <form
-                ng-class="_function.stateMutability === 'view' ? 'col-sm-6' : 'col-sm-12'"
+            ng-class="_function.stateMutability === 'view' ? 'col-sm-6' : 'col-sm-12'"
 
-                ng-submit="handleSubmit(_function);"
+            ng-submit="handleSubmit(_function);"
         >
             <div ng-repeat="input in _function.inputs track by $index">
 
@@ -41,9 +41,9 @@
             </div>
 
             <button
-                    type="submit"
-                    class="btn"
-                    ng-class="_function.stateMutability === 'view' ? 'btn-read' : 'btn-write'"
+                type="submit"
+                class="btn"
+                ng-class="_function.stateMutability === 'view' ? 'btn-read' : 'btn-write'"
 
             >
                 {{_function.name}}
@@ -51,7 +51,6 @@
         </form>
 
         <div class="col-sm-6" ng-if="_function.stateMutability === 'view'">
-
 
             <div class="table-responsive">
 
@@ -63,17 +62,17 @@
 
 
                     <tr
-                            ng-if="_function.name === 'metadataOf'"
-                            ng-repeat="input in outputs[_function.name] track by $index"
-                            class="row"
+                        ng-if="_function.name === 'metadataOf'"
+                        ng-repeat="input in outputs[_function.name] track by $index"
+                        class="row"
                     >
                         <td>{{input.key}}</td>
 
                         <td ng-if="['link', 'source'].includes(input.key)"
                         >
                             <a
-                                    href="{{input.value}}"
-                                    target="_blank"
+                                href="{{input.value}}"
+                                target="_blank"
                             >
 
                                 {{input.value}}
@@ -103,19 +102,19 @@
             </div>
 
             <div
-                    ng-if="_function.name === 'metadataOf' && raw"
+                ng-if="_function.name === 'metadataOf' && raw"
             >
                 <label
-                        for="metadata"
+                    for="metadata"
                 >
                     Meta Data:
                 </label>
                 <textarea
-                        title="raw metadata"
-                        id="metadata"
-                        class="form-control"
-                        readonly
-                        rows="5"
+                    title="raw metadata"
+                    id="metadata"
+                    class="form-control"
+                    readonly
+                    rows="5"
                 >
                                 {{ raw }}
 

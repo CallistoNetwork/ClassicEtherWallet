@@ -141,7 +141,7 @@ nodes.nodeList = {
         chainId: 61,
         tokenList: require("./tokens/etcTokens.json"),
         abiList: require("./abiDefinitions/etcAbi.json"),
-        service: "Ethereum Cooperative",
+        service: "ETC Cooperative",
         lib: new nodes.customNode("https://ethereumclassic.network/", "")
     },
     etc_testnet: {

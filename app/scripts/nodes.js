@@ -23,6 +23,7 @@ nodes.nodeTypes = {
     ETSC: "ETSC",
     MUSIC: "MUSIC",
     ESN: "ESN",
+    AKA: "AKA",
     Custom: "CUSTOM ETH"
 };
 nodes.tldTypes = {
@@ -118,6 +119,30 @@ nodes.nodeList = {
         abiList: require("./abiDefinitions/etcAbi.json"),
         service: "Ethereum Commonwealth Parity",
         lib: new nodes.customNode("https://etc-parity.0xinfra.com/", "")
+    },
+    etc_gastracker: {
+        name: "ETC",
+        blockExplorerTX: "https://gastracker.io/tx/[[txHash]]",
+        blockExplorerAddr: "https://gastracker.io/addr/[[address]]",
+        type: nodes.nodeTypes.ETC,
+        eip155: true,
+        chainId: 61,
+        tokenList: require("./tokens/etcTokens.json"),
+        abiList: require("./abiDefinitions/etcAbi.json"),
+        service: "gastracker.io",
+        lib: new nodes.customNode("https://web3.gastracker.io/", "")
+    },
+    etc_ethereumclassic_network: {
+        name: "ETC",
+        blockExplorerTX: "https://gastracker.io/tx/[[txHash]]",
+        blockExplorerAddr: "https://gastracker.io/addr/[[address]]",
+        type: nodes.nodeTypes.ETC,
+        eip155: true,
+        chainId: 61,
+        tokenList: require("./tokens/etcTokens.json"),
+        abiList: require("./abiDefinitions/etcAbi.json"),
+        service: "ETC Cooperative",
+        lib: new nodes.customNode("https://ethereumclassic.network/", "")
     },
     etc_testnet: {
         name: "ETC Testnet",
@@ -397,6 +422,19 @@ nodes.nodeList = {
         estimateGas: true,
         service: "ethersocial.org",
         lib: new nodes.customNode("https://api.esn.gonspool.com", "")
+    },
+    aka: {
+        name: "AKA",
+        blockExplorerTX: "https://akroma.io/explorer/transaction/[[txHash]]",
+        blockExplorerAddr: "https://akroma.io/explorer/address/[[address]]",
+        type: nodes.nodeTypes.AKA,
+        eip155: true,
+        chainId: 200625,
+        tokenList: require("./tokens/akromaTokens.json"),
+        abiList: require("./abiDefinitions/akromaAbi.json"),
+        estimateGas: true,
+        service: "akroma.io",
+        lib: new nodes.customNode("https://rpc.akroma.io", "")
     }
 };
 module.exports = nodes;

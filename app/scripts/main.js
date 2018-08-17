@@ -149,6 +149,7 @@ var transactionCost = require("./directives/transactionCostDtrv");
 var balanceDrtv = require("./directives/balanceDrtv");
 var arrayInputDrtv = require("./directives/arrayInputDrtv");
 var newMessagesDrtv = require("./directives/newMessagesDrtv");
+const sendTransactionFormDrtv = require("./directives/sendTransactionForm");
 if (IS_CX) {
     var addWalletCtrl = require("./controllers/CX/addWalletCtrl");
     var cxDecryptWalletCtrl = require("./controllers/CX/cxDecryptWalletCtrl");
@@ -203,6 +204,7 @@ app.factory("lookupService", ["dexnsService", "walletService", lookupService]);
 app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
 
+app.directive("sendTransactionForm", sendTransactionFormDrtv);
 app.directive("officialityChecker", [officialityChecker]);
 app.directive("dexnsNameDisplay", [
     "dexnsService",
@@ -250,6 +252,7 @@ app.controller("decryptWalletCtrl", [
     "$scope",
     "$sce",
     "walletService",
+    "globalService",
     decryptWalletCtrl
 ]);
 app.controller("viewWalletCtrl", [
@@ -315,7 +318,6 @@ app.controller("walletBalanceCtrl", [
     "modalService",
     "coldStakingService",
     "messageService",
-    "lookupService",
     walletBalanceCtrl
 ]);
 app.controller("helpersCtrl", ["$scope", helpersCtrl]);

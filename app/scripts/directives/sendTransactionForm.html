@@ -1,0 +1,152 @@
+<div class="row form-group">
+    <address-field
+        placeholder="0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8"
+        var-name="tx.to"
+    />
+</div>
+
+<!-- Amount to Send -->
+<label translate="SEND_amount">Amount to Send:</label>
+<div class="input-group col-sm-11">
+    <input
+        type="text"
+        class="form-control"
+        placeholder="{{ 'SEND_amount_short' | translate }}"
+        ng-model="tx.value"
+        autocomplete="off"
+        spellcheck="false"
+        name="value"
+        required
+        ng-class="sendTransactionForm.value.$valid ? 'is-valid' : 'is-invalid'"
+    />
+    <div class="input-group-btn">
+        <a style="min-width: 170px"
+           class="btn btn-default dropdown-toggle"
+           ng-init="dropdownAmount = false;"
+           ng-click="dropdownAmount = !dropdownAmount"
+           ng-class="dropdownEnabled ? '' : 'disabled'"
+        >
+            <span class="{{'icon icon-' + ajaxReq.type.toLowerCase()}}"></span>
+            <strong>{{unitReadable}}<i class="caret"></i></strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownAmount">
+            <li><a ng-class="{true:'active'}[tx.sendMode=='ether']"
+                   ng-click="setSendMode('ether')">
+                <span class="{{'icon icon-' + ajaxReq.type.toLowerCase()}}"></span>
+                {{ajaxReq.type}}
+            </a>
+            </li>
+            <li ng-repeat="token in wallet.tokenObjs track by $index"
+                ng-show="token.balance!=0 && token.balance!='loading' || token.type!=='default' || tokenVisibility=='shown'">
+                <a ng-class="{true:'active'}[unitReadable == token.getSymbol()]"
+                   ng-click="setSendMode('token', $index, token.getSymbol())"> {{token.getSymbol()}} </a>
+            </li>
+
+        </ul>
+    </div>
+</div>
+<p><a ng-click="transferAllBalance()"><span class="strong" translate="SEND_TransferTotal">Send Entire Balance</span></a>
+</p>
+<!-- / Amount to Send -->
+
+<!-- Gas Limit -->
+<!-- fixme: link -->
+
+<div class="row form-group">
+    <div class="col-sm-11 clearfix">
+        <a class="account-help-icon"
+
+           href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-gas"
+           target="_blank" rel="noopener">
+            <img src="images/icon-help.svg" class="help-icon"/>
+            <p class="account-help-text" translate="GAS_LIMIT_Desc"></p>
+        </a>
+        <label translate="TRANS_gas"> Gas Limit: </label>
+        <input
+            type="text"
+            required
+            class="form-control"
+            placeholder="21000"
+            ng-model="tx.gasLimit"
+            autocomplete="off"
+            spellcheck="false"
+            name="gasLimit"
+            ng-change="gasLimitChanged=true"
+            ng-class="sendTransactionForm.gasLimit.$valid ? 'is-valid' : 'is-invalid'"/>
+    </div>
+</div>
+<!-- / Gas Limin-t -->
+
+<transaction-cost></transaction-cost>
+
+
+<!-- Advanced Option Panel -->
+<a ng-click="showAdvance=true" ng-show='globalService.currentTab==globalService.tabs.sendTransaction.id'>
+    <p class="strong" translate="TRANS_advanced"> + Advanced: Add Data </p>
+</a>
+
+<section ng-show="showAdvance">
+    <!-- Data -->
+    <div class="row form-group">
+        <div class="col-sm-11 clearfix" ng-show="tx.sendMode=='ether'">
+          <span class="account-help-icon">
+            <img src="images/icon-help.svg" class="help-icon"/>
+            <p class="account-help-text" translate="OFFLINE_Step2_Label_6b">This is optional.</p>
+          </span>
+            <label translate="TRANS_data"> Data: </label>
+            <input type="text"
+                   class="form-control"
+                   placeholder="0x6d79657468657277616c6c65742e636f6d20697320746865206265737421"
+                   ng-model="tx.data"
+                   name="data"
+                   ng-class="sendTransactionForm.data.$valid ? 'is-valid' : 'is-invalid'"/>
+        </div>
+    </div>
+    <!-- / Data -->
+
+</section>
+
+<!-- / Advanced Option Panel -->
+
+<a
+    ng-click="showLookup = !showLookup"
+    ng-init="showLookup = false;"
+>
+    <p class="strong">
+
+        <span>{{showLookup ? '-' : '+'}}</span>
+
+        <span translate="LOOKUP_SERVICE">Lookup Service</span>
+
+    </p>
+</a>
+
+<div ng-show="showLookup">
+    <lookup></lookup>
+</div>
+
+
+<div class="clearfix form-group">
+    <div class="well" ng-show="wallet!=null && customGasMsg!=''">
+        <p>
+            <small>A message regarding {{tx.to}}</small>
+        </p>
+        <p><strong> {{customGasMsg}} </strong></p>
+    </div>
+</div>
+
+<div class="row form-group">
+    <div class="col-xs-12 clearfix">
+        <button
+            type="submit"
+            ng-disabled="!validForm()"
+            class="btn btn-info btn-block"
+            ng-click="generateTx()"
+            translate="SEND_generate"
+        > Generate
+            Transaction
+        </button>
+    </div>
+</div>
+
+

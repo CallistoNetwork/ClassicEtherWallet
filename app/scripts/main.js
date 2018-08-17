@@ -332,8 +332,9 @@ app.controller("messagesCtrl", [
 app.controller("encryptCtrl", ["$scope", "walletService", encryptCtrl]);
 app.controller("backgroundNodeCtrl", [
     "$scope",
-    "backgroundNodeService",
     "$interval",
+    "$http",
+    "backgroundNodeService",
     backgroundNodeCtrl
 ]);
 

@@ -1,11 +1,6 @@
 "use strict";
 
-const backgroundNodeCtrl = function(
-    $scope,
-    $interval,
-    $http,
-    backgroundNodeService
-) {
+const backgroundNodeCtrl = function($scope, $interval, backgroundNodeService) {
     const changeBackgroundNode = () => {
         backgroundNodeService.changeBackgroundNode();
         healthCheck();
@@ -43,17 +38,18 @@ const backgroundNodeCtrl = function(
             .healthCheck()
             .then(result => {
                 if (300 <= result.status) {
-                    _handleChange();
+                    _handle();
                 }
             })
-            .catch(_handleChange);
+            .catch(_handle);
 
-        function _handleChange() {
+        function _handle() {
             if (1 < backgroundNodeService.availableNodes.length) {
                 changeBackgroundNode();
             }
         }
     }
+
     healthCheck();
     $scope.interval = $interval(healthCheck, 1000 * 30);
 };

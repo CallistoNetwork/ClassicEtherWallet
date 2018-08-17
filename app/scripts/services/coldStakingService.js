@@ -25,6 +25,9 @@ const round_interval = {
 // but will need to update params
 
  */
+
+const Contract = require("../contract").Contract;
+
 class ColdStakingContract extends Contract {
     constructor(network = "RINKEBY ETH") {
         const { abi } = contract;

@@ -19,11 +19,14 @@ customNode.prototype.config = {
     }
 };
 
-customNode.prototype.healthCheck = function() {
+/*
+    @returns Promise<HttpResponse>
+ */
+customNode.prototype.healthCheck = function(timeout = 1000) {
     return ajaxReq.http({
         method: "OPTIONS",
         url: this.SERVERURL,
-        timeout: 1000
+        timeout
     });
 };
 

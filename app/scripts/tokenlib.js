@@ -4,6 +4,8 @@ const storageContract = require("./abiDefinitions/etcAbi.json").find(
     i => i.name === "DexNS State storage"
 );
 
+const InitContract = require("./contract").InitContract;
+
 const dexnsStorageContract = new InitContract(
     storageContract.abi,
     storageContract.address,

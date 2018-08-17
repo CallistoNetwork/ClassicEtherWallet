@@ -14,6 +14,8 @@ if (!DexNSStorage) {
     throw new Error("Unable to locate DEXNS storage");
 }
 
+const InitContract = require("../contract").InitContract;
+
 function stringifyMetadata({
     tokenNetwork = "ETC",
     link = "",

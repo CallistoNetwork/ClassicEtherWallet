@@ -30,6 +30,8 @@ const CONTRACT = require("../abiDefinitions/etcAbi").find(
 if (!CONTRACT) {
     throw new Error("ERROR FINDING CONTRACT: " + CONTRACT_ADDRESS);
 }
+
+const Contract = require("../contract").Contract;
 const messageService = function() {
     this.MESSAGE_STALING_PERIOD = MESSAGE_STALING_PERIOD; // 25 days
 

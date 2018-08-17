@@ -39,7 +39,9 @@ if (!encsResolver) {
     throw new Error("Unable to locate ecns resolver");
 }
 
-const lookupService = function(dexnsService, walletService) {
+const parseJsonContract = require("../contract").parseJsonContract;
+
+const lookupService = function(dexnsService) {
     const network = ajaxReq.type;
 
     if (network === "ETH") {

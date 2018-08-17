@@ -3,9 +3,15 @@
 const _sample = require("lodash/sample");
 
 const backgroundNodeService = function() {
+    /*
+        Array<nodeNames> [etc_commonwealth_parity, etc_commonwealth_geth...]
+     */
+
     this.availableNodes = Object.keys(nodes.nodeList).filter(
-        _node => nodes.nodeList[_node].type.toUpperCase() === "ETC"
+        _nodeName => nodes.nodeList[_nodeName].type.toUpperCase() === "ETC"
     );
+
+    this.backgroundNode = _sample(this.availableNodes);
 
     this.changeBackgroundNode = () => {
         const { backgroundNode, availableNodes } = this;
@@ -22,8 +28,6 @@ const backgroundNodeService = function() {
 
         return true;
     };
-
-    this.backgroundNode = _sample(this.availableNodes);
 
     return this;
 };

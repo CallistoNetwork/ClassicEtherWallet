@@ -134,6 +134,7 @@ var dexnsService = require("./services/dexnsService");
 var backgroundNodeService = require("./services/backgroundNodeService");
 
 // DIRECTIVES
+const customNodeForm = require("./directives/customNodeForm");
 var officialityChecker = require("./directives/officiality-checker");
 var lookup = require("./directives/crosschain-lookup");
 var dexnsNameDisplay = require("./directives/dexns-name-display");
@@ -230,6 +231,8 @@ app.directive("messagesOverviewDrtv", [
 app.directive("arrayInputDrtv", arrayInputDrtv);
 app.directive("newMessagesDrtv", ["globalService", newMessagesDrtv]);
 app.directive("transactionCost", [transactionCost]);
+
+app.directive("customNodeForm", [customNodeForm]);
 
 app.controller("tabsCtrl", [
     "$scope",

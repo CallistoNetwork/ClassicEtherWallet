@@ -134,10 +134,14 @@ var globalService = function($http, $httpParamSerializerJQLike) {
 
         location.hash = _tab.url;
     };
+
+    const dropdownNode = false;
+
     return {
         tabs: tabs,
         currentTab: currentTab,
-        navigate
+        navigate,
+        dropdownNode
     };
 };
 module.exports = globalService;

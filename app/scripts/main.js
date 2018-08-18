@@ -232,6 +232,7 @@ app.directive("newMessagesDrtv", ["globalService", newMessagesDrtv]);
 app.directive("transactionCost", [transactionCost]);
 
 app.controller("tabsCtrl", [
+    "$http",
     "$scope",
     "globalService",
     "walletService",
@@ -249,6 +250,7 @@ app.controller("viewCtrl", ["$scope", "globalService", "$sce", viewCtrl]);
 app.controller("walletGenCtrl", ["$rootScope", "$scope", walletGenCtrl]);
 app.controller("bulkGenCtrl", ["$scope", bulkGenCtrl]);
 app.controller("decryptWalletCtrl", [
+    "$rootScope",
     "$scope",
     "$sce",
     "walletService",

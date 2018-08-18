@@ -1,0 +1,27 @@
+<label translate="OC_Label_2">Media Resource Link</label>
+<div class="row">
+    <div class="col-sm-8">
+        <input
+            type="text"
+            ng-model="input.link"
+            id="link"
+            name="link"
+            required
+            placeholder="https://callisto.network/"
+            class="form-control"
+            ng-class="officialityChecker.link.$valid ? 'is-valid' : 'is-invalid'"
+            ng-model-options="{debounce: 500 }"
+        />
+    </div>
+    <div class="col-sm-4">
+        <h3 ng-show="officialityChecker.link.$pending" class="text-center" translate="loading">
+            loading...</h3>
+        <h3 ng-show="officialityChecker.link.$valid" class="text-center text-success"
+            translate="OC_Official"> Is
+            official.</h3>
+
+        <h3 class="text-center text-danger"
+            ng-show="officialityChecker.link.$error.isOfficial" translate="OC_NotOfficial"></h3>
+
+    </div>
+</div>

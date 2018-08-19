@@ -1,13 +1,9 @@
 "use strict";
 
-var messagesOverviewDrtv = function(
-    globalService,
-    walletService,
-    messageService
-) {
+var messagesOverview = function(globalService, walletService, messageService) {
     return {
         restrict: "E",
-        template: require("./messagesOverviewDrtv.html"),
+        template: require("./messagesOverview.html"),
         link: function($scope) {
             $scope.walletService = walletService;
             $scope.messageService = messageService;
@@ -19,4 +15,4 @@ var messagesOverviewDrtv = function(
         }
     };
 };
-module.exports = messagesOverviewDrtv;
+module.exports = messagesOverview;

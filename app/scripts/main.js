@@ -124,38 +124,41 @@ var switchNetworkCtrl = require("./controllers/switchNetworkCtrl");
 
 // SERVICES
 
-var lookupService = require("./services/lookup");
-var globalService = require("./services/globalService");
-var coldStakingService = require("./services/coldStakingService");
-var modalService = require("./services/modalService");
-var walletService = require("./services/walletService");
-var messageService = require("./services/messageService");
-var dexnsService = require("./services/dexnsService");
-var backgroundNodeService = require("./services/backgroundNodeService");
+const lookupService = require("./services/lookup");
+const globalService = require("./services/globalService");
+const coldStakingService = require("./services/coldStakingService");
+const modalService = require("./services/modalService");
+const walletService = require("./services/walletService");
+const messageService = require("./services/messageService");
+const dexnsService = require("./services/dexnsService");
+const backgroundNodeService = require("./services/backgroundNodeService");
 
 // DIRECTIVES
-var officialityChecker = require("./directives/officiality-checker");
-var lookup = require("./directives/crosschain-lookup");
-var dexnsNameDisplay = require("./directives/dexns-name-display");
-var blockiesDrtv = require("./directives/blockiesDrtv");
-var addressFieldDrtv = require("./directives/addressFieldDrtv");
-var QRCodeDrtv = require("./directives/QRCodeDrtv");
-var walletDecryptDrtv = require("./directives/walletDecryptDrtv");
-var messagesOverviewDrtv = require("./directives/messagesOverviewDrtv");
-var cssThemeDrtv = require("./directives/cssThemeDrtv");
-var cxWalletDecryptDrtv = require("./directives/cxWalletDecryptDrtv");
-var fileReaderDrtv = require("./directives/fileReaderDrtv");
-var transactionCost = require("./directives/transactionCostDtrv");
-var balanceDrtv = require("./directives/balanceDrtv");
-var arrayInputDrtv = require("./directives/arrayInputDrtv");
-var newMessagesDrtv = require("./directives/newMessagesDrtv");
+const tokenBalances = require("./directives/tokenBalances");
+const sidebarAds = require("./directives/sidebar-ads");
+const sidebar = require("./directives/sidebar");
+const accountInfo = require("./directives/accountInfo");
+const officialityChecker = require("./directives/officiality-checker");
+const lookup = require("./directives/crosschain-lookup");
+const dexnsNameDisplay = require("./directives/dexns-name-display");
+const blockiesDrtv = require("./directives/blockiesDrtv");
+const addressFieldDrtv = require("./directives/addressFieldDrtv");
+const QRCodeDrtv = require("./directives/QRCodeDrtv");
+const walletDecryptDrtv = require("./directives/walletDecryptDrtv");
+const messagesOverview = require("./directives/messagesOverview");
+const cssThemeDrtv = require("./directives/cssThemeDrtv");
+const cxWalletDecryptDrtv = require("./directives/cxWalletDecryptDrtv");
+const fileReaderDrtv = require("./directives/fileReaderDrtv");
+const transactionCost = require("./directives/transactionCostDtrv");
+const arrayInputDrtv = require("./directives/arrayInputDrtv");
+const newMessagesDrtv = require("./directives/newMessagesDrtv");
 const sendTransactionFormDrtv = require("./directives/sendTransactionForm");
 if (IS_CX) {
-    var addWalletCtrl = require("./controllers/CX/addWalletCtrl");
-    var cxDecryptWalletCtrl = require("./controllers/CX/cxDecryptWalletCtrl");
-    var myWalletsCtrl = require("./controllers/CX/myWalletsCtrl");
-    var mainPopCtrl = require("./controllers/CX/mainPopCtrl");
-    var quickSendCtrl = require("./controllers/CX/quickSendCtrl");
+    const addWalletCtrl = require("./controllers/CX/addWalletCtrl");
+    const cxDecryptWalletCtrl = require("./controllers/CX/cxDecryptWalletCtrl");
+    const myWalletsCtrl = require("./controllers/CX/myWalletsCtrl");
+    const mainPopCtrl = require("./controllers/CX/mainPopCtrl");
+    const quickSendCtrl = require("./controllers/CX/quickSendCtrl");
 }
 
 var app = angular.module("mewApp", [
@@ -204,6 +207,10 @@ app.factory("lookupService", ["dexnsService", "walletService", lookupService]);
 app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
 
+app.directive("sidebarAds", sidebarAds);
+app.directive("sidebar", ["walletService", "$timeout", sidebar]);
+app.directive("accountInfo", accountInfo);
+app.directive("tokenBalances", tokenBalances);
 app.directive("sendTransactionForm", sendTransactionFormDrtv);
 app.directive("officialityChecker", [officialityChecker]);
 app.directive("dexnsNameDisplay", [
@@ -218,14 +225,13 @@ app.directive("cssThemeDrtv", cssThemeDrtv);
 app.directive("addressField", ["lookupService", addressFieldDrtv]);
 app.directive("qrCode", QRCodeDrtv);
 app.directive("onReadFile", fileReaderDrtv);
-app.directive("walletBalanceDrtv", ["walletService", "$timeout", balanceDrtv]);
 app.directive("walletDecryptDrtv", walletDecryptDrtv);
 app.directive("cxWalletDecryptDrtv", cxWalletDecryptDrtv);
-app.directive("messagesOverviewDrtv", [
+app.directive("messagesOverview", [
     "globalService",
     "walletService",
     "messageService",
-    messagesOverviewDrtv
+    messagesOverview
 ]);
 app.directive("arrayInputDrtv", arrayInputDrtv);
 app.directive("newMessagesDrtv", ["globalService", newMessagesDrtv]);

@@ -30,7 +30,7 @@
 <!-- Sidebar -->
 <article class="col-sm-4">
 
-    <wallet-balance-drtv></wallet-balance-drtv>
+    <sidebar></sidebar>
 
 
     <div ng-show="checkTxPage" ng-click="checkTxReadOnly=!checkTxReadOnly" class="small text-right text-gray-lighter">

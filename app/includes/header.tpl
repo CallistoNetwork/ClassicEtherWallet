@@ -5,8 +5,8 @@
     <div class="small announcement">
         <div class="container">
             <big>⚠ SECURITY ALERT!<br>There is a security vulnerability in <a
-                    href="https://github.com/ethereum/EIPs/issues/20">ERC20 token standard</a>. ERC20 tokens are <a
-                    href="https://gist.github.com/Dexaran/ddb3e89fe64bf2e06ed15fbd5679bd20">insecure</a>!<br>Use ERC20
+                href="https://github.com/ethereum/EIPs/issues/20">ERC20 token standard</a>. ERC20 tokens are <a
+                href="https://gist.github.com/Dexaran/ddb3e89fe64bf2e06ed15fbd5679bd20">insecure</a>!<br>Use ERC20
                 tokens at your own risk. ClassicEtherWallet is not responsible for the consequences of using tokens of
                 this standard.</big><br>
             Do not transfer ERC20 tokens into any smart-contract using the <code>transfer</code> function. This will
@@ -123,23 +123,32 @@
                         </a>
                     </div>
 
-                    <div ng-switch-default class="dropdown dropdown-node" ng-cloak>
-                        <a tabindex="0" aria-haspopup="true"
+                    <div ng-switch-default
+                         class="dropdown dropdown-node"
+                    >
+                        <a tabindex="0"
+                           aria-haspopup="true"
                            aria-label="change node. current node {{curNode.name}} node by {{curNode.service}}"
-                           class="dropdown-toggle  btn btn-white" ng-click="dropdownNode = !dropdownNode">
+                           class="dropdown-toggle  btn btn-white"
+                           ng-click="globalService.dropdownNode = !globalService.dropdownNode"
+                        >
                             Network: {{curNode.name}}
                             <small>({{curNode.service}})</small>
                             <i class="caret"></i>
                         </a>
-                        <ul class="dropdown-menu" ng-show="dropdownNode">
-                            <li ng-repeat="(key, value) in nodeList"><a ng-class="{true:'active'}[curNode == key]"
-                                                                        ng-click="changeNode(key)">
-                                {{value.name}}
-                                <small> ({{value.service}})</small>
-                                <img ng-show="value.service=='Custom'" src="images/icon-remove.svg" class="node-remove"
-                                     title="Remove Custom Node" ng-click="removeNodeFromLocal(value.name)"/>
-                            </a></li>
-                            <li><a ng-click="customNodeModal.open(); dropdownNode = !dropdownNode;"> Add Custom
+                        <ul class="dropdown-menu" ng-show="globalService.dropdownNode">
+                            <li ng-repeat="(key, value) in nodeList"
+                                ng-click="globalService.dropdownNode = false; changeNode(key)">
+                                <a ng-class="{true:'active'}[curNode == key]">
+                                    {{value.name}}
+                                    <small> ({{value.service}})</small>
+                                    <img ng-show="value.service=='Custom'" src="images/icon-remove.svg"
+                                         class="node-remove"
+                                         title="Remove Custom Node" ng-click="removeNodeFromLocal(value.name)"/>
+                                </a></li>
+                            <li><a
+                                ng-click="customNodeModal.open(); globalService.dropdownNode = !globalService.dropdownNode;">
+                                Add Custom
                                 Node </a></li>
                         </ul>
                     </div>
@@ -164,12 +173,12 @@
                 @@if (site === 'cew' ) {
                 <li ng-repeat="tab in tabNames track by $index" class="nav-item {{tab.name}}"
                     ng-class="{active: $index==gService.currentTab}" ng-show="tab.mew" ng-click="tabClick($index)"><a
-                        tabindex="0" aria-label="nav item: {{tab.name | translate}}" translate="{{tab.name}}"></a></li>
+                    tabindex="0" aria-label="nav item: {{tab.name | translate}}" translate="{{tab.name}}"></a></li>
                 }
                 @@if (site === 'cx' ) {
                 <li ng-repeat="tab in tabNames track by $index" class="nav-item {{tab.name}}"
                     ng-class="{active: $index==gService.currentTab}" ng-show="tab.cx" ng-click="tabClick($index)"><a
-                        tabindex="0" aria-label="nav item: {{tab.name | translate}}" translate="{{tab.name}}"></a></li>
+                    tabindex="0" aria-label="nav item: {{tab.name | translate}}" translate="{{tab.name}}"></a></li>
                 }
                 <li class="nav-item help"><a href="https://support.ethereumcommonwealth.io" target="_blank"
                                              rel="noopener">Help</a></li>

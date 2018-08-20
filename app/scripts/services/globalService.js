@@ -108,14 +108,40 @@ var globalService = function($http, $httpParamSerializerJQLike) {
             url: "broadcast-tx",
             mew: true,
             cx: true
+        },
+        networkInfo: {
+            id: 15,
+            name: "NAV_Network_Info",
+            url: "network-info",
+            mew: true,
+            cx: true
         }
     };
     var currentTab = 0;
-    if (typeof chrome != "undefined")
+    if (typeof chrome !== "undefined")
         currentTab = chrome.windows === undefined ? 0 : 3;
+
+    const navigate = _id => {
+        const _tab = Object.values(this.tabs).find(tab => {
+            return tab.id === _id;
+        });
+
+        if (!_tab) {
+            throw new Error("Invalid Request");
+        }
+
+        this.currentTab = _id;
+
+        location.hash = _tab.url;
+    };
+
+    const dropdownNode = false;
+
     return {
         tabs: tabs,
-        currentTab: currentTab
+        currentTab: currentTab,
+        navigate,
+        dropdownNode
     };
 };
 module.exports = globalService;

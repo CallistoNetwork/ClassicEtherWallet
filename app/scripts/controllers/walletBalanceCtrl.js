@@ -6,10 +6,8 @@ var walletBalanceCtrl = function(
     backgroundNodeService,
     modalService,
     coldStakingService,
-    messageService,
-    lookupService
+    messageService
 ) {
-    $scope.ajaxReq = ajaxReq;
     $scope.erc20Abi = require("../abiDefinitions/erc20abi.json");
     $scope.DEXNS = require("../abiDefinitions/etcAbi.json")[5];
     $scope.DEXNSAddress = $scope.DEXNS.address;
@@ -39,10 +37,6 @@ var walletBalanceCtrl = function(
     $scope.slide = 1;
     $scope.customTokenSymbol = "";
     $scope.customTokenInterval = null;
-
-    walletService.wallet = null;
-    $scope.walletService = walletService;
-    $scope.wallet = null;
 
     $scope.nodeList = nodes.nodeList;
     $scope.alternativeBalance = nodes.alternativeBalance;

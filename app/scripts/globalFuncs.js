@@ -29,6 +29,7 @@ globalFuncs.timeRem = function timeRem(timeUntil) {
         " seconds ";
 
     return {
+        rem,
         days,
         hours,
         minutes,

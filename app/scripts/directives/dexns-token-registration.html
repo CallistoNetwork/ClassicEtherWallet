@@ -21,17 +21,17 @@
     </div>
 
     <div class="col-sm-4">
-        <h3 class="text-info" ng-show="!!tokenRegistration.$pending.tokenName">
-            <span translate="LOADING"></span>
-            {{input.tokenName}}
-        </h3>
+            <div
+                ng-show="!!tokenRegistration.$pending.tokenName"
+                class="alert alert-info" translate="LOADING"></div>
 
         <div ng-show="tokenRegistration.tokenName.$dirty && !tokenRegistration.$pending.tokenName"
              ng-switch="tokenRegistration.tokenName.$valid"
         >
-            <h3 ng-switch-when="true" class="text-success" translate="DEXNS_AVAILABLE_RESPONSE_TEXT">
-            </h3>
-            <h3 ng-switch-default="false" class="text-danger" translate="DEXNS_UNAVAILABLE_RESPONSE_TEXT"></h3>
+            <div ng-switch-when="true" class="alert alert-info" translate="DEXNS_AVAILABLE_RESPONSE_TEXT"></div>
+            <div class="alert alert-danger"
+                 ng-switch-default="false"
+                 translate="DEXNS_UNAVAILABLE_RESPONSE_TEXT"></div>
         </div>
     </div>
 </div>

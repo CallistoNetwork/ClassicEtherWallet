@@ -29,7 +29,6 @@
             </span>
         </div>
 
-
         <form name="dexnsNameDisplay" dexns-name-display novalidate>
         </form>
 
@@ -68,15 +67,30 @@
             </tr>
             </thead>
             <tbody>
+
+
             <tr>
-                <td class="text-left">
-                    <span class="{{'icon icon-' + ajaxReq.type.toLowerCase()}}"></span>
+                <td>
+                    <div ng-show="coldStakingService.validNetwork()" ng-init="showLongBal_ = false;">
+                         <span
+                             title="{{walletService.wallet.balance}} (Double-Click)"
+                             class="text-right pointer"
+                         >
+                          <span ng-dblclick="showLongBal_ = !showLongBal_">
+                                <span class="mono wrap"
+                                      ng-show="!showLongBal_">{{walletService.wallet.balance | number}}</span>
+                                <span class="mono wrap" ng-show="showLongBal_">{{walletService.wallet.balance}}</span>
+                           </span>
+                        </span>
+                    </div>
+                    <span
+                        class="text-left {{'icon icon-' + ajaxReq.type.toLowerCase()}}"></span>
                     {{ajaxReq.type}}
                 </td>
 
 
-                <td ng-switch="{{coldStakingService.validNetwork()}}" class="text-right">
-                    <span ng-switch-default
+                <td class="text-right">
+                    <span ng-show="!coldStakingService.validNetwork()"
                           title="{{walletService.wallet.balance}} (Double-Click)"
                           class="text-left pointer"
                     >
@@ -87,7 +101,7 @@
                            </span>
                     </span>
                     <span
-                        ng-switch-when="{{true}}"
+                        ng-show="coldStakingService.validNetwork()"
                         class="text-right pointer"
                         title="{{coldStakingService.contract.staker_info.weight}} (Double Click)"
                         ng-init="showLongWeight = false;"
@@ -170,12 +184,14 @@
             <tfoot>
             <tr
             >
-                <td><i>Equivalent Values:</i></td>
+                <td><b>Equivalent Values:</b></td>
+                <td ng-show="coldStakingService.validNetwork()"></td>
                 <td class="text-right">BTC: <span class="mono wrap">{{walletService.wallet.btcBalance | number}}</span>
                 </td>
             </tr>
             <tr
             >
+                <td ng-show="coldStakingService.validNetwork()" style="border-top: none;"></td>
                 <td
                     style="border: none;"
                     colspan="2" class="text-right">USD: <span
@@ -314,14 +330,16 @@
                     </address-field>
                 </div>
 
-                <label translate="TOKEN_Symbol"> Token Symbol: </label>
+                <label translate="TOKEN_Symbol" for="tokenSymbol"> Token Symbol: </label>
                 <input class="form-control input-sm"
                        type="text"
+                       id="tokenSymbol"
                        ng-model="localToken.symbol"
                        ng-class="localToken.symbol!='' ? 'is-valid' : 'is-invalid'"/>
-                <label translate="TOKEN_Dec"> Decimals: </label>
+                <label translate="TOKEN_Dec" for="tokenDecimals"> Decimals: </label>
                 <input class="form-control input-sm"
                        type="text"
+                       id="tokenDecimals"
                        ng-model="localToken.decimals"
                        ng-class="Validator.isPositiveNumber(localToken.decimals) ? 'is-valid' : 'is-invalid'"/>
                 <button class="btn btn-primary btn-xs" ng-click="saveTokenToLocal()" translate="x_Save">Save
@@ -334,20 +352,21 @@
                 <span translate="SEND_custom_dexns">Add Custom Token by Token Symbol (DexNS)</span>
             </a>
             <div class="custom-token-fields" ng-show="customTokenDexNSField">
-                <label translate="TOKEN_Symbol"> Token Symbol: </label>
+                <label translate="TOKEN_Symbol" for="customTokenSymbol"> Token Symbol: </label>
 
                 <input class="form-control input-sm"
                        type="text"
+                       id="customTokenSymbol"
                        ng-model="customTokenSymbol"
                        ng-minlength="3"
                        ng-class="customTokenSymbol!='' ? 'is-valid' : 'is-invalid'"/>
 
                 <div ng-hide="localToken.symbol">
                     <div ng-if="!customTokenSymbol">
-                        <p><strong>Type a token symbol.<strong></p>
+                        <p><strong>Type a token symbol.</strong></p>
                     </div>
                     <div ng-if="customTokenSymbol">
-                        <p><strong>Looking for {{ customTokenSymbol }} token...<strong></p>
+                        <p><strong>Looking for {{ customTokenSymbol }} token...</strong></p>
                     </div>
                 </div>
 

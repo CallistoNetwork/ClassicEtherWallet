@@ -1,8 +1,16 @@
 "use strict";
 
-var AddressOnlyWallet = require("../AddressOnlyWallet");
+const AddressOnlyWallet = require("../AddressOnlyWallet");
 
-const decryptWalletCtrl = function($scope, $sce, walletService, globalService) {
+const _sample = require("lodash/sample");
+
+const decryptWalletCtrl = function(
+    $rootScope,
+    $scope,
+    $sce,
+    walletService,
+    globalService
+) {
     $scope.walletType = "";
     $scope.requireFPass = $scope.requirePPass = $scope.showFDecrypt = $scope.showPDecrypt = $scope.showAOnly = $scope.showParityDecrypt = false;
     $scope.filePassword = "";
@@ -350,6 +358,21 @@ const decryptWalletCtrl = function($scope, $sce, walletService, globalService) {
                     // set wallet
                     walletService.wallet = wallet;
                     $scope.wallet = wallet;
+
+                    const _node = _sample(
+                        Object.values(nodes.nodeList)
+                            .map((node, i) =>
+                                Object.assign({}, node, {
+                                    key: Object.keys(nodes.nodeList)[i]
+                                })
+                            )
+                            .filter(node => node.type === wallet.network)
+                    );
+
+                    if (_node) {
+                        $rootScope.$broadcast("ChangeNode", _node.key || 0);
+                    }
+
                     $scope.notifier.info(globalFuncs.successMsgs[6]);
                 }
             });

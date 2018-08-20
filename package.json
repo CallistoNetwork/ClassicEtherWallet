@@ -3,7 +3,7 @@
     "version": "3.12.2",
     "description": "Ethereum Classic blockchain interaction web tool",
     "contributors": [
-        "jchimien@gmail.com"
+        "Chimienti, Joe <jchimien@gmail.com>"
     ],
     "main": "gulpfile.js",
     "author": "ClassicEtherWallet",

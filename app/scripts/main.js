@@ -126,6 +126,7 @@ var dexnsService = require("./services/dexnsService");
 var backgroundNodeService = require("./services/backgroundNodeService");
 
 // DIRECTIVES
+var officialityChecker = require("./directives/officiality-checker");
 var lookup = require("./directives/crosschain-lookup");
 var dexnsNameDisplay = require("./directives/dexns-name-display");
 var blockiesDrtv = require("./directives/blockiesDrtv");
@@ -196,6 +197,7 @@ app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
 
 app.directive("sendTransactionForm", sendTransactionFormDrtv);
+app.directive("officialityChecker", [officialityChecker]);
 app.directive("dexnsNameDisplay", [
     "dexnsService",
     "walletService",
@@ -222,6 +224,7 @@ app.directive("newMessagesDrtv", ["globalService", newMessagesDrtv]);
 app.directive("transactionCost", [transactionCost]);
 
 app.controller("tabsCtrl", [
+    "$http",
     "$scope",
     "globalService",
     "walletService",
@@ -239,6 +242,7 @@ app.controller("viewCtrl", ["$scope", "globalService", "$sce", viewCtrl]);
 app.controller("walletGenCtrl", ["$rootScope", "$scope", walletGenCtrl]);
 app.controller("bulkGenCtrl", ["$scope", bulkGenCtrl]);
 app.controller("decryptWalletCtrl", [
+    "$rootScope",
     "$scope",
     "$sce",
     "walletService",

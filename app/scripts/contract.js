@@ -35,6 +35,15 @@ class Contract {
         this.network = _network.toUpperCase();
     }
 
+    validFunction(_function) {
+        const requiredParams = ["name", "inputs"];
+
+        return (
+            typeof _function === "object" &&
+            requiredParams.every(s => _function.hasOwnProperty(s))
+        );
+    }
+
     setNode(network = this.network) {
         const node = Object.values(nodes.nodeList).find(
             _node => _node.type.toUpperCase() === network.toUpperCase()
@@ -50,7 +59,9 @@ class Contract {
     setAbi(_abi) {
         if (typeof _abi === "string") {
             try {
-                this.abi = JSON.parse(_abi);
+                this.abi = JSON.parse(_abi).map((func, index) =>
+                    Object.assign(func, { index })
+                );
             } catch (e) {
                 throw new Error(`Invalid Abi \n Abi: ${_abi}`);
             }
@@ -117,14 +128,12 @@ class Contract {
         @param inputs Array<any>
 
         @param tx
+        @param functionIndex indexOf function in abi (useful if +1 functions w/ same name)
         @returns Promise<>
 
 
      */
-    call(
-        funcName,
-        { inputs = [], value = 0, unit = "ether", from = null } = {}
-    ) {
+    call(_func, { inputs = [], value = 0, unit = "ether", from = null } = {}) {
         const tx_ = {
             inputs,
             to: this.address,
@@ -134,7 +143,7 @@ class Contract {
             from
         };
 
-        return ethFuncs.call(funcName, this, tx_);
+        return ethFuncs.call(_func, this, tx_);
     }
 
     genTxContract(
@@ -142,22 +151,14 @@ class Contract {
         wallet,
         { inputs = [], value = 0, unit = "ether", from = null } = {}
     ) {
-        return uiFuncs.genTxContract(
-            funcName,
-            this,
-            wallet,
-            Object.assign(
-                {},
-                {
-                    inputs,
-                    network: this.network,
-                    to: this.address,
-                    value,
-                    unit,
-                    from
-                }
-            )
-        );
+        return uiFuncs.genTxContract(funcName, this, wallet, {
+            inputs,
+            network: this.network,
+            to: this.address,
+            value,
+            unit,
+            from
+        });
     }
 
     sendTx(tx) {
@@ -236,26 +237,33 @@ class InitContract extends Contract {
 
      */
 
-    call(funcName, tx) {
-        const func = this.abi.find(a => a.name === funcName);
+    call(_FUNCTION, tx) {
+        let name = _FUNCTION;
 
-        if (!func) {
+        if (typeof _FUNCTION === "string") {
+            _FUNCTION = this.abi.find(f => f.name === _FUNCTION);
+
+            if (!_FUNCTION) {
+                throw new Error("Invalid Request");
+            }
+        } else if (this.validFunction(_FUNCTION)) {
+            name = _FUNCTION.name;
+        } else {
             throw new Error("Invalid Request");
         }
+        return super.call(_FUNCTION, tx).then(result => {
+            const { outputs } = _FUNCTION;
 
-        return super.call(funcName, tx).then(result => {
-            const { outputs } = func;
-
-            this[funcName] = outputs.map((out, idx) => {
-                const name = out.name || funcName;
+            this[name] = outputs.map((out, idx) => {
+                const paramName = out.name || name;
 
                 return Object.assign({}, out, {
                     value: result.data[idx],
-                    name
+                    name: paramName
                 });
             });
 
-            return this[funcName];
+            return this[name];
         });
     }
 

@@ -271,11 +271,7 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
         var estObj = {
             to: $scope.tx.to,
             from: $scope.wallet.getAddressString(),
-            value: ethFuncs.sanitizeHex(
-                ethFuncs.decimalToHex(
-                    etherUnits.toWei($scope.tx.value, $scope.tx.unit)
-                )
-            )
+            value: etherUnits.toWei($scope.tx.value, $scope.tx.unit)
         };
         if ($scope.tx.data !== "")
             estObj.data = ethFuncs.sanitizeHex($scope.tx.data);
@@ -289,13 +285,12 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
             ).data;
             estObj.value = "0x00";
         }
-        ethFuncs.estimateGas(estObj, function(data) {
-            if (!data.error) {
-                if (data.data == "-1")
-                    $scope.notifier.danger(globalFuncs.errorMsgs[21]);
-                $scope.tx.gasLimit = data.data;
-            } else $scope.notifier.danger(data.msg);
-        });
+        ethFuncs
+            .estimateGas(estObj)
+            .then(function(gasLimit) {
+                $scope.tx.gasLimit = gasLimit;
+            })
+            .catch(e => ($scope.tx.gasLimit = -1));
     };
     var isEnough = function(valA, valB) {
         return new BigNumber(valA).lte(new BigNumber(valB));

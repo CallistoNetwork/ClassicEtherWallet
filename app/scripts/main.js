@@ -150,6 +150,8 @@ var balanceDrtv = require("./directives/balanceDrtv");
 var arrayInputDrtv = require("./directives/arrayInputDrtv");
 var newMessagesDrtv = require("./directives/newMessagesDrtv");
 const sendTransactionFormDrtv = require("./directives/sendTransactionForm");
+const eosKeypair = require("./directives/eos-keypair");
+
 if (IS_CX) {
     var addWalletCtrl = require("./controllers/CX/addWalletCtrl");
     var cxDecryptWalletCtrl = require("./controllers/CX/cxDecryptWalletCtrl");
@@ -212,6 +214,7 @@ app.directive("dexnsNameDisplay", [
     "globalService",
     dexnsNameDisplay
 ]);
+app.directive("eosKeypair", eosKeypair);
 app.directive("lookup", ["$rootScope", "lookupService", lookup]);
 app.directive("blockieAddress", blockiesDrtv);
 app.directive("cssThemeDrtv", cssThemeDrtv);

@@ -5,7 +5,7 @@
 
     <div class="btn-group">
         <a class="btn btn-default" ng-click="dropdownContracts = !dropdownContracts">
-            {{selectedFunc == null ? "Select a function" : selectedFunc}}<i
+            {{selectedFunc == null ? "Select a function" : selectedFunc.name}}<i
             class="caret"></i></a>
         <ul class="dropdown-menu" ng-show="dropdownContracts">
             <li ng-repeat="func in visibleFuncList track by $index"
@@ -20,24 +20,16 @@
 
     <div
         class="row"
-        ng-repeat="_function in visibleFuncList track by $index"
-        ng-show="selectedFunc === _function.name"
-
+        ng-repeat="_function in visibleFuncList track by _function.index + _function.name + $index"
+        ng-show="selectedFunc.name === _function.name && selectedFunc.index === _function.index"
     >
-
-
         <!-- Input -->
         <form
             ng-class="_function.stateMutability === 'view' ? 'col-sm-6' : 'col-sm-12'"
-
             ng-submit="handleSubmit(_function);"
         >
-            <div ng-repeat="input in _function.inputs track by $index">
-
-
+            <div ng-repeat="input in _function.inputs">
                 @@include( '../includes/contract-input.tpl', { "site": "cew" } )
-
-
             </div>
 
             <button

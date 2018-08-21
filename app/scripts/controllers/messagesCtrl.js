@@ -382,15 +382,15 @@ var messagesCtrl = function(
             value: "0x00"
         };
 
-        ethFuncs.estimateGas(estObj, function(data) {
-            if (data.error || parseInt(data.data) === -1) {
-                $scope.tx.gasLimit = "";
+        ethFuncs
+            .estimateGas(estObj)
+            .then(function(gasLimit) {
+                Object.assign($scope.tx, estObj, { gasLimit });
 
-                $scope.notifier.danger("Gas estimation error");
-            } else {
-                Object.assign($scope.tx, estObj, { gasLimit: data.data });
-
-                const txData = uiFuncs.getTxData($scope);
+                const txData = uiFuncs.getTxData({
+                    tx: $scope.tx,
+                    wallet: walletService.wallet
+                });
 
                 uiFuncs.generateTx(txData, function(rawTx) {
                     const { signedTx, isError } = rawTx;
@@ -404,8 +404,10 @@ var messagesCtrl = function(
                         sendMessageModal.open();
                     }
                 });
-            }
-        });
+            })
+            .catch(err => {
+                $scope.tx.gasLimit = -1;
+            });
     }
 
     $scope.confirmSendMessage = function() {

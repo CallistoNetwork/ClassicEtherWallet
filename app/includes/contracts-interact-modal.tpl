@@ -38,7 +38,7 @@
                         </div>
 
                     </div>
-                    <a class="btn btn-info btn-block" ng-click="generateTx()" translate="SEND_generate"> Generate
+                    <a class="btn btn-info btn-block" ng-click="generateTx(false)" translate="SEND_generate"> Generate
                         Transaction </a>
 
                     <!-- Data -->

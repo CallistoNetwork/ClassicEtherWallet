@@ -1,68 +1,81 @@
-<main class="tab-pane contracts active" ng-if="globalService.currentTab==globalService.tabs.contracts.id" ng-controller='contractsCtrl' ng-cloak>
-
-  <!-- Title -->
-  <div class="block text-center">
-    <h1>
-      <a translate="NAV_InteractContract" ng-class="{'isActive': visibility=='interactView'}" ng-click="setVisibility('interactView')"> Interact with Contract </a>
-      or
-      <a translate="NAV_DeployContract"  ng-class="{'isActive': visibility=='deployView'}" ng-click="setVisibility('deployView')"> Deploy Contract </a>
-    </h1>
-  </div>
-  <!-- / Title -->
+<main
+    ng-if="globalService.currentTab === globalService.tabs.contracts.id"
+    class="tab-pane contracts active"
+    ng-controller='contractsCtrl'
+    ng-cloak
+>
 
 
-  <!-- Interact Contracts -->
-  <article class="row block" ng-show="visibility=='interactView'">
-
-    @@if (site === 'cew' ) { @@include( '../includes/contracts-interact-1.tpl', { "site": "cew" } ) }
-    @@if (site === 'cx'  ) { @@include( '../includes/contracts-interact-1.tpl', { "site": "cx"  } ) }
-
-  </article>
-
-
-  <article class="row block" ng-show="visibility=='interactView' && showReadWrite">
-
-    @@if (site === 'cew' ) { @@include( '../includes/contracts-interact-2.tpl', { "site": "cew" } ) }
-    @@if (site === 'cx'  ) { @@include( '../includes/contracts-interact-2.tpl', { "site": "cx"  } ) }
-
-  </article>
-
-  <article ng-show="visibility=='interactView'">
-
-    @@if (site === 'cew' ) { @@include( '../includes/contracts-interact-modal.tpl', { "site": "cew" } ) }
-    @@if (site === 'cx'  ) { @@include( '../includes/contracts-interact-modal.tpl', { "site": "cx"  } ) }
-
-  </article>
-  <!-- / Interact Contracts -->
+    <!-- Title -->
+    <div class="block text-center">
+        <h1>
+            <a translate="NAV_InteractContract" ng-class="{'is-active': visibility=='interactView'}"
+               ng-click="visibility = 'interactView'"> Interact with Contract </a>
+            or
+            <a translate="NAV_DeployContract" ng-class="{'is-active': visibility=='deployView'}"
+               ng-click="visibility = 'deployView'"> Deploy Contract </a>
+        </h1>
+    </div>
+    <!-- / Title -->
 
 
+    <!-- Interact Contracts -->
+    <article class="row block" ng-show="visibility=='interactView'">
 
-  <!-- Deploy Contract -->
-  <article class="row block" ng-show="visibility=='deployView'">
+        @@if (site === 'cew' ) { @@include( '../includes/contracts-interact-1.tpl', { "site": "cew" } ) }
+        @@if (site === 'cx' ) { @@include( '../includes/contracts-interact-1.tpl', { "site": "cx" } ) }
 
-    @@if (site === 'cew' ) { @@include( '../includes/contracts-deploy-1.tpl', { "site": "cew" } ) }
-    @@if (site === 'cx'  ) { @@include( '../includes/contracts-deploy-1.tpl', { "site": "cx"  } ) }
+    </article>
 
-  </article>
-  <!-- / Deploy Contract -->
 
-  <!--wallet decrypt-->
-  <article class="form-group" ng-show="(!wd && visibility=='deployView') || (!wd && visibility=='interactView' && contract.selectedFunc && !contract.functions[contract.selectedFunc.index].constant)">
-      @@if (site === 'cx' )  {  <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>   }
-      @@if (site === 'cew' ) {  <wallet-decrypt-drtv></wallet-decrypt-drtv>         }
-  </article>
+    <article class="row block" ng-show="visibility=='interactView' && showReadWrite">
 
-  <article class="col-xs-12" ng-show="contract.selectedFunc!=null && visibility=='interactView'">
+        @@if (site === 'cew' ) { @@include( '../includes/contracts-interact-2.tpl', { "site": "cew" } ) }
+        @@if (site === 'cx' ) { @@include( '../includes/contracts-interact-2.tpl', { "site": "cx" } ) }
 
-    <button class="btn btn-primary btn-block" ng-click="readFromContract()" ng-show="contract.functions[contract.selectedFunc.index].constant && showRead">
-      <span translate="CONTRACT_Read"> READ</span>
-    </button>
+    </article>
 
-    <button class="btn btn-primary btn-block" ng-click="writeToContract()" ng-show="!contract.functions[contract.selectedFunc.index].constant">
-      <span translate="CONTRACT_Write"> WRITE</span>
-    </button>
+    <article ng-show="visibility=='interactView'">
 
-    </br>
-  </article>
+        @@if (site === 'cew' ) { @@include( '../includes/contracts-interact-modal.tpl', { "site": "cew" } ) }
+        @@if (site === 'cx' ) { @@include( '../includes/contracts-interact-modal.tpl', { "site": "cx" } ) }
+
+    </article>
+    <!-- / Interact Contracts -->
+
+
+    <!-- Deploy Contract -->
+    <article class="row block" ng-show="visibility=='deployView'">
+
+        @@if (site === 'cew' ) { @@include( '../includes/contracts-deploy-1.tpl', { "site": "cew" } ) }
+        @@if (site === 'cx' ) { @@include( '../includes/contracts-deploy-1.tpl', { "site": "cx" } ) }
+
+    </article>
+    <!-- / Deploy Contract -->
+
+    <!--wallet decrypt-->
+    <article class="form-group"
+             ng-show="(!wd && visibility=='deployView') || (!wd && visibility=='interactView' && contract.selectedFunc && !contract.functions[contract.selectedFunc.index].constant)">
+        @@if (site === 'cx' ) {
+        <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>
+        }
+        @@if (site === 'cew' ) {
+        <wallet-decrypt-drtv></wallet-decrypt-drtv>
+        }
+    </article>
+
+    <article class="col-xs-12" ng-show="contract.selectedFunc!=null && visibility=='interactView'">
+
+        <button class="btn btn-primary btn-block" ng-click="readFromContract()"
+                ng-show="contract.functions[contract.selectedFunc.index].constant && showRead">
+            <span translate="CONTRACT_Read"> READ</span>
+        </button>
+
+        <button class="btn btn-primary btn-block" ng-click="writeToContract()"
+                ng-show="!contract.functions[contract.selectedFunc.index].constant">
+            <span translate="CONTRACT_Write"> WRITE</span>
+        </button>
+
+    </article>
 
 </main>

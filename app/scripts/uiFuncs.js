@@ -453,38 +453,16 @@ uiFuncs.genTxContract = function(
     } = {}
 ) {
     return new Promise((resolve, reject) => {
-        const tx = { network, inputs, from, value, unit };
-
-        const _func = contract.abi.find(i => i.name === funcName);
-
-        if (!_func) {
-            reject(new Error("Invalid Request"));
-        }
-
-        const funcSig = ethFuncs.getFunctionSignature(
-            ethUtil.solidityUtils.transformToFullName(_func)
-        );
-
-        const tx_data = ethFuncs.sanitizeHex(
-            funcSig +
-                ethUtil.solidityCoder.encodeParams(
-                    _func.inputs.map(i => i.type),
-                    tx.inputs
-                )
-        );
-
-        Object.assign(tx, { data: tx_data });
+        let tx = { network, inputs, from, value, unit };
 
         ethFuncs
             .estGasContract(funcName, contract, tx)
             .then(result => {
-                Object.assign(tx, result, {
-                    value: etherUnits.toEther(tx.value, tx.unit),
-                    unit: "ether"
-                });
-
-                // gen tx data from tx and wallet
-
+                if (result.gasLimit === "-1") {
+                    uiFuncs.notifier.danger(globalFuncs.errorMsgs[8]);
+                    return reject(result);
+                }
+                Object.assign(tx, result);
                 genTx(tx, wallet)
                     .catch(error => {
                         uiFuncs.notifier.danger(

@@ -392,7 +392,7 @@ var messagesCtrl = function(
                     wallet: walletService.wallet
                 });
 
-                uiFuncs.generateTx(txData, function(rawTx) {
+                uiFuncs.generateTx(txData).then(function(rawTx) {
                     const { signedTx, isError } = rawTx;
 
                     if (isError) {
@@ -413,47 +413,34 @@ var messagesCtrl = function(
     $scope.confirmSendMessage = function() {
         sendMessageModal.close();
 
-        uiFuncs.sendTx($scope.signedTx, function(resp) {
-            if (!resp.isError) {
-                var bExStr =
-                    $scope.ajaxReq.type !== nodes.nodeTypes.Custom
-                        ? "<a href='" +
-                          $scope.ajaxReq.blockExplorerTX.replace(
-                              "[[txHash]]",
-                              resp.data
-                          ) +
-                          "' target='_blank' rel='noopener'> View your transaction </a>"
-                        : "";
-                var contractAddr = $scope.tx.contractAddr
-                    ? " & Contract Address <a href='" +
-                      ajaxReq.blockExplorerAddr.replace(
-                          "[[address]]",
-                          $scope.tx.contractAddr
+        uiFuncs.sendTx($scope.signedTx, false).then(function(resp) {
+            var bExStr =
+                $scope.ajaxReq.type !== nodes.nodeTypes.Custom
+                    ? "<a href='" +
+                      $scope.ajaxReq.blockExplorerTX.replace(
+                          "[[txHash]]",
+                          resp.data
                       ) +
-                      "' target='_blank' rel='noopener'>" +
-                      $scope.tx.contractAddr +
-                      "</a>"
+                      "' target='_blank' rel='noopener'> View your transaction </a>"
                     : "";
-                $scope.notifier.success(
-                    globalFuncs.successMsgs[2] +
-                        "<br />" +
-                        resp.data +
-                        "<br />" +
-                        bExStr +
-                        contractAddr
-                );
-            } else {
-                let response = resp.error;
-
-                if (resp.error.includes("Insufficient funds")) {
-                    response = globalFuncs.errorMsgs[17].replace(
-                        "{}",
-                        ajaxReq.type
-                    );
-                }
-
-                $scope.notifier.danger(response);
-            }
+            var contractAddr = $scope.tx.contractAddr
+                ? " & Contract Address <a href='" +
+                  ajaxReq.blockExplorerAddr.replace(
+                      "[[address]]",
+                      $scope.tx.contractAddr
+                  ) +
+                  "' target='_blank' rel='noopener'>" +
+                  $scope.tx.contractAddr +
+                  "</a>"
+                : "";
+            $scope.notifier.success(
+                globalFuncs.successMsgs[2] +
+                    "<br />" +
+                    resp.data +
+                    "<br />" +
+                    bExStr +
+                    contractAddr
+            );
         });
     };
 

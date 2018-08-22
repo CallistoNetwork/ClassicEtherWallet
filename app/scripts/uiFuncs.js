@@ -39,12 +39,11 @@ uiFuncs.isTxDataValid = function(txData) {
 uiFuncs.signTxTrezor = function(rawTx, { path }, callback) {
     function localCallback(result) {
         if (!result.success) {
-            if (callback !== undefined) {
+            callback &&
                 callback({
                     isError: true,
                     error: result.error
                 });
-            }
         }
 
         // check the returned signature_v and recalc signature_v if it needed
@@ -61,7 +60,8 @@ uiFuncs.signTxTrezor = function(rawTx, { path }, callback) {
         rawTx.rawTx = JSON.stringify(rawTx);
         rawTx.signedTx = "0x" + eTx.serialize().toString("hex");
         rawTx.isError = false;
-        if (callback !== undefined) callback(rawTx);
+
+        callback && callback(rawTx);
     }
 
     TrezorConnect.signEthereumTx(
@@ -168,29 +168,43 @@ uiFuncs.trezorUnlock = function() {
 
 
     Generates tx data over defined network
+
+    @returns Promise<>
  */
-uiFuncs.generateTx = function(txData, callback) {
-    txData = uiFuncs.isTxDataValid(txData);
+uiFuncs.generateTx = function(txData) {
+    return new Promise((resolve, reject) => {
+        try {
+            txData = uiFuncs.isTxDataValid(txData);
+        } catch (e) {
+            return reject(e);
+        }
 
-    if (txData.nonce) {
-        return uiFuncs.genTxWithInfo(txData);
-    } else {
-        ajaxReq.getTransactionData(txData.from, function(data) {
-            if (data.error) {
-                callback({
-                    isError: true,
-                    error: data.error
-                });
-            } else {
-                Object.assign(txData, {
-                    isOffline: Boolean(data.isOffline),
-                    nonce: data.data.nonce
-                });
+        if (txData.nonce) {
+            return uiFuncs
+                .genTxWithInfo(txData)
+                .then(resolve)
+                .catch(reject);
+        } else {
+            ajaxReq.getTransactionData(txData.from, function(data) {
+                if (data.error) {
+                    reject({
+                        isError: true,
+                        error: data.error
+                    });
+                } else {
+                    Object.assign(txData, {
+                        isOffline: Boolean(data.isOffline),
+                        nonce: data.data.nonce
+                    });
 
-                uiFuncs.genTxWithInfo(txData, callback);
-            }
-        });
-    }
+                    uiFuncs.genTxWithInfo(txData, function(result) {
+                        console.log("gen tx", result);
+                        resolve(result);
+                    });
+                }
+            });
+        }
+    });
 };
 
 uiFuncs.genTxWithInfo = function(data, callback) {
@@ -260,7 +274,6 @@ uiFuncs.genTxWithInfo = function(data, callback) {
         if (!data.trezorUnlocked) {
             uiFuncs.trezorUnlock().then(() => {
                 data.trezorUnlocked = true;
-
                 uiFuncs.signTxTrezor(rawTx, data, callback);
             });
         } else {
@@ -297,64 +310,96 @@ function mapTransToWeb3Trans(trans) {
     });
 }
 
-uiFuncs.sendTx = function(signedTx, callback) {
+/*
+    send Tx via ajaxReq or web3
+    notify user tx hash
+    return tx hash
+
+    @returns Promise<data: string txHash | error>
+
+ */
+uiFuncs.sendTx = function(signedTx, notify = true) {
     // check for web3 late signed tx
 
     // web3 transaction can be a string that starts w/ quotes or object
 
-    if (typeof signedTx === "string" && signedTx.slice(0, 2) === "0x") {
-        ajaxReq.sendRawTx(signedTx, function(data) {
-            var resp = {};
-            if (data.error) {
-                resp = {
-                    isError: true,
-                    error: data.msg
-                };
-            } else {
-                resp = {
-                    isError: false,
-                    data: data.data
-                };
-            }
-            if (callback !== undefined) callback(resp);
-        });
-    } else {
-        var cb_ = function(err, txHash) {
+    return new Promise((resolve, reject) => {
+        if (typeof signedTx === "string" && signedTx.slice(0, 2) === "0x") {
+            ajaxReq.sendRawTx(signedTx, function(data) {
+                if (data.error) {
+                    reject({
+                        isError: true,
+                        error: data.msg
+                    });
+                } else {
+                    notify && uiFuncs.showTxHash(data.data);
+                    resolve({
+                        isError: false,
+                        data: data.data
+                    });
+                }
+            });
+        } else {
+            return uiFuncs
+                .handleWeb3Trans(signedTx)
+                .then(txHash => {
+                    notify && uiFuncs.showTxHash(txHash);
+                    resolve({ data: txHash, isError: false });
+                })
+                .catch(reject);
+        }
+    });
+};
+
+uiFuncs.showTxHash = function(txHash) {
+    var txHashLink = ajaxReq.blockExplorerTX.replace("[[txHash]]", txHash);
+    var verifyTxBtn =
+        ajaxReq.type !== nodes.nodeTypes.Custom
+            ? '<a class="btn btn-xs btn-info strong" href="' +
+              txHashLink +
+              '" target="_blank" rel="noopener noreferrer">Verify Transaction</a>'
+            : "";
+    var completeMsg =
+        "<p>" +
+        globalFuncs.successMsgs[2] +
+        "<strong>" +
+        txHash +
+        "</strong></p>" +
+        verifyTxBtn;
+
+    uiFuncs.notifier.success(completeMsg, 0);
+};
+
+uiFuncs.handleWeb3Trans = function(signedTx) {
+    return new Promise((resolve, reject) => {
+        if (!"web" in window) {
+            return reject("Web3 not found in window");
+        }
+
+        let transaction;
+
+        try {
+            // when sending tx, web3 tx comes in as string or object
+
+            const _signedTx =
+                typeof signedTx === "string" ? JSON.parse(signedTx) : signedTx;
+
+            transaction = mapTransToWeb3Trans(_signedTx);
+        } catch (e) {
+            reject(e);
+        }
+        web3.eth.sendTransaction(transaction, function(err, result) {
             if (err) {
-                handleErr(err);
+                uiFuncs.notifier.danger(err);
+                reject(err);
             } else {
-                callback({ data: txHash });
+                resolve(result);
             }
-        };
-
-        uiFuncs.handleWeb3Trans(signedTx, cb_);
-    }
-
-    function handleErr(err) {
-        return callback({
-            isError: true,
-            error: err.stack
         });
-    }
+    });
 };
 
-uiFuncs.handleWeb3Trans = function(signedTx, cb_) {
-    let transaction;
-
-    try {
-        // when sending tx, web3 tx comes in as string or object
-
-        const _signedTx =
-            typeof signedTx === "string" ? JSON.parse(signedTx) : signedTx;
-
-        transaction = mapTransToWeb3Trans(_signedTx);
-    } catch (e) {
-        cb_(e);
-    }
-    web3.eth.sendTransaction(transaction, cb_);
-};
-
-uiFuncs.transferAllBalance = function(fromAdd, gasLimit, callback) {
+uiFuncs.transferAllBalance = function(fromAdd, gasLimit) {
     try {
         ajaxReq.getTransactionData(fromAdd, function(data) {
             if (data.error) throw data.msg;
@@ -367,19 +412,17 @@ uiFuncs.transferAllBalance = function(fromAdd, gasLimit, callback) {
                 etherUnits.toEther(maxVal, "wei") < 0
                     ? 0
                     : etherUnits.toEther(maxVal, "wei");
-            if (callback !== undefined)
-                callback({
-                    isError: false,
-                    unit: "ether",
-                    value: maxVal
-                });
+            return {
+                isError: false,
+                unit: "ether",
+                value: maxVal
+            };
         });
     } catch (e) {
-        if (callback !== undefined)
-            callback({
-                isError: true,
-                error: e
-            });
+        return {
+            isError: true,
+            error: e
+        };
     }
 };
 uiFuncs.notifier = {
@@ -464,19 +507,19 @@ uiFuncs.genTxContract = function(
                 }
                 Object.assign(tx, result);
                 genTx(tx, wallet)
-                    .catch(error => {
-                        uiFuncs.notifier.danger(
-                            (error && error.msg) || "error generating tx"
-                        );
-
-                        reject(error);
-                    })
                     .then(rawTx => {
                         if (!rawTx) {
                             reject(false);
                         } else {
                             resolve(Object.assign(tx, rawTx));
                         }
+                    })
+                    .catch(error => {
+                        uiFuncs.notifier.danger(
+                            (error && error.msg) || "error generating tx"
+                        );
+
+                        reject(error);
                     });
             })
             .catch(error => {
@@ -510,20 +553,19 @@ uiFuncs.genTxContract = function(
                     const { nonce } = data.data;
 
                     // wallet and tx must be combined parameters to work
-                    uiFuncs.genTxWithInfo(
+                    const result = uiFuncs.genTxWithInfo(
                         Object.assign({}, tx, wallet, {
                             nonce,
                             chainId,
                             eip155
-                        }),
-                        function(result) {
-                            if (result.error) {
-                                reject(result);
-                            } else {
-                                resolve(result);
-                            }
-                        }
+                        })
                     );
+
+                    if (result.error) {
+                        reject(result);
+                    } else {
+                        resolve(result);
+                    }
                 }
             });
         });
@@ -532,8 +574,9 @@ uiFuncs.genTxContract = function(
 
 /*
 
-send tx to contract
-
+    send tx to contract
+    notify user
+    return tx hash
     @param: {node, network} contract Contract
 
 
@@ -541,104 +584,57 @@ send tx to contract
 
     @returns: Promise<tx|Error>
  */
-uiFuncs.sendTxContract = function({ node, network }, tx) {
+uiFuncs.sendTxContract = function({ node, network }, tx, notify = true) {
     return new Promise((resolve, reject) => {
         if (
             typeof tx.signedTx === "string" &&
             tx.signedTx.slice(0, 2) === "0x"
         ) {
             node.lib.sendRawTx(tx.signedTx, resp => {
-                if (!resp.isError) {
-                    const bExStr =
-                        node.type !== nodes.nodeTypes.Custom
-                            ? "<a href='" +
-                              node.blockExplorerTX.replace(
-                                  "[[txHash]]",
-                                  resp.data
-                              ) +
-                              "' target='_blank' rel='noopener'> View your transaction </a>"
-                            : "";
-                    const contractAddr = tx.to
-                        ? " & Contract Address <a href='" +
-                          node.blockExplorerAddr.replace("[[address]]", tx.to) +
-                          "' target='_blank' rel='noopener'>" +
-                          tx.to +
-                          "</a>"
-                        : "";
-                    uiFuncs.notifier.success(
-                        globalFuncs.successMsgs[2] +
-                            "<br />" +
-                            resp.data +
-                            "<br />" +
-                            bExStr +
-                            contractAddr
-                    );
-
-                    resolve(Object.assign(Object.assign({}, tx, resp.data)));
-                } else {
-                    let response = resp.error;
-
-                    // if (resp.error.includes('Insufficient funds')) {
-                    //
-                    //
-                    //     response = globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type);
-                    //
-                    //
-                    // }
-
-                    uiFuncs.notifier.danger(response);
-
-                    reject(false);
+                if (resp.error) {
+                    return reject(resp);
                 }
+
+                if (notify) {
+                    showTxHashContractAddr(resp.data);
+                }
+
+                return resolve(Object.assign(Object.assign({}, tx, resp.data)));
             });
         } else {
             // send tx via web3
 
-            uiFuncs.handleWeb3Trans(tx.signedTx, function(err, result) {
-                if (err) {
-                    const { message, stack } = err;
-
-                    //
-                    // if (message.includes('Insufficient funds')) {
-                    //
-                    //
-                    //     response = globalFuncs.errorMsgs[17].replace('{}', ajaxReq.type);
-                    //
-                    //
-                    // }
-
-                    uiFuncs.notifier.danger(message);
-
-                    reject(false);
-                } else {
-                    const bExStr =
-                        network !== nodes.nodeTypes.Custom
-                            ? "<a href='" +
-                              node.blockExplorerTX.replace(
-                                  "[[txHash]]",
-                                  result
-                              ) +
-                              "' target='_blank' rel='noopener'> View your transaction </a>"
-                            : "";
-                    const contractAddr = tx.to
-                        ? " & Contract Address <a href='" +
-                          node.blockExplorerAddr.replace("[[address]]", tx.to) +
-                          "' target='_blank' rel='noopener'>" +
-                          tx.to +
-                          "</a>"
-                        : "";
-                    uiFuncs.notifier.success(
-                        globalFuncs.successMsgs[2] +
-                            "<br />" +
-                            result +
-                            "<br />" +
-                            bExStr +
-                            contractAddr
-                    );
-
+            uiFuncs
+                .handleWeb3Trans(tx.signedTx)
+                .then(function(result) {
+                    notify && showTxHashContractAddr(result);
                     resolve(Object.assign(Object.assign({}, tx)));
-                }
-            });
+                })
+                .catch(reject);
+        }
+
+        function showTxHashContractAddr(txHash) {
+            const bExStr =
+                network !== nodes.nodeTypes.Custom
+                    ? "<a href='" +
+                      node.blockExplorerTX.replace("[[txHash]]", txHash) +
+                      "' target='_blank' rel='noopener'> View your transaction </a>"
+                    : "";
+            const contractAddr = tx.to
+                ? " & Contract Address <a href='" +
+                  node.blockExplorerAddr.replace("[[address]]", tx.to) +
+                  "' target='_blank' rel='noopener'>" +
+                  tx.to +
+                  "</a>"
+                : "";
+            uiFuncs.notifier.success(
+                globalFuncs.successMsgs[2] +
+                    "<br />" +
+                    txHash +
+                    "<br />" +
+                    bExStr +
+                    contractAddr
+            );
         }
     });
 };

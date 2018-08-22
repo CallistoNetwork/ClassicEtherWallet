@@ -85,44 +85,23 @@ var quickSendCtrl = function($scope, $sce) {
         }
     };
     $scope.unlockAndSend = function() {
-        try {
-            $scope.decryptWallet();
-            var txData = uiFuncs.getTxData($scope);
-            uiFuncs.generateTx(txData, function(rawTx) {
-                if (!rawTx.isError) {
-                    uiFuncs.sendTx(rawTx.signedTx, function(resp) {
-                        if (!resp.isError) {
-                            $scope.sendTxStatus = $sce.trustAsHtml(
-                                globalFuncs.getSuccessText(
-                                    globalFuncs.successMsgs[2] +
-                                        "<br />" +
-                                        resp.data +
-                                        "<br /><a href='http://etherscan.io/tx/" +
-                                        resp.data +
-                                        "' target='_blank' rel='noopener'> ETH TX via EtherScan.io </a>"
-                                )
-                            );
-                            $scope.setBalance();
-                        } else {
-                            $scope.sendTxStatus = $sce.trustAsHtml(
-                                globalFuncs.getDangerText(resp.error)
-                            );
-                        }
-                    });
-                    $scope.validateTxStatus = $sce.trustAsHtml(
-                        globalFuncs.getDangerText("")
-                    );
-                } else {
-                    $scope.validateTxStatus = $sce.trustAsHtml(
-                        globalFuncs.getDangerText(rawTx.error)
-                    );
-                }
+        $scope.decryptWallet();
+        var txData = uiFuncs.getTxData($scope);
+        uiFuncs
+            .generateTx(txData)
+            .then(function(rawTx) {
+                uiFuncs.sendTx(rawTx.signedTx, true).then(function(resp) {
+                    $scope.setBalance();
+                });
+                $scope.validateTxStatus = $sce.trustAsHtml(
+                    globalFuncs.getDangerText("")
+                );
+            })
+            .catch(err => {
+                $scope.validateTxStatus = $sce.trustAsHtml(
+                    globalFuncs.getDangerText(rawTx.error)
+                );
             });
-        } catch (e) {
-            $scope.validateTxStatus = $sce.trustAsHtml(
-                globalFuncs.getDangerText(e)
-            );
-        }
     };
     $scope.decryptWallet = function() {
         $scope.wallet = null;

@@ -147,11 +147,11 @@ class Contract {
     }
 
     genTxContract(
-        funcName,
+        _func,
         wallet,
         { inputs = [], value = 0, unit = "ether", from = null } = {}
     ) {
-        return uiFuncs.genTxContract(funcName, this, wallet, {
+        return uiFuncs.genTxContract(_func, this, wallet, {
             inputs,
             network: this.network,
             to: this.address,
@@ -283,132 +283,6 @@ class InitContract extends Contract {
     //
     // }
 }
-
-/*
-
-load contract from abiDefinitions
- */
-
-//
-// class OfficialityContract extends InitContract {
-//
-//
-//     constructor() {
-//
-//         const abi = [{
-//             "constant": false,
-//             "inputs": [{"name": "_name", "type": "string"}],
-//             "name": "remove_entry",
-//             "outputs": [],
-//             "payable": false,
-//             "stateMutability": "nonpayable",
-//             "type": "function"
-//         }, {
-//             "constant": false,
-//             "inputs": [{"name": "_who", "type": "address"}],
-//             "name": "fire",
-//             "outputs": [],
-//             "payable": false,
-//             "stateMutability": "nonpayable",
-//             "type": "function"
-//         }, {
-//             "constant": true,
-//             "inputs": [],
-//             "name": "owner",
-//             "outputs": [{"name": "", "type": "address"}],
-//             "payable": false,
-//             "stateMutability": "view",
-//             "type": "function"
-//         }, {
-//             "constant": false,
-//             "inputs": [{"name": "_name", "type": "string"}, {"name": "_link", "type": "string"}, {
-//                 "name": "_metadata",
-//                 "type": "string"
-//             }],
-//             "name": "add_entry",
-//             "outputs": [],
-//             "payable": false,
-//             "stateMutability": "nonpayable",
-//             "type": "function"
-//         }, {
-//             "constant": false,
-//             "inputs": [{"name": "_who", "type": "address"}],
-//             "name": "hire",
-//             "outputs": [],
-//             "payable": false,
-//             "stateMutability": "nonpayable",
-//             "type": "function"
-//         }, {
-//             "constant": true,
-//             "inputs": [{"name": "_name", "type": "string"}],
-//             "name": "get_entry",
-//             "outputs": [{"name": "", "type": "string"}, {"name": "", "type": "string"}, {"name": "", "type": "string"}],
-//             "payable": false,
-//             "stateMutability": "view",
-//             "type": "function"
-//         }, {
-//             "constant": true,
-//             "inputs": [{"name": "_link", "type": "string"}],
-//             "name": "is_official",
-//             "outputs": [{"name": "", "type": "bool"}],
-//             "payable": false,
-//             "stateMutability": "view",
-//             "type": "function"
-//         }, {
-//             "constant": false,
-//             "inputs": [{"name": "_who", "type": "address"}],
-//             "name": "transfer_ownership",
-//             "outputs": [],
-//             "payable": false,
-//             "stateMutability": "nonpayable",
-//             "type": "function"
-//         }, {
-//             "inputs": [],
-//             "payable": false,
-//             "stateMutability": "nonpayable",
-//             "type": "constructor"
-//         }, {
-//             "anonymous": false,
-//             "inputs": [{"indexed": false, "name": "_name", "type": "string"}],
-//             "name": "Registered",
-//             "type": "event"
-//         }, {
-//             "anonymous": false,
-//             "inputs": [{"indexed": false, "name": "_name", "type": "string"}],
-//             "name": "Removed",
-//             "type": "event"
-//         }];
-//
-//         const addr = '0xf6f29e5ba51171c4ef4997bd0208c7e9bc5d5eda';
-//         super(abi, addr, 'CLO');
-//
-//     }
-//
-//
-//     /*
-//
-//         @param path string
-//         @returns Promise<bool>
-//      */
-//
-//     handle_is_official(path) {
-//
-//         const calls = [
-//             "http://" + path,
-//             "https://" + path,
-//             "http://" + path + '/',
-//             "https://" + path + '/'
-//         ].map(_path => this.call('is_official', _path));
-//
-//         return Promise.all(calls).then(result => {
-//
-//             this.is_official = result.some(item => item);
-//
-//             return this.is_official;
-//
-//         });
-//     }
-// }
 
 function parseJsonContract(contract, network, _bootstrap) {
     if (

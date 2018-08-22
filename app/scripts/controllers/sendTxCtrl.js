@@ -313,7 +313,10 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
             $scope.notifier.danger(globalFuncs.errorMsgs[5]);
             return;
         }
-        var txData = uiFuncs.getTxData($scope);
+        var txData = uiFuncs.getTxData({
+            tx: $scope.tx,
+            wallet: walletService.wallet
+        });
         txData.gasPrice = $scope.tx.gasPrice
             ? "0x" + new BigNumber($scope.tx.gasPrice).toString(16)
             : null;
@@ -327,7 +330,7 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
         // if false, replace gas price and nonce. gas price from slider. nonce from server.
         if (txData.gasPrice && txData.nonce) txData.isOffline = true;
 
-        if ($scope.tx.sendMode == "token") {
+        if ($scope.tx.sendMode === "token") {
             // if the amount of tokens you are trying to send > tokens you have, throw error
             if (
                 !isEnough(
@@ -347,58 +350,24 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
             ).data;
             txData.value = "0x00";
         }
-        uiFuncs.generateTx(txData, function(rawTx) {
-            if (!rawTx.isError) {
+        uiFuncs
+            .generateTx(txData)
+            .then(function(rawTx) {
                 $scope.rawTx = rawTx.rawTx;
                 $scope.signedTx = rawTx.signedTx;
                 $scope.showRaw = true;
-            } else {
+                if (!$scope.$$phase) $scope.$apply();
+            })
+            .catch(err => {
                 $scope.showRaw = false;
-                $scope.notifier.danger(rawTx.error);
-            }
-            if (!$scope.$$phase) $scope.$apply();
-        });
+            });
     };
     $scope.sendTx = function() {
         $scope.sendTxModal.close();
-        uiFuncs.sendTx($scope.signedTx, function(resp) {
-            if (!resp.isError) {
-                var txHashLink = $scope.ajaxReq.blockExplorerTX.replace(
-                    "[[txHash]]",
-                    resp.data
-                );
-                var verifyTxBtn =
-                    $scope.ajaxReq.type !== nodes.nodeTypes.Custom
-                        ? '<a class="btn btn-xs btn-info strong" href="' +
-                          txHashLink +
-                          '" target="_blank" rel="noopener noreferrer">Verify Transaction</a>'
-                        : "";
-                var completeMsg =
-                    "<p>" +
-                    globalFuncs.successMsgs[2] +
-                    "<strong>" +
-                    resp.data +
-                    "</strong></p>" +
-                    verifyTxBtn;
-                $scope.notifier.success(completeMsg, 0);
-                $scope.wallet.setBalance(applyScope);
-                if ($scope.tx.sendMode === "token")
-                    $scope.wallet.tokenObjs[$scope.tokenTx.id].setBalance();
-            } else {
-                if (resp.error.includes("insufficient funds")) {
-                    $scope.notifier.danger(
-                        globalFuncs.errorMsgs[17].replace("{}", ajaxReq.type)
-                    );
-                } else {
-                    $scope.notifier.danger(
-                        resp.error ||
-                            globalFuncs.errorMsgs[17].replace(
-                                "{}",
-                                ajaxReq.type
-                            )
-                    );
-                }
-            }
+        uiFuncs.sendTx($scope.signedTx).then(function(resp) {
+            $scope.wallet.setBalance(applyScope);
+            if ($scope.tx.sendMode === "token")
+                $scope.wallet.tokenObjs[$scope.tokenTx.id].setBalance();
         });
     };
     $scope.transferAllBalance = function() {

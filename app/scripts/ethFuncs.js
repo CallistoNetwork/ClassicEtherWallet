@@ -17,7 +17,7 @@ ethFuncs.isChecksumAddress = function(address) {
     return address === ethUtil.toChecksumAddress(address);
 };
 ethFuncs.validateHexString = function(str) {
-    if (!str) return false;
+    if (str === "undefined") return false;
     else if (str === "") return true;
     str =
         str.substring(0, 2) === "0x"

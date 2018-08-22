@@ -1,13 +1,9 @@
 <label> {{input.name}}
     <small> {{input.type}}</small>
 </label>
-<div ng-if="input.type.slice(-2) === '[]'">
-
-    <array-input-drtv name="{{input.name}}" type="{{input.type}}"></array-input-drtv>
-</div>
-<div ng-if="input.type.slice(-2) !== '[]'">
-
-    <div ng-switch="input.type">
+<div ng-switch="input.type.slice(-2) === '[]'">
+    <array-input-drtv ng-switch-when="true" name="{{input.name}}" type="{{input.type}}"></array-input-drtv>
+    <div ng-switch-default="false" ng-switch="input.type">
         <div class="item write-address row" ng-switch-when="address">
             <address-field var-name="input.value"></address-field>
         </div>

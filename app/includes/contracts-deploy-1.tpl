@@ -130,7 +130,5 @@
            translate="NAV_DeployContract"> Deploy Contract </a>
     </div>
 
-    @@if (site === 'cew' ) { @@include( '../includes/contracts-deploy-modal.tpl', { "site": "cew" } ) }
-    @@if (site === 'cx' ) { @@include( '../includes/contracts-deploy-modal.tpl', { "site": "cx" } ) }
 
 </section>

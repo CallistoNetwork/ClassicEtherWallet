@@ -181,6 +181,9 @@ const dexnsCtrl = function(
         }
     };
 
+    $scope.toEther = () =>
+        etherUnits.toEther(dexnsService.feContract.namePrice[0].value, "wei");
+
     $scope.handleSubmit = function(_function) {
         if (_function.stateMutability === "view") {
             $scope.call(_function);

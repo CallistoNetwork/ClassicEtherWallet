@@ -17,7 +17,9 @@
             <a class="btn btn-default" ng-click="dropdownContracts = !dropdownContracts">
                 {{contract.selectedFunc==null ? "Select a function" : contract.selectedFunc.name}}<i class="caret"></i></a>
             <ul class="dropdown-menu" ng-show="dropdownContracts">
-                <li ng-repeat="func in contract.functions track by $index"><a
+                <li ng-repeat="func in contract.functions track by $index"
+                    ng-class="func.stateMutability === 'view' ? 'btn-read' : 'btn-write'"
+                ><a
                     ng-click="selectFunc($index)">{{func.name}}</a></li>
             </ul>
         </div>
@@ -29,8 +31,6 @@
 
             @@include( '../includes/contract-input.tpl', { "site": "cew" } )
 
-            <!--<contract-input input="{{input}}"></contract-input>-->
-
         </div>
     </div>
     <!-- / Write -->
@@ -41,7 +41,6 @@
 
             @@include( '../includes/contract-output.tpl', { "site": "cew" } )
 
-            <!--<contract-output output="{{output}}"></contract-output>-->
 
         </div>
     </div>

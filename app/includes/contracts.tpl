@@ -5,16 +5,21 @@
     ng-cloak
 >
 
+    @@if (site === 'cew' ) { @@include( '../includes/contracts-interact-modal.tpl', { "site": "cew" } ) }
+    @@if (site === 'cx' ) { @@include( '../includes/contracts-interact-modal.tpl', { "site": "cx" } ) }
+
+    @@if (site === 'cew' ) { @@include( '../includes/contracts-deploy-modal.tpl', { "site": "cew" } ) }
+    @@if (site === 'cx' ) { @@include( '../includes/contracts-deploy-modal.tpl', { "site": "cx" } ) }
 
     <!-- Title -->
     <div class="block text-center">
-        <h1>
-            <a translate="NAV_InteractContract" ng-class="{'is-active': visibility=='interactView'}"
-               ng-click="visibility = 'interactView'"> Interact with Contract </a>
+        <h2>
+            <a translate="NAV_InteractContract" ng-class="{'isActive': visibility === 'interactView'}"
+               ng-click="setViz('interactView')"> Interact with Contract </a>
             or
-            <a translate="NAV_DeployContract" ng-class="{'is-active': visibility=='deployView'}"
-               ng-click="visibility = 'deployView'"> Deploy Contract </a>
-        </h1>
+            <a translate="NAV_DeployContract" ng-class="{'isActive': visibility === 'deployView'}"
+               ng-click="setViz('deployView')"> Deploy Contract </a>
+        </h2>
     </div>
     <!-- / Title -->
 

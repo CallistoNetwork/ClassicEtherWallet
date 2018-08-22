@@ -25,7 +25,7 @@
     >
         <!-- Input -->
         <form
-            ng-class="_function.stateMutability === 'view' ? 'col-sm-6' : 'col-sm-12'"
+            ng-class="_function.stateMutability === 'view' ? 'col-sm-4' : 'col-sm-12'"
             ng-submit="handleSubmit(_function);"
         >
             <div ng-repeat="input in _function.inputs">
@@ -42,12 +42,12 @@
             </button>
         </form>
 
-        <div class="col-sm-6" ng-if="_function.stateMutability === 'view'">
+        <div class="col-sm-8" ng-if="_function.stateMutability === 'view'">
 
 
             <table class="table table-responsive" title="Metadata"
             >
-                <caption>Outputs</caption>
+                <caption>{{_function.name}}</caption>
 
                 <tbody>
                 <!-- Custom Metadata UI -->
@@ -95,21 +95,9 @@
             <div
                 ng-if="_function.name === 'metadataOf' && raw"
             >
-                <label
-                    for="metadata"
-                >
-                    Meta Data:
-                </label>
-                <textarea
-                    title="raw metadata"
-                    id="metadata"
-                    class="form-control"
-                    readonly
-                    rows="5"
-                >
-                                {{ raw }}
-
-                            </textarea>
+                <code>
+                    {{raw}}
+                </code>
             </div>
 
         </div>

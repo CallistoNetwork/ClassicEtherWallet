@@ -15,7 +15,7 @@
 
         <div class="btn-group">
             <a class="btn btn-default" ng-click="dropdownContracts = !dropdownContracts">
-                {{contract.selectedFunc==null ? "Select a function" : contract.selectedFunc.name}}<i class="caret"></i></a>
+                {{contract.selectedFunc == null ? "Select a function" : contract.selectedFunc.name}}<i class="caret"></i></a>
             <ul class="dropdown-menu" ng-show="dropdownContracts">
                 <li ng-repeat="func in contract.functions track by $index"
                     ng-class="func.stateMutability === 'view' ? 'btn-read' : 'btn-write'"

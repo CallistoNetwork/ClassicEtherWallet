@@ -15,40 +15,42 @@
     <div class="block text-center">
         <h2>
             <a translate="NAV_InteractContract" ng-class="{'isActive': visibility === 'interactView'}"
-               ng-click="setViz('interactView')"> Interact with Contract </a>
+               ng-click="setVisibility('interactView')"> Interact with Contract </a>
             or
             <a translate="NAV_DeployContract" ng-class="{'isActive': visibility === 'deployView'}"
-               ng-click="setViz('deployView')"> Deploy Contract </a>
+               ng-click="setVisibility('deployView')"> Deploy Contract </a>
         </h2>
     </div>
     <!-- / Title -->
 
 
     <!-- Interact Contracts -->
-    <article class="row block" ng-show="visibility=='interactView'">
 
-        @@if (site === 'cew' ) { @@include( '../includes/contracts-interact-1.tpl', { "site": "cew" } ) }
-        @@if (site === 'cx' ) { @@include( '../includes/contracts-interact-1.tpl', { "site": "cx" } ) }
-
-    </article>
+    <div ng-show="visibility === 'interactView'">
 
 
-    <article class="row block" ng-show="visibility=='interactView' && showReadWrite">
+        <article class="row block">
 
-        @@if (site === 'cew' ) { @@include( '../includes/contracts-interact-2.tpl', { "site": "cew" } ) }
-        @@if (site === 'cx' ) { @@include( '../includes/contracts-interact-2.tpl', { "site": "cx" } ) }
+            @@if (site === 'cew' ) { @@include( '../includes/contracts-interact-1.tpl', { "site": "cew" } ) }
+            @@if (site === 'cx' ) { @@include( '../includes/contracts-interact-1.tpl', { "site": "cx" } ) }
 
-    </article>
+        </article>
 
-    <article ng-show="visibility=='interactView'">
+
+        <article class="row block" ng-show="showReadWrite">
+
+            @@if (site === 'cew' ) { @@include( '../includes/contracts-interact-2.tpl', { "site": "cew" } ) }
+            @@if (site === 'cx' ) { @@include( '../includes/contracts-interact-2.tpl', { "site": "cx" } ) }
+
+        </article>
+
 
         @@if (site === 'cew' ) { @@include( '../includes/contracts-interact-modal.tpl', { "site": "cew" } ) }
         @@if (site === 'cx' ) { @@include( '../includes/contracts-interact-modal.tpl', { "site": "cx" } ) }
 
-    </article>
-    <!-- / Interact Contracts -->
+        <!-- / Interact Contracts -->
 
-
+    </div>
     <!-- Deploy Contract -->
     <article class="row block" ng-show="visibility=='deployView'">
 

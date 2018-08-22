@@ -3,6 +3,7 @@
 var en = function() {};
 en.code = "en";
 en.data = {
+    Result: "Result",
     NAV_Network_Info: "Network Info",
     OC_Label_1:
         "Allows you to check whether a certain media resource is\n" +

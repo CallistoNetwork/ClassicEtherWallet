@@ -372,19 +372,19 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     };
     $scope.transferAllBalance = function() {
         if ($scope.tx.sendMode != "token") {
-            uiFuncs.transferAllBalance(
-                $scope.wallet.getAddressString(),
-                $scope.tx.gasLimit,
-                function(resp) {
-                    if (!resp.isError) {
-                        $scope.tx.unit = resp.unit;
-                        $scope.tx.value = resp.value;
-                    } else {
-                        $scope.showRaw = false;
-                        $scope.notifier.danger(resp.error);
-                    }
-                }
-            );
+            uiFuncs
+                .transferAllBalance(
+                    $scope.wallet.getAddressString(),
+                    $scope.tx.gasLimit
+                )
+                .then(function(resp) {
+                    $scope.tx.unit = resp.unit;
+                    $scope.tx.value = resp.value;
+                })
+                .catch(resp => {
+                    $scope.showRaw = false;
+                    $scope.notifier.danger(resp.error);
+                });
         } else {
             $scope.tx.value = $scope.wallet.tokenObjs[
                 $scope.tokenTx.id

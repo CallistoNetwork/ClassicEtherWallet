@@ -55,18 +55,18 @@ var quickSendCtrl = function($scope, $sce) {
         $scope.wallet.getAddressString = function() {
             return $scope.allWallets[$scope.selectedWallet].addr;
         };
-        uiFuncs.transferAllBalance(
-            $scope.wallet.getAddressString(),
-            $scope.tx.gasLimit,
-            function(resp) {
-                if (!resp.isError) {
-                    $scope.tx.unit = resp.unit;
-                    $scope.tx.value = resp.value;
-                } else {
-                    $scope.validateTxStatus = $sce.trustAsHtml(resp.error);
-                }
-            }
-        );
+        uiFuncs
+            .transferAllBalance(
+                $scope.wallet.getAddressString(),
+                $scope.tx.gasLimit
+            )
+            .then(function(resp) {
+                $scope.tx.unit = resp.unit;
+                $scope.tx.value = resp.value;
+            })
+            .catch(resp => {
+                $scope.validateTxStatus = $sce.trustAsHtml(resp.error);
+            });
     };
     $scope.prepTX = function() {
         try {

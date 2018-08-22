@@ -377,7 +377,9 @@ var ensCtrl = function($scope, $sce, $rootScope, walletService) {
         $scope.ensConfirmModalModal.close();
         $scope.ensFinalizeModal.close();
         var signedTx = $scope.generatedTxs.shift();
-        uiFuncs.sendTx(signedTx).then(function(resp) {
+
+        // send tx, make own notifcation
+        uiFuncs.sendTx(signedTx, false).then(function(resp) {
             var emailLink =
                 '<a class="strong" href="mailto:support@myetherwallet.com?Subject=Issue%20regarding%20my%20ENS%20&Body=Hi%20Taylor%2C%20%0A%0AI%20have%20a%20question%20concerning%20my%20ENS%20transaction.%20%0A%0AI%20was%20attempting%20to%3A%0A-%20Start%20an%20ENS%20auction%0A-%20Bid%20on%20an%20ENS%20name%0A-%20Reveal%20my%20ENS%20bid%0A-%20Finalize%20my%20ENS%20name%0A%0AUnfortunately%20it%3A%0A-%20Never%20showed%20on%20the%20blockchain%0A-%20Failed%20due%20to%20out%20of%20gas%0A-%20Failed%20for%20another%20reason%0A-%20Never%20showed%20up%20in%20the%20account%20I%20was%20sending%20to%0A%0APlease%20see%20the%20below%20details%20for%20additional%20information.%0A%0AThank%20you.%20%0A%0A_%0A%0A%20name%3A%20' +
                 $scope.objENS.name +

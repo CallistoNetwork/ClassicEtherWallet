@@ -125,7 +125,7 @@ ethFuncs.estimateGas = function(dataObj) {
 /*
 
     Given funcName, contract, and tx data, generates data and sends call, returns decoded outputs
-    @param string funcName
+    @param string | contract.abi[n] _func
     @param Contract contract
     @param Transaction tx
     @returns Promise<{error: bool, data: []any}>
@@ -181,7 +181,7 @@ ethFuncs.call = function(
 
     sent over contract's set network
 
-    @param string funcName
+    @param string | contract.abi[n[ _func
     @param Contract contract
     @param Tx transaction
 

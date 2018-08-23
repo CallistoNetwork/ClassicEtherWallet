@@ -163,7 +163,8 @@ globalFuncs.successMsgs = [
     "Your wallet was successfully added: ",
     "File Selected: ",
     "You are connected to the node ",
-    "Message Signature Verified"
+    "Message Signature Verified",
+    "Check Ledger Device"
 ];
 
 // These are translated in the translation files

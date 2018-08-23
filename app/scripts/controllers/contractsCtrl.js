@@ -160,43 +160,50 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
 
         const to = $scope.tx.to || "0xCONTRACT";
 
-        const contractAddr =
-            to === "0xCONTRACT"
-                ? ethFuncs.getDeteministicContractAddress(
-                      walletString,
-                      data.data.nonce
-                  )
-                : "";
+        ajaxReq.getTransactionData(walletString, function(data) {
+            if (data.error) {
+                uiFuncs.notifier.danger(data.error);
+                return false;
+            }
 
-        Object.assign($scope.tx, {
-            //gasLimit: //0 <= $scope.tx.gasLimit ? $scope.tx.gasLimit : 0,
-            data: handleContractData(),
-            to,
-            contractAddr
-        });
+            const contractAddr =
+                to === "0xCONTRACT"
+                    ? ethFuncs.getDeteministicContractAddress(
+                          walletString,
+                          data.data.nonce
+                      )
+                    : "";
 
-        const txData = uiFuncs.getTxData({
-            tx: $scope.tx,
-            wallet: walletService.wallet
-        });
-
-        uiFuncs
-            .generateTx(txData)
-            .then(function(tx) {
-                $scope.rawTx = tx.rawTx;
-                $scope.signedTx = tx.signedTx;
-                $scope.showRaw = true;
-            })
-            .catch(err => {
-                $scope.showRaw = false;
-            })
-            .finally(() => {
-                if (deployingContract) {
-                    $scope.sendTxModal.open();
-                } else {
-                    $scope.sendContractModal.open();
-                }
+            Object.assign($scope.tx, {
+                //gasLimit: //0 <= $scope.tx.gasLimit ? $scope.tx.gasLimit : 0,
+                data: handleContractData(),
+                to,
+                contractAddr
             });
+
+            const txData = uiFuncs.getTxData({
+                tx: $scope.tx,
+                wallet: walletService.wallet
+            });
+
+            uiFuncs
+                .generateTx(txData)
+                .then(function(tx) {
+                    $scope.rawTx = tx.rawTx;
+                    $scope.signedTx = tx.signedTx;
+                    $scope.showRaw = true;
+                })
+                .catch(err => {
+                    $scope.showRaw = false;
+                })
+                .finally(() => {
+                    if (deployingContract) {
+                        $scope.sendTxModal.open();
+                    } else {
+                        $scope.sendContractModal.open();
+                    }
+                });
+        });
     };
 
     $scope.sendTx = function() {

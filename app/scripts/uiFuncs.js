@@ -92,7 +92,7 @@ uiFuncs.signTxLedger = function(
     const txToSign = ethUtil.rlp.encode(toHash);
     const localCallback = function(result, error) {
         if (error) {
-            return callback({
+            callback({
                 isError: true,
                 error,
                 msg: error
@@ -203,7 +203,9 @@ uiFuncs.generateTx = function(txData) {
                     });
 
                     uiFuncs.genTxWithInfo(txData, function(result) {
-                        resolve(result);
+                        if (result.error) {
+                            reject(result);
+                        } else resolve(result);
                     });
                 }
             });
@@ -245,11 +247,13 @@ uiFuncs.genTxWithInfo = function(data, callback = console.log) {
         var EIP155Supported = false;
         var localCallback = function(result, error) {
             if (error) {
-                return callback({
+                callback({
                     isError: true,
                     error: error
                 });
             } else {
+                uiFuncs.notifier.info(globalFuncs.successMsgs[7]);
+
                 var splitVersion = result["version"].split(".");
 
                 if (parseInt(splitVersion[0]) > 1) {
@@ -275,10 +279,15 @@ uiFuncs.genTxWithInfo = function(data, callback = console.log) {
         // https://github.com/trezor/connect/blob/v4/examples/signtx-ethereum.html
 
         if (!data.trezorUnlocked) {
-            uiFuncs.trezorUnlock().then(() => {
-                data.trezorUnlocked = true;
-                uiFuncs.signTxTrezor(rawTx, data, callback);
-            });
+            uiFuncs
+                .trezorUnlock()
+                .then(() => {
+                    data.trezorUnlocked = true;
+                    uiFuncs.signTxTrezor(rawTx, data, callback);
+                })
+                .catch(err => {
+                    callback(err);
+                });
         } else {
             uiFuncs.signTxTrezor(rawTx, data, callback);
         }
@@ -556,19 +565,20 @@ uiFuncs.genTxContract = function(
                     const { nonce } = data.data;
 
                     // wallet and tx must be combined parameters to work
-                    const result = uiFuncs.genTxWithInfo(
+                    uiFuncs.genTxWithInfo(
                         Object.assign({}, tx, wallet, {
                             nonce,
                             chainId,
                             eip155
-                        })
+                        }),
+                        function(result) {
+                            if (result.error) {
+                                reject(result);
+                            } else {
+                                resolve(result);
+                            }
+                        }
                     );
-
-                    if (result.error) {
-                        reject(result);
-                    } else {
-                        resolve(result);
-                    }
                 }
             });
         });

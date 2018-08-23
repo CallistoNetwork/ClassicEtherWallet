@@ -520,6 +520,7 @@ en.data = {
     SUCCESS_5: "File Selected ",
     SUCCESS_6: "You are successfully connected ",
     SUCCESS_7: "Message Signature Verified",
+    SUCCESS_8: "Check Ledger Device",
     WARN_Send_Link:
         "You arrived via a link that has the address, value, gas, data fields, or transaction type (send mode) filled in for you. You can change any information before sending. Unlock your wallet to get started. ",
 

@@ -195,9 +195,11 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
             uiFuncs
                 .generateTx(txData)
                 .then(function(tx) {
-                    $scope.rawTx = tx.rawTx;
-                    $scope.signedTx = tx.signedTx;
-                    $scope.showRaw = true;
+                    $scope.$apply(() => {
+                        $scope.rawTx = tx.rawTx;
+                        $scope.signedTx = tx.signedTx;
+                        $scope.showRaw = true;
+                    });
                 })
                 .catch(err => {
                     $scope.showRaw = false;

@@ -148,10 +148,16 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
         return ethFuncs
             .estimateGas(estObj)
             .then(function(gasLimit) {
-                return ($scope.tx.gasLimit = gasLimit);
+                $scope.$apply(() => {
+                    $scope.tx.gasLimit = gasLimit;
+                });
+                return gasLimit;
             })
             .catch(err => {
-                return ($scope.tx.gasLimit = -1);
+                $scope.$apply(() => {
+                    $scope.tx.gasLimit = -1;
+                });
+                return err;
             });
     };
 

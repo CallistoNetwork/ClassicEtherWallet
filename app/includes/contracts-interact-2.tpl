@@ -20,6 +20,7 @@
                 <li ng-repeat="func in contract.functions track by $index"
                     ng-class="func.stateMutability === 'view' ? 'btn-read' : 'btn-write'"
                 ><a
+                    style="color: rgb(0,0,0)"
                     ng-click="selectFunc($index)">{{func.name}}</a></li>
             </ul>
         </div>

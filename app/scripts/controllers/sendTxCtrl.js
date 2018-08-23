@@ -364,7 +364,7 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     };
     $scope.sendTx = function() {
         $scope.sendTxModal.close();
-        uiFuncs.sendTx($scope.signedTx).then(function(resp) {
+        uiFuncs.sendTx($scope.signedTx, true).then(function(resp) {
             $scope.wallet.setBalance(applyScope);
             if ($scope.tx.sendMode === "token")
                 $scope.wallet.tokenObjs[$scope.tokenTx.id].setBalance();

@@ -339,6 +339,8 @@ uiFuncs.sendTx = function(signedTx, notify = true) {
         if (typeof signedTx === "string" && signedTx.slice(0, 2) === "0x") {
             ajaxReq.sendRawTx(signedTx, function(data) {
                 if (data.error) {
+                    uiFuncs.notifier.danger(data.msg);
+
                     reject({
                         isError: true,
                         error: data.msg
@@ -358,7 +360,10 @@ uiFuncs.sendTx = function(signedTx, notify = true) {
                     notify && uiFuncs.notifySuccessfulTx(txHash);
                     resolve({ data: txHash, isError: false });
                 })
-                .catch(reject);
+                .catch(err => {
+                    uiFuncs.notifier.danger(err);
+                    reject(err);
+                });
         }
     });
 };
@@ -402,7 +407,6 @@ uiFuncs.handleWeb3Trans = function(signedTx) {
         }
         web3.eth.sendTransaction(transaction, function(err, result) {
             if (err) {
-                uiFuncs.notifier.danger(err);
                 reject(err);
             } else {
                 resolve(result);

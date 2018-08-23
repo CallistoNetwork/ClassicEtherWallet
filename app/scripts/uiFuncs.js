@@ -627,7 +627,10 @@ uiFuncs.sendTxContract = function({ node, network }, tx, notify = true) {
                     notify && showSuccessfulTxContract(result);
                     resolve(Object.assign(Object.assign({}, tx)));
                 })
-                .catch(reject);
+                .catch(err => {
+                    uiFuncs.notifier.danger(err);
+                    reject(err);
+                });
         }
 
         function showSuccessfulTxContract(txHash) {

@@ -36,14 +36,13 @@ uiFuncs.isTxDataValid = function(txData) {
     return txData;
 };
 
-uiFuncs.signTxTrezor = function(rawTx, { path }, callback) {
+uiFuncs.signTxTrezor = function(rawTx, { path }, callback = console.log) {
     function localCallback(result) {
         if (!result.success) {
-            callback &&
-                callback({
-                    isError: true,
-                    error: result.error
-                });
+            callback({
+                isError: true,
+                error: result.error
+            });
         }
 
         // check the returned signature_v and recalc signature_v if it needed
@@ -61,7 +60,7 @@ uiFuncs.signTxTrezor = function(rawTx, { path }, callback) {
         rawTx.signedTx = "0x" + eTx.serialize().toString("hex");
         rawTx.isError = false;
 
-        callback && callback(rawTx);
+        callback(rawTx);
     }
 
     TrezorConnect.signEthereumTx(
@@ -77,7 +76,14 @@ uiFuncs.signTxTrezor = function(rawTx, { path }, callback) {
     );
 };
 
-uiFuncs.signTxLedger = function(app, eTx, rawTx, { path }, old, callback) {
+uiFuncs.signTxLedger = function(
+    app,
+    eTx,
+    rawTx,
+    { path },
+    old,
+    callback = console.log
+) {
     eTx.raw[6] = rawTx.chainId;
 
     eTx.raw[7] = eTx.raw[8] = 0;
@@ -86,13 +92,11 @@ uiFuncs.signTxLedger = function(app, eTx, rawTx, { path }, old, callback) {
     const txToSign = ethUtil.rlp.encode(toHash);
     const localCallback = function(result, error) {
         if (error) {
-            if (callback) {
-                callback({
-                    isError: true,
-                    error,
-                    msg: error
-                });
-            }
+            return callback({
+                isError: true,
+                error,
+                msg: error
+            });
         } else {
             let v = result["v"].toString(16);
             if (!old) {
@@ -111,25 +115,26 @@ uiFuncs.signTxLedger = function(app, eTx, rawTx, { path }, old, callback) {
             rawTx.rawTx = JSON.stringify(rawTx);
             rawTx.signedTx = "0x" + eTx.serialize().toString("hex");
             rawTx.isError = false;
-            if (callback) {
-                callback(rawTx);
-            }
+            callback(rawTx);
         }
     };
     app.signTransaction(path, txToSign.toString("hex"), localCallback);
 };
-uiFuncs.signTxDigitalBitbox = function(eTx, rawTx, txData, callback) {
+uiFuncs.signTxDigitalBitbox = function(
+    eTx,
+    rawTx,
+    txData,
+    callback = console.log
+) {
     var localCallback = function(result, error) {
-        if (typeof error != "undefined") {
+        if (typeof error !== "undefined") {
             error = error.errorCode
                 ? u2f.getErrorByCode(error.errorCode)
                 : error;
-            if (callback !== undefined)
-                callback({
-                    isError: true,
-                    error: error
-                });
-            return;
+            callback({
+                isError: true,
+                error: error
+            });
         }
         uiFuncs.notifier.info(
             "The transaction was signed but not sent. Click the blue 'Send Transaction' button to continue."
@@ -141,7 +146,7 @@ uiFuncs.signTxDigitalBitbox = function(eTx, rawTx, txData, callback) {
         rawTx.rawTx = JSON.stringify(rawTx);
         rawTx.signedTx = ethFuncs.sanitizeHex(eTx_.serialize().toString("hex"));
         rawTx.isError = false;
-        if (callback !== undefined) callback(rawTx);
+        callback(rawTx);
     };
     uiFuncs.notifier.info(
         "Touch the LED for 3 seconds to sign the transaction. Or tap the LED to cancel."
@@ -198,7 +203,6 @@ uiFuncs.generateTx = function(txData) {
                     });
 
                     uiFuncs.genTxWithInfo(txData, function(result) {
-                        console.log("gen tx", result);
                         resolve(result);
                     });
                 }
@@ -207,7 +211,7 @@ uiFuncs.generateTx = function(txData) {
     });
 };
 
-uiFuncs.genTxWithInfo = function(data, callback) {
+uiFuncs.genTxWithInfo = function(data, callback = console.log) {
     const gasPrice =
         parseFloat(globalFuncs.localStorage.getItem("gasPrice")) || 21;
 
@@ -241,11 +245,10 @@ uiFuncs.genTxWithInfo = function(data, callback) {
         var EIP155Supported = false;
         var localCallback = function(result, error) {
             if (error) {
-                if (callback)
-                    return callback({
-                        isError: true,
-                        error: error
-                    });
+                return callback({
+                    isError: true,
+                    error: error
+                });
             } else {
                 var splitVersion = result["version"].split(".");
 
@@ -295,7 +298,7 @@ uiFuncs.genTxWithInfo = function(data, callback) {
         rawTx.rawTx = JSON.stringify(rawTx);
         rawTx.signedTx = "0x" + eTx.serialize().toString("hex");
         rawTx.isError = false;
-        if (callback !== undefined) callback(rawTx);
+        callback(rawTx);
     }
 };
 
@@ -332,7 +335,7 @@ uiFuncs.sendTx = function(signedTx, notify = true) {
                         error: data.msg
                     });
                 } else {
-                    notify && uiFuncs.showTxHash(data.data);
+                    notify && uiFuncs.notifySuccessfulTx(data.data);
                     resolve({
                         isError: false,
                         data: data.data
@@ -343,7 +346,7 @@ uiFuncs.sendTx = function(signedTx, notify = true) {
             return uiFuncs
                 .handleWeb3Trans(signedTx)
                 .then(txHash => {
-                    notify && uiFuncs.showTxHash(txHash);
+                    notify && uiFuncs.notifySuccessfulTx(txHash);
                     resolve({ data: txHash, isError: false });
                 })
                 .catch(reject);
@@ -351,7 +354,7 @@ uiFuncs.sendTx = function(signedTx, notify = true) {
     });
 };
 
-uiFuncs.showTxHash = function(txHash) {
+uiFuncs.notifySuccessfulTx = function(txHash) {
     var txHashLink = ajaxReq.blockExplorerTX.replace("[[txHash]]", txHash);
     var verifyTxBtn =
         ajaxReq.type !== nodes.nodeTypes.Custom
@@ -399,9 +402,9 @@ uiFuncs.handleWeb3Trans = function(signedTx) {
     });
 };
 
-uiFuncs.transferAllBalance = function(fromAdd, gasLimit) {
+uiFuncs.transferAllBalance = function(addr, gasLimit) {
     try {
-        ajaxReq.getTransactionData(fromAdd, function(data) {
+        ajaxReq.getTransactionData(addr, function(data) {
             if (data.error) throw data.msg;
             data = data.data;
             var gasPrice = new BigNumber(
@@ -596,7 +599,7 @@ uiFuncs.sendTxContract = function({ node, network }, tx, notify = true) {
                 }
 
                 if (notify) {
-                    showTxHashContractAddr(resp.data);
+                    showSuccessfulTxContract(resp.data);
                 }
 
                 return resolve(Object.assign(Object.assign({}, tx, resp.data)));
@@ -607,13 +610,13 @@ uiFuncs.sendTxContract = function({ node, network }, tx, notify = true) {
             uiFuncs
                 .handleWeb3Trans(tx.signedTx)
                 .then(function(result) {
-                    notify && showTxHashContractAddr(result);
+                    notify && showSuccessfulTxContract(result);
                     resolve(Object.assign(Object.assign({}, tx)));
                 })
                 .catch(reject);
         }
 
-        function showTxHashContractAddr(txHash) {
+        function showSuccessfulTxContract(txHash) {
             const bExStr =
                 network !== nodes.nodeTypes.Custom
                     ? "<a href='" +

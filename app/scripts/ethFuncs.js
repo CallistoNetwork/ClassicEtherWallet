@@ -99,20 +99,18 @@ const adjustGas = gasLimit => {
  */
 
 function mapToGasEst(tx) {
-    const obj = Object.assign(tx, {
+    return Object.assign(tx, {
         value: new BigNumber(tx.value).toString()
     });
-
-    return obj;
 }
 
-ethFuncs.estimateGas = function(dataObj) {
+ethFuncs.estimateGas = function(dataObj, notify = true) {
     return new Promise((resolve, reject) => {
         dataObj = mapToGasEst(dataObj);
 
         ajaxReq.getEstimatedGas(dataObj, function(data) {
             if (data.error || parseInt(data.data) === -1) {
-                uiFuncs.notifier.danger(globalFuncs.errorMsgs[21]);
+                notify && uiFuncs.notifier.danger(globalFuncs.errorMsgs[21]);
 
                 reject(data);
             } else {
@@ -164,11 +162,14 @@ ethFuncs.call = function(
             node.lib.getEthCall(
                 { to: transObj.to, data: transObj.data },
                 function(data) {
-                    resolve(
-                        Object.assign({}, data, {
-                            data: ethFuncs.decodeOutputs(_function, data)
-                        })
-                    );
+                    if (data.error) {
+                        reject(data);
+                    } else
+                        resolve(
+                            Object.assign({}, data, {
+                                data: ethFuncs.decodeOutputs(_function, data)
+                            })
+                        );
                 }
             );
         }

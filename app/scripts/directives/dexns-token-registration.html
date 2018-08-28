@@ -21,9 +21,9 @@
     </div>
 
     <div class="col-sm-4">
-            <div
-                ng-show="!!tokenRegistration.$pending.tokenName"
-                class="alert alert-info" translate="LOADING"></div>
+        <div
+            ng-show="!!tokenRegistration.$pending.tokenName"
+            class="alert alert-info" translate="LOADING"></div>
 
         <div ng-show="tokenRegistration.tokenName.$dirty && !tokenRegistration.$pending.tokenName"
              ng-switch="tokenRegistration.tokenName.$valid"
@@ -87,16 +87,17 @@
 <!--<input name="owner" id="owner" ng-model="input.owner" class="form-control"/>-->
 
 
-<!--<label for="hideOwner">-->
-<!--hideOwner-->
-<!--</label>-->
+<label>
+    hideOwner
+</label>
 
-<!--<input type="checkbox" name="hideOwner" id="hideOwner" ng-model="input.hideOwner" class="form-control"/>-->
+<span class="radio"><label><input ng-model="input.hideOwner" type="radio"
+                                  name="hideOwner"
+                                  ng-value="true">True</label></span>
+<span class="radio"><label><input ng-model="input.hideOwner" type="radio"
+                                  name="hideOwner"
+                                  ng-value="false">False</label></span>
 
-<!--<label for="assign">-->
-<!--assign-->
-<!--</label>-->
-<!--<input type="checkbox" name="assign" id="assign" ng-model="input.assign" class="form-control"/>-->
 
 <hr/>
 

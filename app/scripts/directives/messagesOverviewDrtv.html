@@ -3,7 +3,7 @@
     <span ng-switch="loadingMessages()">
         <span ng-switch-default="true" translate="loading">LOADING...</span>
         <span ng-switch-when="false">
-            <span ng-class="0 < numberOfMessages() ? 'label label-success' : 'label label-default'">
+            <span class="label label-default">
                 {{numberOfMessages()}}
                 <span translate="total">total</span>
             </span>

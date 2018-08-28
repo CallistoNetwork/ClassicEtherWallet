@@ -76,6 +76,10 @@ const dexnsCtrl = function(
         document.getElementById("sendTransactionContract")
     );
 
+    if (ajaxReq.type !== nodes.nodeTypes.ETC) {
+        $rootScope.$broadcast("ChangeNode", globalFuncs.networks.ETC || 0);
+    }
+
     // TODO
     $scope.$watch(
         function() {

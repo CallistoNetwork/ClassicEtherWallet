@@ -50,7 +50,7 @@
                 Registration of the Name will cost you <code>
 
 
-                {{dexnsService.feContract.namePrice[0].value / 1e18}}
+                {{toEther(dexnsService.feContract.namePrice[0].value)}}
 
                 {{dexnsService.feContract.network}}
 

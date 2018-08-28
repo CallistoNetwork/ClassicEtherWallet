@@ -1,4 +1,13 @@
 "use strict";
+/* 0 -> nothing
+ *  1 -> user
+ *  2 -> token
+ *  3 -> contract
+ *  4 -> update Name
+ *  5 -> access Name content
+ *  6 -> step 2 register Name
+ *  7 -> confirmation
+ */
 const statusCodes = {
     nothing: 0,
     user: 1,
@@ -67,6 +76,7 @@ const dexnsCtrl = function(
         document.getElementById("sendTransactionContract")
     );
 
+    // TODO
     $scope.$watch(
         function() {
             if (walletService.wallet == null) return null;
@@ -115,15 +125,17 @@ const dexnsCtrl = function(
             from: _owner
         };
 
-        dexnsService.feContract
+        return dexnsService.feContract
             .genTxContract(
                 "registerAndUpdateName",
                 walletService.wallet,
                 $scope.tx
             )
-            .then(result => openModal(result));
+            .then(result => openModal(result))
+            .catch(err => {
+                throw err;
+            });
     };
-
     $scope.getOwningTime = function() {
         dexnsService.feContract.call("owningTime");
     };
@@ -197,14 +209,18 @@ const dexnsCtrl = function(
         }
 
         $scope._function = _function;
-        dexnsService.feContract
-            .genTxContract(_function.name, walletService.wallet, {
+        return dexnsService.feContract
+            .genTxContract(_function, walletService.wallet, {
                 inputs: _function.inputs.map(i => i.value),
                 from: walletService.wallet.getAddressString(),
                 value,
                 unit: "wei"
             })
-            .then(result => openModal(result));
+            .then(signedTx => ($scope.tx = signedTx))
+            .then(openModal)
+            .catch(err => {
+                console.log("error will not open modal");
+            });
     };
 
     function openModal(signedTx) {
@@ -264,9 +280,8 @@ const dexnsCtrl = function(
     };
 
     function walletUnlocked() {
-        if ($scope.wallet === undefined) {
-            $scope.notifier.danger("Unlock your wallet first!");
-
+        if (!walletService.wallet) {
+            uiFuncs.notifier.danger("Unlock your wallet first!");
             return false;
         }
 
@@ -337,7 +352,8 @@ const dexnsCtrl = function(
 
     $scope.selectFunc = function(_func) {
         $scope.dropdownContracts = !$scope.dropdownContracts;
-        $scope.selectedFunc = _func.name;
+
+        $scope.selectedFunc = _func;
 
         if (_func.inputs.length === 0) {
             $scope.call(_func);

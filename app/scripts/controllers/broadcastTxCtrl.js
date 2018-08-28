@@ -18,44 +18,7 @@ var broadcastTxCtrl = function($scope) {
     }
 
     $scope.handleSubmit = function() {
-        uiFuncs.sendTx($scope.input.signedTx, function(resp) {
-            if (!resp.isError) {
-                const txHashLink = ajaxReq.blockExplorerTX.replace(
-                    "[[txHash]]",
-                    resp.data
-                );
-                const verifyTxBtn =
-                    ajaxReq.type !== nodes.nodeTypes.Custom
-                        ? '<a class="btn btn-xs btn-info strong" href="' +
-                          txHashLink +
-                          '" target="_blank" rel="noopener noreferrer">Verify Transaction</a>'
-                        : "";
-                const completeMsg =
-                    "<p>" +
-                    globalFuncs.successMsgs[2] +
-                    "<strong>" +
-                    resp.data +
-                    "</strong></p>" +
-                    verifyTxBtn;
-                $scope.notifier.success(completeMsg, 0);
-
-                init();
-            } else {
-                if (resp.error.includes("insufficient funds")) {
-                    $scope.notifier.danger(
-                        globalFuncs.errorMsgs[17].replace("{}", ajaxReq.type)
-                    );
-                } else {
-                    $scope.notifier.danger(
-                        resp.error ||
-                            globalFuncs.errorMsgs[17].replace(
-                                "{}",
-                                ajaxReq.type
-                            )
-                    );
-                }
-            }
-        });
+        uiFuncs.sendTx($scope.input.signedTx, true).then(init);
     };
 
     $scope.validTx = function() {

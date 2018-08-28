@@ -47,8 +47,8 @@
 
                         {{tx.value || 0}} {{ajaxReq.type}} to the staking contract:
                         <a
-                                target="_blank"
-                                href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', coldStakingService.contract.address)}}"
+                            target="_blank"
+                            href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', coldStakingService.contract.address)}}"
                         >
                             {{coldStakingService.contract.address}}
                         </a>
@@ -119,9 +119,9 @@
                         No, get me out of here!
                     </button>
                     <button
-                            ng-disabled="coldStakingService.contract.staker_info.weight > 0 && !input.understand"
-                            type="submit"
-                            class="btn btn-primary" translate="SENDModal_Yes">
+                        ng-disabled="coldStakingService.contract.staker_info.weight > 0 && !input.understand"
+                        type="submit"
+                        class="btn btn-primary" translate="SENDModal_Yes">
                         Yes, I am sure! Make transaction.
                     </button>
                 </div>

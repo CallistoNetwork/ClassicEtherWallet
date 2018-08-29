@@ -1,25 +1,17 @@
-<h5>Messages:</h5>
-<div class="row"
-     ng-if="walletService.wallet && walletService.wallet.getAddressString()"
->
-    <div class="col-xs-6">You have:</div>
-    <div class="col-xs-6">Total:</div>
-    <a ng-click="viewMessageList()">
-        <div class="col-xs-6">
-            <span ng-if="messageService.loadingMessages">LOADING...</span>
-
-            <span ng-if="!messageService.loadingMessages">
-                {{messageService.numberOfNewMessages(walletService.wallet.getAddressString()) }}
-                Recent Messages
+<a class="row pad-v-md" ng-click="viewMessageList()">
+    <span style="font-size: larger; font-weight: bold;">Messages:</span>
+    <span ng-switch="loadingMessages()">
+        <span ng-switch-default="true" translate="loading">LOADING...</span>
+        <span ng-switch-when="false">
+            <span class="label label-default">
+                {{numberOfMessages()}}
+                <span translate="total">total</span>
             </span>
-        </div>
-    </a>
-    <div class="col-xs-6">
-        <span ng-if="messageService.loadingMessages">LOADING...</span>
-
-        <span ng-if="!messageService.loadingMessages">
-            {{messageService.numberOfMessages(walletService.wallet.getAddressString())}}
-        messages
+            <span>{{' '}}</span>
+            <span ng-class="0 < numberOfNewMessages() ? 'label label-success' : 'label label-default'">
+                    {{ numberOfNewMessages() }}
+            <span translate="new">new</span>
+            </span>
         </span>
-    </div>
-</div>
+    </span>
+</a>

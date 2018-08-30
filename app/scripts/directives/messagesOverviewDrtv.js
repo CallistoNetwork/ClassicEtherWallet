@@ -1,6 +1,6 @@
 "use strict";
 
-var messagesOverviewDrtv = function(
+module.exports = function messagesOverviewDrtv(
     globalService,
     walletService,
     messageService
@@ -9,8 +9,17 @@ var messagesOverviewDrtv = function(
         restrict: "E",
         template: require("./messagesOverviewDrtv.html"),
         link: function($scope) {
-            $scope.walletService = walletService;
-            $scope.messageService = messageService;
+            $scope.numberOfNewMessages = () =>
+                messageService.numberOfNewMessages(
+                    walletService.wallet.getAddressString()
+                );
+
+            $scope.numberOfMessages = () =>
+                messageService.numberOfMessages(
+                    walletService.wallet.getAddressString()
+                );
+
+            $scope.loadingMessages = () => messageService.loadingMessages;
 
             $scope.viewMessageList = function viewMessageList() {
                 globalService.currentTab = globalService.tabs.messages.id;
@@ -19,4 +28,3 @@ var messagesOverviewDrtv = function(
         }
     };
 };
-module.exports = messagesOverviewDrtv;

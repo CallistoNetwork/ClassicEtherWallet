@@ -3,6 +3,7 @@
     <input class="form-control"
            type="text"
            spellcheck="false"
+           ng-model-options="{debounce: 500}"
            placeholder="{{placeholder}}"
            ng-model="addressDrtv.ensAddressField"
            ng-disabled="addressDrtv.readOnly"

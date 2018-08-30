@@ -36,14 +36,6 @@ window.browser = browser;
 var nodes = require("./nodes");
 window.nodes = nodes;
 
-var contracts = require("./contract");
-
-const { Contract, InitContract, parseJsonContract } = contracts;
-
-window.Contract = Contract;
-window.InitContract = InitContract;
-window.parseJsonContract = parseJsonContract;
-
 const coinPrice = require("./coinPrice");
 
 window._coinPrice = coinPrice;
@@ -200,7 +192,7 @@ app.factory("messageService", messageService);
 
 app.factory("dexnsService", dexnsService);
 
-app.factory("lookupService", ["dexnsService", "walletService", lookupService]);
+app.factory("lookupService", ["dexnsService", lookupService]);
 
 app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
@@ -339,8 +331,8 @@ app.controller("messagesCtrl", [
 app.controller("encryptCtrl", ["$scope", "walletService", encryptCtrl]);
 app.controller("backgroundNodeCtrl", [
     "$scope",
-    "backgroundNodeService",
     "$interval",
+    "backgroundNodeService",
     backgroundNodeCtrl
 ]);
 

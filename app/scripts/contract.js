@@ -10,6 +10,8 @@ const { WAValidator } = ethUtil;
 
  */
 
+const _sample = require("lodash/sample");
+
 class Contract {
     constructor(abi, address, network) {
         this.init(abi, address, network);
@@ -45,14 +47,14 @@ class Contract {
     }
 
     setNode(network = this.network) {
-        const node = Object.values(nodes.nodeList).find(
+        const _nodes = Object.values(nodes.nodeList).filter(
             _node => _node.type.toUpperCase() === network.toUpperCase()
         );
 
-        if (!node) {
+        if (0 === _nodes.length) {
             throw new Error("Invalid Request");
         } else {
-            this.node = node;
+            this.node = _sample(_nodes);
         }
     }
 

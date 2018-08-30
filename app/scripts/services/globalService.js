@@ -125,8 +125,8 @@ var globalService = function($http, $httpParamSerializerJQLike) {
 
     return {
         tabs,
-        dropdownNode,
-        currentTab
+        currentTab,
+        dropdownNode
     };
 };
 module.exports = globalService;

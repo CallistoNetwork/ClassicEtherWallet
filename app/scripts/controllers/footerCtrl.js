@@ -1,24 +1,19 @@
 "use strict";
-var footerCtrl = function($scope) {
+const footerCtrl = function($scope) {
     $scope.curLang = globalFuncs.curLang;
-
     $scope.footerModal = new Modal(document.getElementById("disclaimerModal"));
 
     const LOADING = "loading";
     const ERROR = "error";
 
-    $scope.ethBlockNumber = LOADING;
-    $scope.etcBlockNumber = "loading";
-
-    $scope.showBlocks = window.location.protocol === "https:";
+    $scope.currentBlockNumber = LOADING;
 
     $scope.setBlockNumbers = function() {
-        if (!$scope.showBlocks) return;
         ajaxReq.getCurrentBlock(function(data) {
-            if (data.error) {
+            if (data.error || !data.data) {
                 $scope.currentBlockNumber = ERROR;
             } else {
-                $scope.currentBlockNumber = data.data;
+                $scope.currentBlockNumber = parseInt(data.data);
             }
         });
     };
@@ -27,10 +22,12 @@ var footerCtrl = function($scope) {
         function() {
             return globalFuncs.getCurNode();
         },
-        function(newNode) {
-            $scope.currentBlockNumber = LOADING;
+        function(newNode, oldNode) {
+            if (!angular.equals(newNode, oldNode)) {
+                $scope.currentBlockNumber = LOADING;
 
-            $scope.setBlockNumbers();
+                $scope.setBlockNumbers();
+            }
         }
     );
 

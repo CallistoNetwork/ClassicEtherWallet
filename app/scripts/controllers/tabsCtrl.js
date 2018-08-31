@@ -1,6 +1,6 @@
 "use strict";
 
-const colors = require("../colors.json");
+const colors = require("crypto-icons/colors.json");
 
 var tabsCtrl = function(
     $http,

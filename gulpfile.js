@@ -203,8 +203,6 @@ gulp.task('copy', ['staticJS'], function () {
         .pipe(gulp.dest(path.join(dist, 'css', 'crypto-icons')))
         .pipe(gulp.dest(path.join(dist_CX, 'css', 'crypto-icons')))
 
-    gulp.src(path.join(__dirname, 'node_modules', 'crypto-icons', 'colors.json'))
-        .pipe(gulp.dest(path.join(app, 'scripts')))
 
     return gulp.src(cxSrcFiles)
         .pipe(gulp.dest(dist_CX + 'browser_action'))

@@ -31,8 +31,11 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownAmount">
             <li><a ng-class="{true:'active'}[tx.sendMode=='ether']"
-                   ng-click="setSendMode('ether')">
-                <span class="{{'icon icon-' + ajaxReq.type.toLowerCase()}}"></span>
+                   ng-click="setSendMode('ether')"
+            >
+                <span
+                    ng-style="{color: colors[ajaxReq.type.toLowerCase()]}"
+                    class="{{'icon icon-' + ajaxReq.type.toLowerCase()}}"></span>
                 {{ajaxReq.type}}
             </a>
             </li>

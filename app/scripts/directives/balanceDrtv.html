@@ -71,6 +71,7 @@
 
             <tr>
                 <td>
+
                     <div ng-show="coldStakingService.validNetwork()" ng-init="showLongBal_ = false;">
                          <span
                              title="{{walletService.wallet.balance}} (Double-Click)"
@@ -84,6 +85,7 @@
                         </span>
                     </div>
                     <span
+                        ng-style="{color: colors[ajaxReq.type.toLowerCase()]}"
                         class="text-left {{'icon icon-' + ajaxReq.type.toLowerCase()}}"></span>
                     {{ajaxReq.type}}
                 </td>
@@ -166,9 +168,14 @@
 
             <tr ng-repeat="altBalance in toArray(alternativeBalance) | filter: notAjaxReq">
 
-                <td class="text-left">
-                    <span class="{{'icon icon-' + altBalance.symbol.toLowerCase()}}"></span>
+                <td class="text-left"
+                >
+                    <span
+
+                        ng-style="{color: colors[altBalance.symbol.toLowerCase()]}"
+                        class="{{'icon icon-' + altBalance.symbol.toLowerCase()}}"></span>
                     {{altBalance.symbol}}
+
                 </td>
                 <td class="account-info point text-right"
                     ng-dblclick="showLongBal=!showLongBal"

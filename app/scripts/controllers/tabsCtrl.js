@@ -1,4 +1,7 @@
 "use strict";
+
+const colors = require("../colors.json");
+
 var tabsCtrl = function(
     $http,
     $scope,
@@ -7,6 +10,7 @@ var tabsCtrl = function(
     $translate,
     $sce
 ) {
+    $scope.colors = colors;
     $scope.gService = globalService;
     $scope.tabNames = $scope.gService.tabs;
     $scope.walletService = walletService;

@@ -389,7 +389,7 @@ uiFuncs.notifySuccessfulTx = function(txHash) {
 
 uiFuncs.handleWeb3Trans = function(signedTx) {
     return new Promise((resolve, reject) => {
-        if (!"web" in window) {
+        if (!"web3" in window) {
             return reject("Web3 not found in window");
         }
 

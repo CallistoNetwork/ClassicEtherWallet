@@ -225,6 +225,10 @@ app.directive("messagesOverviewDrtv", [
 app.directive("arrayInputDrtv", arrayInputDrtv);
 app.directive("newMessagesDrtv", ["globalService", newMessagesDrtv]);
 app.directive("transactionCost", [transactionCost]);
+app.directive("sendContractTx", [
+    "walletService",
+    require("./directives/sendContractTx")
+]);
 
 app.controller("tabsCtrl", [
     "$http",

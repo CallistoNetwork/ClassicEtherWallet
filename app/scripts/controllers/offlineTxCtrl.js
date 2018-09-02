@@ -173,17 +173,17 @@ var offlineTxCtrl = function($scope, $sce, $rootScope, walletService) {
             ].getContractAddress();
             txData.value = "0x00";
         }
-        uiFuncs.generateTx(txData, function(rawTx) {
-            if (!rawTx.isError) {
+        uiFuncs
+            .generateTx(txData)
+            .then(function(rawTx) {
                 $scope.rawTx = rawTx.rawTx;
                 $scope.signedTx = rawTx.signedTx;
                 $scope.showRaw = true;
-            } else {
+                if (!$scope.$$phase) $scope.$apply();
+            })
+            .catch(err => {
                 $scope.showRaw = false;
-                $scope.notifier.danger(rawTx.error);
-            }
-            if (!$scope.$$phase) $scope.$apply();
-        });
+            });
     };
     $scope.confirmSendTx = function() {
         try {

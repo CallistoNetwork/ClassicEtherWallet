@@ -1,8 +1,9 @@
 "use strict";
-var customNode = function(srvrUrl, port, httpBasicAuthentication) {
+
+const customNode = function(srvrUrl, port, httpBasicAuthentication) {
     this.SERVERURL = port ? srvrUrl + ":" + port : srvrUrl;
     if (httpBasicAuthentication) {
-        var authorization =
+        const authorization =
             "Basic " +
             btoa(
                 httpBasicAuthentication.user +
@@ -16,6 +17,17 @@ customNode.prototype.config = {
     headers: {
         "Content-Type": "application/json; charset=UTF-8"
     }
+};
+
+/*
+    @returns Promise<HttpResponse>
+ */
+customNode.prototype.healthCheck = function(timeout = 1000) {
+    return ajaxReq.http({
+        method: "OPTIONS",
+        url: this.SERVERURL,
+        timeout
+    });
 };
 
 customNode.prototype.getCurrentBlock = function(callback) {

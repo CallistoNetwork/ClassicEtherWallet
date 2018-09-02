@@ -36,14 +36,6 @@ window.browser = browser;
 var nodes = require("./nodes");
 window.nodes = nodes;
 
-var contracts = require("./contract");
-
-const { Contract, InitContract, parseJsonContract } = contracts;
-
-window.Contract = Contract;
-window.InitContract = InitContract;
-window.parseJsonContract = parseJsonContract;
-
 const coinPrice = require("./coinPrice");
 
 window._coinPrice = coinPrice;
@@ -151,6 +143,7 @@ var balanceDrtv = require("./directives/balanceDrtv");
 var arrayInputDrtv = require("./directives/arrayInputDrtv");
 var newMessagesDrtv = require("./directives/newMessagesDrtv");
 const sendTransactionFormDrtv = require("./directives/sendTransactionForm");
+const dexnsTokenRegistrationForm = require("./directives/dexns-token-registration");
 if (IS_CX) {
     var addWalletCtrl = require("./controllers/CX/addWalletCtrl");
     var cxDecryptWalletCtrl = require("./controllers/CX/cxDecryptWalletCtrl");
@@ -200,19 +193,21 @@ app.factory("messageService", messageService);
 
 app.factory("dexnsService", dexnsService);
 
-app.factory("lookupService", ["dexnsService", "walletService", lookupService]);
+app.factory("lookupService", ["dexnsService", lookupService]);
 
 app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
 
 app.directive("sendTransactionForm", sendTransactionFormDrtv);
 app.directive("officialityChecker", [officialityChecker]);
+app.directive("dexnsTokenRegistrationForm", dexnsTokenRegistrationForm);
 app.directive("dexnsNameDisplay", [
     "dexnsService",
     "walletService",
     "globalService",
     dexnsNameDisplay
 ]);
+app.directive("eosKeypair", require("./directives/eos-keypair"));
 app.directive("lookup", ["$rootScope", "lookupService", lookup]);
 app.directive("blockieAddress", blockiesDrtv);
 app.directive("cssThemeDrtv", cssThemeDrtv);
@@ -235,6 +230,7 @@ app.directive("transactionCost", [transactionCost]);
 app.directive("customNodeForm", [customNodeForm]);
 
 app.controller("tabsCtrl", [
+    "$http",
     "$scope",
     "globalService",
     "walletService",
@@ -252,6 +248,7 @@ app.controller("viewCtrl", ["$scope", "globalService", "$sce", viewCtrl]);
 app.controller("walletGenCtrl", ["$rootScope", "$scope", walletGenCtrl]);
 app.controller("bulkGenCtrl", ["$scope", bulkGenCtrl]);
 app.controller("decryptWalletCtrl", [
+    "$rootScope",
     "$scope",
     "$sce",
     "walletService",
@@ -337,8 +334,8 @@ app.controller("messagesCtrl", [
 app.controller("encryptCtrl", ["$scope", "walletService", encryptCtrl]);
 app.controller("backgroundNodeCtrl", [
     "$scope",
-    "backgroundNodeService",
     "$interval",
+    "backgroundNodeService",
     backgroundNodeCtrl
 ]);
 

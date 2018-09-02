@@ -66,8 +66,9 @@ const dexnsNameDisplay = function(dexnsService, walletService, globalService) {
                     .catch(Promise.reject);
             }
 
-            $scope.goToDexns = function() {
-                globalService.navigate(globalService.tabs.dexns.id);
+            $scope.goToDexns = () => {
+                globalService.currentTab = globalService.tabs.dexns.id;
+                window.location.hash = globalService.tabs.dexns.url;
             };
 
             // todo: replace listener with $on when unlocking new wallet

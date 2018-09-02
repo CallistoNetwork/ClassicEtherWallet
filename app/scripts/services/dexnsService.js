@@ -1,9 +1,9 @@
 const DexNSFrontendABI = require("../abiDefinitions/etcAbi.json")
-    //require('../abiDefinitions/rinkebyAbi.json')
+    // require("../abiDefinitions/rinkebyAbi.json")
     .find(itm => itm.name === "DexNS Frontend contract");
 
 const DexNSStorage = require("../abiDefinitions/etcAbi.json")
-    //require('../abiDefinitions/rinkebyAbi')
+    //require("../abiDefinitions/rinkebyAbi")
     .find(i => i.name === "DexNS State storage");
 
 if (!DexNSFrontendABI) {
@@ -13,6 +13,8 @@ if (!DexNSFrontendABI) {
 if (!DexNSStorage) {
     throw new Error("Unable to locate DEXNS storage");
 }
+
+const InitContract = require("../contract").InitContract;
 
 function stringifyMetadata({
     tokenNetwork = "ETC",
@@ -84,17 +86,19 @@ function parseMetadata(_metadata) {
 const dexnsService = function() {
     this.parseMetadata = parseMetadata;
 
+    const network = nodes.nodeTypes.ETC; // nodes.nodeTypes.Rinkeby;
+
     this.feContract = new InitContract(
         DexNSFrontendABI.abi,
         DexNSFrontendABI.address,
-        "ETC",
+        network,
         false
     );
 
     this.storageContract = new InitContract(
         DexNSStorage.abi,
         DexNSStorage.address,
-        "ETC",
+        network,
         false
     );
 

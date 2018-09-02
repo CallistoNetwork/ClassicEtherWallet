@@ -1,5 +1,6 @@
 "use strict";
 var tabsCtrl = function(
+    $http,
     $scope,
     globalService,
     walletService,
@@ -158,12 +159,11 @@ var tabsCtrl = function(
         } else {
             $scope.curNode = $scope.nodeList[$scope.defaultNodeKey];
         }
-        $scope.dropdownNode = false;
 
         Token.popTokens = $scope.curNode.tokenList.map(token =>
             Object.assign(token, {
                 node: key,
-                network: $scope.curNode.name
+                network: $scope.curNode.type
             })
         );
 
@@ -184,28 +184,36 @@ var tabsCtrl = function(
             })
         );
         $scope.keyNode = globalFuncs.localStorage.getItem("curNode", null);
-        if (nodes.ensNodeTypes.indexOf($scope.curNode.type) == -1)
-            $scope.tabNames.ens.cx = $scope.tabNames.ens.mew = false;
-        else $scope.tabNames.ens.cx = $scope.tabNames.ens.mew = true;
-        ajaxReq.getCurrentBlock(function(data) {
-            if (data.error) {
-                $scope.nodeIsConnected = false;
-                $scope.notifier.danger(globalFuncs.errorMsgs[32]);
-            } else {
-                $scope.nodeIsConnected = true;
-                $scope.notifier.info(
-                    globalFuncs.successMsgs[5] +
-                        "— Now, check the URL: <strong>" +
-                        window.location.href +
-                        ".</strong> <br /> Network: <strong>" +
-                        $scope.nodeType +
-                        " </strong> provided by <strong>" +
-                        $scope.nodeService +
-                        ".</strong>",
-                    5000
-                );
-            }
-        });
+
+        $http({
+            url: $scope.curNode.lib.SERVERURL,
+            timeout: 1000,
+            method: "OPTIONS"
+        })
+            .then(result => {
+                if (300 <= result.status) {
+                    _handleErr();
+                } else {
+                    $scope.nodeIsConnected = true;
+                    $scope.notifier.info(
+                        `${
+                            globalFuncs.successMsgs[5]
+                        } — Now, check the URL: <strong> ${
+                            window.location.href
+                        }.</strong> <br /> 
+Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
+                            $scope.nodeService
+                        }.</strong>`,
+                        5000
+                    );
+                }
+            })
+            .catch(_handleErr);
+
+        function _handleErr() {
+            $scope.nodeIsConnected = false;
+            $scope.notifier.danger(globalFuncs.errorMsgs[32]);
+        }
     };
     $scope.checkNodeUrl = function(nodeUrl) {
         return $scope.Validator.isValidURL(nodeUrl);
@@ -225,19 +233,19 @@ var tabsCtrl = function(
     };
     $scope.addCustomNodeToList = function(nodeInfo) {
         var tempObj = null;
-        if (nodeInfo.options == "etc")
+        if (nodeInfo.options === "etc")
             tempObj = JSON.parse(
                 JSON.stringify(nodes.nodeList.etc_ethereumcommonwealth_parity)
             );
-        else if (nodeInfo.options == "eth")
+        else if (nodeInfo.options === "eth")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.eth_ethscan));
-        else if (nodeInfo.options == "rop")
+        else if (nodeInfo.options === "rop")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.rop_mew));
-        else if (nodeInfo.options == "kov")
+        else if (nodeInfo.options === "kov")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.kov_ethscan));
-        else if (nodeInfo.options == "rin")
+        else if (nodeInfo.options === "rin")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.rin_ethscan));
-        else if (nodeInfo.options == "cus") {
+        else if (nodeInfo.options === "cus") {
             tempObj = JSON.parse(JSON.stringify(nodes.customNodeObj));
             tempObj.eip155 = nodeInfo.eip155;
             tempObj.chainId = parseInt(nodeInfo.chainId);
@@ -258,7 +266,7 @@ var tabsCtrl = function(
     };
     $scope.getCustomNodesFromStorage = function() {
         for (var key in $scope.nodeList) {
-            if (key.indexOf("cus_") != -1) delete $scope.nodeList[key];
+            if (key.indexOf("cus_") !== -1) delete $scope.nodeList[key];
         }
         var localNodes = globalFuncs.localStorage.getItem("localNodes", null);
         if (localNodes) {

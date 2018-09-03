@@ -3,6 +3,8 @@
 var en = function() {};
 en.code = "en";
 en.data = {
+    CUSTOM_NODE_CONNECT_DOWNLOAD:
+        "download the ClassicEtherWallet repo & run it locally",
     LINK: "Link",
     INFO: "Info",
     SOURCE_CODE: "Source Code",

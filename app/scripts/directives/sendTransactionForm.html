@@ -50,7 +50,6 @@
 <!-- / Amount to Send -->
 
 <!-- Gas Limit -->
-<!-- fixme: link -->
 
 <div class="row form-group">
     <div class="col-sm-11 clearfix">
@@ -81,7 +80,7 @@
 
 
 <!-- Advanced Option Panel -->
-<a ng-click="showAdvance=true" ng-show='globalService.currentTab==globalService.tabs.sendTransaction.id'>
+<a ng-click="showAdvance=true" ng-show='globalService.currentTab === globalService.tabs.sendTransaction.id'>
     <p class="strong" translate="TRANS_advanced"> + Advanced: Add Data </p>
 </a>
 
@@ -125,15 +124,6 @@
     <lookup></lookup>
 </div>
 
-
-<div class="clearfix form-group">
-    <div class="well" ng-show="wallet!=null && customGasMsg!=''">
-        <p>
-            <small>A message regarding {{tx.to}}</small>
-        </p>
-        <p><strong> {{customGasMsg}} </strong></p>
-    </div>
-</div>
 
 <div class="row form-group">
     <div class="col-xs-12 clearfix">

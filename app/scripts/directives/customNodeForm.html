@@ -6,20 +6,16 @@
     <h2 class="modal-title" translate="NODE_Title"> Set Up Your Custom Node </h2>
 
     <p class="small"><a
-        href="https://myetherwallet.groovehq.com/knowledge_base/topics/how-can-i-connect-to-a-custom-node"
-        target="_blank" rel="noopener"> Instructions can be found here </a></p>
+        href="https://support.ethereumcommonwealth.io/networks/cant-connect-to-custom-node-on-mycrypto.html"
+        target="_blank" rel="noopener noreferrer"> Instructions can be found here </a></p>
 
     <div ng-show="browserProtocol=='https:'" class="alert alert-danger small" translate="NODE_Warning">
         Your node must be HTTPS in order to connect to it via ClassicEtherWallet.com. You can [download
-        the
-        ClassicEtherWallet repo & run it
+        the ClassicEtherWallet repo & run it
         locally](https://github.com/kvhnuke/etherwallet/releases/latest) to
         connect to your local node. Or, get free SSL certificate via
         [LetsEncrypt](https://letsencrypt.org/)
     </div>
-
-
-
 
 
     <div class="clearfix col-xs-12">
@@ -154,7 +150,6 @@
     </button>
     <button class="btn btn-primary"
             type="submit"
-            ng-click="saveCustomNode()"
             translate="NODE_CTA"
             ng-disabled="customNodeForm.$invalid"
     >

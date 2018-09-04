@@ -118,7 +118,7 @@
                 Registration of the Name will cost you <code>
 
 
-                {{toEther(dexnsService.feContract.namePrice[0].value)}}
+                {{dexnsService.feContract.namePrice[0].value / 1e18 | number}}
 
                 {{dexnsService.feContract.network}}
 

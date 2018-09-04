@@ -119,11 +119,8 @@ const dexnsCtrl = function(
 
         const _owner = walletService.wallet.getAddressString();
 
-        // todo:  hideOwner
-        const _hideOwner = true;
-
         $scope.tx = {
-            inputs: [tokenName, _owner, destination, _metadata, _hideOwner],
+            inputs: [tokenName, _owner, destination, _metadata, hideOwner],
             value: dexnsService.feContract.namePrice[0].value,
             unit: "wei",
             from: _owner

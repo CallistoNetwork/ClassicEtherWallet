@@ -1,13 +1,4 @@
 "use strict";
-/* 0 -> nothing
- *  1 -> user
- *  2 -> token
- *  3 -> contract
- *  4 -> update Name
- *  5 -> access Name content
- *  6 -> step 2 register Name
- *  7 -> confirmation
- */
 const statusCodes = {
     nothing: 0,
     user: 1,
@@ -41,7 +32,7 @@ const storageContracts = [
     "assignation"
 ];
 
-const dexnsCtrl = function(
+const DexnsController = function DexnsController(
     $scope,
     $sce,
     $rootScope,
@@ -220,7 +211,7 @@ const dexnsCtrl = function(
             .then(signedTx => ($scope.tx = signedTx))
             .then(openModal)
             .catch(err => {
-                console.log("error will not open modal");
+                uiFuncs.notifier.danger(err);
             });
     };
 
@@ -402,4 +393,4 @@ const dexnsCtrl = function(
     main();
 };
 
-module.exports = dexnsCtrl;
+module.exports = DexnsController;

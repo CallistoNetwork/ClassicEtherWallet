@@ -37,8 +37,7 @@ module.exports = function dexnsTokenRegistrationForm() {
                 return Boolean(found);
             };
 
-            form.destination.$validators.destination = _addr =>
-                Validator.isValidAddress(_addr);
+            form.destination.$validators.destination = Validator.isValidAddress;
         }
     };
 };

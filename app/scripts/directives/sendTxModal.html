@@ -2,93 +2,135 @@
     <section class="modal-dialog">
         <section class="modal-content">
             <div class="modal-body">
-
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h2 class="modal-title" translate="SENDModal_Title">Confirm Transaction!</h2>
 
-                <table class="table table-responsive">
+                <table class="table">
 
                     <thead>
                     <tr>
                         <td colspan="2">
                             You are interacting with the <strong>
-                    <span class="{{'icon icon-' + ajaxReq.type.toLowerCase()}}"
-                          ng-style="{color: colors[ajaxReq.type.toLowerCase()]}"
-                    >
-                         {{ajaxReq.type}}
-                    </span>
-                            chain</strong>, provided by <strong>{{ajaxReq.service}}</strong>.
+                            <coin-icon/>
+                            chain
+                        </strong>, provided by <strong>{{ajaxReq.service}}</strong>.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="tx_to" translate="SENDModal_To">
+                                to
+                            </label>
+                        </td>
+                        <td>
+                            <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', tx.sendMode === 'ether' ? tx.to : tokenTx.to)}}">
+
+                                <div class="input-group">
+
+                                <span class="input-group-addon transparent-input">
+                                    <div class="addressIdenticon small" title="Address Indenticon"
+                                         ng-show="tx.sendMode !== 'ether'"
+                                         blockie-address="{{tokenTx.to}}"
+                                         watch-var="tokenTx.to"
+                                    ></div>
+
+                                     <div class="addressIdenticon small" title="Address Indenticon"
+                                          ng-show="tx.sendMode === 'ether'"
+                                          blockie-address="{{tx.to}}"
+                                          watch-var="tx.to"
+                                     ></div>
+                                </span>
+                                    <input id="tx_to" class="form-control transparent-input"
+                                           readonly
+                                           value="{{tx.sendMode === 'ether' ? tx.to : tokenTx.to}}"
+                                    />
+                                </div>
+
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label translate="SENDModal_From" for="tx_from">
+                                from
+                            </label>
+                        </td>
+                        <td>
+
+                            <a
+                                rel="noopener noreferrer"
+                                href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', walletService.wallet.getAddressString())}}">
+
+
+                                <div class="input-group">
+                              <span class="input-group-addon transparent-input">
+                                <div class="addressIdenticon small" title="Address Indenticon"
+                                     blockie-address="{{walletService.wallet.getChecksumAddressString()}}"
+                                     watch-var="walletService.wallet.getChecksumAddressString()"></div>
+                          </span>
+                                    <input class="form-control transparent-input"
+                                           readonly
+                                           id="tx_from"
+                                           value="{{walletService.wallet.getChecksumAddressString()}}"
+                                    />
+
+                                </div>
+                            </a>
                         </td>
                     </tr>
                     </thead>
                     <tbody>
+
                     <tr>
                         <td translate="SENDModal_Value">Value</td>
                         <td class="text-right">
-                            <strong ng-show="tx.sendMode=='ether'" class="mono">{{tx.value}} {{unitReadable}}</strong>
-                            <strong ng-show="tx.sendMode!=='ether'" class="mono">{{tokenTx.value}}
-                                {{unitReadable}}</strong>
+                            <strong class="mono">
+                                {{tx.sendMode === 'ether' ? tx.value : tx.tokenTx}}
+
+                                {{unitReadable}}
+                            </strong>
+                            <br/>
+                            <small ng-show="tx.sendMode === 'ether'">
+                                ({{+tx.value * +coinPrices[ajaxReq.type].usd | currency}})
+                            </small>
                         </td>
                     </tr>
-
-                    <tr>
-                        <td translate="SENDModal_To">to</td>
-                        <td>
-                            <div class="input-group" ng-show="tx.sendMode === 'ether'">
-                                <span class="input-group-addon">
-                                    <div class="addressIdenticon med" title="Address Indenticon"
-                                         blockie-address="{{tx.to}}" watch-var="tx.to"></div>
-                                </span>
-                                <input class="form-control" readonly value="{{tx.to}}"/>
-                            </div>
-
-                            <div class="input-group" ng-show="tx.sendMode !== 'ether'">
-                                <span class="input-group-addon">
-                                    <div class="addressIdenticon med" title="Address Indenticon"
-                                         blockie-address="{{tokenTx.to}}" watch-var="tokenTx.to"></div>
-                                </span>
-                                <input class="form-control" readonly value="tokenTx.to"/>
-
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td translate="SENDModal_From">from</td>
-                        <td>
-
-                            <div class="input-group">
-                              <span class="input-group-addon">
-                                <div class="addressIdenticon med" title="Address Indenticon"
-                                     blockie-address="{{walletService.wallet.getChecksumAddressString()}}"
-                                     watch-var="walletService.wallet.getChecksumAddressString()"></div>
-                          </span>
-                                <input class="form-control" disabled
-                                       value="{{walletService.wallet.getChecksumAddressString()}}"/>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
+                    <tr ng-show="0 < txCostEther">
                         <td>Fee</td>
-                        <td>
-                            <transaction-cost></transaction-cost>
+                        <td class="text-right" title="{{txCostFiat | currency}}">
+                            <strong class="mono">
+                                {{txCostEther}}
+                            </strong>
+                            {{unitReadable}}
+                            <br/>
+                            <small ng-show="tx.sendMode === 'ether'">
+                                ({{txCostFiat | currency}})
+                            </small>
                         </td>
                     </tr>
 
                     <!--todo: handle send token-->
 
-                    <!--<tr>-->
-                    <!--<td translate="Total">-->
-                    <!--total-->
-                    <!--</td>-->
-                    <!--<td class="text-right">-->
-                    <!--{{(tx.gasLimit / 1e18) + +tx.value}}-->
-                    <!--<span class="{{'icon icon-' + ajaxReq.type.toLowerCase()}}"-->
-                    <!--ng-style="{color: colors[ajaxReq.type.toLowerCase()]}"-->
-                    <!--&gt;-->
-                    <!--{{ajaxReq.type}}-->
-                    <!--</span>-->
-                    <!--</td>-->
-                    <!--</tr>-->
+                    <tr ng-show="tx.sendMode === 'ether' && 0 < txCostEther">
+                        <td translate="Total">
+                            total
+                        </td>
+                        <td class="text-right">
+                            <strong class="mono">
+                                {{+tx.value + +txCostEther}}
+                            </strong>
+                            {{unitReadable}}
+                            <br/>
+                            <small>
+                                ({{(+txCostEther + +tx.value) * coinPrices[ajaxReq.type].usd | currency}})
+                            </small>
+
+                        </td>
+                    </tr>
                     </tbody>
 
                     <tfoot ng-init="showDetails = false;">
@@ -103,7 +145,7 @@
                     </tr>
                     <tr ng-show="showDetails">
                         <td colspan="2">
-                            {{tx | json }}
+                            {{tx.sendMode === 'ether' ? tx : tokenTx | json }}
                         </td>
                     </tr>
                     </tfoot>

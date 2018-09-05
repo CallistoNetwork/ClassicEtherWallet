@@ -141,7 +141,7 @@ const DexnsController = function DexnsController(
             }
 
             const result = await dexnsService.storageContract.call(
-                _function.name,
+                _function,
                 tx
             );
 
@@ -158,10 +158,7 @@ const DexnsController = function DexnsController(
                 }
             });
         } else {
-            const result = await dexnsService.feContract.call(
-                _function.name,
-                tx
-            );
+            const result = await dexnsService.feContract.call(_function, tx);
 
             $scope.$apply(function() {
                 $scope.outputs[_function.name] = result;

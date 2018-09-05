@@ -10,10 +10,9 @@
                     <thead>
                     <tr>
                         <td colspan="2">
-                            You are interacting with the <strong>
-                            <coin-icon/>
-                            chain
-                        </strong>, provided by <strong>{{ajaxReq.service}}</strong>.
+                            You are interacting with the
+                            <coin-icon></coin-icon>
+                            <strong>chain</strong>, provided by <strong>{{ajaxReq.service}}</strong>
                         </td>
                     </tr>
 
@@ -90,7 +89,6 @@
                         <td class="text-right">
                             <strong class="mono">
                                 {{tx.sendMode === 'ether' ? tx.value : tx.tokenTx}}
-
                                 {{unitReadable}}
                             </strong>
                             <br/>
@@ -113,9 +111,7 @@
                         </td>
                     </tr>
 
-                    <!--todo: handle send token-->
-
-                    <tr ng-show="tx.sendMode === 'ether' && 0 < txCostEther">
+                    <tr ng-show="tx.sendMode === 'ether'">
                         <td translate="Total">
                             total
                         </td>
@@ -124,10 +120,12 @@
                                 {{+tx.value + +txCostEther}}
                             </strong>
                             {{unitReadable}}
-                            <br/>
-                            <small>
-                                ({{(+txCostEther + +tx.value) * coinPrices[ajaxReq.type].usd | currency}})
-                            </small>
+                            <span ng-show="0 < txCostEther">
+                                <br/>
+                                <small>
+                                    ({{(+txCostEther + +tx.value) * coinPrices[ajaxReq.type].usd | currency}})
+                                </small>
+                            </span>
 
                         </td>
                     </tr>

@@ -213,7 +213,7 @@
             <li ng-show="ajaxReq.type != 'CUS'">
                 <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', walletService.wallet.getAddressString())}}"
                    target="_blank" rel="noopener">
-                    {{ajaxReq.type}} ({{ajaxReq.blockExplorerTX.replace('/tx/[[txHash]]', '')}})
+                    {{ajaxReq.type}} ({{ajaxReq.blockExplorerTX.match('://(.*?)/')[1]}})
                 </a>
             </li>
             <li>

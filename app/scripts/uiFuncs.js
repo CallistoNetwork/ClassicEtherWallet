@@ -1,5 +1,7 @@
 "use strict";
 
+const { TrezorConnect } = require("./staticJS/trezorConnect");
+
 const ethUtil = require("ethereumjs-util");
 
 const BigNumber = require("bignumber.js");
@@ -60,7 +62,7 @@ uiFuncs.signTxTrezor = function(rawTx, { path }, callback = console.log) {
         rawTx.v = "0x" + ethFuncs.decimalToHex(result.v);
         rawTx.r = "0x" + result.r;
         rawTx.s = "0x" + result.s;
-        var eTx = new ethUtil.Tx(rawTx);
+        const eTx = new ethUtil.Tx(rawTx);
         rawTx.rawTx = JSON.stringify(rawTx);
         rawTx.signedTx = "0x" + eTx.serialize().toString("hex");
         rawTx.isError = false;
@@ -282,19 +284,14 @@ uiFuncs.genTxWithInfo = function(data, callback = console.log) {
     } else if (data.hwType === "trezor") {
         // https://github.com/trezor/connect/blob/v4/examples/signtx-ethereum.html
 
-        if (!data.trezorUnlocked) {
-            uiFuncs
-                .trezorUnlock()
-                .then(() => {
-                    data.trezorUnlocked = true;
-                    uiFuncs.signTxTrezor(rawTx, data, callback);
-                })
-                .catch(err => {
-                    callback(err);
-                });
-        } else {
-            uiFuncs.signTxTrezor(rawTx, data, callback);
-        }
+        uiFuncs
+            .trezorUnlock()
+            .then(() => {
+                uiFuncs.signTxTrezor(rawTx, data, callback);
+            })
+            .catch(err => {
+                callback(err);
+            });
     } else if (data.hwType === "web3") {
         // for web3, we dont actually sign it here
         // instead we put the final params in the "signedTx" field and

@@ -1,7 +1,9 @@
 "use strict";
+const BigNumber = require("bignumber.js");
+
 const { Contract } = require("./contract");
 
-var ethFuncs = function() {};
+const ethFuncs = function() {};
 
 ethFuncs.gasAdjustment = 21;
 

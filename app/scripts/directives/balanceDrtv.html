@@ -165,8 +165,7 @@
             <tr ng-repeat="altBalance in toArray(alternativeBalance) | filter: notAjaxReq">
 
                 <td class="text-left">
-                    <span class="{{'icon icon-' + altBalance.symbol.toLowerCase()}}"></span>
-                    {{altBalance.symbol}}
+                <coin-icon icon="{{altBalance.symbol.toLowerCase()}}"/>
                 </td>
                 <td class="account-info point text-right"
                     ng-dblclick="showLongBal=!showLongBal"

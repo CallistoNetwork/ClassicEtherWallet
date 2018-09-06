@@ -1,5 +1,14 @@
-module.exports = function() {
+const colors = require("crypto-icons/colors.json");
+
+module.exports = function coinIcon() {
     return {
-        template: require("./coinIcon.html")
+        restrict: "E",
+        template: require("./coinIcon.html"),
+        scope: {
+            icon: "@"
+        },
+        link: function(scope) {
+            scope.colors = colors;
+        }
     };
 };

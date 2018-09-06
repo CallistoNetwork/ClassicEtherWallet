@@ -84,10 +84,7 @@
                            </span>
                         </span>
                     </div>
-                    <span
-                        ng-style="{color: colors[ajaxReq.type.toLowerCase()]}"
-                        class="text-left {{'icon icon-' + ajaxReq.type.toLowerCase()}}"></span>
-                    {{ajaxReq.type}}
+                    <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"></coin-icon>
                 </td>
 
 
@@ -170,11 +167,7 @@
 
                 <td class="text-left"
                 >
-                    <span
-
-                        ng-style="{color: colors[altBalance.symbol.toLowerCase()]}"
-                        class="{{'icon icon-' + altBalance.symbol.toLowerCase()}}"></span>
-                    {{altBalance.symbol}}
+                    <coin-icon icon="{{altBalance.symbol.toLowerCase()}}"/>
 
                 </td>
                 <td class="account-info point text-right"

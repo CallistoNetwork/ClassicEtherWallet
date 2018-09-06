@@ -94,13 +94,6 @@
 
     <div class="clearfix col-xs-12 radio">
 
-        <span ng-repeat="node in _nodes">
-            <label>
-                <input name="options" type="radio" ng-model="customNode.options" ng-value="node.type.toLowerCase()">
-                <coin-icon icon="{{node.type.toLowerCase()}}"></coin-icon>
-            </label>
-        </span>
-        <br/>
         <span>
             <label>
                 <input name="options" type="radio" ng-model="customNode.options" value="cus">
@@ -109,6 +102,14 @@
                 </b>
             </label>
         </span>
+        <br/>
+        <span ng-repeat="node in _nodes">
+            <label>
+                <input name="options" type="radio" ng-model="customNode.options" ng-value="node.type.toLowerCase()">
+                <coin-icon icon="{{node.type.toLowerCase()}}"></coin-icon>
+            </label>
+        </span>
+
 
     </div>
 

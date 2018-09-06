@@ -83,9 +83,7 @@
                            </span>
                         </span>
                     </div>
-                    <span
-                        class="text-left {{'icon icon-' + ajaxReq.type.toLowerCase()}}"></span>
-                    {{ajaxReq.type}}
+                    <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"></coin-icon>
                 </td>
 
 
@@ -167,8 +165,7 @@
             <tr ng-repeat="altBalance in toArray(alternativeBalance) | filter: notAjaxReq">
 
                 <td class="text-left">
-                    <span class="{{'icon icon-' + altBalance.symbol.toLowerCase()}}"></span>
-                    {{altBalance.symbol}}
+                <coin-icon icon="{{altBalance.symbol.toLowerCase()}}"/>
                 </td>
                 <td class="account-info point text-right"
                     ng-dblclick="showLongBal=!showLongBal"
@@ -206,7 +203,7 @@
             <li ng-show="ajaxReq.type != 'CUS'">
                 <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', walletService.wallet.getAddressString())}}"
                    target="_blank" rel="noopener">
-                    {{ajaxReq.type}} ({{ajaxReq.blockExplorerTX.replace('/tx/[[txHash]]', '')}})
+                    {{ajaxReq.type}} ({{ajaxReq.blockExplorerTX.match('://(.*?)/')[1]}})
                 </a>
             </li>
             <li>

@@ -95,15 +95,13 @@ const DexnsController = function DexnsController(
 
         const {
             tokenName,
-            owner,
             destination,
             abi,
             link,
             sourceCode,
             info,
             tokenNetwork,
-            hideOwner,
-            assign
+            hideOwner
         } = $scope.input;
 
         const _metadata = dexnsService.stringifyMetadata($scope.input);

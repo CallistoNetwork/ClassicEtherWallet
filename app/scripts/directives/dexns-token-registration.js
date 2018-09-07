@@ -38,6 +38,21 @@ module.exports = function dexnsTokenRegistrationForm() {
             };
 
             form.destination.$validators.destination = Validator.isValidAddress;
+
+            scope.resetForm = function() {
+                Object.assign(scope.input, {
+                    abi: "",
+                    link: "",
+                    sourceCode: "",
+                    info: "",
+                    tokenName: "",
+                    tokenNetwork: ajaxReq.type,
+                    owner: "",
+                    destination: "",
+                    hideOwner: false,
+                    assign: false
+                });
+            };
         }
     };
 };

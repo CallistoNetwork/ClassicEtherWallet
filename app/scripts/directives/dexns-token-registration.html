@@ -42,7 +42,7 @@
 <div class="row">
     <div class="col-xs-11">
 
-<!-- no need for <address-field /> as lookup is not needed, as user is registering name -->
+        <!-- no need for <address-field /> as lookup is not needed, as user is registering name -->
         <input
             ng-model="input.destination"
             class="form-control"
@@ -77,28 +77,36 @@
     <option value="">---Please Select---</option>
     <option ng-repeat="node in nodeList"
             value="{{node}}"
-    >{{node}}
+    >
+        {{node}}
     </option>
 </select>
-
-
-<!--<label for="owner">-->
-<!--owner-->
-<!--</label>-->
-<!--<input name="owner" id="owner" ng-model="input.owner" class="form-control"/>-->
 
 
 <label>
     hideOwner
 </label>
 
-<span class="radio"><label><input ng-model="input.hideOwner" type="radio"
-                                  name="hideOwner"
-                                  ng-value="true">True</label></span>
-<span class="radio"><label><input ng-model="input.hideOwner" type="radio"
-                                  name="hideOwner"
-                                  ng-value="false">False</label></span>
-
+<span class="radio">
+    <label>
+    <input ng-model="input.hideOwner"
+           type="radio"
+           name="hideOwner"
+           ng-value="true"
+    >
+        True
+    </label>
+</span>
+<span class="radio">
+    <label>
+    <input ng-model="input.hideOwner"
+           type="radio"
+           name="hideOwner"
+           ng-value="false"
+    >
+        False
+    </label>
+</span>
 
 <hr/>
 
@@ -160,11 +168,19 @@
 />
 
 
-<button
-    ng-disabled="!tokenRegistration.$valid"
-    type="submit"
-    class="btn btn-primary"
-    translate="REGISTER_TOKEN"
->
-    Register Token
-</button>
+<div class="row text-center">
+
+    <button
+        class="btn"
+        type="button" ng-click="resetForm(); tokenRegistration.$setPristine();">
+        Reset
+    </button>
+    <button
+        ng-disabled="tokenRegistration.$invalid || tokenRegistration.$pending"
+        type="submit"
+        class="btn btn-primary"
+        translate="REGISTER_TOKEN"
+    >
+        Register Token
+    </button>
+</div>

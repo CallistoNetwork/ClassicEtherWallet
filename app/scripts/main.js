@@ -36,6 +36,7 @@ window.browser = browser;
 var nodes = require("./nodes");
 window.nodes = nodes;
 
+// Wallet loads coinPriceService from window, or would make angular service
 const coinPriceService = require("./services/coinPrice.service");
 
 window.coinPriceService = new coinPriceService();

@@ -29,7 +29,7 @@ var txStatusCtrl = function($scope) {
         if (!$scope.$$phase) $scope.$apply();
     };
     var setUSDvalues = function() {
-        _coinPrice().then(function(data) {
+        coinPriceService.getCoinPrice().then(function(data) {
             $scope.txInfo.gasPrice.usd = new BigNumber(data.usd)
                 .mul(new BigNumber($scope.txInfo.gasPrice.eth))
                 .toString();

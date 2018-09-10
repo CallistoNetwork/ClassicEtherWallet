@@ -65,46 +65,38 @@ Wallet.prototype.setBalance = function(callback) {
         if (data.error) this.balance = data.msg;
         else {
             this.balance = etherUnits.toEther(data.data.balance, "wei");
-            _coinPrice().then(data => {
-                if (!data.error) {
-                    this.usdPrice = etherUnits.toFiat("1", "ether", data.usd);
-                    this.gbpPrice = etherUnits.toFiat("1", "ether", data.gbp);
-                    this.eurPrice = etherUnits.toFiat("1", "ether", data.eur);
-                    this.btcPrice = etherUnits.toFiat("1", "ether", data.btc);
-                    this.chfPrice = etherUnits.toFiat("1", "ether", data.chf);
-                    this.repPrice = etherUnits.toFiat("1", "ether", data.rep);
+            coinPriceService.getCoinPrice().then(data => {
+                this.usdPrice = etherUnits.toFiat("1", "ether", data.usd);
+                this.gbpPrice = etherUnits.toFiat("1", "ether", data.gbp);
+                this.eurPrice = etherUnits.toFiat("1", "ether", data.eur);
+                this.btcPrice = etherUnits.toFiat("1", "ether", data.btc);
+                this.chfPrice = etherUnits.toFiat("1", "ether", data.chf);
+                this.usdBalance = etherUnits.toFiat(
+                    this.balance,
+                    "ether",
+                    data.usd
+                );
+                this.gbpBalance = etherUnits.toFiat(
+                    this.balance,
+                    "ether",
+                    data.gbp
+                );
+                this.eurBalance = etherUnits.toFiat(
+                    this.balance,
+                    "ether",
+                    data.eur
+                );
+                this.btcBalance = etherUnits.toFiat(
+                    this.balance,
+                    "ether",
+                    data.btc
+                );
+                this.chfBalance = etherUnits.toFiat(
+                    this.balance,
+                    "ether",
+                    data.chf
+                );
 
-                    this.usdBalance = etherUnits.toFiat(
-                        this.balance,
-                        "ether",
-                        data.usd
-                    );
-                    this.gbpBalance = etherUnits.toFiat(
-                        this.balance,
-                        "ether",
-                        data.gbp
-                    );
-                    this.eurBalance = etherUnits.toFiat(
-                        this.balance,
-                        "ether",
-                        data.eur
-                    );
-                    this.btcBalance = etherUnits.toFiat(
-                        this.balance,
-                        "ether",
-                        data.btc
-                    );
-                    this.chfBalance = etherUnits.toFiat(
-                        this.balance,
-                        "ether",
-                        data.chf
-                    );
-                    this.repBalance = etherUnits.toFiat(
-                        this.balance,
-                        "ether",
-                        data.rep
-                    );
-                }
                 if (callback) callback();
             });
         }

@@ -36,9 +36,9 @@ window.browser = browser;
 var nodes = require("./nodes");
 window.nodes = nodes;
 
-const coinPrice = require("./coinPrice");
+const coinPriceService = require("./coinPrice.service");
 
-window._coinPrice = coinPrice;
+window.coinPriceService = new coinPriceService();
 
 var Wallet = require("./myetherwallet");
 window.Wallet = Wallet;
@@ -116,14 +116,14 @@ var switchNetworkCtrl = require("./controllers/switchNetworkCtrl");
 
 // SERVICES
 
-var lookupService = require("./services/lookup");
-var globalService = require("./services/globalService");
-var coldStakingService = require("./services/coldStakingService");
-var modalService = require("./services/modalService");
-var walletService = require("./services/walletService");
-var messageService = require("./services/messageService");
-var dexnsService = require("./services/dexnsService");
-var backgroundNodeService = require("./services/backgroundNodeService");
+var lookupService = require("./services/lookup.service");
+var globalService = require("./services/global.service");
+var coldStakingService = require("./services/coldStaking.service");
+var modalService = require("./services/modal.service");
+var walletService = require("./services/wallet.service");
+var messageService = require("./services/message.service");
+var dexnsService = require("./services/dexns.service");
+var backgroundNodeService = require("./services/backgroundNode.service");
 
 // DIRECTIVES
 var officialityChecker = require("./directives/officiality-checker");
@@ -137,7 +137,7 @@ var messagesOverviewDrtv = require("./directives/messagesOverviewDrtv");
 var cssThemeDrtv = require("./directives/cssThemeDrtv");
 var cxWalletDecryptDrtv = require("./directives/cxWalletDecryptDrtv");
 var fileReaderDrtv = require("./directives/fileReaderDrtv");
-var transactionCost = require("./directives/transactionCostDtrv");
+var transactionCost = require("./directives/transactionCost");
 var balanceDrtv = require("./directives/balanceDrtv");
 var arrayInputDrtv = require("./directives/arrayInputDrtv");
 var newMessagesDrtv = require("./directives/newMessagesDrtv");

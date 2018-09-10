@@ -41,6 +41,8 @@ const coinPriceService = function coinPriceService() {
             }
         });
     };
+
+    return this;
 };
 
 module.exports = coinPriceService;

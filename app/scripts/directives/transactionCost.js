@@ -13,18 +13,12 @@ module.exports = function transactionCost() {
                 // coin to look up -> ETC
                 const nodeType = $scope.node.type;
 
-                if (coinPriceService.coinPrices.hasOwnProperty(nodeType)) {
-                    handleCoinPriceResult(
-                        coinPriceService.coinPrices[nodeType]
-                    );
-                } else {
-                    coinPriceService
-                        .getCoinPrice(nodeType)
-                        .then(handleCoinPriceResult)
-                        .catch(err => {
-                            $scope.txCostEther = 0;
-                        });
-                }
+                coinPriceService
+                    .getCoinPrice(nodeType)
+                    .then(handleCoinPriceResult)
+                    .catch(err => {
+                        $scope.txCostEther = 0;
+                    });
 
                 function handleCoinPriceResult(result) {
                     const { gasLimit } = $scope.tx;

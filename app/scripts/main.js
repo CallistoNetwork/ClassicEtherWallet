@@ -36,7 +36,7 @@ window.browser = browser;
 var nodes = require("./nodes");
 window.nodes = nodes;
 
-const coinPriceService = require("./coinPrice.service");
+const coinPriceService = require("./services/coinPrice.service");
 
 window.coinPriceService = new coinPriceService();
 
@@ -59,10 +59,6 @@ var ethFuncs = require("./ethFuncs");
 window.ethFuncs = ethFuncs;
 var Validator = require("./validator");
 window.Validator = Validator;
-
-var changeNow = require("./changeNow");
-
-window.changeNow = changeNow;
 
 var ens = require("./ens");
 window.ens = ens;
@@ -115,15 +111,15 @@ var messagesControl = require("./controllers/messagesCtrl");
 var switchNetworkCtrl = require("./controllers/switchNetworkCtrl");
 
 // SERVICES
-
-var lookupService = require("./services/lookup.service");
-var globalService = require("./services/global.service");
-var coldStakingService = require("./services/coldStaking.service");
-var modalService = require("./services/modal.service");
-var walletService = require("./services/wallet.service");
-var messageService = require("./services/message.service");
-var dexnsService = require("./services/dexns.service");
-var backgroundNodeService = require("./services/backgroundNode.service");
+const changeNowService = require("./services/changeNow.service");
+const lookupService = require("./services/lookup.service");
+const globalService = require("./services/global.service");
+const coldStakingService = require("./services/coldStaking.service");
+const modalService = require("./services/modal.service");
+const walletService = require("./services/wallet.service");
+const messageService = require("./services/message.service");
+const dexnsService = require("./services/dexns.service");
+const backgroundNodeService = require("./services/backgroundNode.service");
 
 // DIRECTIVES
 var officialityChecker = require("./directives/officiality-checker");
@@ -185,7 +181,7 @@ app.factory("globalService", [
 app.factory("walletService", walletService);
 app.factory("backgroundNodeService", backgroundNodeService);
 
-app.factory("changeNowService", changeNow);
+app.factory("changeNowService", changeNowService);
 app.factory("modalService", modalService);
 
 app.factory("messageService", messageService);
@@ -272,7 +268,7 @@ app.controller("swapCtrl", [
     "$scope",
     "$rootScope",
     "$interval",
-    "walletService",
+    "changeNowService",
     swapCtrl
 ]);
 app.controller("signMsgCtrl", ["$scope", "$sce", "walletService", signMsgCtrl]);

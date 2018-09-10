@@ -12,9 +12,20 @@
 
     <!-- Unlock Wallet -->
     <article class="collapse-container">
+
         <div ng-click="wd = !wd">
-            <a class="collapse-button"><span ng-show="wd">+</span><span ng-show="!wd">-</span></a>
-            <h1 translate="NAV_SendEther">Send Ether &amp; Tokens </h1>
+
+            <h1>
+                 <span
+                     style="margin: 0; padding: 0 2px;"
+                     class="collapse-button glyphicon"
+                     ng-class="wd ? 'glyphicon-plus' : 'glyphicon-minus'"
+                 ></span>
+                <span
+                    translate="NAV_SendEther">
+                    Send Ether &amp; Tokens
+                </span>
+            </h1>
         </div>
         <div ng-show="!wd">
             @@if (site === 'cx' ) {

@@ -4,8 +4,18 @@
     <article class="collapse-container">
 
         <div ng-click="wd = !wd">
-            <a class="collapse-button"><span ng-show="wd">+</span><span ng-show="!wd">-</span></a>
-            <h1 translate="NAV_ViewWallet">View Wallet Details</h1>
+
+
+            <h1>
+                <span
+                    style="margin: 0; padding: 0 2px;"
+                    class="collapse-button glyphicon"
+                    ng-class="wd ? 'glyphicon-plus' : 'glyphicon-minus'"
+                >
+
+                </span>
+                <span translate="NAV_ViewWallet">View Wallet Details</span>
+            </h1>
         </div>
 
         <div ng-show="!wd">
@@ -14,9 +24,16 @@
                 may want to do this in order to [import your account into
                 Geth/Mist](http://ethereum.stackexchange.com/questions/465/how-to-import-a-plain-private-key-into-geth/).
                 If you want to check your balance, we recommend using a blockchain explorer like <a
-                    href="http://etherscan.io/" target="_blank" rel="noopener">etherscan.io</a>.
+                href="http://etherscan.io/" target="_blank" rel="noopener">etherscan.io</a>.
             </p>
-            <wallet-decrypt-drtv></wallet-decrypt-drtv>
+            <div ng-show="!wd">
+                @@if (site === 'cx' ) {
+                <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>
+                }
+                @@if (site === 'cew' ) {
+                <wallet-decrypt-drtv></wallet-decrypt-drtv>
+                }
+            </div>
         </div>
 
     </article>

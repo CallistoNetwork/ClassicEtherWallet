@@ -5,15 +5,19 @@
     />
 </div>
 
+
 <!-- Amount to Send -->
-<label translate="SEND_amount">Amount to Send:</label>
-<div class="input-group col-sm-11">
+    <label translate="SEND_amount">Amount to Send:</label>
+    <div class="input-group col-sm-11">
     <input
-        type="text"
+        type="number"
         class="form-control"
+        min="0"
+        step="1e-18"
         placeholder="{{ 'SEND_amount_short' | translate }}"
         ng-model="tx.value"
         autocomplete="off"
+        ng-model-options="{debounce: 500}"
         spellcheck="false"
         name="value"
         required
@@ -48,6 +52,13 @@
 </div>
 <p><a ng-click="transferAllBalance()"><span class="strong" translate="SEND_TransferTotal">Send Entire Balance</span></a>
 </p>
+<p
+    ng-show="sendTransactionForm.value.$dirty &&
+        sendTransactionForm.value.$error.enoughBalance"
+    class="text-danger"
+    translate="GETH_InsufficientFunds"
+>
+</p>
 <!-- / Amount to Send -->
 
 <!-- Gas Limit -->
@@ -63,8 +74,10 @@
         </a>
         <label translate="TRANS_gas"> Gas Limit: </label>
         <input
-            type="text"
+            type="number"
             required
+            min="21000"
+            max="5e6"
             class="form-control"
             placeholder="21000"
             ng-model="tx.gasLimit"
@@ -81,7 +94,8 @@
 
 
 <!-- Advanced Option Panel -->
-<a ng-click="showAdvance=true" ng-show='globalService.currentTab==globalService.tabs.sendTransaction.id'>
+<a ng-click="showAdvance=true"
+   ng-show='globalService.currentTab === globalService.tabs.sendTransaction.id'>
     <p class="strong" translate="TRANS_advanced"> + Advanced: Add Data </p>
 </a>
 
@@ -121,9 +135,7 @@
     </p>
 </a>
 
-<div ng-show="showLookup">
-    <lookup></lookup>
-</div>
+<lookup ng-show="showLookup"></lookup>
 
 
 <div class="clearfix form-group">

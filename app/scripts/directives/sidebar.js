@@ -4,6 +4,7 @@ module.exports = function sidebar($timeout) {
     return {
         restrict: "E",
         template: require("./sidebar.html"),
+        controller: "walletBalanceCtrl",
         link: function(scope) {
             scope.displaySuccess = 0;
 

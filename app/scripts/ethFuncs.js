@@ -1,4 +1,6 @@
 "use strict";
+const { Contract } = require("./contract");
+
 var ethFuncs = function() {};
 
 ethFuncs.gasAdjustment = 21;

@@ -26,22 +26,28 @@
 <form name="dexnsNameDisplay" dexns-name-display novalidate>
 </form>
 
-<div ng-show="showDisplayOnTrezor()">
-    <h5 translate="sidebar_DisplayOnTrezor">Display address on TREZOR</h5>
-    <ul class="account-info">
-        <li><a href="" ng-click="displayOnTrezor()" translate="sidebar_DisplayOnTrezor">Display address
-            on
-            TREZOR</a></li>
-    </ul>
-</div>
-<div ng-show="showDisplayOnLedger()">
-    <h5 translate="sidebar_DisplayOnLedger">Display address on Ledger</h5>
-    <ul class="account-info">
-        <li><a href="" ng-click="displayOnLedger()" translate="sidebar_DisplayOnLedger">Display address
-            on
-            Ledger</a></li>
-    </ul>
-</div>
+<a
+    class="btn btn-primary"
+    ng-show="showDisplayOnTrezor()"
+    ng-click="displayOnTrezor()"
+>
+
+    <h5 translate="sidebar_DisplayOn"
+        style="margin: 0; padding-bottom: 1em;"
+    ></h5>
+    <img src="images/logo-trezor.svg"/>
+
+</a>
+<a ng-show="showDisplayOnLedger()"
+   class="btn btn-primary"
+   ng-click="displayOnLedger()"
+
+>
+    <h5 translate="sidebar_DisplayOn"
+        style="margin: 0; padding-bottom: 1em;"
+    ></h5>
+    <img src="images/logo-ledger.svg"/>
+</a>
 
 
 <table class="table table-responsive">

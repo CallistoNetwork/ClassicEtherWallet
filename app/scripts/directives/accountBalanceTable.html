@@ -1,0 +1,149 @@
+<table class="table table-responsive">
+    <caption translate="sidebar_AccountBal">Account Balance</caption>
+    <thead>
+    <tr ng-if="coldStakingService.validNetwork();">
+        <th translate="sidebar_AccountBal">
+        </th>
+        <th class="text-right">
+            <h5>Staking Balance</h5>
+
+        </th>
+        <th class="text-right">
+            <h5>Reward</h5>
+
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+
+
+    <tr>
+        <td>
+            <div ng-show="coldStakingService.validNetwork()" ng-init="showLongBal_ = false;">
+                         <span
+                             title="{{walletService.wallet.balance}} (Double-Click)"
+                             class="text-right pointer"
+                         >
+                          <span ng-dblclick="showLongBal_ = !showLongBal_">
+                                <span class="mono wrap"
+                                      ng-show="!showLongBal_">{{walletService.wallet.balance | number}}</span>
+                                <span class="mono wrap" ng-show="showLongBal_">{{walletService.wallet.balance}}</span>
+                           </span>
+                        </span>
+            </div>
+            <span
+                class="text-left {{'icon icon-' + ajaxReq.type.toLowerCase()}}"></span>
+            {{ajaxReq.type}}
+        </td>
+
+
+        <td class="text-right">
+                    <span ng-show="!coldStakingService.validNetwork()"
+                          title="{{walletService.wallet.balance}} (Double-Click)"
+                          class="text-left pointer"
+                    >
+                          <span ng-dblclick="showLongBal = !showLongBal">
+                                <span class="mono wrap"
+                                      ng-show="!showLongBal">{{walletService.wallet.balance | number}}</span>
+                                <span class="mono wrap" ng-show="showLongBal">{{walletService.wallet.balance}}</span>
+                           </span>
+                    </span>
+            <span
+                ng-show="coldStakingService.validNetwork()"
+                class="text-right pointer"
+                title="{{coldStakingService.contract.staker_info.weight}} (Double Click)"
+                ng-init="showLongWeight = false;"
+                ng-dblclick="showLongWeight = !showLongWeight"
+            >
+                        <span class="mono wrap" ng-show="!showLongWeight">{{coldStakingService.contract.staker_info.weight | number}}</span>
+                        <span class="mono wrap"
+                              ng-show="showLongWeight"
+                        >
+                            {{coldStakingService.contract.staker_info.weight}}</span>
+                    </span>
+        </td>
+
+        <td class="text-right pointer"
+            ng-if="coldStakingService.validNetwork()"
+            title="{{coldStakingService.contract.staker_info.reward}} (Double Click)"
+            ng-init="showLongReward = false;"
+            ng-dblclick="showLongReward = !showLongReward"
+        >
+
+            <span class="mono wrap" ng-show="!showLongReward">{{coldStakingService.contract.staker_info.reward | number}}</span>
+            <span class="mono wrap"
+                  ng-show="showLongReward">{{coldStakingService.contract.staker_info.reward}}</span>
+        </td>
+
+
+    </tr>
+    <tr ng-if="coldStakingService.validNetwork()">
+
+        <td class="text-left">
+
+            <button class="btn btn-primary btn-teeny text-center"
+                    ng-disabled="{{globalService.currentTab !== globalService.tabs.sendTransaction.id}}"
+                    ng-click="modalService.startStakingModal.open();">
+                Start Staking
+            </button>
+
+        </td>
+
+
+        <td class="text-right">
+
+            <button class="btn btn-primary btn-teeny text-center"
+                    ng-disabled="{{globalService.currentTab !== globalService.tabs.sendTransaction.id}}"
+                    ng-click="handleOpenWithdraw();">
+                Withdraw
+            </button>
+
+        </td>
+
+        <td class="text-right">
+
+            <button class="btn btn-primary btn-teeny text-center"
+                    ng-disabled="{{globalService.currentTab !== globalService.tabs.sendTransaction.id}}"
+                    ng-click="handleOpenClaim();">
+                Claim Reward
+            </button>
+
+
+        </td>
+    </tr>
+
+    <tr ng-repeat="altBalance in toArray(alternativeBalance) | filter: notAjaxReq">
+
+        <td class="text-left">
+            <span class="{{'icon icon-' + altBalance.symbol.toLowerCase()}}"></span>
+            {{altBalance.symbol}}
+        </td>
+        <td class="account-info point text-right"
+            ng-dblclick="showLongBal=!showLongBal"
+            title="{{altBalance.balance}} (Double-Click)"
+            colspan="{{coldStakingService.validNetwork() ? 3 : 1}}"
+        >
+            <span class="mono wrap" ng-show="!showLongBal">{{altBalance.balance | number}}</span>
+            <span class="mono wrap" ng-show="showLongBal">{{altBalance.balance}}</span>
+        </td>
+    </tr>
+
+    </tbody>
+    <tfoot>
+    <tr
+    >
+        <td><b>Equivalent Values:</b></td>
+        <td ng-show="coldStakingService.validNetwork()"></td>
+        <td class="text-right">BTC: <span class="mono wrap">{{walletService.wallet.btcBalance | number}}</span>
+        </td>
+    </tr>
+    <tr
+    >
+        <td ng-show="coldStakingService.validNetwork()" style="border-top: none;"></td>
+        <td
+            style="border: none;"
+            colspan="2" class="text-right">USD: <span
+            class="mono wrap">{{walletService.wallet.usdBalance | currency:"$"}}</span></td>
+    </tr>
+    </tfoot>
+</table>

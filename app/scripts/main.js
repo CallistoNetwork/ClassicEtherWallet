@@ -126,6 +126,7 @@ const dexnsService = require("./services/dexnsService");
 const backgroundNodeService = require("./services/backgroundNodeService");
 
 // DIRECTIVES
+const accountBalanceTable = require("./directives/accountBalanceTable");
 const tokenBalances = require("./directives/tokenBalances");
 const sidebarAds = require("./directives/sidebar-ads");
 const sidebar = require("./directives/sidebar");
@@ -203,7 +204,7 @@ app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
 
 app.directive("coinIcon", coinIcon);
-
+app.directive("accountBalanceTable", accountBalanceTable);
 app.directive("sidebarAds", sidebarAds);
 app.directive("sidebar", ["walletService", "$timeout", sidebar]);
 app.directive("accountInfo", accountInfo);

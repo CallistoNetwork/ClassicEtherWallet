@@ -210,6 +210,8 @@ app.directive("dexnsNameDisplay", [
     "globalService",
     dexnsNameDisplay
 ]);
+app.directive("sendTxModal", require("./directives/sendTxModal"));
+
 app.directive("eosKeypair", require("./directives/eos-keypair"));
 app.directive("lookup", ["$rootScope", "lookupService", lookup]);
 app.directive("blockieAddress", blockiesDrtv);

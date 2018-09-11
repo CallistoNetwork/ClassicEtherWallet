@@ -31,9 +31,7 @@
                 <i class="caret"></i>
             </strong>
         </a>
-        <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownAmount"
-            style="max-height: 50vh; overflow-y: scroll;"
-        >
+        <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownAmount">
             <li><a ng-class="{true:'active'}[tx.sendMode=='ether']"
                    ng-click="setSendMode('ether')">
                 <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"/>

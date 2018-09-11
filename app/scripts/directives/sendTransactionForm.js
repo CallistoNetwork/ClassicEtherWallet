@@ -13,7 +13,10 @@ module.exports = function sendTransactionForm() {
             }
 
             scope.validForm = validForm;
-            form.data.$validators.data = Validator.isValidHex;
+            form.data.$validators.data = val => {
+                if (!val) return true;
+                return Validator.isValidHex(val);
+            };
             form.gasLimit.$validators.gasLimit = form.value.$validators.value =
                 Validator.isPositiveNumber;
         }

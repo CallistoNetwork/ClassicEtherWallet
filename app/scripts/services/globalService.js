@@ -121,26 +121,11 @@ var globalService = function($http, $httpParamSerializerJQLike) {
     if (typeof chrome !== "undefined")
         currentTab = chrome.windows === undefined ? 0 : 3;
 
-    const navigate = _id => {
-        const _tab = Object.values(this.tabs).find(tab => {
-            return tab.id === _id;
-        });
-
-        if (!_tab) {
-            throw new Error("Invalid Request");
-        }
-
-        this.currentTab = _id;
-
-        location.hash = _tab.url;
-    };
-
     const dropdownNode = false;
 
     return {
-        tabs: tabs,
-        currentTab: currentTab,
-        navigate,
+        tabs,
+        currentTab,
         dropdownNode
     };
 };

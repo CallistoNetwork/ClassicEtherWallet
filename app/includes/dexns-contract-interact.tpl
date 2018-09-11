@@ -5,7 +5,7 @@
 
     <div class="btn-group">
         <a class="btn btn-default" ng-click="dropdownContracts = !dropdownContracts">
-            {{selectedFunc == null ? "Select a function" : selectedFunc}}<i
+            {{selectedFunc == null ? "Select a function" : selectedFunc.name}}<i
             class="caret"></i></a>
         <ul class="dropdown-menu" ng-show="dropdownContracts">
             <li ng-repeat="func in visibleFuncList track by $index"
@@ -20,24 +20,16 @@
 
     <div
         class="row"
-        ng-repeat="_function in visibleFuncList track by $index"
-        ng-show="selectedFunc === _function.name"
-
+        ng-repeat="_function in visibleFuncList track by _function.index + _function.name + $index"
+        ng-show="selectedFunc.name === _function.name && selectedFunc.index === _function.index"
     >
-
-
         <!-- Input -->
         <form
-            ng-class="_function.stateMutability === 'view' ? 'col-sm-6' : 'col-sm-12'"
-
+            ng-class="_function.stateMutability === 'view' ? 'col-sm-4' : 'col-sm-12'"
             ng-submit="handleSubmit(_function);"
         >
-            <div ng-repeat="input in _function.inputs track by $index">
-
-
+            <div ng-repeat="input in _function.inputs">
                 @@include( '../includes/contract-input.tpl', { "site": "cew" } )
-
-
             </div>
 
             <button
@@ -50,75 +42,62 @@
             </button>
         </form>
 
-        <div class="col-sm-6" ng-if="_function.stateMutability === 'view'">
+        <div class="col-sm-8" ng-if="_function.stateMutability === 'view'">
 
-            <div class="table-responsive">
 
-                <table class="table" title="Metadata"
+            <table class="table table-responsive" title="Metadata"
+            >
+                <caption>{{_function.name}}</caption>
+
+                <tbody>
+                <!-- Custom Metadata UI -->
+
+
+                <tr
+                    ng-if="_function.name === 'metadataOf'"
+                    ng-repeat="input in outputs[_function.name] track by $index"
+                    class="row"
                 >
+                    <td>{{input.key}}</td>
 
-                    <tbody>
-                    <!-- Custom Metadata UI -->
-
-
-                    <tr
-                        ng-if="_function.name === 'metadataOf'"
-                        ng-repeat="input in outputs[_function.name] track by $index"
-                        class="row"
+                    <td ng-if="['link', 'source'].includes(input.key)"
                     >
-                        <td>{{input.key}}</td>
-
-                        <td ng-if="['link', 'source'].includes(input.key)"
+                        <a
+                            href="{{input.value}}"
+                            target="_blank"
                         >
-                            <a
-                                href="{{input.value}}"
-                                target="_blank"
-                            >
 
-                                {{input.value}}
-
-                            </a>
-                        </td>
-
-                        <td ng-if="!['link', 'source'].includes(input.key)">
                             {{input.value}}
-                        </td>
 
-                    </tr>
+                        </a>
+                    </td>
 
-                    <!-- Generic Contract output UI -->
+                    <td ng-if="!['link', 'source'].includes(input.key)">
+                        {{input.value}}
+                    </td>
 
-                    <tr ng-if="_function.name !== 'metadataOf'">
+                </tr>
 
-                        <td ng-repeat="output in outputs[_function.name] track by $index"
-                            class="form-group">
-                            @@include( '../includes/contract-output.tpl', { "site": "cew" } )
-                        </td>
+                <!-- Generic Contract output UI -->
 
-                    </tr>
-                    </tbody>
-                </table>
+                <tr ng-if="_function.name !== 'metadataOf'">
 
-            </div>
+                    <td ng-repeat="output in outputs[_function.name] track by $index"
+                        class="form-group">
+                        @@include( '../includes/contract-output.tpl', { "site": "cew" } )
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+
 
             <div
                 ng-if="_function.name === 'metadataOf' && raw"
             >
-                <label
-                    for="metadata"
-                >
-                    Meta Data:
-                </label>
-                <textarea
-                    title="raw metadata"
-                    id="metadata"
-                    class="form-control"
-                    readonly
-                    rows="5"
-                >
-                                {{ raw }}
-
-                            </textarea>
+                <code>
+                    {{raw}}
+                </code>
             </div>
 
         </div>

@@ -72,7 +72,10 @@ const coldStakingCtrl = function(
                 })
             )
             .then(tx => {
-                uiFuncs.sendTxContract(coldStakingService.contract, tx);
+                return uiFuncs.sendTxContract(coldStakingService.contract, tx);
+            })
+            .catch(err => {
+                conosle.error(err);
             })
             .finally(() => modalService.startStakingModal.close());
     };
@@ -101,7 +104,10 @@ const coldStakingCtrl = function(
                     })
                 )
                 .then(tx => {
-                    uiFuncs.sendTxContract(coldStakingService.contract, tx);
+                    return uiFuncs.sendTxContract(
+                        coldStakingService.contract,
+                        tx
+                    );
                 })
                 .finally(() => {
                     modalService.openWithdrawModal.close();
@@ -122,7 +128,10 @@ const coldStakingCtrl = function(
                     })
                 )
                 .then(tx => {
-                    uiFuncs.sendTxContract(coldStakingService.contract, tx);
+                    return uiFuncs.sendTxContract(
+                        coldStakingService.contract,
+                        tx
+                    );
                 })
                 .finally(() => {
                     modalService.openClaimRewardModal.close();

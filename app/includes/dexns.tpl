@@ -17,8 +17,8 @@
 
         <div class="row text-right">
             <button
-                    class="btn btn-default"
-                    ng-click="init();"
+                class="btn btn-default"
+                ng-click="init();"
             >
                 Reset
             </button>
@@ -50,7 +50,7 @@
                 Registration of the Name will cost you <code>
 
 
-                {{dexnsService.feContract.namePrice[0].value / 1e18}}
+                {{toEther(dexnsService.feContract.namePrice[0].value)}}
 
                 {{dexnsService.feContract.network}}
 
@@ -97,7 +97,7 @@
             <section class="clearfix collapse-container">
                 <article class="row">
                     <section class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
-                        <form ng-submit="checkDexNSName()">
+                        <form ng-submit="handleCheckName()">
                             <label for="DexNSName">DexNS Name</label>
 
                             <input class="form-control"
@@ -114,9 +114,16 @@
             </section>
         </article>
 
-        @@if (site === 'cew' ) { @@include( './dexns-token-registration.tpl', { "site": "cew" } ) }
-        @@if (site === 'cx' ) { @@include( './dexns-token-registration.tpl', { "site": "cx" } ) }
 
+        <form
+            ng-show="dexns_status === 2"
+            ng-submit="handleRegisterAndUpdateName(tokenRegistration)"
+            class="capitalize-form-label"
+            novalidate
+            name="tokenRegistration"
+            dexns-token-registration-form
+        >
+        </form>
 
         <!-- Unlock Directive: Everything but notAvailable & forbidden -->
         <article class="row" ng-show="(dexns_status === 6 || dexns_status === 7)">

@@ -1,37 +1,21 @@
 "use strict";
 
-var _sample = require("lodash/sample");
-
-var backgroundNodeCtrl = function($scope, backgroundNodeService, $interval) {
-    const availableNodes = Object.keys(nodes.nodeList).filter(
-        nodeName => nodes.nodeList[nodeName].type.toUpperCase() === "ETC"
-    );
-
-    var backgroundNode = _sample(availableNodes);
-
-    Object.assign(backgroundNodeService, { backgroundNode, availableNodes });
+const backgroundNodeCtrl = function($scope, $interval, backgroundNodeService) {
+    const changeBackgroundNode = () => {
+        backgroundNodeService.changeBackgroundNode();
+        healthCheck();
+    };
 
     $scope.backgroundNodeService = backgroundNodeService;
 
-    $scope.nodeList = nodes.nodeList;
     $scope.dropdownNodeBackground = false;
 
-    const changeBackgroundNode = () => {
-        const { backgroundNode, availableNodes } = backgroundNodeService;
-
-        const availableNodes_ = availableNodes.filter(
-            node => node !== backgroundNode
-        );
-
-        const sampleNode = _sample(availableNodes_);
-
-        Object.assign(backgroundNodeService, { backgroundNode: sampleNode });
-    };
+    $scope.nodes = nodes;
 
     $scope.setBackgroundNode = backgroundNode => {
         Object.assign(backgroundNodeService, { backgroundNode });
-
         $scope.dropdownNodeBackground = false;
+        healthCheck();
     };
 
     $scope.$watch(
@@ -47,18 +31,27 @@ var backgroundNodeCtrl = function($scope, backgroundNodeService, $interval) {
         }
     );
 
-    function urlExists() {
+    function healthCheck() {
         const { lib } = nodes.nodeList[backgroundNodeService.backgroundNode];
 
-        lib.getCurrentBlock(function(result) {
-            if (result.error) {
+        return lib
+            .healthCheck()
+            .then(result => {
+                if (300 <= result.status) {
+                    _handle();
+                }
+            })
+            .catch(_handle);
+
+        function _handle() {
+            if (1 < backgroundNodeService.availableNodes.length) {
                 changeBackgroundNode();
             }
-        });
+        }
     }
 
-    urlExists();
-    var interval = $interval(urlExists, 1000 * 30);
+    healthCheck();
+    $scope.interval = $interval(healthCheck, 1000 * 30);
 };
 
 module.exports = backgroundNodeCtrl;

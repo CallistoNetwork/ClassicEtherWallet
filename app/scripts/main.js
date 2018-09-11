@@ -146,6 +146,8 @@ const arrayInputDrtv = require("./directives/arrayInputDrtv");
 const newMessagesDrtv = require("./directives/newMessagesDrtv");
 const sendTransactionFormDrtv = require("./directives/sendTransactionForm");
 const dexnsTokenRegistrationForm = require("./directives/dexns-token-registration");
+
+const coinIcon = require("./directives/coinIcon");
 if (IS_CX) {
     const addWalletCtrl = require("./controllers/CX/addWalletCtrl");
     const cxDecryptWalletCtrl = require("./controllers/CX/cxDecryptWalletCtrl");
@@ -199,6 +201,8 @@ app.factory("lookupService", ["dexnsService", lookupService]);
 
 app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
+
+app.directive("coinIcon", coinIcon);
 
 app.directive("sidebarAds", sidebarAds);
 app.directive("sidebar", ["walletService", "$timeout", sidebar]);

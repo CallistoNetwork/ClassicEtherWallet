@@ -44,9 +44,7 @@
 <article class="swap-panel block clearfix">
 
     <h1 translate="SWAP_init_1"> I want to swap my </h1>
-
     <br/>
-
     <input class="form-control width_10_rem"
            type="text"
            ng-change="updateEstimate(true)"
@@ -55,58 +53,53 @@
            ng-model-options="{ debounce: 750 }"
            ng-class="Validator.isPositiveNumber(swapOrder.fromVal) ? 'is-valid' : 'is-invalid'"
     />
+    <div class="dropdown">
+        <a class="btn btn-default dropdown-toggle" ng-click="toggleDropdown(true)">
+            <coin-icon icon="{{swapOrder.fromCoin.toLowerCase()}}">
 
-
-    <span class="dropdown">
-    <a class="btn btn-default dropdown-toggle" ng-click="toggleDropdown(true)">
-
-    <span class="{{'icon icon-'  + swapOrder.fromCoin.toLowerCase()}}"></span>
-        {{swapOrder.fromCoin.toUpperCase()}}
-        <i class="caret"></i>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-right list-group swap_dropdown"
-        ng-show="dropdownFrom"
-    >
-         <li class="list-group-item">
-    <form ng-submit="handleSubmit(true); input.fromCoin = '';">
-                <input
+            </coin-icon>
+            <span>
+            <i class="caret"></i>
+        </span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right list-group swap_dropdown"
+            ng-show="dropdownFrom"
+        >
+            <li class="list-group-item">
+                <form ng-submit="handleSubmit(true); input.fromCoin = '';">
+                    <input
                         autofocus
                         autocomplete="off"
                         id="fromCoin"
                         class="form-control form-small-pd"
                         ng-model="input.fromCoin"
                         placeholder="type a currency"
-                />
-         <input hidden type="submit"/>
+                    />
+                    <input hidden type="submit"/>
 
-    </form>
+                </form>
 
             </li>
-      <li class="list-group-item" ng-repeat="coin in filterCoins(input.fromCoin) track by coin.ticker">
-        <a
-                ng-click="setOrderCoin(true, coin.ticker)"
-        >
+            <li class="list-group-item" ng-repeat="coin in filterCoins(input.fromCoin) track by coin.ticker">
+                <a
+                    ng-click="setOrderCoin(true, coin.ticker)"
+                >
 
-            <div class="row flex-center">
-                        <div class="{{'text-lg col-xs-4 text-center icon icon-' + coin.ticker.toLowerCase()}}"
+                    <div class="row flex-center">
+                        <div class="text-lg col-xs-4 text-center"
                              style="padding: 5px;">
+                            <coin-icon icon="{{coin.ticker.toLowerCase()}}"/>
                         </div>
                         <div class="col-xs-8 overflow-text">
-
-                            {{coin.ticker.toUpperCase()}}
-
-                            {{' - '}}
                             <small>{{coin.name}}</small>
                         </div>
                     </div>
-        </a>
-      </li>
-    </ul>
-  </span>
+                </a>
+            </li>
+        </ul>
+    </div>
 
     <h1 translate="SWAP_init_2"> for </h1>
-
-
     <input class="form-control width_10_rem"
            placeholder="{{ 'SEND_amount_short' | translate }}"
            ng-change="updateEstimate(false)"
@@ -118,45 +111,43 @@
 
     <div class="dropdown">
         <a class="btn btn-default dropdown-toggle" ng-click="toggleDropdown(false)">
-
-
-            <span class="{{'icon icon-'  + swapOrder.toCoin.toLowerCase()}}"></span>
-
-            {{swapOrder.toCoin.toUpperCase()}}
-
+            <coin-icon icon="{{swapOrder.toCoin.toLowerCase()}}">
+            </coin-icon>
+            <span>
             <i class="caret"></i>
-
+        </span>
         </a>
-
-
         <ul class="dropdown-menu dropdown-menu-right swap_dropdown" ng-show="dropdownTo">
-            <li class="list-group-item">
-                <form ng-submit="handleSubmit(false); input.toCoin = '';">
+            <li class="list-group-item pointer">
+                <form
+                    ng-submit="handleSubmit(false); input.toCoin = '';">
                     <input
-                            class="form-control form-small-pd"
-                            id="toCoin"
-                            autocomplete="off"
-                            autofocus
-                            ng-model="input.toCoin" placeholder="type a currency"/>
+                        class="form-control form-small-pd"
+                        id="toCoin"
+                        autocomplete="off"
+                        type="text"
+                        min="0"
+                        autofocus
+                        ng-model="input.toCoin"
+                        placeholder="type a currency"
+                    />
                     <input type="submit" hidden/>
                 </form>
             </li>
 
-            <li class="list-group-item" ng-repeat="coin in filterCoins(input.toCoin) track by coin.ticker">
+            <li class="list-group-item pointer" ng-repeat="coin in filterCoins(input.toCoin) track by coin.ticker">
                 <a
-                        ng-class="{true:'active'}[coin.ticker.toUpperCase() === swapOrder.toCoin.toUpperCase()]"
-                        ng-click="setOrderCoin(false, coin.ticker);"
+                    ng-class="{true:'active'}[coin.ticker.toUpperCase() === swapOrder.toCoin.toUpperCase()]"
+                    ng-click="setOrderCoin(false, coin.ticker);"
                 >
 
                     <div class="row flex-center">
-                        <div class="{{'text-lg col-xs-4 text-center icon icon-' + coin.ticker.toLowerCase()}}"
+                        <div class="text-lg col-xs-4 text-center"
                              style="padding: 5px;">
+                            <coin-icon icon="{{coin.ticker.toLowerCase()}}"/>
+
                         </div>
                         <div class="col-xs-8 overflow-text">
-
-                            {{coin.ticker.toUpperCase()}}
-
-                            {{' - '}}
                             <small>{{coin.name}}</small>
                         </div>
                     </div>

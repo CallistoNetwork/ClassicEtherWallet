@@ -1,5 +1,6 @@
-module.exports = require("./officiality-checker");
-("use strict");
+"use strict";
+
+const { InitContract } = require("../contract");
 
 /*
 

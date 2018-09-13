@@ -124,10 +124,10 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
     }
 
     $scope.estimateGasLimit = function() {
-        const { value, unit, to, data } = $scope.tx;
+        const { value = 0, unit = "ether", to, data } = $scope.tx;
 
         if (!data) {
-            $scope.tx.gasLimit = "";
+            $scope.tx.gasLimit = -1;
             return false;
         }
 
@@ -143,13 +143,13 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
         if (to && to !== "0xCONTRACT") {
             estObj.to = to;
         }
-        $scope.tx.gasLimit = "loading...";
+        // $scope.tx.gasLimit = "loading...";
 
         return ethFuncs
             .estimateGas(estObj)
             .then(function(gasLimit) {
                 $scope.$apply(() => {
-                    $scope.tx.gasLimit = gasLimit;
+                    $scope.tx.gasLimit = Number(gasLimit);
                 });
                 return gasLimit;
             })

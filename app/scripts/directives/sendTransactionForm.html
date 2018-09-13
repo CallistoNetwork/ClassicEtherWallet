@@ -26,14 +26,17 @@
            ng-click="dropdownAmount = !dropdownAmount"
            ng-class="dropdownEnabled ? '' : 'disabled'"
         >
-            <span class="{{'icon icon-' + ajaxReq.type.toLowerCase()}}"></span>
-            <strong>{{unitReadable}}<i class="caret"></i></strong>
+            <strong>
+                <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"/>
+                <i class="caret"></i>
+            </strong>
         </a>
-        <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownAmount">
+        <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownAmount"
+            style="max-height: 50vh; overflow-y: scroll;"
+        >
             <li><a ng-class="{true:'active'}[tx.sendMode=='ether']"
                    ng-click="setSendMode('ether')">
-                <span class="{{'icon icon-' + ajaxReq.type.toLowerCase()}}"></span>
-                {{ajaxReq.type}}
+                <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"/>
             </a>
             </li>
             <li ng-repeat="token in wallet.tokenObjs track by $index"
@@ -50,13 +53,12 @@
 <!-- / Amount to Send -->
 
 <!-- Gas Limit -->
-<!-- fixme: link -->
 
 <div class="row form-group">
     <div class="col-sm-11 clearfix">
         <a class="account-help-icon"
 
-           href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-gas"
+           href="https://support.ethereumcommonwealth.io/gas/what-is-gas-ethereum.html"
            target="_blank" rel="noopener">
             <img src="images/icon-help.svg" class="help-icon"/>
             <p class="account-help-text" translate="GAS_LIMIT_Desc"></p>

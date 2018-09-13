@@ -126,6 +126,7 @@ var dexnsService = require("./services/dexnsService");
 var backgroundNodeService = require("./services/backgroundNodeService");
 
 // DIRECTIVES
+const customNodeForm = require("./directives/customNodeForm");
 var officialityChecker = require("./directives/officiality-checker");
 var lookup = require("./directives/crosschain-lookup");
 var dexnsNameDisplay = require("./directives/dexns-name-display");
@@ -233,6 +234,8 @@ app.directive("sendContractTx", [
     "walletService",
     require("./directives/sendContractTx")
 ]);
+
+app.directive("customNodeForm", [customNodeForm]);
 
 app.controller("tabsCtrl", [
     "$http",

@@ -119,8 +119,7 @@
                 @@if (site === 'cew' ) { @@include( './sendTx-content.tpl', { "site": "cew" } ) }
                 @@if (site === 'cx' ) { @@include( './sendTx-content.tpl', { "site": "cx" } ) }
 
-                @@if (site === 'cew' ) { @@include( './sendTx-modal.tpl', { "site": "cew" } ) }
-                @@if (site === 'cx' ) { @@include( './sendTx-modal.tpl', { "site": "cx" } ) }
+                <send-tx-modal></send-tx-modal>
             </section>
         </article>
     </div>

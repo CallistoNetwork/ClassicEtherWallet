@@ -3,7 +3,6 @@
       ng-controller='sendTxCtrl'
       ng-cloak>
 
-    <!-- Header : todo turn into warning notification-->
     <div class="alert alert-warning" ng-show="hasQueryString">
         <p translate="WARN_Send_Link">You arrived via a link that has the address, amount, gas or data fields filled in
             for you. You can change any information before sending. Unlock your wallet to get started.</p>
@@ -39,12 +38,14 @@
 
     <!-- Send Tx Content -->
     <article ng-show="wallet!=null">
+
         @@if (site === 'cew' ) { @@include( './sendTx-content.tpl', { "site": "cew" } ) }
         @@if (site === 'cx' ) { @@include( './sendTx-content.tpl', { "site": "cx" } ) }
 
-        @@if (site === 'cew' ) { @@include( './sendTx-modal.tpl', { "site": "cew" } ) }
-        @@if (site === 'cx' ) { @@include( './sendTx-modal.tpl', { "site": "cx" } ) }
+
     </article>
 
+
+    <send-tx-modal></send-tx-modal>
 
 </main>

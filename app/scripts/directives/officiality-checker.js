@@ -1,6 +1,6 @@
 "use strict";
 
-const { InitContract } = require("../contract");
+const InitContract = require("../contract").InitContract;
 
 /*
 

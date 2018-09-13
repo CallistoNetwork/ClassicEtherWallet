@@ -9,7 +9,6 @@
             for you. You can change any information before sending. Unlock your wallet to get started.</p>
     </div>
 
-
     <!-- Unlock Wallet -->
     <article class="collapse-container">
 

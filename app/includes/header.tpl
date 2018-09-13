@@ -188,7 +188,14 @@
            ng-mouseover="scrollHoverIn(false,2);" ng-mouseleave="scrollHoverOut()">&#187;</a>
     </nav>
 
-    @@if (site === 'cew' ) { @@include( './header-node-modal.tpl', { "site": "cew" } ) }
-    @@if (site === 'cx' ) { @@include( './header-node-modal.tpl', { "site": "cx" } ) }
+    <article class="modal fade" id="customNodeModal" tabindex="-1">
+        <section class="modal-dialog">
+            <section class="modal-content">
+                <form name="customNodeForm" custom-node-form ng-submit="saveCustomNode()">
+                </form>
+            </section>
+        </section>
+    </article>
+
 
 </header>

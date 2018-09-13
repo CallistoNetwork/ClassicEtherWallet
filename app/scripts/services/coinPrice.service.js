@@ -3,17 +3,10 @@
 const _url = (sym = "ETC", syms = "USD,EUR,GBP,BTC,CHF") =>
     `https://min-api.cryptocompare.com/data/price?fsym=${sym}&tsyms=${syms}`;
 
-/*
-
-    @param coin
-    @returns Promise< priceObj | error>
- */
 const coinPriceService = function coinPriceService() {
     this.coinPrices = {};
 
-    this.getCoinPrice = function getCoinPrice(
-        coin = nodes.nodeList[globalFuncs.getCurNode()].type
-    ) {
+    this.getCoinPrice = function getCoinPrice(coin = ajaxReq.type) {
         const uri = _url(coin);
 
         return ajaxReq.http.get(uri).then(result => {

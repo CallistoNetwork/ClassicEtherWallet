@@ -3,16 +3,9 @@
         <div class="col-xs-10">
             <div ng-switch on="input.type_">
                 <div class="item write-address" ng-switch-when="address">
-                    <div class="row">
-                        <div class="col-xs-11"><input class="form-control" type="text" placeholder="0x314156..."
-                                                      ng-model="input.displayInput"
-                                                      ng-class="Validator.isValidAddress(input.displayInput) ? 'is-valid' : 'is-invalid'"/>
-                        </div>
-                        <div class="col-xs-1">
-                            <div class="addressIdenticon med" title="Address Indenticon"
-                                 blockie-address="{{input.displayInput}}" watch-var="input.displayInput"></div>
-                        </div>
-                    </div>
+
+                    <address-field  var-name="input.displayInput"/>
+
                 </div>
                 <p class="item write-unit256" ng-switch-when="uint256">
                     <input class="form-control" type="text" placeholder="151" ng-model="input.displayInput"

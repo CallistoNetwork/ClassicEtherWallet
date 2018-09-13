@@ -1,13 +1,4 @@
 "use strict";
-/* 0 -> nothing
- *  1 -> user
- *  2 -> token
- *  3 -> contract
- *  4 -> update Name
- *  5 -> access Name content
- *  6 -> step 2 register Name
- *  7 -> confirmation
- */
 const statusCodes = {
     nothing: 0,
     user: 1,
@@ -41,7 +32,7 @@ const storageContracts = [
     "assignation"
 ];
 
-const dexnsCtrl = function(
+const DexnsController = function DexnsController(
     $scope,
     $sce,
     $rootScope,
@@ -104,26 +95,21 @@ const dexnsCtrl = function(
 
         const {
             tokenName,
-            owner,
             destination,
             abi,
             link,
             sourceCode,
             info,
             tokenNetwork,
-            hideOwner,
-            assign
+            hideOwner
         } = $scope.input;
 
         const _metadata = dexnsService.stringifyMetadata($scope.input);
 
         const _owner = walletService.wallet.getAddressString();
 
-        // todo:  hideOwner
-        const _hideOwner = true;
-
         $scope.tx = {
-            inputs: [tokenName, _owner, destination, _metadata, _hideOwner],
+            inputs: [tokenName, _owner, destination, _metadata, hideOwner],
             value: dexnsService.feContract.namePrice[0].value,
             unit: "wei",
             from: _owner
@@ -153,7 +139,7 @@ const dexnsCtrl = function(
             }
 
             const result = await dexnsService.storageContract.call(
-                _function.name,
+                _function,
                 tx
             );
 
@@ -170,10 +156,7 @@ const dexnsCtrl = function(
                 }
             });
         } else {
-            const result = await dexnsService.feContract.call(
-                _function.name,
-                tx
-            );
+            const result = await dexnsService.feContract.call(_function, tx);
 
             $scope.$apply(function() {
                 $scope.outputs[_function.name] = result;
@@ -223,7 +206,7 @@ const dexnsCtrl = function(
             .then(signedTx => ($scope.tx = signedTx))
             .then(openModal)
             .catch(err => {
-                console.log("error will not open modal");
+                uiFuncs.notifier.danger(err);
             });
     };
 
@@ -405,4 +388,4 @@ const dexnsCtrl = function(
     main();
 };
 
-module.exports = dexnsCtrl;
+module.exports = DexnsController;

@@ -3,6 +3,8 @@
 var en = function() {};
 en.code = "en";
 en.data = {
+    CUSTOM_NODE_CONNECT_DOWNLOAD:
+        "download the ClassicEtherWallet repo & run it locally",
     LINK: "Link",
     INFO: "Info",
     SOURCE_CODE: "Source Code",
@@ -338,15 +340,17 @@ en.data = {
     SEND_raw: "Raw Transaction ",
     SEND_signed: "Signed Transaction ",
     SEND_trans: "Send Transaction ",
-    SENDModal_Title: "Warning! ",
+    SENDModal_Title: "Confirm Transaction",
+    Warning: "Warning!",
     /* full sentence reads "You are about to send "10 ETH" to address "0x1234". Are you sure you want to do this? " */
-    SENDModal_Content_1: "You are about to send ",
-    SENDModal_Content_2: "to address ",
+    SENDModal_Value: "Value",
+    SENDModal_To: "To",
     SENDModal_Content_3: "Are you sure you want to do this? ",
     SENDModal_Content_4:
         "NOTE: If you encounter an error, you most likely need to add ether to your account to cover the gas cost of sending tokens. Gas is paid in ether. ",
     SENDModal_No: "No, get me out of here! ",
     SENDModal_Yes: "Yes, I am sure! Make transaction. ",
+    SENDModal_From: "From",
 
     /* Tokens */
     TOKEN_Addr: "Address ",

@@ -46,10 +46,7 @@
 
                     <label>
                         <span translate="SWAP_rec_add">Your Receiving Address</span>
-                        <strong>
-                            (<span class="{{'icon icon-' + swapOrder.toCoin.toLowerCase()}}"></span>
-                            {{swapOrder.toCoin.toUpperCase()}})
-                        </strong>
+                        <coin-icon icon="{{swapOrder.toCoin.toUpperCase()}}"/>
                     </label>
 
 

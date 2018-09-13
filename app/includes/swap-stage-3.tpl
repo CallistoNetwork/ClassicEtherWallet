@@ -19,9 +19,9 @@
         <div class="col-sm-4 order-info">
             <h4>
                 <a
-                        target="_blank"
-                        rel="noopener"
-                        href="{{'https://changenow.io/exchange/txs/' + orderResult.id}}">
+                    target="_blank"
+                    rel="noopener"
+                    href="{{'https://changenow.io/exchange/txs/' + orderResult.id}}">
 
                     {{orderResult.id}}
                 </a>
@@ -80,7 +80,8 @@
         <h1>
             <span translate="SWAP_order_CTA">      Please send                                                 </span>
             <strong> {{orderResult.expectedSendAmount}} {{orderResult.fromCurrency}} </strong>
-            <span translate="SENDModal_Content_2"> to address                                                  </span><br/>
+            <span
+                translate="SENDModal_Content_2"> to address                                                  </span><br/>
             <strong class="mono text-primary"> {{orderResult.payinAddress}} </strong>
         </h1>
     </section>
@@ -92,8 +93,17 @@
                  ng-show="['new', 'waiting'].includes(orderResult.status.toLowerCase())">
             <section class="clearfix collapse-container">
                 <div class="text-center" ng-click="wd = !wd">
-                    <a class="collapse-button"><span ng-show="wd">+</span><span ng-show="!wd">-</span></a>
-                    <h5 traslate="SWAP_unlock">Unlock your wallet to send ETH or Tokens directly from this page.</h5>
+
+                    <h5>
+
+                          <span
+                              style="margin: 0; padding: 0 2px;"
+                              class="collapse-button glyphicon"
+                              ng-class="wd ? 'glyphicon-plus' : 'glyphicon-minus'"
+                          ></span>
+                        <span
+                            traslate="SWAP_unlock">Unlock your wallet to send ETH or Tokens directly from this page.</span>
+                    </h5>
                 </div>
                 <div ng-show="!wd">
                     @@if (site === 'cew' ) {
@@ -109,8 +119,7 @@
                 @@if (site === 'cew' ) { @@include( './sendTx-content.tpl', { "site": "cew" } ) }
                 @@if (site === 'cx' ) { @@include( './sendTx-content.tpl', { "site": "cx" } ) }
 
-                @@if (site === 'cew' ) { @@include( './sendTx-modal.tpl', { "site": "cew" } ) }
-                @@if (site === 'cx' ) { @@include( './sendTx-modal.tpl', { "site": "cx" } ) }
+                <send-tx-modal></send-tx-modal>
             </section>
         </article>
     </div>

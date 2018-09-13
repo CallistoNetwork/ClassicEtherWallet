@@ -83,7 +83,7 @@ function parseMetadata(_metadata) {
     return [].concat([{ key: "network", value: network }], params);
 }
 
-const dexnsService = function() {
+const dexnsService = function dexnsService() {
     this.parseMetadata = parseMetadata;
 
     const network = nodes.nodeTypes.ETC; // nodes.nodeTypes.Rinkeby;

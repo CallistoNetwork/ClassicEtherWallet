@@ -13,10 +13,19 @@
     <!-- Unlock Wallet -->
     <article class="collapse-container">
         <div ng-click="unlockWallet = !unlockWallet">
-            <a class="collapse-button"><span ng-show="unlockWallet" class="ng-hide">+</span><span
-                    ng-show="!unlockWallet" class="">-</span></a>
 
-            <h1 translate="NAV_Messages" class="ng-scope">Messages</h1>
+
+            <h1>
+
+                 <span
+                     style="margin: 0; padding: 0 2px;"
+                     class="collapse-button glyphicon"
+                     ng-class="wd ? 'glyphicon-plus' : 'glyphicon-minus'"
+                 ></span>
+                <span translate="NAV_Messages">
+                    Messages
+                </span>
+            </h1>
         </div>
         <div ng-show="!unlockWallet">
             @@if (site === 'cx' ) {

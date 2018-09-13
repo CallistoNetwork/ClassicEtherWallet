@@ -101,7 +101,7 @@ var signMsgCtrl = require("./controllers/signMsgCtrl");
 var contractsCtrl = require("./controllers/contractsCtrl");
 var broadcastTxCtrl = require("./controllers/broadcastTxCtrl");
 var ensCtrl = require("./controllers/ensCtrl");
-var dexnsCtrl = require("./controllers/dexnsCtrl");
+var DexnsController = require("./controllers/DexnsController");
 var footerCtrl = require("./controllers/footerCtrl");
 var offlineTxCtrl = require("./controllers/offlineTxCtrl");
 var walletBalanceCtrl = require("./controllers/walletBalanceCtrl");
@@ -123,6 +123,7 @@ const dexnsService = require("./services/dexns.service");
 const backgroundNodeService = require("./services/backgroundNode.service");
 
 // DIRECTIVES
+const customNodeForm = require("./directives/customNodeForm");
 var officialityChecker = require("./directives/officiality-checker");
 var lookup = require("./directives/crosschain-lookup");
 var dexnsNameDisplay = require("./directives/dexns-name-display");
@@ -140,6 +141,8 @@ var arrayInputDrtv = require("./directives/arrayInputDrtv");
 var newMessagesDrtv = require("./directives/newMessagesDrtv");
 const sendTransactionFormDrtv = require("./directives/sendTransactionForm");
 const dexnsTokenRegistrationForm = require("./directives/dexns-token-registration");
+
+const coinIcon = require("./directives/coinIcon");
 if (IS_CX) {
     var addWalletCtrl = require("./controllers/CX/addWalletCtrl");
     var cxDecryptWalletCtrl = require("./controllers/CX/cxDecryptWalletCtrl");
@@ -194,6 +197,8 @@ app.factory("lookupService", ["dexnsService", lookupService]);
 app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
 
+app.directive("coinIcon", coinIcon);
+
 app.directive("sendTransactionForm", sendTransactionFormDrtv);
 app.directive("officialityChecker", [officialityChecker]);
 app.directive("dexnsTokenRegistrationForm", dexnsTokenRegistrationForm);
@@ -203,6 +208,8 @@ app.directive("dexnsNameDisplay", [
     "globalService",
     dexnsNameDisplay
 ]);
+app.directive("sendTxModal", require("./directives/sendTxModal"));
+
 app.directive("eosKeypair", require("./directives/eos-keypair"));
 app.directive("lookup", ["$rootScope", "lookupService", lookup]);
 app.directive("blockieAddress", blockiesDrtv);
@@ -222,6 +229,12 @@ app.directive("messagesOverviewDrtv", [
 app.directive("arrayInputDrtv", arrayInputDrtv);
 app.directive("newMessagesDrtv", ["globalService", newMessagesDrtv]);
 app.directive("transactionCost", [transactionCost]);
+app.directive("sendContractTx", [
+    "walletService",
+    require("./directives/sendContractTx")
+]);
+
+app.directive("customNodeForm", [customNodeForm]);
 
 app.controller("tabsCtrl", [
     "$http",
@@ -287,14 +300,14 @@ app.controller("ensCtrl", [
     "walletService",
     ensCtrl
 ]);
-app.controller("dexnsCtrl", [
+app.controller("DexnsController", [
     "$scope",
     "$sce",
     "$rootScope",
     "walletService",
     "backgroundNodeService",
     "dexnsService",
-    dexnsCtrl
+    DexnsController
 ]);
 app.controller("footerCtrl", ["$scope", footerCtrl]);
 app.controller("offlineTxCtrl", [

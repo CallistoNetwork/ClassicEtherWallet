@@ -79,7 +79,7 @@
                rel="noopener noreferrer"
             >
                 <span translate="x_Download"> DOWNLOAD </span> <span
-                    translate="x_Keystore2"> Keystore File (UTC / JSON) </span>
+                translate="x_Keystore2"> Keystore File (UTC / JSON) </span>
             </a>
 
             <div class="warn">
@@ -203,8 +203,16 @@
     <article class="text-left" ng-show="showGetAddress">
         <div class="clearfix collapse-container">
             <div ng-click="wd = !wd">
-                <a class="collapse-button"><span ng-show="wd">+</span><span ng-show="!wd">-</span></a>
-                <h1 traslate="GEN_Unlock">Unlock your wallet to see your address</h1>
+
+
+                <h1>
+                     <span
+                         style="margin: 0; padding: 0 2px;"
+                         class="collapse-button glyphicon"
+                         ng-class="wd ? 'glyphicon-plus' : 'glyphicon-minus'"
+                     ></span>
+                    <span traslate="GEN_Unlock">Unlock your wallet to see your address</span>
+                </h1>
                 <p translate="x_AddessDesc"></p>
             </div>
             <div ng-show="!wd">

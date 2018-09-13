@@ -124,7 +124,7 @@ ethFuncs.estimateGas = function(dataObj, notify = true) {
 
 /*
 
-    Given funcName, contract, and tx data, generates data and sends call, returns decoded outputs
+    Given function, contract, and tx data, generates data and sends call, returns decoded outputs
     @param string | contract.abi[n] _func
     @param Contract contract
     @param Transaction tx

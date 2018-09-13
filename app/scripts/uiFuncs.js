@@ -1,5 +1,12 @@
 "use strict";
-var uiFuncs = function() {};
+
+const { TrezorConnect } = require("./staticJS/trezorConnect");
+
+const ethUtil = require("ethereumjs-util");
+
+const BigNumber = require("bignumber.js");
+
+const uiFuncs = function() {};
 uiFuncs.getTxData = function({ tx, wallet }) {
     return {
         to: tx.to,
@@ -55,7 +62,7 @@ uiFuncs.signTxTrezor = function(rawTx, { path }, callback = console.log) {
         rawTx.v = "0x" + ethFuncs.decimalToHex(result.v);
         rawTx.r = "0x" + result.r;
         rawTx.s = "0x" + result.s;
-        var eTx = new ethUtil.Tx(rawTx);
+        const eTx = new ethUtil.Tx(rawTx);
         rawTx.rawTx = JSON.stringify(rawTx);
         rawTx.signedTx = "0x" + eTx.serialize().toString("hex");
         rawTx.isError = false;
@@ -151,7 +158,7 @@ uiFuncs.signTxDigitalBitbox = function(
     uiFuncs.notifier.info(
         "Touch the LED for 3 seconds to sign the transaction. Or tap the LED to cancel."
     );
-    var app = new DigitalBitboxEth(txData.hwTransport, "");
+    const app = new DigitalBitboxEth(txData.hwTransport, "");
     app.signTransaction(txData.path, eTx, localCallback);
 };
 uiFuncs.trezorUnlock = function() {
@@ -243,9 +250,10 @@ uiFuncs.genTxWithInfo = function(data, callback = console.log) {
     const eTx = new ethUtil.Tx(rawTx);
 
     if (data.hwType === "ledger") {
-        var app = new ledgerEth(data.hwTransport);
-        var EIP155Supported = false;
-        var localCallback = function(result, error) {
+        const app = new ledgerEth(data.hwTransport);
+        let EIP155Supported = false;
+
+        app.getAppConfiguration(function localCallback(result, error) {
             if (error) {
                 callback({
                     isError: true,
@@ -253,8 +261,7 @@ uiFuncs.genTxWithInfo = function(data, callback = console.log) {
                 });
             } else {
                 uiFuncs.notifier.info(globalFuncs.successMsgs[7]);
-
-                var splitVersion = result["version"].split(".");
+                const splitVersion = result["version"].split(".");
 
                 if (parseInt(splitVersion[0]) > 1) {
                     EIP155Supported = true;
@@ -273,29 +280,23 @@ uiFuncs.genTxWithInfo = function(data, callback = console.log) {
                 !EIP155Supported,
                 callback
             );
-        };
-        app.getAppConfiguration(localCallback);
+        });
     } else if (data.hwType === "trezor") {
         // https://github.com/trezor/connect/blob/v4/examples/signtx-ethereum.html
 
-        if (!data.trezorUnlocked) {
-            uiFuncs
-                .trezorUnlock()
-                .then(() => {
-                    data.trezorUnlocked = true;
-                    uiFuncs.signTxTrezor(rawTx, data, callback);
-                })
-                .catch(err => {
-                    callback(err);
-                });
-        } else {
-            uiFuncs.signTxTrezor(rawTx, data, callback);
-        }
+        uiFuncs
+            .trezorUnlock()
+            .then(() => {
+                uiFuncs.signTxTrezor(rawTx, data, callback);
+            })
+            .catch(err => {
+                callback(err);
+            });
     } else if (data.hwType === "web3") {
         // for web3, we dont actually sign it here
         // instead we put the final params in the "signedTx" field and
         // wait for the confirmation dialogue / sendTx method
-        var txParams = Object.assign({ from: data.from }, rawTx);
+        const txParams = Object.assign({ from: data.from }, rawTx);
         rawTx.rawTx = JSON.stringify(rawTx);
         rawTx.signedTx = JSON.stringify(txParams);
         rawTx.isError = false;
@@ -369,14 +370,14 @@ uiFuncs.sendTx = function(signedTx, notify = true) {
 };
 
 uiFuncs.notifySuccessfulTx = function(txHash) {
-    var txHashLink = ajaxReq.blockExplorerTX.replace("[[txHash]]", txHash);
-    var verifyTxBtn =
+    const txHashLink = ajaxReq.blockExplorerTX.replace("[[txHash]]", txHash);
+    const verifyTxBtn =
         ajaxReq.type !== nodes.nodeTypes.Custom
             ? '<a class="btn btn-xs btn-info strong" href="' +
               txHashLink +
               '" target="_blank" rel="noopener noreferrer">Verify Transaction</a>'
             : "";
-    var completeMsg =
+    const completeMsg =
         "<p>" +
         globalFuncs.successMsgs[2] +
         "<strong>" +
@@ -416,30 +417,34 @@ uiFuncs.handleWeb3Trans = function(signedTx) {
 };
 
 uiFuncs.transferAllBalance = function(addr, gasLimit) {
-    try {
-        ajaxReq.getTransactionData(addr, function(data) {
-            if (data.error) throw data.msg;
-            data = data.data;
-            var gasPrice = new BigNumber(
-                ethFuncs.sanitizeHex(ethFuncs.addTinyMoreToGas(data.gasprice))
-            ).times(gasLimit);
-            var maxVal = new BigNumber(data.balance).minus(gasPrice);
-            maxVal =
-                etherUnits.toEther(maxVal, "wei") < 0
-                    ? 0
-                    : etherUnits.toEther(maxVal, "wei");
-            return {
-                isError: false,
-                unit: "ether",
-                value: maxVal
-            };
-        });
-    } catch (e) {
-        return {
-            isError: true,
-            error: e
-        };
-    }
+    return new Promise((resolve, reject) => {
+        try {
+            ajaxReq.getTransactionData(addr, function(data) {
+                if (data.error) throw data.msg;
+                data = data.data;
+                const gasPrice = new BigNumber(
+                    ethFuncs.sanitizeHex(
+                        ethFuncs.addTinyMoreToGas(data.gasprice)
+                    )
+                ).times(gasLimit);
+                let maxVal = new BigNumber(data.balance).minus(gasPrice);
+                maxVal =
+                    etherUnits.toEther(maxVal, "wei") < 0
+                        ? 0
+                        : etherUnits.toEther(maxVal, "wei");
+                resolve({
+                    isError: false,
+                    unit: "ether",
+                    value: maxVal
+                });
+            });
+        } catch (e) {
+            reject({
+                isError: true,
+                error: e
+            });
+        }
+    });
 };
 uiFuncs.notifier = {
     alerts: {},
@@ -450,21 +455,20 @@ uiFuncs.notifier = {
         this.addAlert("info", msg, duration);
     },
     danger: function(msg, duration = 7000) {
-        msg = msg.message ? msg.message : msg;
+        msg = msg.message || msg.msg || msg;
+
         // Danger messages can be translated based on the type of node
-        msg = globalFuncs.getEthNodeMsg(msg);
-        this.addAlert("danger", msg, duration);
+        const _msg = globalFuncs.getEthNodeMsg(msg);
+        this.addAlert("danger", _msg, duration);
     },
     success: function(msg, duration = 5000) {
         this.addAlert("success", msg, duration);
     },
-    addAlert: function(type, msg, duration) {
-        if (duration == undefined) duration = 7000;
+    addAlert: function(type, msg, duration = 7000) {
         // Save all messages by unique id for removal
-        var id = Date.now();
+        const id = Date.now();
         alert = this.buildAlert(id, type, msg);
         this.alerts[id] = alert;
-        var that = this;
         if (duration > 0) {
             // Support permanent messages
             setTimeout(alert.close, duration);
@@ -472,14 +476,13 @@ uiFuncs.notifier = {
         if (!this.scope.$$phase) this.scope.$apply();
     },
     buildAlert: function(id, type, msg) {
-        var that = this;
         return {
             show: true,
             type: type,
             message: msg,
-            close: function() {
-                delete that.alerts[id];
-                if (!that.scope.$$phase) that.scope.$apply();
+            close: () => {
+                delete this.alerts[id];
+                if (!this.scope.$$phase) this.scope.$apply();
             }
         };
     }

@@ -162,8 +162,7 @@
       @@if (site === 'cew' ) { @@include( './sendTx-content.tpl', { "site": "cew" } ) }
       @@if (site === 'cx'  ) { @@include( './sendTx-content.tpl', { "site": "cx"  } ) }
 
-      @@if (site === 'cew' ) { @@include( './sendTx-modal.tpl',   { "site": "cew" } ) }
-      @@if (site === 'cx'  ) { @@include( './sendTx-modal.tpl',   { "site": "cx"  } ) }
+          <send-tx-modal></send-tx-modal>
       </div>
       <div class="col-xs-12 block block--danger" ng-show="wallet.getChecksumAddressString() != txInfo.from">
         <h5>Please unlock the address {{ txInfo.from }}. Only this address can replace a TX.</h5>

@@ -60,22 +60,37 @@
                 >
                     <td>{{input.key}}</td>
 
-                    <td ng-if="['link', 'source'].includes(input.key)"
-                    >
+                    <td>
                         <a
+                            ng-if="['link', 'source'].includes(input.key)"
                             href="{{input.value}}"
                             target="_blank"
                         >
-
                             {{input.value}}
-
                         </a>
+                        <div ng-if="'network' === input.key">
+                            <coin-icon
+
+                                icon="{{input.value.toLowerCase()}}"/>
+                        </div>
+
+                        <div ng-if="!['link', 'source', 'network'].includes(input.key)">
+                            <span>{{input.value}}</span>
+                        </div>
+
                     </td>
 
-                    <td ng-if="!['link', 'source'].includes(input.key)">
-                        {{input.value}}
-                    </td>
 
+                </tr>
+
+                <tr
+                    ng-if="_function.name === 'metadataOf' && raw"
+                >
+                    <td colspan="2">
+                        <code>
+                            {{raw}}
+                        </code>
+                    </td>
                 </tr>
 
                 <!-- Generic Contract output UI -->
@@ -91,14 +106,6 @@
                 </tbody>
             </table>
 
-
-            <div
-                ng-if="_function.name === 'metadataOf' && raw"
-            >
-                <code>
-                    {{raw}}
-                </code>
-            </div>
 
         </div>
 

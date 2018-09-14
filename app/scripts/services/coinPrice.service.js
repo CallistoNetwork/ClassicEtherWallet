@@ -1,38 +1,56 @@
 "use strict";
 
-const _url = (sym = "ETC", syms = "USD,EUR,GBP,BTC,CHF") =>
-    `https://min-api.cryptocompare.com/data/price?fsym=${sym}&tsyms=${syms}`;
+const _url = (coin = "ETC", syms = "USD,EUR,GBP,BTC,CHF") =>
+    `https://min-api.cryptocompare.com/data/price?fsym=${coin}&tsyms=${syms}`;
 
 const coinPriceService = function coinPriceService() {
     this.coinPrices = {};
 
+    this.initPrices = function() {
+        return Promise.all(
+            [
+                nodes.nodeTypes.ETC,
+                nodes.nodeTypes.ETH,
+                nodes.nodeTypes.CLO,
+                nodes.nodeTypes.EXP,
+                nodes.nodeTypes.UBQ
+            ].map(coin => this.getCoinPrice(coin))
+        );
+    };
+
     this.getCoinPrice = function getCoinPrice(coin = ajaxReq.type) {
         const uri = _url(coin);
 
-        return ajaxReq.http.get(uri).then(result => {
-            if (
-                (result.hasOwnProperty("Response") &&
-                    result.Response === "Error") ||
-                (result.hasOwnProperty("data") &&
-                    result.data.Response === "Error")
-            ) {
-                return Object.assign({}, result, { error: true });
-            } else {
-                const { data } = result;
+        return ajaxReq.http
+            .get(uri, {
+                cache: true
+            })
+            .then(result => {
+                if (
+                    (result.hasOwnProperty("Response") &&
+                        result.Response === "Error") ||
+                    (result.hasOwnProperty("data") &&
+                        result.data.Response === "Error")
+                ) {
+                    // fixme: throw err;
 
-                const prices = {
-                    usd: parseFloat(data["USD"]).toFixed(6),
-                    eur: parseFloat(data["EUR"]).toFixed(6),
-                    btc: parseFloat(data["BTC"]).toFixed(6),
-                    chf: parseFloat(data["CHF"]).toFixed(6),
-                    gbp: parseFloat(data["GBP"]).toFixed(6)
-                };
+                    return Object.assign({}, result, { error: true });
+                } else {
+                    const { data } = result;
 
-                this.coinPrices[coin] = prices;
+                    const prices = {
+                        usd: parseFloat(data["USD"]),
+                        eur: parseFloat(data["EUR"]),
+                        btc: parseFloat(data["BTC"]),
+                        chf: parseFloat(data["CHF"]),
+                        gbp: parseFloat(data["GBP"])
+                    };
 
-                return prices;
-            }
-        });
+                    this.coinPrices[coin] = prices;
+
+                    return prices;
+                }
+            });
     };
 
     return this;

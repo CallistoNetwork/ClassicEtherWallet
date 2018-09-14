@@ -492,5 +492,7 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         .element(document.querySelectorAll(".nav-scroll")[0])
         .bind("scroll", $scope.setOnScrollArrows);
     globalFuncs.changeHash = $scope.setHash;
+
+    coinPriceService.initPrices();
 };
 module.exports = tabsCtrl;

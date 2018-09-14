@@ -1,8 +1,5 @@
 "use strict";
 
-const pkg = require("../../package");
-const { homepage } = pkg;
-
 var globalFuncs = function() {};
 globalFuncs.lightMode = false;
 
@@ -275,12 +272,7 @@ globalFuncs.stripTags = function(str) {
     }
     return str;
 };
-globalFuncs.checkAndRedirectHTTPS = function() {
-    const { host, href } = new URL(homepage);
-    if (host === window.location.host) {
-        window.location = href;
-    }
-};
+
 globalFuncs.isStrongPass = function(password) {
     return password.length > 8;
 };

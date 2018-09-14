@@ -1,5 +1,8 @@
 "use strict";
 
+const pkg = require("../../package");
+const { homepage } = pkg;
+
 var globalFuncs = function() {};
 globalFuncs.lightMode = false;
 
@@ -75,7 +78,7 @@ globalFuncs.getBlockie = function(address) {
         })
         .toDataURL();
 };
-globalFuncs.printPaperWallets = function(strJson, encFileName) {
+globalFuncs.printPaperWallets = function(strJson) {
     var walletWindow = window.open(
         "wallet",
         "_blank",
@@ -273,10 +276,10 @@ globalFuncs.stripTags = function(str) {
     return str;
 };
 globalFuncs.checkAndRedirectHTTPS = function() {
-    var host = "myetherwallet.com";
-    var hostw = "https://www.myetherwallet.com";
-    var path = window.location.pathname;
-    if (host == window.location.host) window.location = hostw + path;
+    const { host, href } = new URL(homepage);
+    if (host === window.location.host) {
+        window.location = href;
+    }
 };
 globalFuncs.isStrongPass = function(password) {
     return password.length > 8;

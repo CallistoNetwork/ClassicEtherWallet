@@ -126,6 +126,7 @@ var dexnsService = require("./services/dexnsService");
 var backgroundNodeService = require("./services/backgroundNodeService");
 
 // DIRECTIVES
+const generateWalletForm = require("./directives/generateWalletForm");
 const customNodeForm = require("./directives/customNodeForm");
 var officialityChecker = require("./directives/officiality-checker");
 var lookup = require("./directives/crosschain-lookup");
@@ -201,7 +202,7 @@ app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
 
 app.directive("coinIcon", coinIcon);
-
+app.directive("generateWalletForm", generateWalletForm);
 app.directive("sendTransactionForm", sendTransactionFormDrtv);
 app.directive("officialityChecker", [officialityChecker]);
 app.directive("dexnsTokenRegistrationForm", dexnsTokenRegistrationForm);

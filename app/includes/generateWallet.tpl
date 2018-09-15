@@ -6,22 +6,9 @@
         <section class="block__main gen__1--inner">
             <br/>
             <h1 translate="NAV_GenerateWallet" aria-live="polite"> Create New Wallet</h1>
-            <h4 translate="GEN_Label_1"> Enter password </h4>
-            <div class="input-group">
-                <input name="password"
-                       class="form-control"
-                       tabindex="1"
-                       type="{{showPass && 'password' || 'text'}}"
-                       placeholder="{{'GEN_Placeholder_1' | translate }}"
-                       ng-model="password"
-                       ng-class="isStrongPass() ? 'is-valid' : 'is-invalid'"
-                       aria-label="{{'GEN_Label_1' |translate}}"/>
-                <span tabindex="0" aria-label="make password visible" role="button" class="input-group-addon eye"
-                      ng-click="showPass=!showPass"></span>
-            </div>
-            <a tabindex="0" role="button" class="btn btn-primary" func="generateSingleWallet" ng-click="genNewWallet()"
-               translate="NAV_GenerateWallet">Generate Wallet</a>
-            <p translate="x_PasswordDesc"></p>
+            <form name="generateWalletForm" generate-wallet-form novalidate ng-submit="genNewWallet()">
+
+            </form>
             <br>
         </section>
 

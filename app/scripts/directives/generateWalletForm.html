@@ -3,7 +3,10 @@
     <input name="password"
            class="form-control"
            required
+           autocomplete="off"
+           spellcheck="false"
            id="password"
+           ng-model-options="{debounce: 300}"
            tabindex="1"
            type="{{showPass && 'password' || 'text'}}"
            placeholder="{{'GEN_Placeholder_1' | translate }}"
@@ -14,13 +17,24 @@
           aria-label="make password visible"
           role="button"
           class="input-group-addon eye"
-          ng-click="showPass=!showPass"></span>
+          ng-click="showPass = !showPass"></span>
+</div>
+
+<div class="row">
+    <span class="text-danger"
+          translate="GEN_Password_Length"
+          ng-show="generateWalletForm.password.$dirty && generateWalletForm.password.$error.validPassword">
+        Password length must be greater than 8 characters
+
+    </span>
 </div>
 <div class="input-group" ng-init="showPass2 = true;">
     <input name="password2"
            class="form-control"
            required
            id="password2"
+           ng-model-options="{debounce: 300}"
+           spellcheck="false"
            tabindex="1"
            type="{{showPass2 && 'password' || 'text'}}"
            placeholder="{{'GEN_Placeholder_1' | translate }}"
@@ -32,6 +46,15 @@
           role="button"
           class="input-group-addon eye"
           ng-click="showPass2 = !showPass2"></span>
+
+
+</div>
+<div class="row">
+    <span class="text-danger"
+          translate="GEN_Passwords_Must_Match"
+          ng-show="generateWalletForm.password2.$dirty && generateWalletForm.password2.$error.matchesPassword">
+
+    </span>
 </div>
 <button tabindex="0"
         type="submit"

@@ -103,12 +103,14 @@
             <h2 translate="GEN_Help_4">Guides &amp; FAQ</h2>
             <ul>
                 <li>
-                    <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/how-do-i-save-slash-backup-my-wallet"
+                    <a href="https://support.ethereumcommonwealth.io/getting-started/backing-up-your-new-wallet.html"
                        target="_blank" rel="noopener"><strong translate="GEN_Help_13">How to Back Up Your Keystore
                         File</strong></a></li>
                 <li>
-                    <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-are-the-different-formats-of-a-private-key"
-                       target="_blank" rel="noopener"><strong translate="GEN_Help_14">What are these Different Formats?</a></strong>
+                    <a href="https://support.ethereumcommonwealth.io/private-keys-passwords/difference-beween-private-key-and-keystore-file.html"
+                       target="_blank" rel="noopener"><strong translate="GEN_Help_14">What are these Different
+                        Formats?</strong>
+                    </a>
                 </li>
             </ul>
 
@@ -155,17 +157,17 @@
             <h2 translate="GEN_Help_4">Guides &amp; FAQ</h2>
             <ul>
                 <li>
-                    <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/how-do-i-save-slash-backup-my-wallet"
+                    <a href="https://support.ethereumcommonwealth.io/getting-started/backing-up-your-new-wallet.html"
                        target="_blank" rel="noopener">
                         <strong translate="HELP_2a_Title">How to Save & Backup Your Wallet.</strong>
                     </a></li>
                 <li>
-                    <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/protecting-yourself-and-your-funds"
+                    <a href="https://support.ethereumcommonwealth.io/security/securing-your-ethereum.html"
                        target="_blank" rel="noopener">
                         <strong translate="GEN_Help_15">Preventing loss &amp; theft of your funds.</strong>
                     </a></li>
                 <li>
-                    <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-are-the-different-formats-of-a-private-key"
+                    <a href="https://support.ethereumcommonwealth.io/private-keys-passwords/difference-beween-private-key-and-keystore-file.html"
                        target="_blank" rel="noopener">
                         <strong translate="GEN_Help_16">What are these Different Formats?</strong>
                     </a></li>
@@ -176,7 +178,7 @@
                 <li translate="GEN_Help_18"> To have a secondary backup.</li>
                 <li translate="GEN_Help_19"> In case you ever forget your password.</li>
                 <li>
-                    <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/how-do-i-safely-slash-offline-slash-cold-storage-with-myetherwallet"
+                    <a href="https://support.ethereumcommonwealth.io/offline/ethereum-cold-storage-with-mycrypto.html"
                        target="_blank" rel="noopener" translate="GEN_Help_20">Cold Storage</a>
                 </li>
             </ul>

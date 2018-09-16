@@ -1,0 +1,70 @@
+<div
+    ng-if="globalService.currentTab === globalService.tabs.networkInfo.id">
+
+    <h1>
+        <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"/>
+        Network Info
+    </h1>
+
+
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <td>
+                Latest Block #:
+            </td>
+            <td>
+                {{currentBlockNumber | number}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Chain Id
+            </td>
+            <td>
+                {{ajaxReq.chainId | number}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Explorer
+            </td>
+            <td>
+                <a href="{{explorerOrigin()}}" target="_blank" rel="noopener noreferrer">
+                    {{explorerOrigin()}}
+                </a>
+            </td>
+        </tr>
+        <tr ng-switch="ajaxReq.type">
+
+            <td colspan="2" ng-switch-when="CLO">
+
+                <main class="tab-pane">
+
+                    <article>
+                        <h1 class="text-center" translate="OC_OfficialityChecker">Callisto Officiality
+                            Checker</h1>
+                        <p class="text-center" translate="OC_Label_1">Allows you to check whether a certain media
+                            resource
+                            is
+                            considered "official" at Callisto or not.</p>
+
+                        <section>
+                            <div class="block">
+                                <form officiality-checker name="officialityChecker" novalidate>
+                                </form>
+                            </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <tx-status/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</div>

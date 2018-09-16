@@ -7,7 +7,7 @@
         </p>
     </div>
 </section>
-<footer class="footer {{curNode.type}}" role="content" aria-label="footer" ng-controller='footerCtrl'>
+<footer class="footer {{curNode.type}}" role="content" aria-label="footer">
     <article class="block__wrap" style="max-width: 1780px; margin: auto;">
         <section class="footer--left">
             <span>Version: 3.12.2</span>

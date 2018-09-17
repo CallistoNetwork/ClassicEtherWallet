@@ -8,13 +8,10 @@ const coinPriceService = function coinPriceService() {
 
     this.initPrices = function() {
         return Promise.all(
-            [
-                nodes.nodeTypes.ETC,
-                nodes.nodeTypes.ETH,
-                nodes.nodeTypes.CLO,
-                nodes.nodeTypes.EXP,
-                nodes.nodeTypes.UBQ
-            ].map(coin => this.getCoinPrice(coin))
+            Object.values(nodes.alternativeBalance)
+                .map(node => node.symbol)
+                .concat(ajaxReq.type)
+                .map(coin => this.getCoinPrice(coin))
         );
     };
 

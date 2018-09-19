@@ -12,9 +12,7 @@ var tabsCtrl = function(
     $scope.tabNames = $scope.gService.tabs;
     $scope.walletService = walletService;
     $scope.curLang = "English";
-    $scope.customNodeModal = document.getElementById("customNodeModal")
-        ? new Modal(document.getElementById("customNodeModal"))
-        : null;
+    $scope.customNodeModal = document.getElementById("customNodeModal");
     $scope.Validator = Validator;
     $scope.nodeList = nodes.nodeList;
     $scope.defaultNodeKey = globalFuncs.networks.ETC; // 'etc_ethereumcommonwealth_parity';
@@ -35,7 +33,7 @@ var tabsCtrl = function(
     $scope.customNodeCount = 0;
     $scope.nodeIsConnected = true;
     $scope.browserProtocol = window.location.protocol;
-    var hval = window.location.hash;
+    const hval = window.location.hash;
     $scope.notifier = uiFuncs.notifier;
     $scope.notifier.sce = $sce;
     $scope.notifier.scope = $scope;

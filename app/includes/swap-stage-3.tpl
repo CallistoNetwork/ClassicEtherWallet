@@ -32,15 +32,28 @@
         </div>
 
         <div class="col-sm-4 order-info">
-            <h4>{{orderResult.expectedReceiveAmount}} {{orderResult.toCurrency.toUpperCase()}}</h4>
+            <h4>
+                {{orderResult.expectedReceiveAmount}}
+                <coin-icon icon="{{orderResult.toCurrency.toLowerCase()}}"></coin-icon>
+            </h4>
             <p translate="SWAP_rec_amt">Amount to receive</p>
         </div>
         <div class="col-sm-4 order-info">
             <h4>{{(orderResult.expectedSendAmount / orderResult.expectedReceiveAmount) | number: 6}}
-                {{orderResult.fromCurrency.toUpperCase() + '/' +
-                orderResult.toCurrency.toUpperCase()}}</h4>
+                <coin-icon icon="{{orderResult.fromCurrency.toLowerCase()}}"></coin-icon>
+                {{' / '}}
+                <coin-icon icon="{{orderResult.toCurrency.toLowerCase()}}"></coin-icon>
+            </h4>
+
+            <h4>{{(orderResult.expectedReceiveAmount / orderResult.expectedSendAmount) | number: 6}}
+                <coin-icon icon="{{orderResult.toCurrency.toLowerCase()}}"></coin-icon>
+                {{' / '}}
+                <coin-icon icon="{{orderResult.fromCurrency.toLowerCase()}}"></coin-icon>
+            </h4>
             <p translate="SWAP_your_rate">Your rate</p>
         </div>
+
+
     </section>
 
 
@@ -78,11 +91,14 @@
     <section class="row text-center"
              ng-show="['new', 'waiting'].includes(orderResult.status.toLowerCase())">
         <h1>
-            <span translate="SWAP_order_CTA">      Please send                                                 </span>
-            <strong> {{orderResult.expectedSendAmount}} {{orderResult.fromCurrency}} </strong>
+            <span translate="SWAP_order_CTA">Please send</span>
+            <strong> {{orderResult.expectedSendAmount}}
+                <coin-icon icon="{{orderResult.fromCurrency.toLowerCase()}}"></coin-icon>
+            </strong>
             <span
-                translate="SENDModal_Content_2"> to address                                                  </span><br/>
-            <strong class="mono text-primary"> {{orderResult.payinAddress}} </strong>
+                translate="SENDModal_Content_2">to address</span><br/>
+            <strong class="mono text-primary">{{orderResult.payinAddress}}
+            </strong>
         </h1>
     </section>
 
@@ -124,23 +140,6 @@
         </article>
     </div>
     <!-- / Swap CTA ETH -->
-
-
-    <!--&lt;!&ndash; Swap CTA BTC &ndash;&gt;-->
-    <!--<section class="row block swap-address text-center" ng-show="orderResult.status.toUpperCase() == 'OPEN' && orderResult.fromCurrency.toUpperCase() === 'BTC'">-->
-    <!--<label translate="x_Address"> Your Address </label>-->
-    <!--<div class="qr-code" qr-code="{{'bitcoin:'+orderResult.payinAddress+'?amount='+orderResult.amount}}"-->
-    <!--watch-var="orderResult"></div>-->
-    <!--<br/>-->
-    <!--<p class="text-danger">-->
-    <!--Orders that take too long will have to be processed manually &amp; and may delay the amount of time it takes-->
-    <!--to receive your coins.-->
-    <!--<br/>-->
-    <!--<a href="https://shapeshift.io/#/btcfee" target="_blank" rel="noopener">Please use the recommended TX fees-->
-    <!--seen here.</a>-->
-    <!--</p>-->
-
-    <!--</section>-->
 
 
 </article>

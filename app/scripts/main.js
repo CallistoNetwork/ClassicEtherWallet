@@ -128,8 +128,6 @@ var backgroundNodeService = require("./services/backgroundNodeService");
 const eosKeypair = require("./directives/eos-keypair");
 const sendTxModal = require("./directives/sendTxModal");
 const validTxHash = require("./directives/validTxHash");
-const sendTxModal = require("./directives/sendTxModal");
-const eosKeypair = require("./directives/eos-keypair");
 const swapOpenOrderForm = require("./directives/swapOpenOrderForm");
 const swapInitForm = require("./directives/swapInitForm");
 const customNodeForm = require("./directives/customNodeForm");
@@ -221,13 +219,9 @@ app.directive("dexnsNameDisplay", [
     dexnsNameDisplay
 ]);
 app.directive("sendTxModal", sendTxModal);
-
-app.directive("sendTxModal", sendTxModal);
 app.directive("networkInfo", networkInfo);
 app.directive("txStatus", txStatus);
 app.directive("eosKeypair", eosKeypair);
-app.directive("eosKeypair", eosKeypair);
-
 app.directive("swapOpenOrderForm", swapOpenOrderForm);
 app.directive("lookup", ["$rootScope", "lookupService", lookup]);
 app.directive("blockieAddress", blockiesDrtv);

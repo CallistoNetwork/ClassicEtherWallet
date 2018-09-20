@@ -205,8 +205,8 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         function _handleErr(err) {
             $scope.nodeIsConnected = false;
 
-            console.log("node did not connect", err);
-            // $scope.notifier.danger(globalFuncs.errorMsgs[32]);
+            // console.log("node did not connect", err);
+            $scope.notifier.danger(globalFuncs.errorMsgs[32]);
         }
     };
     $scope.checkNodeUrl = function(nodeUrl) {

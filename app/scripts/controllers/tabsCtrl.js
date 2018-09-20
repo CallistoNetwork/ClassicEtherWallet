@@ -12,9 +12,7 @@ var tabsCtrl = function(
     $scope.tabNames = $scope.gService.tabs;
     $scope.walletService = walletService;
     $scope.curLang = "English";
-    $scope.customNodeModal = document.getElementById("customNodeModal")
-        ? new Modal(document.getElementById("customNodeModal"))
-        : null;
+    $scope.customNodeModal = document.getElementById("customNodeModal");
     $scope.Validator = Validator;
     $scope.nodeList = nodes.nodeList;
     $scope.defaultNodeKey = globalFuncs.networks.ETC; // 'etc_ethereumcommonwealth_parity';
@@ -35,7 +33,7 @@ var tabsCtrl = function(
     $scope.customNodeCount = 0;
     $scope.nodeIsConnected = true;
     $scope.browserProtocol = window.location.protocol;
-    var hval = window.location.hash;
+    const hval = window.location.hash;
     $scope.notifier = uiFuncs.notifier;
     $scope.notifier.sce = $sce;
     $scope.notifier.scope = $scope;
@@ -492,6 +490,36 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         .element(document.querySelectorAll(".nav-scroll")[0])
         .bind("scroll", $scope.setOnScrollArrows);
     globalFuncs.changeHash = $scope.setHash;
+
+    const LOADING = "loading";
+    const ERROR = "error";
+
+    $scope.currentBlockNumber = LOADING;
+
+    $scope.setBlockNumbers = function() {
+        ajaxReq.getCurrentBlock(function(data) {
+            if (data.error || !data.data) {
+                $scope.currentBlockNumber = ERROR;
+            } else {
+                $scope.currentBlockNumber = parseInt(data.data);
+            }
+        });
+    };
+
+    $scope.$watch(
+        function() {
+            return globalFuncs.getCurNode();
+        },
+        function(newNode, oldNode) {
+            if (!angular.equals(newNode, oldNode)) {
+                $scope.currentBlockNumber = LOADING;
+
+                $scope.setBlockNumbers();
+            }
+        }
+    );
+
+    $scope.setBlockNumbers();
 
     coinPriceService.initPrices();
 };

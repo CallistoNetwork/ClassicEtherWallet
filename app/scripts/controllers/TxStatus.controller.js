@@ -1,5 +1,7 @@
 "use strict";
 
+const etherUnits = require("../etherUnits");
+
 const statusCodes = {
     found: 0,
     notFound: 1,
@@ -32,17 +34,31 @@ module.exports = function TxStatusController($scope) {
 
         const _value = new BigNumber(tx.value);
 
-        const txFee = etherUnits.toEther(_gasPrice.mul(_gas), "wei");
+        const txFee = _gasPrice.mul(_gas);
+
+        let txFee_fiat = null;
+
+        let value_fiat = null;
+
+        const { coinPrices } = window.coinPriceService;
+
+        if (coinPrices.hasOwnProperty(ajaxReq.type)) {
+            const usd = coinPrices[ajaxReq.type].usd;
+            txFee_fiat = etherUnits.toFiat(txFee, "wei", usd);
+            value_fiat = etherUnits.toFiat(_value, "wei", usd);
+        }
 
         $scope.txInfo = Object.assign({}, tx, {
             status: tx.blockNumber
                 ? $scope.txStatus.mined
                 : $scope.txStatus.found,
-            hash: tx.hash,
             from: ethUtil.toChecksumAddress(tx.from),
+            blockNumber: ethFuncs.hexToDecimal(tx.blockNumber),
             to: tx.to ? ethUtil.toChecksumAddress(tx.to) : "",
             value: _value.toString(),
             valueStr: etherUnits.toEther(_value, "wei"),
+            value_fiat,
+            txFee_fiat,
             gasLimit: _gas.toString(),
             gasPrice: {
                 wei: _gasPrice.toString(),
@@ -51,8 +67,10 @@ module.exports = function TxStatusController($scope) {
                     .toString(),
                 eth: etherUnits.toEther(tx.gasPrice, "wei")
             },
-            txFee,
-            // txFeeFiat: etherUnits.toFiat(txFee, "ether", $scope.coinPrices[ajaxReq.type].usd),
+            txFee: {
+                wei: txFee.toString(),
+                gwei: etherUnits.unitToUnit(txFee, "wei", "gwei")
+            },
             data: tx.input === "0x" ? "" : tx.input,
             nonce: new BigNumber(tx.nonce).toString()
         });

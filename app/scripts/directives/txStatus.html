@@ -34,7 +34,7 @@
 
 
 <!-- Section 2: Current State -->
-<section class="block txstatus__2"
+<section class="block"
          ng-show="txStatusForm.$valid && !txStatusForm.$pending">
 
 
@@ -68,7 +68,7 @@
     </div>
 
     <div ng-show="txInfo.status === txStatus.found || txInfo.status === txStatus.mined">
-        <table class="table txstatus__2 cont-md">
+        <table class="table cont-md">
             <caption translate="tx_Details"></caption>
             <tbody>
             <tr>
@@ -83,6 +83,19 @@
 
                     </a>
                 </td>
+            </tr>
+            <tr>
+                <td>
+
+                    Confirmations
+                </td>
+                <td>
+                    {{currentBlockNumber - txInfo.blockNumber | number}}
+                </td>
+            </tr>
+            <tr>
+                <td translate="x_TxBlockNumber">Tx Block Number</td>
+                <td>{{txInfo.blockNumber | number}}</td>
             </tr>
             <tr>
                 <td translate="OFFLINE_Step1_Label_1">From Address</td>
@@ -114,15 +127,14 @@
             <tr>
                 <td translate="SEND_amount_short">Amount</td>
                 <td>{{ txInfo.valueStr }}
-                    <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"/>
+                    <coin-icon icon="{{ajaxReq.type.toLowerCase()}}">
+                    </coin-icon>
+                    <span ng-show="txInfo.value_fiat">
+                       ({{txInfo.value_fiat | currency}})
+                    </span>
                 </td>
             </tr>
-            <tr>
-                <td>tx Fee</td>
-                <td>
-                    {{txInfo.txFee}}
-                </td>
-            </tr>
+
             <tr>
                 <td>
                     <a class="account-help-icon"
@@ -160,6 +172,18 @@
                 <td>
                     {{ txInfo.gasPrice.gwei }} GWEI
                     <small>({{ txInfo.gasPrice.wei }} WEI)</small>
+                </td>
+            </tr>
+            <tr ng-if="txInfo.txFee">
+                <td translate="x_TXFee">Tx Fee</td>
+                <td>
+                    {{txInfo.txFee.gwei | number }}
+                    GWEI
+                    ({{txInfo.txFee.wei | number}}
+                    WEI)
+                    <span ng-show="txInfo.txFee_fiat">
+                        ({{txInfo.txFee_fiat | currency}})
+                    </span>
                 </td>
             </tr>
             <!--<tr>-->

@@ -137,25 +137,10 @@ const messagesOverviewDrtv = require("./directives/messagesOverviewDrtv");
 const cssThemeDrtv = require("./directives/cssThemeDrtv");
 const cxWalletDecryptDrtv = require("./directives/cxWalletDecryptDrtv");
 const fileReaderDrtv = require("./directives/fileReaderDrtv");
-const transactionCost = require("./directives/transactionCostDtrv");
+const transactionCost = require("./directives/transactionCost");
 const balanceDrtv = require("./directives/balanceDrtv");
 const arrayInputDrtv = require("./directives/arrayInputDrtv");
 const newMessagesDrtv = require("./directives/newMessagesDrtv");
-var officialityChecker = require("./directives/officiality-checker");
-var lookup = require("./directives/crosschain-lookup");
-var dexnsNameDisplay = require("./directives/dexns-name-display");
-var blockiesDrtv = require("./directives/blockiesDrtv");
-var addressFieldDrtv = require("./directives/addressFieldDrtv");
-var QRCodeDrtv = require("./directives/QRCodeDrtv");
-var walletDecryptDrtv = require("./directives/walletDecryptDrtv");
-var messagesOverviewDrtv = require("./directives/messagesOverviewDrtv");
-var cssThemeDrtv = require("./directives/cssThemeDrtv");
-var cxWalletDecryptDrtv = require("./directives/cxWalletDecryptDrtv");
-var fileReaderDrtv = require("./directives/fileReaderDrtv");
-var transactionCost = require("./directives/transactionCost");
-var balanceDrtv = require("./directives/balanceDrtv");
-var arrayInputDrtv = require("./directives/arrayInputDrtv");
-var newMessagesDrtv = require("./directives/newMessagesDrtv");
 const sendTransactionFormDrtv = require("./directives/sendTransactionForm");
 const dexnsTokenRegistrationForm = require("./directives/dexns-token-registration");
 const networkInfo = require("./directives/networkInfo");
@@ -264,6 +249,7 @@ app.controller("tabsCtrl", [
     "walletService",
     "$translate",
     "$sce",
+    "$interval",
     tabsCtrl
 ]);
 app.controller("switchNetworkCtrl", [

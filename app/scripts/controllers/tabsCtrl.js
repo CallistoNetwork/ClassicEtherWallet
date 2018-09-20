@@ -6,7 +6,8 @@ var tabsCtrl = function(
     globalService,
     walletService,
     $translate,
-    $sce
+    $sce,
+    $interval
 ) {
     $scope.gService = globalService;
     $scope.tabNames = $scope.gService.tabs;
@@ -513,14 +514,13 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         function(newNode, oldNode) {
             if (!angular.equals(newNode, oldNode)) {
                 $scope.currentBlockNumber = LOADING;
-
                 $scope.setBlockNumbers();
             }
         }
     );
 
     $scope.setBlockNumbers();
-
-    coinPriceService.initPrices();
+    $interval($scope.setBlockNumbers, 1000 * 30);
+    window.coinPriceService.initPrices();
 };
 module.exports = tabsCtrl;

@@ -5,18 +5,24 @@
 
         <section class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
             <form name="txStatusForm" novalidate>
-                <input
-                    class="form-control"
-                    type="text"
-                    name="hash"
-                    ng-model-options="{debounce: 500}"
-                    placeholder="0x3f0efedfe0a0cd611f2465fac9a3699f92d6a06613bc3ead4f786856f5c73e9c"
-                    ng-model="txInfo.hash"
-                    required
-                    valid-tx-hash
-                    aria-label="{{'x_TxHash' | translate}}"
-                    ng-class="txStatusForm.hash.$valid ? 'is-valid' : 'is-invalid'"
-                />
+                <div class="form-group">
+                    <label for="txHash" translate="x_TransHash">
+                        Tx Hash
+                    </label>
+                    <input
+                        id="txHash"
+                        class="form-control"
+                        type="text"
+                        name="hash"
+                        ng-model-options="{debounce: 300}"
+                        placeholder="0x3f0efedfe0a0cd611f2465fac9a3699f92d6a06613bc3ead4f786856f5c73e9c"
+                        ng-model="txInfo.hash"
+                        required
+                        valid-tx-hash
+                        aria-label="{{'x_TxHash' | translate}}"
+                        ng-class="txStatusForm.hash.$valid ? 'is-valid' : 'is-invalid'"
+                    />
+                </div>
                 <button tabindex="0"
                         type="submit"
                         class="btn btn-primary"
@@ -24,8 +30,8 @@
                         translate="NAV_CheckTxStatus"> Check TX Status
                 </button>
             </form>
-            <span ng-show="txStatusForm.$pending">
-                checking tx
+            <span ng-show="txStatusForm.$pending" translate="loading">
+                loading...
             </span>
         </section>
     </article>
@@ -127,7 +133,7 @@
                             <div
                                 style="display: inline-block;"
                                 class="addressIdenticon small" title="Address Indenticon"
-                                 blockie-address="{{txInfo.from}}" watch-var="txInfo.from"></div>
+                                blockie-address="{{txInfo.from}}" watch-var="txInfo.from"></div>
                         {{txInfo.from }}
                        </span>
 
@@ -143,13 +149,12 @@
                             <div
                                 style="display: inline-block;"
                                 class="addressIdenticon small" title="Address Indenticon"
-                                 blockie-address="{{txInfo.to}}" watch-var="txInfo.to"></div>
+                                blockie-address="{{txInfo.to}}" watch-var="txInfo.to"></div>
                         {{txInfo.to }}
                        </span>
                 </a>
                 </td>
             </tr>
-
 
 
             <tr>

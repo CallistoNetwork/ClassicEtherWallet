@@ -71,6 +71,27 @@
         <table class="table cont-md">
             <caption translate="tx_Details"></caption>
             <tbody>
+
+            <tr>
+                <td>
+
+                    Confirmations
+                </td>
+                <td>
+                    {{currentBlockNumber - txInfo.blockNumber | number}}
+                </td>
+            </tr>
+            <tr>
+                <td translate="SEND_amount_short">Amount</td>
+                <td>{{ txInfo.valueStr }}
+                    <coin-icon icon="{{ajaxReq.type.toLowerCase()}}">
+                    </coin-icon>
+                    <span ng-show="txInfo.value_fiat">
+                       ({{txInfo.value_fiat | currency}})
+                    </span>
+                </td>
+            </tr>
+
             <tr>
                 <td translate="x_TxHash">TX Hash</td>
                 <td>
@@ -86,24 +107,26 @@
             </tr>
             <tr>
                 <td>
+                    <a class="account-help-icon"
+                       href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-nonce" target="_blank"
+                       rel="noopener noreferrer">
+                        <img src="images/icon-help.svg" class="help-icon"/>
+                        <p class="account-help-text" translate="NONCE_Desc"></p>
+                    </a>
+                    <span translate="OFFLINE_Step2_Label_5">Nonce</span>
+                </td>
+                <td>{{ txInfo.nonce | number }}</td>
+            </tr>
 
-                    Confirmations
-                </td>
-                <td>
-                    {{currentBlockNumber - txInfo.blockNumber | number}}
-                </td>
-            </tr>
-            <tr>
-                <td translate="x_TxBlockNumber">Tx Block Number</td>
-                <td>{{txInfo.blockNumber | number}}</td>
-            </tr>
             <tr>
                 <td translate="OFFLINE_Step1_Label_1">From Address</td>
                 <td><a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', txInfo.from) }}" target="_blank"
                        rel="noopener">
 
                        <span>
-                            <div class="addressIdenticon small" title="Address Indenticon"
+                            <div
+                                style="display: inline-block;"
+                                class="addressIdenticon small" title="Address Indenticon"
                                  blockie-address="{{txInfo.from}}" watch-var="txInfo.from"></div>
                         {{txInfo.from }}
                        </span>
@@ -117,35 +140,21 @@
                 <td><a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', txInfo.to) }}" target="_blank"
                        rel="noopener">
                          <span>
-                            <div class="addressIdenticon small" title="Address Indenticon"
+                            <div
+                                style="display: inline-block;"
+                                class="addressIdenticon small" title="Address Indenticon"
                                  blockie-address="{{txInfo.to}}" watch-var="txInfo.to"></div>
                         {{txInfo.to }}
                        </span>
                 </a>
                 </td>
             </tr>
-            <tr>
-                <td translate="SEND_amount_short">Amount</td>
-                <td>{{ txInfo.valueStr }}
-                    <coin-icon icon="{{ajaxReq.type.toLowerCase()}}">
-                    </coin-icon>
-                    <span ng-show="txInfo.value_fiat">
-                       ({{txInfo.value_fiat | currency}})
-                    </span>
-                </td>
-            </tr>
+
+
 
             <tr>
-                <td>
-                    <a class="account-help-icon"
-                       href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-nonce" target="_blank"
-                       rel="noopener noreferrer">
-                        <img src="images/icon-help.svg" class="help-icon"/>
-                        <p class="account-help-text" translate="NONCE_Desc"></p>
-                    </a>
-                    <span translate="OFFLINE_Step2_Label_5">Nonce</span>
-                </td>
-                <td>{{ txInfo.nonce | number }}</td>
+                <td translate="x_TxBlockNumber">Tx Block Number</td>
+                <td>{{txInfo.blockNumber | number}}</td>
             </tr>
             <tr>
                 <td>

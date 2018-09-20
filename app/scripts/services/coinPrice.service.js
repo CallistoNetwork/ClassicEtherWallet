@@ -3,8 +3,13 @@
 const _url = (coin = "ETC", syms = "USD,EUR,GBP,BTC,CHF") =>
     `https://min-api.cryptocompare.com/data/price?fsym=${coin}&tsyms=${syms}`;
 
+const overview_url = (coin = "ETC") =>
+    `https://www.cryptocompare.com/coins/${coin.toLowerCase()}/overview`;
+
 const coinPriceService = function coinPriceService() {
     this.coinPrices = {};
+
+    this.overview_url = overview_url;
 
     this.initPrices = function() {
         return Promise.all(

@@ -308,14 +308,15 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
     };
 
     $scope.removeNodeFromLocal = function(localNodeName) {
-        var localNodes = globalFuncs.localStorage.getItem("localNodes", null);
+        let localNodes = globalFuncs.localStorage.getItem("localNodes", null);
         localNodes = !localNodes ? [] : JSON.parse(localNodes);
-        for (var i = 0; i < localNodes.length; i++) {
+        for (let i = 0; i < localNodes.length; i++) {
             if (
-                localNodes[i].name + ":" + localNodes[i].options ==
-                localNodeName
-            )
+                `${localNodes[i].name}:${localNodes[i].type}`.toLowerCase() ===
+                localNodeName.toLowerCase()
+            ) {
                 localNodes.splice(i, 1);
+            }
         }
         globalFuncs.localStorage.setItem(
             "localNodes",

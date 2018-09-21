@@ -171,9 +171,9 @@ var tabsCtrl = function(
             ajaxReq[attrname] = $scope.curNode.lib[attrname];
         for (var attrname in $scope.curNode)
             if (
-                attrname != "name" &&
-                attrname != "tokenList" &&
-                attrname != "lib"
+                attrname !== "name" &&
+                attrname !== "tokenList" &&
+                attrname !== "lib"
             )
                 ajaxReq[attrname] = $scope.curNode[attrname];
         globalFuncs.localStorage.setItem(
@@ -184,33 +184,28 @@ var tabsCtrl = function(
         );
         $scope.keyNode = globalFuncs.localStorage.getItem("curNode", null);
 
-        $http({
-            url: $scope.curNode.lib.SERVERURL,
-            timeout: 1000,
-            method: "OPTIONS"
-        })
+        $scope.curNode.lib
+            .healthCheck()
             .then(result => {
-                if (300 <= result.status) {
-                    _handleErr();
-                } else {
-                    $scope.nodeIsConnected = true;
-                    $scope.notifier.info(
-                        `${
-                            globalFuncs.successMsgs[5]
-                        } — Now, check the URL: <strong> ${
-                            window.location.href
-                        }.</strong> <br /> 
+                $scope.nodeIsConnected = true;
+                $scope.notifier.info(
+                    `${
+                        globalFuncs.successMsgs[5]
+                    } — Now, check the URL: <strong> ${
+                        window.location.href
+                    }.</strong> <br /> 
 Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
-                            $scope.nodeService
-                        }.</strong>`,
-                        5000
-                    );
-                }
+                        $scope.nodeService
+                    }.</strong>`,
+                    5000
+                );
             })
             .catch(_handleErr);
 
-        function _handleErr() {
+        function _handleErr(err) {
             $scope.nodeIsConnected = false;
+
+            // console.log("node did not connect", err);
             $scope.notifier.danger(globalFuncs.errorMsgs[32]);
         }
     };

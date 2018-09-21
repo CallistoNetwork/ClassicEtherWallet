@@ -12,7 +12,10 @@ var tabsCtrl = function(
     $scope.tabNames = $scope.gService.tabs;
     $scope.walletService = walletService;
     $scope.curLang = "English";
-    $scope.customNodeModal = document.getElementById("customNodeModal");
+    $scope.customNodeModal = new Modal(
+        document.getElementById("customNodeModal")
+    );
+
     $scope.Validator = Validator;
     $scope.nodeList = nodes.nodeList;
     $scope.defaultNodeKey = globalFuncs.networks.ETC; // 'etc_ethereumcommonwealth_parity';
@@ -152,6 +155,17 @@ var tabsCtrl = function(
 
     $scope.setGasPrice();
 
+    $scope.getKlass = function(value, index) {
+        const _nodeList = Object.values(nodes.nodeList);
+        if (_nodeList.length <= index + 1) {
+            return null;
+        } else if (_nodeList[index + 1].type !== value.type) {
+            return "grey-bottom-border";
+        } else {
+            return null;
+        }
+    };
+
     $scope.changeNode = function(key) {
         if ($scope.nodeList[key]) {
             $scope.curNode = $scope.nodeList[key];
@@ -271,34 +285,13 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
     };
 
     $scope.saveCustomNode = function() {
+        const { customNode } = $scope;
+        let localNodes = globalFuncs.localStorage.getItem("localNodes", null);
         try {
-            if (!$scope.Validator.isAlphaNumericSpace($scope.customNode.name))
-                throw globalFuncs.errorMsgs[22];
-            else if (!$scope.checkNodeUrl($scope.customNode.url))
-                throw globalFuncs.errorMsgs[23];
-            else if (
-                !$scope.Validator.isPositiveNumber($scope.customNode.port) &&
-                $scope.customNode.port != ""
-            )
-                throw globalFuncs.errorMsgs[24];
-            else if (
-                $scope.customNode.eip155 &&
-                !$scope.Validator.isPositiveNumber($scope.customNode.chainId)
-            )
-                throw globalFuncs.errorMsgs[25];
-            else if (
-                $scope.customNode.httpBasicAuth &&
-                ($scope.customNode.httpBasicAuth.user == "" ||
-                    $scope.customNode.httpBasicAuth.password == "")
-            )
-                throw globalFuncs.errorMsgs[29];
+            localNodes = !localNodes ? [] : JSON.parse(localNodes);
         } catch (e) {
-            $scope.notifier.danger(e);
-            return;
+            uiFuncs.notifier.danger(e);
         }
-        var customNode = $scope.customNode;
-        var localNodes = globalFuncs.localStorage.getItem("localNodes", null);
-        localNodes = !localNodes ? [] : JSON.parse(localNodes);
         localNodes.push(customNode);
         $scope.addCustomNodeToList(customNode);
         $scope.changeNode(

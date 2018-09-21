@@ -78,6 +78,7 @@
             id="user"
 
 
+            ng-required="customNode.httpBasicAuth"
             class="form-control" type="text" ng-model="customNode.httpBasicAuth.user"
             ng-class="customNode.httpBasicAuth &amp;&amp; customNode.httpBasicAuth.user.length > 0 ? 'is-valid' : 'is-invalid'">
     </div>
@@ -87,7 +88,9 @@
         <input
             id="password"
             name="password"
-            class="form-control" type="password"
+            ng-required="customNode.httpBasicAuth"
+            class="form-control"
+            type="password"
             ng-model="customNode.httpBasicAuth.password"
             ng-class="customNode.httpBasicAuth &amp;&amp; customNode.httpBasicAuth.password.length > 0 ? 'is-valid' : 'is-invalid'">
     </div>
@@ -96,7 +99,7 @@
 
         <span>
             <label>
-                <input name="options" type="radio" ng-model="customNode.options" value="cus">
+                <input name="options" type="radio" ng-model="customNode.type" value="cus">
                 <b>
                     <coin-icon icon="custom"/>
                 </b>
@@ -105,8 +108,15 @@
         <br/>
         <span ng-repeat="node in _nodes">
             <label>
-                <input name="options" type="radio" ng-model="customNode.options" ng-value="node.type.toLowerCase()">
-                <coin-icon icon="{{node.type.toLowerCase()}}"></coin-icon>
+                <input name="type"
+                       required
+                       type="radio"
+                       ng-model="customNode.type"
+                       ng-value="node.type"
+                >
+                <b>
+                    <coin-icon icon="{{node.type.toLowerCase()}}"></coin-icon>
+                </b>
             </label>
         </span>
 

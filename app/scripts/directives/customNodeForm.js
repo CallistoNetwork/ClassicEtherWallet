@@ -17,6 +17,8 @@ module.exports = function customNodeForm() {
             };
 
             form.chainId.$validators.chainId = Validator.isPositiveNumber;
+
+            form.nodeName.$validators.validName = Validator.isAlphaNumericSpace;
         }
     };
 };

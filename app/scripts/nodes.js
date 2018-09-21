@@ -158,9 +158,9 @@ nodes.nodeList = {
         lib: new nodes.customNode("https://morden.eos-classic.io", "")
     },
     clo_mainnet: {
-        name: "CLO",
-        blockExplorerTX: "https://cloexplorer.org/tx/[[txHash]]",
-        blockExplorerAddr: "https://cloexplorer.org/addr/[[address]]",
+        name: "Callisto - CLO",
+        blockExplorerTX: "https://explorer2.callisto.network/tx/[[txHash]]",
+        blockExplorerAddr: "https://explorer2.callisto.network/addr/[[address]]",
         type: nodes.nodeTypes.CLO,
         eip155: true,
         chainId: 820,
@@ -168,18 +168,6 @@ nodes.nodeList = {
         abiList: [],
         service: "Callisto.network",
         lib: new nodes.customNode("https://clo-geth.0xinfra.com/", "")
-    },
-    clo_pool: {
-        name: "CLO",
-        blockExplorerTX: "https://cloexplorer.org/tx/[[txHash]]",
-        blockExplorerAddr: "https://cloexplorer.org/addr/[[address]]",
-        type: nodes.nodeTypes.CLO,
-        eip155: true,
-        chainId: 820,
-        tokenList: [],
-        abiList: [],
-        service: "Chainkorea",
-        lib: new nodes.customNode("https://node.clopool.net", "")
     },
     clo_testnet3: {
         name: "CLO Testnet 3.0",
@@ -395,33 +383,6 @@ nodes.nodeList = {
         estimateGas: true,
         service: "ellaism.org",
         lib: new nodes.customNode("https://jsonrpc.ellaism.org", "")
-    },
-    etsc: {
-        name: "ETSC",
-        blockExplorerTX: "https://explorer.ethereumsocial.kr/tx/[[txHash]]",
-        blockExplorerAddr:
-            "https://explorer.ethereumsocial.kr/addr/[[address]]",
-        type: nodes.nodeTypes.ETSC,
-        eip155: true,
-        chainId: 28,
-        tokenList: require("./tokens/etscTokens.json"),
-        abiList: require("./abiDefinitions/etscAbi.json"),
-        estimateGas: true,
-        service: "ethereumsocial.kr",
-        lib: new nodes.customNode("https://node.ethereumsocial.kr", "")
-    },
-    esn: {
-        name: "ESN",
-        blockExplorerTX: "https://ethersocial.net/tx/[[txHash]]",
-        blockExplorerAddr: "https://ethersocial.net/addr/[[address]]",
-        type: nodes.nodeTypes.ESN,
-        eip155: true,
-        chainId: 31102,
-        tokenList: require("./tokens/esnTokens.json"),
-        abiList: require("./abiDefinitions/esnAbi.json"),
-        estimateGas: true,
-        service: "ethersocial.org",
-        lib: new nodes.customNode("https://api.esn.gonspool.com", "")
     },
     aka: {
         name: "AKA",

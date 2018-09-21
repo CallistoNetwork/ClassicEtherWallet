@@ -12,21 +12,23 @@ var tabsCtrl = function(
     $scope.tabNames = $scope.gService.tabs;
     $scope.walletService = walletService;
     $scope.curLang = "English";
-    $scope.customNodeModal = document.getElementById("customNodeModal");
+    $scope.customNodeModal = new Modal(
+        document.getElementById("customNodeModal")
+    );
+
     $scope.Validator = Validator;
     $scope.nodeList = nodes.nodeList;
     $scope.defaultNodeKey = globalFuncs.networks.ETC; // 'etc_ethereumcommonwealth_parity';
 
     const initNode = () => {
         $scope.customNode = {
-            options: "etc",
             name: "",
             url: "",
             port: "",
             httpBasicAuth: null,
-            eip155: true,
-            chainId: 61,
-            type: null
+            eip155: ajaxReq.eip155,
+            chainId: ajaxReq.chainId,
+            type: ajaxReq.type
         };
     };
 
@@ -43,29 +45,20 @@ var tabsCtrl = function(
 
     initNode();
 
-    $scope.$watch("customNode.options", function(val) {
-        if (val) {
-            const node = Object.keys(nodes.nodeList).find(
-                node =>
-                    nodes.nodeList[node].name.toLowerCase() ===
-                    val.toLowerCase()
-            );
+    $scope.setNodeMetadata = function setNodeData(nodeType) {
+        const node = Object.keys(nodes.nodeList).find(
+            node =>
+                nodes.nodeList[node].type.toLowerCase() ===
+                nodeType.toLowerCase()
+        );
 
-            if (node) {
-                const { eip155, chainId } = nodes.nodeList[node];
+        const { eip155, chainId } = nodes.nodeList[node];
 
-                Object.assign($scope.customNode, {
-                    eip155,
-                    chainId
-                });
-            } else {
-                Object.assign($scope.customNode, {
-                    eip155: false,
-                    chainId: ""
-                });
-            }
-        }
-    });
+        Object.assign($scope.customNode, {
+            eip155,
+            chainId
+        });
+    };
 
     $scope.$watch("ajaxReq.type", function() {
         $scope.nodeType = $scope.ajaxReq.type;
@@ -90,9 +83,9 @@ var tabsCtrl = function(
         }, 200);
     };
 
-    var network = globalFuncs.urlGet("network", "");
+    const network = globalFuncs.urlGet("network", "");
 
-    var gasPriceKey = "gasPrice";
+    const gasPriceKey = "gasPrice";
 
     const defaultValue = 21;
 
@@ -152,6 +145,26 @@ var tabsCtrl = function(
 
     $scope.setGasPrice();
 
+    /*
+
+        determines whether to apply grey border to bottom of list
+
+        @param _node nodes.nodeList[key]
+        @param index number index of the node in nodeList
+        @returns 'grey-bottom-border' if n + 1 node type differs than current node else null
+
+     */
+    $scope.getBottomBorder = function(_node, index) {
+        const _nodeList = Object.values(nodes.nodeList);
+        if (_nodeList.length <= index + 1) {
+            return null;
+        } else if (_nodeList[index + 1].type !== _node.type) {
+            return "grey-bottom-border";
+        } else {
+            return null;
+        }
+    };
+
     $scope.changeNode = function(key) {
         if ($scope.nodeList[key]) {
             $scope.curNode = $scope.nodeList[key];
@@ -205,7 +218,6 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         function _handleErr(err) {
             $scope.nodeIsConnected = false;
 
-            // console.log("node did not connect", err);
             $scope.notifier.danger(globalFuncs.errorMsgs[32]);
         }
     };
@@ -226,26 +238,30 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         }
     };
     $scope.addCustomNodeToList = function(nodeInfo) {
-        var tempObj = null;
-        if (nodeInfo.options === "etc")
+        let tempObj = null;
+
+        let { type } = nodeInfo;
+        type = type.toLowerCase();
+
+        if (type === "etc")
             tempObj = JSON.parse(
                 JSON.stringify(nodes.nodeList.etc_ethereumcommonwealth_parity)
             );
-        else if (nodeInfo.options === "eth")
+        else if (type === "eth")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.eth_ethscan));
-        else if (nodeInfo.options === "rop")
+        else if (type === "rop")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.rop_mew));
-        else if (nodeInfo.options === "kov")
+        else if (type === "kov")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.kov_ethscan));
-        else if (nodeInfo.options === "rin")
+        else if (type === "rin")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.rin_ethscan));
-        else if (nodeInfo.options === "cus") {
+        else if (type === "cus") {
             tempObj = JSON.parse(JSON.stringify(nodes.customNodeObj));
-            tempObj.eip155 = nodeInfo.eip155;
+            tempObj.eip155 = Boolean(nodeInfo.eip155);
             tempObj.chainId = parseInt(nodeInfo.chainId);
         }
         if (tempObj) {
-            tempObj.name = nodeInfo.name + ":" + nodeInfo.options;
+            tempObj.name = nodeInfo.name + ":" + type;
             tempObj.service = "Custom";
             tempObj.lib = new nodes.customNode(
                 nodeInfo.url,
@@ -253,7 +269,7 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
                 nodeInfo.httpBasicAuth
             );
             $scope.nodeList[
-                "cus_" + nodeInfo.options + "_" + $scope.customNodeCount
+                "cus_" + type + "_" + $scope.customNodeCount
             ] = tempObj;
             $scope.customNodeCount++;
         }
@@ -271,34 +287,13 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
     };
 
     $scope.saveCustomNode = function() {
+        const { customNode } = $scope;
+        let localNodes = globalFuncs.localStorage.getItem("localNodes", null);
         try {
-            if (!$scope.Validator.isAlphaNumericSpace($scope.customNode.name))
-                throw globalFuncs.errorMsgs[22];
-            else if (!$scope.checkNodeUrl($scope.customNode.url))
-                throw globalFuncs.errorMsgs[23];
-            else if (
-                !$scope.Validator.isPositiveNumber($scope.customNode.port) &&
-                $scope.customNode.port != ""
-            )
-                throw globalFuncs.errorMsgs[24];
-            else if (
-                $scope.customNode.eip155 &&
-                !$scope.Validator.isPositiveNumber($scope.customNode.chainId)
-            )
-                throw globalFuncs.errorMsgs[25];
-            else if (
-                $scope.customNode.httpBasicAuth &&
-                ($scope.customNode.httpBasicAuth.user == "" ||
-                    $scope.customNode.httpBasicAuth.password == "")
-            )
-                throw globalFuncs.errorMsgs[29];
+            localNodes = !localNodes ? [] : JSON.parse(localNodes);
         } catch (e) {
-            $scope.notifier.danger(e);
-            return;
+            uiFuncs.notifier.danger(e);
         }
-        var customNode = $scope.customNode;
-        var localNodes = globalFuncs.localStorage.getItem("localNodes", null);
-        localNodes = !localNodes ? [] : JSON.parse(localNodes);
         localNodes.push(customNode);
         $scope.addCustomNodeToList(customNode);
         $scope.changeNode(

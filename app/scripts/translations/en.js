@@ -423,6 +423,7 @@ en.data = {
     NODE_Name: "Node Name",
     NODE_Port: "Node Port",
     NODE_CTA: "Save & Use Custom Node",
+    NODE_Add_Custom: "Add Custom Node",
 
     /* Swap / Exchange */
     SWAP_rates: "Current Rates ",

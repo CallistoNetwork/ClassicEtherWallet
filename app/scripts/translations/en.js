@@ -3,6 +3,8 @@
 var en = function() {};
 en.code = "en";
 en.data = {
+    GEN_Passwords_Must_Match: "Passwords must match",
+    GEN_Password_Length: "Password length must be greater than 8 characters",
     CUSTOM_NODE_CONNECT_DOWNLOAD:
         "download the ClassicEtherWallet repo & run it locally",
     LINK: "Link",

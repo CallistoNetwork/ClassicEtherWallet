@@ -108,11 +108,13 @@
         <br/>
         <span ng-repeat="node in _nodes">
             <label>
-                <input name="type"
-                       required
-                       type="radio"
-                       ng-model="customNode.type"
-                       ng-value="node.type"
+                <input
+                    type="radio"
+                    name="nodeType"
+                    required
+                    ng-change="setNodeMetadata(node.type)"
+                    ng-model="customNode.type"
+                    ng-value="node.type"
                 >
                 <b>
                     <coin-icon icon="{{node.type.toLowerCase()}}"></coin-icon>

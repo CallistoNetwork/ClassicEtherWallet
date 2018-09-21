@@ -531,6 +531,7 @@ label small {
 @brand-eth: @brand-primary;
 @brand-eth-dark: #025b76;
 @brand-etc: #009241;
+@brand-clo: #009241;
 @brand-etc-dark: #015125;
 @brand-test: #c4c4c4;
 @brand-test-dark: #919191;
@@ -574,7 +575,13 @@ label small {
         border-left: 2px solid @brand-etc;
     }
 
-    li.test {
+    li.clo {
+        border-left: 2px solid @brand-clo;
+    }
+    li.test,
+    li.rinkeby,
+    li.testnet,
+    li.ropsten {
         border-left: 2px solid @brand-test;
     }
 
@@ -613,9 +620,6 @@ label small {
     }
     li.esn {
         border-left: 2px solid @brand-esn;
-    }
-    li:last-child {
-        border-left: 2px solid @brand-cust;
     }
 }
 

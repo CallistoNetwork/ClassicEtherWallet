@@ -22,14 +22,13 @@ var tabsCtrl = function(
 
     const initNode = () => {
         $scope.customNode = {
-            options: "etc",
             name: "",
             url: "",
             port: "",
             httpBasicAuth: null,
-            eip155: true,
-            chainId: 61,
-            type: null
+            eip155: ajaxReq.eip155,
+            chainId: ajaxReq.chainId,
+            type: ajaxReq.type
         };
     };
 
@@ -46,29 +45,20 @@ var tabsCtrl = function(
 
     initNode();
 
-    $scope.$watch("customNode.options", function(val) {
-        if (val) {
-            const node = Object.keys(nodes.nodeList).find(
-                node =>
-                    nodes.nodeList[node].name.toLowerCase() ===
-                    val.toLowerCase()
-            );
+    $scope.setNodeMetadata = function setNodeData(nodeType) {
+        const node = Object.keys(nodes.nodeList).find(
+            node =>
+                nodes.nodeList[node].type.toLowerCase() ===
+                nodeType.toLowerCase()
+        );
 
-            if (node) {
-                const { eip155, chainId } = nodes.nodeList[node];
+        const { eip155, chainId } = nodes.nodeList[node];
 
-                Object.assign($scope.customNode, {
-                    eip155,
-                    chainId
-                });
-            } else {
-                Object.assign($scope.customNode, {
-                    eip155: false,
-                    chainId: ""
-                });
-            }
-        }
-    });
+        Object.assign($scope.customNode, {
+            eip155,
+            chainId
+        });
+    };
 
     $scope.$watch("ajaxReq.type", function() {
         $scope.nodeType = $scope.ajaxReq.type;
@@ -93,9 +83,9 @@ var tabsCtrl = function(
         }, 200);
     };
 
-    var network = globalFuncs.urlGet("network", "");
+    const network = globalFuncs.urlGet("network", "");
 
-    var gasPriceKey = "gasPrice";
+    const gasPriceKey = "gasPrice";
 
     const defaultValue = 21;
 
@@ -219,7 +209,6 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         function _handleErr(err) {
             $scope.nodeIsConnected = false;
 
-            // console.log("node did not connect", err);
             $scope.notifier.danger(globalFuncs.errorMsgs[32]);
         }
     };
@@ -240,26 +229,30 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         }
     };
     $scope.addCustomNodeToList = function(nodeInfo) {
-        var tempObj = null;
-        if (nodeInfo.options === "etc")
+        let tempObj = null;
+
+        let { type } = nodeInfo;
+        type = type.toLowerCase();
+
+        if (type === "etc")
             tempObj = JSON.parse(
                 JSON.stringify(nodes.nodeList.etc_ethereumcommonwealth_parity)
             );
-        else if (nodeInfo.options === "eth")
+        else if (type === "eth")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.eth_ethscan));
-        else if (nodeInfo.options === "rop")
+        else if (type === "rop")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.rop_mew));
-        else if (nodeInfo.options === "kov")
+        else if (type === "kov")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.kov_ethscan));
-        else if (nodeInfo.options === "rin")
+        else if (type === "rin")
             tempObj = JSON.parse(JSON.stringify(nodes.nodeList.rin_ethscan));
-        else if (nodeInfo.options === "cus") {
+        else if (type === "cus") {
             tempObj = JSON.parse(JSON.stringify(nodes.customNodeObj));
-            tempObj.eip155 = nodeInfo.eip155;
+            tempObj.eip155 = Boolean(nodeInfo.eip155);
             tempObj.chainId = parseInt(nodeInfo.chainId);
         }
         if (tempObj) {
-            tempObj.name = nodeInfo.name + ":" + nodeInfo.options;
+            tempObj.name = nodeInfo.name + ":" + type;
             tempObj.service = "Custom";
             tempObj.lib = new nodes.customNode(
                 nodeInfo.url,
@@ -267,7 +260,7 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
                 nodeInfo.httpBasicAuth
             );
             $scope.nodeList[
-                "cus_" + nodeInfo.options + "_" + $scope.customNodeCount
+                "cus_" + type + "_" + $scope.customNodeCount
             ] = tempObj;
             $scope.customNodeCount++;
         }

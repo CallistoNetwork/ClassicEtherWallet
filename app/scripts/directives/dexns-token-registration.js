@@ -37,8 +37,22 @@ module.exports = function dexnsTokenRegistrationForm() {
                 return Boolean(found);
             };
 
-            form.destination.$validators.destination = _addr =>
-                Validator.isValidAddress(_addr);
+            form.destination.$validators.destination = Validator.isValidAddress;
+
+            scope.resetForm = function() {
+                Object.assign(scope.input, {
+                    abi: "",
+                    link: "",
+                    sourceCode: "",
+                    info: "",
+                    tokenName: "",
+                    tokenNetwork: ajaxReq.type,
+                    owner: "",
+                    destination: "",
+                    hideOwner: false,
+                    assign: false
+                });
+            };
         }
     };
 };

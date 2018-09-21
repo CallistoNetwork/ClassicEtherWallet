@@ -379,7 +379,7 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
                 )
                 .then(function(resp) {
                     $scope.tx.unit = resp.unit;
-                    $scope.tx.value = resp.value;
+                    $scope.tx.value = Number(resp.value);
                 })
                 .catch(resp => {
                     $scope.showRaw = false;

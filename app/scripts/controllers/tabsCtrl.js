@@ -1,4 +1,5 @@
 "use strict";
+
 var tabsCtrl = function(
     $http,
     $scope,
@@ -11,9 +12,7 @@ var tabsCtrl = function(
     $scope.tabNames = $scope.gService.tabs;
     $scope.walletService = walletService;
     $scope.curLang = "English";
-    $scope.customNodeModal = document.getElementById("customNodeModal")
-        ? new Modal(document.getElementById("customNodeModal"))
-        : null;
+    $scope.customNodeModal = document.getElementById("customNodeModal");
     $scope.Validator = Validator;
     $scope.nodeList = nodes.nodeList;
     $scope.defaultNodeKey = globalFuncs.networks.ETC; // 'etc_ethereumcommonwealth_parity';
@@ -34,7 +33,7 @@ var tabsCtrl = function(
     $scope.customNodeCount = 0;
     $scope.nodeIsConnected = true;
     $scope.browserProtocol = window.location.protocol;
-    var hval = window.location.hash;
+    const hval = window.location.hash;
     $scope.notifier = uiFuncs.notifier;
     $scope.notifier.sce = $sce;
     $scope.notifier.scope = $scope;
@@ -172,9 +171,9 @@ var tabsCtrl = function(
             ajaxReq[attrname] = $scope.curNode.lib[attrname];
         for (var attrname in $scope.curNode)
             if (
-                attrname != "name" &&
-                attrname != "tokenList" &&
-                attrname != "lib"
+                attrname !== "name" &&
+                attrname !== "tokenList" &&
+                attrname !== "lib"
             )
                 ajaxReq[attrname] = $scope.curNode[attrname];
         globalFuncs.localStorage.setItem(
@@ -185,33 +184,28 @@ var tabsCtrl = function(
         );
         $scope.keyNode = globalFuncs.localStorage.getItem("curNode", null);
 
-        $http({
-            url: $scope.curNode.lib.SERVERURL,
-            timeout: 1000,
-            method: "OPTIONS"
-        })
+        $scope.curNode.lib
+            .healthCheck()
             .then(result => {
-                if (300 <= result.status) {
-                    _handleErr();
-                } else {
-                    $scope.nodeIsConnected = true;
-                    $scope.notifier.info(
-                        `${
-                            globalFuncs.successMsgs[5]
-                        } — Now, check the URL: <strong> ${
-                            window.location.href
-                        }.</strong> <br /> 
+                $scope.nodeIsConnected = true;
+                $scope.notifier.info(
+                    `${
+                        globalFuncs.successMsgs[5]
+                    } — Now, check the URL: <strong> ${
+                        window.location.href
+                    }.</strong> <br /> 
 Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
-                            $scope.nodeService
-                        }.</strong>`,
-                        5000
-                    );
-                }
+                        $scope.nodeService
+                    }.</strong>`,
+                    5000
+                );
             })
             .catch(_handleErr);
 
-        function _handleErr() {
+        function _handleErr(err) {
             $scope.nodeIsConnected = false;
+
+            // console.log("node did not connect", err);
             $scope.notifier.danger(globalFuncs.errorMsgs[32]);
         }
     };
@@ -491,5 +485,35 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         .element(document.querySelectorAll(".nav-scroll")[0])
         .bind("scroll", $scope.setOnScrollArrows);
     globalFuncs.changeHash = $scope.setHash;
+
+    const LOADING = "loading";
+    const ERROR = "error";
+
+    $scope.currentBlockNumber = LOADING;
+
+    $scope.setBlockNumbers = function() {
+        ajaxReq.getCurrentBlock(function(data) {
+            if (data.error || !data.data) {
+                $scope.currentBlockNumber = ERROR;
+            } else {
+                $scope.currentBlockNumber = parseInt(data.data);
+            }
+        });
+    };
+
+    $scope.$watch(
+        function() {
+            return globalFuncs.getCurNode();
+        },
+        function(newNode, oldNode) {
+            if (!angular.equals(newNode, oldNode)) {
+                $scope.currentBlockNumber = LOADING;
+
+                $scope.setBlockNumbers();
+            }
+        }
+    );
+
+    $scope.setBlockNumbers();
 };
 module.exports = tabsCtrl;

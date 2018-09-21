@@ -5,8 +5,13 @@
     ng-cloak
 >
 
-    @@if (site === 'cew' ) { @@include( '../includes/contracts-interact-modal.tpl', { "site": "cew" } ) }
-    @@if (site === 'cx' ) { @@include( '../includes/contracts-interact-modal.tpl', { "site": "cx" } ) }
+    <article class="modal fade" id="sendContract" tabindex="-1">
+        <section class="modal-dialog">
+
+            <form name="sendContractTx" ng-submit="sendTx()" send-contract-tx>
+            </form>
+        </section>
+    </article>
 
     @@if (site === 'cew' ) { @@include( '../includes/contracts-deploy-modal.tpl', { "site": "cew" } ) }
     @@if (site === 'cx' ) { @@include( '../includes/contracts-deploy-modal.tpl', { "site": "cx" } ) }
@@ -44,9 +49,6 @@
 
         </article>
 
-
-        @@if (site === 'cew' ) { @@include( '../includes/contracts-interact-modal.tpl', { "site": "cew" } ) }
-        @@if (site === 'cx' ) { @@include( '../includes/contracts-interact-modal.tpl', { "site": "cx" } ) }
 
         <!-- / Interact Contracts -->
 

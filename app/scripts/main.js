@@ -97,7 +97,7 @@ var walletGenCtrl = require("./controllers/walletGenCtrl");
 var bulkGenCtrl = require("./controllers/bulkGenCtrl");
 var decryptWalletCtrl = require("./controllers/decryptWalletCtrl");
 var viewWalletCtrl = require("./controllers/viewWalletCtrl");
-var txStatusCtrl = require("./controllers/txStatusCtrl");
+const TxStatusController = require("./controllers/TxStatus.controller");
 var sendTxCtrl = require("./controllers/sendTxCtrl");
 var swapCtrl = require("./controllers/swapCtrl");
 var signMsgCtrl = require("./controllers/signMsgCtrl");
@@ -105,7 +105,6 @@ var contractsCtrl = require("./controllers/contractsCtrl");
 var broadcastTxCtrl = require("./controllers/broadcastTxCtrl");
 var ensCtrl = require("./controllers/ensCtrl");
 var DexnsController = require("./controllers/DexnsController");
-var footerCtrl = require("./controllers/footerCtrl");
 var offlineTxCtrl = require("./controllers/offlineTxCtrl");
 var walletBalanceCtrl = require("./controllers/walletBalanceCtrl");
 var backgroundNodeCtrl = require("./controllers/backgroundNodeCtrl");
@@ -126,25 +125,32 @@ var dexnsService = require("./services/dexnsService");
 var backgroundNodeService = require("./services/backgroundNodeService");
 
 // DIRECTIVES
+const eosKeypair = require("./directives/eos-keypair");
+const sendTxModal = require("./directives/sendTxModal");
+const validTxHash = require("./directives/validTxHash");
+const swapOpenOrderForm = require("./directives/swapOpenOrderForm");
+const swapInitForm = require("./directives/swapInitForm");
 const generateWalletForm = require("./directives/generateWalletForm");
 const customNodeForm = require("./directives/customNodeForm");
-var officialityChecker = require("./directives/officiality-checker");
-var lookup = require("./directives/crosschain-lookup");
-var dexnsNameDisplay = require("./directives/dexns-name-display");
-var blockiesDrtv = require("./directives/blockiesDrtv");
-var addressFieldDrtv = require("./directives/addressFieldDrtv");
-var QRCodeDrtv = require("./directives/QRCodeDrtv");
-var walletDecryptDrtv = require("./directives/walletDecryptDrtv");
-var messagesOverviewDrtv = require("./directives/messagesOverviewDrtv");
-var cssThemeDrtv = require("./directives/cssThemeDrtv");
-var cxWalletDecryptDrtv = require("./directives/cxWalletDecryptDrtv");
-var fileReaderDrtv = require("./directives/fileReaderDrtv");
-var transactionCost = require("./directives/transactionCostDtrv");
-var balanceDrtv = require("./directives/balanceDrtv");
-var arrayInputDrtv = require("./directives/arrayInputDrtv");
-var newMessagesDrtv = require("./directives/newMessagesDrtv");
+const officialityChecker = require("./directives/officiality-checker");
+const lookup = require("./directives/crosschain-lookup");
+const dexnsNameDisplay = require("./directives/dexns-name-display");
+const blockiesDrtv = require("./directives/blockiesDrtv");
+const addressFieldDrtv = require("./directives/addressFieldDrtv");
+const QRCodeDrtv = require("./directives/QRCodeDrtv");
+const walletDecryptDrtv = require("./directives/walletDecryptDrtv");
+const messagesOverviewDrtv = require("./directives/messagesOverviewDrtv");
+const cssThemeDrtv = require("./directives/cssThemeDrtv");
+const cxWalletDecryptDrtv = require("./directives/cxWalletDecryptDrtv");
+const fileReaderDrtv = require("./directives/fileReaderDrtv");
+const transactionCost = require("./directives/transactionCostDtrv");
+const balanceDrtv = require("./directives/balanceDrtv");
+const arrayInputDrtv = require("./directives/arrayInputDrtv");
+const newMessagesDrtv = require("./directives/newMessagesDrtv");
 const sendTransactionFormDrtv = require("./directives/sendTransactionForm");
 const dexnsTokenRegistrationForm = require("./directives/dexns-token-registration");
+const networkInfo = require("./directives/networkInfo");
+const txStatus = require("./directives/txStatus");
 
 const coinIcon = require("./directives/coinIcon");
 if (IS_CX) {
@@ -202,6 +208,8 @@ app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
 
 app.directive("coinIcon", coinIcon);
+app.directive("validTxHash", validTxHash);
+app.directive("swapInitForm", swapInitForm);
 app.directive("generateWalletForm", generateWalletForm);
 app.directive("sendTransactionForm", sendTransactionFormDrtv);
 app.directive("officialityChecker", [officialityChecker]);
@@ -212,9 +220,11 @@ app.directive("dexnsNameDisplay", [
     "globalService",
     dexnsNameDisplay
 ]);
-app.directive("sendTxModal", require("./directives/sendTxModal"));
-
-app.directive("eosKeypair", require("./directives/eos-keypair"));
+app.directive("sendTxModal", sendTxModal);
+app.directive("networkInfo", networkInfo);
+app.directive("txStatus", txStatus);
+app.directive("eosKeypair", eosKeypair);
+app.directive("swapOpenOrderForm", swapOpenOrderForm);
 app.directive("lookup", ["$rootScope", "lookupService", lookup]);
 app.directive("blockieAddress", blockiesDrtv);
 app.directive("cssThemeDrtv", cssThemeDrtv);
@@ -273,7 +283,11 @@ app.controller("viewWalletCtrl", [
     "coldStakingService",
     viewWalletCtrl
 ]);
-app.controller("txStatusCtrl", ["$scope", "$rootScope", txStatusCtrl]);
+app.controller("TxStatusController", [
+    "$scope",
+    "$rootScope",
+    TxStatusController
+]);
 app.controller("sendTxCtrl", [
     "$scope",
     "$sce",
@@ -313,7 +327,6 @@ app.controller("DexnsController", [
     "dexnsService",
     DexnsController
 ]);
-app.controller("footerCtrl", ["$scope", footerCtrl]);
 app.controller("offlineTxCtrl", [
     "$scope",
     "$sce",

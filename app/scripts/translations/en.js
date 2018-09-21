@@ -347,6 +347,7 @@ en.data = {
     /* full sentence reads "You are about to send "10 ETH" to address "0x1234". Are you sure you want to do this? " */
     SENDModal_Value: "Value",
     SENDModal_To: "To",
+    SENDModal_Content_2: "To",
     SENDModal_Content_3: "Are you sure you want to do this? ",
     SENDModal_Content_4:
         "NOTE: If you encounter an error, you most likely need to add ether to your account to cover the gas cost of sending tokens. Gas is paid in ether. ",

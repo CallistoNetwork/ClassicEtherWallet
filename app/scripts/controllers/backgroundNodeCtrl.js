@@ -34,16 +34,9 @@ const backgroundNodeCtrl = function($scope, $interval, backgroundNodeService) {
     function healthCheck() {
         const { lib } = nodes.nodeList[backgroundNodeService.backgroundNode];
 
-        return lib
-            .healthCheck()
-            .then(result => {
-                if (300 <= result.status) {
-                    _handle();
-                }
-            })
-            .catch(_handle);
+        return lib.healthCheck().catch(_handle);
 
-        function _handle() {
+        function _handle(err) {
             if (1 < backgroundNodeService.availableNodes.length) {
                 changeBackgroundNode();
             }

@@ -20,13 +20,22 @@ customNode.prototype.config = {
 };
 
 /*
-    @returns Promise<HttpResponse>
+    @returns Promise<>
  */
-customNode.prototype.healthCheck = function(timeout = 1000) {
-    return ajaxReq.http({
-        method: "OPTIONS",
-        url: this.SERVERURL,
-        timeout
+customNode.prototype.healthCheck = function() {
+    return new Promise((resolve, reject) => {
+        this.post(
+            {
+                method: "net_listening"
+            },
+            result => {
+                if (!(result.hasOwnProperty("result") && result.result)) {
+                    reject(new Error("error connecting to node"));
+                } else {
+                    resolve(result);
+                }
+            }
+        );
     });
 };
 

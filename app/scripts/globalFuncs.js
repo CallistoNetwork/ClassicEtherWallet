@@ -75,7 +75,7 @@ globalFuncs.getBlockie = function(address) {
         })
         .toDataURL();
 };
-globalFuncs.printPaperWallets = function(strJson, encFileName) {
+globalFuncs.printPaperWallets = function(strJson) {
     var walletWindow = window.open(
         "wallet",
         "_blank",
@@ -272,12 +272,7 @@ globalFuncs.stripTags = function(str) {
     }
     return str;
 };
-globalFuncs.checkAndRedirectHTTPS = function() {
-    var host = "myetherwallet.com";
-    var hostw = "https://www.myetherwallet.com";
-    var path = window.location.pathname;
-    if (host == window.location.host) window.location = hostw + path;
-};
+
 globalFuncs.isStrongPass = function(password) {
     return password.length > 8;
 };

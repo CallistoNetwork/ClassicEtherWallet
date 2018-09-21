@@ -5,8 +5,7 @@
         <tr ng-repeat="token in wallet.tokenObjs track by $index"
             ng-show="token.balance !== 0 && token.balance !== 'loading' || token.type !== 'default' || tokenVisibility === 'shown'">
             <td class="text-left">
-                <span class="'icon icon-' + {{token.getSymbol()}}"></span>
-                {{token.getSymbol()}}
+                <coin-icon icon="{{{{token.getSymbol()}}}}"></coin-icon>
             </td>
             <td class="mono wrap point text-right">
                 <img src="images/icon-remove.svg"

@@ -128,6 +128,8 @@ var backgroundNodeService = require("./services/backgroundNodeService");
 const eosKeypair = require("./directives/eos-keypair");
 const sendTxModal = require("./directives/sendTxModal");
 const validTxHash = require("./directives/validTxHash");
+const swapOpenOrderForm = require("./directives/swapOpenOrderForm");
+const swapInitForm = require("./directives/swapInitForm");
 const customNodeForm = require("./directives/customNodeForm");
 const officialityChecker = require("./directives/officiality-checker");
 const lookup = require("./directives/crosschain-lookup");
@@ -206,6 +208,7 @@ app.factory("coldStakingService", ["walletService", coldStakingService]);
 
 app.directive("coinIcon", coinIcon);
 app.directive("validTxHash", validTxHash);
+app.directive("swapInitForm", swapInitForm);
 app.directive("sendTransactionForm", sendTransactionFormDrtv);
 app.directive("officialityChecker", [officialityChecker]);
 app.directive("dexnsTokenRegistrationForm", dexnsTokenRegistrationForm);
@@ -215,11 +218,11 @@ app.directive("dexnsNameDisplay", [
     "globalService",
     dexnsNameDisplay
 ]);
-
 app.directive("sendTxModal", sendTxModal);
 app.directive("networkInfo", networkInfo);
 app.directive("txStatus", txStatus);
 app.directive("eosKeypair", eosKeypair);
+app.directive("swapOpenOrderForm", swapOpenOrderForm);
 app.directive("lookup", ["$rootScope", "lookupService", lookup]);
 app.directive("blockieAddress", blockiesDrtv);
 app.directive("cssThemeDrtv", cssThemeDrtv);

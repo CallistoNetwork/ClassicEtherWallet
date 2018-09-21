@@ -152,7 +152,7 @@
                             <li ng-repeat="(key, value) in nodeList track by $index + key"
                                 ng-click="globalService.dropdownNode = false; changeNode(key)"
                                 class="{{value.type.toLowerCase() + ' pointer'}}"
-                                ng-class="getKlass(value, $index)"
+                                ng-class="getBottomBorder(value, $index)"
                             >
                                 <a ng-class="{true:'active'}[curNode == key]"
                                 >

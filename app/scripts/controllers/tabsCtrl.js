@@ -145,11 +145,20 @@ var tabsCtrl = function(
 
     $scope.setGasPrice();
 
-    $scope.getKlass = function(value, index) {
+    /*
+
+        determines whether to apply grey border to bottom of list
+
+        @param _node nodes.nodeList[key]
+        @param index number index of the node in nodeList
+        @returns 'grey-bottom-border' if n + 1 node type differs than current node else null
+
+     */
+    $scope.getBottomBorder = function(_node, index) {
         const _nodeList = Object.values(nodes.nodeList);
         if (_nodeList.length <= index + 1) {
             return null;
-        } else if (_nodeList[index + 1].type !== value.type) {
+        } else if (_nodeList[index + 1].type !== _node.type) {
             return "grey-bottom-border";
         } else {
             return null;

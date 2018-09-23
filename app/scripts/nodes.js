@@ -3,7 +3,6 @@ var nodes = function() {};
 nodes.customNode = require("./nodeHelpers/customNode");
 nodes.infuraNode = require("./nodeHelpers/infura");
 nodes.etherscanNode = require("./nodeHelpers/etherscan");
-nodes.metamaskNode = require("./nodeHelpers/metamask");
 nodes.nodeTypes = {
     CLO: "CLO",
     CLOT: "Testnet CLO",
@@ -160,7 +159,8 @@ nodes.nodeList = {
     clo_mainnet: {
         name: "Callisto - CLO",
         blockExplorerTX: "https://explorer2.callisto.network/tx/[[txHash]]",
-        blockExplorerAddr: "https://explorer2.callisto.network/addr/[[address]]",
+        blockExplorerAddr:
+            "https://explorer2.callisto.network/addr/[[address]]",
         type: nodes.nodeTypes.CLO,
         eip155: true,
         chainId: 820,

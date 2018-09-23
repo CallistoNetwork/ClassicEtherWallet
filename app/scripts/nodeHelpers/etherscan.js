@@ -1,5 +1,4 @@
 "use strict";
-
 var config = {
     headers: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
@@ -20,6 +19,21 @@ var etherscan = function(network) {
 
     this.pendingPosts = [];
     this.config = config;
+
+    /*
+    @returns Promise<>
+ */
+    this.healthCheck = function() {
+        return new Promise((resolve, reject) => {
+            this.getCurrentBlock(function(result) {
+                if (result.error) {
+                    reject(result);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    };
 
     this.getCurrentBlock = function(callback) {
         this.post(

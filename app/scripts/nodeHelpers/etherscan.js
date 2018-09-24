@@ -1,6 +1,6 @@
 "use strict";
-
-var config = {
+const apiKey = "DSH5B24BQYKD1AD8KUCDY3SAQSS6ZAU175";
+const config = {
     headers: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
     }
@@ -20,6 +20,21 @@ var etherscan = function(network) {
 
     this.pendingPosts = [];
     this.config = config;
+
+    /*
+    @returns Promise<>
+ */
+    this.healthCheck = function() {
+        return new Promise((resolve, reject) => {
+            this.getCurrentBlock(function(result) {
+                if (result.error) {
+                    reject(result);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    };
 
     this.getCurrentBlock = function(callback) {
         this.post(
@@ -195,7 +210,7 @@ var etherscan = function(network) {
         // NOTE: this == ajaxReq careful w/ this.pendingPosts
 
         var data = this.pendingPosts[0].data;
-        data.apikey = "DSH5B24BQYKD1AD8KUCDY3SAQSS6ZAU175";
+        data.apikey = apiKey;
         var callback = this.pendingPosts[0].callback;
 
         var parentObj = this;

@@ -44,11 +44,7 @@ uiFuncs.isTxDataValid = function(txData) {
 };
 
 uiFuncs.signTxTrezor = function(rawTx, { path }) {
-    function checkAndRecalcSig({
-        error = null,
-        success,
-        payload: { v, r, s }
-    }) {
+    function localCallback({ error = null, success, payload: { v, r, s } }) {
         if (!success) {
             throw error;
         }
@@ -75,7 +71,7 @@ uiFuncs.signTxTrezor = function(rawTx, { path }) {
         transaction: rawTx
     };
     return TrezorConnect.ethereumSignTransaction(options).then(result =>
-        checkAndRecalcSig(result)
+        localCallback(result)
     );
 };
 

@@ -319,6 +319,7 @@ const decryptWalletCtrl = function(
         TrezorConnect.getPublicKey({ path })
             .then(
                 ({
+                    success,
                     payload: {
                         path,
                         serializedPath,
@@ -327,9 +328,13 @@ const decryptWalletCtrl = function(
                         childNum,
                         publicKey,
                         fingerprint,
-                        depth
+                        depth,
+                        error = ""
                     }
                 }) => {
+                    if (!success) {
+                        throw error;
+                    }
                     $scope.HWWalletCreate(
                         publicKey,
                         chainCode,

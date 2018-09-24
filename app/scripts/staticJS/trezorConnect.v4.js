@@ -46,7 +46,7 @@ var POPUP_INIT_TIMEOUT = 15000;
 /**
  * Public API.
  */
-function TrezorConnect() {
+function TrezorConnectV4() {
     var manager = new PopupManager();
 
     /**
@@ -404,7 +404,7 @@ function TrezorConnect() {
             callback = window[callback];
         }
         if (!callback) {
-            throw new TypeError("TrezorConnect: login callback not found");
+            throw new TypeError("TrezorConnectV4: login callback not found");
         }
         manager.sendWithChannel(
             _fwStrFix(
@@ -452,7 +452,7 @@ function TrezorConnect() {
             opt_coin = "Bitcoin";
         }
         if (!callback) {
-            throw new TypeError("TrezorConnect: callback not found");
+            throw new TypeError("TrezorConnectV4: callback not found");
         }
         manager.sendWithChannel(
             _fwStrFix(
@@ -487,7 +487,7 @@ function TrezorConnect() {
             path = parseHDPath(path);
         }
         if (!callback) {
-            throw new TypeError("TrezorConnect: callback not found");
+            throw new TypeError("TrezorConnectV4: callback not found");
         }
         manager.sendWithChannel(
             _fwStrFix(
@@ -525,7 +525,7 @@ function TrezorConnect() {
             opt_coin = "Bitcoin";
         }
         if (!callback) {
-            throw new TypeError("TrezorConnect: callback not found");
+            throw new TypeError("TrezorConnectV4: callback not found");
         }
         manager.sendWithChannel(
             _fwStrFix(
@@ -560,7 +560,7 @@ function TrezorConnect() {
         requiredFirmware
     ) {
         if (!callback) {
-            throw new TypeError("TrezorConnect: callback not found");
+            throw new TypeError("TrezorConnectV4: callback not found");
         }
         manager.sendWithChannel(
             _fwStrFix(
@@ -603,19 +603,19 @@ function TrezorConnect() {
             path = parseHDPath(path);
         }
         if (typeof value !== "string") {
-            throw new TypeError("TrezorConnect: Value must be a string");
+            throw new TypeError("TrezorConnectV4: Value must be a string");
         }
         if (!/^[0-9A-Fa-f]*$/.test(value)) {
-            throw new TypeError("TrezorConnect: Value must be hexadecimal");
+            throw new TypeError("TrezorConnectV4: Value must be hexadecimal");
         }
         if (value.length % 32 !== 0) {
             // 1 byte == 2 hex strings
             throw new TypeError(
-                "TrezorConnect: Value length must be multiple of 16 bytes"
+                "TrezorConnectV4: Value length must be multiple of 16 bytes"
             );
         }
         if (!callback) {
-            throw new TypeError("TrezorConnect: callback not found");
+            throw new TypeError("TrezorConnectV4: callback not found");
         }
         manager.sendWithChannel(
             _fwStrFix(
@@ -687,11 +687,11 @@ function TrezorConnect() {
     this.pushTransaction = function(rawTx, callback) {
         if (!/^[0-9A-Fa-f]*$/.test(rawTx)) {
             throw new TypeError(
-                "TrezorConnect: Transaction must be hexadecimal"
+                "TrezorConnectV4: Transaction must be hexadecimal"
             );
         }
         if (!callback) {
-            throw new TypeError("TrezorConnect: callback not found");
+            throw new TypeError("TrezorConnectV4: callback not found");
         }
 
         manager.sendWithChannel(
@@ -765,7 +765,7 @@ function TrezorConnect() {
         '<style>@import url("@connect_path@/login_buttons.css")</style>';
 
     var LOGIN_ONCLICK =
-        "TrezorConnect.requestLogin(" +
+        "TrezorConnectV4.requestLogin(" +
         "'@hosticon@','@challenge_hidden@','@challenge_visual@','@callback@'" +
         ")";
 
@@ -786,7 +786,7 @@ function TrezorConnect() {
     /**
      * Find <trezor:login> elements and replace them with login buttons.
      * It's not required to use these special elements, feel free to call
-     * `TrezorConnect.requestLogin` directly.
+     * `TrezorConnectV4.requestLogin` directly.
      */
     this.renderLoginButtons = function() {
         var elements = document.getElementsByTagName("trezor:login");
@@ -1134,7 +1134,7 @@ function PopupManager() {
     };
 }
 
-var connect = new TrezorConnect();
+var connect = new TrezorConnectV4();
 
 if (!IS_CHROME_APP && !DISABLE_LOGIN_BUTTONS) {
     connect.renderLoginButtons();

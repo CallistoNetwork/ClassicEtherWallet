@@ -1,6 +1,6 @@
 "use strict";
 
-// const {TrezorConnect} = require("./staticJS/trezorConnect");
+const TrezorConnect = require("trezor-connect").default;
 
 const ethUtil = require("ethereumjs-util");
 
@@ -274,8 +274,7 @@ uiFuncs.genTxWithInfo = function(data, callback = console.log) {
                 callback(result);
             })
             .catch(err => {
-                console.log("sing err", err);
-                callback({ isError: true, error: err });
+                callback({ isError: true, error: "User cancelled tx" });
             });
     } else if (data.hwType === "web3") {
         // for web3, we dont actually sign it here

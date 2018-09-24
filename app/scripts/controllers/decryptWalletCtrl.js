@@ -281,20 +281,7 @@ const decryptWalletCtrl = function(
             $scope.$apply();
         }
     };
-    $scope.trezorCallback = function(response) {
-        if (response.success) {
-            $scope.HWWalletCreate(
-                response.publicKey,
-                response.chainCode,
-                "trezor",
-                $scope.getTrezorPath()
-            );
-        } else {
-            $scope.trezorError = true;
-            $scope.trezorErrorString = response.error;
-            $scope.$apply();
-        }
-    };
+
     $scope.digitalBitboxCallback = function(result, error) {
         $scope.HDWallet.digitalBitboxSecret = "";
         if (typeof result != "undefined") {
@@ -328,8 +315,39 @@ const decryptWalletCtrl = function(
     };
     $scope.scanTrezor = function() {
         // trezor is using the path without change level id
-        var path = $scope.getTrezorPath();
-        TrezorConnect.getXPubKey(path, $scope.trezorCallback, "1.4.0");
+        const path = $scope.getTrezorPath();
+        TrezorConnect.getPublicKey({ path })
+            .then(
+                ({
+                    success,
+                    payload: {
+                        path,
+                        serializedPath,
+                        xpub,
+                        chainCode,
+                        childNum,
+                        publicKey,
+                        fingerprint,
+                        depth,
+                        error = ""
+                    }
+                }) => {
+                    if (!success) {
+                        throw error;
+                    }
+                    $scope.HWWalletCreate(
+                        publicKey,
+                        chainCode,
+                        "trezor",
+                        $scope.getTrezorPath()
+                    );
+                }
+            )
+            .catch(err => {
+                $scope.trezorError = true;
+                $scope.trezorErrorString = err;
+                $scope.$apply();
+            });
     };
 
     $scope.getLedgerPath = $scope.getTrezorPath = function() {

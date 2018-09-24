@@ -1,6 +1,6 @@
 "use strict";
 
-const { TrezorConnect } = require("./staticJS/trezorConnect");
+const TrezorConnect = require("trezor-connect").default;
 
 const ethUtil = require("ethereumjs-util");
 
@@ -43,43 +43,36 @@ uiFuncs.isTxDataValid = function(txData) {
     return txData;
 };
 
-uiFuncs.signTxTrezor = function(rawTx, { path }, callback = console.log) {
-    function localCallback(result) {
-        if (!result.success) {
-            callback({
-                isError: true,
-                error: result.error
-            });
+uiFuncs.signTxTrezor = function(rawTx, { path }) {
+    function localCallback({ error = null, success, payload: { v, r, s } }) {
+        if (!success) {
+            throw error;
         }
 
+        // see https://github.com/trezor/connect/blob/develop/docs/methods/ethereumSignTransaction.md#migration-from-older-version
         // check the returned signature_v and recalc signature_v if it needed
         // see also https://github.com/trezor/trezor-mcu/pull/399
-        if (result.v <= 1) {
-            // for larger chainId, only signature_v returned. simply recalc signature_v
-            result.v += 2 * rawTx.chainId + 35;
-        }
+        // if (v <= 1) {
+        //     // for larger chainId, only signature_v returned. simply recalc signature_v
+        //     v += 2 * rawTx.chainId + 35;
+        // }
 
-        rawTx.v = "0x" + ethFuncs.decimalToHex(result.v);
-        rawTx.r = "0x" + result.r;
-        rawTx.s = "0x" + result.s;
+        rawTx.v = ethFuncs.sanitizeHex(ethFuncs.decimalToHex(v));
+        rawTx.r = ethFuncs.sanitizeHex(r);
+        rawTx.s = ethFuncs.sanitizeHex(s);
         const eTx = new ethUtil.Tx(rawTx);
         rawTx.rawTx = JSON.stringify(rawTx);
-        rawTx.signedTx = "0x" + eTx.serialize().toString("hex");
+        rawTx.signedTx = ethFuncs.sanitizeHex(eTx.serialize().toString("hex"));
         rawTx.isError = false;
-
-        callback(rawTx);
+        return rawTx;
     }
 
-    TrezorConnect.signEthereumTx(
+    const options = {
         path,
-        ethFuncs.getNakedAddress(rawTx.nonce),
-        ethFuncs.getNakedAddress(rawTx.gasPrice),
-        ethFuncs.getNakedAddress(rawTx.gasLimit),
-        ethFuncs.getNakedAddress(rawTx.to),
-        ethFuncs.getNakedAddress(rawTx.value),
-        ethFuncs.getNakedAddress(rawTx.data),
-        rawTx.chainId, // chain id for EIP-155 - is only used in fw 1.4.2 and newer, older will ignore it
-        localCallback
+        transaction: rawTx
+    };
+    return TrezorConnect.ethereumSignTransaction(options).then(result =>
+        localCallback(result)
     );
 };
 
@@ -160,20 +153,6 @@ uiFuncs.signTxDigitalBitbox = function(
     );
     const app = new DigitalBitboxEth(txData.hwTransport, "");
     app.signTransaction(txData.path, eTx, localCallback);
-};
-uiFuncs.trezorUnlock = function() {
-    return new Promise((resolve, reject) => {
-        TrezorConnect.open(function(error) {
-            if (error) {
-                reject({
-                    isError: true,
-                    error: error
-                });
-            } else {
-                resolve(true);
-            }
-        });
-    });
 };
 
 /*
@@ -282,15 +261,13 @@ uiFuncs.genTxWithInfo = function(data, callback = console.log) {
             );
         });
     } else if (data.hwType === "trezor") {
-        // https://github.com/trezor/connect/blob/v4/examples/signtx-ethereum.html
-
         uiFuncs
-            .trezorUnlock()
-            .then(() => {
-                uiFuncs.signTxTrezor(rawTx, data, callback);
+            .signTxTrezor(rawTx, data)
+            .then(result => {
+                callback(result);
             })
             .catch(err => {
-                callback(err);
+                callback({ isError: true, error: "User cancelled tx" });
             });
     } else if (data.hwType === "web3") {
         // for web3, we dont actually sign it here

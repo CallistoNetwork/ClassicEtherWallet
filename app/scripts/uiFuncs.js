@@ -261,16 +261,9 @@ uiFuncs.genTxWithInfo = function(data, callback = console.log) {
             );
         });
     } else if (data.hwType === "trezor") {
-        // https://github.com/trezor/connect/blob/v4/examples/signtx-ethereum.html
-
-        function mapTxToCb(tx) {
-            return Object.assign({}, { signedTx: tx, isError: false });
-        }
-
         uiFuncs
             .signTxTrezor(rawTx, data)
             .then(result => {
-                console.log("sign", result);
                 callback(result);
             })
             .catch(err => {

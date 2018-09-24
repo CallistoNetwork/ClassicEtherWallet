@@ -359,6 +359,7 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
                 if (!$scope.$$phase) $scope.$apply();
             })
             .catch(err => {
+                uiFuncs.notifier.danger(err);
                 $scope.showRaw = false;
             });
     };

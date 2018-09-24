@@ -49,6 +49,7 @@ uiFuncs.signTxTrezor = function(rawTx, { path }) {
             throw error;
         }
 
+        // see https://github.com/trezor/connect/blob/develop/docs/methods/ethereumSignTransaction.md#migration-from-older-version
         // check the returned signature_v and recalc signature_v if it needed
         // see also https://github.com/trezor/trezor-mcu/pull/399
         // if (v <= 1) {

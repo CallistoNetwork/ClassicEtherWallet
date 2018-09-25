@@ -28,6 +28,7 @@ var format = require("string-format");
 window.format = format;
 var browser = require("detect-browser");
 window.browser = browser;
+const trezorDeviceListener = require("./trezor.deviceListener");
 
 // fixme: window variables should be accessed as services for dependency injection
 
@@ -390,3 +391,5 @@ if (IS_CX) {
         cxDecryptWalletCtrl
     ]);
 }
+
+trezorDeviceListener();

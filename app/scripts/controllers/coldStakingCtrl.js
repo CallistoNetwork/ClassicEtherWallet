@@ -75,7 +75,7 @@ const coldStakingCtrl = function(
                 return uiFuncs.sendTxContract(coldStakingService.contract, tx);
             })
             .catch(err => {
-                conosle.error(err);
+                uiFuncs.notifier.danger(err);
             })
             .finally(() => modalService.startStakingModal.close());
     };
@@ -84,7 +84,7 @@ const coldStakingCtrl = function(
         if (!coldStakingService.userCanWithdraw()) {
             // fixme: translation
 
-            $scope.notifier.danger("ERROR: Cannot withdraw");
+            uiFuncs.notifier.danger("ERROR: Cannot withdraw");
 
             return false;
         }

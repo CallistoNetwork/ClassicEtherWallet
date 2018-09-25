@@ -82,6 +82,7 @@ en.data = {
     x_TransHash: "Transaction Hash",
     x_TXFee: "TX Fee",
     x_TxHash: "TX Hash",
+    x_TxBlockNumber: "Tx Block Number",
 
     /* Check TX Status */
     NAV_CheckTxStatus: "Check TX Status",

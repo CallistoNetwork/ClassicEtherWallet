@@ -1,14 +1,14 @@
 <div
-    ng-if="globalService.currentTab === globalService.tabs.networkInfo.id">
-
-    <h1>{{ajaxReq.type}} Network Info</h1>
+    ng-if="globalService.currentTab === globalService.tabs.networkInfo.id"
+>
+    <h1>
+        <span><coin-icon icon="{{ajaxReq.type.toLowerCase()}}"></coin-icon></span>
+        <span translate="NAV_Network_Info">Network Info</span>
+    </h1>
 
     <div ng-switch="ajaxReq.type">
-
         <div ng-switch-when="CLO">
-
             <main class="tab-pane">
-
                 <article>
                     <h1 class="text-center" translate="OC_OfficialityChecker">Callisto Officiality
                         Checker</h1>
@@ -21,6 +21,9 @@
                             <form officiality-checker name="officialityChecker" novalidate>
                             </form>
                         </div>
+                    </section>
+                </article>
+            </main>
         </div>
     </div>
 </div>

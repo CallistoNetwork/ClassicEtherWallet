@@ -28,7 +28,7 @@
 
 
   <!-- Section 2: Current State -->
-  <section class="block txstatus__2" ng-show="txInfo.status==txStatus.mined || txInfo.status==txStatus.notFound || txInfo.status==txStatus.found">
+  <section class="block" ng-show="txInfo.status==txStatus.mined || txInfo.status==txStatus.notFound || txInfo.status==txStatus.found">
 
     <div class="cont-md" ng-show="txInfo.status == txStatus.mined">
       <h3 class="text-success" translate="tx_FoundOnChain"> Transaction Found </h3>
@@ -62,7 +62,7 @@
     <div ng-show="txInfo.status == txStatus.found || txInfo.status == txStatus.mined">
     <h4 translate="tx_Details" class="cont-md">Transaction Details</h4>
     <br />
-    <table class="table table-striped txstatus__2 cont-md"> <!-- ng-show="tx.status=='foundOnChain' || foundInPending'"-->
+    <table class="table table-striped cont-md"> <!-- ng-show="tx.status=='foundOnChain' || foundInPending'"-->
       <tbody>
         <tr>
           <td translate="x_TxHash">TX Hash</td>

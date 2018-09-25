@@ -17,6 +17,8 @@ module.exports = function networkInfo() {
                 const explorerURL = new URL(ajaxReq.blockExplorerTX);
                 return explorerURL.origin;
             };
+
+            scope.coinPriceService = window.coinPriceService;
         }
     };
 };

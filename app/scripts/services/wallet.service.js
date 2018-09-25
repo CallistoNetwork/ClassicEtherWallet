@@ -1,5 +1,5 @@
 "use strict";
-var walletService = function() {
+const walletService = function() {
     return {
         wallet: null,
         password: "",
@@ -21,8 +21,7 @@ var walletService = function() {
         gbpPrice: null,
         eurPrice: null,
         btcPrice: null,
-        chfPrice: null,
-        repPrice: null
+        chfPrice: null
     };
 };
 module.exports = walletService;

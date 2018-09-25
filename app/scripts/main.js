@@ -37,9 +37,10 @@ const trezorDeviceListener = require("./trezor.deviceListener");
 var nodes = require("./nodes");
 window.nodes = nodes;
 
-const coinPrice = require("./coinPrice");
+// Wallet loads coinPriceService from window, or would make angular service
+const coinPriceService = require("./services/coinPrice.service");
 
-window._coinPrice = coinPrice;
+window.coinPriceService = new coinPriceService();
 
 var Wallet = require("./myetherwallet");
 window.Wallet = Wallet;
@@ -60,10 +61,6 @@ var ethFuncs = require("./ethFuncs");
 window.ethFuncs = ethFuncs;
 var Validator = require("./validator");
 window.Validator = Validator;
-
-var changeNow = require("./changeNow");
-
-window.changeNow = changeNow;
 
 var ens = require("./ens");
 window.ens = ens;
@@ -115,15 +112,15 @@ var messagesControl = require("./controllers/messagesCtrl");
 var switchNetworkCtrl = require("./controllers/switchNetworkCtrl");
 
 // SERVICES
-
-var lookupService = require("./services/lookup");
-var globalService = require("./services/globalService");
-var coldStakingService = require("./services/coldStakingService");
-var modalService = require("./services/modalService");
-var walletService = require("./services/walletService");
-var messageService = require("./services/messageService");
-var dexnsService = require("./services/dexnsService");
-var backgroundNodeService = require("./services/backgroundNodeService");
+const changeNowService = require("./services/changeNow.service");
+const lookupService = require("./services/lookup.service");
+const globalService = require("./services/global.service");
+const coldStakingService = require("./services/coldStaking.service");
+const modalService = require("./services/modal.service");
+const walletService = require("./services/wallet.service");
+const messageService = require("./services/message.service");
+const dexnsService = require("./services/dexns.service");
+const backgroundNodeService = require("./services/backgroundNode.service");
 
 // DIRECTIVES
 const eosKeypair = require("./directives/eos-keypair");
@@ -144,7 +141,7 @@ const messagesOverviewDrtv = require("./directives/messagesOverviewDrtv");
 const cssThemeDrtv = require("./directives/cssThemeDrtv");
 const cxWalletDecryptDrtv = require("./directives/cxWalletDecryptDrtv");
 const fileReaderDrtv = require("./directives/fileReaderDrtv");
-const transactionCost = require("./directives/transactionCostDtrv");
+const transactionCost = require("./directives/transactionCost");
 const balanceDrtv = require("./directives/balanceDrtv");
 const arrayInputDrtv = require("./directives/arrayInputDrtv");
 const newMessagesDrtv = require("./directives/newMessagesDrtv");
@@ -196,7 +193,7 @@ app.factory("globalService", [
 app.factory("walletService", walletService);
 app.factory("backgroundNodeService", backgroundNodeService);
 
-app.factory("changeNowService", changeNow);
+app.factory("changeNowService", changeNowService);
 app.factory("modalService", modalService);
 
 app.factory("messageService", messageService);
@@ -258,6 +255,7 @@ app.controller("tabsCtrl", [
     "walletService",
     "$translate",
     "$sce",
+    "$interval",
     tabsCtrl
 ]);
 app.controller("switchNetworkCtrl", [
@@ -301,7 +299,7 @@ app.controller("swapCtrl", [
     "$scope",
     "$rootScope",
     "$interval",
-    "walletService",
+    "changeNowService",
     swapCtrl
 ]);
 app.controller("signMsgCtrl", ["$scope", "$sce", "walletService", signMsgCtrl]);

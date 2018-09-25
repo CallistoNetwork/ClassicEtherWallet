@@ -1,6 +1,6 @@
 "use strict";
 
-var transactionCostDrtv = function() {
+module.exports = function transactionCost() {
     return {
         //restrict: "E",
         template: require("./transactionCost.html"),
@@ -13,26 +13,15 @@ var transactionCostDrtv = function() {
                 // coin to look up -> ETC
                 const nodeType = $scope.node.type;
 
-                if ($scope.coinPrices.hasOwnProperty(nodeType)) {
-                    handleCoinPriceResult($scope.coinPrices[nodeType]);
-                } else {
-                    _coinPrice(nodeType)
-                        .then(function(result) {
-                            if (!result.error) {
-                                handleCoinPriceResult(result);
-                            } else {
-                                $scope.txCostEther = 0;
-                            }
-                        })
-                        .catch(err => {
-                            $scope.txCostEther = 0;
-                        });
-                }
+                coinPriceService
+                    .getCoinPrice(nodeType)
+                    .then(handleCoinPriceResult)
+                    .catch(err => {
+                        $scope.txCostEther = 0;
+                    });
 
                 function handleCoinPriceResult(result) {
                     const { gasLimit } = $scope.tx;
-
-                    $scope.coinPrices[$scope.node.type] = result;
 
                     $scope.gasPrice = etherUnits.toWei(
                         globalFuncs.localStorage.getItem("gasPrice") || 20,
@@ -85,4 +74,3 @@ var transactionCostDrtv = function() {
         }
     };
 };
-module.exports = transactionCostDrtv;

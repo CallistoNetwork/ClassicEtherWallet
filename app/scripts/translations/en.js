@@ -3,6 +3,8 @@
 var en = function() {};
 en.code = "en";
 en.data = {
+    GEN_Passwords_Must_Match: "Passwords must match",
+    GEN_Password_Length: "Password length must be greater than 8 characters",
     CUSTOM_NODE_CONNECT_DOWNLOAD:
         "download the ClassicEtherWallet repo & run it locally",
     LINK: "Link",
@@ -80,6 +82,7 @@ en.data = {
     x_TransHash: "Transaction Hash",
     x_TXFee: "TX Fee",
     x_TxHash: "TX Hash",
+    x_TxBlockNumber: "Tx Block Number",
 
     /* Check TX Status */
     NAV_CheckTxStatus: "Check TX Status",
@@ -342,9 +345,10 @@ en.data = {
     SEND_trans: "Send Transaction ",
     SENDModal_Title: "Confirm Transaction",
     Warning: "Warning!",
-    /* full sentence reads "You are about to send "10 ETH" to address "0x1234". Are you sure you want to do this? " */
     SENDModal_Value: "Value",
     SENDModal_To: "To",
+    /* full sentence reads "You are about to send "10 ETH" to address "0x1234". Are you sure you want to do this? " */
+    SENDModal_Content_1: "You are about to send ",
     SENDModal_Content_2: "To",
     SENDModal_Content_3: "Are you sure you want to do this? ",
     SENDModal_Content_4:
@@ -423,6 +427,7 @@ en.data = {
     NODE_Name: "Node Name",
     NODE_Port: "Node Port",
     NODE_CTA: "Save & Use Custom Node",
+    NODE_Add_Custom: "Add Custom Node",
 
     /* Swap / Exchange */
     SWAP_rates: "Current Rates ",

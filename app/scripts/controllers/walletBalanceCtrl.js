@@ -342,7 +342,10 @@ var walletBalanceCtrl = function(
     };
 
     $scope.displayOnTrezor = function() {
-        TrezorConnect.ethereumGetAddress($scope.wallet.path, function() {});
+        TrezorConnect.ethereumGetAddress({
+            path: $scope.wallet.path,
+            showOnTrezor: true
+        });
     };
 
     $scope.showDisplayOnLedger = function() {

@@ -1,20 +1,22 @@
 "use strict";
 
-var swapCtrl = function($scope, $rootScope, $interval) {
-    const bitcoinExplorer = `https://blockchain.info/tx/[[txHash]]`;
+const bitcoinExplorer = `https://blockchain.info/tx/[[txHash]]`;
+const lStorageKey = "swapOrder";
+// sort swapOrder coins
+const popularCoins = ["ETC", "CLO", "BTC", "XMR", "ZEC"];
 
-    const lStorageKey = "swapOrder";
+//fixme
 
-    // sort swapOrder coins
-    const popularCoins = ["ETC", "CLO", "BTC", "XMR", "ZEC"];
+const ethCoins = Object.keys(nodes.alternativeBalance).concat("CLO");
 
-    //fixme
-
-    const ethCoins = Object.keys(nodes.alternativeBalance).concat("CLO");
-
-    // priceTicker in page header
-    const priceTickers = ["ETC", "CLO", "ETH"];
-
+// priceTicker in page header
+const priceTickers = ["ETC", "CLO", "ETH"];
+const SwapCryptoCurrenciesController = function(
+    $scope,
+    $rootScope,
+    $interval,
+    changeNowService
+) {
     let priceTicker = {};
 
     priceTickers.forEach(ticker => {
@@ -55,7 +57,7 @@ var swapCtrl = function($scope, $rootScope, $interval) {
     `;
 
     $scope.initChangeNow = async function() {
-        const currencies = await $scope.changeNow.getCurrencies();
+        const currencies = await changeNowService.getCurrencies();
 
         if (currencies) {
             $scope.availableCoins = currencies.sort($scope.coinOrder);
@@ -64,7 +66,7 @@ var swapCtrl = function($scope, $rootScope, $interval) {
 
             return Promise.all(
                 priceTickers.map(async ticker => {
-                    const result = await $scope.changeNow.exchangeAmount(
+                    const result = await changeNowService.exchangeAmount(
                         1,
                         "btc",
                         ticker
@@ -108,7 +110,7 @@ var swapCtrl = function($scope, $rootScope, $interval) {
             availableCoins: [],
             parentTxConfig: {},
             showedMinMaxError: false,
-            changeNow: new changeNow(),
+            changeNow: changeNowService,
             priceTicker,
             progressCheck: null,
             input: {
@@ -256,8 +258,8 @@ var swapCtrl = function($scope, $rootScope, $interval) {
 
         const handleEstimate =
             $scope.stage === 1
-                ? $scope.changeNow.estimateConversion(toCoin, fromCoin, amount)
-                : $scope.changeNow.exchangeAmount(amount, fromCoin, toCoin);
+                ? changeNowService.estimateConversion(toCoin, fromCoin, amount)
+                : changeNowService.exchangeAmount(amount, fromCoin, toCoin);
 
         return handleEstimate.then(result => {
             if (result) {
@@ -292,7 +294,7 @@ var swapCtrl = function($scope, $rootScope, $interval) {
         $scope.stage = 2;
         $scope.updateEstimate($scope.swapOrder.isFrom);
 
-        $scope.changeNow
+        changeNowService
             .minAmount($scope.swapOrder.fromCoin, $scope.swapOrder.toCoin)
             .then(result => {
                 if (result) {
@@ -320,11 +322,11 @@ var swapCtrl = function($scope, $rootScope, $interval) {
         }
         return tempArr;
     };
-    var isStorageOrderExists = function() {
-        var order = globalFuncs.localStorage.getItem(lStorageKey, null);
+    const isStorageOrderExists = function() {
+        const order = globalFuncs.localStorage.getItem(lStorageKey, null);
         return order && Validator.isJSON(order);
     };
-    var setOrderFromStorage = function() {
+    const setOrderFromStorage = function() {
         const order = JSON.parse(
             globalFuncs.localStorage.getItem(lStorageKey, null)
         );
@@ -384,7 +386,7 @@ var swapCtrl = function($scope, $rootScope, $interval) {
         await handleProgressCheck();
 
         async function handleProgressCheck() {
-            const data = await $scope.changeNow.transactionStatus(
+            const data = await changeNowService.transactionStatus(
                 $scope.orderResult.id
             );
 
@@ -514,7 +516,7 @@ var swapCtrl = function($scope, $rootScope, $interval) {
                 address: toAddress
             };
 
-            const orderResult = await $scope.changeNow.openOrder(order);
+            const orderResult = await changeNowService.openOrder(order);
 
             if (orderResult) {
                 $scope.$apply(function() {
@@ -575,4 +577,4 @@ var swapCtrl = function($scope, $rootScope, $interval) {
 
     main();
 };
-module.exports = swapCtrl;
+module.exports = SwapCryptoCurrenciesController;

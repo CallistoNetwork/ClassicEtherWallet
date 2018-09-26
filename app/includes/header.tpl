@@ -25,6 +25,17 @@
         </div>
     </div>
     }
+
+    <article class="modal fade" id="customNodeModal" tabindex="-1">
+        <section class="modal-dialog">
+            <section class="modal-content">
+                <form name="customNodeForm" custom-node-form ng-submit="saveCustomNode()">
+                </form>
+            </section>
+        </section>
+    </article>
+
+
     <section class="bg-gradient header-branding">
         <section class="container">
             @@if (site === 'cew' ) {
@@ -105,7 +116,7 @@
               <p class="small" style="white-space:normal;font-weight:300;margin: 2rem 0 0;"
                  translate="GAS_PRICE_Desc"></p>
               <a class="small" translate="x_ReadMore"
-                 href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-gas" target="_blank"
+                 href="https://support.ethereumcommonwealth.io/gas/what-is-gas-ethereum.html" target="_blank"
                  rel="noopener"></a>
             </div>
           </ul>
@@ -136,20 +147,31 @@
                             <small>({{curNode.service}})</small>
                             <i class="caret"></i>
                         </a>
+
                         <ul class="dropdown-menu" ng-show="globalService.dropdownNode">
-                            <li ng-repeat="(key, value) in nodeList"
-                                ng-click="globalService.dropdownNode = false; changeNode(key)">
-                                <a ng-class="{true:'active'}[curNode == key]">
+                            <li ng-repeat="(key, value) in nodeList track by $index + key"
+                                ng-click="globalService.dropdownNode = false; changeNode(key)"
+                                class="{{value.type.toLowerCase() + ' pointer'}}"
+                                ng-class="getBottomBorder(value, $index)"
+                            >
+                                <a ng-class="{true:'active'}[curNode == key]"
+                                >
                                     {{value.name}}
                                     <small> ({{value.service}})</small>
-                                    <img ng-show="value.service=='Custom'" src="images/icon-remove.svg"
+                                    <img ng-show="value.service === 'Custom'"
+                                         src="images/icon-remove.svg"
                                          class="node-remove"
                                          title="Remove Custom Node" ng-click="removeNodeFromLocal(value.name)"/>
-                                </a></li>
-                            <li><a
-                                ng-click="customNodeModal.open(); globalService.dropdownNode = !globalService.dropdownNode;">
-                                Add Custom
-                                Node </a></li>
+                                </a>
+
+                            </li>
+                            <li
+                                ng-click="customNodeModal.open(); globalService.dropdownNode = !globalService.dropdownNode;"
+                            >
+                                <a
+                                    translate="NODE_Add_Custom"
+                                >Add Custom Node </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -188,14 +210,6 @@
            ng-mouseover="scrollHoverIn(false,2);" ng-mouseleave="scrollHoverOut()">&#187;</a>
     </nav>
 
-    <article class="modal fade" id="customNodeModal" tabindex="-1">
-        <section class="modal-dialog">
-            <section class="modal-content">
-                <form name="customNodeForm" custom-node-form ng-submit="saveCustomNode()">
-                </form>
-            </section>
-        </section>
-    </article>
 
 
 </header>

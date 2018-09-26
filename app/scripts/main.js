@@ -28,6 +28,7 @@ var format = require("string-format");
 window.format = format;
 var browser = require("detect-browser");
 window.browser = browser;
+const trezorDeviceListener = require("./trezor.deviceListener");
 
 // fixme: window variables should be accessed as services for dependency injection
 
@@ -36,9 +37,10 @@ window.browser = browser;
 var nodes = require("./nodes");
 window.nodes = nodes;
 
-const coinPrice = require("./coinPrice");
+// Wallet loads coinPriceService from window, or would make angular service
+const coinPriceService = require("./services/coinPrice.service");
 
-window._coinPrice = coinPrice;
+window.coinPriceService = new coinPriceService();
 
 var Wallet = require("./myetherwallet");
 window.Wallet = Wallet;
@@ -60,10 +62,6 @@ window.ethFuncs = ethFuncs;
 var Validator = require("./validator");
 window.Validator = Validator;
 
-var changeNow = require("./changeNow");
-
-window.changeNow = changeNow;
-
 var ens = require("./ens");
 window.ens = ens;
 var translate = require("./translations/translate.js");
@@ -75,13 +73,13 @@ if (IS_CX) {
     var u2f = require("./staticJS/u2f-api");
     var ledger3 = require("./staticJS/ledger3");
     var ledgerEth = require("./staticJS/ledger-eth");
-    var trezorConnect = require("./staticJS/trezorConnect");
+    const trezorConnect = require("trezor-connect").default;
     var digitalBitboxUsb = require("./staticJS/digitalBitboxUsb");
     var digitalBitboxEth = require("./staticJS/digitalBitboxEth");
     window.u2f = u2f;
     window.Ledger3 = ledger3;
     window.ledgerEth = ledgerEth;
-    window.TrezorConnect = trezorConnect.TrezorConnect;
+    window.TrezorConnect = trezorConnect;
     window.DigitalBitboxUsb = digitalBitboxUsb;
     window.DigitalBitboxEth = digitalBitboxEth;
 }
@@ -90,47 +88,39 @@ window.CustomGasMessages = CustomGasMessages;
 
 // CONTROLLERS
 
-const tabsCtrl = require("./controllers/tabsCtrl");
-const viewCtrl = require("./controllers/viewCtrl");
-const coldStakingCtrl = require("./controllers/coldStakingCtrl");
-const walletGenCtrl = require("./controllers/walletGenCtrl");
-const bulkGenCtrl = require("./controllers/bulkGenCtrl");
-const decryptWalletCtrl = require("./controllers/decryptWalletCtrl");
-const viewWalletCtrl = require("./controllers/viewWalletCtrl");
+var tabsCtrl = require("./controllers/tabsCtrl");
+var viewCtrl = require("./controllers/viewCtrl");
+var coldStakingCtrl = require("./controllers/coldStakingCtrl");
+var walletGenCtrl = require("./controllers/walletGenCtrl");
+var bulkGenCtrl = require("./controllers/bulkGenCtrl");
+var decryptWalletCtrl = require("./controllers/decryptWalletCtrl");
+var viewWalletCtrl = require("./controllers/viewWalletCtrl");
 const TxStatusController = require("./controllers/TxStatus.controller");
-const sendTxCtrl = require("./controllers/sendTxCtrl");
-const swapCtrl = require("./controllers/swapCtrl");
-const signMsgCtrl = require("./controllers/signMsgCtrl");
-const contractsCtrl = require("./controllers/contractsCtrl");
-const broadcastTxCtrl = require("./controllers/broadcastTxCtrl");
-const ensCtrl = require("./controllers/ensCtrl");
-const DexnsController = require("./controllers/DexnsController");
-const offlineTxCtrl = require("./controllers/offlineTxCtrl");
-const walletBalanceCtrl = require("./controllers/walletBalanceCtrl");
-const backgroundNodeCtrl = require("./controllers/backgroundNodeCtrl");
-const encryptCtrl = require("./controllers/encryptCtrl");
-const helpersCtrl = require("./controllers/helpersCtrl");
-const messagesControl = require("./controllers/messagesCtrl");
-const switchNetworkCtrl = require("./controllers/switchNetworkCtrl");
-
-// cx controllers
-
-const addWalletCtrl = require("./controllers/CX/addWalletCtrl");
-const cxDecryptWalletCtrl = require("./controllers/CX/cxDecryptWalletCtrl");
-const myWalletsCtrl = require("./controllers/CX/myWalletsCtrl");
-const mainPopCtrl = require("./controllers/CX/mainPopCtrl");
-const quickSendCtrl = require("./controllers/CX/quickSendCtrl");
+var sendTxCtrl = require("./controllers/sendTxCtrl");
+var swapCtrl = require("./controllers/swapCtrl");
+var signMsgCtrl = require("./controllers/signMsgCtrl");
+var contractsCtrl = require("./controllers/contractsCtrl");
+var broadcastTxCtrl = require("./controllers/broadcastTxCtrl");
+var ensCtrl = require("./controllers/ensCtrl");
+var DexnsController = require("./controllers/DexnsController");
+var offlineTxCtrl = require("./controllers/offlineTxCtrl");
+var walletBalanceCtrl = require("./controllers/walletBalanceCtrl");
+var backgroundNodeCtrl = require("./controllers/backgroundNodeCtrl");
+var encryptCtrl = require("./controllers/encryptCtrl");
+var helpersCtrl = require("./controllers/helpersCtrl");
+var messagesControl = require("./controllers/messagesCtrl");
+var switchNetworkCtrl = require("./controllers/switchNetworkCtrl");
 
 // SERVICES
-
-const lookupService = require("./services/lookup");
-const globalService = require("./services/globalService");
-const coldStakingService = require("./services/coldStakingService");
-const modalService = require("./services/modalService");
-const walletService = require("./services/walletService");
-const messageService = require("./services/messageService");
-const dexnsService = require("./services/dexnsService");
-const backgroundNodeService = require("./services/backgroundNodeService");
+const changeNowService = require("./services/changeNow.service");
+const lookupService = require("./services/lookup.service");
+const globalService = require("./services/global.service");
+const coldStakingService = require("./services/coldStaking.service");
+const modalService = require("./services/modal.service");
+const walletService = require("./services/wallet.service");
+const messageService = require("./services/message.service");
+const dexnsService = require("./services/dexns.service");
+const backgroundNodeService = require("./services/backgroundNode.service");
 
 // DIRECTIVES
 const eosKeypair = require("./directives/eos-keypair");
@@ -138,6 +128,7 @@ const sendTxModal = require("./directives/sendTxModal");
 const validTxHash = require("./directives/validTxHash");
 const swapOpenOrderForm = require("./directives/swapOpenOrderForm");
 const swapInitForm = require("./directives/swapInitForm");
+const generateWalletForm = require("./directives/generateWalletForm");
 const customNodeForm = require("./directives/customNodeForm");
 const officialityChecker = require("./directives/officiality-checker");
 const lookup = require("./directives/crosschain-lookup");
@@ -149,6 +140,8 @@ const walletDecryptDrtv = require("./directives/walletDecryptDrtv");
 const cssThemeDrtv = require("./directives/cssThemeDrtv");
 const cxWalletDecryptDrtv = require("./directives/cxWalletDecryptDrtv");
 const fileReaderDrtv = require("./directives/fileReaderDrtv");
+const transactionCost = require("./directives/transactionCost");
+const balanceDrtv = require("./directives/balanceDrtv");
 const transactionCost = require("./directives/transactionCostDtrv");
 const arrayInputDrtv = require("./directives/arrayInputDrtv");
 const newMessagesDrtv = require("./directives/newMessagesDrtv");
@@ -164,6 +157,13 @@ const networkInfo = require("./directives/networkInfo");
 const txStatus = require("./directives/txStatus");
 
 const coinIcon = require("./directives/coinIcon");
+if (IS_CX) {
+    var addWalletCtrl = require("./controllers/CX/addWalletCtrl");
+    var cxDecryptWalletCtrl = require("./controllers/CX/cxDecryptWalletCtrl");
+    var myWalletsCtrl = require("./controllers/CX/myWalletsCtrl");
+    var mainPopCtrl = require("./controllers/CX/mainPopCtrl");
+    var quickSendCtrl = require("./controllers/CX/quickSendCtrl");
+}
 
 var app = angular.module("mewApp", [
     "pascalprecht.translate",
@@ -199,7 +199,7 @@ app.factory("globalService", [
 app.factory("walletService", walletService);
 app.factory("backgroundNodeService", backgroundNodeService);
 
-app.factory("changeNowService", changeNow);
+app.factory("changeNowService", changeNowService);
 app.factory("modalService", modalService);
 
 app.factory("messageService", messageService);
@@ -214,6 +214,7 @@ app.factory("coldStakingService", ["walletService", coldStakingService]);
 app.directive("coinIcon", coinIcon);
 app.directive("validTxHash", validTxHash);
 app.directive("swapInitForm", swapInitForm);
+app.directive("generateWalletForm", generateWalletForm);
 app.directive("accountBalanceTable", accountBalanceTable);
 app.directive("sidebarAds", sidebarAds);
 app.directive("sidebar", ["walletService", "$timeout", sidebar]);
@@ -264,6 +265,7 @@ app.controller("tabsCtrl", [
     "walletService",
     "$translate",
     "$sce",
+    "$interval",
     tabsCtrl
 ]);
 app.controller("switchNetworkCtrl", [
@@ -307,7 +309,7 @@ app.controller("swapCtrl", [
     "$scope",
     "$rootScope",
     "$interval",
-    "walletService",
+    "changeNowService",
     swapCtrl
 ]);
 app.controller("signMsgCtrl", ["$scope", "$sce", "walletService", signMsgCtrl]);
@@ -397,3 +399,5 @@ if (IS_CX) {
         cxDecryptWalletCtrl
     ]);
 }
+
+trezorDeviceListener();

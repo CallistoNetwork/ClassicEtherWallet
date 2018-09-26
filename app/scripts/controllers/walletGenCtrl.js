@@ -1,20 +1,21 @@
 "use strict";
 var walletGenCtrl = function($rootScope, $scope) {
-    $scope.password = "";
     $scope.networks = globalFuncs.networks;
+
+    $scope.userInput = {
+        password: "",
+        password2: ""
+    };
 
     $scope.wallet = null;
     $scope.showWallet = false;
     $scope.blob = $scope.blobEnc = "";
     $scope.isDone = true;
-    $scope.showPass = true;
     $scope.fileDownloaded = false;
     $scope.showPaperWallet = false;
     $scope.showGetAddress = false;
     $scope.genNewWallet = function() {
-        if (!$scope.isStrongPass()) {
-            $scope.notifier.danger(globalFuncs.errorMsgs[1]);
-        } else if ($scope.isDone) {
+        if ($scope.isDone) {
             $scope.wallet = $scope.blob = $scope.blobEnc = null;
             if (!$scope.$$phase) $scope.$apply();
             $scope.isDone = false;
@@ -26,7 +27,7 @@ var walletGenCtrl = function($rootScope, $scope) {
             );
             $scope.blobEnc = globalFuncs.getBlob(
                 "text/json;charset=UTF-8",
-                $scope.wallet.toV3($scope.password, {
+                $scope.wallet.toV3($scope.userInput.password, {
                     kdf: globalFuncs.kdf,
                     n: globalFuncs.scrypt.n
                 })
@@ -55,9 +56,7 @@ var walletGenCtrl = function($rootScope, $scope) {
             $scope.encFileName
         );
     };
-    $scope.isStrongPass = function() {
-        return globalFuncs.isStrongPass($scope.password);
-    };
+
     $scope.downloaded = function() {
         $scope.fileDownloaded = true;
     };

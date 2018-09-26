@@ -6,22 +6,9 @@
         <section class="block__main gen__1--inner">
             <br/>
             <h1 translate="NAV_GenerateWallet" aria-live="polite"> Create New Wallet</h1>
-            <h4 translate="GEN_Label_1"> Enter password </h4>
-            <div class="input-group">
-                <input name="password"
-                       class="form-control"
-                       tabindex="1"
-                       type="{{showPass && 'password' || 'text'}}"
-                       placeholder="{{'GEN_Placeholder_1' | translate }}"
-                       ng-model="password"
-                       ng-class="isStrongPass() ? 'is-valid' : 'is-invalid'"
-                       aria-label="{{'GEN_Label_1' |translate}}"/>
-                <span tabindex="0" aria-label="make password visible" role="button" class="input-group-addon eye"
-                      ng-click="showPass=!showPass"></span>
-            </div>
-            <a tabindex="0" role="button" class="btn btn-primary" func="generateSingleWallet" ng-click="genNewWallet()"
-               translate="NAV_GenerateWallet">Generate Wallet</a>
-            <p translate="x_PasswordDesc"></p>
+            <form name="generateWalletForm" generate-wallet-form novalidate ng-submit="genNewWallet()">
+
+            </form>
             <br>
         </section>
 
@@ -116,12 +103,14 @@
             <h2 translate="GEN_Help_4">Guides &amp; FAQ</h2>
             <ul>
                 <li>
-                    <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/how-do-i-save-slash-backup-my-wallet"
+                    <a href="https://support.ethereumcommonwealth.io/getting-started/backing-up-your-new-wallet.html"
                        target="_blank" rel="noopener"><strong translate="GEN_Help_13">How to Back Up Your Keystore
                         File</strong></a></li>
                 <li>
-                    <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-are-the-different-formats-of-a-private-key"
-                       target="_blank" rel="noopener"><strong translate="GEN_Help_14">What are these Different Formats?</a></strong>
+                    <a href="https://support.ethereumcommonwealth.io/private-keys-passwords/difference-beween-private-key-and-keystore-file.html"
+                       target="_blank" rel="noopener"><strong translate="GEN_Help_14">What are these Different
+                        Formats?</strong>
+                    </a>
                 </li>
             </ul>
 
@@ -168,17 +157,17 @@
             <h2 translate="GEN_Help_4">Guides &amp; FAQ</h2>
             <ul>
                 <li>
-                    <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/how-do-i-save-slash-backup-my-wallet"
+                    <a href="https://support.ethereumcommonwealth.io/getting-started/backing-up-your-new-wallet.html"
                        target="_blank" rel="noopener">
                         <strong translate="HELP_2a_Title">How to Save & Backup Your Wallet.</strong>
                     </a></li>
                 <li>
-                    <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/protecting-yourself-and-your-funds"
+                    <a href="https://support.ethereumcommonwealth.io/security/securing-your-ethereum.html"
                        target="_blank" rel="noopener">
                         <strong translate="GEN_Help_15">Preventing loss &amp; theft of your funds.</strong>
                     </a></li>
                 <li>
-                    <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-are-the-different-formats-of-a-private-key"
+                    <a href="https://support.ethereumcommonwealth.io/private-keys-passwords/difference-beween-private-key-and-keystore-file.html"
                        target="_blank" rel="noopener">
                         <strong translate="GEN_Help_16">What are these Different Formats?</strong>
                     </a></li>
@@ -189,7 +178,7 @@
                 <li translate="GEN_Help_18"> To have a secondary backup.</li>
                 <li translate="GEN_Help_19"> In case you ever forget your password.</li>
                 <li>
-                    <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/how-do-i-safely-slash-offline-slash-cold-storage-with-myetherwallet"
+                    <a href="https://support.ethereumcommonwealth.io/offline/ethereum-cold-storage-with-mycrypto.html"
                        target="_blank" rel="noopener" translate="GEN_Help_20">Cold Storage</a>
                 </li>
             </ul>

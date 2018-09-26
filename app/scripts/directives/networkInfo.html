@@ -2,13 +2,14 @@
     ng-if="globalService.currentTab === globalService.tabs.networkInfo.id">
 
     <h1>
-        <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"/>
-        Network Info
+        <coin-icon icon="{{ajaxReq.type.toLowerCase()}}">
+        </coin-icon>
+        <span translate="NAV_Network_Info">Network Info</span>
     </h1>
 
 
-
     <table class="table">
+        <caption translate="NAV_Network_Info"></caption>
         <tbody>
         <tr>
             <td>
@@ -33,6 +34,18 @@
             <td>
                 <a href="{{explorerOrigin()}}" target="_blank" rel="noopener noreferrer">
                     {{explorerOrigin()}}
+                </a>
+            </td>
+        </tr>
+        <tr ng-show="coinPriceService.coinPrices.hasOwnProperty(ajaxReq.type)">
+            <td>
+                $
+            </td>
+            <td>
+                <a target="_blank"
+                   rel="noopener noreferrer"
+                   href="{{coinPriceService.overview_url(ajaxReq.type)}}">
+                    {{coinPriceService.coinPrices[ajaxReq.type].usd | currency}}
                 </a>
             </td>
         </tr>

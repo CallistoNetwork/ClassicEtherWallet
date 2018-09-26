@@ -3,7 +3,6 @@
 const backgroundNodeCtrl = function($scope, $interval, backgroundNodeService) {
     const changeBackgroundNode = () => {
         backgroundNodeService.changeBackgroundNode();
-        healthCheck();
     };
 
     $scope.backgroundNodeService = backgroundNodeService;
@@ -15,7 +14,6 @@ const backgroundNodeCtrl = function($scope, $interval, backgroundNodeService) {
     $scope.setBackgroundNode = backgroundNode => {
         Object.assign(backgroundNodeService, { backgroundNode });
         $scope.dropdownNodeBackground = false;
-        healthCheck();
     };
 
     $scope.$watch(

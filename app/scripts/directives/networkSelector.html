@@ -1,0 +1,37 @@
+<ul class="dropdown-menu" ng-show="globalService.dropdownNode">
+    <li
+        ng-repeat="network in networkList track by network.type"
+        style="height: 3em;"
+        class="{{network.type.toLowerCase() + ' pointer grey-bottom-border'}}"
+        ng-init="showMe = null;"
+    >
+        <div class="container">
+            <div class="row" style="display: flex; justify-content: center; padding: .25em 0; margin: 0; width: 100%;">
+                <div>
+                    <a
+                        ng-click="changeNetwork(network.type); globalService.dropdownNode = false;"
+                    >
+                        <coin-icon icon="{{network.type.toLowerCase()}}"></coin-icon>
+                    </a>
+                </div>
+                <div>
+                    <span class="glyphicon glyphicon-chevron-down text-right text-gray-lighter"
+                          ng-click="showMe === network.type ? showMe = null : showMe = network.type"
+                    >
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <node-selector-list ng-if="showMe === network.type"></node-selector-list>
+            </div>
+        </div>
+
+    </li>
+    <li
+        ng-click="customNodeModal.open(); globalService.dropdownNode = !globalService.dropdownNode;"
+    >
+        <a
+            translate="NODE_Add_Custom"
+        >Add Custom Node </a>
+    </li>
+</ul>

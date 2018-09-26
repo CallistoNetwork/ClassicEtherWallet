@@ -1,0 +1,18 @@
+<ul class="dropdown-menu" style="position: relative; width: 100%;">
+    <li
+        ng-repeat="node in getAllNodesInNetwork(network.type) track by node.key"
+        ng-click="changeNode(node.key); globalService.dropdownNode = false;"
+        class="{{network.type.toLowerCase() + ' pointer'}}"
+    >
+        <a ng-class="{true:'active'}[curNode == node.key]">
+            {{node.name}}
+            <small> ({{node.service}})</small>
+            <img ng-show="node.service === 'Custom'"
+                 src="images/icon-remove.svg"
+                 class="node-remove"
+                 title="Remove Custom Node"
+                 ng-click="removeNodeFromLocal(node.name)"
+            />
+        </a>
+    </li>
+</ul>

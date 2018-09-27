@@ -1,10 +1,13 @@
-<ul class="dropdown-menu" style="position: relative; width: 100%;">
+<ul style="list-style: none; padding-left: 0; width: 100%;">
     <li
         ng-repeat="node in getAllNodesInNetwork(network.type) track by node.key"
         ng-click="changeNode(node.key); globalService.dropdownNode = false;"
-        class="{{network.type.toLowerCase() + ' pointer'}}"
+        class="{{node.type.toLowerCase() + ' pointer'}}"
     >
-        <a ng-class="{true:'active'}[curNode == node.key]">
+        <a
+            class="network-label"
+            ng-class="{true:'is-selected'}[curNode.key === node.key]"
+        >
             {{node.name}}
             <small> ({{node.service}})</small>
             <img ng-show="node.service === 'Custom'"

@@ -1,31 +1,32 @@
-<ul class="dropdown-menu" ng-show="globalService.dropdownNode">
+<ul class="dropdown-menu" ng-show="globalService.dropdownNode" ng-init="showMe = null;">
     <li
+        style="display: flex; flex-direction: column;"
         ng-repeat="network in networkList track by network.type"
-        style="height: 3em;"
-        class="{{network.type.toLowerCase() + ' pointer grey-bottom-border'}}"
-        ng-init="showMe = null;"
-    >
-        <div class="container">
-            <div class="row" style="display: flex; justify-content: center; padding: .25em 0; margin: 0; width: 100%;">
-                <div>
-                    <a
-                        ng-click="changeNetwork(network.type); globalService.dropdownNode = false;"
-                    >
-                        <coin-icon icon="{{network.type.toLowerCase()}}"></coin-icon>
-                    </a>
-                </div>
-                <div>
-                    <span class="glyphicon glyphicon-chevron-down text-right text-gray-lighter"
-                          ng-click="showMe === network.type ? showMe = null : showMe = network.type"
-                    >
-                    </span>
-                </div>
-            </div>
-            <div class="row">
-                <node-selector-list ng-if="showMe === network.type"></node-selector-list>
-            </div>
-        </div>
+        class="{{network.type.toLowerCase() + ' pointer grey-bottom-border container'}}"
 
+    >
+        <div
+            class="d-flex align-items-center"
+
+            style="margin: .2em; padding: .5em .25em; width: 100%;">
+            <a
+                class="network-label dropdown-header"
+                style="padding: .3em .4em;"
+                ng-class="{true: 'is-selected'}[ajaxReq.type === network.type]"
+                ng-click="changeNetwork(network.type); globalService.dropdownNode = false;"
+            >
+                <coin-icon icon="{{network.type.toLowerCase()}}"></coin-icon>
+            </a>
+
+            <a  style="position: absolute; right: 0; width: 32px; height: 32px;"
+               ng-click="showMe === network.type ? showMe = null : showMe = network.type"
+            >
+                <span class="caret"></span>
+            </a>
+        </div>
+        <div ng-if="showMe === network.type">
+            <node-selector-list></node-selector-list>
+        </div>
     </li>
     <li
         ng-click="customNodeModal.open(); globalService.dropdownNode = !globalService.dropdownNode;"

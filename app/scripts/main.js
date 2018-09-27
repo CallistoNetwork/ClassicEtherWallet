@@ -123,6 +123,8 @@ const dexnsService = require("./services/dexns.service");
 const backgroundNodeService = require("./services/backgroundNode.service");
 
 // DIRECTIVES
+const nodeSelectorList = require("./directives/nodeSelectorList");
+const networkSelector = require("./directives/networkSelector");
 const eosKeypair = require("./directives/eos-keypair");
 const sendTxModal = require("./directives/sendTxModal");
 const validTxHash = require("./directives/validTxHash");
@@ -206,6 +208,8 @@ app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
 
 app.directive("coinIcon", coinIcon);
+app.directive("networkSelector", networkSelector);
+app.directive("nodeSelectorList", nodeSelectorList);
 app.directive("validTxHash", validTxHash);
 app.directive("swapInitForm", swapInitForm);
 app.directive("generateWalletForm", generateWalletForm);

@@ -1,7 +1,29 @@
 <a
+    href="https://callisto.network/buy/"
+    ng-show="slide === 1"
+    class="block swap--clo ad-wrapper"
+    target="_blank"
+    rel="noopener"
+>
+    <div class="col-sm-7">
+        <span class="swap-flag--price">
+            Buy
+            <coin-icon icon="clo"></coin-icon>
+        </span>
+        <span class="swap-flag--bal">
+            Cryptocurrency and Free Smart-Contract Security Audits
+        </span>
+    </div>
+    <div class="col-sm-5">
+        <span class="text-uppercase text-info" style="font-weight: 600; letter-spacing: .2rem;">
+        Callisto</span>
+    </div>
+</a>
+
+<a
 
     ng-click="globalService.currentTab = globalService.tabs.swap.id"
-    ng-show="slide === 1"
+    ng-show="slide === 2"
     class="block swap--btc ad-wrapper"
 
 >
@@ -21,7 +43,7 @@
 
 </a>
 
-<a ng-show="slide === 2" class="block swap--hw ad-wrapper">
+<a ng-show="slide === 3" class="block swap--hw ad-wrapper">
     <div class="col-sm-7">
         <h6>Learn more about protecting your funds.</h6>
     </div>
@@ -31,23 +53,6 @@
         <img src="images/logo-trezor.svg" width="80" height="auto" class="swap__logo">
     </div>
 </a>
-
-
-<a href="https://buy.coinbase.com?code=a6e1bd98-6464-5552-84dd-b27f0388ac7d&address={{walletService.wallet.getChecksumAddressString()}}&crypto_currency=ETH&currency=USD"
-   ng-show="slide===3"
-   class="block swap--usd ad-wrapper"
-   target="_blank" rel="noopener">
-    <div class="col-sm-7">
-        <p class="swap__subhead" ng-show="wallet.balance<=0">Aw...you don't have any ETH</p>
-        <p class="swap__subhead" ng-show="wallet.balance>0">It's now easier to get more ETH</p>
-        <h5 class="swap__cta">Buy ETH with USD</h5>
-    </div>
-    <div class="col-sm-5">
-        <img src="images/logo-coinbase.svg" width="64" height="auto" class="swap__logo">
-        <p class="swap-flag--price">1 ETH ≈ <br/> {{wallet.usdPrice}} USD</p>
-    </div>
-</a>
-
 
 <div class="swap__nav">
     <a ng-click="slide=1"> &bull; </a>

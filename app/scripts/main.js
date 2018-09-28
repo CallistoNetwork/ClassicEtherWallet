@@ -218,7 +218,7 @@ app.directive("validTxHash", validTxHash);
 app.directive("swapInitForm", swapInitForm);
 app.directive("generateWalletForm", generateWalletForm);
 app.directive("accountBalanceTable", accountBalanceTable);
-app.directive("sidebarAds", sidebarAds);
+app.directive("sidebarAds", ["$interval", sidebarAds]);
 app.directive("sidebar", ["walletService", "$timeout", sidebar]);
 app.directive("accountInfo", accountInfo);
 app.directive("tokenBalances", tokenBalances);

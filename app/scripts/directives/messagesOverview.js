@@ -7,7 +7,7 @@ module.exports = function messagesOverviewDrtv(
 ) {
     return {
         restrict: "E",
-        template: require("./messagesOverviewDrtv.html"),
+        template: require("./messagesOverview.html"),
         link: function($scope) {
             $scope.numberOfNewMessages = () =>
                 messageService.numberOfNewMessages(

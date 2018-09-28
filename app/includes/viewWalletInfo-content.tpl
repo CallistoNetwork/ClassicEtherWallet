@@ -93,5 +93,6 @@
 </article>
 
 <article class="col-sm-4">
-    <wallet-balance-drtv></wallet-balance-drtv>
+
+    <sidebar></sidebar>
 </article>

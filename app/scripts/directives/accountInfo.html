@@ -1,0 +1,51 @@
+<h5 translate="sidebar_AccountAddr">Account Address</h5>
+<div class="account-info">
+    <div ng-click="copyToClipboard('addr')" class="pointer copier">
+
+        <div class="addressIdenticon med float" blockie-address="{{walletService.wallet.getAddressString()}}"
+             watch-var="wallet"></div>
+        <span
+            id="addr"
+            class="mono wrap"
+            ng-click="copyToClipboard('addr')"
+        >{{walletService.wallet.getChecksumAddressString()}}</span>
+
+        <div class="transition-display">
+            <img src="images/clipboard.png" width="16" height="16"/>
+            <span translate="COPY_TO_CLIPBOARD"></span>
+        </div>
+    </div>
+    <span
+        ng-class="displaySuccess > 0 ? 'show-viz' : ''"
+        class="text-success transition-display"
+        translate="ADDR_COPY"
+    >
+            </span>
+</div>
+
+<form name="dexnsNameDisplay" dexns-name-display novalidate>
+</form>
+
+<a
+    class="btn btn-primary"
+    ng-show="showDisplayOnTrezor()"
+    ng-click="displayOnTrezor()"
+>
+
+    <h5 translate="sidebar_DisplayOn"
+        style="margin: 0; padding-bottom: 1em;"
+    ></h5>
+    <img src="images/logo-trezor.svg"/>
+
+</a>
+<a ng-show="showDisplayOnLedger()"
+   class="btn btn-primary"
+   ng-click="displayOnLedger()"
+
+>
+    <h5 translate="sidebar_DisplayOn"
+        style="margin: 0; padding-bottom: 1em;"
+    ></h5>
+    <img src="images/logo-ledger.svg"/>
+</a>
+<account-balance-table/>

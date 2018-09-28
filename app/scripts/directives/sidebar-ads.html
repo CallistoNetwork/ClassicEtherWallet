@@ -1,0 +1,62 @@
+<a
+    href="https://callisto.network/buy/"
+    ng-show="slide === 1"
+    class="block swap--clo ad-wrapper"
+    target="_blank"
+    rel="noopener"
+>
+    <div class="col-sm-7">
+        <span class="swap-flag--price">
+            Buy
+            <coin-icon icon="clo"></coin-icon>
+        </span>
+        <span class="swap-flag--bal">
+            Cryptocurrency and Free Smart-Contract Security Audits
+        </span>
+    </div>
+    <div class="col-sm-5">
+        <span class="text-uppercase text-info" style="font-weight: 600; letter-spacing: .2rem;">
+        Callisto</span>
+    </div>
+</a>
+
+<a
+
+    ng-click="globalService.currentTab = globalService.tabs.swap.id"
+    ng-show="slide === 2"
+    class="block swap--btc ad-wrapper"
+
+>
+
+    <div class="col-sm-7">
+        <h6>
+            Exchange Coins & Tokens
+        </h6>
+    </div>
+    <div class="col-sm-5">
+
+
+        <button class="btn change-now-btn">
+
+        </button>
+    </div>
+
+</a>
+
+<a ng-show="slide === 3" class="block swap--hw ad-wrapper">
+    <div class="col-sm-7">
+        <h6>Learn more about protecting your funds.</h6>
+    </div>
+    <div class="col-sm-5">
+        <img src="images/logo-ledger.svg" width="80" height="auto" class="swap__logo">
+        <br/>
+        <img src="images/logo-trezor.svg" width="80" height="auto" class="swap__logo">
+    </div>
+</a>
+
+<div class="swap__nav">
+    <a ng-click="slide=1"> &bull; </a>
+    <a ng-click="slide=2"> &bull; </a>
+    <a ng-click="slide=3"> &bull; </a>
+</div>
+<!-- Navigation Ads -->

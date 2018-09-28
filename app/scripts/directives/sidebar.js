@@ -1,9 +1,10 @@
 "use strict";
 
-var balanceDrtv = function(walletService, $timeout) {
+module.exports = function sidebar($timeout) {
     return {
         restrict: "E",
-        template: require("./balanceDrtv.html"),
+        template: require("./sidebar.html"),
+        controller: "walletBalanceCtrl",
         link: function(scope) {
             scope.displaySuccess = 0;
 
@@ -30,4 +31,3 @@ var balanceDrtv = function(walletService, $timeout) {
         }
     };
 };
-module.exports = balanceDrtv;

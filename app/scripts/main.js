@@ -1,6 +1,6 @@
 "use strict";
 require("./localStoragePolyfill");
-var IS_CX = false;
+let IS_CX = false;
 if (typeof chrome != "undefined")
     IS_CX = chrome.windows === undefined ? false : true;
 var angular = require("angular");
@@ -139,14 +139,18 @@ const blockiesDrtv = require("./directives/blockiesDrtv");
 const addressFieldDrtv = require("./directives/addressFieldDrtv");
 const QRCodeDrtv = require("./directives/QRCodeDrtv");
 const walletDecryptDrtv = require("./directives/walletDecryptDrtv");
-const messagesOverviewDrtv = require("./directives/messagesOverviewDrtv");
 const cssThemeDrtv = require("./directives/cssThemeDrtv");
 const cxWalletDecryptDrtv = require("./directives/cxWalletDecryptDrtv");
 const fileReaderDrtv = require("./directives/fileReaderDrtv");
 const transactionCost = require("./directives/transactionCost");
-const balanceDrtv = require("./directives/balanceDrtv");
 const arrayInputDrtv = require("./directives/arrayInputDrtv");
 const newMessagesDrtv = require("./directives/newMessagesDrtv");
+const accountBalanceTable = require("./directives/accountBalanceTable");
+const tokenBalances = require("./directives/tokenBalances");
+const sidebarAds = require("./directives/sidebar-ads");
+const sidebar = require("./directives/sidebar");
+const accountInfo = require("./directives/accountInfo");
+const messagesOverview = require("./directives/messagesOverview");
 const sendTransactionFormDrtv = require("./directives/sendTransactionForm");
 const dexnsTokenRegistrationForm = require("./directives/dexns-token-registration");
 const networkInfo = require("./directives/networkInfo");
@@ -213,6 +217,11 @@ app.directive("nodeSelectorList", nodeSelectorList);
 app.directive("validTxHash", validTxHash);
 app.directive("swapInitForm", swapInitForm);
 app.directive("generateWalletForm", generateWalletForm);
+app.directive("accountBalanceTable", accountBalanceTable);
+app.directive("sidebarAds", ["$interval", sidebarAds]);
+app.directive("sidebar", ["walletService", "$timeout", sidebar]);
+app.directive("accountInfo", accountInfo);
+app.directive("tokenBalances", tokenBalances);
 app.directive("sendTransactionForm", sendTransactionFormDrtv);
 app.directive("officialityChecker", [officialityChecker]);
 app.directive("dexnsTokenRegistrationForm", dexnsTokenRegistrationForm);
@@ -233,14 +242,13 @@ app.directive("cssThemeDrtv", cssThemeDrtv);
 app.directive("addressField", ["lookupService", addressFieldDrtv]);
 app.directive("qrCode", QRCodeDrtv);
 app.directive("onReadFile", fileReaderDrtv);
-app.directive("walletBalanceDrtv", ["walletService", "$timeout", balanceDrtv]);
 app.directive("walletDecryptDrtv", walletDecryptDrtv);
 app.directive("cxWalletDecryptDrtv", cxWalletDecryptDrtv);
-app.directive("messagesOverviewDrtv", [
+app.directive("messagesOverview", [
     "globalService",
     "walletService",
     "messageService",
-    messagesOverviewDrtv
+    messagesOverview
 ]);
 app.directive("arrayInputDrtv", arrayInputDrtv);
 app.directive("newMessagesDrtv", ["globalService", newMessagesDrtv]);

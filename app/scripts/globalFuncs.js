@@ -47,7 +47,19 @@ globalFuncs.networks = {
     ROP: "rop_mew",
     CLO: "clo_mainnet",
     RIN: "rin_ethscan",
-    CLOT: "clo_testnet3"
+    CLOT: "clo_testnet3",
+    "Testnet ETC": "etc_testnet",
+    "Testnet CLO": "clo_testnet3",
+    "ROPSTEN ETH": "rop_mew",
+    "KOVAN ETH": "kov_ethscan",
+    "RINKEBY ETH": "rin_ethscan",
+    RSK: "rsk",
+    MUSIC: "music",
+    PIRL: "pirl",
+    POA: "poa",
+    TOMO: "tomo",
+    ELLA: "ella",
+    AKA: "aka"
 };
 
 globalFuncs.copyToClipboard = function copyToClipboard(elementId = "addr") {

@@ -148,31 +148,7 @@
                             <i class="caret"></i>
                         </a>
 
-                        <ul class="dropdown-menu" ng-show="globalService.dropdownNode">
-                            <li ng-repeat="(key, value) in nodeList track by $index + key"
-                                ng-click="globalService.dropdownNode = false; changeNode(key)"
-                                class="{{value.type.toLowerCase() + ' pointer'}}"
-                                ng-class="getBottomBorder(value, $index)"
-                            >
-                                <a ng-class="{true:'active'}[curNode == key]"
-                                >
-                                    {{value.name}}
-                                    <small> ({{value.service}})</small>
-                                    <img ng-show="value.service === 'Custom'"
-                                         src="images/icon-remove.svg"
-                                         class="node-remove"
-                                         title="Remove Custom Node" ng-click="removeNodeFromLocal(value.name)"/>
-                                </a>
-
-                            </li>
-                            <li
-                                ng-click="customNodeModal.open(); globalService.dropdownNode = !globalService.dropdownNode;"
-                            >
-                                <a
-                                    translate="NODE_Add_Custom"
-                                >Add Custom Node </a>
-                            </li>
-                        </ul>
+                        <network-selector></network-selector>
                     </div>
                 </div>
                 <!-- Note: The separator colors you see on the frontend are in styles/etherwallet-custom.less. If you add / change a node, you have to adjust these. Ping j-chimienti if you're not a CSS wizard -->

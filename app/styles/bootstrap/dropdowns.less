@@ -169,8 +169,12 @@
     padding: 3px 20px;
     font-size: @font-size-small;
     line-height: @line-height-base;
-    color: @dropdown-header-color;
+
     white-space: nowrap; // as with > li > a
+}
+
+.network-type {
+    color: @dropdown-header-color;
 }
 
 // Backdrop to catch body clicks on mobile, etc.
@@ -243,4 +247,12 @@
 .network-label.is-selected:before {
     background: @brand-etc;
     border-color: @brand-etc;
+}
+
+.network-type.is-selected {
+    color: @brand-ubq;
+}
+
+.rotate {
+    transform: rotateZ(180deg);
 }

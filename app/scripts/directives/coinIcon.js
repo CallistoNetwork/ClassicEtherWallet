@@ -5,10 +5,14 @@ module.exports = function coinIcon() {
         restrict: "E",
         template: require("./coinIcon.html"),
         scope: {
-            icon: "@"
+            icon: "@",
+            hidetext: "@?"
         },
-        link: function(scope) {
+        link: function(scope, e, attrs) {
             scope.colors = colors;
+            if (!attrs.hidetext) {
+                attrs.hidetext = false;
+            }
         }
     };
 };

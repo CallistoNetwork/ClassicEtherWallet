@@ -31,7 +31,8 @@
                            </span>
                         </span>
             </div>
-           <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"></coin-icon>
+           <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
+            {{ajaxReq.type}}
         </td>
 
 
@@ -113,7 +114,8 @@
     <tr ng-repeat="altBalance in toArray(alternativeBalance) | filter: notAjaxReq">
 
         <td class="text-left">
-         <coin-icon icon="{{altBalance.symbol.toLowerCase()}}"></coin-icon>
+         <coin-icon icon="{{altBalance.symbol.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
+            {{altBalance.symbol}}
         </td>
         <td class="account-info point text-right"
             ng-dblclick="showLongBal=!showLongBal"

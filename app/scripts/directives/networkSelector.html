@@ -10,18 +10,33 @@
 
             style="margin: .2em; padding: .5em .25em; width: 100%;">
             <a
-                class="network-label dropdown-header"
+                class="dropdown-header d-flex align-items-center"
                 style="padding: .3em .4em;"
-                ng-class="{true: 'is-selected'}[ajaxReq.type === network.type]"
                 ng-click="changeNetwork(network.type); globalService.dropdownNode = false;"
             >
-                <coin-icon icon="{{network.type.toLowerCase()}}"></coin-icon>
+
+                    <coin-icon
+                        style="width: 30px; display: inline-block;"
+                        icon="{{network.type.toLowerCase()}}"
+                        hidetext="{{true}}"></coin-icon>
+                <span
+                    class="network-label"
+                    ng-class="{true: 'is-selected'}[ajaxReq.type === network.type]"
+                ></span>
+                <span
+                    class="network-type"
+                    ng-class="{true: 'is-selected'}[ajaxReq.type === network.type]"
+                    >
+                    {{network.type}}
+                </span>
             </a>
 
-            <a  style="position: absolute; right: 0; width: 32px; height: 32px;"
+            <a style="position: absolute; right: 0; width: 32px; height: 32px;"
                ng-click="showMe === network.type ? showMe = null : showMe = network.type"
             >
-                <span class="caret"></span>
+                <span class="caret"
+                    ng-class="{true: 'rotate'}[showMe === network.type]"
+                ></span>
             </a>
         </div>
         <div ng-if="showMe === network.type">

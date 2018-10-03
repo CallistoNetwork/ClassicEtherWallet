@@ -26,7 +26,7 @@
         <section class="footer--cent">
             <h5><i aria-hidden="true">💝</i> Donations are always appreciated!</h5>
             <p>ETH or ETC donation address: <span class="mono wrap"><big><a
-                href="http://gastracker.io/addr/0x2ca1377dfa03577ce5bbb815c98eda1ac7632e7d">0x2ca1377dfa03577ce5bbb815c98eda1ac7632e7d</a></big></span>
+                href="https://gastracker.io/addr/0x2ca1377dfa03577ce5bbb815c98eda1ac7632e7d">0x2ca1377dfa03577ce5bbb815c98eda1ac7632e7d</a></big></span>
             </p>
 
             <h5><i aria-hidden="true">👫</i> You can support us by supporting our blockchain-family.</h5>
@@ -84,28 +84,14 @@
             </a></li>
           </ul>
         </span>
+
+                <css-theme-drtv></css-theme-drtv>
             </div>
-            <p><a aria-label="website via my ether wallet dot com" href="https://ethereumproject.github.io/etherwallet"
-                  target="_blank" rel="noopener" role="link" tabindex="0">
-                ClassicEtherWallet.com
-            </a></p>
-            <p><a aria-label="website via github URL" href="https://ethereumproject.github.io/etherwallet/"
-                  target="_blank" rel="noopener" role="link" tabindex="0">
-                ethereumproject.github.io/etherwallet/
-            </a></p>
-            <p><a aria-label="my ether wallet github" href="https://github.com/EthereumCommonwealth/etherwallet"
-                  target="_blank" rel="noopener" role="link" tabindex="0">
-                Github: Current ClassicEtherWallet Site &amp; CX
-            </a></p>
             <p><a aria-label="our organization on github"
                   href="https://github.com/EthereumCommonwealth/etherwallet/releases/latest" target="_blank"
                   rel="noopener" role="link" tabindex="0">
                 Github: Ether wallet releases (downloadable version)
             </a></p>
-            <!-- Commented out due to incompatibility
-            <p><a aria-label="my ether wallet chrome extension" href="https://chrome.google.com/webstore/detail/classicetherwallet-cx/opggclcfcbfbchcienjdaohghcamjfhf" target="_blank" rel="noopener" role="link" tabindex="0">
-              ClassicEtherWallet CX
-            </a></p> -->
             <p><a aria-label="Anti-Phishing chrome extension"
                   href="https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn"
                   target="_blank" rel="noopener" role="link" tabindex="0">
@@ -124,7 +110,7 @@
                 <a aria-label="medium" href="https://medium.com/@dexaran820" target="_blank" rel="noopener" role="link"
                    tabindex="0">Medium</a>
             </p>
-            <p>Latest Block#: {{currentBlockNumber | number}} </p>
+            <p><b>Latest Block #:</b> {{currentBlockNumber | number}} </p>
         </section>
     </article>
 </footer>

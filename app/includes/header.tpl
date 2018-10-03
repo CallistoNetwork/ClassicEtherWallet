@@ -154,9 +154,6 @@
                 <!-- Note: The separator colors you see on the frontend are in styles/etherwallet-custom.less. If you add / change a node, you have to adjust these. Ping j-chimienti if you're not a CSS wizard -->
 
 
-                <css-theme-drtv></css-theme-drtv>
-
-
             </div>
         </section>
     </section>

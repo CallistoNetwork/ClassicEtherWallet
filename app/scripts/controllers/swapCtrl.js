@@ -10,7 +10,7 @@ const popularCoins = ["ETC", "CLO", "BTC", "XMR", "ZEC"];
 const ethCoins = Object.keys(nodes.alternativeBalance).concat("CLO");
 
 // priceTicker in page header
-const priceTickers = ["ETC", "CLO", "ETH"];
+const priceTickers = ["ETC"];
 const SwapCryptoCurrenciesController = function(
     $scope,
     $rootScope,

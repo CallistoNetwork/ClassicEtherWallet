@@ -219,7 +219,7 @@ app.directive("swapInitForm", swapInitForm);
 app.directive("generateWalletForm", generateWalletForm);
 app.directive("accountBalanceTable", accountBalanceTable);
 app.directive("sidebarAds", ["$interval", sidebarAds]);
-app.directive("sidebar", ["walletService", "$timeout", sidebar]);
+app.directive("sidebar", ["$timeout", sidebar]);
 app.directive("accountInfo", accountInfo);
 app.directive("tokenBalances", tokenBalances);
 app.directive("sendTransactionForm", sendTransactionFormDrtv);

@@ -48,7 +48,7 @@ Wallet.prototype.setTokens = function() {
         );
 
     this.tokenObjs = tokens.map(token => {
-        if (token.network === network.type) {
+        if (token.network === ajaxReq.type) {
             token.fetchBalance();
         } else {
             token.setBalance(`SWITCH TO ${token.network} NETWORK`);

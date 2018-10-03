@@ -11,7 +11,7 @@ module.exports = function transactionCost() {
                 $scope.node = nodes.nodeList[_node];
 
                 // coin to look up -> ETC
-                const nodeType = $scope.node.type;
+                const nodeType = ajaxReq.type;
 
                 coinPriceService
                     .getCoinPrice(nodeType)

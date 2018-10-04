@@ -41,10 +41,12 @@
                           title="{{walletService.wallet.balance}} (Double-Click)"
                           class="text-left pointer"
                     >
-                          <span ng-dblclick="showLongBal = !showLongBal">
+                          <span
+                              ng-init="showLongBalance = false;"
+                              ng-dblclick="showLongBalance = !showLongBalance">
                                 <span class="mono wrap"
-                                      ng-show="!showLongBal">{{walletService.wallet.balance | number}}</span>
-                                <span class="mono wrap" ng-show="showLongBal">{{walletService.wallet.balance}}</span>
+                                      ng-show="!showLongBalance">{{walletService.wallet.balance | number}}</span>
+                                <span class="mono wrap" ng-show="showLongBalance">{{walletService.wallet.balance}}</span>
                            </span>
                     </span>
             <span
@@ -118,7 +120,9 @@
             {{altBalance.symbol}}
         </td>
         <td class="account-info point text-right"
+            ng-init="showLongBal = false;"
             ng-dblclick="showLongBal=!showLongBal"
+
             title="{{altBalance.balance}} (Double-Click)"
             colspan="{{coldStakingService.validNetwork() ? 3 : 1}}"
         >

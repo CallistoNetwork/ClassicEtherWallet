@@ -13,7 +13,17 @@
                      title="Remove Token"
                      ng-click="removeTokenFromLocal(token.symbol)"
                      ng-show="token.type!=='default'"/>
-                {{token.getBalance() }}
+                <span ng-switch="showLongBal"
+                      ng-dblclick="showLongBal = !showLongBal"
+                      ng-init="showLongBal = false;"
+                >
+                        <span ng-switch-default="false">
+                            {{token.getBalance() | number }}
+                        </span>
+                        <span ng-switch-when="true">
+                            {{token.getBalance() }}
+                        </span>
+                </span>
             </td>
             <td ng-if="token.dexns.name && token.dexns.info">
                 {{token.dexns.info}}

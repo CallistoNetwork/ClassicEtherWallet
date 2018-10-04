@@ -34,7 +34,6 @@ var walletBalanceCtrl = function(
     $scope.contract = {
         functions: []
     };
-    $scope.slide = 1;
     $scope.customTokenSymbol = "";
     $scope.customTokenInterval = null;
 
@@ -58,6 +57,8 @@ var walletBalanceCtrl = function(
             if (coldStakingService.validNetwork()) {
                 coldStakingService.staker_info();
             }
+
+            $scope.setAllBalance();
         }
     );
 
@@ -102,8 +103,6 @@ var walletBalanceCtrl = function(
         $scope.customTokenField = false;
         $scope.customTokenDexNSField = false;
         $scope.customTokenSymbol = "";
-
-        $scope.addressDrtv.ensAddressField = "";
     };
 
     $scope.saveTokenToLocal = function() {
@@ -137,7 +136,7 @@ var walletBalanceCtrl = function(
             $scope.contract.functions = [];
             var tAbi = $scope.erc20Abi;
             for (var i in tAbi) {
-                if (tAbi[i].type == "function") {
+                if (tAbi[i].type === "function") {
                     tAbi[i].inputs.map(function(i) {
                         i.value = "";
                     });
@@ -199,30 +198,9 @@ var walletBalanceCtrl = function(
 
     $scope.$watch(
         function() {
-            return $scope.addressDrtv.ensAddressField;
-        },
-        function(newAddress) {
-            if (!$scope.Validator) return;
-
-            $scope.localToken.symbol = "";
-
-            $scope.localToken.decimals = "";
-
-            if ($scope.Validator.isValidAddress(newAddress)) {
-                $scope.localToken.symbol = "loading...";
-
-                $scope.localToken.decimals = "loading...";
-
-                $scope.getTokenInfo(newAddress);
-            }
-        }
-    );
-
-    $scope.$watch(
-        function() {
             return globalFuncs.getCurNode();
         },
-        function(newNode) {
+        function(newNode, oldNode) {
             // console.log('new node', newNode);
 
             $scope.resetLocalToken();

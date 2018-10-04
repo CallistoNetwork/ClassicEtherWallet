@@ -2,8 +2,8 @@
     <table class="account-info table table-responsive">
         <caption translate="sidebar_TokenBal">Token Balances:</caption>
         <tbody>
-        <tr ng-repeat="token in wallet.tokenObjs track by $index"
-            ng-show="token.balance !== 0 && token.balance !== 'loading' || token.type !== 'default' || tokenVisibility === 'shown'">
+        <tr ng-repeat="token in wallet.tokenObjs track by $index + token.contractAddress"
+            ng-show="token.type === ajaxReq.type && tokenVisibility === 'shown'">
             <td class="text-left">
                 <coin-icon icon="{{token.getSymbol()}}"></coin-icon>
             </td>
@@ -12,8 +12,19 @@
                      class="token-remove"
                      title="Remove Token"
                      ng-click="removeTokenFromLocal(token.symbol)"
-                     ng-show="token.type!=='default'"/>
-                {{token.getBalance() }}
+                     ng-show="token.local === true"
+                />
+                <span ng-switch="showLongBal"
+                      ng-dblclick="showLongBal = !showLongBal"
+                      ng-init="showLongBal = false;"
+                >
+                        <span ng-switch-default="false">
+                            {{token.getBalance() | number }}
+                        </span>
+                        <span ng-switch-when="true">
+                            {{token.getBalance() }}
+                        </span>
+                </span>
             </td>
             <td ng-if="token.dexns.name && token.dexns.info">
                 {{token.dexns.info}}

@@ -18,8 +18,8 @@ var Token = function(
     symbol,
     decimal,
     type,
-    network,
-    node
+    node,
+    local = false
 ) {
     this.contractAddress = contractAddress;
     this.userAddress = userAddress;
@@ -27,8 +27,9 @@ var Token = function(
     this.decimal = decimal;
     this.type = type;
     this.balance = "loading";
-    this.network = network; // str
     this.node = node; // str
+
+    this.local = local;
 
     this.dexns = {
         info: "",
@@ -44,12 +45,6 @@ Token.popTokens = [];
 Token.prototype.getContractAddress = function() {
     return this.contractAddress;
 };
-Token.prototype.getUserAddress = function() {
-    return this.userAddress;
-};
-Token.prototype.setUserAddress = function(address) {
-    this.userAddress = address;
-};
 Token.prototype.getSymbol = function() {
     return this.symbol;
 };
@@ -58,9 +53,6 @@ Token.prototype.getDecimal = function() {
 };
 Token.prototype.getBalance = function() {
     return this.balance;
-};
-Token.prototype.getBalanceBN = function() {
-    return this.balanceBN;
 };
 
 Token.prototype.setBalance = function(balance) {
@@ -75,7 +67,7 @@ Token.prototype.initDexns = function() {
 
             if (_name) {
                 this.dexns.name = _name;
-                console.log(this.contractAddress, _name);
+                // console.log(this.contractAddress, _name);
 
                 dexnsStorageContract
                     .call("getName", { inputs: [_name] })
@@ -94,7 +86,7 @@ Token.prototype.fetchBalance = function() {
         [ethFuncs.getNakedAddress(this.userAddress)]
     );
 
-    const node_ = nodes.nodeList[this.node];
+    const node_ = this.node;
 
     // check that node has proper getEthCall method or resort to ajax Req
     const requestObj =
@@ -103,9 +95,6 @@ Token.prototype.fetchBalance = function() {
         node_.lib.hasOwnProperty("getEthCall")
             ? node_.lib
             : ajaxReq;
-
-    // FIXME: translate
-    this.setBalance("loading...");
 
     try {
         requestObj.getEthCall(request_, data => {
@@ -119,18 +108,12 @@ Token.prototype.fetchBalance = function() {
                         .div(new BigNumber(10).pow(this.getDecimal()))
                         .toString()
                 );
-                this.balanceBN = new BigNumber(data.data).toString();
-                //if (callback) callback();
             } else {
                 this.setBalance(globalFuncs.errorMsgs[20]);
-                this.balanceBN = "0";
             }
         });
     } catch (e) {
         this.setBalance("0"); //globalFuncs.errorMsgs[20];
-        this.balanceBN = "0";
-
-        // console.error('error fetching token balance: ', request_);
     }
 };
 

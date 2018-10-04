@@ -34,9 +34,9 @@ const coinPriceService = function coinPriceService() {
                     (result.hasOwnProperty("data") &&
                         result.data.Response === "Error")
                 ) {
-                    // fixme: throw err;
-
-                    return Object.assign({}, result, { error: true });
+                    return Promise.reject(
+                        Object.assign({}, result, { error: true })
+                    );
                 } else {
                     const { data } = result;
 

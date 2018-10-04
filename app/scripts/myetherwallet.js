@@ -22,44 +22,48 @@ Wallet.generate = function(icapDirect) {
     }
 };
 Wallet.prototype.setTokens = function() {
-    const { popTokens } = Token;
-    let storedTokens = !!globalFuncs.localStorage.getItem("localTokens", null)
-        ? JSON.parse(globalFuncs.localStorage.getItem("localTokens"))
-        : [];
-    storedTokens = storedTokens.map(token =>
-        Object.assign(token, { address: token.contractAddress })
+    const { popTokens: _popTokens } = Token;
+
+    const popTokens = _popTokens.map(token =>
+        Object.assign(token, { local: false })
     );
 
-    let node_ = globalFuncs.getCurNode();
-    const network = nodes.nodeList[node_];
-    const tokens = []
-        .concat(popTokens, storedTokens)
+    const _localTokens = !!globalFuncs.localStorage.getItem("localTokens", null)
+        ? JSON.parse(globalFuncs.localStorage.getItem("localTokens"))
+        : [];
+    const localTokens = _localTokens.map(token =>
+        Object.assign(token, { address: token.contractAddress, local: true })
+    );
+
+    const addr = this.getAddressString();
+    this.tokenObjs = []
+        .concat(popTokens, localTokens)
         .map(
             token =>
                 new Token(
                     token.address,
-                    this.getAddressString(),
+                    addr,
                     globalFuncs.stripTags(token.symbol),
                     token.decimal,
                     token.type,
-                    token.network,
-                    token.node
+                    token.node,
+                    token.local
                 )
         );
 
-    this.tokenObjs = tokens.map(token => {
-        if (token.network === ajaxReq.type) {
-            token.fetchBalance();
-        } else {
-            token.setBalance(`SWITCH TO ${token.network} NETWORK`);
-        }
-
-        return token;
-    });
+    Promise.all(
+        this.tokenObjs.map(token => {
+            if (token.type === ajaxReq.type) {
+                token.fetchBalance();
+            } else {
+                token.setBalance(`SWITCH TO ${token.type} NETWORK`);
+            }
+        })
+    );
 };
 
-Wallet.prototype.setBalance = function(callback) {
-    this.balance = this.usdBalance = this.eurBalance = this.btcBalance = this.chfBalance = this.repBalance = this.gbpBalance =
+Wallet.prototype.setBalance = function(callback = console.log) {
+    this.balance = this.usdBalance = this.eurBalance = this.btcBalance = this.chfBalance = this.gbpBalance =
         "loading";
     ajaxReq.getBalance(this.getAddressString(), data => {
         if (data.error) this.balance = data.msg;
@@ -96,8 +100,7 @@ Wallet.prototype.setBalance = function(callback) {
                     "ether",
                     data.chf
                 );
-
-                if (callback) callback();
+                callback();
             });
         }
     });
@@ -125,21 +128,21 @@ Wallet.prototype.getPrivateKeyString = function() {
     }
 };
 Wallet.prototype.getPublicKey = function() {
-    if (typeof this.pubKey == "undefined") {
+    if (typeof this.pubKey === "undefined") {
         return ethUtil.privateToPublic(this.privKey);
     } else {
         return this.pubKey;
     }
 };
 Wallet.prototype.getPublicKeyString = function() {
-    if (typeof this.pubKey == "undefined") {
+    if (typeof this.pubKey === "undefined") {
         return "0x" + this.getPublicKey().toString("hex");
     } else {
         return "0x" + this.pubKey.toString("hex");
     }
 };
 Wallet.prototype.getAddress = function() {
-    if (typeof this.pubKey == "undefined") {
+    if (typeof this.pubKey === "undefined") {
         return ethUtil.privateToAddress(this.privKey);
     } else {
         return ethUtil.publicToAddress(this.pubKey, true);

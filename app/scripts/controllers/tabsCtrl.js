@@ -154,9 +154,9 @@ var tabsCtrl = function(
         }
 
         Token.popTokens = $scope.curNode.tokenList.map(token =>
-            Object.assign(token, {
+            Object.assign({}, token, {
                 node: key,
-                network: $scope.curNode.type
+                type: $scope.curNode.type
             })
         );
 

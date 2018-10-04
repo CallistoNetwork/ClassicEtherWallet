@@ -14,6 +14,8 @@ var walletBalanceCtrl = function(
 
     $scope.messageService = messageService;
 
+    $scope.tokenVisibility = "shown";
+
     $scope.modalService = modalService;
     $scope.coldStakingService = coldStakingService;
 
@@ -23,7 +25,7 @@ var walletBalanceCtrl = function(
         DEXNSFunction: 5
     };
 
-    $scope.tokensLoaded = true;
+    $scope.tokensLoaded = false;
     $scope.localToken = {
         contractAdd: "",
         symbol: "",
@@ -126,8 +128,7 @@ var walletBalanceCtrl = function(
             contractAdd: "",
             symbol: "",
             decimals: "",
-            type: "custom",
-            network: ""
+            type: ajaxReq.type
         };
     };
 
@@ -230,8 +231,6 @@ var walletBalanceCtrl = function(
                     ];
                 getNameFunction.inputs[0].value = newSymbol;
 
-                var DEXNSnetwork = "ETC"; // DexNS network is always ETC!
-
                 $scope.nodeList[
                     backgroundNodeService.backgroundNode
                 ].lib.getEthCall(
@@ -254,7 +253,6 @@ var walletBalanceCtrl = function(
                             data
                         ).outputs;
                         var contractAddress = outputs[1].value;
-                        var contractInfo = outputs[2].value.split("-");
 
                         if (
                             contractAddress ===
@@ -352,8 +350,7 @@ var walletBalanceCtrl = function(
 
     $scope.getTokenInfo = function(address, symbol = null) {
         $scope.localToken.contractAdd = address;
-        $scope.localToken.network =
-            nodes.nodeList[globalFuncs.getCurNode()].name;
+        $scope.localToken.type = ajaxReq.type;
 
         var request_ = {
             to: address,

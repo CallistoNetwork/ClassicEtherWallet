@@ -345,8 +345,7 @@ globalFuncs.saveTokenToLocal = function(localToken, callback) {
             symbol: localToken.symbol,
             decimal: parseInt(localToken.decimals),
             decimals: parseInt(localToken.decimals),
-            type: nodes.nodeTypes.Custom,
-            network: nodes.nodeList[node].name,
+            type: localToken.type,
             node
         });
         globalFuncs.localStorage.setItem(

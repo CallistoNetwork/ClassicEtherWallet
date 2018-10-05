@@ -170,10 +170,12 @@ uiFuncs.generateTx = function(txData) {
         }
 
         if (txData.nonce) {
-            return uiFuncs
-                .genTxWithInfo(txData)
-                .then(resolve)
-                .catch(reject);
+            return uiFuncs.genTxWithInfo(txData, function(result) {
+                if (result.isError) {
+                    return reject(result);
+                }
+                resolve(result);
+            });
         } else {
             ajaxReq.getTransactionData(txData.from, function(data) {
                 if (data.error) {

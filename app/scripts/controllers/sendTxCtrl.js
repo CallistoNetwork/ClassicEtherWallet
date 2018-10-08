@@ -229,10 +229,6 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.estimateGasLimit = function() {
         if ($scope.gasLimitChanged) return;
 
-        if (globalFuncs.lightMode) {
-            $scope.tx.gasLimit = globalFuncs.defaultTokenGasLimit;
-            return;
-        }
         var estObj = {
             to: $scope.tx.to,
             from: $scope.wallet.getAddressString(),
@@ -262,9 +258,9 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     };
     $scope.hasEnoughBalance = function() {
         if ($scope.wallet.balance === "loading") {
-            return true;
+            return false;
         } else if (!$scope.tx.value) {
-            return true;
+            return false;
         }
         return isEnough($scope.tx.value, $scope.wallet.balance);
     };

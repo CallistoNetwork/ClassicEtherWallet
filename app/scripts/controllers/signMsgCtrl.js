@@ -1,4 +1,7 @@
 "use strict";
+const Transport = require("@ledgerhq/hw-transport-u2f").default;
+const LedgerEth = require("@ledgerhq/hw-app-eth").default;
+
 var signMsgCtrl = function($scope, $sce, walletService) {
     walletService.wallet = null;
     $scope.visibility = "signView";
@@ -66,9 +69,6 @@ var signMsgCtrl = function($scope, $sce, walletService) {
                 // Sign via Ledger
             } else if (typeof hwType != "undefined" && hwType == "ledger") {
                 var msg = Buffer.from(thisMessage).toString("hex");
-
-                const Transport = require("@ledgerhq/hw-transport-u2f").default;
-                const LedgerEth = require("@ledgerhq/hw-app-eth").default;
 
                 Transport.create.then(trasport => {
                     var app = new LedgerEth(trasport);

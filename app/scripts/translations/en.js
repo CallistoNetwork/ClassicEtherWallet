@@ -236,8 +236,6 @@ en.data = {
     sidebar_DisplayOnLedger: "Display address on Ledger",
     sidebar_StakingBalance: "Staking Balance",
     sidebar_Reward: "Reward",
-    sidebar_Refresh: "Refresh Balance",
-
     /* Decrypt Panel */
     decrypt_Access: "How would you like to access your wallet? ",
     decrypt_Title: "Select the format of your private key ",

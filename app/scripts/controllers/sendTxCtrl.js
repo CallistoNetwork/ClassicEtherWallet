@@ -26,9 +26,6 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
         value: 0,
         id: -1
     };
-    $scope.customGasMsg = "";
-
-    $scope.customGas = CustomGasMessages;
 
     $scope.tx = {
         // if there is no gasLimit or gas key in the URI, use the default value. Otherwise use value of gas or gasLimit. gasLimit wins over gas if both present
@@ -226,44 +223,12 @@ var sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
                 $scope.tokenTx.to = $scope.tx.to;
                 $scope.tokenTx.value = $scope.tx.value;
             }
-            if (newValue.to !== oldValue.to) {
-                for (var i in $scope.customGas) {
-                    if (
-                        $scope.tx.to.toLowerCase() ===
-                        $scope.customGas[i].to.toLowerCase()
-                    ) {
-                        $scope.customGasMsg =
-                            $scope.customGas[i].msg !== ""
-                                ? $scope.customGas[i].msg
-                                : "";
-                        return;
-                    }
-                }
-
-                $scope.customGasMsg = "";
-            }
         },
         true
     );
     $scope.estimateGasLimit = function() {
-        $scope.customGasMsg = "";
         if ($scope.gasLimitChanged) return;
-        for (var i in $scope.customGas) {
-            if (
-                $scope.tx.to.toLowerCase() ==
-                $scope.customGas[i].to.toLowerCase()
-            ) {
-                $scope.showAdvance =
-                    $scope.customGas[i].data != "" ? true : false;
-                $scope.tx.gasLimit = $scope.customGas[i].gasLimit;
-                $scope.tx.data = $scope.customGas[i].data;
-                $scope.customGasMsg =
-                    $scope.customGas[i].msg != ""
-                        ? $scope.customGas[i].msg
-                        : "";
-                return;
-            }
-        }
+
         if (globalFuncs.lightMode) {
             $scope.tx.gasLimit = globalFuncs.defaultTokenGasLimit;
             return;

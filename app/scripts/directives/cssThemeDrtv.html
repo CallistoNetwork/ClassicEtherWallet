@@ -1,12 +1,12 @@
 <form name="currentTheme">
     <label class="text-capitalize" for="theme">theme</label>
     <select
-            title="{{currentTheme === 'night' ? 'switch to day mode' : 'switch to night mode'}}"
-            name="theme"
-            id="theme"
-            ng-model="currentTheme"
-            class="theme-selector"
-            ng-change="handleChangeTheme(currentTheme);"
+        title="{{currentTheme === 'night' ? 'switch to day mode' : 'switch to night mode'}}"
+        name="theme"
+        id="theme"
+        ng-model="currentTheme"
+        class="theme-selector"
+        ng-change="handleChangeTheme(currentTheme);"
     >
         <option id="night" name="night" value="night">
             night
@@ -22,6 +22,20 @@
     :root {
 
         --classic-black: rgb(40, 40, 40);
+        --black: rgb(25, 33, 38);
+        --nav-black: rgb(34, 34, 34);
+        --modal-content-black: rgb(32, 32, 32);
+        --list-black: rgb(25, 33, 38);
+        --blue: rgb(49, 121, 205);
+        --classic-gray: rgb(47, 61, 69);
+        --grey: rgba(255, 255, 255, 0.4);
+        --modal-content-gray-text: rgb(136, 136, 136);
+        --light-gray: rgb(173, 175, 174);
+        --white: rgb(255, 255, 255);
+        --panel-gray: rgb(60, 60, 60);
+        --light-gray-2: rgb(51, 51, 51);
+        --border-control: white;
+
     }
 
     body, body * {
@@ -42,20 +56,11 @@
 <span ng-if="currentTheme === 'night'">
     <style>
 
+
         :root {
-            --black: rgb(25, 33, 38);
-            --nav-black: rgb(34, 34, 34);
-            --modal-content-black: rgb(32, 32, 32);
-            --list-black: rgb(25, 33, 38);
-            --blue: rgb(49, 121, 205);
-            --classic-gray: rgb(47, 61, 69);
-            --grey: rgba(255, 255, 255, 0.4);
-            --modal-content-gray-text: rgb(136, 136, 136);
-            --light-gray: rgb(173, 175, 174);
-            --white: rgb(255, 255, 255);
-            --panel-gray: rgb(60, 60, 60);
-            --light-gray-2: rgb(51, 51, 51);
+            --border-control: #4d5463;
         }
+
 
         body {
             background-color: var(--black);
@@ -163,14 +168,15 @@
             background-color: var(--white);
         }
 
-        .nav-inner {
-
-            border-color: var(--white) !important;
-        }
 
         .nav-container .nav-arrow-left, .nav-container .nav-arrow-right {
 
             background-color: var(--nav-black);
+        }
+
+        li.nav-item:not(.active) > a {
+
+            color: var(--grey) !important;
         }
 
 

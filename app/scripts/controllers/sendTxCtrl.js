@@ -18,6 +18,7 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.sendTxModal = new Modal(document.getElementById("sendTransaction"));
     walletService.wallet = null;
     walletService.password = "";
+    $scope.wd = false;
     $scope.showAdvance = $scope.showRaw = false;
     $scope.dropdownEnabled = true;
     $scope.Validator = Validator;

@@ -64,13 +64,6 @@ var tabsCtrl = function(
         });
     };
 
-    $scope.$watch("ajaxReq.type", function() {
-        $scope.nodeType = ajaxReq.type;
-    });
-    $scope.$watch("ajaxReq.service", function() {
-        $scope.nodeService = ajaxReq.service;
-    });
-
     $scope.$watch(
         () => {
             return (
@@ -79,13 +72,20 @@ var tabsCtrl = function(
                 walletService.wallet.getAddressString()
             );
         },
-        (addr, oldArrd) => {
+        addr => {
             if (!(addr && ethFuncs.validateEtherAddress(addr))) {
                 return;
             }
             $rootScope.$broadcast("ChangeWallet", addr);
         }
     );
+
+    $scope.$on("ChangeWallet", () => {
+        $scope.wallet = walletService.wallet;
+        $scope.wd = true;
+        walletService.wallet.setBalance();
+        walletService.wallet.setTokens();
+    });
 
     $scope.setArrowVisibility = function() {
         setTimeout(function() {
@@ -159,10 +159,6 @@ var tabsCtrl = function(
         $scope.gasChanged();
     };
 
-    $scope.$watch("keyNode", function() {
-        $scope.setGasPrice();
-    });
-
     $scope.setGasPrice();
 
     $scope.changeNode = function(key) {
@@ -196,11 +192,13 @@ var tabsCtrl = function(
             })
         );
         $scope.keyNode = globalFuncs.localStorage.getItem("curNode", null);
+        $rootScope.$broadcast("ChangeNode", key);
 
         $scope.curNode.lib
             .healthCheck()
             .then(result => {
                 $scope.nodeIsConnected = true;
+
                 uiFuncs.notifier.info(
                     `${
                         globalFuncs.successMsgs[5]
@@ -396,7 +394,7 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
     $scope.changeLanguage = function(key, value) {
         $translate.use(key);
         $scope.setErrorMsgLanguage();
-        if (globalFuncs.getEthNodeName() == "geth")
+        if (globalFuncs.getEthNodeName() === "geth")
             $scope.setGethErrMsgLanguage();
         else $scope.setParityErrMsgLanguage();
         $scope.curLang = value;
@@ -458,10 +456,6 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         ele.scrollLeft += val;
     };
 
-    $scope.$on("ChangeNode", function(event, nodeId) {
-        $scope.changeNode(nodeId);
-    });
-
     $scope.$on("ChangeGas", function($event, gasPrice) {
         $scope.gas.value = gasPrice;
         $scope.validateGasPrice();
@@ -497,17 +491,17 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         });
     };
 
-    $scope.$watch(
-        function() {
-            return globalFuncs.getCurNode();
-        },
-        function(newNode, oldNode) {
-            if (!angular.equals(newNode, oldNode)) {
-                $scope.currentBlockNumber = LOADING;
-                $scope.setBlockNumbers();
-            }
-        }
-    );
+    $scope.$on("ChangeNode", function(key) {
+        $scope.nodeType = ajaxReq.type;
+        $scope.nodeService = ajaxReq.service;
+
+        $scope.currentBlockNumber = LOADING;
+        $scope.setBlockNumbers();
+
+        //fixme all
+        walletService.wallet.setBalance();
+        walletService.wallet.setTokens();
+    });
 
     $scope.setBlockNumbers();
     $interval($scope.setBlockNumbers, 1000 * 30);

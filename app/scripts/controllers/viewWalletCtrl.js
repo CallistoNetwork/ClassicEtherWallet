@@ -14,16 +14,13 @@ var viewWalletCtrl = function($scope, $rootScope, walletService) {
     walletService.password = "";
     $scope.ajaxReq = ajaxReq;
     $scope.$on("ChangeWallet", function() {
-        if (walletService.wallet == null) return;
-        $scope.wallet = walletService.wallet;
-        $scope.wd = true;
-        $scope.showEnc = walletService.password != "";
-        if (walletService.wallet.type == "default")
+        $scope.showEnc = walletService.password !== "";
+        if (walletService.wallet.type === "default")
             $scope.blob = globalFuncs.getBlob(
                 "text/json;charset=UTF-8",
                 $scope.wallet.toJSON()
             );
-        if (walletService.password != "") {
+        if (walletService.password !== "") {
             $scope.blobEnc = globalFuncs.getBlob(
                 "text/json;charset=UTF-8",
                 $scope.wallet.toV3(walletService.password, {
@@ -35,12 +32,6 @@ var viewWalletCtrl = function($scope, $rootScope, walletService) {
         }
         $scope.wallet.setBalance();
         $scope.wallet.setTokens();
-    });
-    $scope.$watch("ajaxReq.key", function() {
-        if ($scope.wallet) {
-            $scope.wallet.setBalance();
-            $scope.wallet.setTokens();
-        }
     });
 
     $scope.printQRCode = function() {

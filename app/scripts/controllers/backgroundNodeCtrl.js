@@ -16,18 +16,13 @@ const backgroundNodeCtrl = function($scope, $interval, backgroundNodeService) {
         $scope.dropdownNodeBackground = false;
     };
 
-    $scope.$watch(
-        function() {
-            return globalFuncs.getCurNode();
-        },
-        function(curNode) {
-            const { backgroundNode } = backgroundNodeService;
+    $scope.$on("ChangeNode", function(_, curNode) {
+        const { backgroundNode } = backgroundNodeService;
 
-            if (backgroundNode === curNode) {
-                changeBackgroundNode();
-            }
+        if (backgroundNode === curNode) {
+            changeBackgroundNode();
         }
-    );
+    });
 
     function healthCheck() {
         const { lib } = nodes.nodeList[backgroundNodeService.backgroundNode];

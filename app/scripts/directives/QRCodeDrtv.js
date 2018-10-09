@@ -5,8 +5,8 @@ var QRCodeDrtv = function() {
         scope.$watch(watchVar, function() {
             var value = attrs.qrCode;
             element.empty();
-            var delay = 0;
-            if (element[0].clientWidth == 0) delay = 200;
+            let delay = 0;
+            if (element[0].clientWidth === 0) delay = 200;
             setTimeout(function() {
                 new QRCode(element[0], {
                     text: value,

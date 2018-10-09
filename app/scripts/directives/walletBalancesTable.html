@@ -16,7 +16,7 @@
         <td>
             <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"/>
         </td>
-        <td class="text-right pointer">
+        <td class="text-right pointer mono">
           <span
               ng-init="showLongBal_ = false;"
               ng-dblclick="showLongBal_ = !showLongBal_">
@@ -25,11 +25,11 @@
                 <span class="mono wrap" ng-show="showLongBal_">{{walletService.wallet.balance}}</span>
            </span>
         </td>
-        <td class="text-right">
+        <td class="text-right mono">
             {{coinPriceService.coinPrices[ajaxReq.type].usd | currency}}
         </td>
 
-        <td class="text-right">{{walletService.wallet.usdBalance | currency}}</td>
+        <td class="text-right mono">{{walletService.wallet.usdBalance | currency}}</td>
 
 
     </tr>

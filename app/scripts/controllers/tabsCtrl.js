@@ -12,6 +12,7 @@ var tabsCtrl = function(
 ) {
     $scope.gService = globalService;
     $scope.tabNames = $scope.gService.tabs;
+    $scope.ajaxReq = ajaxReq;
     $scope.walletService = walletService;
     $scope.curLang = "English";
     $scope.customNodeModal = new Modal(

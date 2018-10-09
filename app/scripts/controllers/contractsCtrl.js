@@ -38,6 +38,10 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
 
     $scope.tx = initTrans;
 
+    $scope.abiList = function() {
+        return ajaxReq.abiList;
+    };
+
     $scope.rawTx = null;
 
     $scope.signedTx = null;

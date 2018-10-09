@@ -1,0 +1,73 @@
+<table class="table table-responsive">
+    <caption translate="sidebar_AccountBal">Account Balance</caption>
+    <thead>
+    <tr>
+        <th>Asset</th>
+        <th class="text-right">Quantity</th>
+        <th class="text-right">Price</th>
+        <th class="text-right">Total</th>
+    </tr>
+    </thead>
+    <tbody>
+
+
+    <tr>
+        <!-- name -->
+        <td>
+            <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"/>
+        </td>
+        <td class="text-right pointer">
+          <span
+              ng-init="showLongBal_ = false;"
+              ng-dblclick="showLongBal_ = !showLongBal_">
+                <span class="mono wrap"
+                      ng-show="!showLongBal_">{{walletService.wallet.balance | number}}</span>
+                <span class="mono wrap" ng-show="showLongBal_">{{walletService.wallet.balance}}</span>
+           </span>
+        </td>
+        <td class="text-right">
+            {{coinPriceService.coinPrices[ajaxReq.type].usd | currency}}
+        </td>
+
+        <td class="text-right">{{walletService.wallet.usdBalance | currency}}</td>
+
+
+    </tr>
+
+    <tr ng-repeat="(key, altBalance) in walletService.wallet.balances | toArray | filter: {symbol: '!' + ajaxReq.type}">
+
+        <td class="text-left">
+            <coin-icon icon="{{altBalance.symbol.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
+            {{altBalance.symbol}}
+        </td>
+        <td class="account-info point text-right"
+            ng-dblclick="showLongBal=!showLongBal"
+            ng-init="showLongBal = false;"
+            title="{{altBalance.balance}} (Double-Click)"
+        >
+            <span class="mono wrap" ng-show="!showLongBal">{{altBalance.balance | number}}</span>
+            <span class="mono wrap" ng-show="showLongBal">{{altBalance.balance}}</span>
+        </td>
+        <td class="text-right mono">
+            {{altBalance.usdPrice | currency }}
+        </td>
+        <td class="text-right mono">{{altBalance.usdBalance | currency }}
+        </td>
+    </tr>
+
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="1">
+            Equivalent Values:
+        </td>
+        <td colspan="3" class="text-right mono">
+            {{walletService.wallet.getAllBalances().usdBal | currency}}
+            <br/>
+            {{walletService.wallet.getAllBalances().btcBal | number}}
+            <coin-icon icon="btc"></coin-icon>
+        </td>
+    </tr>
+    </tfoot>
+</table>
+

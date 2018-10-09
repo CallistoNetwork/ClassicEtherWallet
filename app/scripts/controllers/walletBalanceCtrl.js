@@ -45,8 +45,6 @@ var walletBalanceCtrl = function(
     $scope.customTokenField = false;
 
     $scope.$on("ChangeWallet", () => {
-        $scope.wallet = walletService.wallet;
-
         coldStakingService.contract.initStakerInfo();
 
         if (coldStakingService.validNetwork()) {
@@ -189,18 +187,10 @@ var walletBalanceCtrl = function(
         return curFunc;
     };
 
-    $scope.$watch(
-        function() {
-            return globalFuncs.getCurNode();
-        },
-        function(newNode, oldNode) {
-            // console.log('new node', newNode);
-
-            $scope.resetLocalToken();
-
-            $scope.resetTokenField();
-        }
-    );
+    $scope.$on("ChangeNode", function() {
+        $scope.resetLocalToken();
+        $scope.resetTokenField();
+    });
 
     // will return custom token symbol if registed as dexNS
 
@@ -263,12 +253,6 @@ var walletBalanceCtrl = function(
             }, 1300);
         }
     );
-
-    $scope.$watch("wallet.balance", function() {
-        if ($scope.wallet !== null) {
-            $scope.setAllBalance();
-        }
-    });
 
     $scope.setAllBalance = function() {
         if (!$scope.nodeList) return;

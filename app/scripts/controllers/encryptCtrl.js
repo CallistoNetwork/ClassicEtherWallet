@@ -32,7 +32,6 @@ var encryptCtrl = function($scope, walletService) {
     $scope.networks = globalFuncs.networks;
 
     $scope.$on("ChangeWallet", () => {
-        $scope.wallet = walletService.wallet;
         $scope.unlockWallet = true;
     });
 

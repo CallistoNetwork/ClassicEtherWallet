@@ -1,3 +1,6 @@
+/*
+on tab switch, if url has network switch
+ */
 var switchNetworkCtrl = function($scope, $rootScope, globalService) {
     $scope.$watch(
         () => globalService.currentTab,

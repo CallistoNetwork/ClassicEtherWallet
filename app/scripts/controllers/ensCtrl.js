@@ -70,11 +70,7 @@ var ensCtrl = function($scope, $sce, $rootScope, walletService) {
     };
 
     $scope.$on("ChangeWallet", () => {
-        $scope.wallet = walletService.wallet;
-        $scope.wd = true;
         $scope.objENS.nameReadOnly = true;
-        $scope.wallet.setBalance();
-        $scope.wallet.setTokens();
     });
     $scope.getCurrentTime = function() {
         return new Date().toString();

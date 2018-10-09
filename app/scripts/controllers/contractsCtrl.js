@@ -49,8 +49,6 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.contract = initContract;
 
     $scope.$on("ChangeWallet", () => {
-        $scope.wallet = walletService.wallet;
-        $scope.wd = true;
         $scope.tx.nonce = 0;
     });
 

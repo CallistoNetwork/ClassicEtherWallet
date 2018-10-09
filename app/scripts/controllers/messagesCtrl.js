@@ -272,14 +272,8 @@ var messagesCtrl = function(
         }
     }
 
-    $scope.$watch(function() {
-        if (!walletService.wallet) {
-            return null;
-        }
-        return walletService.wallet.getAddressString();
-    });
-
-    $scope.$on("ChangeWallet", function(event, address) {
+    $scope.$on("ChangeWallet", function() {
+        //fixme
         if (!address) {
             $scope.unlockWallet = false;
             $interval.cancel($scope.interval);

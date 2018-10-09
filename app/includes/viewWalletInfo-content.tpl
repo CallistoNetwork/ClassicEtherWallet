@@ -1,5 +1,7 @@
 <article class="col-sm-8 view-wallet-content">
 
+
+
     <section class="block">
         <div class="col-xs-11">
             <div class="account-help-icon">
@@ -88,6 +90,10 @@
                 </div>
             </div>
         </div>
+    </section>
+
+    <section class="block">
+        <wallet-balances-table></wallet-balances-table>
     </section>
 
 </article>

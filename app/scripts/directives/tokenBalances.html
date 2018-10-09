@@ -124,25 +124,24 @@
         <tbody>
         <tr>
             <td class="text-left">BTC:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.btcBalance | number}}</td>
+            <td class="text-right mono wrap">{{walletService.wallet.getAllBalances().btcBal | number}}</td>
         </tr>
-
 
         <tr>
             <td class="text-left">USD:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.usdBalance | currency:"$"}}</td>
+            <td class="text-right mono wrap">{{walletService.wallet.getAllBalances().usdBal | currency:"$"}}</td>
         </tr>
         <tr>
             <td class="text-left">CHF:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.chfBalance | currency:" "}}</td>
+            <td class="text-right mono wrap">{{walletService.wallet.getAllBalances().chfBal | currency:" "}}</td>
         </tr>
         <tr>
             <td class="text-left">EUR:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.eurBalance | currency:"€"}}</td>
+            <td class="text-right mono wrap">{{walletService.wallet.getAllBalances().eurBal | currency:"€"}}</td>
         </tr>
         <tr>
             <td class="text-left">GBP:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.gbpBalance | currency:"£"}}</td>
+            <td class="text-right mono wrap">{{walletService.wallet.getAllBalances().gbpBal | currency:"£"}}</td>
         </tr>
         </tbody>
     </table>

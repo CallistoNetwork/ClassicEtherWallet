@@ -7,7 +7,8 @@ var tabsCtrl = function(
     walletService,
     $translate,
     $sce,
-    $interval
+    $interval,
+    $rootScope
 ) {
     $scope.gService = globalService;
     $scope.tabNames = $scope.gService.tabs;
@@ -17,7 +18,6 @@ var tabsCtrl = function(
         document.getElementById("customNodeModal")
     );
 
-    $scope.Validator = Validator;
     $scope.nodeList = nodes.nodeList;
     $scope.defaultNodeKey = globalFuncs.networks.ETC; // 'etc_ethereumcommonwealth_parity';
 
@@ -37,12 +37,8 @@ var tabsCtrl = function(
     $scope.nodeIsConnected = true;
     $scope.browserProtocol = window.location.protocol;
     const hval = window.location.hash;
-    $scope.notifier = uiFuncs.notifier;
-    $scope.notifier.sce = $sce;
-    $scope.notifier.scope = $scope;
-    $scope.ajaxReq = ajaxReq;
-    $scope.nodeType = $scope.ajaxReq.type;
-    $scope.nodeService = $scope.ajaxReq.service;
+    $scope.nodeType = ajaxReq.type;
+    $scope.nodeService = ajaxReq.service;
 
     initNode();
 
@@ -62,11 +58,27 @@ var tabsCtrl = function(
     };
 
     $scope.$watch("ajaxReq.type", function() {
-        $scope.nodeType = $scope.ajaxReq.type;
+        $scope.nodeType = ajaxReq.type;
     });
     $scope.$watch("ajaxReq.service", function() {
-        $scope.nodeService = $scope.ajaxReq.service;
+        $scope.nodeService = ajaxReq.service;
     });
+
+    $scope.$watch(
+        () => {
+            return (
+                walletService &&
+                walletService.wallet &&
+                walletService.wallet.getAddressString()
+            );
+        },
+        (addr, oldArrd) => {
+            if (!(addr && ethFuncs.validateEtherAddress(addr))) {
+                return;
+            }
+            $rootScope.$broadcast("ChangeWallet", addr);
+        }
+    );
 
     $scope.setArrowVisibility = function() {
         setTimeout(function() {
@@ -111,8 +123,8 @@ var tabsCtrl = function(
 
     $scope.validateGasPrice = function validateGasPrice() {
         if (!isValidPrice($scope.gas.value)) {
-            // $scope.notifier.danger(globalFuncs.errorMsgs[38]);
-            $scope.notifier.danger(
+            // uiFuncs.notifier.danger(globalFuncs.errorMsgs[38]);
+            uiFuncs.notifier.danger(
                 "Invalid gas price! Min gasPrice is 0.1 GWei. Max gasPrice is 100 GWei. GasPrice is resetted to 21GWei default value!"
             );
             $scope.gas.value = $scope.gas.defaultValue;
@@ -182,7 +194,7 @@ var tabsCtrl = function(
             .healthCheck()
             .then(result => {
                 $scope.nodeIsConnected = true;
-                $scope.notifier.info(
+                uiFuncs.notifier.info(
                     `${
                         globalFuncs.successMsgs[5]
                     } — Now, check the URL: <strong> ${
@@ -199,11 +211,11 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         function _handleErr(err) {
             $scope.nodeIsConnected = false;
 
-            $scope.notifier.danger(globalFuncs.errorMsgs[32]);
+            uiFuncs.notifier.danger(globalFuncs.errorMsgs[32]);
         }
     };
     $scope.checkNodeUrl = function(nodeUrl) {
-        return $scope.Validator.isValidURL(nodeUrl);
+        return Validator.isValidURL(nodeUrl);
     };
     $scope.setCurNodeFromStorage = function() {
         var node = globalFuncs.localStorage.getItem("curNode", null);

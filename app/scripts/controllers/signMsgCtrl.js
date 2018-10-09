@@ -2,16 +2,10 @@
 var signMsgCtrl = function($scope, $sce, walletService) {
     walletService.wallet = null;
     $scope.visibility = "signView";
-    $scope.$watch(
-        function() {
-            if (walletService.wallet == null) return null;
-            return walletService.wallet.getAddressString();
-        },
-        function() {
-            if (walletService.wallet == null) return;
-            $scope.wallet = walletService.wallet;
-        }
-    );
+    $scope.$on("ChangeWallet", function() {
+        if (walletService.wallet == null) return;
+        $scope.wallet = walletService.wallet;
+    });
     $scope.signMsg = {
         message: "",
         status: "",

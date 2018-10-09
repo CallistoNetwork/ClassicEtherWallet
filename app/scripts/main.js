@@ -268,6 +268,7 @@ app.controller("tabsCtrl", [
     "$translate",
     "$sce",
     "$interval",
+    "$rootScope",
     tabsCtrl
 ]);
 app.controller("switchNetworkCtrl", [

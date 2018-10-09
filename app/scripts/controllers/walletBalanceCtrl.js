@@ -44,25 +44,17 @@ var walletBalanceCtrl = function(
 
     $scope.customTokenField = false;
 
-    $scope.$watch(
-        function() {
-            return (
-                walletService.wallet && walletService.wallet.getAddressString()
-            );
-        },
-        function(val, _val) {
-            if (!val) return;
-            $scope.wallet = walletService.wallet;
+    $scope.$on("ChangeWallet", () => {
+        $scope.wallet = walletService.wallet;
 
-            coldStakingService.contract.initStakerInfo();
+        coldStakingService.contract.initStakerInfo();
 
-            if (coldStakingService.validNetwork()) {
-                coldStakingService.staker_info();
-            }
-
-            $scope.setAllBalance();
+        if (coldStakingService.validNetwork()) {
+            coldStakingService.staker_info();
         }
-    );
+
+        $scope.setAllBalance();
+    });
 
     /*
 

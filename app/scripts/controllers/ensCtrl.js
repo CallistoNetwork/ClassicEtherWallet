@@ -68,20 +68,14 @@ var ensCtrl = function($scope, $sce, $rootScope, walletService) {
             ];
         return nodes.ensNodeTypes.indexOf(ajaxReq.type) > -1;
     };
-    $scope.$watch(
-        function() {
-            if (walletService.wallet == null) return null;
-            return walletService.wallet.getAddressString();
-        },
-        function() {
-            if (walletService.wallet == null) return;
-            $scope.wallet = walletService.wallet;
-            $scope.wd = true;
-            $scope.objENS.nameReadOnly = true;
-            $scope.wallet.setBalance();
-            $scope.wallet.setTokens();
-        }
-    );
+
+    $scope.$on("ChangeWallet", () => {
+        $scope.wallet = walletService.wallet;
+        $scope.wd = true;
+        $scope.objENS.nameReadOnly = true;
+        $scope.wallet.setBalance();
+        $scope.wallet.setTokens();
+    });
     $scope.getCurrentTime = function() {
         return new Date().toString();
     };

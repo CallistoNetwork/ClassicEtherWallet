@@ -74,6 +74,7 @@ var tabsCtrl = function(
         },
         addr => {
             if (!(addr && ethFuncs.validateEtherAddress(addr))) {
+                $scope.wd = false;
                 return;
             }
             $rootScope.$broadcast("ChangeWallet", addr);

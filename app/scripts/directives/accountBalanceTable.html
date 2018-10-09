@@ -113,7 +113,7 @@
         </td>
     </tr>
 
-    <tr ng-repeat="altBalance in toArray(alternativeBalance) | filter: notAjaxReq">
+    <tr ng-repeat="altBalance in walletService.wallet.balances | toArray | filter: {symbol: '!' + ajaxReq.type}">
 
         <td class="text-left">
          <coin-icon icon="{{altBalance.symbol.toLowerCase()}}" hidetext="{{true}}"></coin-icon>

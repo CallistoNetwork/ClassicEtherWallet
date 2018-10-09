@@ -80,8 +80,6 @@ if (IS_CX) {
     window.DigitalBitboxUsb = digitalBitboxUsb;
     window.DigitalBitboxEth = digitalBitboxEth;
 }
-var CustomGasMessages = require("./customGas.js");
-window.CustomGasMessages = CustomGasMessages;
 
 // CONTROLLERS
 

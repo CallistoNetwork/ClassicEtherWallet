@@ -50,8 +50,6 @@ var walletBalanceCtrl = function(
         if (coldStakingService.validNetwork()) {
             coldStakingService.staker_info();
         }
-
-        $scope.setAllBalance();
     });
 
     /*

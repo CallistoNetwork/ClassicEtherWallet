@@ -81,10 +81,9 @@ var tabsCtrl = function(
     );
 
     $scope.$on("ChangeWallet", () => {
-        $scope.wallet = walletService.wallet;
         $scope.wd = true;
         walletService.wallet.setBalance();
-        walletService.wallet.setTokens();
+        $scope.wallet = walletService.wallet;
     });
 
     $scope.setArrowVisibility = function() {

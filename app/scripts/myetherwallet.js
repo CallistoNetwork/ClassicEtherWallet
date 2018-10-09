@@ -88,12 +88,10 @@ Wallet.prototype.setTokens = function() {
     );
 };
 
-Wallet.prototype.setBalance = function(callback = console.log) {
+Wallet.prototype.setBalance = function() {
     this.balance = this.usdBalance = this.eurBalance = this.btcBalance = this.chfBalance = this.gbpBalance =
         "loading";
-    this.setAltBalances();
-    this.setTokens();
-    callback();
+    Promise.all([this.setAltBalances(), this.setTokens()]);
 };
 
 Wallet.prototype.getAllBalances = function() {

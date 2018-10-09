@@ -1,4 +1,9 @@
 "use strict";
+
+const Transport = require("@ledgerhq/hw-transport-u2f").default;
+
+const LedgerEth = require("@ledgerhq/hw-app-eth").default;
+
 var walletBalanceCtrl = function(
     $scope,
     $sce,
@@ -329,8 +334,14 @@ var walletBalanceCtrl = function(
     };
 
     $scope.displayOnLedger = function() {
-        var app = new ledgerEth($scope.wallet.getHWTransport());
-        app.getAddress($scope.wallet.path, function() {}, true, false);
+        Transport.create()
+            .then(transport => {
+                const app = new LedgerEth(transport);
+                const display = true;
+
+                app.getAddress($scope.wallet.path, display);
+            })
+            .catch(console.error);
     };
 
     /*

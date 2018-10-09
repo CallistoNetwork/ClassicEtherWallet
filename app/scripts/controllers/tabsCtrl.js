@@ -12,7 +12,6 @@ var tabsCtrl = function(
 ) {
     $scope.gService = globalService;
     $scope.tabNames = $scope.gService.tabs;
-    $scope.ajaxReq = ajaxReq;
     $scope.walletService = walletService;
     $scope.curLang = "English";
     $scope.customNodeModal = new Modal(
@@ -38,8 +37,15 @@ var tabsCtrl = function(
     $scope.nodeIsConnected = true;
     $scope.browserProtocol = window.location.protocol;
     const hval = window.location.hash;
+
+    $scope.notifier = uiFuncs.notifier;
     $scope.nodeType = ajaxReq.type;
+    $scope.notifier.sce = $sce;
     $scope.nodeService = ajaxReq.service;
+    $scope.notifier.scope = $scope;
+    $scope.ajaxReq = ajaxReq;
+    $scope.nodeType = $scope.ajaxReq.type;
+    $scope.nodeService = $scope.ajaxReq.service;
 
     initNode();
 

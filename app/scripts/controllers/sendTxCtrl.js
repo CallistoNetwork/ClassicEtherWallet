@@ -14,6 +14,7 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
 
     $scope.ajaxReq = ajaxReq;
 
+    $scope.wd = false;
     $scope.unitReadable = ajaxReq.type;
     $scope.sendTxModal = new Modal(document.getElementById("sendTransaction"));
     walletService.wallet = null;
@@ -52,17 +53,17 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.setSendMode = function(sendMode, tokenId = "", tokensymbol = "") {
         $scope.tx.sendMode = sendMode;
         $scope.unitReadable = "";
-        if (globalFuncs.urlGet("tokensymbol") != null) {
+        if (globalFuncs.urlGet("tokensymbol") !== null) {
             $scope.unitReadable = $scope.tx.tokensymbol;
             $scope.tx.sendMode = "token";
-        } else if (sendMode == "ether") {
+        } else if (sendMode === "ether") {
             $scope.unitReadable = ajaxReq.type;
         } else {
             $scope.unitReadable = tokensymbol;
             $scope.tokenTx.id = tokenId;
         }
         //console.log($scope.tx.sendMode);
-        if ($scope.tx.sendMode == "token") {
+        if ($scope.tx.sendMode === "token") {
             for (var i = 0; i < walletService.wallet.tokenObjs.length; i++) {
                 if (
                     walletService.wallet.tokenObjs[i].symbol
@@ -72,10 +73,10 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
                     //console.log(walletService.wallet.tokenObjs[i].network);
                     if (
                         walletService.wallet.tokenObjs[i].network &&
-                        walletService.wallet.tokenObjs[i].network !=
+                        walletService.wallet.tokenObjs[i].network !==
                             ajaxReq.type
                     ) {
-                        console.log(ajaxReq.type);
+                        // console.log(ajaxReq.type);
                         $scope.notifier.warning(
                             "WARNING! You are trying to send " +
                                 walletService.wallet.tokenObjs[i].symbol +
@@ -118,9 +119,6 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
         }
         if ($scope.tx.sendMode !== "token") $scope.tokenTx.id = -1;
     };
-    var applyScope = function() {
-        if (!$scope.$$phase) $scope.$apply();
-    };
     var defaultInit = function() {
         globalFuncs.urlGet("sendMode") == null
             ? $scope.setSendMode("ether")
@@ -143,6 +141,7 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
             $scope.hasQueryString = true; // if there is a query string, show an warning at top of page
     };
     $scope.$on("ChangeWallet", function() {
+        $scope.wd = true;
         if ($scope.parentTxConfig) {
             const setTxObj = function() {
                 Object.assign($scope.tx, $scope.parentTxConfig);
@@ -202,10 +201,7 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
                 oldValue.sendMode !== newValue.sendMode &&
                 newValue.sendMode === "ether"
             ) {
-                $scope.tx.data =
-                    globalFuncs.urlGet("data") == null
-                        ? ""
-                        : globalFuncs.urlGet("data");
+                $scope.tx.data = globalFuncs.urlGet("data", "");
                 $scope.tx.gasLimit = globalFuncs.defaultTxGasLimit;
             }
 
@@ -315,7 +311,7 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.sendTx = function() {
         $scope.sendTxModal.close();
         uiFuncs.sendTx($scope.signedTx, true).then(function(resp) {
-            walletService.wallet.setBalance(applyScope);
+            walletService.wallet.setBalance();
             if ($scope.tx.sendMode === "token")
                 walletService.wallet.tokenObjs[$scope.tokenTx.id].setBalance();
         });

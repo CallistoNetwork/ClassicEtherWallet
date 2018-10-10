@@ -11,7 +11,8 @@ module.exports = function toArray() {
                 return angular.isObject(value)
                     ? Object.defineProperty(value, "$key", {
                           enumerable: false,
-                          value: key
+                          value: key,
+                          configurable: true
                       })
                     : { $key: key, $value: value };
             });

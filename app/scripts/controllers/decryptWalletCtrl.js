@@ -20,6 +20,7 @@ const decryptWalletCtrl = function(
     $scope.fileContent = "";
     $scope.isSSL = window.location.protocol === "https:";
     $scope.nodeType = ajaxReq.type;
+    $scope.wd = false;
 
     $scope.HDWallet = Object.assign({}, globalFuncs.HDWallet, {
         numWallets: 0,
@@ -297,8 +298,6 @@ const decryptWalletCtrl = function(
 
                 eth.getAddress(path, _display, _chainCode)
                     .then(result => {
-                        const j = result;
-
                         const { publicKey, address, chainCode = 60 } = result;
                         $scope.HWWalletCreate(
                             publicKey,

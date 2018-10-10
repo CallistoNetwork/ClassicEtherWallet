@@ -1,5 +1,14 @@
 <table class="table table-responsive">
-    <caption translate="sidebar_AccountBal">Account Balance</caption>
+    <caption
+    >
+         <span translate="sidebar_AccountBal">
+        Account Balance
+        </span>
+        <span
+            ng-click="refreshBalances();"
+            class="pointer glyphicon glyphicon-refresh">
+        </span>
+    </caption>
     <thead>
     <tr ng-if="coldStakingService.validNetwork();">
         <th translate="sidebar_AccountBal">

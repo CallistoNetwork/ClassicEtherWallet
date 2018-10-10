@@ -1,10 +1,6 @@
 "use strict";
 
 const backgroundNodeCtrl = function($scope, $interval, backgroundNodeService) {
-    const changeBackgroundNode = () => {
-        backgroundNodeService.changeBackgroundNode();
-    };
-
     $scope.backgroundNodeService = backgroundNodeService;
 
     $scope.dropdownNodeBackground = false;
@@ -17,10 +13,12 @@ const backgroundNodeCtrl = function($scope, $interval, backgroundNodeService) {
     };
 
     $scope.$on("ChangeNode", function(_, curNode) {
-        const { backgroundNode } = backgroundNodeService;
+        const { backgroundNode, changeBackgroundNode } = backgroundNodeService;
 
         if (backgroundNode === curNode) {
+            $scope.stopHealthCheck();
             changeBackgroundNode();
+            $scope.startHealthCheck();
         }
     });
 
@@ -31,13 +29,26 @@ const backgroundNodeCtrl = function($scope, $interval, backgroundNodeService) {
 
         function _handle(err) {
             if (1 < backgroundNodeService.availableNodes.length) {
-                changeBackgroundNode();
+                backgroundNodeService.changeBackgroundNode();
             }
         }
     }
 
+    $scope.stopHealthCheck = function() {
+        if ($scope.interval) {
+            $interval.cancel($scope.interval);
+
+            $scope.interval = null;
+        }
+    };
+
+    $scope.$on("$destroy", () => $scope.stopHealthCheck());
+
+    $scope.startHealthCheck = function() {
+        $scope.interval = $interval(healthCheck, 1000 * 30);
+    };
     healthCheck();
-    $scope.interval = $interval(healthCheck, 1000 * 30);
+    $scope.startHealthCheck();
 };
 
 module.exports = backgroundNodeCtrl;

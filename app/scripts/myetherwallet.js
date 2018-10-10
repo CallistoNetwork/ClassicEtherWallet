@@ -98,7 +98,11 @@ Wallet.prototype.setTokens = function() {
 };
 
 Wallet.prototype.setBalance = function() {
-    return Promise.all([this.setAltBalances(), this.setTokens()]);
+    for (let coin in this.balances) {
+        Object.assign(this.balances[coin], defaultWalletBalance);
+    }
+
+    return Promise.all([this._setBalances(), this.setTokens()]);
 };
 
 Wallet.prototype.sumBalances = function() {
@@ -128,14 +132,6 @@ Wallet.prototype._setBalance = function(currency = "ETC") {
     const { coinPrices } = window.coinPriceService;
 
     return data => {
-        if (!this.balances.hasOwnProperty(currency)) {
-            Object.assign(this.balances, {
-                [currency]: Object.assign({}, defaultWalletBalance, {
-                    symbol: ajaxReq.type
-                })
-            });
-        }
-
         if (data.error) {
             this.balances[currency].balance = data.msg;
             return;
@@ -211,24 +207,20 @@ Wallet.prototype._setBalance = function(currency = "ETC") {
     };
 };
 
-Wallet.prototype.setAltBalances = function() {
+Wallet.prototype._setBalances = function() {
     const networks = _map(Object.values(this.balances), "symbol");
-    const requests = Object.values(this.balances);
     const coin = ajaxReq.type;
 
     if (!networks.includes(coin)) {
-        requests.push({
+        this.balances[coin] = Object.assign({}, defaultWalletBalance, {
             node: ajaxReq.key,
             symbol: ajaxReq.type
         });
     }
+    const requests = Object.values(this.balances);
 
     return Promise.all(
         requests.map(currency => {
-            if (!currency.node in nodes.nodeList) {
-                console.error("Invalid Request", currency);
-                return;
-            }
             const { lib } = nodes.nodeList[currency.node];
 
             return lib.getBalance(

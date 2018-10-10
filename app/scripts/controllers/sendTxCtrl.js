@@ -18,7 +18,6 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.sendTxModal = new Modal(document.getElementById("sendTransaction"));
     walletService.wallet = null;
     walletService.password = "";
-    $scope.wd = false;
     $scope.showAdvance = $scope.showRaw = false;
     $scope.dropdownEnabled = true;
     $scope.Validator = Validator;
@@ -29,9 +28,6 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
         value: 0,
         id: -1
     };
-    $scope.customGasMsg = "";
-
-    $scope.customGas = CustomGasMessages;
 
     $scope.tx = {
         // if there is no gasLimit or gas key in the URI, use the default value. Otherwise use value of gas or gasLimit. gasLimit wins over gas if both present
@@ -217,47 +213,12 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
                 $scope.tokenTx.to = $scope.tx.to;
                 $scope.tokenTx.value = $scope.tx.value;
             }
-            if (newValue.to !== oldValue.to) {
-                for (var i in $scope.customGas) {
-                    if (
-                        $scope.tx.to.toLowerCase() ===
-                        $scope.customGas[i].to.toLowerCase()
-                    ) {
-                        $scope.customGasMsg =
-                            $scope.customGas[i].msg !== ""
-                                ? $scope.customGas[i].msg
-                                : "";
-                        return;
-                    }
-                }
-
-                $scope.customGasMsg = "";
-            }
         },
         true
     );
     $scope.estimateGasLimit = function() {
-        $scope.customGasMsg = "";
         if ($scope.gasLimitChanged) return;
-        for (var i in $scope.customGas) {
-            if (
-                $scope.tx.to.toLowerCase() ===
-                $scope.customGas[i].to.toLowerCase()
-            ) {
-                $scope.showAdvance = $scope.customGas[i].data !== "";
-                $scope.tx.gasLimit = $scope.customGas[i].gasLimit;
-                $scope.tx.data = $scope.customGas[i].data;
-                $scope.customGasMsg =
-                    $scope.customGas[i].msg !== ""
-                        ? $scope.customGas[i].msg
-                        : "";
-                return;
-            }
-        }
-        if (globalFuncs.lightMode) {
-            $scope.tx.gasLimit = globalFuncs.defaultTokenGasLimit;
-            return;
-        }
+
         var estObj = {
             to: $scope.tx.to,
             from: walletService.wallet.getAddressString(),
@@ -288,7 +249,7 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
         if (walletService.wallet.balance === "loading") {
             return true;
         } else if (!$scope.tx.value) {
-            return true;
+            return false;
         }
         return isEnough($scope.tx.value, walletService.wallet.balance);
     };

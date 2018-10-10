@@ -1,4 +1,7 @@
 "use strict";
+const Transport = require("@ledgerhq/hw-transport-u2f").default;
+const LedgerEth = require("@ledgerhq/hw-app-eth").default;
+
 var signMsgCtrl = function($scope, $sce, walletService) {
     walletService.wallet = null;
     $scope.visibility = "signView";
@@ -57,41 +60,35 @@ var signMsgCtrl = function($scope, $sce, walletService) {
                 // Sign via Ledger
             } else if (typeof hwType != "undefined" && hwType == "ledger") {
                 var msg = Buffer.from(thisMessage).toString("hex");
-                var app = new ledgerEth($scope.wallet.getHWTransport());
-                var localCallback = function(signed, error) {
-                    if (typeof error != "undefined") {
-                        error = error.errorCode
-                            ? u2f.getErrorByCode(error.errorCode)
-                            : error;
-                        if (callback !== undefined)
-                            callback({
-                                isError: true,
-                                error: error
-                            });
-                        return;
-                    }
-                    var combined = signed["r"] + signed["s"] + signed["v"];
-                    var combinedHex = combined.toString("hex");
-                    var signingAddr = $scope.wallet.getAddressString();
-                    $scope.signMsg.signedMsg = JSON.stringify(
-                        {
-                            address: $scope.wallet.getAddressString(),
-                            msg: thisMessage,
-                            sig: "0x" + combinedHex,
-                            version: "2"
-                        },
-                        null,
-                        2
-                    );
-                    $scope.notifier.success(
-                        "Successfully Signed Message with " + signingAddr
-                    );
-                };
-                app.signPersonalMessage_async(
-                    $scope.wallet.getPath(),
-                    msg,
-                    localCallback
-                );
+
+                Transport.create.then(trasport => {
+                    var app = new LedgerEth(trasport);
+                    var localCallback = function(signed) {
+                        var combined = signed["r"] + signed["s"] + signed["v"];
+                        var combinedHex = combined.toString("hex");
+                        var signingAddr = $scope.wallet.getAddressString();
+                        $scope.signMsg.signedMsg = JSON.stringify(
+                            {
+                                address: $scope.wallet.getAddressString(),
+                                msg: thisMessage,
+                                sig: "0x" + combinedHex,
+                                version: "2"
+                            },
+                            null,
+                            2
+                        );
+                        $scope.notifier.success(
+                            "Successfully Signed Message with " + signingAddr
+                        );
+                    };
+                    app.signPersonalMessage($scope.wallet.getPath(), msg)
+                        .then(signed => {
+                            localCallback(signed);
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                });
 
                 // Sign via trezor
             } else if (typeof hwType != "undefined" && hwType == "trezor") {

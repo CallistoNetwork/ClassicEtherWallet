@@ -4,6 +4,9 @@ const AddressOnlyWallet = require("../AddressOnlyWallet");
 
 const _sample = require("lodash/sample");
 
+const Transport = require("@ledgerhq/hw-transport-u2f").default;
+const LedgerEth = require("@ledgerhq/hw-app-eth").default;
+
 const decryptWalletCtrl = function(
     $rootScope,
     $scope,
@@ -121,11 +124,11 @@ const decryptWalletCtrl = function(
         $scope.HDWallet.id = 0;
         $scope.HDWallet.numWallets = start + limit;
     };
-    $scope.setHDAddressesHWWallet = function(start, limit, ledger) {
+    $scope.setHDAddressesHWWallet = function(start, limit) {
         $scope.HDWallet.wallets = [];
-        for (var i = start; i < start + limit; i++) {
-            var derivedKey = $scope.HDWallet.hdk.derive("m/" + i);
-            if ($scope.walletType == "ledger") {
+        for (let i = start; i < start + limit; i++) {
+            const derivedKey = $scope.HDWallet.hdk.derive("m/" + i);
+            if ($scope.walletType === "ledger") {
                 $scope.HDWallet.wallets.push(
                     new Wallet(
                         undefined,
@@ -135,7 +138,7 @@ const decryptWalletCtrl = function(
                         $scope.ledger
                     )
                 );
-            } else if ($scope.walletType == "digitalBitbox") {
+            } else if ($scope.walletType === "digitalBitbox") {
                 $scope.HDWallet.wallets.push(
                     new Wallet(
                         undefined,
@@ -166,9 +169,9 @@ const decryptWalletCtrl = function(
     };
     $scope.AddRemoveHDAddresses = function(isAdd) {
         if (
-            $scope.walletType == "ledger" ||
-            $scope.walletType == "trezor" ||
-            $scope.walletType == "digitalBitbox"
+            $scope.walletType === "ledger" ||
+            $scope.walletType === "trezor" ||
+            $scope.walletType === "digitalBitbox"
         ) {
             if (isAdd)
                 $scope.setHDAddressesHWWallet(
@@ -267,20 +270,6 @@ const decryptWalletCtrl = function(
         );
         walletService.wallet = null;
     };
-    $scope.ledgerCallback = function(result, error) {
-        if (result) {
-            $scope.HWWalletCreate(
-                result["publicKey"],
-                result["chainCode"],
-                "ledger",
-                $scope.getLedgerPath()
-            );
-        } else {
-            $scope.ledgerError = true;
-            $scope.ledgerErrorString = error;
-            $scope.$apply();
-        }
-    };
 
     $scope.digitalBitboxCallback = function(result, error) {
         $scope.HDWallet.digitalBitboxSecret = "";
@@ -295,15 +284,44 @@ const decryptWalletCtrl = function(
         } else $scope.notifier.danger(error);
     };
     $scope.scanLedger = function() {
-        $scope.ledger = new Ledger3("w0w");
-        var app = new ledgerEth($scope.ledger);
+        Transport.create()
+            .then(transport => {
+                const eth = new LedgerEth(transport);
+                $scope.ledger = eth;
 
-        var path = $scope.getLedgerPath();
+                const path = $scope.getLedgerPath();
+                const _display = false;
+                const _chainCode = true;
 
-        console.log("path", path);
+                console.log("path", path);
 
-        app.getAddress(path, $scope.ledgerCallback, false, true);
+                eth.getAddress(path, _display, _chainCode)
+                    .then(result => {
+                        const j = result;
+
+                        const { publicKey, address, chainCode = 60 } = result;
+                        $scope.HWWalletCreate(
+                            publicKey,
+                            chainCode,
+                            "ledger",
+                            path
+                        );
+                    })
+                    .catch(error => {
+                        console.error(error);
+
+                        $scope.ledgerError = true;
+                        $scope.ledgerErrorString = error;
+                        $scope.$apply();
+                    });
+            })
+            .catch(error => {
+                $scope.ledgerError = true;
+                $scope.ledgerErrorString = error;
+                $scope.$apply();
+            });
     };
+
     $scope.scanDigitalBitbox = function() {
         $scope.digitalBitbox = new DigitalBitboxUsb();
         var app = new DigitalBitboxEth(

@@ -6,9 +6,7 @@
 
     <address-field var-name="tx.to"></address-field>
 
-    <section class="col-xs-12">
-      <p>{{customGasMsg}}</p>
-    </section>
+
   </article>
 
   <!-- Amount to Send -->

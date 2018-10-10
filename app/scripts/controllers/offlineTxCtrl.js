@@ -122,24 +122,8 @@ var offlineTxCtrl = function($scope, $sce, $rootScope, walletService) {
         }
         $scope.dropdownAmount = false;
     };
-    $scope.validateAddress = function(address, status) {
-        $scope.customGasMsg = "";
-        if (ethFuncs.validateEtherAddress(address)) {
-            for (var i in CustomGasMessages) {
-                if (
-                    $scope.tx.to.toLowerCase() ==
-                    CustomGasMessages[i].to.toLowerCase()
-                ) {
-                    $scope.customGasMsg =
-                        CustomGasMessages[i].msg != ""
-                            ? CustomGasMessages[i].msg
-                            : "";
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
+    $scope.validateAddress = function(address) {
+        return ethFuncs.validateEtherAddress(address);
     };
     $scope.generateTx = function() {
         if (!ethFuncs.validateEtherAddress($scope.tx.to)) {

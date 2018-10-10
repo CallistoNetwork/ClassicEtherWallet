@@ -6,6 +6,9 @@ const ethUtil = require("ethereumjs-util");
 
 const BigNumber = require("bignumber.js");
 
+const Transport = require("@ledgerhq/hw-transport-u2f").default;
+const LedgerEth = require("@ledgerhq/hw-app-eth").default;
+
 const uiFuncs = function() {};
 uiFuncs.getTxData = function({ tx, wallet }) {
     return {
@@ -89,35 +92,37 @@ uiFuncs.signTxLedger = function(
 
     const toHash = old ? eTx.raw.slice(0, 6) : eTx.raw;
     const txToSign = ethUtil.rlp.encode(toHash);
-    const localCallback = function(result, error) {
-        if (error) {
+
+    app.signTransaction(path, txToSign.toString("hex"))
+        .then(result => localCallback(result))
+        .catch(error =>
             callback({
                 isError: true,
                 error,
                 msg: error
-            });
-        } else {
-            let v = result["v"].toString(16);
-            if (!old) {
-                // EIP155 support. check/recalc signature v value.
-                const rv = parseInt(v, 16);
-                let cv = rawTx.chainId * 2 + 35;
-                if (rv !== cv && (rv & cv) !== rv) {
-                    cv += 1; // add signature v bit.
-                }
-                v = cv.toString(16);
+            })
+        );
+
+    const localCallback = function(result) {
+        let v = result["v"].toString(16);
+        if (!old) {
+            // EIP155 support. check/recalc signature v value.
+            const rv = parseInt(v, 16);
+            let cv = rawTx.chainId * 2 + 35;
+            if (rv !== cv && (rv & cv) !== rv) {
+                cv += 1; // add signature v bit.
             }
-            rawTx.v = "0x" + v;
-            rawTx.r = "0x" + result["r"];
-            rawTx.s = "0x" + result["s"];
-            eTx = new ethUtil.Tx(rawTx);
-            rawTx.rawTx = JSON.stringify(rawTx);
-            rawTx.signedTx = "0x" + eTx.serialize().toString("hex");
-            rawTx.isError = false;
-            callback(rawTx);
+            v = cv.toString(16);
         }
+        rawTx.v = "0x" + v;
+        rawTx.r = "0x" + result["r"];
+        rawTx.s = "0x" + result["s"];
+        eTx = new ethUtil.Tx(rawTx);
+        rawTx.rawTx = JSON.stringify(rawTx);
+        rawTx.signedTx = "0x" + eTx.serialize().toString("hex");
+        rawTx.isError = false;
+        callback(rawTx);
     };
-    app.signTransaction(path, txToSign.toString("hex"), localCallback);
 };
 uiFuncs.signTxDigitalBitbox = function(
     eTx,
@@ -170,10 +175,12 @@ uiFuncs.generateTx = function(txData) {
         }
 
         if (txData.nonce) {
-            return uiFuncs
-                .genTxWithInfo(txData)
-                .then(resolve)
-                .catch(reject);
+            return uiFuncs.genTxWithInfo(txData, function(result) {
+                if (result.isError) {
+                    return reject(result);
+                }
+                resolve(result);
+            });
         } else {
             ajaxReq.getTransactionData(txData.from, function(data) {
                 if (data.error) {
@@ -228,37 +235,40 @@ uiFuncs.genTxWithInfo = function(data, callback = console.log) {
     const eTx = new ethUtil.Tx(rawTx);
 
     if (data.hwType === "ledger") {
-        const app = new ledgerEth(data.hwTransport);
-        let EIP155Supported = false;
+        Transport.create()
+            .then(transport => {
+                const app = new LedgerEth(transport);
 
-        app.getAppConfiguration(function localCallback(result, error) {
-            if (error) {
-                callback({
-                    isError: true,
-                    error: error
-                });
-            } else {
-                uiFuncs.notifier.info(globalFuncs.successMsgs[7]);
-                const splitVersion = result["version"].split(".");
+                let EIP155Supported = false;
 
-                if (parseInt(splitVersion[0]) > 1) {
-                    EIP155Supported = true;
-                } else if (parseInt(splitVersion[1]) > 0) {
-                    EIP155Supported = true;
-                } else if (parseInt(splitVersion[2]) > 2) {
-                    EIP155Supported = true;
-                }
-            }
+                app.getAppConfiguration()
+                    .then(({ version }) => {
+                        uiFuncs.notifier.info(globalFuncs.successMsgs[7]);
+                        const splitVersion = version.split(".");
 
-            uiFuncs.signTxLedger(
-                app,
-                eTx,
-                rawTx,
-                data,
-                !EIP155Supported,
-                callback
-            );
-        });
+                        if (parseInt(splitVersion[0]) > 1) {
+                            EIP155Supported = true;
+                        } else if (parseInt(splitVersion[1]) > 0) {
+                            EIP155Supported = true;
+                        } else if (parseInt(splitVersion[2]) > 2) {
+                            EIP155Supported = true;
+                        }
+                        uiFuncs.signTxLedger(
+                            app,
+                            eTx,
+                            rawTx,
+                            data,
+                            !EIP155Supported,
+                            callback
+                        );
+                    })
+                    .catch(error => {
+                        callback({ isError: true, error });
+                    });
+            })
+            .catch(error => {
+                callback({ isError: true, error });
+            });
     } else if (data.hwType === "trezor") {
         uiFuncs
             .signTxTrezor(rawTx, data)

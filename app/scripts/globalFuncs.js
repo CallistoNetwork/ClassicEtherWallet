@@ -1,7 +1,6 @@
 "use strict";
 
 var globalFuncs = function() {};
-globalFuncs.lightMode = false;
 
 globalFuncs.timeRem = function timeRem(timeUntil) {
     var rem = timeUntil - new Date();

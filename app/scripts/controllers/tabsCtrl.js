@@ -202,8 +202,8 @@ var tabsCtrl = function(
                     } — Now, check the URL: <strong> ${
                         window.location.href
                     }.</strong> <br /> 
-Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
-                        $scope.nodeService
+Network: <strong>${ajaxReq.type}</strong> provided by <strong>${
+                        ajaxReq.service
                     }.</strong>`,
                     5000
                 );
@@ -496,15 +496,14 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         walletService.wallet.setBalance();
     });
 
-    $scope.setBlockNumbers();
-    $scope.blockNumberInterval = $interval($scope.setBlockNumbers, 1000 * 30);
-
     $scope.$on("$destroy", () => {
         $interval.cancel($scope.blockNumberInterval);
 
         $scope.blockNumberInterval = null;
     });
 
+    $scope.setBlockNumbers();
     window.coinPriceService.initPrices();
+    $scope.blockNumberInterval = $interval($scope.setBlockNumbers, 1000 * 30);
 };
 module.exports = tabsCtrl;

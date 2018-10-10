@@ -1,55 +1,41 @@
 "use strict";
 var viewWalletCtrl = function($scope, $rootScope, walletService) {
-    $scope.usdBalance = "loading";
-    $scope.gbpBalance = "loading";
-    $scope.eurBalance = "loading";
-    $scope.btcBalance = "loading";
-    $scope.etherBalance = "loading";
     $scope.tokenVisibility = "hidden";
     $scope.networks = globalFuncs.networks;
-
-    $scope.pkeyVisible = false;
-
     walletService.wallet = null;
     walletService.password = "";
-    $scope.ajaxReq = ajaxReq;
     $scope.$on("ChangeWallet", function() {
         $scope.showEnc = walletService.password !== "";
+        $scope.wd = true;
         if (walletService.wallet.type === "default")
             $scope.blob = globalFuncs.getBlob(
                 "text/json;charset=UTF-8",
-                $scope.wallet.toJSON()
+                walletService.wallet.toJSON()
             );
         if (walletService.password !== "") {
             $scope.blobEnc = globalFuncs.getBlob(
                 "text/json;charset=UTF-8",
-                $scope.wallet.toV3(walletService.password, {
+                walletService.wallet.toV3(walletService.password, {
                     kdf: globalFuncs.kdf,
                     n: globalFuncs.scrypt.n
                 })
             );
-            $scope.encFileName = $scope.wallet.getV3Filename();
+            $scope.encFileName = walletService.wallet.getV3Filename();
         }
-        $scope.wallet.setBalance();
-        $scope.wallet.setTokens();
     });
 
     $scope.printQRCode = function() {
         globalFuncs.printPaperWallets(
             JSON.stringify([
                 {
-                    address: $scope.wallet.getChecksumAddressString(),
-                    private: $scope.wallet.getPrivateKeyString()
+                    address: walletService.wallet.getChecksumAddressString(),
+                    private: walletService.wallet.getPrivateKeyString()
                 }
             ])
         );
     };
 
-    $scope.showHidePkey = function() {
-        $scope.pkeyVisible = !$scope.pkeyVisible;
-    };
     $scope.resetWallet = function() {
-        $scope.wallet = null;
         walletService.wallet = null;
         walletService.password = "";
         $scope.blob = $scope.blobEnc = $scope.password = "";

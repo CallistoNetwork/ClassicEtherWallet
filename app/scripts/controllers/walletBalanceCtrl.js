@@ -6,6 +6,15 @@ const LedgerEth = require("@ledgerhq/hw-app-eth").default;
 
 const erc20Abi = require("../abiDefinitions/erc20abi.json");
 
+const DEXNS = require("../abiDefinitions/etcAbi.json").find(
+    contract =>
+        contract.address === "0x28fc417c046d409c14456cec0fc6f9cde46cc9f3"
+);
+
+if (!DEXNS) {
+    throw new Error("Unable to find DEXNS abi");
+}
+
 var walletBalanceCtrl = function(
     $scope,
     $sce,
@@ -39,7 +48,13 @@ var walletBalanceCtrl = function(
     $scope.contract = {
         functions: []
     };
-    $scope.customTokenSymbol = "";
+    $scope.input = {
+        customTokenSymbol: ""
+    };
+    $scope.customTokenInterval = null;
+
+    $scope.nodeList = nodes.nodeList;
+    $scope.alternativeBalance = nodes.alternativeBalance;
 
     $scope.customTokenField = false;
 
@@ -99,7 +114,7 @@ var walletBalanceCtrl = function(
     $scope.resetTokenField = function() {
         $scope.customTokenField = false;
         $scope.customTokenDexNSField = false;
-        $scope.customTokenSymbol = "";
+        $scope.input.customTokenSymbol = "";
     };
 
     $scope.saveTokenToLocal = function() {
@@ -113,7 +128,7 @@ var walletBalanceCtrl = function(
 
                 $scope.resetLocalToken();
             } else {
-                $scope.notifier.danger(data.msg);
+                uiFuncs.notifier.danger(data.msg);
             }
         });
     };
@@ -187,10 +202,55 @@ var walletBalanceCtrl = function(
         return curFunc;
     };
 
-    $scope.$on("ChangeNode", function() {
+    $scope.$on("ChangeNode", () => {
         $scope.resetLocalToken();
+
         $scope.resetTokenField();
     });
+
+    $scope.getCustomTokenSymbol = function(newSymbol) {
+        if (!newSymbol) return;
+        if (newSymbol.length < 3) return;
+
+        let getNameFunction =
+            $scope.contract.functions[$scope.erc20Indexes.DEXNSFunction];
+
+        getNameFunction.inputs[0].value = newSymbol;
+
+        $scope.nodeList[backgroundNodeService.backgroundNode].lib.getEthCall(
+            {
+                to: DEXNS.address,
+                data: $scope.getTxData($scope.erc20Indexes.DEXNSFunction)
+            },
+            function(data) {
+                if (data.error) {
+                    uiFuncs.notifier.danger(
+                        "Ops, we'd had an error communicating with DexNS."
+                    );
+                    return;
+                }
+
+                var outputs = $scope.readData(
+                    $scope.erc20Indexes.DEXNSFunction,
+                    data
+                ).outputs;
+                var contractAddress = outputs[1].value;
+
+                if (
+                    contractAddress ===
+                    "0x0000000000000000000000000000000000000000"
+                ) {
+                    $scope.resetLocalToken();
+                    uiFuncs.notifier.danger("Symbol not found.");
+                    return;
+                }
+
+                // FIXME: if not connected to correct network, info not loaded and correct network not saved
+
+                $scope.getTokenInfo(contractAddress, newSymbol);
+            }
+        );
+    };
     $scope.removeTokenFromLocal = function(tokensymbol) {
         globalFuncs.removeTokenFromLocal(
             tokensymbol,
@@ -249,51 +309,55 @@ var walletBalanceCtrl = function(
         $scope.localToken.contractAdd = address;
         $scope.localToken.type = ajaxReq.type;
 
+        return Promise.all([
+            $scope._getTokenDecimals(address),
+            $scope._getTokenSymbol(symbol, address)
+        ]);
+    };
+    // call decimals
+    $scope._getTokenDecimals = function(address) {
         const request_ = {
             to: address,
             data: $scope.getTxData($scope.erc20Indexes.DECIMALS)
         };
 
-        // call decimals
+        ajaxReq.getEthCall(request_, function(data) {
+            if (data.error || data.data === "0x") {
+                $scope.localToken.decimals = "";
+                $scope.localToken.network = "";
+                uiFuncs.notifier.danger("Error fetching decimals");
+                return;
+            }
 
-        Promise.all([
-            ajaxReq.getEthCall(request_, function(data) {
-                if (data.error || data.data === "0x") {
-                    $scope.localToken.decimals = "";
-                    $scope.localToken.network = "";
-                    $scope.notifier.danger("Error fetching decimals");
-                    return;
-                }
+            $scope.localToken.decimals = $scope.readData(
+                $scope.erc20Indexes.DECIMALS,
+                data
+            ).outputs[0].value;
+        });
+    };
+    $scope._getTokenSymbol = function(symbol, address) {
+        if (symbol) {
+            $scope.localToken.symbol = symbol;
+            return;
+        }
 
-                $scope.localToken.decimals = $scope.readData(
-                    $scope.erc20Indexes.DECIMALS,
+        const options = {
+            to: address,
+            data: $scope.getTxData($scope.erc20Indexes.SYMBOL)
+        };
+        // call for symbol
+        ajaxReq.getEthCall(options, function(data) {
+            if (!data.error && data.data !== "0x") {
+                $scope.localToken.symbol = $scope.readData(
+                    $scope.erc20Indexes.SYMBOL,
                     data
                 ).outputs[0].value;
-            }),
-            () => {
-                if (symbol) {
-                    $scope.localToken.symbol = symbol;
-                    return;
-                }
-                const request_symbol = Object.assign({}, request_, {
-                    data: $scope.getTxData($scope.erc20Indexes.SYMBOL)
-                });
-
-                // call for symbol
-                ajaxReq.getEthCall(request_symbol, function(data) {
-                    if (!data.error && data.data !== "0x") {
-                        $scope.localToken.symbol = $scope.readData(
-                            $scope.erc20Indexes.SYMBOL,
-                            data
-                        ).outputs[0].value;
-                    } else {
-                        $scope.localToken.symbol = "";
-                        $scope.localToken.network = "";
-                        $scope.notifier.danger("Error fetching symbol");
-                    }
-                });
+            } else {
+                $scope.localToken.symbol = "";
+                $scope.localToken.network = "";
+                uiFuncs.notifier.danger("Error fetching symbol");
             }
-        ]);
+        });
     };
 };
 module.exports = walletBalanceCtrl;

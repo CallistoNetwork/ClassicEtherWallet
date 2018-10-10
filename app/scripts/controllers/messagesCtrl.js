@@ -50,6 +50,7 @@ var messagesCtrl = function(
     Object.assign($scope, {
         ajaxReq: ajaxReq,
         Validator: Validator,
+        // wd: walletService && walletService.hasOwnProperty('wallet') && walletService.wallet.hasOwnProperty('getAddressString'),
         wallet: walletService.wallet,
         rawTx: null,
         signedTx: null,
@@ -247,7 +248,7 @@ var messagesCtrl = function(
             } else {
                 messageService.loadingMessages = false;
 
-                //$scope.notifier.danger('Error locating lastMsgIndex');
+                //uiFuncs.notifier.danger('Error locating lastMsgIndex');
                 console.error("Error locating lastMsgIndex");
             }
         });
@@ -267,24 +268,26 @@ var messagesCtrl = function(
         messageService.msgCheckTime = new Date().toLocaleTimeString();
         // console.log('check messages', $scope.msgCheckTime);
 
-        if ($scope.unlockWallet && $scope.wallet) {
-            initMessages($scope.wallet.getAddressString());
+        if ($scope.unlockWallet && walletService.wallet) {
+            initMessages(walletService.wallet.getAddressString());
         }
     }
 
-    $scope.$on("ChangeWallet", function() {
-        //fixme
-        if (!address) {
-            $scope.unlockWallet = false;
+    $scope.$on("$destroy", () => {
+        $scope.stopMessages();
+    });
+
+    $scope.stopMessages = () => {
+        if ($scope.interval) {
             $interval.cancel($scope.interval);
-            return;
+            $scope.interval = null;
         }
-        $scope.unlockWallet = true;
+    };
 
-        $scope.wallet = walletService.wallet;
+    $scope.$on("ChangeWallet", function() {
+        $scope.wd = true;
 
-        $interval.cancel($scope.interval);
-        $scope.interval = null;
+        $scope.stopMessages();
 
         messageService.messagesList = {};
 
@@ -308,13 +311,15 @@ var messagesCtrl = function(
         if (
             0 < val &&
             !messageService.openedModals.includes(
-                $scope.wallet.getAddressString()
+                walletService.wallet.getAddressString()
             ) &&
             globalService.currentTab === id
         ) {
             newMessagesModal.open();
 
-            messageService.openedModals.push($scope.wallet.getAddressString());
+            messageService.openedModals.push(
+                walletService.wallet.getAddressString()
+            );
         }
     });
 
@@ -326,15 +331,12 @@ var messagesCtrl = function(
         const to = TO.value;
         const text = TEXT.value;
 
-        if (
-            nodes.nodeList[globalFuncs.getCurNode()].type.toUpperCase() !==
-            "ETC"
-        ) {
-            $scope.notifier.danger(
+        if (ajaxReq.type.toUpperCase() !== "ETC") {
+            uiFuncs.notifier.danger(
                 "Wrong chain! You need to switch to $ETC network to send messages"
             );
         } else if (!Validator.isValidAddress(to)) {
-            $scope.notifier.danger(globalFuncs.errorMsgs[5]);
+            uiFuncs.notifier.danger(globalFuncs.errorMsgs[5]);
         } else sendMessage(to, text);
     };
 
@@ -369,7 +371,7 @@ var messagesCtrl = function(
         );
 
         const estObj = {
-            from: $scope.wallet.getAddressString(),
+            from: walletService.wallet.getAddressString(),
             to: messageContract.address,
             data: $scope.tx.data,
             value: "0x00"
@@ -389,7 +391,7 @@ var messagesCtrl = function(
                     const { signedTx, isError } = rawTx;
 
                     if (isError) {
-                        $scope.notifier.danger(rawTx.error);
+                        uiFuncs.notifier.danger(rawTx.error);
                     } else {
                         $scope.rawTx = rawTx;
                         $scope.signedTx = signedTx;
@@ -408,12 +410,9 @@ var messagesCtrl = function(
 
         uiFuncs.sendTx($scope.signedTx, false).then(function(resp) {
             var bExStr =
-                $scope.ajaxReq.type !== nodes.nodeTypes.Custom
+                ajaxReq.type !== nodes.nodeTypes.Custom
                     ? "<a href='" +
-                      $scope.ajaxReq.blockExplorerTX.replace(
-                          "[[txHash]]",
-                          resp.data
-                      ) +
+                      ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data) +
                       "' target='_blank' rel='noopener'> View your transaction </a>"
                     : "";
             var contractAddr = $scope.tx.contractAddr
@@ -426,7 +425,7 @@ var messagesCtrl = function(
                   $scope.tx.contractAddr +
                   "</a>"
                 : "";
-            $scope.notifier.success(
+            uiFuncs.notifier.success(
                 globalFuncs.successMsgs[2] +
                     "<br />" +
                     resp.data +

@@ -14,27 +14,33 @@
     <tr>
         <!-- name -->
         <td>
-            <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"/>
+            <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
+            {{ajaxReq.type}}
+
         </td>
         <td class="text-right pointer mono">
           <span
               ng-init="showLongBal_ = false;"
               ng-dblclick="showLongBal_ = !showLongBal_">
                 <span class="mono wrap"
-                      ng-show="!showLongBal_">{{walletService.wallet.balance | number}}</span>
-                <span class="mono wrap" ng-show="showLongBal_">{{walletService.wallet.balance}}</span>
+                      ng-show="!showLongBal_">{{walletService.wallet.balances[ajaxReq.type].balance | number}}</span>
+                <span class="mono wrap"
+                      ng-show="showLongBal_">{{walletService.wallet.balances[ajaxReq.type].balance}}</span>
            </span>
         </td>
         <td class="text-right mono">
-            {{coinPriceService.coinPrices[ajaxReq.type].usd | currency}}
+            {{walletService.wallet.balances[ajaxReq.type].usdPrice | currency}}
         </td>
 
-        <td class="text-right mono">{{walletService.wallet.usdBalance | currency}}</td>
+        <td class="text-right mono">{{walletService.wallet.balances[ajaxReq.type].usdBalance | currency}}</td>
 
 
     </tr>
 
-    <tr ng-repeat="(key, altBalance) in walletService.wallet.balances | toArray | filter: {symbol: '!' + ajaxReq.type}">
+    <tr ng-repeat="(key, altBalance) in walletService.wallet.balances |
+    toArray |
+    filter: {symbol: '!' + ajaxReq.type}
+    track by key + altBalance.symbol + $index">
 
         <td class="text-left">
             <coin-icon icon="{{altBalance.symbol.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
@@ -62,10 +68,10 @@
             Equivalent Values:
         </td>
         <td colspan="3" class="text-right mono">
-            {{walletService.wallet.getAllBalances().usdBal | currency}}
-            <br/>
-            {{walletService.wallet.getAllBalances().btcBal | number}}
+            {{walletService.wallet.sumBalances().btcBalance | number}}
             <coin-icon icon="btc"></coin-icon>
+            <br/>
+            {{walletService.wallet.sumBalances().usdBalance | currency}}
         </td>
     </tr>
     </tfoot>

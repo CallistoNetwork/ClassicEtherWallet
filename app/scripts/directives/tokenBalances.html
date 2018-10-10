@@ -2,8 +2,8 @@
     <table class="account-info table table-responsive">
         <caption translate="sidebar_TokenBal">Token Balances:</caption>
         <tbody>
-        <tr ng-repeat="token in wallet.tokenObjs track by $index + token.contractAddress"
-            ng-show="token.type === ajaxReq.type && tokenVisibility === 'shown'">
+        <tr ng-repeat="token in wallet.tokenObjs | filter: {type: ajaxReq.type} track by $index + token.contractAddress"
+            ng-show="tokenVisibility === 'shown'">
             <td class="text-left">
                 <coin-icon icon="{{token.getSymbol()}}"></coin-icon>
             </td>
@@ -124,24 +124,24 @@
         <tbody>
         <tr>
             <td class="text-left">BTC:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.getAllBalances().btcBal | number}}</td>
+            <td class="text-right mono wrap">{{walletService.wallet.sumBalances().btcBalance | number}}</td>
         </tr>
 
         <tr>
             <td class="text-left">USD:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.getAllBalances().usdBal | currency:"$"}}</td>
+            <td class="text-right mono wrap">{{walletService.wallet.sumBalances().usdBalance | currency:"$"}}</td>
         </tr>
         <tr>
             <td class="text-left">CHF:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.getAllBalances().chfBal | currency:" "}}</td>
+            <td class="text-right mono wrap">{{walletService.wallet.sumBalances().chfBalance | currency:" "}}</td>
         </tr>
         <tr>
             <td class="text-left">EUR:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.getAllBalances().eurBal | currency:"€"}}</td>
+            <td class="text-right mono wrap">{{walletService.wallet.sumBalances().eurBalance | currency:"€"}}</td>
         </tr>
         <tr>
             <td class="text-left">GBP:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.getAllBalances().gbpBal | currency:"£"}}</td>
+            <td class="text-right mono wrap">{{walletService.wallet.sumBalances().gbpBalance | currency:"£"}}</td>
         </tr>
         </tbody>
     </table>

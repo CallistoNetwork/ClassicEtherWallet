@@ -7,6 +7,18 @@ module.exports = function sidebarAds($interval) {
         link: function($scope) {
             $scope.slide = 1;
 
+            $scope.$on("$destroy", () => {
+                $scope.stopSlide();
+            });
+
+            $scope.stopSlide = function() {
+                if ($scope.interval) {
+                    $interval.cancel($scope.interval);
+
+                    $scope.interval = null;
+                }
+            };
+
             function updateSlide() {
                 if (3 <= $scope.slide) {
                     $scope.slide = 1;
@@ -14,7 +26,8 @@ module.exports = function sidebarAds($interval) {
                     $scope.slide += 1;
                 }
             }
-            $interval(updateSlide, 1000 * 8);
+
+            $scope.interval = $interval(updateSlide, 1000 * 8);
         }
     };
 };

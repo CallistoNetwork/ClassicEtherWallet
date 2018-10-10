@@ -1,4 +1,4 @@
-<article class="col-sm-8 view-wallet-content">
+<article class="col-sm-8 view-wallet-content" ng-init="pkeyVisible = false;">
 
     <section class="block">
         <div class="col-xs-11">
@@ -44,7 +44,7 @@
                 <input class="form-control no-animate" type="{{pkeyVisible ? 'text' : 'password'}}"
                        ng-value="walletService.wallet.getPrivateKeyString()" readonly="readonly">
                 <span tabindex="0" aria-label="make private key visible" role="button" class="input-group-addon eye"
-                      ng-click="showHidePkey()"></span>
+                      ng-click="pkeyVisible = !pkeyVisible"></span>
             </div>
         </div>
 
@@ -68,7 +68,7 @@
         <div class="col-xs-6">
 
 
-            <div ng-if="walletService.wallet.type ==='default'">
+            <div ng-if="walletService.wallet.hasOwnProperty('getPrivateKeyString')">
 
                 <h5>
                     <span translate="x_PrivKey">Private Key (unencrypted)</span>
@@ -83,7 +83,7 @@
                                style="display:none;width:0;height:0;padding:0">
                         <span tabindex="0" aria-label="make private key visible" role="button"
                               class="input-group-addon eye"
-                              ng-click="showHidePkey()"></span>
+                              ng-click="pkeyVisible = !pkeyVisible"></span>
                     </div>
                 </div>
             </div>

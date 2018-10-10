@@ -26,8 +26,6 @@ var Wallet = function(priv, pub, path, hwType, hwTransport) {
     this.hwTransport = hwTransport;
     this.type = "default";
 
-    this.balance = 0;
-
     this.balances = Object.keys(nodes.alternativeBalance).reduce(
         (total, key) => {
             total[key] = Object.assign(

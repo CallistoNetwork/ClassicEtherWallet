@@ -50,10 +50,6 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
 
     $scope.contract = initContract;
 
-    $scope.$on("ChangeWallet", () => {
-        $scope.tx.nonce = 0;
-    });
-
     $scope.$watch("contract.address", function(newValue, oldValue) {
         if (Validator.isValidAddress($scope.contract.address)) {
             for (var i in ajaxReq.abiList) {

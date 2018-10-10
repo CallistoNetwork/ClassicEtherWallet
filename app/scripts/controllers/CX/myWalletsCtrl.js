@@ -114,7 +114,9 @@ var myWalletsCtrl = function($scope, $sce, walletService) {
                     $scope.fiatVal.btc
                 );
 
-                $scope[varWal][id].balance = $scope.wallet.setBalance();
+                $scope[varWal][
+                    id
+                ].balance = $scope.wallet.setBalanceOfNetwork();
                 $scope[varWal][id].balanceR = $scope.wallet.setTokens();
             }
         });

@@ -69,7 +69,7 @@ const decryptWalletCtrl = function(
         $scope.onHDDPathChange();
     };
     $scope.showContent = function($fileContent) {
-        $scope.notifier.info(
+        uiFuncs.notifier.info(
             globalFuncs.successMsgs[4] +
                 document.getElementById("fselector").files[0].name
         );
@@ -78,7 +78,7 @@ const decryptWalletCtrl = function(
             $scope.showFDecrypt = !$scope.requireFPass;
             $scope.fileContent = $fileContent;
         } catch (e) {
-            $scope.notifier.danger(e);
+            uiFuncs.notifier.danger(e);
         }
     };
 
@@ -92,8 +92,8 @@ const decryptWalletCtrl = function(
         const manualprivkey = fixPkey($scope.manualprivkey);
 
         $scope.requirePPass =
-            manualprivkey.length == 128 || manualprivkey.length == 132;
-        $scope.showPDecrypt = manualprivkey.length == 64;
+            manualprivkey.length === 128 || manualprivkey.length === 132;
+        $scope.showPDecrypt = manualprivkey.length === 64;
     };
     $scope.onPrivKeyPassChange = function() {
         $scope.showPDecrypt = $scope.privPassword.length > 0;
@@ -120,7 +120,7 @@ const decryptWalletCtrl = function(
             );
             $scope.HDWallet.wallets[
                 $scope.HDWallet.wallets.length - 1
-            ].setBalance(false);
+            ].setBalanceOfNetwork();
         }
         $scope.HDWallet.id = 0;
         $scope.HDWallet.numWallets = start + limit;
@@ -163,7 +163,7 @@ const decryptWalletCtrl = function(
                 "addressOnly";
             $scope.HDWallet.wallets[
                 $scope.HDWallet.wallets.length - 1
-            ].setBalance(false);
+            ].setBalanceOfNetwork();
         }
         $scope.HDWallet.id = 0;
         $scope.HDWallet.numWallets = start + limit;
@@ -203,7 +203,7 @@ const decryptWalletCtrl = function(
         walletService.wallet = $scope.wallet =
             $scope.HDWallet.wallets[$scope.HDWallet.id];
         $scope.mnemonicModel.close();
-        $scope.notifier.info(globalFuncs.successMsgs[1]);
+        uiFuncs.notifier.info(globalFuncs.successMsgs[1]);
     };
     $scope.decryptWallet = function() {
         $scope.wallet = null;
@@ -216,7 +216,7 @@ const decryptWalletCtrl = function(
                 walletService.password = $scope.privPassword;
             } else if ($scope.showPDecrypt && !$scope.requirePPass) {
                 if (!Validator.isValidHex($scope.manualprivkey)) {
-                    $scope.notifier.danger(globalFuncs.errorMsgs[37]);
+                    uiFuncs.notifier.danger(globalFuncs.errorMsgs[37]);
                     return;
                 }
                 $scope.wallet = new Wallet(fixPkey($scope.manualprivkey));
@@ -228,9 +228,6 @@ const decryptWalletCtrl = function(
                 );
                 walletService.password = $scope.filePassword;
             } else if ($scope.showMDecrypt) {
-                $scope.mnemonicModel = new Modal(
-                    document.getElementById("mnemonicModel")
-                );
                 $scope.mnemonicModel.open();
                 $scope.onHDDPathChange($scope.mnemonicPassword);
             } else if ($scope.showParityDecrypt) {
@@ -238,10 +235,10 @@ const decryptWalletCtrl = function(
             }
             walletService.wallet = $scope.wallet;
         } catch (e) {
-            $scope.notifier.danger(globalFuncs.errorMsgs[6] + e);
+            uiFuncs.notifier.danger(globalFuncs.errorMsgs[6] + e);
         }
         if ($scope.wallet != null)
-            $scope.notifier.info(globalFuncs.successMsgs[1]);
+            uiFuncs.notifier.info(globalFuncs.successMsgs[1]);
     };
     $scope.decryptAddressOnly = function() {
         if (Validator.isValidAddress($scope.addressOnly)) {
@@ -255,9 +252,6 @@ const decryptWalletCtrl = function(
         }
     };
     $scope.HWWalletCreate = function(publicKey, chainCode, walletType, path) {
-        $scope.mnemonicModel = new Modal(
-            document.getElementById("mnemonicModel")
-        );
         $scope.mnemonicModel.open();
         $scope.HDWallet.hdk = new hd.HDKey();
         $scope.HDWallet.hdk.publicKey = new Buffer(publicKey, "hex");
@@ -274,15 +268,15 @@ const decryptWalletCtrl = function(
 
     $scope.digitalBitboxCallback = function(result, error) {
         $scope.HDWallet.digitalBitboxSecret = "";
-        if (typeof result != "undefined") {
+        if (typeof result !== "undefined") {
             $scope.HWWalletCreate(
                 result["publicKey"],
                 result["chainCode"],
                 "digitalBitbox",
                 $scope.HDWallet.dPath
             );
-            $scope.notifier.close();
-        } else $scope.notifier.danger(error);
+            uiFuncs.notifier.close();
+        } else uiFuncs.notifier.danger(error);
     };
     $scope.scanLedger = function() {
         Transport.create()
@@ -294,30 +288,14 @@ const decryptWalletCtrl = function(
                 const _display = false;
                 const _chainCode = true;
 
-                console.log("path", path);
-
-                eth.getAddress(path, _display, _chainCode)
-                    .then(result => {
-                        const { publicKey, address, chainCode = 60 } = result;
-                        $scope.HWWalletCreate(
-                            publicKey,
-                            chainCode,
-                            "ledger",
-                            path
-                        );
-                    })
-                    .catch(error => {
-                        console.error(error);
-
-                        $scope.ledgerError = true;
-                        $scope.ledgerErrorString = error;
-                        $scope.$apply();
-                    });
+                eth.getAddress(path, _display, _chainCode).then(result => {
+                    const { publicKey, address, chainCode = 60 } = result;
+                    $scope.HWWalletCreate(publicKey, chainCode, "ledger", path);
+                });
             })
             .catch(error => {
                 $scope.ledgerError = true;
                 $scope.ledgerErrorString = error;
-                $scope.$apply();
             });
     };
 
@@ -363,7 +341,6 @@ const decryptWalletCtrl = function(
             .catch(err => {
                 $scope.trezorError = true;
                 $scope.trezorErrorString = err;
-                $scope.$apply();
             });
     };
 
@@ -375,25 +352,17 @@ const decryptWalletCtrl = function(
         const web3 = window.web3;
 
         if (!web3) {
-            $scope.notifier.danger("ClassicMask / Metamask / Mist not found");
+            uiFuncs.notifier.danger("ClassicMask / Metamask / Mist not found");
         } else {
             web3.eth.getAccounts(function(err, accounts) {
                 if (err) {
-                    $scope.notifier.danger(
+                    uiFuncs.notifier.danger(
                         err +
                             ". Are you sure you are on a secure (SSL / HTTPS) connection?"
                     );
                 } else if (!(Array.isArray(accounts) && accounts.length > 0)) {
-                    $scope.notifier.danger("Unlock Account");
+                    uiFuncs.notifier.danger("Unlock Account");
                 } else {
-                    var address = accounts[0];
-                    var addressBuffer = Buffer.from(address.slice(2), "hex");
-                    var wallet = new Web3Wallet(addressBuffer);
-                    wallet.setBalance(false);
-                    // set wallet
-                    walletService.wallet = wallet;
-                    $scope.wallet = wallet;
-
                     const _node = _sample(
                         Object.values(nodes.nodeList)
                             .map((node, i) =>
@@ -408,7 +377,14 @@ const decryptWalletCtrl = function(
                         $rootScope.$broadcast("ChangeNode", _node.key || 0);
                     }
 
-                    $scope.notifier.info(globalFuncs.successMsgs[6]);
+                    const address = accounts[0];
+                    const addressBuffer = Buffer.from(address.slice(2), "hex");
+                    walletService.wallet = new Web3Wallet(addressBuffer);
+                    walletService.wallet.setBalanceOfNetwork();
+                    // set wallet
+                    $scope.wallet = walletService.wallet;
+
+                    uiFuncs.notifier.info(globalFuncs.successMsgs[6]);
                 }
             });
         }

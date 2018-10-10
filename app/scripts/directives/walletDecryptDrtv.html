@@ -143,7 +143,7 @@
             <!-- if selected type MetaMask-->
             <br/>
             <div id="selectedTypeMetamask" ng-if="walletType=='metamask'">
-                <p id="aria2" tabindex="0" translate="ADD_Ledger_0a" class="text-danger" ng-hide="isSSL">
+                <p tabindex="0" translate="ADD_Ledger_0a" class="text-danger" ng-hide="isSSL">
                     You must access ClassicEtherWallet via a secure(SSL / HTTPS) connection to connect.
                 </p>
                 <div class="form-group">
@@ -595,7 +595,7 @@
                                 <td>
                                     <label>
                                         <input aria-describedby="modalTitle2"
-                                               aria-label="Unlock wallet with {{wallet.getBalance()}} {{ajaxReq.type}}. Address: {{wallet.getChecksumAddressString()}}"
+                                               aria-label="Unlock wallet with {{wallet.balances[ajaxReq.type].balance}} {{ajaxReq.type}}. Address: {{wallet.getChecksumAddressString()}}"
                                                name="addressSelect"
                                                ng-model="HDWallet.id"
                                                type="radio"
@@ -607,7 +607,7 @@
                                 <td class="text-right">
                                     <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', wallet.getAddressString())}}"
                                        target="_blank" rel="noopener">
-                                        {{wallet.getBalance()}}
+                                        {{wallet.balances[ajaxReq.type].balance}}
                                         <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"/>
                                     </a>
                                 </td>

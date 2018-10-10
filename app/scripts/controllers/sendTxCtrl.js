@@ -311,13 +311,13 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.sendTx = function() {
         $scope.sendTxModal.close();
         uiFuncs.sendTx($scope.signedTx, true).then(function(resp) {
-            walletService.wallet.setBalance();
+            walletService.wallet.setBalanceOfNetwork();
             if ($scope.tx.sendMode === "token")
                 walletService.wallet.tokenObjs[$scope.tokenTx.id].setBalance();
         });
     };
     $scope.transferAllBalance = function() {
-        if ($scope.tx.sendMode != "token") {
+        if ($scope.tx.sendMode !== "token") {
             uiFuncs
                 .transferAllBalance(
                     walletService.wallet.getAddressString(),

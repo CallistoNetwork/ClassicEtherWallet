@@ -1,3 +1,4 @@
+<send-tx-modal></send-tx-modal>
 <article class="swap-order">
 
 
@@ -76,8 +77,6 @@
             <div class="progress-circle"><i>4</i></div>
             <p>
                 <span translate="SWAP_progress_4">Sending your </span> {{orderResult.toCurrency}} <br/>
-                <small ng-show="orderResult.fromCurrency=='ETH'"> Waiting for 10 confirmations...</small>
-                <small ng-show="orderResult.fromCurrency=='BTC'"> Waiting for 1 confirmation...</small>
             </p>
         </div>
         <div class="progress-item {{orderResult.progress.bar[4]}}">
@@ -131,11 +130,11 @@
                 </div>
             </section>
 
-            <section ng-show="wallet" class="row">
+            <section ng-show="walletService.wallet" class="row">
                 @@if (site === 'cew' ) { @@include( './sendTx-content.tpl', { "site": "cew" } ) }
                 @@if (site === 'cx' ) { @@include( './sendTx-content.tpl', { "site": "cx" } ) }
 
-                <send-tx-modal></send-tx-modal>
+
             </section>
         </article>
     </div>

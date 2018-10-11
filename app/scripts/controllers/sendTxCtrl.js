@@ -102,6 +102,7 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
 
         if ($scope.parentTxConfig) {
             Object.assign($scope.tx, $scope.parentTxConfig);
+            $scope.addressDrtv.ensAddressField = $scope.parentTxConfig.to;
             $scope.$watch(
                 "parentTxConfig",
                 function() {

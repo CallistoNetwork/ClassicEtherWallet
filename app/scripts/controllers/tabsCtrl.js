@@ -1,4 +1,5 @@
 "use strict";
+const _throttle = require("lodash/throttle");
 
 var tabsCtrl = function(
     $http,
@@ -478,7 +479,7 @@ Network: <strong>${ajaxReq.type}</strong> provided by <strong>${
 
     $scope.currentBlockNumber = LOADING;
 
-    $scope.setBlockNumbers = function() {
+    $scope._setBlockNumbers = function() {
         ajaxReq.getCurrentBlock(function(data) {
             if (data.error || !data.data) {
                 $scope.currentBlockNumber = ERROR;
@@ -488,12 +489,21 @@ Network: <strong>${ajaxReq.type}</strong> provided by <strong>${
         });
     };
 
+    $scope.setBlockNumbers = _throttle(() => $scope._setBlockNumbers(), 1000);
+
     $scope.$on("ChangeNode", function(key) {
         $scope.nodeType = ajaxReq.type;
         $scope.nodeService = ajaxReq.service;
         $scope.currentBlockNumber = LOADING;
         $scope.setBlockNumbers();
-        walletService.wallet.setBalance();
+
+        if (
+            walletService &&
+            walletService.wallet &&
+            walletService.wallet.getAddressString()
+        ) {
+            walletService.wallet.setBalance();
+        }
     });
 
     $scope.$on("$destroy", () => {
@@ -502,8 +512,8 @@ Network: <strong>${ajaxReq.type}</strong> provided by <strong>${
         $scope.blockNumberInterval = null;
     });
 
-    $scope.setBlockNumbers();
     window.coinPriceService.initPrices();
+    $scope.setBlockNumbers();
     $scope.blockNumberInterval = $interval($scope.setBlockNumbers, 1000 * 30);
 };
 module.exports = tabsCtrl;

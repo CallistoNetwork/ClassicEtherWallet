@@ -1,4 +1,4 @@
-<send-tx-modal></send-tx-modal>
+
 <article class="swap-order">
 
 
@@ -103,6 +103,7 @@
 
     <div ng-controller='sendTxCtrl'>
 
+        <send-tx-modal></send-tx-modal>
         <!-- Swap CTA ETH -->
         <article class="row"
                  ng-show="['new', 'waiting'].includes(orderResult.status.toLowerCase())">
@@ -133,6 +134,7 @@
             <section ng-show="walletService.wallet" class="row">
                 @@if (site === 'cew' ) { @@include( './sendTx-content.tpl', { "site": "cew" } ) }
                 @@if (site === 'cx' ) { @@include( './sendTx-content.tpl', { "site": "cx" } ) }
+
 
 
             </section>

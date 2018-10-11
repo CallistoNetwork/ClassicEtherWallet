@@ -591,32 +591,35 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="wallet in HDWallet.wallets track by $index">
+                            <tr ng-repeat="_wallet in HDWallet.wallets track by _wallet.getChecksumAddressString()">
                                 <td>
                                     <label>
                                         <input aria-describedby="modalTitle2"
-                                               aria-label="Unlock wallet with {{wallet.balances[ajaxReq.type].balance}} {{ajaxReq.type}}. Address: {{wallet.getChecksumAddressString()}}"
+                                               aria-label="Unlock wallet with {{_wallet.balances[ajaxReq.type].balance}} {{ajaxReq.type}}. Address: {{_wallet.getChecksumAddressString()}}"
                                                name="addressSelect"
                                                ng-model="HDWallet.id"
                                                type="radio"
                                                value="{{$index}}"
                                         />
-                                        <span class="small">{{wallet.getChecksumAddressString()}}</span>
+                                        <span class="small">{{_wallet.getChecksumAddressString()}}</span>
                                     </label>
                                 </td>
                                 <td class="text-right">
-                                    <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', wallet.getAddressString())}}"
+                                    <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', _wallet.getAddressString())}}"
                                        target="_blank" rel="noopener">
-                                        {{wallet.balances[ajaxReq.type].balance}}
-                                        <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"/>
+                                        {{_wallet.balances[ajaxReq.type].balance}}
+                                        <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"
+                                                   hidetext="{{true}}"></coin-icon>
+                                        {{ajaxReq.type}}
                                     </a>
                                 </td>
                                 <td class="text-center">
-                                    <a href="https://ethplorer.io/address/{{wallet.getAddressString()}}" target="_blank"
+                                    <a href="https://ethplorer.io/address/{{_wallet.getAddressString()}}"
+                                       target="_blank"
                                        rel="noopener"
-                                       title="https://ethplorer.io/address/{{wallet.getAddressString()}}">
+                                       title="https://ethplorer.io/address/{{_wallet.getAddressString()}}">
                                         <img src="images/icon-external-link.svg"
-                                             title="https://ethplorer.io/address/{{wallet.getAddressString()}}"
+                                             title="https://ethplorer.io/address/{{_wallet.getAddressString()}}"
                                              ng-click="removeTokenFromLocal(token.symbol)"
                                              ng-show="token.type!=='default'"/>
                                     </a>

@@ -431,7 +431,8 @@ var ensCtrl = function($scope, $sce, $rootScope, walletService) {
                 _objENS.status != $scope.ensModes.reveal &&
                 (!$scope.Validator.isPositiveNumber(_objENS.dValue) ||
                     _objENS.dValue < _objENS.bidValue ||
-                    $scope.wallet.balance <= _objENS.dValue)
+                    $scope.wallet.balances[ajaxReq.type].balance <=
+                        _objENS.dValue)
             )
                 throw globalFuncs.errorMsgs[0];
             else if (!$scope.Validator.isPasswordLenValid(_objENS.secret, 0))

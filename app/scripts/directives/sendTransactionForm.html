@@ -7,8 +7,8 @@
 
 
 <!-- Amount to Send -->
-    <label translate="SEND_amount">Amount to Send:</label>
-    <div class="input-group col-sm-11">
+<label translate="SEND_amount">Amount to Send:</label>
+<div class="input-group col-sm-11">
     <input
         type="number"
         class="form-control"
@@ -36,15 +36,19 @@
             </strong>
         </a>
         <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownAmount">
-            <li><a ng-class="{true:'active'}[tx.sendMode=='ether']"
+            <!-- fixme -->
+            <li><a ng-class="{true:'active'}[tx.sendMode === 'ether']"
                    ng-click="setSendMode('ether')">
-                <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"/>
+                <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
+                {{ajaxReq.type}}
             </a>
             </li>
-            <li ng-repeat="token in wallet.tokenObjs track by $index"
-                ng-show="token.balance!=0 && token.balance!='loading' || token.type!=='default' || tokenVisibility=='shown'">
-                <a ng-class="{true:'active'}[unitReadable == token.getSymbol()]"
-                   ng-click="setSendMode('token', $index, token.getSymbol())"> {{token.getSymbol()}} </a>
+            <li ng-repeat="token in walletService.wallet.tokenObjs track by $index"
+                ng-show="tokenVisibility=='shown' && token.balance !== 0 && token.type !== 'default'">
+                <a ng-class="{true:'active'}[unitReadable === token.getSymbol()]"
+                   ng-click="setSendMode('token', $index, token.getSymbol())">
+                    {{token.getSymbol()}}
+                </a>
             </li>
 
         </ul>

@@ -31,7 +31,10 @@ module.exports = function sendTransactionForm(walletService) {
                     etherUnits.toWei(_val, "ether")
                 ).add(etherUnits.toWei(scope.txCostEther, "ether"));
                 const _balance = new BigNumber(
-                    etherUnits.toWei(walletService.wallet.balance, "ether")
+                    etherUnits.toWei(
+                        walletService.wallet.balances[ajaxReq.type].balance,
+                        "ether"
+                    )
                 );
 
                 Object.assign(scope.tx, {

@@ -1,6 +1,7 @@
 "use strict";
 const etherUnits = require("../etherUnits.js");
 const _throttle = require("lodash/throttle");
+const BigNumber = require("bignumber.js");
 
 const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     const gasPrice = parseFloat(
@@ -276,9 +277,9 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     };
     $scope.transferAllBalance = function() {
         if ($scope.tx.sendMode === "token") {
-            $scope.tx.value = walletService.wallet.tokenObjs[
-                $scope.tokenTx.id
-            ].getBalance();
+            $scope.tx.value = new BigNumber(
+                walletService.wallet.tokenObjs[$scope.tokenTx.id].getBalance()
+            ).toNumber();
         } else {
             uiFuncs
                 .transferAllBalance(

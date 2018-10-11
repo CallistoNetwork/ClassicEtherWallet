@@ -80,10 +80,10 @@ var tabsCtrl = function(
                 $scope.wd = false;
                 return;
             }
-            walletService.wallet.setBalance();
-            $scope.wallet = walletService.wallet;
             $scope.wd = true;
+            $scope.wallet = walletService.wallet;
             $rootScope.$broadcast("ChangeWallet", addr);
+            walletService.wallet.setBalance();
         }
     );
 

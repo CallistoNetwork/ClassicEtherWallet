@@ -53,6 +53,7 @@
             <div class="input-group-btn">
                 <button style="min-width: 170px"
                         class="btn btn-default"
+                        translate="SEND_estimateGas"
                         ng-click="estimateGasLimit()"
                 > Estimate gasLimit
                 </button>

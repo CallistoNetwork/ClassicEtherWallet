@@ -19,6 +19,8 @@ var tabsCtrl = function(
         document.getElementById("customNodeModal")
     );
 
+    $scope.ethUtil = ethUtil;
+
     $scope.nodeList = nodes.nodeList;
     $scope.defaultNodeKey = globalFuncs.networks.ETC; // 'etc_ethereumcommonwealth_parity';
 

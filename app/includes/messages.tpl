@@ -41,7 +41,7 @@
 
 
 
-    <div>
+    <div ng-show="wd">
 
         <!-- Title -->
         <div class="block text-center" >

@@ -41,7 +41,7 @@
 
 
 
-    <div ng-show="wd">
+    <div ng-show="wd || walletService.wallet">
 
         <!-- Title -->
         <div class="block text-center" >

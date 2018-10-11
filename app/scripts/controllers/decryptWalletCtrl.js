@@ -378,10 +378,10 @@ const decryptWalletCtrl = function(
                                 })
                             )
                     );
-                    walletService.wallet.setBalanceOfNetwork();
                     if (_node) {
                         $rootScope.$broadcast("ChangeNode", _node.key || 0);
                     }
+                    walletService.wallet.setBalanceOfNetwork();
                     $scope.wallet = walletService.wallet;
                     uiFuncs.notifier.info(globalFuncs.successMsgs[6]);
                 }

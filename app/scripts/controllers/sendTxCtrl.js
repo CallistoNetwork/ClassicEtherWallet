@@ -281,14 +281,15 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
                 walletService.wallet.tokenObjs[$scope.tokenTx.id].getBalance()
             ).toNumber();
         } else {
-            uiFuncs
+            $scope.tx.value = null;
+
+            return uiFuncs
                 .transferAllBalance(
                     walletService.wallet.getAddressString(),
                     $scope.tx.gasLimit
                 )
-                .then(function(resp) {
-                    $scope.tx.unit = resp.unit;
-                    $scope.tx.value = Number(resp.value);
+                .then(function({ unit, value, nonce, gasPrice }) {
+                    Object.assign($scope.tx, { unit, value, gasPrice, nonce });
                 })
                 .catch(resp => {
                     $scope.showRaw = false;

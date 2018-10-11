@@ -404,32 +404,31 @@ uiFuncs.handleWeb3Trans = function(signedTx) {
 
 uiFuncs.transferAllBalance = function(addr, gasLimit) {
     return new Promise((resolve, reject) => {
-        try {
-            ajaxReq.getTransactionData(addr, function(data) {
-                if (data.error) throw data.msg;
-                data = data.data;
-                const gasPrice = new BigNumber(
-                    ethFuncs.sanitizeHex(
-                        ethFuncs.addTinyMoreToGas(data.gasprice)
-                    )
-                ).times(gasLimit);
-                let maxVal = new BigNumber(data.balance).minus(gasPrice);
-                maxVal =
-                    etherUnits.toEther(maxVal, "wei") < 0
-                        ? 0
-                        : etherUnits.toEther(maxVal, "wei");
-                resolve({
-                    isError: false,
-                    unit: "ether",
-                    value: maxVal
+        ajaxReq.getTransactionData(addr, function(data) {
+            if (data.error) {
+                reject({
+                    isError: true,
+                    error: data.error
                 });
+            }
+            const {
+                data: { gasprice, balance, nonce, address }
+            } = data;
+            const gasPrice = new BigNumber(
+                ethFuncs.sanitizeHex(ethFuncs.addTinyMoreToGas(gasprice))
+            );
+            const gasCost = gasPrice.times(gasLimit);
+            const maxVal = new BigNumber(balance).minus(gasCost);
+            const value = Math.max(0, etherUnits.toEther(maxVal, "wei"));
+            resolve({
+                isError: false,
+                unit: "ether",
+                value,
+                gasPrice,
+                nonce,
+                address
             });
-        } catch (e) {
-            reject({
-                isError: true,
-                error: e
-            });
-        }
+        });
     });
 };
 uiFuncs.notifier = {

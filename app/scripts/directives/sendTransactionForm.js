@@ -27,21 +27,39 @@ module.exports = function sendTransactionForm(walletService) {
 
             form.value.$validators.enoughBalance = _val => {
                 if (!_val) return true;
+
                 const txCost = new BigNumber(
                     etherUnits.toWei(_val, "ether")
                 ).add(etherUnits.toWei(scope.txCostEther, "ether"));
-                const _balance = new BigNumber(
-                    etherUnits.toWei(
-                        walletService.wallet.balances[ajaxReq.type].balance,
-                        "ether"
-                    )
-                );
+
+                let balance = 0;
+
+                if (scope.tx.sendMode === "ether") {
+                    balance = new BigNumber(
+                        etherUnits.toWei(
+                            walletService.wallet.balances[ajaxReq.type].balance,
+                            "ether"
+                        )
+                    );
+                } else if (scope.tx.sendMode === "token") {
+                    balance = new BigNumber(
+                        etherUnits.toWei(
+                            walletService.wallet.tokenObjs[scope.tokenTx.id]
+                                .balance,
+                            "ether"
+                        )
+                    );
+                } else {
+                    throw new Error(
+                        "Unknown tx.sendMode, must be token / ether"
+                    );
+                }
 
                 Object.assign(scope.tx, {
                     totalTxCost: txCost.toString()
                 });
 
-                return txCost.lt(_balance);
+                return txCost.lte(balance);
             };
         }
     };

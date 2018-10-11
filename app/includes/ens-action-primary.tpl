@@ -39,7 +39,7 @@
       <p ng-show="objENS.status!=ensModes.reveal"><em><small>You must remember this to claim your name later.</small></em></p>
       <div class="input-group">
         <!-- validate wallet balance for everything but reveal -->
-        <input ng-show="objENS.status!=ensModes.reveal" class="form-control" type="number" placeholder="1 {{ajaxReq.type}}" ng-model="objENS.bidValue" ng-class="Validator.isPositiveNumber(objENS.bidValue) && objENS.bidValue >= 0.01 && objENS.bidValue < wallet.balance ? 'is-valid' : 'is-invalid'"/>
+        <input ng-show="objENS.status!=ensModes.reveal" class="form-control" type="number" placeholder="1 {{ajaxReq.type}}" ng-model="objENS.bidValue" ng-class="Validator.isPositiveNumber(objENS.bidValue) && objENS.bidValue >= 0.01 && objENS.bidValue < wallet.balances[ajaxReq.type].balance ? 'is-valid' : 'is-invalid'"/>
         <!-- don't check wallet balance for reveal -->
         <input ng-show="objENS.status==ensModes.reveal" class="form-control" type="number" placeholder="1 {{ajaxReq.type}}" ng-model="objENS.bidValue" ng-class="Validator.isPositiveNumber(objENS.bidValue) && objENS.bidValue >= 0.01 ? 'is-valid' : 'is-invalid'"/>
         <div class="input-group-btn"><a class="btn btn-default">{{ajaxReq.type}}</a></div>
@@ -51,7 +51,7 @@
         <h5>Bid Mask</h5>
         <p><em><small>This is the amount of {{ajaxReq.type}} you send when placing your bid. It has no bearing on the *actual* amount you bid (above). It is simply to hide your real bid amount. It must be >= to your actual bid. </small></em></p>
         <div class="input-group">
-          <input class="form-control" type="number" placeholder="2 {{ajaxReq.type}}" ng-model="objENS.dValue" ng-class="Validator.isPositiveNumber(objENS.dValue) && objENS.dValue >= objENS.bidValue && objENS.dValue < wallet.balance ? 'is-valid' : 'is-invalid'"/>
+          <input class="form-control" type="number" placeholder="2 {{ajaxReq.type}}" ng-model="objENS.dValue" ng-class="Validator.isPositiveNumber(objENS.dValue) && objENS.dValue >= objENS.bidValue && objENS.dValue < wallet.balances[ajaxReq.type].balance ? 'is-valid' : 'is-invalid'"/>
           <div class="input-group-btn"><a class="btn btn-default">{{ajaxReq.type}}</a></div>
         </div>
       </div>

@@ -1,5 +1,14 @@
 <table class="table table-responsive">
-    <caption translate="sidebar_AccountBal">Account Balance</caption>
+    <caption
+    >
+         <span translate="sidebar_AccountBal">
+        Account Balance
+        </span>
+        <span
+            ng-click="refreshBalances();"
+            class="pointer glyphicon glyphicon-refresh">
+        </span>
+    </caption>
     <thead>
     <tr ng-if="coldStakingService.validNetwork();">
         <th translate="sidebar_AccountBal">
@@ -21,32 +30,32 @@
         <td>
             <div ng-show="coldStakingService.validNetwork()" ng-init="showLongBal_ = false;">
                          <span
-                             title="{{walletService.wallet.balance}} (Double-Click)"
+                             title="{{walletService.wallet.balances[ajaxReq.type].balance}} (Double-Click)"
                              class="text-right pointer"
                          >
                           <span ng-dblclick="showLongBal_ = !showLongBal_">
                                 <span class="mono wrap"
-                                      ng-show="!showLongBal_">{{walletService.wallet.balance | number}}</span>
-                                <span class="mono wrap" ng-show="showLongBal_">{{walletService.wallet.balance}}</span>
+                                      ng-show="!showLongBal_">{{walletService.wallet.balances[ajaxReq.type].balance | number}}</span>
+                                <span class="mono wrap" ng-show="showLongBal_">{{walletService.wallet.balances[ajaxReq.type].balance}}</span>
                            </span>
                         </span>
             </div>
-           <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
+            <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
             {{ajaxReq.type}}
         </td>
 
 
         <td class="text-right">
                     <span ng-show="!coldStakingService.validNetwork()"
-                          title="{{walletService.wallet.balance}} (Double-Click)"
+                          title="{{walletService.wallet.balances[ajaxReq.type].balance}} (Double-Click)"
                           class="text-left pointer"
                     >
                           <span
                               ng-init="showLongBalance = false;"
                               ng-dblclick="showLongBalance = !showLongBalance">
                                 <span class="mono wrap"
-                                      ng-show="!showLongBalance">{{walletService.wallet.balance | number}}</span>
-                                <span class="mono wrap" ng-show="showLongBalance">{{walletService.wallet.balance}}</span>
+                                      ng-show="!showLongBalance">{{walletService.wallet.balances[ajaxReq.type].balance | number}}</span>
+                                <span class="mono wrap" ng-show="showLongBalance">{{walletService.wallet.balances[ajaxReq.type].balance}}</span>
                            </span>
                     </span>
             <span
@@ -113,10 +122,15 @@
         </td>
     </tr>
 
-    <tr ng-repeat="altBalance in toArray(alternativeBalance) | filter: notAjaxReq">
+    <tr
+        ng-repeat="(key, altBalance) in walletService.wallet.balances |
+    toArray |
+    filter: {symbol: '!' + ajaxReq.type}
+    track by key + altBalance.symbol + $index"
+    >
 
         <td class="text-left">
-         <coin-icon icon="{{altBalance.symbol.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
+            <coin-icon icon="{{altBalance.symbol.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
             {{altBalance.symbol}}
         </td>
         <td class="account-info point text-right"
@@ -137,7 +151,9 @@
     >
         <td><b>Equivalent Values:</b></td>
         <td ng-show="coldStakingService.validNetwork()"></td>
-        <td class="text-right">BTC: <span class="mono wrap">{{walletService.wallet.btcBalance | number}}</span>
+        <td class="text-right">
+            <span class="mono wrap">{{walletService.wallet.sumBalances().btcBalance | number}}</span>
+            <coin-icon icon="btc"></coin-icon>
         </td>
     </tr>
     <tr
@@ -145,8 +161,11 @@
         <td ng-show="coldStakingService.validNetwork()" style="border-top: none;"></td>
         <td
             style="border: none;"
-            colspan="2" class="text-right">USD: <span
-            class="mono wrap">{{walletService.wallet.usdBalance | currency:"$"}}</span></td>
+            colspan="2"
+            class="text-right mono"
+        >
+            <span
+                class="mono wrap">{{walletService.wallet.sumBalances().usdBalance | currency:"$"}}</span></td>
     </tr>
     </tfoot>
 </table>

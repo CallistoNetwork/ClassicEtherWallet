@@ -1,4 +1,5 @@
 "use strict";
+const _throttle = require("lodash/throttle");
 
 var tabsCtrl = function(
     $http,
@@ -7,7 +8,8 @@ var tabsCtrl = function(
     walletService,
     $translate,
     $sce,
-    $interval
+    $interval,
+    $rootScope
 ) {
     $scope.gService = globalService;
     $scope.tabNames = $scope.gService.tabs;
@@ -17,7 +19,6 @@ var tabsCtrl = function(
         document.getElementById("customNodeModal")
     );
 
-    $scope.Validator = Validator;
     $scope.nodeList = nodes.nodeList;
     $scope.defaultNodeKey = globalFuncs.networks.ETC; // 'etc_ethereumcommonwealth_parity';
 
@@ -37,8 +38,11 @@ var tabsCtrl = function(
     $scope.nodeIsConnected = true;
     $scope.browserProtocol = window.location.protocol;
     const hval = window.location.hash;
+
     $scope.notifier = uiFuncs.notifier;
+    $scope.nodeType = ajaxReq.type;
     $scope.notifier.sce = $sce;
+    $scope.nodeService = ajaxReq.service;
     $scope.notifier.scope = $scope;
     $scope.ajaxReq = ajaxReq;
     $scope.nodeType = $scope.ajaxReq.type;
@@ -61,12 +65,25 @@ var tabsCtrl = function(
         });
     };
 
-    $scope.$watch("ajaxReq.type", function() {
-        $scope.nodeType = $scope.ajaxReq.type;
-    });
-    $scope.$watch("ajaxReq.service", function() {
-        $scope.nodeService = $scope.ajaxReq.service;
-    });
+    $scope.$watch(
+        () => {
+            return (
+                walletService &&
+                walletService.wallet &&
+                walletService.wallet.getAddressString()
+            );
+        },
+        addr => {
+            if (!(addr && ethFuncs.validateEtherAddress(addr))) {
+                $scope.wd = false;
+                return;
+            }
+            walletService.wallet.setBalance();
+            $scope.wallet = walletService.wallet;
+            $scope.wd = true;
+            $rootScope.$broadcast("ChangeWallet", addr);
+        }
+    );
 
     $scope.setArrowVisibility = function() {
         setTimeout(function() {
@@ -111,8 +128,8 @@ var tabsCtrl = function(
 
     $scope.validateGasPrice = function validateGasPrice() {
         if (!isValidPrice($scope.gas.value)) {
-            // $scope.notifier.danger(globalFuncs.errorMsgs[38]);
-            $scope.notifier.danger(
+            // uiFuncs.notifier.danger(globalFuncs.errorMsgs[38]);
+            uiFuncs.notifier.danger(
                 "Invalid gas price! Min gasPrice is 0.1 GWei. Max gasPrice is 100 GWei. GasPrice is resetted to 21GWei default value!"
             );
             $scope.gas.value = $scope.gas.defaultValue;
@@ -139,10 +156,6 @@ var tabsCtrl = function(
 
         $scope.gasChanged();
     };
-
-    $scope.$watch("keyNode", function() {
-        $scope.setGasPrice();
-    });
 
     $scope.setGasPrice();
 
@@ -177,19 +190,21 @@ var tabsCtrl = function(
             })
         );
         $scope.keyNode = globalFuncs.localStorage.getItem("curNode", null);
+        $rootScope.$broadcast("ChangeNode", key);
 
         $scope.curNode.lib
             .healthCheck()
             .then(result => {
                 $scope.nodeIsConnected = true;
-                $scope.notifier.info(
+
+                uiFuncs.notifier.info(
                     `${
                         globalFuncs.successMsgs[5]
                     } — Now, check the URL: <strong> ${
                         window.location.href
                     }.</strong> <br /> 
-Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
-                        $scope.nodeService
+Network: <strong>${ajaxReq.type}</strong> provided by <strong>${
+                        ajaxReq.service
                     }.</strong>`,
                     5000
                 );
@@ -199,11 +214,11 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         function _handleErr(err) {
             $scope.nodeIsConnected = false;
 
-            $scope.notifier.danger(globalFuncs.errorMsgs[32]);
+            uiFuncs.notifier.danger(globalFuncs.errorMsgs[32]);
         }
     };
     $scope.checkNodeUrl = function(nodeUrl) {
-        return $scope.Validator.isValidURL(nodeUrl);
+        return Validator.isValidURL(nodeUrl);
     };
     $scope.setCurNodeFromStorage = function() {
         var node = globalFuncs.localStorage.getItem("curNode", null);
@@ -377,7 +392,7 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
     $scope.changeLanguage = function(key, value) {
         $translate.use(key);
         $scope.setErrorMsgLanguage();
-        if (globalFuncs.getEthNodeName() == "geth")
+        if (globalFuncs.getEthNodeName() === "geth")
             $scope.setGethErrMsgLanguage();
         else $scope.setParityErrMsgLanguage();
         $scope.curLang = value;
@@ -439,10 +454,6 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         ele.scrollLeft += val;
     };
 
-    $scope.$on("ChangeNode", function(event, nodeId) {
-        $scope.changeNode(nodeId);
-    });
-
     $scope.$on("ChangeGas", function($event, gasPrice) {
         $scope.gas.value = gasPrice;
         $scope.validateGasPrice();
@@ -468,7 +479,7 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
 
     $scope.currentBlockNumber = LOADING;
 
-    $scope.setBlockNumbers = function() {
+    $scope._setBlockNumbers = function() {
         ajaxReq.getCurrentBlock(function(data) {
             if (data.error || !data.data) {
                 $scope.currentBlockNumber = ERROR;
@@ -478,20 +489,31 @@ Network: <strong>${$scope.nodeType}</strong> provided by <strong>${
         });
     };
 
-    $scope.$watch(
-        function() {
-            return globalFuncs.getCurNode();
-        },
-        function(newNode, oldNode) {
-            if (!angular.equals(newNode, oldNode)) {
-                $scope.currentBlockNumber = LOADING;
-                $scope.setBlockNumbers();
-            }
-        }
-    );
+    $scope.setBlockNumbers = _throttle(() => $scope._setBlockNumbers(), 1000);
 
-    $scope.setBlockNumbers();
-    $interval($scope.setBlockNumbers, 1000 * 30);
+    $scope.$on("ChangeNode", function(key) {
+        $scope.nodeType = ajaxReq.type;
+        $scope.nodeService = ajaxReq.service;
+        $scope.currentBlockNumber = LOADING;
+        $scope.setBlockNumbers();
+
+        if (
+            walletService &&
+            walletService.wallet &&
+            walletService.wallet.getAddressString()
+        ) {
+            walletService.wallet.setBalance();
+        }
+    });
+
+    $scope.$on("$destroy", () => {
+        $interval.cancel($scope.blockNumberInterval);
+
+        $scope.blockNumberInterval = null;
+    });
+
     window.coinPriceService.initPrices();
+    $scope.setBlockNumbers();
+    $scope.blockNumberInterval = $interval($scope.setBlockNumbers, 1000 * 30);
 };
 module.exports = tabsCtrl;

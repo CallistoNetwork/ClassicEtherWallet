@@ -37,7 +37,7 @@
 
 
     <!-- Send Tx Content -->
-    <article ng-show="wallet!=null">
+    <article ng-show="wd">
 
         @@if (site === 'cew' ) { @@include( './sendTx-content.tpl', { "site": "cew" } ) }
         @@if (site === 'cx' ) { @@include( './sendTx-content.tpl', { "site": "cx" } ) }

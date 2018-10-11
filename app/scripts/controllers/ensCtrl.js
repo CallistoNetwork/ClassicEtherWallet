@@ -68,20 +68,10 @@ var ensCtrl = function($scope, $sce, $rootScope, walletService) {
             ];
         return nodes.ensNodeTypes.indexOf(ajaxReq.type) > -1;
     };
-    $scope.$watch(
-        function() {
-            if (walletService.wallet == null) return null;
-            return walletService.wallet.getAddressString();
-        },
-        function() {
-            if (walletService.wallet == null) return;
-            $scope.wallet = walletService.wallet;
-            $scope.wd = true;
-            $scope.objENS.nameReadOnly = true;
-            $scope.wallet.setBalance();
-            $scope.wallet.setTokens();
-        }
-    );
+
+    $scope.$on("ChangeWallet", () => {
+        $scope.objENS.nameReadOnly = true;
+    });
     $scope.getCurrentTime = function() {
         return new Date().toString();
     };
@@ -441,7 +431,8 @@ var ensCtrl = function($scope, $sce, $rootScope, walletService) {
                 _objENS.status != $scope.ensModes.reveal &&
                 (!$scope.Validator.isPositiveNumber(_objENS.dValue) ||
                     _objENS.dValue < _objENS.bidValue ||
-                    $scope.wallet.balance <= _objENS.dValue)
+                    $scope.wallet.balances[ajaxReq.type].balance <=
+                        _objENS.dValue)
             )
                 throw globalFuncs.errorMsgs[0];
             else if (!$scope.Validator.isPasswordLenValid(_objENS.secret, 0))

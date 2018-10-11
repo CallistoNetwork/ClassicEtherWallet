@@ -3,7 +3,7 @@
 
     <ul class="list-group">
 
-        <li ng-if="!messageService.loadingMessages && empty()">No messages found for {{wallet.getAddressString()}}
+        <li ng-if="!messageService.loadingMessages && empty()">No messages found for {{walletService.wallet.getAddressString()}}
         </li>
 
         <li ng-if="messageService.loadingMessages">

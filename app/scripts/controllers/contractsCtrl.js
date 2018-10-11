@@ -33,29 +33,22 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
         bytecode: ""
     };
 
-    var node = globalFuncs.getCurNode();
-    $scope.selectedAbi = nodes.nodeList[node].abiList[0] || "";
+    $scope.selectedAbi =
+        Array.isArray(ajaxReq.abiList) && 0 < ajaxReq.abiList.length
+            ? ajaxReq.abiList[0]
+            : "";
 
     $scope.tx = initTrans;
+
+    $scope.abiList = function() {
+        return ajaxReq.abiList;
+    };
 
     $scope.rawTx = null;
 
     $scope.signedTx = null;
 
     $scope.contract = initContract;
-
-    $scope.$watch(
-        function() {
-            if (walletService.wallet == null) return null;
-            return walletService.wallet.getAddressString();
-        },
-        function() {
-            if (walletService.wallet == null) return;
-            $scope.wallet = walletService.wallet;
-            $scope.wd = true;
-            $scope.tx.nonce = 0;
-        }
-    );
 
     $scope.$watch("contract.address", function(newValue, oldValue) {
         if (Validator.isValidAddress($scope.contract.address)) {

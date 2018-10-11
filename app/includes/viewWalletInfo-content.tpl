@@ -1,4 +1,4 @@
-<article class="col-sm-8 view-wallet-content">
+<article class="col-sm-8 view-wallet-content" ng-init="pkeyVisible = false;">
 
     <section class="block">
         <div class="col-xs-11">
@@ -9,11 +9,11 @@
                     recognize your address.</p>
                 <h5 translate="x_Address">Your Address:</h5>
             </div>
-            <input class="form-control" type="text" ng-value="wallet.getChecksumAddressString()" readonly="readonly">
+            <input class="form-control" type="text" ng-value="walletService.wallet.getChecksumAddressString()" readonly="readonly">
         </div>
 
         <div class="col-xs-1 address-identicon-container">
-            <div class="addressIdenticon" title="Address Indenticon" blockie-address="{{wallet.getAddressString()}}"
+            <div class="addressIdenticon" title="Address Indenticon" blockie-address="{{walletService.wallet.getAddressString()}}"
                  watch-var="wallet"></div>
         </div>
 
@@ -29,7 +29,7 @@
                 DOWNLOAD </a>
         </div>
 
-        <div class="col-xs-12" ng-if="wallet.type === 'default'">
+        <div class="col-xs-12" ng-if="walletService.wallet.type === 'default'">
             <div class="account-help-icon">
                 <img src="images/icon-help.svg" class="help-icon"/>
                 <p class="account-help-text" translate="x_PrivKeyDesc">This is the unencrypted text version of your
@@ -42,14 +42,14 @@
             </div>
             <div class="input-group">
                 <input class="form-control no-animate" type="{{pkeyVisible ? 'text' : 'password'}}"
-                       ng-value="wallet.getPrivateKeyString()" readonly="readonly">
+                       ng-value="walletService.wallet.getPrivateKeyString()" readonly="readonly">
                 <span tabindex="0" aria-label="make private key visible" role="button" class="input-group-addon eye"
-                      ng-click="showHidePkey()"></span>
+                      ng-click="pkeyVisible = !pkeyVisible"></span>
             </div>
         </div>
 
 
-        <div class="col-xs-12" ng-show="wallet.type=='default'">
+        <div class="col-xs-12" ng-show="walletService.wallet.type=='default'">
             <div class="account-help-icon">
                 <img src="images/icon-help.svg" class="help-icon"/>
                 <p class="account-help-text" translate="x_PrintDesc">ProTip: Click print and save this as a PDF, even if
@@ -63,31 +63,35 @@
     <section class="block">
         <div class="col-xs-6">
             <h5 translate="x_Address">Your Address:</h5>
-            <div class="qr-code" qr-code="{{wallet.getChecksumAddressString()}}" watch-var="wallet" width="100%"></div>
+            <div class="qr-code" qr-code="{{walletService.wallet.getChecksumAddressString()}}" watch-var="walletService.wallet"></div>
         </div>
         <div class="col-xs-6">
 
 
-            <div ng-if="wallet.type ==='default'">
+            <div ng-if="walletService.wallet.hasOwnProperty('getPrivateKeyString')">
 
                 <h5>
                     <span translate="x_PrivKey">Private Key (unencrypted)</span>
                 </h5>
                 <div class="qr-pkey-container">
                     <div class="qr-overlay" ng-show="!pkeyVisible"></div>
-                    <div class="qr-code" qr-code="{{wallet.getPrivateKeyString()}}" watch-var="wallet"
+                    <div class="qr-code" qr-code="{{walletService.wallet.getPrivateKeyString()}}" watch-var="walletService.wallet"
                          width="100%"></div>
                     <div class="input-group">
                         <input class="form-control no-animate" type="{{pkeyVisible ? 'text' : 'password'}}"
-                               ng-value="wallet.getPrivateKeyString()" readonly="readonly"
+                               ng-value="walletService.wallet.getPrivateKeyString()" readonly="readonly"
                                style="display:none;width:0;height:0;padding:0">
                         <span tabindex="0" aria-label="make private key visible" role="button"
                               class="input-group-addon eye"
-                              ng-click="showHidePkey()"></span>
+                              ng-click="pkeyVisible = !pkeyVisible"></span>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
+
+    <section class="block">
+        <wallet-balances-table></wallet-balances-table>
     </section>
 
 </article>

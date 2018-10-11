@@ -118,6 +118,7 @@ const dexnsService = require("./services/dexns.service");
 const backgroundNodeService = require("./services/backgroundNode.service");
 
 // DIRECTIVES
+const walletBalancesTable = require("./directives/walletBalancesTable");
 const nodeSelectorList = require("./directives/nodeSelectorList");
 const networkSelector = require("./directives/networkSelector");
 const eosKeypair = require("./directives/eos-keypair");
@@ -206,6 +207,7 @@ app.factory("lookupService", ["dexnsService", lookupService]);
 app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
 
+app.directive("walletBalancesTable", ["walletService", walletBalancesTable]);
 app.directive("coinIcon", coinIcon);
 app.directive("networkSelector", networkSelector);
 app.directive("nodeSelectorList", nodeSelectorList);
@@ -255,6 +257,9 @@ app.directive("sendContractTx", [
 
 app.directive("customNodeForm", [customNodeForm]);
 
+const toArray = require("./filters/toArray.filter");
+app.filter("toArray", toArray);
+
 app.controller("tabsCtrl", [
     "$http",
     "$scope",
@@ -263,6 +268,7 @@ app.controller("tabsCtrl", [
     "$translate",
     "$sce",
     "$interval",
+    "$rootScope",
     tabsCtrl
 ]);
 app.controller("switchNetworkCtrl", [

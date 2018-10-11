@@ -31,17 +31,9 @@ var encryptCtrl = function($scope, walletService) {
 
     $scope.networks = globalFuncs.networks;
 
-    $scope.$watch(
-        function() {
-            if (walletService.wallet == null) return null;
-            return walletService.wallet.getAddressString();
-        },
-        function() {
-            if (walletService.wallet == null) return;
-            $scope.wallet = walletService.wallet;
-            $scope.unlockWallet = true;
-        }
-    );
+    $scope.$on("ChangeWallet", () => {
+        $scope.unlockWallet = true;
+    });
 
     $scope.reEncrypt = function reEncrypt($event, password) {
         $event.preventDefault();

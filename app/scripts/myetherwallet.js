@@ -1,13 +1,43 @@
 "use strict";
+const _map = require("lodash/map");
+// const {ethUtil, nodes, globalFuncs, coinPriceService, etherUnits} = window;
+
+const defaultWalletBalance = {
+    usdPrice: 0,
+    gbpPrice: 0,
+    eurPrice: 0,
+    btcPrice: 0,
+    chfPrice: 0,
+    usdBalance: 0,
+    gbpBalance: 0,
+    eurBalance: 0,
+    btcBalance: 0,
+    chfBalance: 0,
+    balance: 0
+};
+
 var Wallet = function(priv, pub, path, hwType, hwTransport) {
-    if (typeof priv != "undefined") {
-        this.privKey = priv.length == 32 ? priv : Buffer(priv, "hex");
+    if (typeof priv !== "undefined") {
+        this.privKey = priv.length === 32 ? priv : Buffer(priv, "hex");
     }
     this.pubKey = pub;
     this.path = path;
     this.hwType = hwType;
     this.hwTransport = hwTransport;
     this.type = "default";
+
+    this.balances = Object.keys(nodes.alternativeBalance).reduce(
+        (total, key) => {
+            total[key] = Object.assign(
+                {},
+                nodes.alternativeBalance[key],
+                defaultWalletBalance
+            );
+
+            return total;
+        },
+        {}
+    );
 };
 Wallet.generate = function(icapDirect) {
     if (icapDirect) {
@@ -28,10 +58,15 @@ Wallet.prototype.setTokens = function() {
         Object.assign(token, { local: false })
     );
 
-    const _localTokens = !!globalFuncs.localStorage.getItem("localTokens", null)
-        ? JSON.parse(globalFuncs.localStorage.getItem("localTokens"))
-        : [];
-    const localTokens = _localTokens.map(token =>
+    let _localTokens = globalFuncs.localStorage.getItem("localTokens", []);
+
+    let _tokens;
+    try {
+        _tokens = JSON.parse(_localTokens);
+    } catch (e) {
+        _tokens = [];
+    }
+    const localTokens = _tokens.map(token =>
         Object.assign(token, { address: token.contractAddress, local: true })
     );
 
@@ -51,60 +86,163 @@ Wallet.prototype.setTokens = function() {
                 )
         );
 
-    Promise.all(
-        this.tokenObjs.map(token => {
-            if (token.type === ajaxReq.type) {
+    return Promise.all(
+        this.tokenObjs
+            .filter(token => token.type === ajaxReq.type)
+            .map(token => {
                 token.fetchBalance();
-            } else {
-                token.setBalance(`SWITCH TO ${token.type} NETWORK`);
-            }
+            })
+    );
+};
+
+Wallet.prototype.setBalance = function() {
+    for (let coin in this.balances) {
+        Object.assign(this.balances[coin], defaultWalletBalance);
+    }
+    return Promise.all([this._setBalances(), this.setTokens()]);
+};
+
+Wallet.prototype.setBalanceOfNetwork = function() {
+    ajaxReq.getBalance(this.getChecksumAddressString(), result => {
+        if (!(!result.error && result.data)) {
+            return false;
+        }
+        this._saveBalance(ajaxReq.type, result);
+    });
+};
+
+Wallet.prototype.sumBalances = function() {
+    const balances = Object.values(this.balances);
+
+    const _btcBalances = _map(balances, "btcBalance").map(Number);
+    const _usdBalances = _map(balances, "usdBalance").map(Number);
+    const _eurBalances = _map(balances, "eurBalance").map(Number);
+    const _gbpBalances = _map(balances, "gbpBalance").map(Number);
+    const _chfBalances = _map(balances, "chfBalance").map(Number);
+
+    const btcBalance = _btcBalances.reduce((total, btc) => total + btc, 0);
+    const usdBalance = _usdBalances.reduce((total, usd) => total + usd, 0);
+    const eurBalance = _eurBalances.reduce((total, i) => total + i, 0);
+    const gbpBalance = _gbpBalances.reduce((total, i) => total + i, 0);
+    const chfBalance = _chfBalances.reduce((total, i) => total + i, 0);
+    return {
+        btcBalance,
+        usdBalance,
+        eurBalance,
+        gbpBalance,
+        chfBalance
+    };
+};
+
+Wallet.prototype._setBalance = function(currency = "ETC") {
+    return data => {
+        if (data.error) {
+            this.balances[currency].balance = data.msg;
+            return;
+        }
+
+        this._saveBalance(currency, data);
+    };
+};
+
+Wallet.prototype._saveBalance = function(
+    currency = "ETC",
+    { data: { balance } }
+) {
+    const { coinPrices } = window.coinPriceService;
+    const etherBal = etherUnits.toEther(balance, "wei");
+    this.balances[currency].balance = etherBal;
+
+    if (currency in coinPrices) {
+        const data = coinPrices[currency];
+
+        this.balances[currency].usdPrice = etherUnits.toFiat(
+            "1",
+            "ether",
+            data.usd
+        );
+        this.balances[currency].gbpPrice = etherUnits.toFiat(
+            "1",
+            "ether",
+            data.gbp
+        );
+        this.balances[currency].eurPrice = etherUnits.toFiat(
+            "1",
+            "ether",
+            data.eur
+        );
+        this.balances[currency].btcPrice = etherUnits.toFiat(
+            "1",
+            "ether",
+            data.btc
+        );
+        this.balances[currency].chfPrice = etherUnits.toFiat(
+            "1",
+            "ether",
+            data.chf
+        );
+        this.balances[currency].usdBalance = etherUnits.toFiat(
+            etherBal,
+            "ether",
+            data.usd
+        );
+        this.balances[currency].gbpBalance = etherUnits.toFiat(
+            etherBal,
+            "ether",
+            data.gbp
+        );
+        this.balances[currency].eurBalance = etherUnits.toFiat(
+            etherBal,
+            "ether",
+            data.eur
+        );
+        this.balances[currency].btcBalance = etherUnits.toFiat(
+            etherBal,
+            "ether",
+            data.btc
+        );
+        this.balances[currency].chfBalance = etherUnits.toFiat(
+            etherBal,
+            "ether",
+            data.chf
+        );
+    } else {
+        Object.assign(this.balances, {
+            [currency]: Object.assign(
+                {},
+                defaultWalletBalance,
+                this.balances[currency]
+            )
+        });
+    }
+
+    return this.balances[currency];
+};
+
+Wallet.prototype._setBalances = function() {
+    const networks = _map(Object.values(this.balances), "symbol");
+    const coin = ajaxReq.type;
+
+    if (!networks.includes(coin)) {
+        this.balances[coin] = Object.assign({}, defaultWalletBalance, {
+            node: ajaxReq.key,
+            symbol: ajaxReq.type
+        });
+    }
+    const requests = Object.values(this.balances);
+
+    return Promise.all(
+        requests.map(currency => {
+            const { lib } = nodes.nodeList[currency.node];
+
+            return lib.getBalance(
+                this.getAddressString(),
+                this._setBalance(currency.symbol)
+            );
         })
     );
 };
 
-Wallet.prototype.setBalance = function(callback = console.log) {
-    this.balance = this.usdBalance = this.eurBalance = this.btcBalance = this.chfBalance = this.gbpBalance =
-        "loading";
-    ajaxReq.getBalance(this.getAddressString(), data => {
-        if (data.error) this.balance = data.msg;
-        else {
-            this.balance = etherUnits.toEther(data.data.balance, "wei");
-            coinPriceService.getCoinPrice().then(data => {
-                this.usdPrice = etherUnits.toFiat("1", "ether", data.usd);
-                this.gbpPrice = etherUnits.toFiat("1", "ether", data.gbp);
-                this.eurPrice = etherUnits.toFiat("1", "ether", data.eur);
-                this.btcPrice = etherUnits.toFiat("1", "ether", data.btc);
-                this.chfPrice = etherUnits.toFiat("1", "ether", data.chf);
-                this.usdBalance = etherUnits.toFiat(
-                    this.balance,
-                    "ether",
-                    data.usd
-                );
-                this.gbpBalance = etherUnits.toFiat(
-                    this.balance,
-                    "ether",
-                    data.gbp
-                );
-                this.eurBalance = etherUnits.toFiat(
-                    this.balance,
-                    "ether",
-                    data.eur
-                );
-                this.btcBalance = etherUnits.toFiat(
-                    this.balance,
-                    "ether",
-                    data.btc
-                );
-                this.chfBalance = etherUnits.toFiat(
-                    this.balance,
-                    "ether",
-                    data.chf
-                );
-                callback();
-            });
-        }
-    });
-};
 Wallet.prototype.getBalance = function() {
     return this.balance;
 };

@@ -8,11 +8,6 @@ module.exports = function sidebar($timeout) {
         link: function(scope) {
             scope.displaySuccess = 0;
 
-            scope.notAjaxReq = item =>
-                item.symbol.toUpperCase() !== ajaxReq.type.toUpperCase();
-
-            scope.toArray = obj => Object.values(obj);
-
             function displaySuccess() {
                 scope.displaySuccess = 1;
 

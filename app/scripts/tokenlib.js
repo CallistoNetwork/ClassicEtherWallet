@@ -26,7 +26,7 @@ var Token = function(
     this.symbol = symbol;
     this.decimal = decimal;
     this.type = type;
-    this.balance = "loading";
+    this.balance = 0;
     this.node = node; // str
 
     this.local = local;

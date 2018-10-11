@@ -1,6 +1,7 @@
 "use strict";
 
 const _sample = require("lodash/sample");
+const _throttle = require("lodash/throttle");
 
 const backgroundNodeService = function() {
     /*
@@ -13,7 +14,12 @@ const backgroundNodeService = function() {
 
     this.backgroundNode = _sample(this.availableNodes);
 
-    this.changeBackgroundNode = () => {
+    this.changeBackgroundNode = _throttle(
+        () => this._changeBackgroundNode(),
+        1000
+    );
+
+    this._changeBackgroundNode = () => {
         const { backgroundNode, availableNodes } = this;
 
         const availableNodes_ = availableNodes.filter(

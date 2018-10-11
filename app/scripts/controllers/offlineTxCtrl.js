@@ -38,16 +38,7 @@ var offlineTxCtrl = function($scope, $sce, $rootScope, walletService) {
         decimals: "",
         type: "custom"
     };
-    $scope.$watch(
-        function() {
-            if (walletService.wallet == null) return null;
-            return walletService.wallet.getAddressString();
-        },
-        function() {
-            if (walletService.wallet == null) return;
-            $scope.wallet = walletService.wallet;
-        }
-    );
+
     $scope.setTokens = function() {
         $scope.tokenObjs = [];
         for (var i = 0; i < $scope.tokens.length; i++) {

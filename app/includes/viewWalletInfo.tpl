@@ -1,4 +1,4 @@
-<main class="tab-pane active" ng-if="globalService.currentTab==globalService.tabs.viewWalletInfo.id"
+<main class="tab-pane active" ng-if="globalService.currentTab === globalService.tabs.viewWalletInfo.id"
       ng-controller='viewWalletCtrl' ng-cloak>
 
     <article class="collapse-container">
@@ -38,7 +38,7 @@
 
     </article>
 
-    <article class="row" ng-show="wallet!=null">
+    <article class="row" ng-show="wd">
 
 
         @@if (site === 'cx' ) { @@include( './viewWalletInfo-content.tpl', { "site": "cx" } ) }

@@ -397,7 +397,12 @@ const decryptWalletCtrl = function(
         return key;
     }
 
-    if (globalService.currentTab === globalService.tabs.viewWalletInfo.id) {
+    if (
+        [
+            globalService.tabs.viewWalletInfo.id,
+            globalService.tabs.messages.id
+        ].includes(globalService.currentTab)
+    ) {
         const addr =
             globalFuncs.urlGet("address", null) ||
             globalFuncs.urlGet("addr", null);

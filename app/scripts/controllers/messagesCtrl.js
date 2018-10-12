@@ -50,13 +50,12 @@ var messagesCtrl = function(
     Object.assign($scope, {
         ajaxReq: ajaxReq,
         Validator: Validator,
-        // wd: walletService && walletService.hasOwnProperty('wallet') && walletService.wallet.hasOwnProperty('getAddressString'),
         wallet: walletService.wallet,
         rawTx: null,
         signedTx: null,
         msgCheckTime: null,
         messagesConversation: null,
-        unlockWallet: false,
+        wd: false,
         loadingMessages: false,
         messageService,
         newMessage: {
@@ -268,7 +267,7 @@ var messagesCtrl = function(
         messageService.msgCheckTime = new Date().toLocaleTimeString();
         // console.log('check messages', $scope.msgCheckTime);
 
-        if ($scope.unlockWallet && walletService.wallet) {
+        if (walletService.wallet && walletService.wallet.getAddressString()) {
             initMessages(walletService.wallet.getAddressString());
         }
     }

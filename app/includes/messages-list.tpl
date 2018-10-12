@@ -1,59 +1,97 @@
 <section class="messagesList">
-    <h2>Inbox</h2>
+    <h2>
+        Inbox
+
+        <small>
+            <span class="label label-default"
+            >
+            {{messageService.numberOfMessages(walletService.wallet.getAddressString())}}
+            <span translate="total">
+                total
+            </span>
+        </span>
+            <span
+                ng-class="0 < messageService.numberOfNewMessages() ? 'label label-success' : 'label label-default'"
+            >
+            {{messageService.numberOfNewMessages(walletService.wallet.getAddressString())}}
+            <span translate="total">
+                total
+            </span>
+        </span>
+        </small>
+
+    </h2>
 
     <ul class="list-group">
 
-        <li ng-if="!messageService.loadingMessages && empty()">No messages found for {{walletService.wallet.getAddressString()}}
+        <li ng-if="!messageService.loadingMessages && empty()">
+            No messages found for
+            <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', walletService.wallet.getChecksumAddressString())}}"
+               target="_blank"
+               rel="noopener">
+                {{walletService.wallet.getChecksumAddressString()}}
+            </a>
         </li>
 
         <li ng-if="messageService.loadingMessages">
-            LOADING...
-        </li>
-        <li ng-if="!messageService.loadingMessages && messageService.msgCheckTime">
-            last checked: {{messageService.msgCheckTime}}
+            <div class="bouncing-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <small class="pull-right" ng-if="!messageService.loadingMessages && messageService.msgCheckTime">
+                last checked: {{messageService.msgCheckTime}}
+            </small>
         </li>
 
 
         <li
 
-                class="list-group-item pointer"
-                ng-repeat="message in messageService.messagesList"
-                ng-click="viewMessagesConversation(message[0].from)"
+            class="list-group-item pointer"
+            ng-repeat="message in messageService.messagesList"
+            ng-click="viewMessagesConversation(message[0].from)"
 
         >
             <div class="row">
-                <div class="col-sm-9 row justify_row">
-                    <div class="address-identicon-container">
+                <div class="col-sm-12 row d-flex" style="justify-content: flex-start">
+                    <h5 style="padding-right: 1rem;">From</h5>
+                    <div class="address-identicon-container" style="padding-right: 1rem;">
 
                         <div class="addressIdenticon med float" title="Address Indenticon"
                              blockie-address="{{message[0].from}}"></div>
                     </div>
-                    <span class="from">{{message[0].from}}</span>
+                    <span class="from" style="padding-right: 1rem;">
+                            {{ethUtil.toChecksumAddress(message[0].from)}}
+                    </span>
 
 
-                </div>
-                <div class="col-sm-3">
-                    <div class="row">
-                        <span
-
-
-                        >{{message[0].time | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
-                    </div>
-                    <div class="row">
-                        <b>New Messages: </b>
-                        <b
-                                ng-class="messageService.numberOfNewMessages(message[0].to, message[0].from) > 0 ? 'text-success' : 'text-gray'"
-                        >
-
-                            {{messageService.numberOfNewMessages(message[0].to, message[0].from)}}
-                        </b>
-                    </div>
-                    <div>
-                    </div>
                 </div>
 
             </div>
-            <p class="message_text">{{message[0].text}}</p>
+            <div class="row">
+
+
+                  <span
+                      class="label label-default"
+                  >
+
+                            {{messageService.numberOfMessages(message[0].to, message[0].from)}}
+                            total
+                        </span>
+                <span
+                    ng-class="0 < messageService.numberOfNewMessages(message[0].to, message[0].from) ? 'label label-success' : 'label label-default'"
+                >
+
+                            {{messageService.numberOfNewMessages(message[0].to, message[0].from)}}
+                            new
+                        </span>
+            </div>
+            <p class="message_text">
+                {{message[0].text}}
+                <span class="pull-right">
+                     {{message[0].time | date}}
+                </span>
+            </p>
             <hr/>
         </li>
     </ul>

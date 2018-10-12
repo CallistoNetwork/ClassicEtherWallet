@@ -1,8 +1,8 @@
-<div class="block token-balances">
+<div class="token-balances">
     <table class="account-info table table-responsive">
         <caption translate="sidebar_TokenBal">Token Balances:</caption>
         <tbody>
-        <tr ng-repeat="token in walletService.wallet.tokenObjs | filter: {type: ajaxReq.type} track by $index + token.contractAddress"
+        <tr ng-repeat="token in walletService.wallet.tokenObjs | filter: {type: ajaxReq.type} | filter: balanceFilter track by $index + token.contractAddress"
             ng-show="tokenVisibility === 'shown'"
         >
 

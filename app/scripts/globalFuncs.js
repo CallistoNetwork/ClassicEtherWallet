@@ -396,7 +396,7 @@ globalFuncs.localStorage = {
         localStorage.setItem(key, value);
     },
     getItem: function(key, dValue = "") {
-        return localStorage.getItem(key);
+        return localStorage.getItem(key) || dValue;
     }
 };
 

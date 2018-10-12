@@ -112,7 +112,7 @@ ethFuncs.estimateGas = function(dataObj, notify = true) {
 
         ajaxReq.getEstimatedGas(dataObj, function(data) {
             if (data.error || parseInt(data.data) === -1) {
-                notify && uiFuncs.notifier.danger(globalFuncs.errorMsgs[21]);
+                notify && uiFuncs.notifier.danger(data);
 
                 reject(data);
             } else {

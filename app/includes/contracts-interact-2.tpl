@@ -4,7 +4,7 @@
     <!-- Contract Info CONTRACT_Interact_CTA -->
     <div class="form-group">
         <h4 translate="CONTRACT_Interact_Title">Read / Write Contract </h4>
-        <h5> {{ contract.address }} </h5>
+        <h5> {{ ethUtil.toChecksumAddress(contract.address) }} </h5>
 
         <div class="form-group well"
              ng-show="contract.address=='0x0101010101010101010101010101010101010101' || contract.address=='0x1010101010101010101010101010101010101010'">

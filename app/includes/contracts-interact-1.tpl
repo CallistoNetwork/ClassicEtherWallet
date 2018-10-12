@@ -16,7 +16,9 @@
             <i class="caret"></i>
         </a>
         <ul class="dropdown-menu dropdown-menu-left" ng-show="dropdownExistingContracts">
-            <li ng-repeat="abi in abiList() track by $index"><a ng-click="selectExistingAbi($index)">{{abi.name}}
+
+            <li ng-repeat="abi in ajaxReq.abiList track by $index"><a ng-click="selectExistingAbi($index)">
+                {{abi.name}}
                 <small class="mono">{{abi.address}}</small>
             </a></li>
         </ul>

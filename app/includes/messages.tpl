@@ -39,22 +39,27 @@
     </article>
 
 
-
-
-    <div>
+    <div ng-show="wd || walletService.wallet">
 
         <!-- Title -->
-        <div class="block text-center" >
+        <div class="block text-center">
             <h1>
-                <a translate="NAV_LIST" ng-class="{'isActive': visibility === VISIBILITY.LIST}"
-                   ng-click="setVisibility(VISIBILITY.LIST)"> List </a>
-                <span>
-                or
                 <a
+                    ng-class="{'isActive': visibility === VISIBILITY.LIST}"
+                    ng-click="setVisibility(VISIBILITY.LIST)">
+                    <span class="glyphicon glyphicon-th-list"></span>
+                    <span class="NAV_LIST">
+                        List
+                    </span>
 
-                    translate="NAV_NEW_MESSAGE"
+                </a>
+                <span>
+                <a
                     ng-class="{'isActive': visibility === VISIBILITY.NEW}"
-                    ng-click="setVisibility(VISIBILITY.NEW)"> New Message </a>
+                    ng-click="setVisibility(VISIBILITY.NEW)">
+                    <span class="glyphicon glyphicon-envelope"></span>
+                    <span translate="NAV_NEW_MESSAGE">New Message</span>
+                </a>
 
                 </span>
             </h1>

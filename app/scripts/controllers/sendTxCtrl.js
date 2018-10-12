@@ -1,5 +1,7 @@
 "use strict";
 const etherUnits = require("../etherUnits.js");
+const _throttle = require("lodash/throttle");
+const BigNumber = require("bignumber.js");
 
 const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     const gasPrice = parseFloat(
@@ -36,13 +38,15 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
             globalFuncs.urlGet("gaslimit") ||
             globalFuncs.urlGet("gas") ||
             globalFuncs.urlGet("gasLimit") ||
-            globalFuncs.defaultTxGasLimit,
+            globalFuncs.defaultTxGasLimit ||
+            21,
         data: globalFuncs.urlGet("data") || "",
         to: globalFuncs.urlGet("to") || "",
         unit: "ether",
         sendMode: "ether",
         value: globalFuncs.urlGet("value", ""),
         nonce: null,
+        gasPrice: null,
         donate: false,
         tokensymbol:
             globalFuncs.urlGet("tokensymbol") ||
@@ -55,43 +59,44 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
         $scope.tx.sendMode = sendMode;
         if (sendMode === "ether") {
             $scope.unitReadable = ajaxReq.type;
-        } else {
+        } else if ($scope.tx.sendMode === "token") {
             $scope.unitReadable = tokensymbol;
             $scope.tokenTx.id = tokenId;
-        }
-        //console.log($scope.tx.sendMode);
-        if ($scope.tx.sendMode === "token") {
-            for (var i = 0; i < walletService.wallet.tokenObjs.length; i++) {
-                if (
-                    walletService.wallet.tokenObjs[i].symbol
-                        .toLowerCase()
-                        .indexOf(tokensymbol.toLowerCase()) !== -1
-                ) {
-                    //console.log(walletService.wallet.tokenObjs[i].network);
-                    if (
-                        walletService.wallet.tokenObjs[i].network &&
-                        walletService.wallet.tokenObjs[i].network !==
-                            ajaxReq.type
-                    ) {
-                        // console.log(ajaxReq.type);
-                        $scope.notifier.warning(
-                            "WARNING! You are trying to send " +
-                                walletService.wallet.tokenObjs[i].symbol +
-                                " token, but this is a token of $" +
-                                walletService.wallet.tokenObjs[i].network +
-                                " network! Switch to $" +
-                                walletService.wallet.tokenObjs[i].network +
-                                " node first.",
-                            0
-                        );
-                    } else {
-                        $scope.tokenTx.to =
-                            walletService.wallet.tokenObjs[i].contractAddress;
-                        $scope.tokenTx.value = $scope.tx.to || 1;
-                    }
-                    break;
-                }
+
+            const token = walletService.wallet.tokenObjs.find(
+                token =>
+                    token.symbol.toLowerCase() === tokensymbol.toLowerCase()
+            );
+
+            if (!token) {
+                throw new Error("Invalid Request");
             }
+
+            const node = nodes.nodeList[token.node];
+
+            if (!node) {
+                throw new Error("Invalid Request");
+            }
+
+            const tokenNetwork = node.type;
+
+            if (!(tokenNetwork === ajaxReq.type)) {
+                uiFuncs.notifier.warning(
+                    "WARNING! You are trying to send " +
+                        token.symbol +
+                        " token, but this is a token of $" +
+                        token.network +
+                        " network! Switch to $" +
+                        token.network +
+                        " node first.",
+                    0
+                );
+            } else {
+                $scope.tokenTx.to = token.contractAddress;
+                $scope.tokenTx.value = $scope.tx.to || 1;
+            }
+        } else {
+            throw new Error("Unknown tx.sendMode");
         }
         $scope.dropdownAmount = false;
     };
@@ -114,26 +119,28 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     });
 
     $scope.$on("ChangeNode", function() {
-        if (walletService.wallet) {
-            $scope.setSendMode("ether");
-        }
+        $scope.setSendMode("ether");
     });
 
+    $scope.throttleEstGasLimit = _throttle(
+        () => $scope.estimateGasLimit(),
+        500
+    );
     $scope.$watch(
-        "tokenTx",
+        "tx.value",
         function() {
+            if (!angular.equals($scope.tx.sendMode, "token")) {
+                return;
+            }
             if (
                 walletService.wallet &&
                 walletService.wallet.tokenObjs !== undefined &&
                 walletService.wallet.tokenObjs[$scope.tokenTx.id] !==
                     undefined &&
                 $scope.Validator.isValidAddress($scope.tokenTx.to) &&
-                $scope.Validator.isPositiveNumber($scope.tokenTx.value)
+                $scope.Validator.isPositiveNumber($scope.tx.value)
             ) {
-                if ($scope.estimateTimer) clearTimeout($scope.estimateTimer);
-                $scope.estimateTimer = setTimeout(function() {
-                    $scope.estimateGasLimit();
-                }, 500);
+                $scope.throttleEstGasLimit();
             }
         },
         true
@@ -147,136 +154,146 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
                 angular.equals(newValue, "ether")
             ) {
                 $scope.tx.data = globalFuncs.urlGet("data", "");
-                $scope.tx.gasLimit = globalFuncs.defaultTxGasLimit;
+                $scope.tx.gasLimit = globalFuncs.defaultTxGasLimit || 21;
             }
 
-            if ($scope.tx.sendMode === "token") {
+            if (angular.equals(newValue, "token")) {
                 $scope.tokenTx.to = $scope.tx.to;
                 $scope.tokenTx.value = $scope.tx.value;
+            }
+
+            if (
+                Validator.isPositiveNumber($scope.tx.value) &&
+                Validator.isValidAddress($scope.tx.to)
+            ) {
+                $scope.throttleEstGasLimit();
             }
         },
         true
     );
     $scope.estimateGasLimit = function() {
-        if ($scope.gasLimitChanged) return;
-
-        var estObj = {
-            to: $scope.tx.to,
+        let estObj = {
             from: walletService.wallet.getAddressString(),
-            value: etherUnits.toWei($scope.tx.value, $scope.tx.unit)
+            to: null,
+            value: null
         };
-        if ($scope.tx.data !== "")
-            estObj.data = ethFuncs.sanitizeHex($scope.tx.data);
-        if ($scope.tx.sendMode === "token") {
-            estObj.to = walletService.wallet.tokenObjs[
-                $scope.tokenTx.id
-            ].getContractAddress();
-            estObj.data = walletService.wallet.tokenObjs[
-                $scope.tokenTx.id
-            ].getData($scope.tokenTx.to, $scope.tokenTx.value).data;
-            estObj.value = "0x00";
+        if ($scope.tx.sendMode === "ether") {
+            Object.assign(estObj, {
+                to: $scope.tx.to,
+                value: etherUnits.toWei($scope.tx.value, $scope.tx.unit)
+            });
+
+            if ($scope.tx.data) {
+                estObj.data = ethFuncs.sanitizeHex($scope.tx.data);
+            }
+        } else if ($scope.tx.sendMode === "token") {
+            Object.assign(estObj, $scope.getTokenTxData());
+        } else {
+            throw new Error("unknown tx.sendMode");
         }
-        ethFuncs
+        return ethFuncs
             .estimateGas(estObj)
             .then(function(gasLimit) {
-                $scope.tx.gasLimit = gasLimit;
+                $scope.$apply(function() {
+                    $scope.tx.gasLimit = new BigNumber(gasLimit).toNumber();
+                });
             })
-            .catch(e => ($scope.tx.gasLimit = -1));
+            .catch(e => {
+                $scope.$apply(function() {
+                    $scope.tx.gasLimit = -1;
+                });
+            });
     };
-    var isEnough = function(valA, valB) {
-        return new BigNumber(valA).lte(new BigNumber(valB));
-    };
-    $scope.hasEnoughBalance = function() {
-        if (!$scope.tx.value) {
-            return false;
+
+    $scope.getTokenTxData = function() {
+        const token = walletService.wallet.tokenObjs[$scope.tokenTx.id];
+
+        if (!token) {
+            throw new Error("Invalid Request");
         }
-        return isEnough(
-            $scope.tx.value,
-            walletService.wallet.balances[ajaxReq.type].balance
-        );
+        let txData = {
+            to: token.getContractAddress(),
+            value: ethFuncs.sanitizeHex("0")
+        };
+        const { isError, data } = token.getData($scope.tx.to, $scope.tx.value);
+
+        if (isError) {
+            throw new Error("Error Generating token tx");
+        }
+        txData.data = data;
+        // don't send ether w/ token transfer
+
+        Object.assign($scope.tokenTx, txData);
+
+        return txData;
     };
-    $scope.onDonateClick = function() {
-        $scope.addressDrtv.ensAddressField = globalFuncs.donateAddress;
-        $scope.tx.value = "1";
-        $scope.tx.donate = true;
-    };
+
     $scope.generateTx = function() {
-        const txData = uiFuncs.getTxData({
-            tx: $scope.tx,
-            wallet: walletService.wallet
-        });
-        txData.gasPrice = $scope.tx.gasPrice
+        let txData = {};
+        const gasPrice = $scope.tx.gasPrice
             ? "0x" + new BigNumber($scope.tx.gasPrice).toString(16)
             : null;
-        txData.nonce = $scope.tx.nonce
+        const nonce = $scope.tx.nonce
             ? "0x" + new BigNumber($scope.tx.nonce).toString(16)
             : null;
 
-        // set to true for offline tab and txstatus tab
-        // on sendtx tab, it pulls gas price from the gasprice slider & nonce
-        // if its true the whole txData object is set - don't try to change it
-        // if false, replace gas price and nonce. gas price from slider. nonce from server.
-        if (txData.gasPrice && txData.nonce) txData.isOffline = true;
+        const _txData = uiFuncs.getTxData({
+            tx: $scope.tx,
+            wallet: walletService.wallet
+        });
+
+        Object.assign(txData, _txData, { isOffline: gasPrice && nonce });
+
+        if (gasPrice && nonce) {
+            Object.assign(txData, { gasPrice, nonce });
+        }
 
         if ($scope.tx.sendMode === "token") {
-            // if the amount of tokens you are trying to send > tokens you have, throw error
-            if (
-                !isEnough(
-                    $scope.tx.value,
-                    walletService.wallet.tokenObjs[$scope.tokenTx.id].balance
-                )
-            ) {
-                $scope.notifier.danger(globalFuncs.errorMsgs[0]);
-                return;
-            }
-            txData.to = walletService.wallet.tokenObjs[
-                $scope.tokenTx.id
-            ].getContractAddress();
-            txData.data = walletService.wallet.tokenObjs[
-                $scope.tokenTx.id
-            ].getData($scope.tokenTx.to, $scope.tokenTx.value).data;
-            txData.value = "0x00";
-        } else {
-            uiFuncs
-                .generateTx(txData)
-                .then(function(rawTx) {
+            Object.assign(txData, $scope.getTokenTxData());
+        }
+        uiFuncs
+            .generateTx(txData)
+            .then(function(rawTx) {
+                $scope.$apply(function() {
                     $scope.rawTx = rawTx.rawTx;
                     $scope.signedTx = rawTx.signedTx;
                     $scope.showRaw = true;
-                    if (!$scope.$$phase) $scope.$apply();
-                })
-                .catch(err => {
-                    uiFuncs.notifier.danger(err);
-                    $scope.showRaw = false;
                 });
-        }
+            })
+            .catch(err => {
+                uiFuncs.notifier.danger(err);
+                $scope.showRaw = false;
+            });
     };
     $scope.sendTx = function() {
         $scope.sendTxModal.close();
         uiFuncs.sendTx($scope.signedTx, true).then(function(resp) {
-            walletService.wallet.setBalanceOfNetwork();
-            if ($scope.tx.sendMode === "token")
+            if ($scope.tx.sendMode === "ether") {
+                walletService.wallet.setBalanceOfNetwork();
+            } else if ($scope.tx.sendMode === "token") {
                 walletService.wallet.tokenObjs[$scope.tokenTx.id].setBalance();
+            }
         });
     };
     $scope.transferAllBalance = function() {
         if ($scope.tx.sendMode === "token") {
-            $scope.tx.value = walletService.wallet.tokenObjs[
-                $scope.tokenTx.id
-            ].getBalance();
+            $scope.tx.value = new BigNumber(
+                walletService.wallet.tokenObjs[$scope.tokenTx.id].getBalance()
+            ).toNumber();
         } else {
-            uiFuncs
+            $scope.tx.value = null;
+
+            return uiFuncs
                 .transferAllBalance(
                     walletService.wallet.getAddressString(),
                     $scope.tx.gasLimit
                 )
-                .then(function(resp) {
-                    $scope.tx.unit = resp.unit;
-                    $scope.tx.value = Number(resp.value);
+                .then(function({ unit, value, nonce, gasPrice }) {
+                    Object.assign($scope.tx, { unit, value, gasPrice, nonce });
                 })
                 .catch(resp => {
                     $scope.showRaw = false;
-                    $scope.notifier.danger(resp.error);
+                    uiFuncs.notifier.danger(resp.error);
                 });
         }
     };

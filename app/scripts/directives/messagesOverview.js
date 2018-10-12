@@ -24,6 +24,8 @@ module.exports = function messagesOverviewDrtv(
             $scope.viewMessageList = function viewMessageList() {
                 globalService.currentTab = globalService.tabs.messages.id;
                 location.hash = globalService.tabs.messages.url;
+
+                window.scrollTo(0, 0);
             };
         }
     };

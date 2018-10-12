@@ -349,6 +349,7 @@ en.data = {
     Warning: "Warning!",
     SENDModal_Value: "Value",
     SENDModal_To: "To",
+    SEND_estimateGas: "Estimate Gas",
     /* full sentence reads "You are about to send "10 ETH" to address "0x1234". Are you sure you want to do this? " */
     SENDModal_Content_1: "You are about to send ",
     SENDModal_Content_2: "To",

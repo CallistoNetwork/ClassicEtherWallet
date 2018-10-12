@@ -57,7 +57,7 @@ Web3Wallet.prototype.getV3Filename = function(timestamp) {
 };
 
 Web3Wallet.prototype.getNetwork = function() {
-    const web3 = window.web3;
+    const { web3 } = window;
 
     this.chainId = parseInt(web3.version.network);
 
@@ -65,9 +65,10 @@ Web3Wallet.prototype.getNetwork = function() {
         node => node.chainId === this.chainId
     );
 
-    if (node) {
-        this.network = node.type;
+    if (!node) {
+        throw new Error("Invalid Request");
     }
+    this.network = node.type;
 };
 
 module.exports = Web3Wallet;

@@ -19,6 +19,8 @@ var tabsCtrl = function(
         document.getElementById("customNodeModal")
     );
 
+    $scope.ethUtil = ethUtil;
+
     $scope.nodeList = nodes.nodeList;
     $scope.defaultNodeKey = globalFuncs.networks.ETC; // 'etc_ethereumcommonwealth_parity';
 
@@ -78,10 +80,10 @@ var tabsCtrl = function(
                 $scope.wd = false;
                 return;
             }
-            walletService.wallet.setBalance();
-            $scope.wallet = walletService.wallet;
             $scope.wd = true;
+            $scope.wallet = walletService.wallet;
             $rootScope.$broadcast("ChangeWallet", addr);
+            walletService.wallet.setBalance();
         }
     );
 

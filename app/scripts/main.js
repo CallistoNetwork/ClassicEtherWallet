@@ -120,6 +120,7 @@ const dexnsService = require("./services/dexns.service");
 const backgroundNodeService = require("./services/backgroundNode.service");
 
 // DIRECTIVES
+const equivalentValues = require("./directives/equivalentValues");
 const walletBalancesTable = require("./directives/walletBalancesTable");
 const nodeSelectorList = require("./directives/nodeSelectorList");
 const networkSelector = require("./directives/networkSelector");
@@ -209,6 +210,7 @@ app.factory("lookupService", ["dexnsService", lookupService]);
 app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
 
+app.directive("equivalentValues", equivalentValues);
 app.directive("walletBalancesTable", ["walletService", walletBalancesTable]);
 app.directive("coinIcon", coinIcon);
 app.directive("networkSelector", networkSelector);

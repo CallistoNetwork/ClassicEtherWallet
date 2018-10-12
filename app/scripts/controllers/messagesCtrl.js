@@ -50,13 +50,12 @@ var messagesCtrl = function(
     Object.assign($scope, {
         ajaxReq: ajaxReq,
         Validator: Validator,
-        // wd: walletService && walletService.hasOwnProperty('wallet') && walletService.wallet.hasOwnProperty('getAddressString'),
         wallet: walletService.wallet,
         rawTx: null,
         signedTx: null,
         msgCheckTime: null,
         messagesConversation: null,
-        unlockWallet: false,
+        wd: false,
         loadingMessages: false,
         messageService,
         newMessage: {
@@ -268,7 +267,7 @@ var messagesCtrl = function(
         messageService.msgCheckTime = new Date().toLocaleTimeString();
         // console.log('check messages', $scope.msgCheckTime);
 
-        if ($scope.unlockWallet && walletService.wallet) {
+        if (walletService.wallet && walletService.wallet.getAddressString()) {
             initMessages(walletService.wallet.getAddressString());
         }
     }
@@ -357,50 +356,57 @@ var messagesCtrl = function(
             a => a.name === "sendMessage"
         );
 
-        var fullFuncName = ethUtil.solidityUtils.transformToFullName(
+        const fullFuncName = ethUtil.solidityUtils.transformToFullName(
             sendMsgAbi
         );
-        var funcSig = ethFuncs.getFunctionSignature(fullFuncName);
-
-        $scope.tx.data = ethFuncs.sanitizeHex(
-            funcSig +
-                ethUtil.solidityCoder.encodeParams(
-                    sendMsgAbi.inputs.map(i => i.type),
-                    [to, text]
-                )
-        );
+        const funcSig = ethFuncs.getFunctionSignature(fullFuncName);
 
         const estObj = {
+            data: ethFuncs.sanitizeHex(
+                funcSig +
+                    ethUtil.solidityCoder.encodeParams(
+                        sendMsgAbi.inputs.map(i => i.type),
+                        [to, text]
+                    )
+            ),
             from: walletService.wallet.getAddressString(),
             to: messageContract.address,
-            data: $scope.tx.data,
-            value: "0x00"
+            value: 0
         };
+
+        Object.assign($scope.tx, estObj);
 
         ethFuncs
             .estimateGas(estObj)
             .then(function(gasLimit) {
-                Object.assign($scope.tx, estObj, { gasLimit });
+                Object.assign($scope.tx, { gasLimit });
 
-                const txData = uiFuncs.getTxData({
+                const tx = uiFuncs.getTxData({
                     tx: $scope.tx,
                     wallet: walletService.wallet
                 });
 
-                uiFuncs.generateTx(txData).then(function(rawTx) {
-                    const { signedTx, isError } = rawTx;
+                uiFuncs
+                    .generateTx(tx)
+                    .then(function(rawTx) {
+                        const { signedTx, isError } = rawTx;
 
-                    if (isError) {
-                        uiFuncs.notifier.danger(rawTx.error);
-                    } else {
-                        $scope.rawTx = rawTx;
-                        $scope.signedTx = signedTx;
-
-                        sendMessageModal.open();
-                    }
-                });
+                        if (isError) {
+                            uiFuncs.notifier.danger(rawTx.error);
+                        } else {
+                            $scope.$apply(function() {
+                                $scope.rawTx = rawTx;
+                                $scope.signedTx = signedTx;
+                                sendMessageModal.open();
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        uiFuncs.notifier.danger(err);
+                    });
             })
             .catch(err => {
+                uiFuncs.notifier.danger(err);
                 $scope.tx.gasLimit = -1;
             });
     }

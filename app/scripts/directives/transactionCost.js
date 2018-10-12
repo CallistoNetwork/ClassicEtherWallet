@@ -6,14 +6,12 @@ module.exports = function transactionCost() {
         template: require("./transactionCost.html"),
         link: function($scope) {
             function getTxCost() {
-                const _node = globalFuncs.getCurNode();
-
-                $scope.node = nodes.nodeList[_node];
+                $scope.node = nodes.nodeList[ajaxReq.key];
 
                 // coin to look up -> ETC
                 const nodeType = ajaxReq.type;
 
-                coinPriceService
+                window.coinPriceService
                     .getCoinPrice(nodeType)
                     .then(handleCoinPriceResult)
                     .catch(err => {

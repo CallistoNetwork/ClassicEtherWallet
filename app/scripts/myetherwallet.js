@@ -58,13 +58,14 @@ Wallet.prototype.setTokens = function() {
         Object.assign(token, { local: false })
     );
 
-    let _localTokens = globalFuncs.localStorage.getItem("localTokens", []);
-
-    let _tokens;
-    try {
-        _tokens = JSON.parse(_localTokens);
-    } catch (e) {
-        _tokens = [];
+    let _localTokens = globalFuncs.localStorage.getItem("localTokens", null);
+    let _tokens = [];
+    if (_localTokens) {
+        try {
+            _tokens = JSON.parse(_localTokens);
+        } catch (e) {
+            _tokens = [];
+        }
     }
     const localTokens = _tokens.map(token =>
         Object.assign(token, { address: token.contractAddress, local: true })

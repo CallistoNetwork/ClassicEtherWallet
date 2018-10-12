@@ -1,7 +1,14 @@
 <a class="row pad-v-md" ng-click="viewMessageList()">
+
     <span style="font-size: larger; font-weight: bold;">Messages:</span>
     <span ng-switch="loadingMessages()">
-        <span ng-switch-default="true" translate="loading">LOADING...</span>
+        <span ng-switch-default="true">
+            <div class="bouncing-loader inline">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </span>
         <span ng-switch-when="false">
             <span class="label label-default">
                 {{numberOfMessages()}}

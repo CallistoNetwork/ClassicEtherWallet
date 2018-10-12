@@ -88,7 +88,12 @@ const messageService = function() {
         ).length;
     };
 
-    this.numberOfMessages = function numberOfMessages(address) {
+    this.numberOfMessages = function numberOfMessages(address, from = null) {
+        if (from) {
+            return this.messages.filter(
+                message => message.to === address && message.from === from
+            ).length;
+        }
         return this.messages.filter(message => message.to === address).length;
     };
 

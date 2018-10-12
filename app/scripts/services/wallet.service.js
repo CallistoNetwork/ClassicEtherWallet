@@ -9,19 +9,8 @@ const walletService = function() {
         hwType: null,
         hwTransport: null,
         type: null,
-        gbpBalance: null,
-        repBalance: null,
-        chfBalance: null,
-        btcBalance: null,
-        eurBalance: null,
-        usdBalance: null,
-        balance: null,
-        tokenObjs: [], // Token {["contractAddress","userAddress","symbol","decimal","type","balance","network","node","balanceBN"]}
-        usdPrice: null,
-        gbpPrice: null,
-        eurPrice: null,
-        btcPrice: null,
-        chfPrice: null
+        balances: {},
+        tokenObjs: [] // Token {["contractAddress","userAddress","symbol","decimal","type","balance","network","node","balanceBN"]}
     };
 };
 module.exports = walletService;

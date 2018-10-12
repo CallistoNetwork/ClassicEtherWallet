@@ -118,19 +118,25 @@ var walletBalanceCtrl = function(
     };
 
     $scope.saveTokenToLocal = function() {
-        globalFuncs.saveTokenToLocal($scope.localToken, function(data) {
-            if (!data.error) {
-                $scope.resetLocalToken();
-                walletService.wallet.setTokens();
-                $scope.validateLocalToken = $sce.trustAsHtml("");
+        globalFuncs.saveTokenToLocal(
+            Object.assign({}, $scope.localToken, {
+                type: ajaxReq.type,
+                local: true
+            }),
+            function(data) {
+                if (!data.error) {
+                    $scope.resetLocalToken();
+                    walletService.wallet.setTokens();
+                    $scope.validateLocalToken = $sce.trustAsHtml("");
 
-                $scope.resetTokenField();
+                    $scope.resetTokenField();
 
-                $scope.resetLocalToken();
-            } else {
-                uiFuncs.notifier.danger(data.msg);
+                    $scope.resetLocalToken();
+                } else {
+                    uiFuncs.notifier.danger(data.msg);
+                }
             }
-        });
+        );
     };
 
     $scope.resetLocalToken = function() {

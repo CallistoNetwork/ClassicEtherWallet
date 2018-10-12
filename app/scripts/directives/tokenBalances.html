@@ -1,12 +1,20 @@
-<div class="block token-balances">
+<div class="token-balances">
     <table class="account-info table table-responsive">
         <caption translate="sidebar_TokenBal">Token Balances:</caption>
         <tbody>
-        <tr ng-repeat="token in walletService.wallet.tokenObjs | filter: {type: ajaxReq.type} track by $index + token.contractAddress"
+        <tr ng-repeat="token in walletService.wallet.tokenObjs | filter: {type: ajaxReq.type} | filter: balanceFilter track by $index + token.contractAddress"
             ng-show="tokenVisibility === 'shown'"
         >
+
             <td class="text-left">
-                <coin-icon icon="{{token.getSymbol()}}"></coin-icon>
+                <a
+                    style="color: inherit"
+                    href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', token.contractAddress)}}"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    <coin-icon icon="{{token.getSymbol()}}"></coin-icon>
+                </a>
             </td>
             <td class="mono wrap point text-right">
                 <img src="images/icon-remove.svg"
@@ -122,34 +130,6 @@
                 <div ng-bind-html="validateLocalToken"></div>
             </div>
         </div>
-
-
     </div>
-    <table class="table table-responsive">
-        <caption translate="sidebar_Equiv">Equivalent Values:</caption>
-        <tbody>
-        <tr>
-            <td class="text-left">BTC:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.sumBalances().btcBalance | number}}</td>
-        </tr>
-
-        <tr>
-            <td class="text-left">USD:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.sumBalances().usdBalance | currency:"$"}}</td>
-        </tr>
-        <tr>
-            <td class="text-left">CHF:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.sumBalances().chfBalance | currency:" "}}</td>
-        </tr>
-        <tr>
-            <td class="text-left">EUR:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.sumBalances().eurBalance | currency:"€"}}</td>
-        </tr>
-        <tr>
-            <td class="text-left">GBP:</td>
-            <td class="text-right mono wrap">{{walletService.wallet.sumBalances().gbpBalance | currency:"£"}}</td>
-        </tr>
-        </tbody>
-    </table>
 
 </div>

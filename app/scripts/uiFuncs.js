@@ -10,40 +10,63 @@ const Transport = require("@ledgerhq/hw-transport-u2f").default;
 const LedgerEth = require("@ledgerhq/hw-app-eth").default;
 
 const uiFuncs = function() {};
-uiFuncs.getTxData = function({ tx, wallet }) {
+uiFuncs.getTxData = function({
+    tx: { to = "", value = 0, unit = "ether", gasLimit = 21000, data = "" },
+    wallet
+}) {
     return {
-        to: tx.to,
-        value: tx.value,
-        unit: tx.unit,
-        gasLimit: tx.gasLimit,
-        data: tx.data,
-        from: wallet.getAddressString(),
+        to,
+        value,
+        unit,
+        gasLimit,
+        data,
+        gasPrice: globalFuncs.localStorage.getItem("gasPrice", 21), // gwei
+        from: wallet.getChecksumAddressString(),
         privKey: wallet.privKey ? wallet.getPrivateKeyString() : "",
         path: wallet.getPath(),
         hwType: wallet.getHWType(),
-        hwTransport: wallet.getHWTransport(),
-        gasPrice: globalFuncs.localStorage.getItem("gasPrice", 21)
+        hwTransport: wallet.getHWTransport()
     };
 };
 
 uiFuncs.isTxDataValid = function(txData) {
-    if (txData.to !== "0xCONTRACT" && !ethFuncs.validateEtherAddress(txData.to))
-        throw globalFuncs.errorMsgs[5];
-    if (txData.to === "0xCONTRACT") txData.to = "";
-    else if (
-        !globalFuncs.isNumeric(txData.value) ||
-        parseFloat(txData.value) < 0
-    )
-        throw globalFuncs.errorMsgs[0];
-    else if (
-        !globalFuncs.isNumeric(txData.gasLimit) ||
-        parseFloat(txData.gasLimit) <= 0
-    )
-        throw globalFuncs.errorMsgs[8];
-    else if (!ethFuncs.validateHexString(txData.data))
-        throw globalFuncs.errorMsgs[9];
+    if (
+        txData.to !== "0xCONTRACT" &&
+        !ethFuncs.validateEtherAddress(txData.to)
+    ) {
+        return {
+            error: globalFuncs.errorMsgs[5],
+            txData
+        };
+    }
+    if (txData.to === "0xCONTRACT") {
+        txData.to = "";
+    }
 
-    return txData;
+    if (new BigNumber(txData.value).lt(0)) {
+        return {
+            error: globalFuncs.errorMsgs[0],
+            txData
+        };
+    }
+    if (new BigNumber(txData.gasLimit).lt(21000)) {
+        return {
+            error: globalFuncs.errorMsgs[8],
+            txData
+        };
+    }
+
+    if (!ethFuncs.validateHexString(txData.data)) {
+        return {
+            error: globalFuncs.errorMsgs[9],
+            txData
+        };
+    }
+
+    return {
+        error: false,
+        txData
+    };
 };
 
 uiFuncs.signTxTrezor = function(rawTx, { path }) {
@@ -166,14 +189,13 @@ uiFuncs.signTxDigitalBitbox = function(
 
     @returns Promise<>
  */
-uiFuncs.generateTx = function(txData) {
+uiFuncs.generateTx = function(_txData) {
     return new Promise((resolve, reject) => {
-        try {
-            txData = uiFuncs.isTxDataValid(txData);
-        } catch (e) {
-            return reject(e);
-        }
+        const { txData, error } = uiFuncs.isTxDataValid(_txData);
 
+        if (error) {
+            return reject(new Error(error));
+        }
         if (txData.nonce) {
             return uiFuncs.genTxWithInfo(txData, function(result) {
                 if (result.isError) {
@@ -404,32 +426,31 @@ uiFuncs.handleWeb3Trans = function(signedTx) {
 
 uiFuncs.transferAllBalance = function(addr, gasLimit) {
     return new Promise((resolve, reject) => {
-        try {
-            ajaxReq.getTransactionData(addr, function(data) {
-                if (data.error) throw data.msg;
-                data = data.data;
-                const gasPrice = new BigNumber(
-                    ethFuncs.sanitizeHex(
-                        ethFuncs.addTinyMoreToGas(data.gasprice)
-                    )
-                ).times(gasLimit);
-                let maxVal = new BigNumber(data.balance).minus(gasPrice);
-                maxVal =
-                    etherUnits.toEther(maxVal, "wei") < 0
-                        ? 0
-                        : etherUnits.toEther(maxVal, "wei");
-                resolve({
-                    isError: false,
-                    unit: "ether",
-                    value: maxVal
+        ajaxReq.getTransactionData(addr, function(data) {
+            if (data.error) {
+                reject({
+                    isError: true,
+                    error: data.error
                 });
+            }
+            const {
+                data: { gasprice, balance, nonce, address }
+            } = data;
+            const gasPrice = new BigNumber(
+                ethFuncs.sanitizeHex(ethFuncs.addTinyMoreToGas(gasprice))
+            );
+            const gasCost = gasPrice.times(gasLimit);
+            const maxVal = new BigNumber(balance).minus(gasCost);
+            const value = Math.max(0, etherUnits.toEther(maxVal, "wei"));
+            resolve({
+                isError: false,
+                unit: "ether",
+                value,
+                gasPrice,
+                nonce,
+                address
             });
-        } catch (e) {
-            reject({
-                isError: true,
-                error: e
-            });
-        }
+        });
     });
 };
 uiFuncs.notifier = {

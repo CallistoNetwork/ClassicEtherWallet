@@ -1,41 +1,11 @@
 <form ng-submit="handleSubmitNewMessage($event)">
 
-    <div ng-if="[VISIBILITY.NEW].includes(visibility)">
-
-        <div class="row">
+    <div ng-if="[VISIBILITY.NEW].includes(visibility)" class="row">
 
 
-            <div class="col-xs-11">
-                <div class="account-help-icon">
-                    <img src="images/icon-help.svg" class="help-icon"/>
-                    <p class="account-help-text" translate="x_AddessDesc">You may know this as your "Account #" or
-                        your "Public Key". It's what you send people so they can send you ETH. That icon is an easy
-                        way to recognize your address.</p>
-                    <h5 translate="SEND_addr">To Address:</h5>
-                </div>
-                <div class="col-xs-11">
-                    <input ng-class="validateAddress() ? 'form-control is-valid' : 'form-control is-invalid'"
-                           placeholder="0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8"
-                           name="to"
-                           ng-model="newMessage.to"
-                    />
-                </div>
-            </div>
-
-            <div class="col-xs-1 address-identicon-container">
-
-                <div
-                        class="addressIdenticon med"
-                        title="Address Indenticon"
-                        blockie-address="{{newMessage.to}}"
-                        watch-var="newMessage.to"
-
-                ></div>
-            </div>
-
-
-        </div>
-
+        <address-field
+            var-name="newMessage.to"
+        ></address-field>
 
     </div>
 
@@ -50,8 +20,8 @@
 
                 <input
 
-                        title="to"
-                        class="form-control" readonly name="to" value="{{messageService.messagesConversation[0].from}}"/>
+                    title="to"
+                    class="form-control" readonly name="to" value="{{messageService.messagesConversation[0].from}}"/>
             </div>
 
         </div>
@@ -69,8 +39,8 @@
 
 
     <button
-            class="btn btn-primary"
-            type="submit"
+        class="btn btn-primary"
+        type="submit"
     >
         Send
     </button>

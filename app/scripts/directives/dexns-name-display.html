@@ -6,18 +6,24 @@
     required
     ng-model="input.address"
 />
-<div ng-show="dexnsNameDisplay.address.$pending.validDexnsName" class="alert alert-info" translate="DEXNS_NAME_LOADING">
-    Loading DexNS name...
-</div>
+<div>
+        <span translate="DEXNS_name">
+        DexNS Name
+    </span>
+    <div class="bouncing-loader inline"
+         ng-show="dexnsNameDisplay.address.$pending.validDexnsName"
+    >
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
 
+</div>
 
 <div ng-show="!dexnsNameDisplay.address.$pending.validDexnsName">
     <div ng-show="dexnsNameDisplay.address.$valid">
-
-        <label for="dexnsName" translate="DEXNS_name">
-            DexNS Name
-        </label>
         <input
+            title="dexns name"
             type="text"
             name="dexnsName"
             id="dexnsName"
@@ -56,9 +62,12 @@
     </div>
 
     <!-- LOADING DISPLAYS -->
-    <div ng-show="dexnsNameDisplay.dexnsName.$pending.timeRemaining" class="alert alert-info"
-         translate="DEXNS_DETAILS_LOADING">
-        Loading DexNS name details...
+    <div ng-show="dexnsNameDisplay.dexnsName.$pending.timeRemaining">
+        <div class="bouncing-loader inline">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
 
     <!-- /LOADING DISPLAYS -->

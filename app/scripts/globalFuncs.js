@@ -386,26 +386,17 @@ globalFuncs.removeTokenFromLocal = function(symbol, tokenObj) {
 };
 
 globalFuncs.localStorage = {
-    isAvailable: function() {
-        // return typeof localStorage != "undefined";
-        // return globalFuncs.storageAvailable('localStorage');
-
-        // Polyfilled if not available/accessible
-        return true;
+    clear: function() {
+        localStorage.clear();
+    },
+    removeItem: function(key) {
+        localStorage.removeItem(key);
     },
     setItem: function(key, value) {
-        if (this.isAvailable()) {
-            localStorage.setItem(key, value);
-        } else {
-            // console.log("localStorage is available? " + this.isAvailable());
-        }
+        localStorage.setItem(key, value);
     },
     getItem: function(key, dValue = "") {
-        if (this.isAvailable()) {
-            return localStorage.getItem(key);
-        } else {
-            return dValue;
-        }
+        return localStorage.getItem(key);
     }
 };
 

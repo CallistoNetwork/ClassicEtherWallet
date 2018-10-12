@@ -81,6 +81,9 @@ if (IS_CX) {
     window.DigitalBitboxEth = digitalBitboxEth;
 }
 
+const { version } = require("../../package.json");
+const { appNewVersion } = require("./updateAppVersion");
+
 // CONTROLLERS
 
 var tabsCtrl = require("./controllers/tabsCtrl");
@@ -403,4 +406,5 @@ if (IS_CX) {
     ]);
 }
 
+appNewVersion(version);
 trezorDeviceListener();

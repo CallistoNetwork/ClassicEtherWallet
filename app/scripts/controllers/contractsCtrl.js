@@ -1,13 +1,13 @@
 "use strict";
 
-const initTrans = {
+const _get = require("lodash/get");
+
+const initTx = {
     gasLimit: 21000,
     data: "",
     to: "",
     unit: "ether",
-    value: 0,
-    nonce: null,
-    gasPrice: null
+    value: 0
 };
 
 const initContract = {
@@ -25,33 +25,38 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
 
     Object.assign($scope, {
         rawTx: null,
-        tx: initTrans,
+        tx: initTx,
         signedTx: null,
         contract: initContract,
         ajaxReq,
         Validator,
         visibility: "interactView",
-        sendTxModal: new Modal(document.getElementById("deployContract")),
-        sendContractModal: new Modal(document.getElementById("sendContract")),
+        deployContractModal: new Modal(
+            document.getElementById("deployContract")
+        ),
+        interactWithContractModal: new Modal(
+            document.getElementById("interactWithContractModal")
+        ),
         showReadWrite: false,
         showRaw: false,
-        selectedAbi:
-            Array.isArray(ajaxReq.abiList) && ajaxReq.abiList.length
-                ? ajaxReq.abiList[0]
-                : ""
+        selectedAbi: _get(ajaxReq, "abiList[0]", "")
     });
 
     $scope.selectExistingAbi = function(index) {
         const selectedAbi = ajaxReq.abiList[index];
-        $scope.selectedAbi = selectedAbi;
-        $scope.addressDrtv.ensAddressField = $scope.selectedAbi.address;
-        $scope.addressDrtv.showDerivedAddress = false;
-        $scope.dropdownExistingContracts = false;
-        $scope.dropdownContracts = false;
-        Object.assign($scope.contract, {
-            selectedFunc: null,
-            address: $scope.selectedAbi.address,
-            abi: selectedAbi.abi
+        Object.assign($scope, {
+            selectedAbi,
+            addressDrtv: {
+                ensAddressField: selectedAbi.address,
+                showDerivedAddress: false
+            },
+            dropdownExistingContracts: false,
+            dropdownContracts: false,
+            contract: {
+                selectedFunc: null,
+                address: $scope.selectedAbi.address,
+                abi: selectedAbi.abi
+            }
         });
         $scope.initContract();
     };
@@ -73,6 +78,7 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
 
         if ($scope.visibility === "interactView") {
             if (selectedFunc === null) {
+                console.log("no data");
                 return "";
             }
 
@@ -92,33 +98,23 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
 
     $scope.generateContractDeterministicAddr = function() {
         return new Promise((resolve, reject) => {
-            ajaxReq.getTransactionData(
-                walletService.wallet.getAddressString(),
-                function(data) {
-                    if (data.error) {
-                        uiFuncs.notifier.danger(data.error);
-                        return reject(data.error);
-                    }
-
-                    const contractAddr = ethFuncs.getDeteministicContractAddress(
-                        walletService.wallet.getAddressString(),
-                        data.data.nonce
-                    );
-
-                    Object.assign($scope.tx, {
-                        data: _getContractData(),
-                        to: contractAddr,
-                        contractAddr
-                    });
-
-                    // const txData = uiFuncs.getTxData({
-                    //     tx: $scope.tx,
-                    //     wallet: walletService.wallet
-                    // });
-
-                    return resolve($scope.tx);
+            const addr = walletService.wallet.getAddressString();
+            ajaxReq.getTransactionData(addr, function(data) {
+                if (data.error) {
+                    uiFuncs.notifier.danger(data.error);
+                    return reject(data.error);
                 }
-            );
+
+                const contractAddr = ethFuncs.getDeteministicContractAddress(
+                    addr,
+                    data.data.nonce
+                );
+
+                return resolve({
+                    to: contractAddr,
+                    contractAddr
+                });
+            });
         });
     };
 
@@ -130,13 +126,7 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
         }
 
         if ($scope.visibility === "deployView") {
-            if (
-                !(
-                    walletService.wallet &&
-                    walletService.wallet.getAddressString()
-                )
-            ) {
-                uiFuncs.notifier.danger(globalFuncs.errorMsgs[3]);
+            if (!$scope.walletUnlocked()) {
                 return;
             }
         }
@@ -147,28 +137,33 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
                     walletService.wallet.getAddressString()) ||
                 globalFuncs.donateAddress,
             to: $scope.tx.to,
-            value: etherUnits.toWei($scope.tx.value, $scope.tx.unit),
+            value: new BigNumber(
+                etherUnits.toWei($scope.tx.value, $scope.tx.unit)
+            ).toNumber(),
             data: _getContractData()
         };
 
         if ($scope.visibility === "deployView") {
-            if (!$scope.tx.to || angular.equals(to, "0xCONTRACT")) {
-                // deploying contract, get add nonce to contract addr
-
-                const result = await $scope.generateContractDeterministicAddr();
-                Object.assign(estObj, { to: result.to });
-            }
+            // must get an addr to estimate gas
+            //fixme: gas estimates are low
+            //
+            const result = await $scope
+                .generateContractDeterministicAddr()
+                .catch(err => {
+                    uiFuncs.notifier.danger(err);
+                    throw err;
+                });
+            Object.assign(estObj, { to: result.to, contractAddr: result.to });
         } else if ($scope.visibility === "interactView") {
-            const { functions, selectedFunc, address } = $scope.contract;
+            const { address } = $scope.contract;
 
             Object.assign(estObj, {
                 to: address,
-                from: walletService.wallet.getAddressString(),
                 data: $scope.getContractData()
             });
         }
 
-        Object.assign($scope.tx, estObj);
+        Object.assign($scope.tx, { to: estObj.to, data: estObj.data });
 
         return ethFuncs
             .estimateGas(estObj)
@@ -186,107 +181,99 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
             });
     };
 
-    $scope.generateTx = function() {
-        if (
-            !(walletService.wallet && walletService.wallet.getAddressString())
-        ) {
-            uiFuncs.notifier.danger("Unlock your wallet first!");
+    $scope.generateTx = async function() {
+        if (!$scope.walletUnlocked()) {
             return;
         }
+        if ($scope.visibility === "deployView") {
+            Object.assign($scope.tx, { to: "0xCONTRACT" });
+        }
 
-        const walletString = walletService.wallet.getAddressString();
+        Object.assign($scope.tx, { data: _getContractData() });
 
-        ajaxReq.getTransactionData(walletString, function(data) {
-            if (data.error) {
-                uiFuncs.notifier.danger(data.error);
-                return false;
-            }
-
-            const contractAddr =
-                $scope.tx.to === "0xCONTRACT"
-                    ? ethFuncs.getDeteministicContractAddress(
-                          walletString,
-                          data.data.nonce
-                      )
-                    : $scope.tx.to;
-
-            Object.assign($scope.tx, {
-                data: _getContractData(),
-                to: contractAddr,
-                contractAddr
-            });
-
-            const txData = uiFuncs.getTxData({
-                tx: $scope.tx,
-                wallet: walletService.wallet
-            });
-
-            uiFuncs
-                .generateTx(txData)
-                .then(function(tx) {
-                    $scope.$apply(() => {
-                        $scope.rawTx = tx.rawTx;
-                        $scope.signedTx = tx.signedTx;
-                        $scope.showRaw = true;
-                    });
-                })
-                .catch(err => {
-                    $scope.showRaw = false;
-
-                    Object.assign($scope, {
-                        rawTx: null,
-                        signedTx: null
-                    });
-                })
-                .finally(() => {
-                    if ($scope.visibility === "deployView") {
-                        $scope.sendTxModal.open();
-                    } else {
-                        $scope.sendContractModal.open();
-                    }
-                });
+        const txData = uiFuncs.getTxData({
+            tx: $scope.tx,
+            wallet: walletService.wallet
         });
+
+        Object.assign($scope.tx, txData);
+
+        uiFuncs
+            .generateTx($scope.tx)
+            .then(function(result) {
+                $scope.$apply(() => {
+                    Object.assign($scope, {
+                        rawTx: result.rawTx,
+                        showRaw: true,
+                        signedTx: result.signedTx
+                    });
+                });
+                $scope.visibility === "deployView" &&
+                    $scope.deployContractModal.open();
+            })
+            .catch(err => {
+                uiFuncs.notifier.danger(err);
+                Object.assign($scope, {
+                    showRaw: false,
+                    rawTx: null,
+                    signedTx: null
+                });
+            })
+            .finally(() => {
+                // open modal even if failing tx
+                // (note w/ tx w/ 0 < value tx will fail as value field is in modal
+
+                $scope.visibility === "interactView" &&
+                    $scope.interactWithContractModal.open();
+            });
     };
 
     $scope.sendTx = function() {
-        if ($scope.visibility === "deployView") {
-            $scope.sendTxModal.close();
-        } else {
-            $scope.sendContractModal.close();
-        }
-        uiFuncs.sendTx($scope.signedTx, false).then(function(resp) {
-            const bExStr =
-                ajaxReq.type !== nodes.nodeTypes.Custom
-                    ? "<a href='" +
-                      ajaxReq.blockExplorerTX.replace("[[txHash]]", resp.data) +
-                      "' target='_blank' rel='noopener'> View your transaction </a>"
+        return uiFuncs
+            .sendTx($scope.signedTx, false)
+            .then(function(resp) {
+                const bExStr =
+                    ajaxReq.type !== nodes.nodeTypes.Custom
+                        ? "<a href='" +
+                          ajaxReq.blockExplorerTX.replace(
+                              "[[txHash]]",
+                              resp.data
+                          ) +
+                          "' target='_blank' rel='noopener'> View your transaction </a>"
+                        : "";
+                const contractAddr = $scope.tx.contractAddr
+                    ? " & Contract Address <a href='" +
+                      ajaxReq.blockExplorerAddr.replace(
+                          "[[address]]",
+                          $scope.tx.contractAddr
+                      ) +
+                      "' target='_blank' rel='noopener'>" +
+                      $scope.tx.contractAddr +
+                      "</a>"
                     : "";
-            const contractAddr = $scope.tx.contractAddr
-                ? " & Contract Address <a href='" +
-                  ajaxReq.blockExplorerAddr.replace(
-                      "[[address]]",
-                      $scope.tx.contractAddr
-                  ) +
-                  "' target='_blank' rel='noopener'>" +
-                  $scope.tx.contractAddr +
-                  "</a>"
-                : "";
-            uiFuncs.notifier.success(
-                globalFuncs.successMsgs[2] +
-                    "<br />" +
-                    resp.data +
-                    "<br />" +
-                    bExStr +
-                    contractAddr
-            );
-        });
+                uiFuncs.notifier.success(
+                    globalFuncs.successMsgs[2] +
+                        "<br />" +
+                        resp.data +
+                        "<br />" +
+                        bExStr +
+                        contractAddr
+                );
+            })
+            .finally(() => {
+                if ($scope.visibility === "deployView") {
+                    $scope.deployContractModal.close();
+                } else {
+                    $scope.interactWithContractModal.close();
+                }
+            });
     };
 
     $scope.setVisibility = function(str = "interactView") {
         Object.assign($scope, {
             visibility: str,
-            tx: Object.assign({}, $scope.tx, initTrans),
-            contract: Object.assign({}, $scope.contract, initContract),
+            tx: Object.assign({}, initTx),
+            contract: Object.assign({}, initContract),
             rawTx: null,
             signedTx: null,
             showRaw: false
@@ -294,10 +281,12 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
     };
 
     $scope.selectFunc = function(index) {
-        $scope.contract.selectedFunc = {
-            name: $scope.contract.functions[index].name,
-            index: index
-        };
+        const selectedFunc = $scope.contract.functions[index];
+
+        Object.assign($scope.contract, {
+            selectedFunc: Object.assign({}, selectedFunc, { index })
+        });
+
         if (!$scope.contract.functions[index].inputs.length) {
             $scope.readFromContract();
             $scope.showRead = false;
@@ -337,20 +326,31 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
       Write to a contract
     */
 
-    $scope.writeToContract = function() {
-        if (
-            !(walletService.wallet && walletService.wallet.getAddressString())
-        ) {
+    $scope.walletUnlocked = function() {
+        const isUnlocked = walletService.unlocked();
+        if (!isUnlocked) {
             uiFuncs.notifier.danger(globalFuncs.errorMsgs[3]);
+        }
+        return isUnlocked;
+    };
+
+    $scope.writeToContract = function() {
+        const { functions, selectedFunc, address } = $scope.contract;
+        if (!($scope.walletUnlocked() && validData())) {
             return;
         }
-
-        const { functions, selectedFunc, address } = $scope.contract;
 
         Object.assign($scope.tx, {
             to: address,
             contractAddr: address,
             data: $scope.getContractData()
+        });
+
+        $scope.estimateGasLimit().finally(() => {
+            // open modal even if tx is failing
+            // let user edit send value and re-check gas
+
+            $scope.generateTx();
         });
 
         function validData() {
@@ -377,17 +377,6 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
 
             return check;
         }
-
-        // estimate gas limit via ajax request, generate tx data, open sendTransactionModal
-
-        if (validData()) {
-            $scope.estimateGasLimit().finally(() => {
-                // open modal even if tx is failing
-                // let user edit send value and re-check gas
-
-                $scope.generateTx();
-            });
-        }
     };
 
     $scope.toggleContractParams = function() {
@@ -402,18 +391,18 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
             data
         ) {
             if (!data.error) {
-                var curFunc =
+                const curFunc =
                     $scope.contract.functions[
                         $scope.contract.selectedFunc.index
                     ];
-                var outTypes = curFunc.outputs.map(function(i) {
+                const outTypes = curFunc.outputs.map(function(i) {
                     return i.type;
                 });
-                var decoded = ethUtil.solidityCoder.decodeParams(
+                const decoded = ethUtil.solidityCoder.decodeParams(
                     outTypes,
                     data.data.replace("0x", "")
                 );
-                for (var i in decoded) {
+                for (const i in decoded) {
                     if (decoded[i] instanceof BigNumber)
                         curFunc.outputs[i].value = decoded[i].toFixed(0);
                     else curFunc.outputs[i].value = decoded[i];
@@ -447,23 +436,6 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
         }
     };
 
-    $scope.$watch("contract.abi", function handleAbiUpdate(newVal) {
-        if ($scope.visibility === "deployView") {
-            const constructor = $scope.initConstructorParamsFrom(newVal);
-
-            if (
-                constructor &&
-                constructor.hasOwnProperty("inputs") &&
-                Array.isArray(constructor.inputs) &&
-                constructor.inputs.length > 0
-            ) {
-                $scope.contract.abi = newVal;
-
-                $scope.contract.constructorParams = constructor;
-            }
-        }
-    });
-
     $scope.initConstructorParamsFrom = function(abi) {
         try {
             if (Array.isArray(abi) && abi.length === 0) {
@@ -491,6 +463,23 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
 
     $scope.$watch("contract.bytecode", function(newVal, oldVal) {
         $scope.tx.data = _getContractData();
+    });
+
+    $scope.$watch("contract.abi", function handleAbiUpdate(newVal) {
+        if ($scope.visibility === "deployView") {
+            const constructor = $scope.initConstructorParamsFrom(newVal);
+
+            if (
+                constructor &&
+                constructor.hasOwnProperty("inputs") &&
+                Array.isArray(constructor.inputs) &&
+                0 < constructor.inputs.length
+            ) {
+                $scope.contract.abi = newVal;
+
+                $scope.contract.constructorParams = constructor;
+            }
+        }
     });
 };
 module.exports = contractsCtrl;

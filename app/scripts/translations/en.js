@@ -370,7 +370,7 @@ en.data = {
     /* Send Transaction */
     TRANS_desc:
         'If you want to send Tokens, please use the "Send Token" page instead. ',
-    TRANS_advanced: "+Advanced: Add Data ",
+    TRANS_advanced: "Advanced: Add Data ",
     TRANS_data: "Data ",
     TRANS_gas: "Gas Limit ",
     TRANS_sendInfo:

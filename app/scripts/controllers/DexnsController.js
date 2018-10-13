@@ -32,6 +32,10 @@ const storageContracts = [
     "assignation"
 ];
 
+const AVAILABLE_RESPONSE_TEXT = "This name is available for registration.";
+const UNAVAILABLE_RESPONSE_TEXT =
+    "This name is already registered! You should try to register another name.";
+
 const DexnsController = function DexnsController(
     $scope,
     $sce,
@@ -40,36 +44,23 @@ const DexnsController = function DexnsController(
     backgroundNodeService,
     dexnsService
 ) {
-    $scope.etherUnits = etherUnits;
-
-    const AVAILABLE_RESPONSE_TEXT = "This name is available for registration.";
-    const UNAVAILABLE_RESPONSE_TEXT =
-        "This name is already registered! You should try to register another name.";
-
-    Object.assign($scope, {
-        AVAILABLE_RESPONSE_TEXT,
-        UNAVAILABLE_RESPONSE_TEXT
-    });
-
-    $scope.dexnsService = dexnsService;
     walletService.wallet = null;
-
-    $scope.contract = dexnsService.feContract;
-
-    $scope.walletService = walletService;
-
-    $scope.networks = globalFuncs.networks;
-
-    $scope.dexnsConfirmModalModal = new Modal(
-        document.getElementById("dexnsConfirmModal")
-    );
-    $scope.sendTransactionContractModal = new Modal(
-        document.getElementById("sendTransactionContract")
-    );
-
     if (ajaxReq.type !== nodes.nodeTypes.ETC) {
         $rootScope.$broadcast("ChangeNode", globalFuncs.networks.ETC || 0);
     }
+    Object.assign($scope, {
+        AVAILABLE_RESPONSE_TEXT,
+        UNAVAILABLE_RESPONSE_TEXT,
+        dexnsService,
+        walletService,
+        networks: globalFuncs.networks,
+        contract: dexnsService.feContract,
+        etherUnits,
+        dexnsConfirmModalModal: new Modal(
+            document.getElementById("dexnsConfirmModal")
+        ),
+        sendTxModal: new Modal(document.getElementById("dexnsSendTxModal"))
+    });
 
     $scope.handleRegisterAndUpdateName = function(_form) {
         if (!_form.$valid) {
@@ -199,7 +190,7 @@ const DexnsController = function DexnsController(
         $scope.$apply(function() {
             $scope.tx = signedTx;
         });
-        $scope.sendTransactionContractModal.open();
+        $scope.sendTxModal.open();
     }
 
     /*
@@ -209,7 +200,7 @@ const DexnsController = function DexnsController(
 
     $scope.sendTxContract = function() {
         dexnsService.feContract.sendTx($scope.tx).finally(result => {
-            $scope.sendTransactionContractModal.close();
+            $scope.sendTxModal.close();
 
             // todo: save result and display
         });

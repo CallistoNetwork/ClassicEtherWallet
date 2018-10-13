@@ -19,7 +19,7 @@ ethFuncs.isChecksumAddress = function(address) {
     return address === ethUtil.toChecksumAddress(address);
 };
 ethFuncs.validateHexString = function(str) {
-    if (str === "undefined") return false;
+    if (typeof str === "undefined") return false;
     else if (str === "") return true;
     str =
         str.substring(0, 2) === "0x"
@@ -90,33 +90,28 @@ ethFuncs.getFunctionSignature = function(name) {
         .toString("hex")
         .slice(0, 8);
 };
-const adjustGas = gasLimit => {
-    if (gasLimit === "0x5209") return "21000";
-    if (new BigNumber(gasLimit).gt(3500000)) return "-1";
-    return new BigNumber(gasLimit).toString();
-};
 
 /*
     returns <Promise> {data, msg, error: false}
  */
 
 function mapToGasEst(tx) {
-    return Object.assign(tx, {
-        value: new BigNumber(tx.value).toString()
+    return Object.assign({}, tx, {
+        value: new BigNumber(tx.value).toNumber()
     });
 }
 
-ethFuncs.estimateGas = function(dataObj, notify = true) {
+ethFuncs.estimateGas = function(dataObj, notifyError = true) {
     return new Promise((resolve, reject) => {
-        dataObj = mapToGasEst(dataObj);
+        const tx = mapToGasEst(dataObj);
 
-        ajaxReq.getEstimatedGas(dataObj, function(data) {
+        ajaxReq.getEstimatedGas(tx, function(data) {
             if (data.error || parseInt(data.data) === -1) {
-                notify && uiFuncs.notifier.danger(data);
+                notifyError && uiFuncs.notifier.danger(data);
 
                 reject(data);
             } else {
-                resolve(adjustGas(data.data));
+                resolve(new BigNumber(data.data).toNumber());
             }
         });
     });

@@ -1,5 +1,5 @@
 "use strict";
-var Wallet = require("./myetherwallet.js");
+const Wallet = require("./Wallet");
 
 var Web3Wallet = function(addressBuffer) {
     Wallet.call(this);

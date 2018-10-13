@@ -5,16 +5,81 @@
     ng-cloak
 >
 
-    <article class="modal fade" id="sendContract" tabindex="-1">
-        <section class="modal-dialog">
+    <!-- Modals -->
 
-            <form name="sendContractTx" ng-submit="sendTx()" send-contract-tx>
+    <!-- Interact Modal -->
+    <!-- Interact Modal -->
+    <article class="modal fade" id="interactWithContractModal" tabindex="-1">
+        <section class="modal-dialog">
+            <form name="sendContractTx" ng-submit="sendTx()" contract-interact-modal>
             </form>
         </section>
     </article>
+    <!-- / Interact Modal -->
 
-    @@if (site === 'cew' ) { @@include( '../includes/contracts-deploy-modal.tpl', { "site": "cew" } ) }
-    @@if (site === 'cx' ) { @@include( '../includes/contracts-deploy-modal.tpl', { "site": "cx" } ) }
+    <!-- Contract Deploy Modal -->
+
+    <article class="modal fade" id="deployContract" tabindex="-1">
+        <section class="modal-dialog">
+            <section class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" translate="SENDModal_Title">Confirm Transaction!</h2>
+
+
+                    <p>You are about to
+                        <strong>
+                            deploy a contract
+                            {{tx.contractAddr}}
+                        </strong>
+                        on the
+                        <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"></coin-icon>
+                        chain.
+                    </p>
+
+                    <p> The <strong>
+                        <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"></coin-icon>
+                    </strong> node you are sending through is provided by <strong>{{ajaxReq.service}}</strong>.
+                    </p>
+
+                    <h4 translate="SENDModal_Content_3"> Are you sure you want to do this? </h4>
+                </div>
+
+                <div ng-init="showDetails = false;" class="container-fluid">
+                    <div class="row">
+                        <div class="text-center col-xs-12">
+                            <button type="button"
+                                    class="btn btn-default"
+                                    ng-click="showDetails = !showDetails"
+                            >Details
+                            </button>
+                        </div>
+                    </div>
+                    <div ng-show="showDetails" class="row">
+                        <textarea readonly class="form-control" title="tx details" rows="5">
+                            {{tx | json }}
+                        </textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
+                        No, get me out of here!
+                    </button>
+                    <button class="btn btn-primary" ng-click="sendTx()" translate="SENDModal_Yes">
+                        Yes, I am sure! Make transaction.
+                    </button>
+                </div>
+
+            </section>
+        </section>
+    </article>
+
+
+    <!-- /Contract Deploy Modal -->
+
+    <!-- Modals -->
+
 
     <!-- Title -->
     <div class="block text-center">
@@ -54,7 +119,7 @@
 
     </div>
     <!-- Deploy Contract -->
-    <article class="row block" ng-show="visibility=='deployView'">
+    <article class="row block" ng-show="visibility === 'deployView'">
 
         @@if (site === 'cew' ) { @@include( '../includes/contracts-deploy-1.tpl', { "site": "cew" } ) }
         @@if (site === 'cx' ) { @@include( '../includes/contracts-deploy-1.tpl', { "site": "cx" } ) }
@@ -62,18 +127,7 @@
     </article>
     <!-- / Deploy Contract -->
 
-    <!--wallet decrypt-->
-    <article class="form-group"
-             ng-show="(!wd && visibility=='deployView') || (!wd && visibility=='interactView' && contract.selectedFunc && !contract.functions[contract.selectedFunc.index].constant)">
-        @@if (site === 'cx' ) {
-        <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>
-        }
-        @@if (site === 'cew' ) {
-        <wallet-decrypt-drtv></wallet-decrypt-drtv>
-        }
-    </article>
-
-    <article class="col-xs-12" ng-show="contract.selectedFunc!=null && visibility=='interactView'">
+    <article class="col-xs-12" ng-show="contract.selectedFunc!=null && visibility === 'interactView'">
 
         <button class="btn btn-primary btn-block" ng-click="readFromContract()"
                 ng-show="contract.functions[contract.selectedFunc.index].constant && showRead">
@@ -86,5 +140,30 @@
         </button>
 
     </article>
+
+
+    <!--wallet decrypt-->
+
+    <div ng-click="wd = !wd">
+
+        <h1>
+                 <span
+                     style="margin: 0; padding: 0 2px;"
+                     class="collapse-button glyphicon"
+                     ng-class="wd ? 'glyphicon-plus' : 'glyphicon-minus'"
+                 ></span>
+            <span>Change Wallet</span>
+        </h1>
+    </div>
+    <article class="form-group"
+             ng-show="!wd">
+        @@if (site === 'cx' ) {
+        <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>
+        }
+        @@if (site === 'cew' ) {
+        <wallet-decrypt-drtv></wallet-decrypt-drtv>
+        }
+    </article>
+
 
 </main>

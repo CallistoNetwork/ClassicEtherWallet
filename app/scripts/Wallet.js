@@ -1,6 +1,5 @@
 "use strict";
 const _map = require("lodash/map");
-// const {ethUtil, nodes, globalFuncs, coinPriceService, etherUnits} = window;
 
 const defaultWalletBalance = {
     usdPrice: 0,

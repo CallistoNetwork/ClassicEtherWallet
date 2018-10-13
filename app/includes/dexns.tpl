@@ -5,8 +5,8 @@
 >
 
 
-    @@if (site === 'cew' ) { @@include( './sendTx-contract-modal.tpl', { "site": "cew" } ) }
-    @@if (site === 'cx' ) { @@include( './sendTx-contract-modal.tpl', { "site": "cx" } ) }
+    @@if (site === 'cew' ) { @@include( './dexns-sendtx-modal.tpl', { "site": "cew" } ) }
+    @@if (site === 'cx' ) { @@include( './dexns-sendtx-modal.tpl', { "site": "cx" } ) }
 
 
     <!-- Dexns Register Name Modal -->

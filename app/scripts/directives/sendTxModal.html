@@ -151,9 +151,9 @@
                         </div>
                     </div>
                     <div ng-show="showDetails" class="row">
-                        <div class="col-xs-12">
+                        <textarea title="tx details" class="form-control" rows="5">
                             {{tx.sendMode === 'ether' ? tx : tokenTx | json }}
-                        </div>
+                        </textarea>
                     </div>
                 </div>
             </div>

@@ -2,6 +2,14 @@
 
 const InitContract = require("../contract").InitContract;
 
+const officialityContract = require("../abiDefinitions/clo").find(
+    i => i.address === "0xf6f29e5ba51171c4ef4997bd0208c7e9bc5d5eda"
+);
+
+if (!officialityContract) {
+    throw new Error("Invalid Request");
+}
+
 /*
 
     https://github.com/yuriy77k/Officiality-checker-web3.js-/blob/master/CEW_tab/app/scripts/controllers/officialityCheckerCtrl.js#L41
@@ -25,15 +33,7 @@ function mapToURL(_url) {
 
 class OfficialityContract extends InitContract {
     constructor() {
-        const oc = require("../abiDefinitions/clo").find(
-            i => i.address === "0xf6f29e5ba51171c4ef4997bd0208c7e9bc5d5eda"
-        );
-
-        if (!oc) {
-            throw new Error("Invalid Request");
-        }
-
-        super(oc.abi, oc.address, "CLO");
+        super(officialityContract.abi, officialityContract.address, "CLO");
     }
 
     /*

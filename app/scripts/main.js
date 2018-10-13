@@ -42,7 +42,7 @@ const coinPriceService = require("./services/coinPrice.service");
 
 window.coinPriceService = new coinPriceService();
 
-var Wallet = require("./myetherwallet");
+var Wallet = require("./Wallet");
 window.Wallet = Wallet;
 var Web3Wallet = require("./web3Wallet");
 window.Web3Wallet = Web3Wallet;
@@ -120,6 +120,7 @@ const dexnsService = require("./services/dexns.service");
 const backgroundNodeService = require("./services/backgroundNode.service");
 
 // DIRECTIVES
+const contractInteractModal = require("./directives/contract-interact-modal");
 const equivalentValues = require("./directives/equivalentValues");
 const walletBalancesTable = require("./directives/walletBalancesTable");
 const nodeSelectorList = require("./directives/nodeSelectorList");
@@ -150,7 +151,7 @@ const sidebarAds = require("./directives/sidebar-ads");
 const sidebar = require("./directives/sidebar");
 const accountInfo = require("./directives/accountInfo");
 const messagesOverview = require("./directives/messagesOverview");
-const sendTransactionFormDrtv = require("./directives/sendTransactionForm");
+const sendTransactionForm = require("./directives/sendTransactionForm");
 const dexnsTokenRegistrationForm = require("./directives/dexns-token-registration");
 const networkInfo = require("./directives/networkInfo");
 const txStatus = require("./directives/txStatus");
@@ -163,6 +164,8 @@ if (IS_CX) {
     var mainPopCtrl = require("./controllers/CX/mainPopCtrl");
     var quickSendCtrl = require("./controllers/CX/quickSendCtrl");
 }
+
+const toArray = require("./filters/toArray.filter");
 
 var app = angular.module("mewApp", [
     "pascalprecht.translate",
@@ -223,7 +226,7 @@ app.directive("sidebarAds", ["$interval", sidebarAds]);
 app.directive("sidebar", ["$timeout", sidebar]);
 app.directive("accountInfo", accountInfo);
 app.directive("tokenBalances", tokenBalances);
-app.directive("sendTransactionForm", sendTransactionFormDrtv);
+app.directive("sendTransactionForm", sendTransactionForm);
 app.directive("officialityChecker", [officialityChecker]);
 app.directive("dexnsTokenRegistrationForm", dexnsTokenRegistrationForm);
 app.directive("dexnsNameDisplay", [
@@ -254,14 +257,10 @@ app.directive("messagesOverview", [
 app.directive("arrayInputDrtv", arrayInputDrtv);
 app.directive("newMessagesDrtv", ["globalService", newMessagesDrtv]);
 app.directive("transactionCost", [transactionCost]);
-app.directive("sendContractTx", [
-    "walletService",
-    require("./directives/sendContractTx")
-]);
+app.directive("contractInteractModal", [contractInteractModal]);
 
-app.directive("customNodeForm", [customNodeForm]);
+app.directive("customNodeForm", customNodeForm);
 
-const toArray = require("./filters/toArray.filter");
 app.filter("toArray", toArray);
 
 app.controller("tabsCtrl", [

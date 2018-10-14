@@ -939,7 +939,8 @@ en.data = {
         "If you do not feel comfortable using this tool, then by all means, do not use it. We created this tool as a helpful way for people to generate wallets and make transactions without needing to dive into command line or run a full node. Again, feel free to reach out if you have concerns and we will respond as quickly as possible. Thanks! ",
 
     HELP_FAQ_Title: "More Helpful Answers to Frequent Questions ",
-    HELP_Contact_Title: "Ways to Get in Touch "
+    HELP_Contact_Title: "Ways to Get in Touch ",
+    BEEP_BOOP: "beep boop"
 };
 
 module.exports = en;

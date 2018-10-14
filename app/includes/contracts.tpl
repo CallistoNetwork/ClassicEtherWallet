@@ -22,25 +22,36 @@
     <article class="modal fade" id="deployContract" tabindex="-1">
         <section class="modal-dialog">
             <section class="modal-content">
-                <div class="modal-body">
+                <div class="modal-body" ng-if="tx.contractAddr">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h2 class="modal-title" translate="SENDModal_Title">Confirm Transaction!</h2>
 
 
-                    <p>You are about to
+                    <div class="row col-xs-12">You are about to
                         <strong>
                             deploy a contract
-                            {{tx.contractAddr}}
                         </strong>
-                        on the
-                        <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"></coin-icon>
-                        chain.
-                    </p>
+                    </div>
+                    <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', tx.contractAddr);}}" target="_blank" rel="noopener">
+                        <div class="row col-xs-12 d-flex justify-content-center align-items-center">
+                            <div class="addressIdenticon med"
+                                 title="Address Indenticon"
+                                 style="display: inline-block; margin: 1rem;"
+                                 blockie-address="{{tx.contractAddr}}"
+                                 watch-var="tx.contractAddr">
 
-                    <p> The <strong>
-                        <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"></coin-icon>
-                    </strong> node you are sending through is provided by <strong>{{ajaxReq.service}}</strong>.
-                    </p>
+                            </div>
+                            <span>{{ethUtil.toChecksumAddress(tx.contractAddr)}}</span>
+                        </div>
+                    </a>
+                    <div class="row col-xs-12">
+                        On the
+                        <b>
+                            <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"></coin-icon>
+                            Chain
+                        </b>
+                    </div>
+
 
                     <h4 translate="SENDModal_Content_3"> Are you sure you want to do this? </h4>
                 </div>
@@ -144,7 +155,7 @@
 
     <!--wallet decrypt-->
 
-    <div ng-click="wd = !wd">
+    <div ng-click="wd = !wd" class="marg-v-md">
 
         <h1>
                  <span

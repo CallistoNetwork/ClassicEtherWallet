@@ -75,7 +75,7 @@ var tabsCtrl = function(
                 walletService.wallet.getAddressString()
             );
         },
-        addr => {
+        (addr, oldAddr) => {
             if (!(addr && ethFuncs.validateEtherAddress(addr))) {
                 $scope.wd = false;
                 return;
@@ -140,6 +140,8 @@ var tabsCtrl = function(
                 $scope.gas.defaultValue
             );
         }
+        globalFuncs.localStorage.setItem(gasPriceKey, $scope.gas.value);
+
         // console.log($scope.gas.value, globalFuncs.localStorage.getItem(gasPriceKey), $scope.gas.curVal);
     };
 

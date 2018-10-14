@@ -376,7 +376,7 @@ var messagesCtrl = function(
 
         Object.assign($scope.tx, estObj);
 
-        ethFuncs
+        uiFuncs
             .estimateGas(estObj)
             .then(function(gasLimit) {
                 Object.assign($scope.tx, { gasLimit });

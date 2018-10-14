@@ -226,7 +226,11 @@ app.directive("sidebarAds", ["$interval", sidebarAds]);
 app.directive("sidebar", ["$timeout", sidebar]);
 app.directive("accountInfo", accountInfo);
 app.directive("tokenBalances", tokenBalances);
-app.directive("sendTransactionForm", sendTransactionForm);
+app.directive("sendTransactionForm", [
+    "walletService",
+    "globalService",
+    sendTransactionForm
+]);
 app.directive("officialityChecker", [officialityChecker]);
 app.directive("dexnsTokenRegistrationForm", dexnsTokenRegistrationForm);
 app.directive("dexnsNameDisplay", [
@@ -316,6 +320,7 @@ app.controller("swapCtrl", [
     "$rootScope",
     "$interval",
     "changeNowService",
+    "walletService",
     swapCtrl
 ]);
 app.controller("signMsgCtrl", ["$scope", "$sce", "walletService", signMsgCtrl]);

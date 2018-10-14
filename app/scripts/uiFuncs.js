@@ -1,4 +1,5 @@
 "use strict";
+const { Contract } = require("./contract");
 
 const TrezorConnect = require("trezor-connect").default;
 
@@ -424,31 +425,32 @@ uiFuncs.handleWeb3Trans = function(signedTx) {
     });
 };
 
-uiFuncs.transferAllBalance = function(addr, gasLimit) {
+uiFuncs.transferAllBalance = function(addr, { gasLimit = 21000 } = {}) {
     return new Promise((resolve, reject) => {
-        ajaxReq.getTransactionData(addr, function(data) {
-            if (data.error) {
-                reject({
-                    isError: true,
-                    error: data.error
-                });
+        ajaxReq.getTransactionData(addr, result => {
+            if (result.error) {
+                reject(result);
             }
             const {
-                data: { gasprice, balance, nonce, address }
-            } = data;
-            const gasPrice = new BigNumber(
-                ethFuncs.sanitizeHex(ethFuncs.addTinyMoreToGas(gasprice))
-            );
-            const gasCost = gasPrice.times(gasLimit);
+                data: { balance, gasprice, nonce, address }
+            } = result;
+
+            if (
+                ethUtil.toChecksumAddress(addr) !==
+                ethUtil.toChecksumAddress(address)
+            ) {
+                return reject(result);
+            }
+
+            const gasCost = new BigNumber(gasprice).times(gasLimit);
             const maxVal = new BigNumber(balance).minus(gasCost);
             const value = Math.max(0, etherUnits.toEther(maxVal, "wei"));
-            resolve({
-                isError: false,
+            return resolve({
                 unit: "ether",
                 value,
-                gasPrice,
                 nonce,
-                address
+                gasPrice: gasprice,
+                gasCost
             });
         });
     });
@@ -524,7 +526,7 @@ uiFuncs.genTxContract = function(
     return new Promise((resolve, reject) => {
         let tx = { network, inputs, from, value, unit };
 
-        ethFuncs
+        uiFuncs
             .estGasContract(funcName, contract, tx)
             .then(result => {
                 if (result.gasLimit === "-1") {
@@ -664,6 +666,197 @@ uiFuncs.sendTxContract = function({ node, network }, tx, notify = true) {
                     "<br />" +
                     bExStr +
                     contractAddr
+            );
+        }
+    });
+};
+
+/*
+    returns <Promise> {data, msg, error: false}
+ */
+
+uiFuncs.estimateGas = function(dataObj, notifyError = true) {
+    return new Promise((resolve, reject) => {
+        ajaxReq.getEstimatedGas(dataObj, function(data) {
+            if (data.error || parseInt(data.data) === -1) {
+                notifyError && uiFuncs.notifier.danger(data);
+                reject(-1);
+            } else {
+                resolve(new BigNumber(data.data).toNumber());
+            }
+        });
+    });
+};
+
+/*
+
+    Estimate gasPrice of tx to contract
+
+    sent over contract's set network
+
+    @param string | contract.abi[n[ _func
+    @param Contract contract
+    @param Tx transaction
+
+    @returns tx: Tx {gasLimit: }
+
+ */
+
+uiFuncs.estGasContract = function(
+    _func,
+    contract,
+    {
+        network = ajaxReq.type,
+        inputs = null,
+        from = null,
+        value = 0,
+        unit = "ether"
+    } = {}
+) {
+    return new Promise((resolve, reject) => {
+        const tx = { network, inputs, from, value, unit };
+
+        const { error, tx: _tx } = uiFuncs.prepContractData(
+            _func,
+            contract,
+            tx
+        );
+
+        if (error) {
+            reject(error);
+        } else {
+            Object.assign(tx, _tx);
+
+            const estObj = {
+                from: tx.from,
+                data: tx.data,
+                to: contract.address,
+                value: new BigNumber(
+                    etherUnits.toWei(tx.value, tx.unit)
+                ).toString()
+            };
+
+            contract.node.lib.getEstimatedGas(estObj, function(data) {
+                if (data.error || parseInt(data.data) === -1) {
+                    reject(Object.assign({}, data, { error: true }));
+                } else {
+                    resolve(
+                        Object.assign({}, tx, {
+                            gasLimit: new BigNumber(data.data).toNumber()
+                        })
+                    );
+                }
+            });
+        }
+    });
+};
+
+/*
+Generates tx data from contract function
+
+@param string  | contract.abi[n] _FUNCTION
+@param Contract contract
+@param Tx {}
+@returns {error: bool | error, {tx: Tx, _function: contract.abi.function} } if cannot estimate gas
+
+*/
+
+uiFuncs.prepContractData = function(
+    _FUNCTION,
+    contract,
+    { inputs = [], from, value = 0, unit = "ether" } = {}
+) {
+    const ERROR = { error: true, tx: null, _function: null };
+
+    if (!(contract instanceof Contract)) {
+        return ERROR;
+    }
+
+    let _function = null;
+
+    if (typeof _FUNCTION === "string") {
+        _function = contract.abi.find(itm => itm.name === _FUNCTION);
+    } else {
+        _function = _FUNCTION;
+    }
+
+    if (!contract.validFunction(_function)) return ERROR;
+
+    _function.inputs.forEach((item, i) => (item.value = inputs[i] || ""));
+
+    let data = ethFuncs.getFunctionSignature(
+        ethUtil.solidityUtils.transformToFullName(_function)
+    );
+
+    if (!data) {
+        return ERROR;
+    }
+
+    const inputs__ = ethFuncs.encodeInputs(_function);
+
+    return {
+        tx: {
+            to: contract.address,
+            data: ethFuncs.sanitizeHex(data + inputs__),
+            value,
+            unit
+        },
+        _function,
+        error: null
+    };
+};
+
+/*
+
+    Given function, contract, and tx data, generates data and sends call, returns decoded outputs
+    @param string | contract.abi[n] _func
+    @param Contract contract
+    @param Transaction tx
+    @returns Promise<{error: bool, data: []any}>
+ */
+
+uiFuncs.call = function(
+    _func,
+    contract,
+    {
+        network = ajaxReq.type,
+        inputs = null,
+        from = null,
+        value = 0,
+        unit = "ether"
+    } = {}
+) {
+    return new Promise((resolve, reject) => {
+        const { node } = contract;
+
+        const { tx: transObj, _function, error } = uiFuncs.prepContractData(
+            _func,
+            contract,
+            {
+                inputs,
+                from,
+                value,
+                unit
+            }
+        );
+
+        if (error) {
+            reject({ error: transObj, data: null });
+        } else {
+            // if reading from contract, send call
+
+            node.lib.getEthCall(
+                { to: transObj.to, data: transObj.data },
+                function(data) {
+                    if (data.error) {
+                        reject(data);
+                    } else
+                        resolve(
+                            Object.assign({}, data, {
+                                data: ethFuncs.decodeOutputs(_function, data)
+                            })
+                        );
+                }
             );
         }
     });

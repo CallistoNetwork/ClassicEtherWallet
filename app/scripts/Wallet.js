@@ -151,7 +151,7 @@ Wallet.prototype._saveBalance = function(
 ) {
     const { coinPrices } = window.coinPriceService;
     const etherBal = etherUnits.toEther(balance, "wei");
-    this.balances[currency].balance = etherBal;
+    this.balances[currency].balance = new BigNumber(etherBal).toNumber();
 
     if (currency in coinPrices) {
         const data = coinPrices[currency];

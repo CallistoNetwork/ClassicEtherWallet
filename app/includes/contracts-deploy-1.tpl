@@ -54,10 +54,12 @@
         <h4 translate="TRANS_gas"> Gas: </h4>
         <div class="input-group">
             <input class="form-control"
-                   type="text"
+                   type="number"
                    placeholder="300000"
                    ng-model="tx.gasLimit"
-                   ng-class="Validator.isPositiveNumber(tx.gasLimit) ? 'is-valid' : 'is-invalid'"/>
+                   min="21000"
+                   ng-class="Validator.isPositiveNumber(tx.gasLimit) ? 'is-valid' : 'is-invalid'"
+            />
 
             <div class="input-group-btn">
                 <button style="min-width: 170px"

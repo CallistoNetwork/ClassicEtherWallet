@@ -145,7 +145,7 @@ class Contract {
             from
         };
 
-        return ethFuncs.call(_func, this, tx_);
+        return uiFuncs.call(_func, this, tx_);
     }
 
     genTxContract(
@@ -184,7 +184,7 @@ class Contract {
     }
 
     estGasLimit(funcName, tx) {
-        return ethFuncs.estGasContract(funcName, this, tx);
+        return uiFuncs.estGasContract(funcName, this, tx);
     }
 }
 

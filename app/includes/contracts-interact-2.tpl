@@ -9,7 +9,9 @@
             </span>
 
             <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', ethUtil.toChecksumAddress(contract.address))}}"
-               target="_blank" rel="noopener">
+               target="_blank" rel="noopener"
+               class="pull-right"
+            >
                 <small class="d-inline-flex align-items-center justify-content-center">
                     <div class="addressIdenticon med" title="Address Indenticon" blockie-address="{{contract.address}}"
                          watch-var="contract.address"></div>
@@ -17,7 +19,6 @@
                 </small>
             </a>
         </h4>
-
 
         <div class="form-group well"
              ng-show="contract.address === '0x0101010101010101010101010101010101010101' || contract.address === '0x1010101010101010101010101010101010101010'">
@@ -28,7 +29,7 @@
 
         <div class="btn-group">
             <a class="btn btn-default" ng-click="dropdownContracts = !dropdownContracts">
-                {{contract.selectedFunc == null ? "Select a function" : contract.selectedFunc.name}}<i
+                {{!(contract.selectedFunc && contract.selectedFunc.name) ? "Select a function" : contract.selectedFunc.name}}<i
                 class="caret"></i></a>
             <ul class="dropdown-menu" ng-show="dropdownContracts">
                 <li ng-repeat="func in contract.functions track by $index"

@@ -56,6 +56,9 @@ Web3Wallet.prototype.getV3Filename = function(timestamp) {
     ].join("");
 };
 
+/*
+  ETC, ETH, RINKEBY ETH
+ */
 Web3Wallet.prototype.getNetwork = function() {
     const { web3 } = window;
 
@@ -68,6 +71,7 @@ Web3Wallet.prototype.getNetwork = function() {
     if (!node) {
         throw new Error("Invalid Request");
     }
+
     this.network = node.type;
 };
 

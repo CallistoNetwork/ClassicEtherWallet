@@ -366,21 +366,12 @@ const decryptWalletCtrl = function(
                     const address = accounts[0];
                     const addressBuffer = Buffer.from(address.slice(2), "hex");
                     walletService.wallet = new Web3Wallet(addressBuffer);
-                    const _node = _sample(
-                        Object.values(nodes.nodeList)
-                            .filter(
-                                node =>
-                                    node.type === walletService.wallet.network
-                            )
-                            .map((node, i) =>
-                                Object.assign({}, node, {
-                                    key: Object.keys(nodes.nodeList)[i]
-                                })
-                            )
-                    );
-                    if (_node) {
-                        $rootScope.$broadcast("ChangeNode", _node.key || 0);
-                    }
+
+                    const network =
+                        globalFuncs.networks[walletService.wallet.network];
+
+                    $scope.changeNode(network);
+
                     walletService.wallet.setBalanceOfNetwork();
                     $scope.wallet = walletService.wallet;
                     uiFuncs.notifier.info(globalFuncs.successMsgs[6]);

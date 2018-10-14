@@ -80,7 +80,7 @@
 
         <button type="button"
                 class="btn btn-info btn-block"
-                ng-click="writeToContract()"
+                ng-click="generateTx()"
                 translate="SEND_generate"
         >
             Generate
@@ -93,12 +93,16 @@
             <!-- Raw TX -->
             <div class="form-group col-sm-6">
                 <h4 translate="SEND_raw"> Raw Transaction </h4>
-                <textarea title="rawTx" class="form-control" rows="3" readonly>{{rawTx}}</textarea>
+                <textarea
+                    name="rawTx"
+                    id="rawTx"
+                    title="rawTx" class="form-control" rows="3" readonly>{{rawTx}}</textarea>
             </div>
             <!-- Singed TX -->
             <div class="form-group col-sm-6">
                 <h4 translate="SEND_signed"> Signed Transaction </h4>
-                <textarea title="signed tx" class="form-control" rows="3" readonly>{{signedTx}}</textarea>
+                <textarea
+                    title="signed tx" class="form-control" rows="3" readonly>{{signedTx}}</textarea>
             </div>
         </section>
 

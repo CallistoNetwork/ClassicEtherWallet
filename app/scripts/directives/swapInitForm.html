@@ -14,7 +14,7 @@
            ng-class="swapInitForm.fromVal.$valid ? 'is-valid' : 'is-invalid'"
     />
     <div class="dropdown">
-        <a class="btn btn-default dropdown-toggle" ng-click="toggleDropdown(true)">
+        <a class="btn dropdown-toggle" ng-click="toggleDropdown(true)">
             <coin-icon icon="{{swapOrder.fromCoin.toLowerCase()}}">
 
             </coin-icon>
@@ -75,7 +75,7 @@
 
 
     <div class="dropdown">
-        <a class="btn btn-default dropdown-toggle" ng-click="toggleDropdown(false)">
+        <a class="btn dropdown-toggle" ng-click="toggleDropdown(false)">
             <coin-icon icon="{{swapOrder.toCoin.toLowerCase()}}">
             </coin-icon>
             <span>

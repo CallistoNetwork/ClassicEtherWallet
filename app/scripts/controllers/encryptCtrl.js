@@ -6,9 +6,6 @@ var encryptCtrl = function($scope, walletService) {
     $scope.input = {};
 
     walletService.wallet = null;
-
-    $scope.wallet = null; // walletService.wallet;
-
     $scope.showPass = true;
 
     $scope.unlockWallet = false;
@@ -40,8 +37,7 @@ var encryptCtrl = function($scope, walletService) {
         $scope.loading = true;
 
         if ($scope.isStrongPass(password)) {
-            var wallet_ = $scope.wallet.toV3(password, $scope.options);
-            // update wallet password
+            var wallet_ = walletService.wallet.toV3(password, $scope.options);
 
             walletService.password = password;
 
@@ -49,16 +45,13 @@ var encryptCtrl = function($scope, walletService) {
 
             $scope.newWalletDetails = {
                 blob: globalFuncs.getBlob("text/json;charset=UTF-8", wallet_),
-                fileName: $scope.wallet.getV3Filename()
+                fileName: walletService.wallet.getV3Filename()
             };
         } else {
             $scope.notifier.danger(globalFuncs.errorMsgs[1]);
         }
         $scope.loading = false;
     };
-
-    // FIXME: cannot call in html template
-    // checking valid password via length
 
     $scope.isStrongPass = function(password) {
         return globalFuncs.isStrongPass(password);
@@ -76,8 +69,8 @@ var encryptCtrl = function($scope, walletService) {
         globalFuncs.printPaperWallets(
             JSON.stringify([
                 {
-                    address: $scope.wallet.getChecksumAddressString(),
-                    private: $scope.wallet.getPrivateKeyString()
+                    address: walletService.wallet.getChecksumAddressString(),
+                    private: walletService.wallet.getPrivateKeyString()
                 }
             ])
         );
@@ -101,7 +94,7 @@ var encryptCtrl = function($scope, walletService) {
         };
         $scope.loading = false;
         $scope.showPaperWallet = false;
-        $scope.wallet = null;
+        walletService.wallet = null;
     };
 };
 module.exports = encryptCtrl;

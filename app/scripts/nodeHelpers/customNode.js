@@ -185,18 +185,24 @@ customNode.prototype.sendRawTx = function(rawTx, callback) {
     );
 };
 customNode.prototype.getEstimatedGas = function(txobj, callback) {
-    txobj.value = ethFuncs.trimHexZero(txobj.value);
+    let tx = {};
+    if (txobj.value) {
+        tx.value = new BigNumber(txobj.value).toNumber();
+    }
+    if (txobj.from) {
+        tx.from = txobj.from;
+    }
+    if (txobj.to) {
+        tx.to = txobj.to;
+    }
+    if (txobj.data) {
+        tx.data = txobj.data;
+    }
+
     this.post(
         {
             method: "eth_estimateGas",
-            params: [
-                {
-                    from: txobj.from,
-                    to: txobj.to,
-                    value: txobj.value,
-                    data: txobj.data
-                }
-            ]
+            params: [tx]
         },
         function(data) {
             if (data.error)

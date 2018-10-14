@@ -167,25 +167,32 @@ var etherscan = function(network) {
         );
     };
     this.getEstimatedGas = function(txobj, callback) {
-        this.post(
-            {
-                module: "proxy",
-                action: "eth_estimateGas",
-                to: txobj.to,
-                value: txobj.value,
-                data: txobj.data,
-                from: txobj.from
-            },
-            function(data) {
-                if (data.error)
-                    callback({
-                        error: true,
-                        msg: data.error.message,
-                        data: ""
-                    });
-                else callback({ error: false, msg: "", data: data.result });
-            }
-        );
+        let tx = {
+            module: "proxy",
+            action: "eth_estimateGas"
+        };
+        if (txobj.value) {
+            tx.value = new BigNumber(txobj.value).toNumber();
+        }
+        if (txobj.from) {
+            tx.from = txobj.from;
+        }
+        if (txobj.to) {
+            tx.to = txobj.to;
+        }
+        if (txobj.data) {
+            tx.data = txobj.data;
+        }
+
+        this.post(tx, function(data) {
+            if (data.error)
+                callback({
+                    error: true,
+                    msg: data.error.message,
+                    data: ""
+                });
+            else callback({ error: false, msg: "", data: data.result });
+        });
     };
     this.getEthCall = function(txobj, callback) {
         this.post(

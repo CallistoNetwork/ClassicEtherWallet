@@ -2,8 +2,9 @@
 
 const BigNumber = require("bignumber.js");
 const etherUnits = require("../etherUnits");
+const _get = require("lodash/get");
 
-module.exports = function sendTransactionForm(walletService) {
+module.exports = function sendTransactionForm(walletService, globalService) {
     return {
         template: require("./sendTransactionForm.html"),
         restrict: "A",
@@ -11,7 +12,7 @@ module.exports = function sendTransactionForm(walletService) {
         link: function(scope, element, attrs, form) {
             Object.assign(scope.tx, { totalTxCost: 0 });
 
-            // address field passed into lookup service (async function)
+            // address field passed into lookup service and scope not updated
 
             function validForm() {
                 return form.$valid && Validator.isValidAddress(scope.tx.to);
@@ -28,6 +29,10 @@ module.exports = function sendTransactionForm(walletService) {
             form.value.$validators.enoughBalance = _val => {
                 if (!_val) return true;
 
+                if (globalService.currentTab === globalService.tabs.swap.id) {
+                    return true;
+                }
+
                 const txCost = new BigNumber(
                     etherUnits.toWei(_val, "ether")
                 ).add(etherUnits.toWei(scope.txCostEther, "ether"));
@@ -37,15 +42,22 @@ module.exports = function sendTransactionForm(walletService) {
                 if (scope.tx.sendMode === "ether") {
                     balance = new BigNumber(
                         etherUnits.toWei(
-                            walletService.wallet.balances[ajaxReq.type].balance,
+                            _get(
+                                walletService,
+                                `wallet.balances[${ajaxReq.type}].balance`,
+                                0
+                            ),
                             "ether"
                         )
                     );
                 } else if (scope.tx.sendMode === "token") {
                     balance = new BigNumber(
                         etherUnits.toWei(
-                            walletService.wallet.tokenObjs[scope.tokenTx.id]
-                                .balance,
+                            _get(
+                                walletService,
+                                `wallet.tokenObjs[${scope.tokenTx.id}].balance`,
+                                0
+                            ),
                             "ether"
                         )
                     );

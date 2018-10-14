@@ -6,7 +6,6 @@
     </address-field>
 </div>
 
-
 <!-- Amount to Send -->
 <label translate="SEND_amount">Amount to Send:</label>
 <div class="input-group col-sm-11">
@@ -15,7 +14,7 @@
         class="form-control"
         min="0"
         step="1e-18"
-        placeholder="{{ 'SEND_amount_short' | translate }}"
+        placeholder="{{ calculatingSendBalance ? 'BEEP_BOOP' : 'SEND_amount_short' | translate }}"
         ng-model="tx.value"
         autocomplete="off"
         ng-model-options="{debounce: 500}"

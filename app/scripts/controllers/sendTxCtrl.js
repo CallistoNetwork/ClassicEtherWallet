@@ -15,7 +15,7 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.networks = globalFuncs.networks;
 
     $scope.ajaxReq = ajaxReq;
-
+    $scope.calculatingSendBalance = false;
     $scope.wd = false;
     $scope.unitReadable = ajaxReq.type;
     $scope.sendTxModal = new Modal(document.getElementById("sendTransaction"));
@@ -44,7 +44,7 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
         to: globalFuncs.urlGet("to") || "",
         unit: "ether",
         sendMode: "ether",
-        value: globalFuncs.urlGet("value", ""),
+        value: globalFuncs.urlGet("value", "") || "",
         nonce: null,
         gasPrice: null,
         donate: false,
@@ -106,15 +106,12 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
         $scope.setSendMode("ether");
 
         if ($scope.parentTxConfig) {
-            Object.assign($scope.tx, $scope.parentTxConfig);
-            $scope.addressDrtv.ensAddressField = $scope.parentTxConfig.to;
-            $scope.$watch(
-                "parentTxConfig",
-                function() {
-                    Object.assign($scope.tx, $scope.parentTxConfig);
-                },
-                true
-            );
+            Object.assign($scope, {
+                tx: Object.assign($scope.tx, $scope.parentTxConfig),
+                addressDrtv: {
+                    ensAddressField: $scope.parentTxConfig.to
+                }
+            });
         }
     });
 
@@ -147,26 +144,20 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     );
     $scope.$watch(
         "tx.sendMode",
-        function(newValue, oldValue) {
+        function(newValue) {
             $scope.showRaw = false;
-            if (
-                !angular.equals(newValue, oldValue) &&
-                angular.equals(newValue, "ether")
-            ) {
-                $scope.tx.data = globalFuncs.urlGet("data", "");
-                $scope.tx.gasLimit = globalFuncs.defaultTxGasLimit || 21;
-            }
-
-            if (angular.equals(newValue, "token")) {
+            if (angular.equals(newValue, "ether")) {
+                $scope.tx.gasLimit = globalFuncs.defaultTxGasLimit || 21000;
+            } else if (angular.equals(newValue, "token")) {
                 $scope.tokenTx.to = $scope.tx.to;
                 $scope.tokenTx.value = $scope.tx.value;
-            }
-
-            if (
-                Validator.isPositiveNumber($scope.tx.value) &&
-                Validator.isValidAddress($scope.tx.to)
-            ) {
-                $scope.throttleEstGasLimit();
+                $scope.tx.gasLimit = globalFuncs.defaultTokenGasLimit || 200000;
+                if (
+                    Validator.isPositiveNumber($scope.tx.value) &&
+                    Validator.isValidAddress($scope.tx.to)
+                ) {
+                    $scope.throttleEstGasLimit();
+                }
             }
         },
         true
@@ -191,7 +182,7 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
         } else {
             throw new Error("unknown tx.sendMode");
         }
-        return ethFuncs
+        return uiFuncs
             .estimateGas(estObj)
             .then(function(gasLimit) {
                 $scope.$apply(function() {
@@ -229,7 +220,8 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
     };
 
     $scope.generateTx = function() {
-        let txData = {};
+        let txData = Object.assign({}, $scope.tx);
+
         const gasPrice = $scope.tx.gasPrice
             ? "0x" + new BigNumber($scope.tx.gasPrice).toString(16)
             : null;
@@ -237,26 +229,27 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
             ? "0x" + new BigNumber($scope.tx.nonce).toString(16)
             : null;
 
-        const _txData = uiFuncs.getTxData({
-            tx: $scope.tx,
-            wallet: walletService.wallet
+        Object.assign(txData, {
+            gasPrice,
+            nonce,
+            value: $scope.tx.value.toString()
         });
-
-        Object.assign(txData, _txData, { isOffline: gasPrice && nonce });
-
-        if (gasPrice && nonce) {
-            Object.assign(txData, { gasPrice, nonce });
-        }
 
         if ($scope.tx.sendMode === "token") {
             Object.assign(txData, $scope.getTokenTxData());
         }
+
+        const _txData = uiFuncs.getTxData({
+            tx: txData,
+            wallet: walletService.wallet
+        });
+
         uiFuncs
-            .generateTx(txData)
-            .then(function(rawTx) {
+            .generateTx(_txData)
+            .then(function(result) {
                 $scope.$apply(function() {
-                    $scope.rawTx = rawTx.rawTx;
-                    $scope.signedTx = rawTx.signedTx;
+                    $scope.rawTx = result.rawTx;
+                    $scope.signedTx = result.signedTx;
                     $scope.showRaw = true;
                 });
             })
@@ -283,17 +276,29 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
         } else {
             $scope.tx.value = null;
 
+            $scope.calculatingSendBalance = true;
+
             return uiFuncs
-                .transferAllBalance(
-                    walletService.wallet.getAddressString(),
-                    $scope.tx.gasLimit
-                )
+                .transferAllBalance(walletService.wallet.getAddressString(), {
+                    gasLimit: $scope.tx.gasLimit
+                })
                 .then(function({ unit, value, nonce, gasPrice }) {
-                    Object.assign($scope.tx, { unit, value, gasPrice, nonce });
+                    const gasPriceGwei = etherUnits.unitToUnit(
+                        gasPrice,
+                        "wei",
+                        "gwei"
+                    );
+
+                    $rootScope.$broadcast("ChangeGas", gasPriceGwei);
+
+                    Object.assign($scope.tx, { unit, value, nonce, gasPrice });
                 })
                 .catch(resp => {
                     $scope.showRaw = false;
-                    uiFuncs.notifier.danger(resp.error);
+                    uiFuncs.notifier.danger(resp);
+                })
+                .finally(() => {
+                    $scope.calculatingSendBalance = false;
                 });
         }
     };

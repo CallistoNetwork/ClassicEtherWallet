@@ -3,7 +3,7 @@
       ng-controller='broadcastTxCtrl'
       ng-cloak>
 
-    <article>
+    <article class="block">
         <h2 class="text-center">Broadcast Signed Transaction</h2>
 
         <p class="text-center">
@@ -14,10 +14,16 @@
         <section>
             <div class="block">
                 <form ng-submit="handleSubmit()">
-                    <label>Signed Transaction</label>
+                    <label for="signedTx">Signed Transaction</label>
                     <input ng-model="input.signedTx"
                            ng-change="handleDecodeTx()"
-                           class="form-control">
+                           name="signedTx"
+                           required
+                           id="signedTx"
+                           ng-model-options="{debounce: 300}"
+                           class="form-control"
+                           ng-class="isValidHex(input.signedTx) ? 'is-valid' : 'is-invalid'"
+                    >
 
                     <div ng-show="input.signedTx" class="row">
                         <div class="col-xs-6">
@@ -36,9 +42,9 @@
 
                     <div class="row row-justify">
                         <button
-                                ng-show="input.signedTx"
-                                style="max-width: 272px;"
-                                translate="SEND_trans" class="btn btn-primary btn-block text-center">Send Transaction
+                            ng-show="input.signedTx"
+                            style="max-width: 272px;"
+                            translate="SEND_trans" class="btn btn-primary btn-block text-center">Send Transaction
                         </button>
                     </div>
                 </form>

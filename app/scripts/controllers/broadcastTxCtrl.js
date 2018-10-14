@@ -3,9 +3,13 @@ var broadcastTxCtrl = function($scope) {
         init();
     }
 
+    const { isValidHex } = Validator;
+
+    $scope.isValidHex = isValidHex;
+
     function init() {
         $scope.input = {
-            signedTx: null,
+            signedTx: "",
             rawTx: {
                 gasPrice: null,
                 gasLimit: null,
@@ -18,7 +22,7 @@ var broadcastTxCtrl = function($scope) {
     }
 
     $scope.handleSubmit = function() {
-        uiFuncs.sendTx($scope.input.signedTx, true).then(init);
+        return uiFuncs.sendTx($scope.input.signedTx, true);
     };
 
     $scope.validTx = function() {
@@ -26,6 +30,14 @@ var broadcastTxCtrl = function($scope) {
     };
 
     $scope.handleDecodeTx = function() {
+        if (!$scope.input.signedTx) {
+            return;
+        }
+
+        if (!isValidHex($scope.input.signedTx)) {
+            uiFuncs.notifier.danger("Invalid Tx");
+            return;
+        }
         const tx = new ethUtil.Tx($scope.input.signedTx);
 
         function mapToHex(param) {

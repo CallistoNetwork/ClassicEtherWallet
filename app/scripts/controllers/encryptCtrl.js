@@ -8,7 +8,7 @@ var encryptCtrl = function($scope, walletService) {
     walletService.wallet = null;
     $scope.showPass = true;
 
-    $scope.unlockWallet = false;
+    $scope.wd = false;
 
     $scope.newWallet = false;
 
@@ -29,7 +29,7 @@ var encryptCtrl = function($scope, walletService) {
     $scope.networks = globalFuncs.networks;
 
     $scope.$on("ChangeWallet", () => {
-        $scope.unlockWallet = true;
+        $scope.wd = true;
     });
 
     $scope.reEncrypt = function reEncrypt($event, password) {
@@ -83,7 +83,7 @@ var encryptCtrl = function($scope, walletService) {
 
         $scope.showPass = true;
 
-        $scope.unlockWallet = false;
+        $scope.wd = false;
 
         $scope.newWallet = false;
 

@@ -2,6 +2,7 @@
 <main class="tab-pane swap-tab active" ng-if="globalService.currentTab === globalService.tabs.swap.id"
       ng-controller='swapCtrl' ng-cloak>
     <div ng-switch="stage">
+
         <div ng-switch-default>
 
             @@if (site === 'cew' ) { @@include( '../includes/swap-stage-1.tpl', { "site": "cew" } ) }
@@ -19,7 +20,12 @@
         </div>
     </div>
 
+
     <section class="changenow-contact text-center">
+
+
+
+
         <div ng-show="orderResult && orderResult.id" ng-init="showDetails = false;" class="marg-v-md">
 
             <div class="d-flex align-items-center justify-content-center">

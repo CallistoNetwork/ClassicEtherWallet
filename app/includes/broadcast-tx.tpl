@@ -20,6 +20,9 @@
                            name="signedTx"
                            required
                            id="signedTx"
+                           type="text"
+                           autocomplete="false"
+                           spellcheck="false"
                            ng-model-options="{debounce: 300}"
                            class="form-control"
                            ng-class="isValidHex(input.signedTx) ? 'is-valid' : 'is-invalid'"

@@ -57,6 +57,16 @@
     </section>
 
 
+    <div ng-show="initilizingOrder">
+        <h3>Processing Order</h3>
+        <div class="bouncing-loader">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+
     <!-- Swap Progress -->
     <section class="row swap-progress">
         <div class="sep"></div>
@@ -141,7 +151,6 @@
         </div>
     </article>
     <!-- / Swap CTA ETH -->
-
 
 
 </article>

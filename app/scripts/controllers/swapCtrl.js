@@ -117,6 +117,7 @@ const SwapCryptoCurrenciesController = function(
         Object.assign($scope, {
             stage: 1,
             swapIssue: false,
+            initilizingOrder: false,
             ethCoins,
             availableCoins: [],
             parentTxConfig: {},
@@ -453,22 +454,26 @@ const SwapCryptoCurrenciesController = function(
             address: toAddress
         };
 
+        $scope.initilizingOrder = true;
+
         const orderResult = await changeNowService
             .openOrder(order)
             .catch(err => {
                 uiFuncs.notifier.danger(globalFuncs.errorMsgs[5]);
+                initValues();
             });
 
         $scope.$apply(function() {
             $scope.stage = 3;
 
+            $scope.initilizingOrder = false;
             Object.assign(
                 $scope.orderResult,
                 {
-                    status: "new",
+                    status: statuses.new,
                     expectedSendAmount: order.amount,
                     progress: {
-                        status: "new",
+                        status: statuses.new,
                         bar: getProgressBarArr(0, 5)
                     }
                 },

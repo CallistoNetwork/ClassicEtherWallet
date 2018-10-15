@@ -444,10 +444,11 @@ uiFuncs.transferAllBalance = function(addr, { gasLimit = 21000 } = {}) {
 
             const gasCost = new BigNumber(gasprice).times(gasLimit);
             const maxVal = new BigNumber(balance).minus(gasCost);
-            const value = Math.max(0, etherUnits.toEther(maxVal, "wei"));
+            const value = Math.max(0, maxVal.toNumber());
+            const valueEther = etherUnits.toEther(value, "wei");
             return resolve({
                 unit: "ether",
-                value,
+                value: valueEther,
                 nonce,
                 gasPrice: gasprice,
                 gasCost

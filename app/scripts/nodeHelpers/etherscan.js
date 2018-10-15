@@ -166,22 +166,31 @@ var etherscan = function(network) {
             }
         );
     };
-    this.getEstimatedGas = function(txobj, callback) {
-        let tx = {
-            module: "proxy",
-            action: "eth_estimateGas"
-        };
-        if (txobj.value) {
-            tx.value = new BigNumber(txobj.value).toNumber();
+    this.getEstimatedGas = function(
+        { to = "", from = "", value = "", data = "" } = {},
+        callback
+    ) {
+        const tx = Object.assign(
+            {},
+            {
+                module: "proxy",
+                action: "eth_estimateGas"
+            }
+        );
+
+        if (data) {
+            tx.data = data;
         }
-        if (txobj.from) {
-            tx.from = txobj.from;
+
+        if (Validator.isValidAddress(from)) {
+            tx.from = from;
         }
-        if (txobj.to) {
-            tx.to = txobj.to;
+        if (Validator.isValidAddress(to)) {
+            tx.to = to;
         }
-        if (txobj.data) {
-            tx.data = txobj.data;
+
+        if (Validator.isValidNumber(value)) {
+            tx.value = "0x" + new BigNumber(value).toString();
         }
 
         this.post(tx, function(data) {
@@ -196,12 +205,10 @@ var etherscan = function(network) {
     };
     this.getEthCall = function(txobj, callback) {
         this.post(
-            {
+            Object.assign({}, txobj, {
                 module: "proxy",
-                action: "eth_call",
-                to: txobj.to,
-                data: txobj.data
-            },
+                action: "eth_call"
+            }),
             function(data) {
                 if (data.error)
                     callback({

@@ -2,11 +2,6 @@
     <div class="row">
         <div class="col-xs-10">
             <div ng-switch on="input.type_">
-                <!--<div class="item write-address" ng-switch-when="address">-->
-
-                    <!--<address-field  var-name="input.displayInput"/>-->
-
-                <!--</div>-->
                 <p class="item write-unit256" ng-switch-when="uint256">
                     <input class="form-control" type="text" placeholder="151" ng-model="input.displayInput"
                            ng-class="Validator.isPositiveNumber(input.displayInput) ? 'is-valid' : 'is-invalid'"/>

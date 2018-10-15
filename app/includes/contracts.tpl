@@ -36,7 +36,7 @@
                         <div class="row col-xs-12 d-flex justify-content-center align-items-center">
                             <div class="addressIdenticon med"
                                  title="Address Indenticon"
-                                 style="display: inline-block; margin: 1rem;"
+                                 style="display: inline-block; margin: 1rem; padding-right: .2rem;"
                                  blockie-address="{{tx.contractAddr}}"
                                  watch-var="tx.contractAddr">
 

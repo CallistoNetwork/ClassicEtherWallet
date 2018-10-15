@@ -63,6 +63,8 @@
                                ng-model="tx.value"
                                class="form-control"
                                required
+                               autocomplete="off"
+
                                placeholder="{{ajaxReq.type}}"
                                ng-class="coldStakingService.valid_staking_tx(tx.value) ? 'is-valid' : 'is-invalid'"
                         >

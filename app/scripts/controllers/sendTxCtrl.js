@@ -289,9 +289,11 @@ const sendTxCtrl = function($scope, $sce, $rootScope, walletService) {
                         "gwei"
                     );
 
-                    $rootScope.$broadcast("ChangeGas", gasPriceGwei);
-
                     Object.assign($scope.tx, { unit, value, nonce, gasPrice });
+                    $rootScope.$broadcast(
+                        "ChangeGas",
+                        new BigNumber(gasPriceGwei).toNumber()
+                    );
                 })
                 .catch(resp => {
                     $scope.showRaw = false;

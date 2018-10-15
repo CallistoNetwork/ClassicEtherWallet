@@ -184,19 +184,24 @@ customNode.prototype.sendRawTx = function(rawTx, callback) {
         }
     );
 };
-customNode.prototype.getEstimatedGas = function(txobj, callback) {
-    let tx = {};
-    if (txobj.value) {
-        tx.value = new BigNumber(txobj.value).toNumber();
+customNode.prototype.getEstimatedGas = function(
+    { to = "", from = "", value = "", data = "" } = {},
+    callback
+) {
+    const tx = {};
+
+    if (data) {
+        tx.data = data;
     }
-    if (txobj.from) {
-        tx.from = txobj.from;
+
+    if (Validator.isValidAddress(from)) {
+        tx.from = from;
     }
-    if (txobj.to) {
-        tx.to = txobj.to;
+    if (Validator.isValidAddress(to)) {
+        tx.to = to;
     }
-    if (txobj.data) {
-        tx.data = txobj.data;
+    if (Validator.isValidNumber(value)) {
+        tx.value = "0x" + new BigNumber(value).toString();
     }
 
     this.post(

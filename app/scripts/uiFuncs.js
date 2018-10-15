@@ -429,7 +429,7 @@ uiFuncs.transferAllBalance = function(addr, { gasLimit = 21000 } = {}) {
     return new Promise((resolve, reject) => {
         ajaxReq.getTransactionData(addr, result => {
             if (result.error) {
-                reject(result);
+                return reject(result);
             }
             const {
                 data: { balance, gasprice, nonce, address }
@@ -442,15 +442,18 @@ uiFuncs.transferAllBalance = function(addr, { gasLimit = 21000 } = {}) {
                 return reject(result);
             }
 
-            const gasCost = new BigNumber(gasprice).times(gasLimit);
+            const gasPrice = new BigNumber(
+                ethFuncs.sanitizeHex(ethFuncs.addTinyMoreToGas(gasprice))
+            );
+            const gasCost = gasPrice.times(gasLimit);
             const maxVal = new BigNumber(balance).minus(gasCost);
             const value = Math.max(0, maxVal.toNumber());
             const valueEther = etherUnits.toEther(value, "wei");
             return resolve({
                 unit: "ether",
-                value: valueEther,
+                value: new BigNumber(valueEther).toNumber(),
                 nonce,
-                gasPrice: gasprice,
+                gasPrice: gasPrice.toNumber(),
                 gasCost
             });
         });
@@ -476,7 +479,7 @@ uiFuncs.notifier = {
     },
     addAlert: function(type, msg, duration = 7000) {
         // Save all messages by unique id for removal
-        const id = Date.now();
+        const id = globalFuncs.getRandomBytes(16).toString("hex");
         alert = this.buildAlert(id, type, msg);
         this.alerts[id] = alert;
         if (duration > 0) {
@@ -489,7 +492,7 @@ uiFuncs.notifier = {
         return {
             show: true,
             type: type,
-            message: msg,
+            message: msg.message || msg.msg || msg,
             close: () => {
                 delete this.alerts[id];
                 if (!this.scope.$$phase) this.scope.$apply();
@@ -530,7 +533,7 @@ uiFuncs.genTxContract = function(
         uiFuncs
             .estGasContract(funcName, contract, tx)
             .then(result => {
-                if (result.gasLimit === "-1") {
+                if (result.gasLimit == "-1") {
                     uiFuncs.notifier.danger(globalFuncs.errorMsgs[8]);
                     return reject(result);
                 }

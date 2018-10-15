@@ -4,9 +4,6 @@
 <div ng-switch="input.type.slice(-2) === '[]'">
     <array-input-drtv ng-switch-when="true" name="{{input.name}}" type="{{input.type}}"></array-input-drtv>
     <div ng-switch-default="false" ng-switch="input.type">
-        <!--<div class="item write-address row" ng-switch-when="address">-->
-            <!--<address-field var-name="input.value"  ></address-field>-->
-        <!--</div>-->
         <p class="item write-unit256" ng-switch-when="uint256">
 
             <input

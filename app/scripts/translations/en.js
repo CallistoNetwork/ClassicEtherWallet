@@ -370,13 +370,13 @@ en.data = {
     /* Send Transaction */
     TRANS_desc:
         'If you want to send Tokens, please use the "Send Token" page instead. ',
-    TRANS_advanced: "+Advanced: Add Data ",
+    TRANS_advanced: "Advanced: Add Data ",
     TRANS_data: "Data ",
     TRANS_gas: "Gas Limit ",
     TRANS_sendInfo:
         "A standard transaction using 21000 gas will cost 0.000441 ETH. We use a slightly-above-minimum gas price of 0.000000021 ETH to ensure it gets mined quickly. We do not take a transaction fee. ",
-    TRANS_params: "+Advanced: Apply Params",
-    TRANS_params_remove: "-Advanced: Remove Params",
+    TRANS_params: "Advanced: Apply Params",
+    TRANS_params_remove: "Advanced: Remove Params",
     /* Offline Transaction */
     OFFLINE_Title: "Generate & Send Offline Transaction ",
     OFFLINE_Desc:
@@ -939,7 +939,8 @@ en.data = {
         "If you do not feel comfortable using this tool, then by all means, do not use it. We created this tool as a helpful way for people to generate wallets and make transactions without needing to dive into command line or run a full node. Again, feel free to reach out if you have concerns and we will respond as quickly as possible. Thanks! ",
 
     HELP_FAQ_Title: "More Helpful Answers to Frequent Questions ",
-    HELP_Contact_Title: "Ways to Get in Touch "
+    HELP_Contact_Title: "Ways to Get in Touch ",
+    BEEP_BOOP: "beep boop"
 };
 
 module.exports = en;

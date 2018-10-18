@@ -184,19 +184,30 @@ customNode.prototype.sendRawTx = function(rawTx, callback) {
         }
     );
 };
-customNode.prototype.getEstimatedGas = function(txobj, callback) {
-    txobj.value = ethFuncs.trimHexZero(txobj.value);
+customNode.prototype.getEstimatedGas = function(
+    { to = "", from = "", value = "", data = "" } = {},
+    callback
+) {
+    const tx = {};
+
+    if (data) {
+        tx.data = data;
+    }
+
+    if (Validator.isValidAddress(from)) {
+        tx.from = from;
+    }
+    if (Validator.isValidAddress(to)) {
+        tx.to = to;
+    }
+    if (Validator.isValidNumber(value)) {
+        tx.value = "0x" + new BigNumber(value).toString();
+    }
+
     this.post(
         {
             method: "eth_estimateGas",
-            params: [
-                {
-                    from: txobj.from,
-                    to: txobj.to,
-                    value: txobj.value,
-                    data: txobj.data
-                }
-            ]
+            params: [tx]
         },
         function(data) {
             if (data.error)

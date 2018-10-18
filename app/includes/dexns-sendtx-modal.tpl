@@ -1,4 +1,4 @@
-<article class="modal fade" id="sendTransactionContract" tabindex="-1">
+<article class="modal fade" id="dexnsSendTxModal" tabindex="-1">
     <section class="modal-dialog">
         <section class="modal-content">
 
@@ -6,7 +6,7 @@
 
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-                <h2 class="modal-title text-danger" translate="SENDModal_Title">Warning!</h2>
+                <h2 class="modal-title" translate="SENDModal_Title">Confirm Transaction!</h2>
 
                 <table class="table text-center">
                     <tbody>
@@ -17,12 +17,14 @@
                                  blockie-address="{{walletService.wallet.getAddressString()}}"
                                  watch-var="walletService.wallet.getAddressString()"></div>
                             <p><strong
-                                    class="send-modal__addr">{{walletService.wallet.getChecksumAddressString()}}</strong>
+                                class="send-modal__addr">{{walletService.wallet.getChecksumAddressString()}}</strong>
                             </p>
                         </td>
 
-                        <td class="mono">-><br/><h4 class="text-danger">{{tx.value}}
-                            {{tx.network}}</h4></td>
+                        <td class="mono">-><br/><h4 class="text-danger">
+                            {{tx.value}}
+                            {{tx.network}}
+                        </h4></td>
 
                         <td>
                             <div class="addressIdenticon med" title="Address Indenticon" blockie-address="{{tx.to}}"
@@ -41,7 +43,7 @@
                     <strong class="mono">{{tx.value}} {{tx.network}}</strong>
                     <br/>
                     <span translate="SENDModal_Content_2">to address</span>
-                    <strong class="mono"> {{tx.to}}. </strong>
+                    <strong class="mono"> {{tx.to}} </strong>
                 </p>
 
                 <p> You are interacting with the <strong>{{tx.network}} chain</strong>, provided by <strong>{{contract.node.service}}</strong>.
@@ -62,7 +64,6 @@
                     </div>
                 </section>
             </div>
-
 
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">

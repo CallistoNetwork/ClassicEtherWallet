@@ -1,4 +1,3 @@
-
 <article class="swap-order">
 
 
@@ -8,7 +7,7 @@
         <h5 class="col-xs-6" translate="SWAP_information">Your Information</h5>
         <div class="col-xs-3">
 
-            <a href="{{'https://changenow.io/exchange/txs/' + orderResult.id}}" target="_blank">
+            <a href="{{'https://changenow.io/exchange/txs/' + orderResult.id}}" target="_blank" rel="noopener">
                 <img src="https://changenow.io/images/embeds/button.svg" alt="ChangeNOW button">
             </a>
         </div>
@@ -58,6 +57,16 @@
     </section>
 
 
+    <div ng-show="initilizingOrder">
+        <h3>Processing Order</h3>
+        <div class="bouncing-loader">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+
     <!-- Swap Progress -->
     <section class="row swap-progress">
         <div class="sep"></div>
@@ -101,46 +110,48 @@
         </h1>
     </section>
 
-    <div ng-controller='sendTxCtrl'>
 
-        <send-tx-modal></send-tx-modal>
-        <!-- Swap CTA ETH -->
-        <article class="row"
-                 ng-show="['new', 'waiting'].includes(orderResult.status.toLowerCase())">
-            <section class="clearfix collapse-container">
-                <div class="text-center" ng-click="wd = !wd">
+    <!-- Swap CTA ETH -->
+    <article class="row"
+             ng-show="[statuses.new, statuses.waiting].includes(orderResult.status.toLowerCase())">
+        <section class="clearfix collapse-container">
+            <div class="text-center" ng-click="wd = !wd">
 
-                    <h5>
+                <h5>
 
                           <span
                               style="margin: 0; padding: 0 2px;"
                               class="collapse-button glyphicon"
                               ng-class="wd ? 'glyphicon-plus' : 'glyphicon-minus'"
                           ></span>
-                        <span
-                            traslate="SWAP_unlock">Unlock your wallet to send ETH or Tokens directly from this page.</span>
-                    </h5>
-                </div>
-                <div ng-show="!wd">
-                    @@if (site === 'cew' ) {
-                    <wallet-decrypt-drtv></wallet-decrypt-drtv>
-                    }
-                    @@if (site === 'cx' ) {
-                    <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>
-                    }
-                </div>
-            </section>
+                    <span
+                        traslate="SWAP_unlock">Unlock your wallet to send ETH or Tokens directly from this page.</span>
+                </h5>
+            </div>
+            <div ng-show="!wd">
+                @@if (site === 'cew' ) {
+                <wallet-decrypt-drtv></wallet-decrypt-drtv>
+                }
+                @@if (site === 'cx' ) {
+                <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>
+                }
+            </div>
+        </section>
 
-            <section ng-show="walletService.wallet" class="row">
+        <div ng-controller='sendTxCtrl'
+             ng-show="walletService && walletService.wallet && walletService.wallet.getAddressString()"
+        >
+            <send-tx-modal></send-tx-modal>
+
+            <section class="row">
                 @@if (site === 'cew' ) { @@include( './sendTx-content.tpl', { "site": "cew" } ) }
                 @@if (site === 'cx' ) { @@include( './sendTx-content.tpl', { "site": "cx" } ) }
 
-
-
             </section>
-        </article>
-    </div>
+        </div>
+    </article>
     <!-- / Swap CTA ETH -->
 
 
 </article>
+

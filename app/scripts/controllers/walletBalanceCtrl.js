@@ -86,7 +86,7 @@ var walletBalanceCtrl = function(
             from: walletService.wallet.getAddressString()
         };
 
-        ethFuncs
+        uiFuncs
             .estGasContract(name, coldStakingService.contract, tx)
             .then(data => {
                 Object.assign(coldStakingService.tx, data);

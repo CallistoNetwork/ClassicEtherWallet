@@ -9,14 +9,16 @@
 <section class="col-sm-6 clearfix">
     <label translate="CONTRACT_Title_2"> Select Existing Contract </label>
     <div class="dropdown">
-        <a class="btn btn-default dropdown-toggle" class="dropdown-toggle"
+        <a class="btn btn-default dropdown-toggle"
            ng-click="dropdownExistingContracts = !dropdownExistingContracts">
             {{selectedAbi.name}}
             <small class="mono">{{selectedAbi.address}}</small>
             <i class="caret"></i>
         </a>
         <ul class="dropdown-menu dropdown-menu-left" ng-show="dropdownExistingContracts">
-            <li ng-repeat="abi in abiList() track by $index"><a ng-click="selectExistingAbi($index)">{{abi.name}}
+
+            <li ng-repeat="abi in ajaxReq.abiList track by $index"><a ng-click="selectExistingAbi($index)">
+                {{abi.name}}
                 <small class="mono">{{abi.address}}</small>
             </a></li>
         </ul>

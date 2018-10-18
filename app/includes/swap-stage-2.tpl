@@ -58,6 +58,18 @@
 
     <!-- Your Address -->
     <section class='swap-address block'>
+
+
+        <div ng-show="initilizingOrder">
+            <h3>Processing Order</h3>
+            <div class="bouncing-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+
+
         <form name="swapOpenOrderForm" novalidate swap-open-order-form ng-submit="openOrder();">
         </form>
         <!-- / CTA -->

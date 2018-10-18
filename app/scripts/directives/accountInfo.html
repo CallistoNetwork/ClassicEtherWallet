@@ -3,7 +3,7 @@
     <div ng-click="copyToClipboard('addr')" class="pointer copier">
 
         <div class="addressIdenticon med float" blockie-address="{{walletService.wallet.getAddressString()}}"
-             watch-var="wallet"></div>
+             watch-var="walletService.wallet"></div>
         <span
             id="addr"
             class="mono wrap"

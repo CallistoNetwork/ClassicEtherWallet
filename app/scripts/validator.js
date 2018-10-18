@@ -57,6 +57,9 @@ validator.isValidENSAddress = function(address) {
 validator.isValidBTCAddress = function(address) {
     return ethUtil.WAValidator.validate(address, "BTC");
 };
+validator.isValidNumber = n =>
+    !isNaN(parseFloat(n)) && isFinite(n) && Number(n) == n;
+
 validator.isPositiveNumber = function(value) {
     return globalFuncs.isNumeric(value) && parseFloat(value) >= 0;
 };

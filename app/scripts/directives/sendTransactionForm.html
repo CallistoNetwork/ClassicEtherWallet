@@ -6,7 +6,6 @@
     </address-field>
 </div>
 
-
 <!-- Amount to Send -->
 <label translate="SEND_amount">Amount to Send:</label>
 <div class="input-group col-sm-11">
@@ -15,7 +14,7 @@
         class="form-control"
         min="0"
         step="1e-18"
-        placeholder="{{ 'SEND_amount_short' | translate }}"
+        placeholder="{{ calculatingSendBalance ? 'BEEP_BOOP' : 'SEND_amount_short' | translate }}"
         ng-model="tx.value"
         autocomplete="off"
         ng-model-options="{debounce: 500}"
@@ -26,7 +25,7 @@
     />
     <div class="input-group-btn">
         <a style="min-width: 170px"
-           class="btn btn-default dropdown-toggle"
+           class="btn dropdown-toggle"
            ng-init="dropdownAmount = false;"
            ng-click="dropdownAmount = !dropdownAmount"
            ng-class="dropdownEnabled ? '' : 'disabled'"
@@ -37,7 +36,6 @@
             </strong>
         </a>
         <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownAmount">
-            <!-- fixme -->
             <li><a ng-class="{true:'active'}[tx.sendMode === 'ether']"
                    ng-click="setSendMode('ether')">
                 <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
@@ -105,31 +103,40 @@
 
 
 <!-- Advanced Option Panel -->
-<a ng-click="showAdvance=true"
-   ng-show='globalService.currentTab === globalService.tabs.sendTransaction.id'>
-    <p class="strong" translate="TRANS_advanced"> + Advanced: Add Data </p>
-</a>
+<div ng-show="tx.sendMode === 'ether'">
+    <a ng-click="showAdvance = !showAdvance"
+       ng-show='globalService.currentTab === globalService.tabs.sendTransaction.id'
+    >
+        <p class="strong">
+            <span ng-show="showAdvance" class="glyphicon glyphicon-minus"></span>
+            <span ng-show="!showAdvance" class="glyphicon glyphicon-plus"></span>
 
-<section ng-show="showAdvance">
-    <!-- Data -->
-    <div class="row form-group">
-        <div class="col-sm-11 clearfix" ng-show="tx.sendMode=='ether'">
+            <span translate="TRANS_advanced">Advanced: Add Data
+        </span>
+        </p>
+    </a>
+
+    <section ng-show="showAdvance">
+        <!-- Data -->
+        <div class="row form-group">
+            <div class="col-sm-11 clearfix">
           <span class="account-help-icon">
             <img src="images/icon-help.svg" class="help-icon"/>
             <p class="account-help-text" translate="OFFLINE_Step2_Label_6b">This is optional.</p>
           </span>
-            <label translate="TRANS_data"> Data: </label>
-            <input type="text"
-                   class="form-control"
-                   placeholder="0x6d79657468657277616c6c65742e636f6d20697320746865206265737421"
-                   ng-model="tx.data"
-                   name="data"
-                   ng-class="sendTransactionForm.data.$valid ? 'is-valid' : 'is-invalid'"/>
+                <label translate="TRANS_data"> Data: </label>
+                <input type="text"
+                       class="form-control"
+                       placeholder="0x6d79657468657277616c6c65742e636f6d20697320746865206265737421"
+                       ng-model="tx.data"
+                       name="data"
+                       ng-class="sendTransactionForm.data.$valid ? 'is-valid' : 'is-invalid'"/>
+            </div>
         </div>
-    </div>
-    <!-- / Data -->
+        <!-- / Data -->
 
-</section>
+    </section>
+</div>
 
 <!-- / Advanced Option Panel -->
 
@@ -139,14 +146,19 @@
 >
     <p class="strong">
 
-        <span>{{showLookup ? '-' : '+'}}</span>
+
+        <span ng-show="showLookup" class="glyphicon glyphicon-minus"></span>
+        <span ng-show="!showLookup" class="glyphicon glyphicon-plus"></span>
 
         <span translate="LOOKUP_SERVICE">Lookup Service</span>
 
     </p>
 </a>
 
+
+
 <lookup ng-show="showLookup"></lookup>
+
 
 
 <div class="row form-group">

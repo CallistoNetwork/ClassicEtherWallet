@@ -1,16 +1,17 @@
 "use strict";
 const walletService = function() {
-    return {
-        wallet: null,
-        password: "",
-        privKey: null,
-        pubKey: null,
-        path: null,
-        hwType: null,
-        hwTransport: null,
-        type: null,
-        balances: {},
-        tokenObjs: [] // Token {["contractAddress","userAddress","symbol","decimal","type","balance","network","node","balanceBN"]}
-    };
+    this.wallet = null;
+    this.password = "";
+    this.privKey = null;
+    this.pubKey = null;
+    this.path = null;
+    this.hwType = null;
+    this.hwTransport = null;
+    this.type = null;
+    this.balances = {};
+    this.tokenObjs = []; // Token {["contractAddress","userAddress","symbol","decimal","type","balance","network","node","balanceBN"];
+
+    this.unlocked = () => this.wallet && this.wallet.getAddressString();
+    return this;
 };
 module.exports = walletService;

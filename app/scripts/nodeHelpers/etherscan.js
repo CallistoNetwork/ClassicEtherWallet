@@ -166,35 +166,49 @@ var etherscan = function(network) {
             }
         );
     };
-    this.getEstimatedGas = function(txobj, callback) {
-        this.post(
+    this.getEstimatedGas = function(
+        { to = "", from = "", value = "", data = "" } = {},
+        callback
+    ) {
+        const tx = Object.assign(
+            {},
             {
                 module: "proxy",
-                action: "eth_estimateGas",
-                to: txobj.to,
-                value: txobj.value,
-                data: txobj.data,
-                from: txobj.from
-            },
-            function(data) {
-                if (data.error)
-                    callback({
-                        error: true,
-                        msg: data.error.message,
-                        data: ""
-                    });
-                else callback({ error: false, msg: "", data: data.result });
+                action: "eth_estimateGas"
             }
         );
+
+        if (data) {
+            tx.data = data;
+        }
+
+        if (Validator.isValidAddress(from)) {
+            tx.from = from;
+        }
+        if (Validator.isValidAddress(to)) {
+            tx.to = to;
+        }
+
+        if (Validator.isValidNumber(value)) {
+            tx.value = "0x" + new BigNumber(value).toString();
+        }
+
+        this.post(tx, function(data) {
+            if (data.error)
+                callback({
+                    error: true,
+                    msg: data.error.message,
+                    data: ""
+                });
+            else callback({ error: false, msg: "", data: data.result });
+        });
     };
     this.getEthCall = function(txobj, callback) {
         this.post(
-            {
+            Object.assign({}, txobj, {
                 module: "proxy",
-                action: "eth_call",
-                to: txobj.to,
-                data: txobj.data
-            },
+                action: "eth_call"
+            }),
             function(data) {
                 if (data.error)
                     callback({

@@ -5,25 +5,30 @@
 >
 
 
-    <div class="block text-center">
-        <h1 translate="NAV_Encrypt">Encrypt</h1>
+    <div class="block">
+        <h1 class="text-center" translate="NAV_Encrypt">Encrypt</h1>
+
+        <div ng-show="!wd">
+            @@if (site === 'cx' ) {
+            <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>
+            }
+            @@if (site === 'cew' ) {
+            <wallet-decrypt-drtv></wallet-decrypt-drtv>
+            }
+        </div>
+
+
     </div>
 
-    <div ng-show="!unlockWallet">
-        @@if (site === 'cx' ) {
-        <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>
-        }
-        @@if (site === 'cew' ) {
-        <wallet-decrypt-drtv></wallet-decrypt-drtv>
-        }
-    </div>
-
-
-    <div ng-show="unlockWallet">
+    <div ng-show="wd">
 
 
         <div ng-if="loading">
-            LOADING...
+            <div class="bouncing-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
         <div ng-if="!loading && !newWallet">
             <form ng-submit="reEncrypt($event, $ctrl.input.newPassword)"
@@ -31,14 +36,14 @@
 
                 <div class="input-group">
                     <input
-                            name="newPassword"
-                            id="newPassword"
-                            class="form-control"
-                            type="{{showPass && 'password' || 'text'}}"
-                            placeholder="{{'GEN_YOUR_NEW_PASSWORD' | translate }}"
-                            ng-model="$ctrl.input.newPassword"
-                            ng-class="$ctrl.input.newPassword.length > 8 ? 'is-valid' : 'is-invalid'"
-                            aria-label="{{'GEN_Label_1' |translate}}"
+                        name="newPassword"
+                        id="newPassword"
+                        class="form-control"
+                        type="{{showPass && 'password' || 'text'}}"
+                        placeholder="{{'GEN_YOUR_NEW_PASSWORD' | translate }}"
+                        ng-model="$ctrl.input.newPassword"
+                        ng-class="$ctrl.input.newPassword.length > 8 ? 'is-valid' : 'is-invalid'"
+                        aria-label="{{'GEN_Label_1' |translate}}"
                     />
                     <span tabindex="0" aria-label="make password visible"
                           role="button" class="input-group-addon eye"

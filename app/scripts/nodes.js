@@ -167,6 +167,7 @@ nodes.nodeList = {
         tokenList: [],
         abiList: [],
         service: "Callisto.network",
+        abiList: require("./abiDefinitions/clo.json"),
         lib: new nodes.customNode("https://clo-geth.0xinfra.com/", "")
     },
     clo_testnet3: {
@@ -181,6 +182,7 @@ nodes.nodeList = {
         tokenList: [],
         abiList: [],
         service: "Callisto.network",
+        abiList: require("./abiDefinitions/clo.json"),
         lib: new nodes.customNode("https://clo-testnet3.0xinfra.com/", "")
     },
     eth_mew: {

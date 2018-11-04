@@ -7,7 +7,7 @@ const contract = require("../abiDefinitions/rinkebyAbi").find(
 if (!contract) throw new Error("Unable to locate cold staking contract");
 
 const addrs = {
-    "Testnet CLO": "0xa45083107ae67636cd9b93ad13c15b939dbdce31",
+    "Testnet CLO": "0xd813419749b3c2cDc94A2F9Cfcf154113264a9d6",
     "RINKEBY ETH": "0x713f80e73b174b9aba62dd75fa1da6925c13ace5"
 };
 

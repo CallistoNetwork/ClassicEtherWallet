@@ -42,10 +42,9 @@
                     </p>
 
                     <p>
-                        <b>Warning:</b> After claiming the reward, your funds will be frozen for the next 172,800 blocks
+                        <b>Warning:</b> After claiming the reward, your funds will be frozen for the next 27 days
 
-                        (approx. 1 month) and you will be unable to claim new reward OR withdraw your funds during this
-                        period.
+                        and you will be unable to claim new reward OR withdraw your funds during this period.
                     </p>
 
 

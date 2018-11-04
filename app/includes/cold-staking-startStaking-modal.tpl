@@ -96,9 +96,8 @@
 
                     <p translate="COLD_STAKING_LOCKED_WARNING">
 
-                        Your funds will be locked for 172,800 blocks (approximately 1 month)
-                        and you will be unable to withdraw within the locking period
-
+                        Your funds will be locked for 27 days and you will be unable 
+                        to withdraw within the locking period
 
                     </p>
 

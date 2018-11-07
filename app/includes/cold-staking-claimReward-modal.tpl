@@ -10,7 +10,7 @@
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-                    <div class="alert alert-danger" ng-if="coldStakingService.contract.staker_info.reward === 0">
+                    <div class="alert alert-danger" ng-if="coldStakingService.stakingInfo.amount === 0">
                         <h1>WARNING!</h1>
                         <p translate="COLD_STAKING_NO_WITHDRAW">
                             You do not have any deposit to withdraw.
@@ -72,7 +72,7 @@
                         No, get me out of here!
                     </button>
                     <button
-                            ng-disabled="!coldStakingService.contract.staker_info.reward"
+                            ng-disabled="!coldStakingService.stakingInfo.amount"
 
                             type="submit"
                             class="btn btn-primary" translate="SENDModal_Yes">

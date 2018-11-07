@@ -52,6 +52,9 @@ const coinPriceService = function coinPriceService() {
 
                     return prices;
                 }
+            })
+            .catch(err => {
+                console.log("err", err);
             });
     };
 

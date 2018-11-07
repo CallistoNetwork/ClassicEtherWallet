@@ -16,13 +16,16 @@ if (!DEXNS) {
 }
 
 var walletBalanceCtrl = function(
+    $rootScope,
     $scope,
     $sce,
     walletService,
     backgroundNodeService,
     modalService,
     coldStakingService,
-    messageService
+    messageService,
+    $interval,
+    $timeout
 ) {
     $scope.messageService = messageService;
 
@@ -58,13 +61,11 @@ var walletBalanceCtrl = function(
 
     $scope.customTokenField = false;
 
-    $scope.$on("ChangeWallet", () => {
-        coldStakingService.contract.initStakerInfo();
-
-        if (coldStakingService.validNetwork()) {
-            coldStakingService.staker_info();
-        }
-    });
+    $scope.stakerInfo = {
+        amount: 0,
+        time: 0,
+        reward: 0
+    };
 
     /*
 
@@ -75,13 +76,53 @@ var walletBalanceCtrl = function(
 
     $scope.refreshBalances = function() {
         walletService.wallet.setBalance();
-        coldStakingService.contract.initStakerInfo();
-        if (coldStakingService.validNetwork()) {
-            coldStakingService.staker_info();
-        }
+        $scope.stakerInfo = { amount: 0, time: 0, reward: 0 };
+        $scope.handleStake();
     };
 
-    $scope.estimateGas_ = function(name = "claim_and_withdraw") {
+    $scope.$on("ChangeWallet", () => {
+        coldStakingService.initStakerInfo();
+        $scope.stakerInfo = { amount: 0, time: 0, reward: 0 };
+        $scope.handleStake();
+    });
+
+    $scope.handleStake = () => {
+        $scope.interval_ = $interval(async () => {
+            if (!$scope.stakerInfo.amount) {
+                await $scope._handleStake();
+            }
+        }, 700);
+
+        $timeout(() => $interval.cancel($scope.interval_), 1000 * 10);
+    };
+
+    $scope.$on("$destroy", () => {
+        if ($scope.interval_) {
+            $interval.cancel($scope.interval_);
+        }
+    });
+
+    $scope._handleStake = () => {
+        if (!coldStakingService.validNetwork()) {
+            return;
+        }
+
+        return coldStakingService
+            .staker()
+            .then(result => {
+                $scope.$apply(function() {
+                    $scope.stakerInfo = Object.assign({}, result);
+                });
+                return result;
+            })
+            .catch(err => {
+                $scope.stakerInfo = { amount: 0, time: 0, reward: 0 };
+
+                return $scope.stakerInfo;
+            });
+    };
+
+    $scope.estimateGas_ = function(name = "withdraw_stake") {
         const tx = {
             from: walletService.wallet.getAddressString()
         };
@@ -95,7 +136,7 @@ var walletBalanceCtrl = function(
                 uiFuncs.notifier.danger((err && err.msg) || err);
             })
             .finally(() => {
-                if (name === "claim_and_withdraw") {
+                if (name === "withdraw_stake") {
                     modalService.openWithdrawModal.open();
                 } else if (name === "claim") {
                     modalService.openClaimRewardModal.open();
@@ -104,7 +145,7 @@ var walletBalanceCtrl = function(
     };
 
     $scope.handleOpenWithdraw = function() {
-        $scope.estimateGas_("claim_and_withdraw");
+        $scope.estimateGas_("withdraw_stake");
     };
 
     $scope.handleOpenClaim = function() {
@@ -210,8 +251,9 @@ var walletBalanceCtrl = function(
 
     $scope.$on("ChangeNode", () => {
         $scope.resetLocalToken();
-
         $scope.resetTokenField();
+        coldStakingService.handleInit();
+        $scope.handleStake();
     });
 
     $scope.getCustomTokenSymbol = function(newSymbol) {

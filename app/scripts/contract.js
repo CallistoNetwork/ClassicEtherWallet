@@ -34,7 +34,7 @@ class Contract {
     }
 
     setNetwork(_network) {
-        this.network = _network.toUpperCase();
+        this.network = _network;
     }
 
     validFunction(_function) {

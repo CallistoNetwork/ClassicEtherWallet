@@ -24,8 +24,6 @@
     </tr>
     </thead>
     <tbody>
-
-
     <tr>
         <td>
             <div ng-show="coldStakingService.validNetwork()" ng-init="showLongBal_ = false;">
@@ -61,28 +59,29 @@
             <span
                 ng-show="coldStakingService.validNetwork()"
                 class="text-right pointer"
-                title="{{coldStakingService.contract.staker_info.weight}} (Double Click)"
+                title="{{stakerInfo.amount}} (Double Click)"
                 ng-init="showLongWeight = false;"
                 ng-dblclick="showLongWeight = !showLongWeight"
             >
-                        <span class="mono wrap" ng-show="!showLongWeight">{{coldStakingService.contract.staker_info.weight | number}}</span>
+                        <span class="mono wrap" ng-show="!showLongWeight">{{stakerInfo.amount | number}}</span>
                         <span class="mono wrap"
                               ng-show="showLongWeight"
                         >
-                            {{coldStakingService.contract.staker_info.weight}}</span>
+                            {{stakerInfo.amount}}</span>
                     </span>
         </td>
 
         <td class="text-right pointer"
             ng-if="coldStakingService.validNetwork()"
-            title="{{coldStakingService.contract.staker_info.reward}} (Double Click)"
+            title="{{stakerInfo.reward}} (Double Click)"
             ng-init="showLongReward = false;"
             ng-dblclick="showLongReward = !showLongReward"
         >
 
-            <span class="mono wrap" ng-show="!showLongReward">{{coldStakingService.contract.staker_info.reward | number}}</span>
             <span class="mono wrap"
-                  ng-show="showLongReward">{{coldStakingService.contract.staker_info.reward}}</span>
+                  ng-show="!showLongReward">{{stakerInfo.reward | number}}</span>
+            <span class="mono wrap"
+                  ng-show="showLongReward">{{stakerInfo.reward}}</span>
         </td>
 
 
@@ -119,6 +118,30 @@
             </button>
 
 
+        </td>
+    </tr>
+
+    <tr ng-if="coldStakingService.validNetwork() && 0 < stakerInfo.time && 0 < stakerInfo.amount">
+        <td colspan="3">
+            <!--<p>-->
+                <!--time: {{stakerInfo.time | date:'hh:mm:ss' }},-->
+                <!--available: {{progressBar.threshold | date:'hh:mm:ss'}},-->
+                <!--elapsed: {{progressBar.elapsed | number}},-->
+                <!--remaining: {{progressBar.remaining | number}},-->
+
+            <!--</p>-->
+            <div class="progress">
+                <div class="progress-bar"
+                     role="progressbar"
+                     aria-valuenow={{progressBar.width}}
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     ng-class="progressBar.klass"
+                     ng-style="{width: progressBar.width + '%' }"
+                >
+                    <span class="mono">{{progressBar.width + '%'}}</span>
+                </div>
+            </div>
         </td>
     </tr>
 

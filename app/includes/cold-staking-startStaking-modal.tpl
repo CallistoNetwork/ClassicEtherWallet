@@ -12,7 +12,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
 
 
-                    <div ng-if="coldStakingService.contract.staker_info.weight > 0" class="alert alert-danger">
+                    <div ng-if="coldStakingService.stakingInfo.amount > 0" class="alert alert-danger">
                         <h2> WARNING!</h2>
                         <p translate="COLD_STAKING_START_STAKING_WARNING">
                             You already have funds in staking contract.
@@ -64,9 +64,8 @@
                                class="form-control"
                                required
                                autocomplete="off"
-
                                placeholder="{{ajaxReq.type}}"
-                               ng-class="coldStakingService.valid_staking_tx(tx.value) ? 'is-valid' : 'is-invalid'"
+                               ng-class="coldStakingService.validStakingTx(tx.value) ? 'is-valid' : 'is-invalid'"
                         >
 
                     </div>
@@ -96,7 +95,7 @@
 
                     <p translate="COLD_STAKING_LOCKED_WARNING">
 
-                        Your funds will be locked for 27 days and you will be unable 
+                        Your funds will be locked for 27 days and you will be unable
                         to withdraw within the locking period
 
                     </p>
@@ -120,7 +119,7 @@
                         No, get me out of here!
                     </button>
                     <button
-                        ng-disabled="coldStakingService.contract.staker_info.weight > 0 && !input.understand"
+                        ng-disabled="coldStakingService.stakingInfo.amount > 0 && !input.understand"
                         type="submit"
                         class="btn btn-primary" translate="SENDModal_Yes">
                         Yes, I am sure! Make transaction.

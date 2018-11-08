@@ -51,7 +51,14 @@ ethFuncs.decimalToHex = function(dec) {
     return new BigNumber(dec).toString(16);
 };
 ethFuncs.hexToDecimal = function(hex) {
-    return new BigNumber(this.sanitizeHex(hex)).toString();
+    try {
+        return hex === "0x"
+            ? hex
+            : new BigNumber(this.sanitizeHex(hex)).toString();
+    } catch (e) {
+        console.error("error hexToDeimal", hex);
+        return hex;
+    }
 };
 ethFuncs.contractOutToArray = function(hex) {
     hex = hex.replace("0x", "").match(/.{64}/g);
@@ -112,18 +119,24 @@ ethFuncs.encodeInputs = function encodeInputs({ inputs }) {
 ethFuncs.decodeOutputs = function decodeOutputs(contractFunction, data) {
     const { outputs } = contractFunction;
 
-    const output = ethUtil.solidityCoder.decodeParams(
-        outputs.map(o => o.type),
-        data.data.replace("0x", "")
-    );
+    try {
+        const output = ethUtil.solidityCoder.decodeParams(
+            outputs.map(o => o.type),
+            data.data.replace("0x", "")
+        );
 
-    return output.map(i => {
-        if (i instanceof BigNumber) {
-            return i.toFixed(0);
-        }
+        return output.map(i => {
+            if (i instanceof BigNumber) {
+                return i.toFixed(0);
+            }
 
-        return i;
-    });
+            return i;
+        });
+    } catch (e) {
+        console.error("decode", e, outputs);
+
+        return [];
+    }
 };
 
 module.exports = ethFuncs;

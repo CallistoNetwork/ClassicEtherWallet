@@ -31,16 +31,6 @@ const coldStakingCtrl = function(
             threshold and staker info if wallet unlocked.
          */
 
-    $scope.$watch(
-        function() {
-            return ajaxReq.type;
-        },
-        function(val, _val) {
-            coldStakingService.handleInit();
-            $scope.tx.to = coldStakingService.contract.address;
-        }
-    );
-
     /*
 
             send tx to contract
@@ -51,12 +41,12 @@ const coldStakingCtrl = function(
     // would have been easier to call start_staking() directly;
 
     $scope.startStaking = function() {
-        if (coldStakingService.staker_info.weight > 0) {
+        if (0 < coldStakingService.stakingInfo.amount) {
             const {
                 input: { understand }
             } = $scope;
             if (!understand) {
-                return $scope.notifier.danger("Press checkbox to continue");
+                return uiFuncs.notifier.danger("Press checkbox to continue");
             }
         }
 
@@ -92,11 +82,11 @@ const coldStakingCtrl = function(
         return true;
     }
 
-    $scope.claim_and_withdraw = function() {
+    $scope.withdraw_stake = function() {
         if (handleUserCanWithdraw()) {
             uiFuncs
                 .genTxContract(
-                    "claim_and_withdraw",
+                    "withdraw_stake",
                     coldStakingService.contract,
                     walletService.wallet,
                     Object.assign({}, coldStakingService.tx, {
@@ -117,27 +107,25 @@ const coldStakingCtrl = function(
     };
 
     $scope.claim = function() {
-        if (handleUserCanWithdraw()) {
-            uiFuncs
-                .genTxContract(
-                    "claim",
-                    coldStakingService.contract,
-                    walletService.wallet,
-                    Object.assign({}, coldStakingService.tx, {
-                        from: walletService.wallet.getAddressString()
-                    })
-                )
-                .then(tx => {
-                    return uiFuncs.sendTxContract(
-                        coldStakingService.contract,
-                        tx
-                    );
-                })
-                .finally(() => {
-                    modalService.openClaimRewardModal.close();
-                    init();
-                });
+        if (!handleUserCanWithdraw()) {
+            return;
         }
+        uiFuncs
+            .genTxContract(
+                "claim",
+                coldStakingService.contract,
+                walletService.wallet,
+                Object.assign({}, coldStakingService.tx, {
+                    from: walletService.wallet.getAddressString()
+                })
+            )
+            .then(tx => {
+                return uiFuncs.sendTxContract(coldStakingService.contract, tx);
+            })
+            .finally(() => {
+                modalService.openClaimRewardModal.close();
+                init();
+            });
     };
 
     function main() {

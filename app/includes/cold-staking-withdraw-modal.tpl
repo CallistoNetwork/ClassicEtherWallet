@@ -1,12 +1,10 @@
 <article class="modal fade" id="openWithdrawModal" tabindex="-1"
 >
     <section class="modal-dialog">
-        <form ng-submit="claim_and_withdraw()">
+        <form ng-submit="withdraw_stake()">
             <section class="modal-content"
                      ng-if="coldStakingService.validNetwork()"
-
             >
-
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
 
@@ -17,13 +15,13 @@
                         </h1>
                         Withdraw is impossible
                         stake time < round interval
-                        ({{coldStakingService.contract.staker_info.stake_time | number}} <
+                        ({{coldStakingService.stakingInfo.time | number}} <
                         {{coldStakingService.contract.round_interval | number}})
                     </div>
 
 
                     <div class="alert alert-danger"
-                         ng-if="coldStakingService.userCanWithdraw() && coldStakingService.contract.staker_info.reward === 0"
+                         ng-if="coldStakingService.userCanWithdraw() && coldStakingService.stakingInfo.amount === 0"
                     >
                         <h1>WARNING!
                         </h1>
@@ -31,12 +29,19 @@
                     </div>
 
 
-                    <h2 class="modal-title">You are about to <b>withdraw {{ajaxReq.type}} from Cold Staking:</b></h2>
+                    <h2 class="modal-title">You are about to <b>withdraw
+
+                        <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}">
+
+                        </coin-icon>
+                        {{ajaxReq.type}}
+
+                        from Cold Staking:</b></h2>
 
                     <h5>You will withdraw from the staking contract:
                         <a
-                                target="_blank"
-                                href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', coldStakingService.contract.address)}}"
+                            target="_blank"
+                            href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', coldStakingService.contract.address)}}"
                         >
                             {{coldStakingService.contract.address}}
                         </a>
@@ -56,14 +61,18 @@
                         <div class="col-xs-4 text-center">
                             - >
                             <br/>
-                            {{tx.value || 0}} {{ajaxReq.type}}
+                            {{tx.value || 0}}
+                            <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}">
+
+                            </coin-icon>
+                            {{ajaxReq.type}}
                         </div>
 
 
                         <div class="col-xs-4">
 
                             <div class="addressIdenticon med" title="Address Indenticon"
-                                 blockie-address="{{walletService.wallet.getAddressString()}}"
+                                 blockie-address="{{walletService.wallet.getChecksumAddressString()}}"
                                  watch-var="walletService.wallet.getAddressString()">
 
                             </div>
@@ -79,9 +88,9 @@
                     </button>
                     <button
 
-                            ng-disabled="!coldStakingService.userCanWithdraw();"
-                            type="submit"
-                            class="btn btn-primary" translate="SENDModal_Yes">
+                        ng-disabled="!coldStakingService.userCanWithdraw();"
+                        type="submit"
+                        class="btn btn-primary" translate="SENDModal_Yes">
                         Yes, I am sure! Make transaction.
                     </button>
                 </div>

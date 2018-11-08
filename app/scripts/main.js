@@ -1,5 +1,6 @@
 "use strict";
 require("./localStoragePolyfill");
+require("babel-polyfill");
 let IS_CX = false;
 if (typeof chrome != "undefined")
     IS_CX = chrome.windows === undefined ? false : true;
@@ -221,7 +222,11 @@ app.directive("nodeSelectorList", nodeSelectorList);
 app.directive("validTxHash", validTxHash);
 app.directive("swapInitForm", swapInitForm);
 app.directive("generateWalletForm", generateWalletForm);
-app.directive("accountBalanceTable", accountBalanceTable);
+app.directive("accountBalanceTable", [
+    "coldStakingService",
+    "$interval",
+    accountBalanceTable
+]);
 app.directive("sidebarAds", ["$interval", sidebarAds]);
 app.directive("sidebar", ["$timeout", sidebar]);
 app.directive("accountInfo", accountInfo);
@@ -312,6 +317,7 @@ app.controller("sendTxCtrl", [
     "$sce",
     "$rootScope",
     "walletService",
+    "coldStakingService",
     sendTxCtrl
 ]);
 
@@ -355,6 +361,7 @@ app.controller("offlineTxCtrl", [
     offlineTxCtrl
 ]);
 app.controller("walletBalanceCtrl", [
+    "$rootScope",
     "$scope",
     "$sce",
     "walletService",
@@ -362,6 +369,8 @@ app.controller("walletBalanceCtrl", [
     "modalService",
     "coldStakingService",
     "messageService",
+    "$interval",
+    "$timeout",
     walletBalanceCtrl
 ]);
 app.controller("helpersCtrl", ["$scope", helpersCtrl]);

@@ -12,13 +12,9 @@ const addrs = {
     //"RINKEBY ETH": "0x713f80e73b174b9aba62dd75fa1da6925c13ace5"
 };
 
-const blockTime = {
-    CLO: 15,
-    "Testnet CLO": 15
-};
 
 const round_interval = {
-    CLO: 172800,
+    CLO: 2332800,
     "Testnet CLO": 600,
     "RINKEBY ETH": 15000
 };
@@ -35,7 +31,7 @@ const Contract = require("../contract").Contract;
 
 class ColdStakingContract extends Contract {
     constructor(network = "CLO") {
-        if (!(round_interval[network] && blockTime[network])) {
+        if (!(round_interval[network])) {
             throw new Error("Invalid Request");
         }
         const { abi } = contract;
@@ -46,7 +42,6 @@ class ColdStakingContract extends Contract {
         this.staking_threshold = 0;
 
         this.round_interval = round_interval[network];
-        this.blockTime = blockTime[network];
 
         this.networks = Object.keys(addrs);
 
@@ -55,7 +50,7 @@ class ColdStakingContract extends Contract {
 }
 
 const coldStakingService = function(walletService) {
-    this.tx = { gasLimit: -1 };
+    this.tx = { gasLimit: 150000 };
 
     this.networks = Object.keys(addrs);
 
@@ -114,10 +109,10 @@ const coldStakingService = function(walletService) {
 
     this.getThresholdTime = () => {
         const {
-            contract: { blockTime, round_interval }
+            contract: { round_interval }
         } = this;
 
-        return blockTime * round_interval * 1000;
+        return round_interval * 1000;
     };
 
     this.stakeReward = () => {

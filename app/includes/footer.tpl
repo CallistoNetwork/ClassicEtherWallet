@@ -11,8 +11,6 @@
     <article class="block__wrap" style="max-width: 1780px; margin: auto;">
         <section class="footer--left">
             <span>Version: 3.12.2</span>
-            <a href="/"><img src="images/logo-myetherwallet.png" height="45px" width="auto" alt="Ether Wallet"
-                             class="footer--logo"/></a>
             <p><span translate="FOOTER_1">Free, open-source, client-side interface for generating Ethereum Classic wallets &amp; more. Interact with the Ethereum-compatible blockchains such are ETH, ETC, UBQ and EXP easily &amp; securely. Double-check the URL ( https://ethereumproject.github.io/etherwallet/ ) before unlocking your wallet.</span>
             </p>
             <p><a href="https://ethereumproject.github.io/etherwallet/helpers.html" target="_blank" rel="noopener"
@@ -53,39 +51,6 @@
 
             <div class="footer-branding">
 
-      <span
-          ng-controller="backgroundNodeCtrl"
-          class="dropdown dropdown-background-node"
-          ng-init="dropdownNodeBackground = false"
-
-      >
-
-
-           <a tabindex="0"
-              aria-haspopup="true"
-              aria-label="change node. current node {{nodes.nodeList[backgroundNodeService.backgroundNode].name}} node by {{nodes.nodeList[backgroundNodeService.backgroundNode].service}}"
-              class="dropdown-toggle  btn btn-white background-node"
-              ng-click="dropdownNodeBackground = !dropdownNodeBackground"
-           >
-
-            <span translate="NODE_BACKGROUND"></span>
-             {{nodes.nodeList[backgroundNodeService.backgroundNode].name}}
-               <small>({{nodes.nodeList[backgroundNodeService.backgroundNode].service}})</small>
-            <i class="caret"></i>
-          </a>
-          <ul class="dropdown-menu" ng-show="dropdownNodeBackground">
-            <li ng-repeat="node in backgroundNodeService.availableNodes;">
-                <a
-                    ng-class="{true:'active'}[backgroundNodeService.backgroundNode == node]"
-                    ng-click="setBackgroundNode(node);">
-
-                {{nodes.nodeList[node].name}}
-              <small> ({{nodes.nodeList[node].service}}) </small>
-            </a></li>
-          </ul>
-        </span>
-
-                <css-theme-drtv></css-theme-drtv>
             </div>
             <p><a aria-label="our organization on github"
                   href="https://github.com/EthereumCommonwealth/etherwallet/releases/latest" target="_blank"

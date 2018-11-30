@@ -194,10 +194,10 @@
 }
 
 .footer {
-    background-color: @ether-navy;
-    color: white;
-    font-size: 0.8rem;
+    color: #868d95;
     h5 {
+        font-weight: 800;
+        color: #163f59;
         font-size: 0.95rem;
         margin: 0.25em 0 0;
         i {
@@ -219,16 +219,13 @@
     }
     li,
     p {
+        color: @clo-green;
         font-size: 0.8rem;
         margin: 0.25em 0;
     }
     a {
-        color: #7fe5ff;
+        color: @clo-green;
         font-weight: 400;
-        &:hover,
-        &:focus {
-            color: darken(#7fe5ff, 10%);
-        }
     }
     small {
         font-size: 0.6rem;
@@ -236,6 +233,14 @@
 
     .background-node {
         color: #163151;
+        border: solid 1px #163151;
+        width: 100%;
+        overflow: hidden;
+    }
+    .background-node:focus,
+    .background-node:hover {
+        color: #163151 !important;
+        border: solid 1px #163151;
     }
 }
 

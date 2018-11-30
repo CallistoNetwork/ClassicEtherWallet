@@ -95,6 +95,35 @@ nodes.alternativeBalance = {
 };
 
 nodes.nodeList = {
+    clo_mainnet: {
+        name: "Callisto - CLO",
+        blockExplorerTX: "https://explorer2.callisto.network/tx/[[txHash]]",
+        blockExplorerAddr:
+            "https://explorer2.callisto.network/addr/[[address]]",
+        type: nodes.nodeTypes.CLO,
+        eip155: true,
+        chainId: 820,
+        tokenList: [],
+        abiList: [],
+        service: "Callisto.network",
+        abiList: require("./abiDefinitions/clo.json"),
+        lib: new nodes.customNode("https://clo-geth.0xinfra.com/", "")
+    },
+    clo_testnet3: {
+        name: "CLO Testnet 3.0",
+        blockExplorerTX:
+            "https://explorer-testnet.callisto.network/tx/[[txHash]]",
+        blockExplorerAddr:
+            "https://explorer-testnet.callisto.network/addr/[[address]]",
+        type: nodes.nodeTypes.CLOT,
+        eip155: true,
+        chainId: 20729,
+        tokenList: [],
+        abiList: [],
+        service: "Callisto.network",
+        abiList: require("./abiDefinitions/clo.json"),
+        lib: new nodes.customNode("https://clo-testnet3.0xinfra.com/", "")
+    },
     etc_ethereumcommonwealth_geth: {
         name: "ETC",
         blockExplorerTX: "https://gastracker.io/tx/[[txHash]]",
@@ -155,35 +184,6 @@ nodes.nodeList = {
         abiList: [],
         service: "ethertrack.io",
         lib: new nodes.customNode("https://morden.eos-classic.io", "")
-    },
-    clo_mainnet: {
-        name: "Callisto - CLO",
-        blockExplorerTX: "https://explorer2.callisto.network/tx/[[txHash]]",
-        blockExplorerAddr:
-            "https://explorer2.callisto.network/addr/[[address]]",
-        type: nodes.nodeTypes.CLO,
-        eip155: true,
-        chainId: 820,
-        tokenList: [],
-        abiList: [],
-        service: "Callisto.network",
-        abiList: require("./abiDefinitions/clo.json"),
-        lib: new nodes.customNode("https://clo-geth.0xinfra.com/", "")
-    },
-    clo_testnet3: {
-        name: "CLO Testnet 3.0",
-        blockExplorerTX:
-            "https://explorer-testnet.callisto.network/tx/[[txHash]]",
-        blockExplorerAddr:
-            "https://explorer-testnet.callisto.network/addr/[[address]]",
-        type: nodes.nodeTypes.CLOT,
-        eip155: true,
-        chainId: 20729,
-        tokenList: [],
-        abiList: [],
-        service: "Callisto.network",
-        abiList: require("./abiDefinitions/clo.json"),
-        lib: new nodes.customNode("https://clo-testnet3.0xinfra.com/", "")
     },
     eth_mew: {
         name: "ETH",

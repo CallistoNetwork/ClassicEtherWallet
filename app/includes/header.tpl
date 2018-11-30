@@ -39,13 +39,13 @@
     <section class="bg-gradient header-branding">
         <section class="container">
             @@if (site === 'cew' ) {
-            <a class="brand" href="https://ethereumproject.github.io/etherwallet/" aria-label="Go to homepage">
-                <img src="images/logo-myetherwallet.png" height="64px" width="245px" alt="ClassicEtherWallet"/>
+            <a class="brand" href="/" aria-label="Go to homepage">
+                <img src="images/clo-logo.svg" height="64px" width="245px" alt="ClassicEtherWallet"/>
             </a>
             }
             @@if (site === 'cx' ) {
             <a class="brand" href="/cx-wallet.html" aria-label="Go to homepage">
-                <img src="images/logo-myetherwallet.png" height="64px" width="245px" alt="ClassicEtherWallet"/>
+                <img src="images/clo-logo.svg" height="64px" width="245px" alt="ClassicEtherWallet"/>
             </a>
             }
             <div class="tagline">

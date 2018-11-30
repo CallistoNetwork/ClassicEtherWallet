@@ -22,7 +22,7 @@ var tabsCtrl = function(
     $scope.ethUtil = ethUtil;
 
     $scope.nodeList = nodes.nodeList;
-    $scope.defaultNodeKey = globalFuncs.networks.ETC; // 'etc_ethereumcommonwealth_parity';
+    $scope.defaultNodeKey = globalFuncs.networks.CLO; // 'etc_ethereumcommonwealth_parity';
 
     const initNode = () => {
         $scope.customNode = {

@@ -1,3 +1,21 @@
+body {
+    background-color: #f2f6f6;
+}
+
+.nav-container {
+    background-color: #fff;
+    border-bottom-width: 0 !important;
+    .nav-scroll {
+        .nav-inner {
+            .nav-item {
+                a {
+                    color: #34c88a !important;
+                }
+            }
+        }
+    }
+}
+
 img {
     max-width: 100%;
     height: auto;
@@ -9,23 +27,16 @@ textarea {
 
 // anouncement bars
 .announcement {
-    padding: 3px 10px;
+    padding: 10px;
     text-align: center;
     font-weight: 300;
     display: block;
-    background-color: #a00000;
-    color: #fff;
+    background-color: #e9f7ff;
+    color: #163f59;
     a {
-        font-size: 18px;
+        color: #ff876c;
         text-decoration: underline;
         transition: 250ms all ease;
-    }
-    &:hover,
-    &:focus {
-        transition: 250ms all ease;
-        color: darken(white, 5%);
-        text-decoration: none;
-        background-color: darken(@brand-primary, 5%);
     }
     strong {
         font-weight: 400;
@@ -531,7 +542,7 @@ label small {
 @brand-eth: @brand-primary;
 @brand-eth-dark: #025b76;
 @brand-etc: #009241;
-@brand-clo: #009241;
+@brand-clo: #34c88a;
 @brand-etc-dark: #015125;
 @brand-test: #c4c4c4;
 @brand-test-dark: #919191;
@@ -627,409 +638,31 @@ header {
     margin-bottom: 1em;
 }
 
-header.ETH {
+header {
     & + .container .modal-content {
-        border: 0.25rem solid @brand-eth;
+        border: 0.25rem solid @brand-clo;
     }
     & + .container .alert-info {
-        background-color: @brand-eth;
+        background-color: @brand-clo;
     }
     & + .container .btn-primary {
-        background: @brand-eth;
-        border-color: @brand-eth;
+        background: @brand-clo;
+        border-color: @brand-clo;
     }
     & + .container .btn-info {
-        background: @brand-eth-dark;
-        border-color: @brand-eth-dark;
+        background: @brand-clo;
+        border-color: @brand-clo;
     }
     .header-branding {
-        background: linear-gradient(130deg, @brand-eth, @brand-eth-dark);
-        border-bottom: 0.25rem solid @brand-eth;
-    }
-}
-
-header.ETC {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-etc;
-    }
-    & + .container .alert-info {
-        background-color: @brand-etc;
-    }
-    & + .container .btn-primary {
-        background: @brand-etc;
-        border-color: @brand-etc;
-    }
-    & + .container .btn-info {
-        background: @brand-etc-dark;
-        border-color: @brand-etc-dark;
-    }
-    .header-branding {
-        background: linear-gradient(130deg, @brand-etc, @brand-etc-dark);
-        border-bottom: 0.25rem solid @brand-etc;
+        background: #fff;
+        .btn-white {
+            color: #163f59;
+            border: solid 1px #163f59;
+        }
     }
     & + .btn-primary {
-        background: @brand-etc;
-        border-color: @brand-etc;
-    }
-}
-
-header.Ropsten {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-test;
-    }
-    & + .container .alert-info {
-        background-color: @brand-test;
-    }
-    & + .container .btn-primary {
-        background: @brand-test;
-        border-color: @brand-test;
-    }
-    & + .container .btn-info {
-        background: @brand-test-dark;
-        border-color: @brand-test-dark;
-    }
-    .header-branding {
-        background: linear-gradient(130deg, @brand-test, @brand-test-dark);
-        border-bottom: 0.25rem solid @brand-test;
-    }
-}
-
-header.Kovan {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-test;
-    }
-    & + .container .alert-info {
-        background-color: @brand-test;
-    }
-    & + .container .btn-primary {
-        background: @brand-test;
-        border-color: @brand-test;
-    }
-    & + .container .btn-info {
-        background: @brand-test-dark;
-        border-color: @brand-test-dark;
-    }
-    .header-branding {
-        background: @brand-test;
-        border-bottom: 0.25rem solid @brand-test;
-    }
-}
-
-header.Rinkeby {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-test;
-    }
-    & + .container .alert-info {
-        background-color: @brand-test;
-    }
-    & + .container .btn-primary {
-        background: @brand-test;
-        border-color: @brand-test;
-    }
-    & + .container .btn-info {
-        background: @brand-test-dark;
-        border-color: @brand-test-dark;
-    }
-    .header-branding {
-        background: @brand-test;
-        border-bottom: 0.25rem solid @brand-test;
-    }
-}
-
-header.RSK {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-rsk;
-    }
-    & + .container .alert-info {
-        background-color: @brand-rsk;
-    }
-    & + .container .btn-primary {
-        background: @brand-rsk;
-        border-color: @brand-rsk;
-    }
-    & + .container .btn-info {
-        background: @brand-rsk-dark;
-        border-color: @brand-rsk-dark;
-    }
-    .header-branding {
-        background: @brand-rsk;
-        border-bottom: 0.25rem solid @brand-rsk;
-    }
-}
-
-header.EXP {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-exp;
-    }
-    & + .container .alert-info {
-        background-color: @brand-exp;
-    }
-    & + .container .btn-primary {
-        background: @brand-exp;
-        border-color: @brand-exp;
-    }
-    & + .container .btn-info {
-        background: @brand-exp-dark;
-        border-color: @brand-exp-dark;
-    }
-    .header-branding {
-        background: linear-gradient(130deg, @brand-exp, @brand-exp-dark);
-        border-bottom: 0.25rem solid @brand-exp;
-    }
-}
-
-header.MUSIC {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-music;
-    }
-    & + .container .alert-info {
-        background-color: @brand-music;
-    }
-    & + .container .btn-primary {
-        background: @brand-music;
-        border-color: @brand-music;
-    }
-    & + .container .btn-info {
-        background: @brand-music-dark;
-        border-color: @brand-music-dark;
-    }
-    .header-branding {
-        background: linear-gradient(130deg, @brand-music, @brand-music-dark);
-        border-bottom: 0.25rem solid @brand-music;
-    }
-}
-
-header.UBQ {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-ubq;
-    }
-    & + .container .alert-info {
-        background-color: @brand-ubq;
-    }
-    & + .container .btn-primary {
-        background: @brand-ubq;
-        border-color: @brand-ubq;
-    }
-    & + .container .btn-info {
-        background: @brand-ubq-dark;
-        border-color: @brand-ubq-dark;
-    }
-    .header-branding {
-        background: linear-gradient(130deg, @brand-ubq, @brand-ubq-dark);
-        border-bottom: 0.25rem solid @brand-ubq;
-    }
-}
-
-header.PIRL {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-pirl;
-    }
-    & + .container .alert-info {
-        background-color: @brand-pirl;
-    }
-    & + .container .btn-primary {
-        background: @brand-pirl;
-        border-color: @brand-pirl;
-    }
-    & + .container .btn-info {
-        background: @brand-pirl;
-        border-color: @brand-pirl;
-    }
-    .header-branding {
-        background: @brand-pirl;
-        border-bottom: 0.25rem solid @brand-pirl;
-    }
-}
-
-header.POA {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-poa;
-    }
-    & + .container .alert-info {
-        background-color: @brand-poa;
-    }
-    & + .container .btn-primary {
-        background: @brand-poa;
-        border-color: @brand-poa;
-    }
-    & + .container .btn-info {
-        background: @brand-poa;
-        border-color: @brand-poa;
-    }
-    .header-branding {
-        background: @brand-poa;
-        border-bottom: 0.25rem solid @brand-poa;
-    }
-}
-
-header.TOMO {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-tomo;
-    }
-    & + .container .alert-info {
-        background-color: @brand-tomo;
-    }
-    & + .container .btn-primary {
-        background: @brand-tomo;
-        border-color: @brand-tomo;
-    }
-    & + .container .btn-info {
-        background: @brand-tomo;
-        border-color: @brand-tomo;
-    }
-    .header-branding {
-        background: @brand-tomo;
-        border-bottom: 0.25rem solid @brand-tomo;
-    }
-}
-
-header.ELLA {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-ella;
-    }
-    & + .container .alert-info {
-        background-color: @brand-ella;
-    }
-    & + .container .btn-primary {
-        background: @brand-ella;
-        border-color: @brand-ella;
-    }
-    & + .container .btn-info {
-        background: @brand-ella;
-        border-color: @brand-ella;
-    }
-    .header-branding {
-        background: @brand-ella;
-        border-bottom: 0.25rem solid @brand-ella;
-    }
-}
-
-header.ETSC {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-etsc;
-    }
-    & + .container .alert-info {
-        background-color: @brand-etsc;
-    }
-    & + .container .btn-primary {
-        background: @brand-etsc;
-        border-color: @brand-etsc;
-    }
-    & + .container .btn-info {
-        background: @brand-etsc-dark;
-        border-color: @brand-etsc-dark;
-    }
-    .header-branding {
-        background: linear-gradient(130deg, @brand-etsc, @brand-etsc-dark);
-        border-bottom: 0.25rem solid @brand-etsc;
-    }
-}
-
-header.CLO {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-etc;
-    }
-    & + .container .alert-info {
-        background-color: @brand-etc;
-    }
-    & + .container .btn-primary {
-        background: @brand-etc;
-        border-color: @brand-etc;
-    }
-    & + .container .btn-info {
-        background: @brand-etc-dark;
-        border-color: @brand-etc-dark;
-    }
-    .header-branding {
-        background: linear-gradient(130deg, @brand-etc, @brand-etc-dark);
-        border-bottom: 0.25rem solid @brand-etc;
-    }
-    & + .btn-primary {
-        background: @brand-etc;
-        border-color: @brand-etc;
-    }
-}
-
-header.CLOT {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-etc;
-    }
-    & + .container .alert-info {
-        background-color: @brand-etc;
-    }
-    & + .container .btn-primary {
-        background: @brand-etc;
-        border-color: @brand-etc;
-    }
-    & + .container .btn-info {
-        background: @brand-etc-dark;
-        border-color: @brand-etc-dark;
-    }
-    .header-branding {
-        background: linear-gradient(130deg, @brand-etc, @brand-etc-dark);
-        border-bottom: 0.25rem solid @brand-etc;
-    }
-    & + .btn-primary {
-        background: @brand-etc;
-        border-color: @brand-etc;
-    }
-}
-
-header.ESN {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-esn;
-    }
-    & + .container .alert-info {
-        background-color: @brand-esn;
-    }
-    & + .container .btn-primary {
-        background: @brand-esn;
-        border-color: @brand-esn;
-    }
-    & + .container .btn-info {
-        background: @brand-esn-dark;
-        border-color: @brand-esn-dark;
-    }
-    .header-branding {
-        background: linear-gradient(130deg, @brand-esn, @brand-esn-dark);
-        border-bottom: 0.25rem solid @brand-esn;
-    }
-    & + .btn-primary {
-        background: @brand-esn;
-        border-color: @brand-esn;
-    }
-}
-
-header.Custom {
-    & + .container .modal-content {
-        border: 0.25rem solid @brand-cust;
-    }
-    & + .container .alert-info {
-        background-color: @brand-cust;
-    }
-    & + .container .btn-primary {
-        background: @brand-cust;
-        border-color: @brand-cust;
-    }
-    & + .container .btn-info {
-        background: @brand-cust-dark;
-        border-color: @brand-cust-dark;
-    }
-    .header-branding {
-        background: linear-gradient(130deg, @brand-cust, @brand-cust-dark);
-        border-bottom: 0.25rem solid @brand-cust;
-    }
-}
-
-footer {
-    border-top: 0.25rem solid @brand-etc;
-
-    &.ETH {
-        border-top: 0.25rem solid @brand-eth;
-    }
-
-    &.Custom {
-        border-top: 0.25rem solid @brand-cust;
+        background: @brand-clo;
+        border-color: @brand-clo;
     }
 }
 
@@ -1142,4 +775,11 @@ input.transparent-input {
 
 .d-inline-flex {
     display: inline-flex;
+}
+
+.block__main,
+.block__help {
+    border-radius: 8px;
+    box-shadow: 0 0 14px 0 rgba(198, 202, 206, 0.3);
+    background-color: #fff;
 }

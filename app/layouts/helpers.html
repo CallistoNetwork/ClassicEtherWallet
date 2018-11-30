@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="mewApp">
+
+
+@@include('../includes/head.tpl')
+
+
+<body>
+
+<div ng-controller="switchNetworkCtrl"></div>
+<div ng-controller="backgroundNodeCtrl">
+</div>
+
+<div ng-controller="tabsCtrl">
+
+  @@include( '../includes/header.tpl', { "site": "cew" } )
+
+
+  <section class="container" style="min-height: 50%" ng-controller='viewCtrl'>
+
+    <div class="tab-content">
+
+      @@include( '../includes/helpers.tpl', { "site": "cew" } )
+
+
+    </div>
+
+    @@include('../includes/alerts.tpl')
+
+  </section>
+
+  @@include( '../includes/footer.tpl', { "site": "cew" } )
+</div>
+</body>

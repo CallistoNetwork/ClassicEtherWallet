@@ -1,0 +1,135 @@
+<div class="token-balances">
+    <table class="account-info table table-responsive">
+        <caption translate="sidebar_TokenBal">Token Balances:</caption>
+        <tbody>
+        <tr ng-repeat="token in walletService.wallet.tokenObjs | filter: {type: ajaxReq.type} | filter: balanceFilter track by $index + token.contractAddress"
+            ng-show="tokenVisibility === 'shown'"
+        >
+
+            <td class="text-left">
+                <a
+                    style="color: inherit"
+                    href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', token.contractAddress)}}"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    <coin-icon icon="{{token.getSymbol()}}"></coin-icon>
+                </a>
+            </td>
+            <td class="mono wrap point text-right">
+                <img src="images/icon-remove.svg"
+                     class="token-remove"
+                     title="Remove Token"
+                     ng-click="removeTokenFromLocal(token.symbol)"
+                     ng-show="token.local === true"
+                />
+                <span ng-switch="showLongBal"
+                      ng-dblclick="showLongBal = !showLongBal"
+                      ng-init="showLongBal = false;"
+                >
+                        <span ng-switch-default="false">
+                            {{token.getBalance() | number }}
+                        </span>
+                        <span ng-switch-when="true">
+                            {{token.getBalance() }}
+                        </span>
+                </span>
+            </td>
+            <td ng-if="token.dexns.name && token.dexns.info">
+                {{token.dexns.info}}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a class="btn btn-default btn-xs" ng-click="wallet.setTokens(); tokensLoaded=true"
+       ng-hide="tokensLoaded">
+        Load Tokens Balances
+    </a>
+    <a class="btn btn-default btn-xs" ng-click="tokenVisibility='shown'"
+       ng-show="tokenVisibility=='hidden'">
+        Show All Tokens
+    </a>
+    <a class="btn btn-default btn-xs" ng-click="tokenVisibility='hidden'"
+       ng-show="tokenVisibility=='shown'">
+        Hide Tokens
+    </a>
+    <a class="btn btn-default btn-xs" ng-click="customTokenField=!customTokenField; initContract()">
+        <span translate="SEND_custom">Add Custom Token</span>
+    </a>
+    <div class="custom-token-fields" ng-show="customTokenField">
+        <div class="row">
+            <address-field
+                placeholder="mewsupport.eth"
+                var-name="localToken.contractAdd"
+                labelTranslated="TOKEN_Addr"
+            >
+            </address-field>
+        </div>
+
+        <label translate="TOKEN_Symbol" for="tokenSymbol"> Token Symbol: </label>
+        <input class="form-control input-sm"
+               type="text"
+               id="tokenSymbol"
+               ng-model="localToken.symbol"
+               ng-class="localToken.symbol!='' ? 'is-valid' : 'is-invalid'"/>
+        <label translate="TOKEN_Dec" for="tokenDecimals"> Decimals: </label>
+        <input class="form-control input-sm"
+               type="text"
+               id="tokenDecimals"
+               ng-model="localToken.decimals"
+               ng-class="Validator.isPositiveNumber(localToken.decimals) ? 'is-valid' : 'is-invalid'"/>
+        <button class="btn btn-primary btn-xs" ng-click="saveTokenToLocal()" translate="x_Save">Save
+        </button>
+        <div ng-bind-html="validateLocalToken"></div>
+    </div>
+
+    <a class="btn btn-default btn-xs wrap" style="white-space: normal;"
+       ng-click="customTokenDexNSField = !customTokenDexNSField; initContract()">
+        <span translate="SEND_custom_dexns">Add Custom Token by Token Symbol (DexNS)</span>
+    </a>
+    <div class="custom-token-fields" ng-show="customTokenDexNSField">
+
+        <label translate="TOKEN_Symbol" for="customTokenSymbol"> Token Symbol: </label>
+
+        <input class="form-control input-sm"
+               type="text"
+               id="customTokenSymbol"
+               name="customTokenSymbol"
+               ng-change="getCustomTokenSymbol(input.customTokenSymbol)"
+               ng-model="input.customTokenSymbol"
+               ng-model-options="{debounce: 300}"
+               ng-minlength="3"
+               ng-class="input.customTokenSymbol.length ? 'is-valid' : 'is-invalid'"
+        />
+
+        <div ng-hide="localToken.symbol">
+            <div ng-if="!input.customTokenSymbol">
+                <p><strong>Type a token symbol.</strong></p>
+            </div>
+            <div ng-if="input.customTokenSymbol">
+                <p><strong>Looking for {{ input.customTokenSymbol }} token...</strong></p>
+            </div>
+        </div>
+
+        <div ng-show="localToken.symbol">
+            <p><strong>You are adding {{ localToken.symbol }} token</strong></p>
+            <p>Information: </p>
+            <ul>
+                <li><strong>Network:</strong> {{ localToken.network }}</li>
+                <li><strong>Decimals:</strong> {{ localToken.decimals }}</li>
+                <li class="wrap"><strong>Contract Address:</strong> <a
+                    href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', localToken.contractAdd)}}"
+                    target="_blank" rel="noopener">
+                    {{ localToken.contractAdd }}
+                </a></li>
+            </ul>
+            <div>
+                <button class="btn btn-primary btn-xs" ng-click="saveTokenToLocal()" translate="x_Save">
+                    Save
+                </button>
+                <div ng-bind-html="validateLocalToken"></div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,26 @@
+<table class="table table-responsive">
+    <caption translate="sidebar_Equiv">Equivalent Values:</caption>
+    <tbody>
+    <tr>
+        <td class="text-left">BTC:</td>
+        <td class="text-right mono wrap">{{walletService.wallet.sumBalances().btcBalance | number}}</td>
+    </tr>
+
+    <tr>
+        <td class="text-left">USD:</td>
+        <td class="text-right mono wrap">{{walletService.wallet.sumBalances().usdBalance | currency:"$"}}</td>
+    </tr>
+    <tr>
+        <td class="text-left">CHF:</td>
+        <td class="text-right mono wrap">{{walletService.wallet.sumBalances().chfBalance | currency:" "}}</td>
+    </tr>
+    <tr>
+        <td class="text-left">EUR:</td>
+        <td class="text-right mono wrap">{{walletService.wallet.sumBalances().eurBalance | currency:"€"}}</td>
+    </tr>
+    <tr>
+        <td class="text-left">GBP:</td>
+        <td class="text-right mono wrap">{{walletService.wallet.sumBalances().gbpBalance | currency:"£"}}</td>
+    </tr>
+    </tbody>
+</table>

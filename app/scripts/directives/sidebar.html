@@ -1,0 +1,43 @@
+<aside
+    ng-if="walletService.wallet && walletService.wallet.getAddressString()"
+    class="block"
+>
+
+    <account-info></account-info>
+
+
+    <!-- Tx history links -->
+    <h5 translate="sidebar_TransHistory"> Transaction History</h5>
+    <div ng-show="ajaxReq.type != 'CUS'">
+        <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', walletService.wallet.getAddressString())}}"
+           target="_blank" rel="noopener">
+            <div class="row">
+                <div class="col-xs-3">
+                    {{ajaxReq.type}}
+                </div>
+                <div class="col-xs-9">
+                    ({{ajaxReq.blockExplorerTX.replace('/tx/[[txHash]]', '')}})
+                </div>
+            </div>
+        </a>
+    </div>
+    <div>
+        <a href="https://ethplorer.io/address/{{walletService.wallet.getAddressString()}}" target="_blank"
+           rel="noopener">
+            <div class="row">
+                <div class="col-xs-3">
+                    Tokens
+                </div>
+                <div class="col-xs-9">
+                    (Ethplorer.io)
+                </div>
+            </div>
+        </a>
+    </div>
+    <!-- Tx history links -->
+
+    <messages-overview></messages-overview>
+    <sidebar-ads></sidebar-ads>
+    <token-balances></token-balances>
+    <eqivalent-values></eqivalent-values>
+</aside>

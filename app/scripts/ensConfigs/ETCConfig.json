@@ -1,0 +1,8 @@
+{
+    "public": {
+        "resolver": "0x4fa1fc37a083abe4c53b6304f389042bc0566855",
+        "reverse": "0x9434e3f592f5d63de25dbd54af4bd58b822b6136",
+        "ethAuction": "0xcb177520ACa646881D53909b456A9B2B730391f0",
+    },
+    "registry": "0xb96836a066ef81ea038280c733f833f69c23efde"
+}

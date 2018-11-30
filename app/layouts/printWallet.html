@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>classicetherwallet.com</title>
+    <link rel="shortcut icon" href="images/fav/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="ClassicEtherWallet">
+    <meta name="application-name" content="ClassicEtherWallet">
+    <meta name="theme-color" content="#1d6986">
+    <link rel="stylesheet" href="css/etherwallet-master.min.css"/>
+
+    <link rel="stylesheet" href="css/crypto-icons/font.css">
+    <link rel="stylesheet" href="css/crypto-icons/styles.css">
+
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/etherwallet-static.min.js"></script>
+
+</head>
+<body class="container">
+
+
+<span id="printwalletjson" style="display: none;">{{WALLETJSON}}</span>
+
+
+<div class="print-container" style="display: none;" id="print-container">
+    <img src="images/logo-ethereum-1.png" class="ether-logo-1" height="100%" width="auto"/>
+    <div id="identicon" class="addressIdenticon med float"></div>
+    <img src="images/print-sidebar.png" height="100%" width="auto" class="print-title"/>
+    <div class="print-qr-code-1">
+        <div id="paperwalletaddqr"></div>
+        <p class="print-text" style="padding-top: 25px;">YOUR ADDRESS
+        </p>
+    </div>
+    <div class="print-notes"><img src="images/notes-bg.png" width="90%" height="auto" class="pull-left"/>
+        <p class="print-text">AMOUNT / NOTES
+        </p>
+    </div>
+    <div class="print-qr-code-2">
+        <div id="paperwalletprivqr"></div>
+        <p class="print-text" style="padding-top: 30px;">YOUR PRIVATE KEY
+        </p>
+    </div>
+    <div class="print-address-container"><p><strong>Your Address:</strong> <br/><span
+            id="paperwalletadd"></span>
+    </p>
+        <p><strong class="text-danger">Your Private Key:</strong> <br/><span id="paperwalletpriv"></span>
+        </p>
+    </div>
+</div>
+
+<script type="text/javascript"> function getBlockie(address) {
+    return blockies.create({seed: address.toLowerCase(), size: 8, scale: 16}).toDataURL();
+}
+
+function generateWallets() {
+    var json = JSON.parse($("#printwalletjson").html());
+    for (var i = 0; i < json.length; i++) {
+        var walletTemplate = $('<section/>').append($("#print-container").clone());
+        new QRCode($(walletTemplate).find("#paperwalletaddqr")[0], {
+            text: json[i]['address'],
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        new QRCode($(walletTemplate).find("#paperwalletprivqr")[0], {
+            text: json[i]['private'],
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        $(walletTemplate).find("#paperwalletadd").html(json[i]['address']);
+        $(walletTemplate).find("#paperwalletpriv").html(json[i]['private']);
+        $(walletTemplate).find("#identicon").css('background-image', 'url(' + getBlockie(json[i]['address']) + ')');
+        walletTemplate = $(walletTemplate).find("#print-container").show();
+
+
+        const section = document.createElement('section');
+
+        section.id = 'cew_wallet_section';
+
+        section.className = 'border_section';
+
+
+        $('body').append(section);
+
+        $('#cew_wallet_section').append(walletTemplate);
+
+    }
+
+
+}
+
+
+function generateText() {
+
+    const text = `
+
+
+           <b>Send Ether and Tokens from ERC-20 Compatible Wallet:</b>
+            <ol class="list-group">
+                <li class="list-group-item">
+                Open <a href="https://classicetherwallet.com">https://classicetherwallet.com</a>
+                and  navigate to <a href="https://classicetherwallet.com/#send-transaction">Send Ether &amp; Tokens</a>
+                </li>
+                <li class="list-group-item">Unlock Wallet via keyfile and password or private key</li>
+            </ol>
+
+            <b>Wallet Description:</b>
+            <img src="images/logo-ethereum-1.png" class="ether-logo-1" height="100%" width="auto"/>
+
+            <div>
+            <style>
+                .flexer {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-around;
+                    font-size: 1.3rem;
+                    padding: 15px 0;
+                }
+            </style>
+
+            <p>An Ethereum wallet is as simple as a single pairing of a Ethereum address with its corresponding Ethereum private
+                key.</p>
+            <p>Your <b>Address</b> (Account # or your Public Key) is what you share to receive transactions.
+                Find the colorful address icon. Make sure it matches your paper wallet whenever you enter
+                your address somewhere.</p>
+            <p>Your address is valid on all networks that share the same account generation algorithm<strong>(including but not limited to):</strong></p>
+            <div class="flexer">
+
+                <span class="icon icon-etc">ETC</span>
+
+                <span class="icon icon-clo">CLO</span>
+
+                <span class="icon icon-eth">ETH</span>
+
+                <span class="icon icon-exp">EXP</span>
+
+                <span class="icon icon-ubq">UBQ</span>
+
+                <span class="icon icon-etz">ETZ</span>
+
+                <span class="icon icon-etsc">ETSC</span>
+            </div>
+
+            <p>Keep your <b>Private Key </b>(keyfile, wallet file, UTC file) and password safe. If someone gets hold of your private
+                key they have access to all the assets on all networks that share
+                the same algorithm</p>
+
+            <p>An encrypted, password protected JSON file was generated and downloaded. Please ensure it is stored safely.
+                If you lose your private key or file / password, the account cannot be recovered.
+            </p>
+
+            <p>This site does not have knowledge of your private key.
+                If you leave / refresh the site or generate a New Wallet, then a new private key will be generated and the
+                previously
+                displayed private key will not be retrievable.
+                Store paper wallet it in a zip lock bag to keep it safe from water, treat a paper wallet like cash!</p>
+
+
+</div>
+`;
+
+
+    $("body").append(text);
+
+
+}
+
+
+function main() {
+    generateWallets();
+
+    generateText();
+
+    setTimeout(function () {
+        window.print();
+    }, 2000);
+}
+
+
+</script>
+</body>
+</html>

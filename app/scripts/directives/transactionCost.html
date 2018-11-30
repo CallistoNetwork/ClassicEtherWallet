@@ -1,0 +1,16 @@
+<div class="row form-group" ng-if="txCostEther > 0">
+    <div class="col-sm-11 clearfix">
+        <a class="account-help-icon" href="#"
+           target="_blank" rel="noopener">
+            <img src="images/icon-help.svg" class="help-icon"/>
+            <p class="account-help-text" translate="TXFEE_Desc"></p>
+        </a>
+
+        <label for="txfee">Transaction Fee</label>
+        <input class="form-control"
+               disabled
+               id="txfee"
+               value="{{txCostEther}} {{node.type}} ~= {{txCostFiat | currency}}"
+        />
+    </div>
+</div>

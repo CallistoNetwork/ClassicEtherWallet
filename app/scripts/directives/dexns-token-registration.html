@@ -1,0 +1,186 @@
+<label for="tokenName" translate="DEXNS_TOKEN_NAME_LABEL">
+    Token Name (DexNS name)
+</label>
+<!-- TOKEN NAME -->
+
+<div class="row row-justify">
+
+    <div class="col-sm-8">
+        <input
+            required
+            autocomplete="off"
+            spellcheck="false"
+            ng-model-options="{ debounce: 500 }"
+            id="tokenName"
+            name="tokenName"
+            type="text"
+            class="form-control"
+            ng-class="tokenRegistration.tokenName.$valid ? 'is-valid' : 'is-invalid'"
+            ng-model="input.tokenName"
+        />
+    </div>
+
+    <div class="col-sm-4">
+        <div
+            ng-show="!!tokenRegistration.$pending.tokenName"
+            class="alert alert-info" translate="LOADING"></div>
+
+        <div ng-show="tokenRegistration.tokenName.$dirty && !tokenRegistration.$pending.tokenName"
+             ng-switch="tokenRegistration.tokenName.$valid"
+        >
+            <div ng-switch-when="true" class="alert alert-info" translate="DEXNS_AVAILABLE_RESPONSE_TEXT"></div>
+            <div class="alert alert-danger"
+                 ng-switch-default="false"
+                 translate="DEXNS_UNAVAILABLE_RESPONSE_TEXT"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOKEN NAME -->
+
+<label for="destination" translate="Destination">Destination</label>
+<div class="row">
+    <div class="col-xs-11">
+
+        <!-- no need for <address-field /> as lookup is not needed, as user is registering name -->
+        <input
+            ng-model="input.destination"
+            class="form-control"
+            name="destination"
+            autocomplete="off"
+            spellcheck="false"
+            id="destination"
+            type="text"
+            placeholder="0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8"
+            ng-class="tokenRegistration.destination.$valid ? 'is-valid' : 'is-invalid'"
+            required
+        />
+
+    </div>
+    <div class="col-xs-1 address-identicon-container">
+        <div class="addressIdenticon"
+             blockie-address="{{input.destination}}"
+             watch-var="input.destination"></div>
+    </div>
+</div>
+
+
+<label for="tokenNetwork" translate="TOKEN_NETWORK">token network</label>
+
+<select class="form-control"
+        id="tokenNetwork"
+        name="tokenNetwork"
+        ng-model="input.tokenNetwork"
+        required
+        ng-class="tokenRegistration.tokenNetwork.$valid ? 'is-valid' : 'is-invalid'"
+>
+    <option value="">---Please Select---</option>
+    <option ng-repeat="node in nodeList"
+            value="{{node}}"
+    >
+        {{node}}
+    </option>
+</select>
+
+
+<label>
+    hideOwner
+</label>
+
+<span class="radio">
+    <label>
+    <input ng-model="input.hideOwner"
+           type="radio"
+           name="hideOwner"
+           ng-value="true"
+    >
+        True
+    </label>
+</span>
+<span class="radio">
+    <label>
+    <input ng-model="input.hideOwner"
+           type="radio"
+           name="hideOwner"
+           ng-value="false"
+    >
+        False
+    </label>
+</span>
+
+<hr/>
+
+<h5 translate="OPTIONAL_PARAMETERS">Optional parameters</h5>
+
+<label for="abi" translate="CONTRACT_Json">
+    abi
+</label>
+<textarea
+    placeholder='[{ "type":"contructor", "inputs": [{ "name":"param1", "type":"uint256", "indexed":true }], "name":"Event" }, { "type":"function", "inputs": [{"name":"a", "type":"uint256"}], "name":"foo", "outputs": [] }] '
+    rows="5"
+    name="abi"
+    id="abi"
+    ng-model="input.abi"
+    class="form-control"
+    ng-class="tokenRegistration.abi.$valid ? 'is-valid' : 'is-invalid'"
+></textarea>
+<label for="link" translate="LINK">
+    link
+</label>
+<input
+    placeholder="https://bitcointalk.org/"
+    type="url"
+    name="link"
+    autocomplete="off"
+    id="link"
+    ng-model="input.link"
+    class="form-control"
+    ng-class="tokenRegistration.link.$valid ? 'is-valid' : 'is-invalid'"
+/>
+<label for="sourceCode" translate="SOURCE_CODE">
+    sourceCode
+</label>
+<input
+
+    placeholder="https://github.com/"
+    type="url"
+    name="sourceCode"
+    autocomplete="off"
+    id="sourceCode"
+    ng-model="input.sourceCode"
+    class="form-control"
+    ng-class="tokenRegistration.sourceCode.$valid ? 'is-valid' : 'is-invalid'"
+
+/>
+<label for="info" translate="INFO">
+    info
+</label>
+<input
+    name="info"
+    type="text"
+    autocomplete="off"
+    spellcheck="true"
+    id="info"
+    ng-model="input.info"
+    class="form-control"
+    ng-class="tokenRegistration.info.$valid ? 'is-valid' : 'is-invalid'"
+    placeholder="brief description of the token"
+/>
+
+
+<div class="row text-center">
+
+    <button
+        class="btn"
+        type="button" ng-click="resetForm(); tokenRegistration.$setPristine();">
+        Reset
+    </button>
+    <button
+        ng-disabled="tokenRegistration.$invalid || tokenRegistration.$pending"
+        type="submit"
+        class="btn btn-primary"
+        translate="REGISTER_TOKEN"
+    >
+        Register Token
+    </button>
+</div>

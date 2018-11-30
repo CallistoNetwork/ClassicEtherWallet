@@ -1,0 +1,97 @@
+<input
+    hidden
+    title="address"
+    id="address"
+    name="address"
+    required
+    ng-model="input.address"
+/>
+<div>
+        <span translate="DEXNS_name">
+        DexNS Name
+    </span>
+    <div class="bouncing-loader inline"
+         ng-show="dexnsNameDisplay.address.$pending.validDexnsName"
+    >
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+</div>
+
+<div ng-show="!dexnsNameDisplay.address.$pending.validDexnsName">
+    <div ng-show="dexnsNameDisplay.address.$valid">
+        <input
+            title="dexns name"
+            type="text"
+            name="dexnsName"
+            id="dexnsName"
+            disabled
+            required
+            ng-model="input.dexnsName"
+            class="form-control form-control-sm mono wrap"
+        />
+
+        <div ng-show="!dexnsNameDisplay.dexnsName.$pending.timeRemaining &&
+        dexnsNameDisplay.dexnsName.$valid">
+
+            <label for="endTimeDisplay" translate="DEXNS_end_time"></label>
+            <input
+                id="endTimeDisplay"
+                title="expiration date"
+                disabled
+                value="{{input.endTime | date}}"
+                class="form-control form-control-sm mono wrap"/>
+
+            <label for="timeRemainingText" translate="DEXNS_ownership_expires"></label>
+
+            <input
+                id="timeRemainingText"
+                type="text"
+                disabled
+                required
+                style="font-size: small;"
+                class="form-control form-control-lg mono wrap"
+                title="{{timeRemainingText}}"
+                name="timeRemainingText"
+                ng-model="input.timeRemainingText"
+            />
+
+        </div>
+    </div>
+
+    <!-- LOADING DISPLAYS -->
+    <div ng-show="dexnsNameDisplay.dexnsName.$pending.timeRemaining">
+        <div class="bouncing-loader inline">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <!-- /LOADING DISPLAYS -->
+    <!-- ERROR DISPLAYS -->
+    <div ng-show="dexnsNameDisplay.address.$error.validDexnsName"
+         class="alert alert-warning">
+        <span translate="DEXNS_href">
+            You don't have a Name yet.
+        You can register one for your address
+        </span>
+        <!--href="https://ethereumproject.github.io/etherwallet/#dexns"-->
+        <a ng-click="goToDexns();"
+        >
+            here
+        </a>
+    </div>
+    <div ng-show="dexnsNameDisplay.dexnsName.$error.timeRemaining"
+         class="alert alert-warning">
+        <span translate="DEXNS_EXPIRED_NAME">Warning! Expired name</span>
+        <span>{{input.endTime | date}} </span>
+    </div>
+
+    <!--  / ERROR DISPLAYS -->
+
+
+</div>
+

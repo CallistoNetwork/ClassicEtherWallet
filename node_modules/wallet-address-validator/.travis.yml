@@ -1,0 +1,9 @@
+sudo: required
+addons:
+  chrome: stable
+language: node_js
+node_js:
+  - "4"
+  - "6"
+  - "8"
+  - "9"

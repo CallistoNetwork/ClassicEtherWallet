@@ -1,0 +1,73 @@
+[
+  {
+    "address":"0x6F6DEb5db0C4994A8283A01D6CFeEB27Fc3bBe9C",
+    "symbol":"Smart",
+    "decimal":0,
+    "type":"default"
+  },{
+    "address":"0x085fb4f24031eaedbc2b611aa528f22343eb52db",
+    "symbol":"BEC",
+    "decimal":8,
+    "type":"default"
+  },{
+   "address":"0x5ace17f87c7391e5792a7683069a8025b83bbd85",
+   "symbol":"PLAY",
+   "decimal": 0,
+   "type":"default"
+  },{
+   "address":"0x345a9e6c44d546dae5141700372986c4bb532e3d",
+   "symbol":"DEX",
+   "decimal": 18,
+   "type":"default"
+  },{
+   "address":"0x02dc6a2b94289d9ec72bc0689391688113c136b1",
+   "symbol":"EPOOLS",
+   "decimal": 0,
+   "type":"default"
+  },{
+   "address":"0x1312f9EC97a2377c8e2Ba6f088AfdFedFe59398C",
+   "symbol":"DGDR",
+   "decimal": 9,
+   "type":"default"
+  },{
+   "address":"0xdf0b7310588741cad931de88bc6c4f687cdf0e16",
+   "symbol":"GAM",
+   "decimal": 8,
+   "type":"default"
+  },{
+   "address":"0xc1fd237d844c0a1a4f18a5d6bd44f57df48e5e6a",
+   "symbol":"COR",
+   "decimal": 6,
+   "type":"default"
+  },{
+   "address":"0x452d5E21BD86bb419690827cC5AC024b6940040b",
+   "symbol":"CORP",
+   "decimal": 0,
+   "type":"default"
+  },{
+   "address":"0xb3c9a2f3f96ffbc4b7ded2d92c83175698147ae2",
+   "symbol":"MULLA",
+   "decimal": 18,
+   "type":"default"
+  },{
+   "address":"0x908dc05899e362ebf70372111cc21ac85b3d7bd8",
+   "symbol":"INPAY",
+   "decimal": 8,
+   "type":"default"
+  },{
+   "address":"0xac55641cbb734bdf6510d1bbd62e240c2409040f",
+   "symbol":"SATURN",
+   "decimal": 4,
+   "type":"default"
+  },{
+   "address":"0x76ce07a737115b9591cc5433082dacf7b32381ff",
+   "symbol":"HNT",
+   "decimal": 18,
+   "type":"default"
+  },{
+   "address":"0x8fb9424ede5af8d8d68bdf83886fd22d7661a142",
+   "symbol":"uSh",
+   "decimal": 18,
+   "type":"default"
+  }
+]

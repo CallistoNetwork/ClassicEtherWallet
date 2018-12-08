@@ -778,8 +778,24 @@ input.transparent-input {
 }
 
 .block__main,
-.block__help {
+.block__help,
+.block {
     border-radius: 8px;
     box-shadow: 0 0 14px 0 rgba(198, 202, 206, 0.3);
     background-color: #fff;
+}
+
+a {
+    &:focus {
+        outline: none;
+    }
+}
+
+.btn-default {
+    background-color: #fff;
+}
+
+.form-control.is-invalid {
+    border-color: #ff876c;
+    box-shadow: none;
 }

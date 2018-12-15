@@ -1,27 +1,33 @@
 {
-  "_from": "crypto-icons@^1.0.10",
+  "_args": [
+    [
+      "crypto-icons@1.0.23",
+      "/Users/carlossampol/Proyectos/ClassicEtherWallet"
+    ]
+  ],
+  "_development": true,
+  "_from": "crypto-icons@1.0.23",
   "_id": "crypto-icons@1.0.23",
   "_inBundle": false,
   "_integrity": "sha512-2HxxVXruJXjK/a2IpDuchsV1UHTCypNN8ONfMZ+cT8s5ZxmnNo51/iSd+8PdodPGHL86kVIgYD2RQJEt/jEazA==",
   "_location": "/crypto-icons",
   "_phantomChildren": {},
   "_requested": {
-    "type": "range",
+    "type": "version",
     "registry": true,
-    "raw": "crypto-icons@^1.0.10",
+    "raw": "crypto-icons@1.0.23",
     "name": "crypto-icons",
     "escapedName": "crypto-icons",
-    "rawSpec": "^1.0.10",
+    "rawSpec": "1.0.23",
     "saveSpec": null,
-    "fetchSpec": "^1.0.10"
+    "fetchSpec": "1.0.23"
   },
   "_requiredBy": [
     "#DEV:/"
   ],
   "_resolved": "https://registry.npmjs.org/crypto-icons/-/crypto-icons-1.0.23.tgz",
-  "_shasum": "93cc0cc36390910f7b129c38ece487e4d939b546",
-  "_spec": "crypto-icons@^1.0.10",
-  "_where": "/Users/carlossampol/Proyectos/etherwallet",
+  "_spec": "1.0.23",
+  "_where": "/Users/carlossampol/Proyectos/ClassicEtherWallet",
   "author": {
     "name": "Guarda co"
   },
@@ -29,7 +35,6 @@
     "url": "https://github.com/guardaco/crypto-icons/issues",
     "email": "hello@guarda.co"
   },
-  "bundleDependencies": false,
   "contributors": [
     {
       "name": "Din Tores",
@@ -37,7 +42,6 @@
       "url": "https://github.com/dintores"
     }
   ],
-  "deprecated": false,
   "description": "Guarda is glad to present our set of icons for various cryptocurrencies and tokens that can be downloaded and used completely for free.",
   "devDependencies": {
     "stylelint": "^9.4.0",

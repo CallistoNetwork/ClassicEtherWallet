@@ -43,20 +43,6 @@
   <header class="{{curNode.name}} {{curNode.service}} nav-index-{{gService.currentTab}}"
         aria-label="header">
 
-    
-    <div class="small announcement">
-        <div class="container">
-            <big>⚠ SECURITY ALERT!<br>There is a security vulnerability in <a
-                href="https://github.com/ethereum/EIPs/issues/20">ERC20 token standard</a>. ERC20 tokens are <a
-                href="https://gist.github.com/Dexaran/ddb3e89fe64bf2e06ed15fbd5679bd20">insecure</a>!<br>Use ERC20
-                tokens at your own risk. ClassicEtherWallet is not responsible for the consequences of using tokens of
-                this standard.</big><br>
-            Do not transfer ERC20 tokens into any smart-contract using the <code>transfer</code> function. This will
-            result in the loss of your tokens.
-            <br/>
-        </div>
-    </div>
-    
 
     
 
@@ -201,8 +187,6 @@
                     tabindex="0" aria-label="nav item: {{tab.name | translate}}" translate="{{tab.name}}"></a></li>
                 
                 
-                <li class="nav-item help"><a href="https://support.ethereumcommonwealth.io" target="_blank"
-                                             rel="noopener">Help</a></li>
             </ul>
         </div>
         <a aria-hidden="true" ng-show="showRightArrow" class="nav-arrow-right" ng-click="scrollRight(100);"
@@ -567,20 +551,15 @@
             <span>Version: 3.12.2</span>
             <p><span translate="FOOTER_1">Free, open-source, client-side interface for generating Ethereum Classic wallets &amp; more. Interact with the Ethereum-compatible blockchains such are ETH, ETC, UBQ and EXP easily &amp; securely. Double-check the URL ( https://ethereumproject.github.io/etherwallet/ ) before unlocking your wallet.</span>
             </p>
-            <p><a href="https://ethereumproject.github.io/etherwallet/helpers.html" target="_blank" rel="noopener"
-                  role="link" tabindex="0">
-                Helpers &amp; ENS Debugging
-            </a></p>
             <p><a data-target="#disclaimerModal" data-toggle="modal" target="_blank" rel="noopener" role="link"
                   tabindex="0" translate="FOOTER_4"> Disclaimer </a></p>
-            <p> &copy; 2018 ClassicEtherWallet, LLC </p>
+            <p> &copy; Callisto Network Foundation OU</p>
         </section>
         <section class="footer--cent">
             <h5><i aria-hidden="true">💝</i> Donations are always appreciated!</h5>
-            <p>ETH or ETC donation address: <span class="mono wrap"><big><a
-                href="https://gastracker.io/addr/0x2ca1377dfa03577ce5bbb815c98eda1ac7632e7d">0x2ca1377dfa03577ce5bbb815c98eda1ac7632e7d</a></big></span>
+            <p>CLO, ETH or ETC donation address: <span class="mono wrap"><big><a
+                href="https://gastracker.io/addr/0x2ca1377dfa03577ce5bbb815c98eda1ac7632e7d">0x74682fc32007af0b6118f259cbe7bccc21641600</a></big></span>
             </p>
-
             <h5><i aria-hidden="true">👫</i> You can support us by supporting our blockchain-family.</h5>
             <p><a
                 aria-label="Swap Ether or Bitcoin via Change Now.com"
@@ -607,27 +586,22 @@
 
             </div>
             <p><a aria-label="our organization on github"
-                  href="https://github.com/EthereumCommonwealth/etherwallet/releases/latest" target="_blank"
+                  href="https://github.com/CallistoNetwork/ClassicEtherWallet" target="_blank"
                   rel="noopener" role="link" tabindex="0">
-                Github: Ether wallet releases (downloadable version)
-            </a></p>
-            <p><a aria-label="Anti-Phishing chrome extension"
-                  href="https://chrome.google.com/webstore/detail/etheraddresslookup/pdknmigbbbhmllnmgdfalmedcmcefdfn"
-                  target="_blank" rel="noopener" role="link" tabindex="0">
-                Anti-Phishing CX
+                Github: Ether wallet releases 
             </a></p>
             <p>
-                <a aria-label="join our discord live chat" href="https://discordapp.com/invite/HgBa9b4" target="_blank"
+                <a aria-label="join our discord live chat" href="https://discord.gg/fGdPSA2" target="_blank"
                    rel="noopener" role="link" tabindex="0">Discord live chat</a>
                 &middot;
-                <a aria-label="reddit" href="https://www.reddit.com/r/EthereumClassic/" target="_blank" rel="noopener"
+                <a aria-label="reddit" href="http://reddit.com/r/CallistoCrypto" target="_blank" rel="noopener"
                    role="link" tabindex="0">Reddit</a>
                 &middot;
-                <a aria-label="twitter" href="https://twitter.com/eth_classic" target="_blank" rel="noopener"
+                <a aria-label="twitter" href="https://twitter.com/CallistoSupport" target="_blank" rel="noopener"
                    role="link" tabindex="0">Twitter</a>
                 &middot;
-                <a aria-label="medium" href="https://medium.com/@dexaran820" target="_blank" rel="noopener" role="link"
-                   tabindex="0">Medium</a>
+                <a aria-label="medium" href="https://t.me/CallistoNetNews" target="_blank" rel="noopener" role="link"
+                   tabindex="0">Telegarm</a>
             </p>
             <p><b>Latest Block #:</b> {{currentBlockNumber | number}} </p>
         </section>

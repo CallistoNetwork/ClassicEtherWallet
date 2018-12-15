@@ -1,20 +1,6 @@
 <header class="{{curNode.name}} {{curNode.service}} nav-index-{{gService.currentTab}}"
         aria-label="header">
 
-    @@if (site === 'cew' ) {
-    <div class="small announcement">
-        <div class="container">
-            <big>⚠ SECURITY ALERT!<br>There is a security vulnerability in <a
-                href="https://github.com/ethereum/EIPs/issues/20">ERC20 token standard</a>. ERC20 tokens are <a
-                href="https://gist.github.com/Dexaran/ddb3e89fe64bf2e06ed15fbd5679bd20">insecure</a>!<br>Use ERC20
-                tokens at your own risk. ClassicEtherWallet is not responsible for the consequences of using tokens of
-                this standard.</big><br>
-            Do not transfer ERC20 tokens into any smart-contract using the <code>transfer</code> function. This will
-            result in the loss of your tokens.
-            <br/>
-        </div>
-    </div>
-    }
 
     @@if (site === 'cx' ) {
     <div class="small announcement annoucement-danger">
@@ -175,8 +161,6 @@
                     ng-class="{active: $index==gService.currentTab}" ng-show="tab.cx" ng-click="tabClick($index)"><a
                     tabindex="0" aria-label="nav item: {{tab.name | translate}}" translate="{{tab.name}}"></a></li>
                 }
-                <li class="nav-item help"><a href="https://support.ethereumcommonwealth.io" target="_blank"
-                                             rel="noopener">Help</a></li>
             </ul>
         </div>
         <a aria-hidden="true" ng-show="showRightArrow" class="nav-arrow-right" ng-click="scrollRight(100);"

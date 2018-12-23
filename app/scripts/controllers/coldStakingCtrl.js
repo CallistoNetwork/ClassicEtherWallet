@@ -56,7 +56,11 @@ const coldStakingCtrl = function(
                 coldStakingService.contract,
                 walletService.wallet,
                 Object.assign({}, $scope.tx, {
-                    value: etherUnits.toWei($scope.tx.value, $scope.tx.unit),
+                    value: ethFuncs.sanitizeHex(
+                        ethFuncs.decimalToHex(
+                            etherUnits.toWei($scope.tx.value, $scope.tx.unit)
+                        )
+                    ),
                     from: walletService.wallet.getAddressString(),
                     unit: "wei"
                 })
@@ -90,7 +94,11 @@ const coldStakingCtrl = function(
                     coldStakingService.contract,
                     walletService.wallet,
                     Object.assign({}, coldStakingService.tx, {
-                        from: walletService.wallet.getAddressString()
+                        value: ethFuncs.sanitizeHex(
+                            ethFuncs.decimalToHex(new BigNumber(0))
+                        ),
+                        from: walletService.wallet.getAddressString(),
+                        unit: "wei"
                     })
                 )
                 .then(tx => {
@@ -116,7 +124,9 @@ const coldStakingCtrl = function(
                 coldStakingService.contract,
                 walletService.wallet,
                 Object.assign({}, coldStakingService.tx, {
-                    from: walletService.wallet.getAddressString()
+                    value: ethFuncs.sanitizeHex(ethFuncs.decimalToHex(0)),
+                    from: walletService.wallet.getAddressString(),
+                    unit: "wei"
                 })
             )
             .then(tx => {

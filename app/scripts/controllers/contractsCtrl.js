@@ -67,17 +67,20 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
             return;
         }
 
-        let estObj = {
-            from: walletService.wallet.getAddressString(),
-            to:
-                $scope.visibility === "deployView"
-                    ? ""
-                    : $scope.contract.address,
-            value: new BigNumber(
-                etherUnits.toWei($scope.tx.value, $scope.tx.unit)
-            ).toString(),
-            data: $scope.getContractData()
+        var estObj = {
+            from:
+                $scope.wallet != null
+                    ? $scope.wallet.getAddressString()
+                    : globalFuncs.donateAddress,
+            value: ethFuncs.sanitizeHex(
+                ethFuncs.decimalToHex(
+                    etherUnits.toWei($scope.tx.value, $scope.tx.unit)
+                )
+            ),
+            data: ethFuncs.sanitizeHex($scope.tx.data)
         };
+
+        if ($scope.tx.to != "") estObj.to = $scope.tx.to;
 
         return uiFuncs
             .estimateGas(estObj)

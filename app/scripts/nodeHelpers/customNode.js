@@ -201,7 +201,7 @@ customNode.prototype.getEstimatedGas = function(
         tx.to = to;
     }
     if (Validator.isValidNumber(value)) {
-        tx.value = "0x" + new BigNumber(value).toString();
+        tx.value = ethFuncs.trimHexZero(value);
     }
 
     this.post(
@@ -210,9 +210,18 @@ customNode.prototype.getEstimatedGas = function(
             params: [tx]
         },
         function(data) {
-            if (data.error)
+            if (data.error) {
                 callback({ error: true, msg: data.error.message, data: "" });
-            else callback({ error: false, msg: "", data: data.result });
+            } else {
+                var gasLimit = new BigNumber(data.result)
+                    .plus(100000)
+                    .toString(16);
+                callback({
+                    error: false,
+                    msg: "",
+                    data: ethFuncs.sanitizeHex(gasLimit)
+                });
+            }
         }
     );
 };

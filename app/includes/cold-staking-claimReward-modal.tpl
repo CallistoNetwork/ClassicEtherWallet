@@ -19,7 +19,7 @@
 
 
                     <h2 class="modal-title">You are about to claim <b> Reward
-                        {{coldStakingService.contract.stake_balance || 0}}
+                        {{coldStakingService.stakingInfo.reward || 0 | number}}
                         {{ajaxReq.type}}</b>
                     </h2>
 

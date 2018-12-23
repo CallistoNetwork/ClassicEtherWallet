@@ -19,7 +19,6 @@
                         {{coldStakingService.contract.round_interval | number}})
                     </div>
 
-
                     <div class="alert alert-danger"
                          ng-if="coldStakingService.userCanWithdraw() && coldStakingService.stakingInfo.amount === 0"
                     >
@@ -34,6 +33,7 @@
                         <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}">
 
                         </coin-icon>
+                        {{coldStakingService.stakingInfo.amount || 0 | number}}
                         {{ajaxReq.type}}
 
                         from Cold Staking:</b></h2>

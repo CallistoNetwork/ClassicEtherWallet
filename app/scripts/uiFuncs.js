@@ -681,12 +681,17 @@ uiFuncs.sendTxContract = function({ node, network }, tx, notify = true) {
 
 uiFuncs.estimateGas = function(dataObj, notifyError = true) {
     return new Promise((resolve, reject) => {
+        var adjustGas = function(gasLimit) {
+            if (gasLimit == "0x5209") return "21000";
+            if (new BigNumber(gasLimit).gt(4000000)) return "-1";
+            return new BigNumber(gasLimit).toString();
+        };
         ajaxReq.getEstimatedGas(dataObj, function(data) {
             if (data.error || parseInt(data.data) === -1) {
                 notifyError && uiFuncs.notifier.danger(data);
                 reject(-1);
             } else {
-                resolve(new BigNumber(data.data).toNumber());
+                resolve(adjustGas(data.data));
             }
         });
     });
@@ -713,7 +718,7 @@ uiFuncs.estGasContract = function(
         network = ajaxReq.type,
         inputs = null,
         from = null,
-        value = 0,
+        value = "0x00",
         unit = "ether"
     } = {}
 ) {
@@ -735,9 +740,7 @@ uiFuncs.estGasContract = function(
                 from: tx.from,
                 data: tx.data,
                 to: contract.address,
-                value: new BigNumber(
-                    etherUnits.toWei(tx.value, tx.unit)
-                ).toString()
+                value: value
             };
 
             contract.node.lib.getEstimatedGas(estObj, function(data) {
@@ -746,7 +749,7 @@ uiFuncs.estGasContract = function(
                 } else {
                     resolve(
                         Object.assign({}, tx, {
-                            gasLimit: new BigNumber(data.data).toNumber()
+                            gasLimit: data.data
                         })
                     );
                 }

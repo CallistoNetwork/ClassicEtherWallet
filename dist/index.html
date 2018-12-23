@@ -755,7 +755,6 @@
                         {{coldStakingService.contract.round_interval | number}})
                     </div>
 
-
                     <div class="alert alert-danger"
                          ng-if="coldStakingService.userCanWithdraw() && coldStakingService.stakingInfo.amount === 0"
                     >
@@ -770,6 +769,7 @@
                         <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}">
 
                         </coin-icon>
+                        {{coldStakingService.stakingInfo.amount || 0 | number}}
                         {{ajaxReq.type}}
 
                         from Cold Staking:</b></h2>
@@ -858,7 +858,7 @@
 
 
                     <h2 class="modal-title">You are about to claim <b> Reward
-                        {{coldStakingService.contract.stake_balance || 0}}
+                        {{coldStakingService.stakingInfo.reward || 0 | number}}
                         {{ajaxReq.type}}</b>
                     </h2>
 
@@ -4550,7 +4550,7 @@
         <section class="footer--cent">
             <h5><i aria-hidden="true">💝</i> Donations are always appreciated!</h5>
             <p>CLO, ETH or ETC donation address: <span class="mono wrap"><big><a
-                href="https://gastracker.io/addr/0x2ca1377dfa03577ce5bbb815c98eda1ac7632e7d">0x74682fc32007af0b6118f259cbe7bccc21641600</a></big></span>
+                href="https://explorer2.callisto.network/addr/0x74682fc32007af0b6118f259cbe7bccc21641600">0x74682fc32007af0b6118f259cbe7bccc21641600</a></big></span>
             </p>
             <h5><i aria-hidden="true">👫</i> You can support us by supporting our blockchain-family.</h5>
             <p><a

@@ -2,7 +2,7 @@
   "_args": [
     [
       "crypto-icons@1.0.23",
-      "/Users/carlossampol/Proyectos/clo/ClassicEtherWallet"
+      "/Users/carlossampol/Proyectos/ClassicEtherWallet"
     ]
   ],
   "_development": true,
@@ -27,7 +27,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/crypto-icons/-/crypto-icons-1.0.23.tgz",
   "_spec": "1.0.23",
-  "_where": "/Users/carlossampol/Proyectos/clo/ClassicEtherWallet",
+  "_where": "/Users/carlossampol/Proyectos/ClassicEtherWallet",
   "author": {
     "name": "Guarda co"
   },

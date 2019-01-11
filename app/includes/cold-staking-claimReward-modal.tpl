@@ -50,7 +50,12 @@
 
                         and you will be unable to claim new reward OR withdraw your funds during this period.
                     </p>
+                    
+                    <p>
+                        <b>Warning:</b>
 
+                        Claiming your reward do not give you back your initial investment and it will re stake automatically your founds. To withdraw all, press withdraw
+                    </p>
 
                     <b>Warning:</b> Staking reward can vary over time. Your staking reward depend on:
                     <ol>

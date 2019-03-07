@@ -3,6 +3,11 @@ const { Contract } = require("./contract");
 
 const TrezorConnect = require("trezor-connect").default;
 
+TrezorConnect.manifest({
+    email: "yograterol@callisto.network",
+    appUrl: "https://wallet.callisto.network/"
+});
+
 const ethUtil = require("ethereumjs-util");
 
 const BigNumber = require("bignumber.js");

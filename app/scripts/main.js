@@ -76,6 +76,10 @@ if (IS_CX) {
     const trezorConnect = require("trezor-connect").default;
     var digitalBitboxUsb = require("./staticJS/digitalBitboxUsb");
     var digitalBitboxEth = require("./staticJS/digitalBitboxEth");
+    trezorConnect.manifest({
+        email: "yograterol@callisto.network",
+        appUrl: "https://wallet.callisto.network/"
+    });
     window.u2f = u2f;
     window.TrezorConnect = trezorConnect;
     window.DigitalBitboxUsb = digitalBitboxUsb;

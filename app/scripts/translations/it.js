@@ -148,7 +148,7 @@ it.data = {
 
     /* Footer */
     FOOTER_1:
-        "Interfaccia gratuita, open source, lato client per generare portafogli Ethereum e altro. Interagisci con la *blockchain* Ethereum facilmente e in modo sicuro. Controlla bene l'URL ( .com ) prima di sbloccare un portafoglio.",
+        "Interfaccia gratuita, open source, lato client per generare portafogli Ethereum e altro. Interagisci con la *blockchain* Ethereum facilmente e in modo sicuro. Controlla bene l'URL ( .network ) prima di sbloccare un portafoglio.",
     FOOTER_1b: "Creato da ",
     FOOTER_2: "Donazioni molto apprezzate: ",
     FOOTER_3: "Generazione portafogli lato client da parte di ",

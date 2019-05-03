@@ -28,7 +28,6 @@ nodes.nodeTypes = {
 nodes.tldTypes = {
     ETH: ".eth",
     ETC: ".etc",
-    Ropsten: ".eth",
     Kovan: ".eth",
     Rinkeby: ".eth",
     RSK: ".rsk"
@@ -221,66 +220,6 @@ nodes.nodeList = {
         service: "infura.io",
         lib: new nodes.infuraNode("https://mainnet.infura.io/mew")
     },
-    rop_mew: {
-        name: "Ropsten",
-        type: nodes.nodeTypes.Ropsten,
-        blockExplorerTX: "https://ropsten.etherscan.io/tx/[[txHash]]",
-        blockExplorerAddr: "https://ropsten.etherscan.io/address/[[address]]",
-        eip155: true,
-        chainId: 3,
-        tokenList: require("./tokens/ropstenTokens.json"),
-        abiList: require("./abiDefinitions/ropstenAbi.json"),
-        service: "MyEtherWallet",
-        lib: new nodes.customNode("https://api.myetherapi.com/rop", "")
-    },
-    rop_infura: {
-        name: "Ropsten",
-        blockExplorerTX: "https://ropsten.etherscan.io/tx/[[txHash]]",
-        blockExplorerAddr: "https://ropsten.etherscan.io/address/[[address]]",
-        type: nodes.nodeTypes.Ropsten,
-        eip155: true,
-        chainId: 3,
-        tokenList: require("./tokens/ropstenTokens.json"),
-        abiList: require("./abiDefinitions/ropstenAbi.json"),
-        service: "infura.io",
-        lib: new nodes.infuraNode("https://ropsten.infura.io/mew")
-    },
-    kov_ethscan: {
-        name: "Kovan",
-        type: nodes.nodeTypes.Kovan,
-        blockExplorerTX: "https://kovan.etherscan.io/tx/[[txHash]]",
-        blockExplorerAddr: "https://kovan.etherscan.io/address/[[address]]",
-        eip155: true,
-        chainId: 42,
-        tokenList: require("./tokens/kovanTokens.json"),
-        abiList: require("./abiDefinitions/kovanAbi.json"),
-        service: "Etherscan.io",
-        lib: new nodes.etherscanNode("kovan")
-    },
-    rin_ethscan: {
-        name: "Rinkeby",
-        type: nodes.nodeTypes.Rinkeby,
-        blockExplorerTX: "https://rinkeby.etherscan.io/tx/[[txHash]]",
-        blockExplorerAddr: "https://rinkeby.etherscan.io/address/[[address]]",
-        eip155: true,
-        chainId: 4,
-        tokenList: require("./tokens/rinkebyTokens.json"),
-        abiList: require("./abiDefinitions/rinkebyAbi.json"),
-        service: "Etherscan.io",
-        lib: new nodes.etherscanNode("rinkeby")
-    },
-    rin_infura: {
-        name: "Rinkeby",
-        blockExplorerTX: "https://rinkeby.etherscan.io/tx/[[txHash]]",
-        blockExplorerAddr: "https://rinkeby.etherscan.io/address/[[address]]",
-        type: nodes.nodeTypes.Rinkeby,
-        eip155: true,
-        chainId: 4,
-        tokenList: require("./tokens/rinkebyTokens.json"),
-        abiList: require("./abiDefinitions/rinkebyAbi.json"),
-        service: "infura.io",
-        lib: new nodes.infuraNode("https://rinkeby.infura.io/mew")
-    },
     rsk: {
         name: "RSK",
         blockExplorerTX: "https://explorer.rsk.co/tx/[[txHash]]",
@@ -293,44 +232,6 @@ nodes.nodeList = {
         estimateGas: true,
         service: "GK2.sk",
         lib: new nodes.customNode("https://rsk-test.gk2.sk/", "")
-    },
-    exp: {
-        name: "EXP",
-        blockExplorerTX: "http://www.gander.tech/tx/[[txHash]]",
-        blockExplorerAddr: "http://www.gander.tech/address/[[address]]",
-        type: nodes.nodeTypes.EXP,
-        eip155: true,
-        chainId: 2,
-        tokenList: require("./tokens/expTokens.json"),
-        abiList: require("./abiDefinitions/expAbi.json"),
-        estimateGas: true,
-        service: "Expanse.tech",
-        lib: new nodes.customNode("https://node.expanse.tech/", "")
-    },
-    music: {
-        name: "MUSIC",
-        blockExplorerTX: "https://explorer.musicoin.org/tx/[[txHash]]",
-        blockExplorerAddr: "https://explorer.musicoin.org/account/[[address]]",
-        type: nodes.nodeTypes.MUSIC,
-        eip155: true,
-        chainId: 7762959,
-        tokenList: require("./tokens/musicTokens.json"),
-        abiList: require("./abiDefinitions/musicAbi.json"),
-        service: "musicoin.org",
-        lib: new nodes.customNode("https://mcdnode.trustfarm.io/api", "")
-    },
-    ubq: {
-        name: "UBQ",
-        blockExplorerTX: "https://ubiqscan.io/en/tx/[[txHash]]",
-        blockExplorerAddr: "https://ubiqscan.io/en/address/[[address]]",
-        type: nodes.nodeTypes.UBQ,
-        eip155: true,
-        chainId: 8,
-        tokenList: require("./tokens/ubqTokens.json"),
-        abiList: require("./abiDefinitions/ubqAbi.json"),
-        estimateGas: true,
-        service: "ubiqscan.io",
-        lib: new nodes.customNode("https://pyrus2.ubiqscan.io", "")
     },
     pirl: {
         name: "PIRL",
@@ -359,32 +260,6 @@ nodes.nodeList = {
         estimateGas: true,
         service: "poa.infura.io",
         lib: new nodes.infuraNode("https://poa.infura.io", "")
-    },
-    tomo: {
-        name: "TOMO",
-        blockExplorerTX: "https://explorer.tomocoin.io/#/tx/[[txHash]]",
-        blockExplorerAddr: "https://explorer.tomocoin.io/#/address/[[address]]",
-        type: nodes.nodeTypes.TOMO,
-        eip155: true,
-        chainId: 40686,
-        tokenList: [],
-        abiList: [],
-        estimateGas: true,
-        service: "core.tomocoin.io",
-        lib: new nodes.customNode("https://core.tomocoin.io", "")
-    },
-    ella: {
-        name: "ELLA",
-        blockExplorerTX: "https://explorer.ellaism.org/tx/[[txHash]]",
-        blockExplorerAddr: "https://explorer.ellaism.org/addr/[[address]]",
-        type: nodes.nodeTypes.ELLA,
-        eip155: true,
-        chainId: 64,
-        tokenList: [],
-        abiList: [],
-        estimateGas: true,
-        service: "ellaism.org",
-        lib: new nodes.customNode("https://jsonrpc.ellaism.org", "")
     },
     aka: {
         name: "AKA",

@@ -1,7 +1,4 @@
 {
-  "1st": "#ff4946",
-  "300": "#985f1f",
-  "ada": "#016F80",
   "adc": "#3CB0E5",
   "aeon": "#164450",
   "amp": "#048DD2",
@@ -139,6 +136,5 @@
   "xvg": "#42afb2",
   "ybc": "#d6c154",
   "zec": "#e5a93d",
-  "zeit": "#acacac",
-  "smart": "#fec60d"
+  "zeit": "#acacac"
 }

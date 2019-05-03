@@ -1,39 +1,3 @@
-.icon-bchsv::before {
-  content: "\ea06";
-}
-
-.icon-joys::before {
-  content: "\ea05";
-}
-
-.icon-tusd::before {
-  content: "\ea01";
-}
-
-.icon-usdc::before {
-  content: "\ea02";
-}
-
-.icon-dai::before {
-  content: "\ea03";
-}
-
-.icon-pax::before {
-  content: "\ea04";
-}
-
-.icon-aion::before {
-  content: "\ea00";
-}
-
-.icon-ela::before {
-  content: "\e9fe";
-}
-
-.icon-smart::before {
-  content: "\e9ff";
-}
-
 .icon-ely::before {
   content: "\e9fd";
 }

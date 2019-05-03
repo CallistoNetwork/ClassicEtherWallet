@@ -3,6 +3,7 @@
         style="display: flex; flex-direction: column;"
         ng-repeat="network in networkList track by network.type"
         class="{{network.type.toLowerCase() + ' pointer grey-bottom-border container'}}"
+        ng-class="{true: 'is-selected'}[ajaxReq.type === network.type]"
 
     >
         <div
@@ -19,10 +20,6 @@
                         style="width: 30px; display: inline-block;"
                         icon="{{network.type.toLowerCase()}}"
                         hidetext="{{true}}"></coin-icon>
-                <span
-                    class="network-label"
-                    ng-class="{true: 'is-selected'}[ajaxReq.type === network.type]"
-                ></span>
                 <span
                     class="network-type"
                     ng-class="{true: 'is-selected'}[ajaxReq.type === network.type]"

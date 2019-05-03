@@ -147,7 +147,7 @@ vi.data = {
 
     /* Footer */
     FOOTER_1:
-        "Free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URL ( .com ) before unlocking your wallet.",
+        "Free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URL ( .network ) before unlocking your wallet.",
     FOOTER_1b: "Nhà Phát Triển: ",
     FOOTER_2:
         'Quyên Góp & Ủng Hộ Vào "Quỹ Phát Triển" Từ Bạn Là Một Hành Động Đáng Trân Trọng: ',

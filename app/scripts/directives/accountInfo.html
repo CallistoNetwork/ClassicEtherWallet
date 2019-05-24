@@ -6,9 +6,7 @@
              watch-var="walletService.wallet"></div>
         <span
             id="addr"
-            class="mono wrap"
-            ng-click="copyToClipboard('addr')"
-        >{{walletService.wallet.getChecksumAddressString()}}</span>
+            class="mono wrap">{{walletService.wallet.getChecksumAddressString()}}</span>
 
         <div class="transition-display">
             <img src="images/clipboard.png" width="16" height="16"/>
@@ -18,13 +16,12 @@
     <span
         ng-class="displaySuccess > 0 ? 'show-viz' : ''"
         class="text-success transition-display"
-        translate="ADDR_COPY"
-    >
-            </span>
+        translate="ADDR_COPY">
+    </span>
 </div>
 
-<form name="dexnsNameDisplay" dexns-name-display novalidate>
-</form>
+<!-- <form name="dexnsNameDisplay" dexns-name-display novalidate>
+</form> -->
 
 <a
     class="btn btn-primary"

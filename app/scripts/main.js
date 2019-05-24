@@ -71,8 +71,6 @@ if (IS_CX) {
     var cxFuncs = require("./cxFuncs");
     window.cxFuncs = cxFuncs;
 } else {
-    var u2f = require("./staticJS/u2f-api");
-
     const trezorConnect = require("trezor-connect").default;
     var digitalBitboxUsb = require("./staticJS/digitalBitboxUsb");
     var digitalBitboxEth = require("./staticJS/digitalBitboxEth");
@@ -80,7 +78,6 @@ if (IS_CX) {
         email: "yograterol@callisto.network",
         appUrl: "https://wallet.callisto.network/"
     });
-    window.u2f = u2f;
     window.TrezorConnect = trezorConnect;
     window.DigitalBitboxUsb = digitalBitboxUsb;
     window.DigitalBitboxEth = digitalBitboxEth;
@@ -139,7 +136,7 @@ const generateWalletForm = require("./directives/generateWalletForm");
 const customNodeForm = require("./directives/customNodeForm");
 const officialityChecker = require("./directives/officiality-checker");
 const lookup = require("./directives/crosschain-lookup");
-const dexnsNameDisplay = require("./directives/dexns-name-display");
+// const dexnsNameDisplay = require("./directives/dexns-name-display");
 const blockiesDrtv = require("./directives/blockiesDrtv");
 const addressFieldDrtv = require("./directives/addressFieldDrtv");
 const QRCodeDrtv = require("./directives/QRCodeDrtv");
@@ -241,13 +238,13 @@ app.directive("sendTransactionForm", [
     sendTransactionForm
 ]);
 app.directive("officialityChecker", [officialityChecker]);
-app.directive("dexnsTokenRegistrationForm", dexnsTokenRegistrationForm);
-app.directive("dexnsNameDisplay", [
-    "dexnsService",
-    "walletService",
-    "globalService",
-    dexnsNameDisplay
-]);
+// app.directive("dexnsTokenRegistrationForm", dexnsTokenRegistrationForm);
+// app.directive("dexnsNameDisplay", [
+//     "dexnsService",
+//     "walletService",
+//     "globalService",
+//     dexnsNameDisplay
+// ]);
 app.directive("sendTxModal", sendTxModal);
 app.directive("networkInfo", networkInfo);
 app.directive("txStatus", txStatus);

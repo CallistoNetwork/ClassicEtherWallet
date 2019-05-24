@@ -1,27 +1,35 @@
 {
-  "name": "crypto-icons",
-  "version": "1.0.18",
-  "description": "Guarda is glad to present our set of icons for various cryptocurrencies and tokens that can be downloaded and used completely for free.",
-  "main": "index.js",
-  "scripts": {
-    "lint": "stylelint *.css"
+  "_from": "crypto-icons@^1.0.10",
+  "_id": "crypto-icons@1.0.35",
+  "_inBundle": false,
+  "_integrity": "sha512-DE24vrspqYEZNREjuJckCkxCVK/XOZgogAPVve9kX/fERspMQ+rGQL2voaEj7irNsKrcsr7gUumt+Aut2luWtg==",
+  "_location": "/crypto-icons",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "crypto-icons@^1.0.10",
+    "name": "crypto-icons",
+    "escapedName": "crypto-icons",
+    "rawSpec": "^1.0.10",
+    "saveSpec": null,
+    "fetchSpec": "^1.0.10"
   },
-  "private": false,
-  "keywords": [
-    "cryptocurrencies",
-    "icons",
-    "svg",
-    "svg-icons"
+  "_requiredBy": [
+    "#DEV:/"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/guardaco/crypto-icons"
+  "_resolved": "https://registry.npmjs.org/crypto-icons/-/crypto-icons-1.0.35.tgz",
+  "_shasum": "32fd681c9446fedeef95e2c1a7cf0ca1a37a950b",
+  "_spec": "crypto-icons@^1.0.10",
+  "_where": "/Users/yohangraterol/projects/callisto/ClassicEtherWallet",
+  "author": {
+    "name": "Guarda co"
   },
   "bugs": {
-    "email": "hello@guarda.co",
-    "url": "https://github.com/guardaco/crypto-icons/issues"
+    "url": "https://github.com/guardaco/crypto-icons/issues",
+    "email": "hello@guarda.co"
   },
-  "author": "Guarda co",
+  "bundleDependencies": false,
   "contributors": [
     {
       "name": "Din Tores",
@@ -29,10 +37,29 @@
       "url": "https://github.com/dintores"
     }
   ],
-  "homepage": "https://guarda.co/",
-  "license": "MIT",
+  "deprecated": false,
+  "description": "Guarda is glad to present our set of icons for various cryptocurrencies and tokens that can be downloaded and used completely for free.",
   "devDependencies": {
-    "stylelint": "^9.4.0",
-    "stylelint-config-standard": "^18.2.0"
-  }
+    "stylelint": "10.0.1",
+    "stylelint-config-standard": "18.3.0"
+  },
+  "homepage": "https://guarda.co/",
+  "keywords": [
+    "cryptocurrencies",
+    "icons",
+    "svg",
+    "svg-icons"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "crypto-icons",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guardaco/crypto-icons.git"
+  },
+  "scripts": {
+    "lint": "stylelint *.css"
+  },
+  "version": "1.0.35"
 }

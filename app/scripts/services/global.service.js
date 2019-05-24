@@ -52,64 +52,64 @@ var globalService = function($http, $httpParamSerializerJQLike) {
             mew: true,
             cx: true
         },
-        ens: {
-            id: 7,
-            name: "NAV_ENS",
-            url: "ens",
-            mew: true,
-            cx: true
-        },
-        dexns: {
-            id: 8,
-            name: "NAV_DexNS",
-            url: "dexns",
-            mew: true,
-            cx: true
-        },
+        // ens: {
+        //     id: 7,
+        //     name: "NAV_ENS",
+        //     url: "ens",
+        //     mew: true,
+        //     cx: true
+        // },
+        // dexns: {
+        //     id: 8,
+        //     name: "NAV_DexNS",
+        //     url: "dexns",
+        //     mew: true,
+        //     cx: true
+        // },
         viewWalletInfo: {
-            id: 9,
+            id: 7,
             name: "NAV_ViewWallet",
             url: "view-wallet-info",
             mew: true,
             cx: false
         },
-        signMsg: {
-            id: 10,
-            name: "NAV_SignMsg",
-            url: "sign-message",
-            mew: false,
-            cx: false
-        },
+        // signMsg: {
+        //     id: 8,
+        //     name: "NAV_SignMsg",
+        //     url: "sign-message",
+        //     mew: false,
+        //     cx: false
+        // },
         bulkGenerate: {
-            id: 11,
+            id: 8,
             name: "NAV_BulkGenerate",
             url: "bulk-generate",
             mew: false,
             cx: false
         },
-        messages: {
-            id: 12,
-            name: "NAV_Messages",
-            url: "messages",
-            mew: true,
-            cx: true
-        },
+        // messages: {
+        //     id: 10,
+        //     name: "NAV_Messages",
+        //     url: "messages",
+        //     mew: true,
+        //     cx: true
+        // },
         reEncrypt: {
-            id: 13,
+            id: 9,
             name: "NAV_Encrypt",
             url: "encrypt-wallet",
             mew: true,
             cx: false
         },
         broadcastTx: {
-            id: 14,
+            id: 10,
             name: "NAV_Broadcast",
             url: "broadcast-tx",
             mew: true,
             cx: true
         },
         networkInfo: {
-            id: 15,
+            id: 11,
             name: "NAV_Network_Info",
             url: "network-info",
             mew: true,

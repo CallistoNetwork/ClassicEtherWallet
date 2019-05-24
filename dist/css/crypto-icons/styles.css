@@ -1,3 +1,95 @@
+.icon-ont::before {
+  content: "\ea14";
+}
+
+.icon-kin::before {
+  content: "\ea13";
+}
+
+.icon-vtho::before {
+  content: "\ea12";
+}
+
+.icon-vet::before {
+  content: "\ea03";
+}
+
+.icon-npxs::before {
+  content: "\ea0c";
+}
+
+.icon-r::before {
+  content: "\ea0b";
+}
+
+.icon-link::before {
+  content: "\ea0e";
+}
+
+.icon-hot::before {
+  content: "\ea0f";
+}
+
+.icon-gusd::before {
+  content: "\ea10";
+}
+
+.icon-eurs::before {
+  content: "\ea11";
+}
+
+.icon-trezor::before {
+  content: "\ea09";
+}
+
+.icon-ledger::before {
+  content: "\ea0a";
+}
+
+.icon-bth::before {
+  content: "\ea08";
+}
+
+.icon-bsv::before {
+  content: "\ea07";
+}
+
+.icon-bchsv::before {
+  content: "\ea06";
+}
+
+.icon-joys::before {
+  content: "\ea05";
+}
+
+.icon-tusd::before {
+  content: "\ea01";
+}
+
+.icon-usdc::before {
+  content: "\ea02";
+}
+
+.icon-dai::before {
+  content: "\ea03";
+}
+
+.icon-pax::before {
+  content: "\ea04";
+}
+
+.icon-aion::before {
+  content: "\ea00";
+}
+
+.icon-ela::before {
+  content: "\e9fe";
+}
+
+.icon-smart::before {
+  content: "\e9ff";
+}
+
 .icon-ely::before {
   content: "\e9fd";
 }

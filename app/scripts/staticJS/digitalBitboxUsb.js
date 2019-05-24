@@ -4,7 +4,7 @@
  **/
 
 "use strict";
-
+const u2f = require("u2f-api");
 var DigitalBitboxUsb = function(timeoutSeconds) {
     this.timeoutSeconds = timeoutSeconds;
 };
@@ -57,16 +57,12 @@ DigitalBitboxUsb.prototype.exchange = function(msg, callback) {
             msg.slice(index * kh_max_len, (index + 1) * kh_max_len)
         ]);
         var key = {
+            appId: location.origin,
+            challenge: DigitalBitboxUsb.webSafe64(challenge.toString("base64")),
             version: "U2F_V2",
             keyHandle: DigitalBitboxUsb.webSafe64(kh.toString("base64"))
         };
-        u2f.sign(
-            location.origin,
-            DigitalBitboxUsb.webSafe64(challenge.toString("base64")),
-            [key],
-            localCallback,
-            this.timeoutSeconds
-        );
+        u2f.sign([key], this.timeoutSeconds).then(localCallback);
     }
 };
 

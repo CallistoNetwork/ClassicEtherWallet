@@ -6,7 +6,7 @@
             <h4 translate="decrypt_Access" style="margin-top:0;"> Select the format of your private key: </h4>
 
             <label aria-flowto="aria7" class="radio"
-                   ng-show="[globalService.tabs.viewWalletInfo.id, globalService.tabs.messages.id].includes(globalService.currentTab)">
+                   ng-show="[globalService.tabs.viewWalletInfo.id].includes(globalService.currentTab)">
                 <input aria-flowto="aria8" aria-label="address" type="radio" ng-model="walletType" value="addressOnly"/>
                 View with Address Only
             </label>

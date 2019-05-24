@@ -40,7 +40,7 @@ module.exports = function accountBalanceTable(coldStakingService, $interval) {
 
             scope.progressBarInterval = $interval(
                 () => scope.setProgressBar(),
-                1000 * 15
+                1000
             );
 
             scope.$on("$destroy", () => {

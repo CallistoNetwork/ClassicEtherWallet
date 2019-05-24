@@ -1,4 +1,5 @@
 "use strict";
+const u2f = require("u2f-api");
 const { Contract } = require("./contract");
 
 const TrezorConnect = require("trezor-connect").default;

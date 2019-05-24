@@ -44,11 +44,10 @@ let onError = function (err) {
 
 function onSuccess(msg) {
     return {
-        message: msg + " Complete! ",
+        "message": "Complete! ",
         //sound:     "Pop",
-        icon: app + "images/logo-etc.png",
-        onLast: true
-    }
+        "onLast": true
+    };
 }
 
 
@@ -121,14 +120,12 @@ function bundle_js(bundler) {
 function bundle_js_debug(bundler) {
     return bundler.bundle()
         .pipe(plumber({errorHandler: onError}))
-        .pipe(source('main.js'))
+        .pipe(source("main.js"))
         .pipe(buffer())
         .pipe(rename(js_destFile))
         .pipe(gulp.dest(js_destFolder))
-        .pipe(gulp.dest(js_destFolder_CX))
-        .pipe(notify(onSuccess('JS')))
+        .pipe(gulp.dest(js_destFolder_CX));
 }
-
 
 gulp.task('js', function () {
     let bundler = browserify(js_srcFile).transform(babelify).transform(html2js);

@@ -1,5 +1,5 @@
 <!-- Content -->
-<article class="col-sm-8 block">
+<article class="col-sm-7 block">
 
 
         <form send-transaction-form
@@ -28,7 +28,7 @@
 </article>
 <!-- / Content -->
 
-<article class="col-sm-4">
+<article class="col-sm-5">
 
     <sidebar></sidebar>
 

@@ -1,4 +1,5 @@
 "use strict";
+const u2f = require("u2f-api");
 const Transport = require("@ledgerhq/hw-transport-u2f").default;
 const LedgerEth = require("@ledgerhq/hw-app-eth").default;
 

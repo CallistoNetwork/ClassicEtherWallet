@@ -116,7 +116,7 @@ nodes.nodeList = {
             "https://explorer-testnet.callisto.network/addr/[[address]]",
         type: nodes.nodeTypes.CLOT,
         eip155: true,
-        chainId: 20729,
+        chainId: 19100,
         tokenList: [],
         abiList: [],
         service: "Callisto.network",

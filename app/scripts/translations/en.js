@@ -940,7 +940,9 @@ en.data = {
 
     HELP_FAQ_Title: "More Helpful Answers to Frequent Questions ",
     HELP_Contact_Title: "Ways to Get in Touch ",
-    BEEP_BOOP: "beep boop"
+    BEEP_BOOP: "beep boop",
+    NAV_Vote_Proposal: "Vote Proposal",
+    NAV_Submit_Proposal: "Submit Proposal"
 };
 
 module.exports = en;

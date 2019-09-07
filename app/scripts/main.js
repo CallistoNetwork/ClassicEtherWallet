@@ -156,6 +156,7 @@ const messagesOverview = require("./directives/messagesOverview");
 const sendTransactionForm = require("./directives/sendTransactionForm");
 const dexnsTokenRegistrationForm = require("./directives/dexns-token-registration");
 const networkInfo = require("./directives/networkInfo");
+const voteProposal = require("./directives/voteProposal");
 const txStatus = require("./directives/txStatus");
 
 const coinIcon = require("./directives/coinIcon");
@@ -247,6 +248,7 @@ app.directive("officialityChecker", [officialityChecker]);
 // ]);
 app.directive("sendTxModal", sendTxModal);
 app.directive("networkInfo", networkInfo);
+app.directive("voteProposal", voteProposal);
 app.directive("txStatus", txStatus);
 app.directive("eosKeypair", eosKeypair);
 app.directive("swapOpenOrderForm", swapOpenOrderForm);

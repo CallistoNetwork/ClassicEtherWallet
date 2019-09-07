@@ -114,6 +114,20 @@ var globalService = function($http, $httpParamSerializerJQLike) {
             url: "network-info",
             mew: true,
             cx: true
+        },
+        voteProposal: {
+            id: 12,
+            name: "NAV_Vote_Proposal",
+            url: "vote-proposal",
+            mew: true,
+            cx: true
+        },
+        submitProposal: {
+            id: 13,
+            name: "NAV_Submit_Proposal",
+            url: "submit-proposal",
+            mew: true,
+            cx: true
         }
     };
     var currentTab = 0;

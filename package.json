@@ -24,7 +24,8 @@
         "format": "prettier --write \"app/**/*.js\"",
         "precommit": "lint-staged",
         "lint": "eslint app/scripts",
-        "lint:fix": "eslint app/scripts --fix"
+        "lint:fix": "eslint app/scripts --fix",
+        "preinstall": "npx npm-force-resolutions"
     },
     "lint-staged": {
         "app/**/*.js": [
@@ -95,5 +96,8 @@
         "trezor-connect": "^7.0.1",
         "vinyl-buffer": "^1.0.0",
         "vinyl-source-stream": "^1.1.0"
+    },
+    "resolutions": {
+        "graceful-fs": "4.2.3"
     }
 }

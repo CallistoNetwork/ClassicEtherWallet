@@ -67,13 +67,12 @@ nodes.customNodeObj = {
 nodes.alternativeBalance = {
     ETH: {
         balance: "Loading",
-        // eth_ethscan node rate limiting issue??
-        node: "eth_ethscan",
+        node: "eth_mew",
         symbol: "ETH"
     },
     ETC: {
         balance: "Loading",
-        node: "etc_ethereumcommonwealth_geth",
+        node: "etc_ethercluster",
         symbol: "ETC"
     },
     CLO: {
@@ -103,7 +102,6 @@ nodes.nodeList = {
         eip155: true,
         chainId: 820,
         tokenList: [],
-        abiList: [],
         service: "Callisto.network",
         abiList: require("./abiDefinitions/clo.json"),
         lib: new nodes.customNode("https://clo-geth.0xinfra.com/", "")
@@ -118,71 +116,22 @@ nodes.nodeList = {
         eip155: true,
         chainId: 19100,
         tokenList: [],
-        abiList: [],
         service: "Callisto.network",
         abiList: require("./abiDefinitions/clo.json"),
         lib: new nodes.customNode("https://clo-testnet3.0xinfra.com/", "")
     },
-    etc_ethereumcommonwealth_geth: {
+    etc_ethercluster: {
         name: "ETC",
-        blockExplorerTX: "https://gastracker.io/tx/[[txHash]]",
-        blockExplorerAddr: "https://gastracker.io/addr/[[address]]",
-        type: nodes.nodeTypes.ETC,
-        eip155: true,
-        chainId: 61,
-        tokenList: require("./tokens/etcTokens.json"),
-        abiList: require("./abiDefinitions/etcAbi.json"),
-        service: "Ethereum Commonwealth Geth",
-        lib: new nodes.customNode("https://etc-geth.0xinfra.com/", "")
-    },
-    etc_ethereumcommonwealth_parity: {
-        name: "ETC",
-        blockExplorerTX: "https://gastracker.io/tx/[[txHash]]",
-        blockExplorerAddr: "https://gastracker.io/addr/[[address]]",
-        type: nodes.nodeTypes.ETC,
-        eip155: true,
-        chainId: 61,
-        tokenList: require("./tokens/etcTokens.json"),
-        abiList: require("./abiDefinitions/etcAbi.json"),
-        service: "Ethereum Commonwealth Parity",
-        lib: new nodes.customNode("https://etc-parity.0xinfra.com/", "")
-    },
-    etc_gastracker: {
-        name: "ETC",
-        blockExplorerTX: "https://gastracker.io/tx/[[txHash]]",
-        blockExplorerAddr: "https://gastracker.io/addr/[[address]]",
-        type: nodes.nodeTypes.ETC,
-        eip155: true,
-        chainId: 61,
-        tokenList: require("./tokens/etcTokens.json"),
-        abiList: require("./abiDefinitions/etcAbi.json"),
-        service: "gastracker.io",
-        lib: new nodes.customNode("https://web3.gastracker.io/", "")
-    },
-    etc_ethereumclassic_network: {
-        name: "ETC",
-        blockExplorerTX: "https://gastracker.io/tx/[[txHash]]",
-        blockExplorerAddr: "https://gastracker.io/addr/[[address]]",
-        type: nodes.nodeTypes.ETC,
-        eip155: true,
-        chainId: 61,
-        tokenList: require("./tokens/etcTokens.json"),
-        abiList: require("./abiDefinitions/etcAbi.json"),
-        service: "ETC Cooperative",
-        lib: new nodes.customNode("https://ethereumclassic.network/", "")
-    },
-    etc_testnet: {
-        name: "ETC Testnet",
-        type: nodes.nodeTypes.ETCT,
-        blockExplorerTX: "http://mordenexplorer.ethertrack.io/tx/[[txHash]]",
+        blockExplorerTX: "https://classic.etccoopexplorer.com/tx/[[txHash]]",
         blockExplorerAddr:
-            "http://mordenexplorer.ethertrack.io/addr/[[address]]",
+            "https://classic.etccoopexplorer.com/address/[[address]]",
+        type: nodes.nodeTypes.ETC,
         eip155: true,
-        chainId: 62,
-        tokenList: [],
-        abiList: [],
-        service: "ethertrack.io",
-        lib: new nodes.customNode("https://morden.eos-classic.io", "")
+        chainId: 61,
+        tokenList: require("./tokens/etcTokens.json"),
+        abiList: require("./abiDefinitions/etcAbi.json"),
+        service: "Ether Cluster",
+        lib: new nodes.customNode("https://www.ethercluster.com/etc", "")
     },
     eth_mew: {
         name: "ETH",
@@ -193,32 +142,8 @@ nodes.nodeList = {
         chainId: 1,
         tokenList: require("./tokens/ethTokens.json"),
         abiList: require("./abiDefinitions/ethAbi.json"),
-        service: "myetherwallet.com",
-        lib: new nodes.customNode("https://api.myetherwallet.com/eth", "")
-    },
-    eth_ethscan: {
-        name: "ETH",
-        blockExplorerTX: "https://etherscan.io/tx/[[txHash]]",
-        blockExplorerAddr: "https://etherscan.io/address/[[address]]",
-        type: nodes.nodeTypes.ETH,
-        eip155: true,
-        chainId: 1,
-        tokenList: require("./tokens/ethTokens.json"),
-        abiList: require("./abiDefinitions/ethAbi.json"),
-        service: "Etherscan.io",
-        lib: new nodes.etherscanNode("api")
-    },
-    eth_infura: {
-        name: "ETH",
-        blockExplorerTX: "https://etherscan.io/tx/[[txHash]]",
-        blockExplorerAddr: "https://etherscan.io/address/[[address]]",
-        type: nodes.nodeTypes.ETH,
-        eip155: true,
-        chainId: 1,
-        tokenList: require("./tokens/ethTokens.json"),
-        abiList: require("./abiDefinitions/ethAbi.json"),
-        service: "infura.io",
-        lib: new nodes.infuraNode("https://mainnet.infura.io/mew")
+        service: "mycrypto.com",
+        lib: new nodes.customNode("https://api.mycryptoapi.com/eth", "")
     },
     rsk: {
         name: "RSK",

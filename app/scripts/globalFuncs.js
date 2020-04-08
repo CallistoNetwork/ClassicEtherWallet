@@ -39,15 +39,14 @@ globalFuncs.timeRem = function timeRem(timeUntil) {
 
 // default nodes to connect to
 globalFuncs.networks = {
-    ETH: "eth_ethscan",
-    ETC: "etc_ethereumcommonwealth_parity",
+    ETH: "eth_mew",
+    ETC: "etc_ethercluster",
     UBQ: "ubq",
     EXP: "exp",
     ROP: "rop_mew",
     CLO: "clo_mainnet",
     RIN: "rin_ethscan",
     CLOT: "clo_testnet3",
-    "Testnet ETC": "etc_testnet",
     "Testnet CLO": "clo_testnet3",
     "ROPSTEN ETH": "rop_mew",
     "KOVAN ETH": "kov_ethscan",

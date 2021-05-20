@@ -162,7 +162,7 @@ en.data = {
     NAV_Multisig: "Multisig ",
     NAV_MyWallets: "My Wallets ",
     NAV_Offline: "Send Offline ",
-    NAV_SendEther: "Send Ether & Tokens ",
+    NAV_SendEther: "Send CLO & Tokens ",
     NAV_SendTokens: "Send Tokens ",
     NAV_SignMsg: "Sign Message ",
     NAV_Swap: "Swap ",

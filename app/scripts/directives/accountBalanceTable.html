@@ -86,12 +86,16 @@
 
     </tr>
     <tr ng-if="coldStakingService.validNetwork()">
+        <div class="alert alert-warning">
+            We are migrating to Cold Staking v2. Please wait for the new smart-contract version. <strong>All funds are SAFE and you will be able to withdraw after finishing your staking round.</strong>.
+        </div>
 
         <td class="text-left">
 
             <button class="btn btn-primary btn-teeny text-center"
-                    ng-disabled="{{globalService.currentTab !== globalService.tabs.sendTransaction.id}}"
-                    ng-click="modalService.startStakingModal.open();">
+                    ng-disabled="true">
+<!--                    ng-click="modalService.startStakingModal.open();"-->
+
                 Start Staking
             </button>
 
@@ -111,8 +115,9 @@
         <td class="text-right">
 
             <button class="btn btn-primary btn-teeny text-center"
-                    ng-disabled="{{globalService.currentTab !== globalService.tabs.sendTransaction.id}}"
-                    ng-click="handleOpenClaim();">
+                    ng-disabled="true">
+
+            <!--                    ng-click="handleOpenClaim();"-->
                 Claim Reward
             </button>
 

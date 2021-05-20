@@ -97,7 +97,7 @@ es.data = {
     NAV_Multisig: "Multifirma ",
     NAV_MyWallets: "Mis carteras ",
     NAV_Offline: "Enviar sin conexión ",
-    NAV_SendEther: "Enviar ether y tokens ",
+    NAV_SendEther: "Enviar CLO y tokens ",
     NAV_SendTokens: "Enviar tokens ",
     NAV_SignMsg: "Firmar mensaje ",
     NAV_Swap: "Intercambiar ",

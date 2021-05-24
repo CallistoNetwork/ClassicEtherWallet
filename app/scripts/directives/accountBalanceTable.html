@@ -25,6 +25,104 @@
     <tbody>
     <tr>
         <td>
+            <div ng-show="coldStakingV2Service.validNetwork()" ng-init="showLongBal_ = false;">
+                         <span
+                             title="{{walletService.wallet.balances[ajaxReq.type].balance}} (Double-Click)"
+                             class="text-right pointer"
+                         >
+                          <span ng-dblclick="showLongBal_ = !showLongBal_">
+                                <span class="mono wrap"
+                                      ng-show="!showLongBal_">{{walletService.wallet.balances[ajaxReq.type].balance | number}}</span>
+                                <span class="mono wrap"
+                                      ng-show="showLongBal_">{{walletService.wallet.balances[ajaxReq.type].balance}}</span>
+                           </span>
+                        </span>
+            </div>
+            <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
+            {{ajaxReq.type}}
+        </td>
+
+
+        <td class="text-right">
+                    <span ng-show="!coldStakingV2Service.validNetwork()"
+                          title="{{walletService.wallet.balances[ajaxReq.type].balance}} (Double-Click)"
+                          class="text-left pointer"
+                    >
+                          <span
+                              ng-init="showLongBalance = false;"
+                              ng-dblclick="showLongBalance = !showLongBalance">
+                                <span class="mono wrap"
+                                      ng-show="!showLongBalance">{{walletService.wallet.balances[ajaxReq.type].balance | number}}</span>
+                                <span class="mono wrap"
+                                      ng-show="showLongBalance">{{walletService.wallet.balances[ajaxReq.type].balance}}</span>
+                           </span>
+                    </span>
+            <span
+                ng-show="coldStakingV2Service.validNetwork()"
+                class="text-right pointer"
+                title="{{stakerInfoV2.amount}} (Double Click)"
+                ng-init="showLongWeight = false;"
+                ng-dblclick="showLongWeight = !showLongWeight"
+            >
+                        <span class="mono wrap" ng-show="!showLongWeight">{{stakerInfoV2.amount | number}}</span>
+                        <span class="mono wrap"
+                              ng-show="showLongWeight"
+                        >
+                            {{stakerInfo.amount}}</span>
+                    </span>
+        </td>
+
+        <td class="text-right pointer"
+            ng-if="coldStakingV2Service.validNetwork()"
+            title="{{stakerInfoV2.reward}} (Double Click)"
+            ng-init="showLongReward = false;"
+            ng-dblclick="showLongReward = !showLongReward"
+        >
+
+            <span class="mono wrap"
+                  ng-show="!showLongReward">{{stakerInfoV2.reward | number}}</span>
+            <span class="mono wrap"
+                  ng-show="showLongReward">{{stakerInfoV2.reward}}</span>
+        </td>
+
+
+    </tr>
+
+    <tr ng-if="coldStakingV2Service.validNetwork()">
+        <td class="text-left">
+            <button class="btn btn-primary btn-teeny text-center"
+                    ng-click="modalService.startStakingModalV2.open();">
+
+                Start Staking V2
+            </button>
+
+        </td>
+
+
+        <td class="text-right">
+
+            <button class="btn btn-primary btn-teeny text-center"
+                    ng-disabled="{{globalService.currentTab !== globalService.tabs.sendTransaction.id}}"
+                    ng-click="handleOpenWithdrawV2();">
+                Withdraw
+            </button>
+
+        </td>
+
+        <td class="text-right">
+
+            <button class="btn btn-primary btn-teeny text-center"
+                    ng-click="handleOpenClaimV2();">
+                Claim Reward
+            </button>
+
+
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
             <div ng-show="coldStakingService.validNetwork()" ng-init="showLongBal_ = false;">
                          <span
                              title="{{walletService.wallet.balances[ajaxReq.type].balance}} (Double-Click)"
@@ -33,7 +131,8 @@
                           <span ng-dblclick="showLongBal_ = !showLongBal_">
                                 <span class="mono wrap"
                                       ng-show="!showLongBal_">{{walletService.wallet.balances[ajaxReq.type].balance | number}}</span>
-                                <span class="mono wrap" ng-show="showLongBal_">{{walletService.wallet.balances[ajaxReq.type].balance}}</span>
+                                <span class="mono wrap"
+                                      ng-show="showLongBal_">{{walletService.wallet.balances[ajaxReq.type].balance}}</span>
                            </span>
                         </span>
             </div>
@@ -52,7 +151,8 @@
                               ng-dblclick="showLongBalance = !showLongBalance">
                                 <span class="mono wrap"
                                       ng-show="!showLongBalance">{{walletService.wallet.balances[ajaxReq.type].balance | number}}</span>
-                                <span class="mono wrap" ng-show="showLongBalance">{{walletService.wallet.balances[ajaxReq.type].balance}}</span>
+                                <span class="mono wrap"
+                                      ng-show="showLongBalance">{{walletService.wallet.balances[ajaxReq.type].balance}}</span>
                            </span>
                     </span>
             <span
@@ -85,18 +185,19 @@
 
 
     </tr>
+
     <tr ng-if="coldStakingService.validNetwork()">
         <div class="alert alert-warning">
-            We are migrating to Cold Staking v2. Please wait for the new smart-contract version. <strong>All funds are SAFE and you will be able to withdraw after finishing your staking round.</strong>.
+            We are migrating to Cold Staking v2. Please wait for the new smart-contract version. <strong>All funds are
+            SAFE and you will be able to withdraw after finishing your staking round.</strong>.
         </div>
 
         <td class="text-left">
-
-            <button class="btn btn-primary btn-teeny text-center"
+            <button class="btn btn-light btn-teeny text-center"
                     ng-disabled="true">
-<!--                    ng-click="modalService.startStakingModal.open();"-->
+                <!--                    ng-click="modalService.startStakingModal.open();"-->
 
-                Start Staking
+                Start Staking Old V1
             </button>
 
         </td>
@@ -107,17 +208,17 @@
             <button class="btn btn-primary btn-teeny text-center"
                     ng-disabled="{{globalService.currentTab !== globalService.tabs.sendTransaction.id}}"
                     ng-click="handleOpenWithdraw();">
-                Withdraw
+                Withdraw Old V1
             </button>
 
         </td>
 
         <td class="text-right">
 
-            <button class="btn btn-primary btn-teeny text-center"
+            <button class="btn btn-light btn-teeny text-center"
                     ng-disabled="true">
 
-            <!--                    ng-click="handleOpenClaim();"-->
+                <!--                    ng-click="handleOpenClaim();"-->
                 Claim Reward
             </button>
 
@@ -125,13 +226,37 @@
         </td>
     </tr>
 
+    <tr ng-if="coldStakingV2Service.validNetwork() && 0 < stakerInfoV2.time && 0 < stakerInfoV2.amount">
+        <td colspan="3">
+            <!--<p>-->
+            <!--time: {{stakerInfo.time | date:'hh:mm:ss' }},-->
+            <!--available: {{progressBar.threshold | date:'hh:mm:ss'}},-->
+            <!--elapsed: {{progressBar.elapsed | number}},-->
+            <!--remaining: {{progressBar.remaining | number}},-->
+
+            <!--</p>-->
+            <div class="progress">
+                <div class="progress-bar"
+                     role="progressbar"
+                     aria-valuenow={{progressBarV2.width}}
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     ng-class="progressBarV2.klass"
+                     ng-style="{width: progressBarV2.width + '%' }"
+                >
+                    <span class="mono">V2 {{progressBarV2.width + '%'}}</span>
+                </div>
+            </div>
+        </td>
+    </tr>
+
     <tr ng-if="coldStakingService.validNetwork() && 0 < stakerInfo.time && 0 < stakerInfo.amount">
         <td colspan="3">
             <!--<p>-->
-                <!--time: {{stakerInfo.time | date:'hh:mm:ss' }},-->
-                <!--available: {{progressBar.threshold | date:'hh:mm:ss'}},-->
-                <!--elapsed: {{progressBar.elapsed | number}},-->
-                <!--remaining: {{progressBar.remaining | number}},-->
+            <!--time: {{stakerInfo.time | date:'hh:mm:ss' }},-->
+            <!--available: {{progressBar.threshold | date:'hh:mm:ss'}},-->
+            <!--elapsed: {{progressBar.elapsed | number}},-->
+            <!--remaining: {{progressBar.remaining | number}},-->
 
             <!--</p>-->
             <div class="progress">
@@ -143,7 +268,7 @@
                      ng-class="progressBar.klass"
                      ng-style="{width: progressBar.width + '%' }"
                 >
-                    <span class="mono">{{progressBar.width + '%'}}</span>
+                    <span class="mono">OLD V1{{progressBar.width + '%'}}</span>
                 </div>
             </div>
         </td>

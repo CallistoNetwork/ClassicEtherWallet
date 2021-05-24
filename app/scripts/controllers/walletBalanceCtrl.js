@@ -23,6 +23,7 @@ var walletBalanceCtrl = function(
     backgroundNodeService,
     modalService,
     coldStakingService,
+    coldStakingV2Service,
     messageService,
     $interval,
     $timeout
@@ -32,7 +33,10 @@ var walletBalanceCtrl = function(
     $scope.tokenVisibility = "shown";
 
     $scope.modalService = modalService;
+
     $scope.coldStakingService = coldStakingService;
+
+    $scope.coldStakingV2Service = coldStakingV2Service;
 
     $scope.erc20Indexes = {
         DECIMALS: 2,
@@ -67,6 +71,12 @@ var walletBalanceCtrl = function(
         reward: 0
     };
 
+    $scope.stakerInfoV2 = {
+        amount: 0,
+        time: 0,
+        reward: 0
+    };
+
     /*
 
 
@@ -77,19 +87,26 @@ var walletBalanceCtrl = function(
     $scope.refreshBalances = function() {
         walletService.wallet.setBalance();
         $scope.stakerInfo = { amount: 0, time: 0, reward: 0 };
+        $scope.stakerInfoV2 = { amount: 0, time: 0, reward: 0 };
         $scope.handleStake();
     };
 
     $scope.$on("ChangeWallet", () => {
         coldStakingService.initStakerInfo();
+        coldStakingV2Service.initStakerInfo();
         $scope.stakerInfo = { amount: 0, time: 0, reward: 0 };
+        $scope.stakerInfoV2 = { amount: 0, time: 0, reward: 0 };
         $scope.handleStake();
+        console.log(walletService.wallet.balances);
     });
 
     $scope.handleStake = () => {
         $scope.interval_ = $interval(async () => {
             if (!$scope.stakerInfo.amount) {
                 await $scope._handleStake();
+            }
+            if (!$scope.stakerInfoV2.amount) {
+                await $scope._handleStakeV2();
             }
         }, 700);
 
@@ -122,34 +139,68 @@ var walletBalanceCtrl = function(
             });
     };
 
-    $scope.estimateGas_ = function(name = "withdraw_stake") {
+    $scope._handleStakeV2 = () => {
+        if (!coldStakingV2Service.validNetwork()) {
+            return;
+        }
+        console.log("Handle STAKE");
+        return coldStakingV2Service
+            .staker()
+            .then(result => {
+                $scope.$apply(function() {
+                    $scope.stakerInfoV2 = Object.assign({}, result);
+                    console.log($scope.stakerInfoV2);
+                });
+                return result;
+            })
+            .catch(err => {
+                $scope.stakerInfoV2 = { amount: 0, time: 0, reward: 0 };
+
+                return $scope.stakerInfoV2;
+            });
+    };
+
+    $scope.estimateGas_ = function(name = "withdraw_stake", CSService, v1) {
         const tx = {
             from: walletService.wallet.getAddressString()
         };
 
         uiFuncs
-            .estGasContract(name, coldStakingService.contract, tx)
+            .estGasContract(name, CSService.contract, tx)
             .then(data => {
-                Object.assign(coldStakingService.tx, data);
+                Object.assign(CSService.tx, data);
             })
             .catch(err => {
+                console.log(err);
                 uiFuncs.notifier.danger((err && err.msg) || err);
             })
             .finally(() => {
-                if (name === "withdraw_stake") {
+                if (name === "withdraw_stake" && v1) {
                     modalService.openWithdrawModal.open();
-                } else if (name === "claim") {
+                } else if (name === "withdraw_stake" && !v1) {
+                    modalService.openWithdrawModalV2.open();
+                } else if (name === "claim" && v1) {
                     modalService.openClaimRewardModal.open();
+                } else if (name === "claim" && !v1) {
+                    modalService.openClaimRewardModalV2.open();
                 }
             });
     };
 
     $scope.handleOpenWithdraw = function() {
-        $scope.estimateGas_("withdraw_stake");
+        $scope.estimateGas_("withdraw_stake", coldStakingService, true);
+    };
+
+    $scope.handleOpenWithdrawV2 = function() {
+        $scope.estimateGas_("withdraw_stake", coldStakingV2Service, false);
     };
 
     $scope.handleOpenClaim = function() {
-        $scope.estimateGas_("claim");
+        $scope.estimateGas_("claim", coldStakingService, true);
+    };
+
+    $scope.handleOpenClaimV2 = function() {
+        $scope.estimateGas_("claim", coldStakingV2Service, false);
     };
 
     $scope.resetTokenField = function() {

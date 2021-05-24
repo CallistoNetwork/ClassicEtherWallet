@@ -90,6 +90,7 @@ const { updateAppVersion } = require("./updateAppVersion");
 var tabsCtrl = require("./controllers/tabsCtrl");
 var viewCtrl = require("./controllers/viewCtrl");
 var coldStakingCtrl = require("./controllers/coldStakingCtrl");
+var coldStakingCtrlV2 = require("./controllers/coldStakingCtrlV2");
 var walletGenCtrl = require("./controllers/walletGenCtrl");
 var bulkGenCtrl = require("./controllers/bulkGenCtrl");
 var decryptWalletCtrl = require("./controllers/decryptWalletCtrl");
@@ -115,6 +116,7 @@ const changeNowService = require("./services/changeNow.service");
 const lookupService = require("./services/lookup.service");
 const globalService = require("./services/global.service");
 const coldStakingService = require("./services/coldStaking.service");
+const coldStakingV2Service = require("./services/coldStakingV2.service");
 const modalService = require("./services/modal.service");
 const walletService = require("./services/wallet.service");
 const messageService = require("./services/message.service");
@@ -214,6 +216,7 @@ app.factory("lookupService", ["dexnsService", lookupService]);
 
 app.factory("messageService", messageService);
 app.factory("coldStakingService", ["walletService", coldStakingService]);
+app.factory("coldStakingV2Service", ["walletService", coldStakingV2Service]);
 
 app.directive("equivalentValues", equivalentValues);
 app.directive("walletBalancesTable", ["walletService", walletBalancesTable]);
@@ -225,6 +228,7 @@ app.directive("swapInitForm", swapInitForm);
 app.directive("generateWalletForm", generateWalletForm);
 app.directive("accountBalanceTable", [
     "coldStakingService",
+    "coldStakingV2Service",
     "$interval",
     accountBalanceTable
 ]);
@@ -369,6 +373,7 @@ app.controller("walletBalanceCtrl", [
     "backgroundNodeService",
     "modalService",
     "coldStakingService",
+    "coldStakingV2Service",
     "messageService",
     "$interval",
     "$timeout",
@@ -402,6 +407,14 @@ app.controller("coldStakingCtrl", [
     "modalService",
     "coldStakingService",
     coldStakingCtrl
+]);
+app.controller("coldStakingCtrlV2", [
+    "$scope",
+    "$rootScope",
+    "walletService",
+    "modalService",
+    "coldStakingV2Service",
+    coldStakingCtrlV2
 ]);
 if (IS_CX) {
     app.controller("addWalletCtrl", ["$scope", "$sce", addWalletCtrl]);

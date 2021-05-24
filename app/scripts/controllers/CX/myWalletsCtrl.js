@@ -113,7 +113,6 @@ var myWalletsCtrl = function($scope, $sce, walletService) {
                     "ether",
                     $scope.fiatVal.btc
                 );
-
                 $scope[varWal][
                     id
                 ].balance = $scope.wallet.setBalanceOfNetwork();

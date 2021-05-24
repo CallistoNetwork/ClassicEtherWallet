@@ -37,6 +37,7 @@ var Wallet = function(priv, pub, path, hwType, hwTransport) {
         },
         {}
     );
+    console.log(this.balances);
 };
 Wallet.generate = function(icapDirect) {
     if (icapDirect) {
@@ -201,11 +202,6 @@ Wallet.prototype._saveBalance = function(
             "ether",
             data.btc
         );
-        this.balances[currency].chfBalance = etherUnits.toFiat(
-            etherBal,
-            "ether",
-            data.chf
-        );
     } else {
         Object.assign(this.balances, {
             [currency]: Object.assign(
@@ -223,6 +219,11 @@ Wallet.prototype._setBalances = function() {
     const networks = _map(Object.values(this.balances), "symbol");
     const coin = ajaxReq.type;
 
+    console.log(coin);
+    console.log(networks);
+    console.log(this.balances);
+    console.log(nodes.nodeList);
+
     if (!networks.includes(coin)) {
         this.balances[coin] = Object.assign({}, defaultWalletBalance, {
             node: ajaxReq.key,
@@ -233,6 +234,7 @@ Wallet.prototype._setBalances = function() {
 
     return Promise.all(
         requests.map(currency => {
+            console.log(currency.node);
             const { lib } = nodes.nodeList[currency.node];
 
             return lib.getBalance(

@@ -1,10 +1,20 @@
 "use strict";
 
-module.exports = function accountBalanceTable(coldStakingService, $interval) {
+module.exports = function accountBalanceTable(
+    coldStakingService,
+    coldStakingV2Service,
+    $interval
+) {
     return {
         template: require("./accountBalanceTable.html"),
         link: function(scope) {
             scope.progressBar = {
+                width: 0,
+                klass: "",
+                text: ""
+            };
+
+            scope.progressBarV2 = {
                 width: 0,
                 klass: "",
                 text: ""
@@ -36,12 +46,42 @@ module.exports = function accountBalanceTable(coldStakingService, $interval) {
                 });
             };
 
-            scope.setProgressBar();
+            scope.setProgressBarV2 = function() {
+                const _date = new Date();
+                const {
+                    time: _time,
+                    amount
+                } = coldStakingV2Service.stakingInfo;
 
-            scope.progressBarInterval = $interval(
-                () => scope.setProgressBar(),
-                1000
-            );
+                if (!(0 < _time && 0 < amount)) {
+                    return;
+                }
+
+                const time = new Date(_time);
+
+                const _thresholdTime = coldStakingV2Service.getThresholdTime();
+                const thresholdTime = new Date(_thresholdTime + _time);
+
+                const num = _date - time;
+                const denom = thresholdTime - time;
+                const progress = num / denom;
+                const width = progress * 100;
+                Object.assign(scope.progressBarV2, {
+                    klass: 100 <= width ? "progress-bar-success" : "",
+                    width: Math.min(100, Math.floor(width)),
+                    elapsed: num,
+                    threshold: thresholdTime,
+                    remaining: thresholdTime - _date
+                });
+            };
+
+            scope.setProgressBar();
+            scope.setProgressBarV2();
+
+            scope.progressBarInterval = $interval(() => {
+                scope.setProgressBar();
+                scope.setProgressBarV2();
+            }, 1000);
 
             scope.$on("$destroy", () => {
                 $interval.cancel(scope.progressBarInterval);

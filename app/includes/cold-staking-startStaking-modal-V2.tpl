@@ -19,7 +19,6 @@
                             You will lose your staking reward if you make a new deposit into the contract.
                             You should withdraw your staking reward first or use a another account for a new staking
                             deposit.
-
                         </p>
 
                         <div class="checkbox">
@@ -78,18 +77,18 @@
                         <select ng-model="input.stakingPeriod"
                                 class="form-control"
                                 required="true">
-                            <option value="1" selected="selected">1 Month (27 days)</option>
-                            <option value="2">2 Months</option>
-                            <option value="3">3 Months</option>
-                            <option value="4">4 Months</option>
-                            <option value="5">5 Months</option>
-                            <option value="6">6 Months</option>
-                            <option value="7">7 Months</option>
-                            <option value="8">8 Months</option>
-                            <option value="9">9 Months</option>
-                            <option value="10">10 Months</option>
-                            <option value="11">11 Months</option>
-                            <option value="12">12 Months</option>
+                            <option value="1" selected="selected">1 Round (27 days)</option>
+                            <option value="2">2 Rounds (54 days)</option>
+                            <option value="3">3 Rounds (81 days)</option>
+                            <option value="4">4 Rounds (108 days)</option>
+                            <option value="5">5 Rounds (135 days)</option>
+                            <option value="6">6 Rounds (162 days)</option>
+                            <option value="7">7 Rounds (189 days)</option>
+                            <option value="8">8 Rounds (216 days)</option>
+                            <option value="9">9 Rounds (243 days)</option>
+                            <option value="10">10 Rounds (270 days)</option>
+                            <option value="11">11 Rounds (297 days)</option>
+                            <option value="12">12 Rounds (324 days)</option>
                         </select>
 
                     </div>
@@ -119,8 +118,8 @@
 
                     <p translate="COLD_STAKING_LOCKED_WARNING">
 
-                        Your funds will be locked for 27 days and you will be unable
-                        to withdraw within the locking period
+                        Your funds will be locked and you will be unable
+                        to withdraw within the locking period (staking rounds).
 
                     </p>
 

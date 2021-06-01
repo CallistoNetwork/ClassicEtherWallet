@@ -123,7 +123,6 @@ var walletBalanceCtrl = function(
         if (!coldStakingService.validNetwork()) {
             return;
         }
-
         return coldStakingService
             .staker()
             .then(result => {
@@ -143,13 +142,11 @@ var walletBalanceCtrl = function(
         if (!coldStakingV2Service.validNetwork()) {
             return;
         }
-        console.log("Handle STAKE");
         return coldStakingV2Service
             .staker()
             .then(result => {
                 $scope.$apply(function() {
                     $scope.stakerInfoV2 = Object.assign({}, result);
-                    console.log($scope.stakerInfoV2);
                 });
                 return result;
             })

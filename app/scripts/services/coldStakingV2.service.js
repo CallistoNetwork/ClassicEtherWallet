@@ -154,7 +154,6 @@ const coldStakingV2Service = function(walletService) {
                 return this.stakingInfo;
             })
             .catch(err => {
-                console.error(err);
                 return this.stakingInfo;
             });
     };

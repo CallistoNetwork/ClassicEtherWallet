@@ -12,7 +12,6 @@ const addrs = {
     //"RINKEBY ETH": "0x713f80e73b174b9aba62dd75fa1da6925c13ace5"
 };
 
-
 const round_interval = {
     CLO: 2332800,
     "Testnet CLO": 600,
@@ -31,7 +30,7 @@ const Contract = require("../contract").Contract;
 
 class ColdStakingContract extends Contract {
     constructor(network = "CLO") {
-        if (!(round_interval[network])) {
+        if (!round_interval[network]) {
             throw new Error("Invalid Request");
         }
         const { abi } = contract;
@@ -157,7 +156,7 @@ const coldStakingService = function(walletService) {
                 return this.stakingInfo;
             })
             .catch(err => {
-                console.error(err);
+                return this.stakingInfo;
             });
     };
 

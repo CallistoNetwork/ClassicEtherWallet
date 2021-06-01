@@ -52,8 +52,8 @@ en.data = {
         "                            You should withdraw your staking reward first or use a another account for a new staking\n" +
         "                            deposit.",
     COLD_STAKING_LOCKED_WARNING:
-        "Your funds will be locked for 27 days\n" +
-        "                        and you will be unable to withdraw within the locking period",
+        "Your funds will be locked \n" +
+        "                        and you will be unable to withdraw within the locking period (staking rounds)",
 
     COLD_STAKING_PAY_TX_FEE_WARNING:
         "You need to pay transaction fees to start staking,\n" +

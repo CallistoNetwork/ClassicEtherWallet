@@ -50,7 +50,9 @@ const coldStakingV2Service = function(walletService) {
     this.tx = { gasLimit: 150000 };
 
     this.networks = Object.keys(addrs);
-
+    console.log(ajaxReq.type);
+    console.log(this.networks);
+    console.log("netowrks");
     this.validNetwork = () => this.networks.includes(ajaxReq.type);
 
     if (this.validNetwork()) {

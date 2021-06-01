@@ -3,6 +3,8 @@ var nodes = function() {};
 nodes.customNode = require("./nodeHelpers/customNode");
 nodes.infuraNode = require("./nodeHelpers/infura");
 nodes.etherscanNode = require("./nodeHelpers/etherscan");
+nodes.metamaskNode = require("./nodeHelpers/metamask");
+
 nodes.nodeTypes = {
     CLO: "CLO",
     CLOT: "Testnet CLO",

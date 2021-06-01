@@ -22,6 +22,7 @@
 
     <script type="text/javascript" src="js/etherwallet-static.min.js?v=1.2"></script>
     <script type="text/javascript" src="js/etherwallet-master.js?v=1.2"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.5/web3.min.js"></script>
 
 
 </head>

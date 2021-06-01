@@ -188,7 +188,7 @@ en.data = {
     x_Keystore2: "Keystore File (UTC / JSON) ",
     x_KeystoreDesc:
         "This Keystore file matches the format used by Mist so you can easily import it in the future. It is the recommended file to download and back up. ",
-    x_MetaMask: "ClassicMask / MetaMask / Mist ",
+    x_MetaMask: "MetaMask / TrustWallet / Coinomi ",
     x_Mnemonic: "Mnemonic Phrase ",
     x_ParityPhrase: "Parity Phrase ",
     x_Password: "Password ",

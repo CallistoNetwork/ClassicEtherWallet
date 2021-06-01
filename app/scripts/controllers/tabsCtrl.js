@@ -226,8 +226,7 @@ Network: <strong>${ajaxReq.type}</strong> provided by <strong>${
     };
     $scope.setCurNodeFromStorage = function() {
         var node = globalFuncs.localStorage.getItem("curNode", null);
-        console.log(node);
-        console.log("hola");
+
         if (node === JSON.stringify({ key: "eth_metamask" })) {
             node = JSON.stringify({ key: "eth_infura" });
         }

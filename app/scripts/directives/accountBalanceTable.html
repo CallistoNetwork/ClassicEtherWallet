@@ -24,7 +24,7 @@
     </thead>
     <tbody>
     <tr>
-        <td>
+        <td class="table-width2">
             <div ng-show="coldStakingV2Service.validNetwork()" ng-init="showLongBal_ = false;">
                          <span
                              title="{{walletService.wallet.balances[ajaxReq.type].balance}} (Double-Click)"
@@ -43,7 +43,7 @@
         </td>
 
 
-        <td class="text-right">
+        <td class="text-right table-width2">
                     <span ng-show="!coldStakingV2Service.validNetwork()"
                           title="{{walletService.wallet.balances[ajaxReq.type].balance}} (Double-Click)"
                           class="text-left pointer"
@@ -72,7 +72,7 @@
                     </span>
         </td>
 
-        <td class="text-right pointer"
+        <td class="text-right pointer table-width2"
             ng-if="coldStakingV2Service.validNetwork()"
             title="{{stakerInfoV2.reward}} (Double Click)"
             ng-init="showLongReward = false;"
@@ -89,7 +89,7 @@
     </tr>
 
     <tr ng-if="coldStakingV2Service.validNetwork()">
-        <td class="text-left">
+        <td class="text-left table-width2">
             <button class="btn btn-primary btn-teeny text-center"
                     ng-click="modalService.startStakingModalV2.open();">
 
@@ -99,7 +99,7 @@
         </td>
 
 
-        <td class="text-right">
+        <td class="text-right table-width2">
 
             <button class="btn btn-primary btn-teeny text-center"
                     ng-disabled="{{globalService.currentTab !== globalService.tabs.sendTransaction.id}}"
@@ -109,7 +109,7 @@
 
         </td>
 
-        <td class="text-right">
+        <td class="text-right table-width2">
 
             <button class="btn btn-primary btn-teeny text-center"
                     ng-click="handleOpenClaimV2();">
@@ -192,7 +192,7 @@
             SAFE and you will be able to withdraw after finishing your staking round.</strong>.
         </div>
 
-        <td class="text-left">
+        <td class="text-left table-width2">
             <button class="btn btn-light btn-teeny text-center"
                     ng-disabled="true">
                 <!--                    ng-click="modalService.startStakingModal.open();"-->
@@ -203,7 +203,7 @@
         </td>
 
 
-        <td class="text-right">
+        <td class="text-right table-width2">
 
             <button class="btn btn-primary btn-teeny text-center"
                     ng-disabled="{{globalService.currentTab !== globalService.tabs.sendTransaction.id}}"
@@ -213,7 +213,7 @@
 
         </td>
 
-        <td class="text-right">
+        <td class="text-right table-width2">
 
             <button class="btn btn-light btn-teeny text-center"
                     ng-disabled="true">

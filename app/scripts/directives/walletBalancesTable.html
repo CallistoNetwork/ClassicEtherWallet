@@ -2,10 +2,10 @@
     <caption translate="sidebar_AccountBal">Account Balance</caption>
     <thead>
     <tr>
-        <th>Asset</th>
-        <th class="text-right">Quantity</th>
-        <th class="text-right">Price</th>
-        <th class="text-right">Total</th>
+        <th class="table-width">Asset</th>
+        <th class="text-right table-width">Quantity</th>
+        <th class="text-right table-width">Price</th>
+        <th class="text-right table-width">Total</th>
     </tr>
     </thead>
     <tbody>
@@ -13,12 +13,12 @@
 
     <tr>
         <!-- name -->
-        <td>
+        <td class="table-width">
             <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
             {{ajaxReq.type}}
 
         </td>
-        <td class="text-right pointer mono">
+        <td class="text-right pointer mono table-width">
           <span
               ng-init="showLongBal_ = false;"
               ng-dblclick="showLongBal_ = !showLongBal_">
@@ -28,11 +28,11 @@
                       ng-show="showLongBal_">{{walletService.wallet.balances[ajaxReq.type].balance}}</span>
            </span>
         </td>
-        <td class="text-right mono">
+        <td class="text-right mono table-width">
             {{walletService.wallet.balances[ajaxReq.type].usdPrice | currency}}
         </td>
 
-        <td class="text-right mono">{{walletService.wallet.balances[ajaxReq.type].usdBalance | currency}}</td>
+        <td class="text-right mono table-width">{{walletService.wallet.balances[ajaxReq.type].usdBalance | currency}}</td>
 
 
     </tr>
@@ -42,11 +42,11 @@
     filter: {symbol: '!' + ajaxReq.type}
     track by key + altBalance.symbol + $index">
 
-        <td class="text-left">
+        <td class="text-left table-width">
             <coin-icon icon="{{altBalance.symbol.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
             {{altBalance.symbol}}
         </td>
-        <td class="account-info point text-right"
+        <td class="account-info point text-right table-width"
             ng-dblclick="showLongBal=!showLongBal"
             ng-init="showLongBal = false;"
             title="{{altBalance.balance}} (Double-Click)"
@@ -54,10 +54,10 @@
             <span class="mono wrap" ng-show="!showLongBal">{{altBalance.balance | number}}</span>
             <span class="mono wrap" ng-show="showLongBal">{{altBalance.balance}}</span>
         </td>
-        <td class="text-right mono">
+        <td class="text-right mono table-width">
             {{altBalance.usdPrice | currency }}
         </td>
-        <td class="text-right mono">{{altBalance.usdBalance | currency }}
+        <td class="text-right mono table-width">{{altBalance.usdBalance | currency }}
         </td>
     </tr>
 

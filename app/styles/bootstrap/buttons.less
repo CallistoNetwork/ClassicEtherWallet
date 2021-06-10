@@ -11,6 +11,9 @@
   touch-action: manipulation;
   vertical-align: middle;
   white-space: nowrap;
+  @media screen and (max-width: 420px) {
+    white-space: normal;
+  }
   .button-size(
     @padding-base-vertical; @padding-large-horizontal; @font-size-bump;
       @line-height-base; @border-radius

@@ -54,7 +54,7 @@
                     <p>
                         <b>Warning:</b>
 
-                        Claiming your reward do not give you back your initial investment and it will re stake automatically your founds. To withdraw all, press withdraw
+                        Claiming your reward do not give you back your initial investment and it will re stake automatically your funds. To withdraw all, press withdraw
                     </p>
 
                     <b>Warning:</b> Staking reward can vary over time. Your staking reward depend on:

@@ -55,7 +55,7 @@ var myWalletsCtrl = function($scope, $sce, walletService) {
                 );
                 $scope[varWal][j].tokens[
                     $scope[varWal][j].tokens.length - 1
-                ].setBalance();
+                ].fetchBalance();
             }
             var storedTokens =
                 globalFuncs.localStorage.getItem("localTokens", null) != null
@@ -77,7 +77,7 @@ var myWalletsCtrl = function($scope, $sce, walletService) {
                 );
                 $scope[varWal][j].tokens[
                     $scope[varWal][j].tokens.length - 1
-                ].setBalance();
+                ].fetchBalance();
             }
         }
     };

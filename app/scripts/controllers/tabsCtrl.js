@@ -83,7 +83,7 @@ var tabsCtrl = function(
             $scope.wd = true;
             $scope.wallet = walletService.wallet;
             $rootScope.$broadcast("ChangeWallet", addr);
-            walletService.wallet.setBalance();
+            $scope.wallet.setBalance();
         }
     );
 
@@ -513,12 +513,29 @@ Network: <strong>${ajaxReq.type}</strong> provided by <strong>${
 
     $scope.$on("$destroy", () => {
         $interval.cancel($scope.blockNumberInterval);
+        $interval.cancel($scope.tokensInterval);
 
         $scope.blockNumberInterval = null;
+        $scope.tokensInterval = null;
     });
+
+    $scope.setTokensWallet = function() {
+        if (
+            walletService &&
+            walletService.wallet &&
+            walletService.wallet.getAddressString()
+        ) {
+            walletService.wallet.setTokens();
+
+            $interval.cancel($scope.tokensInterval);
+
+            $scope.tokensInterval = null;
+        }
+    };
 
     window.coinPriceService.initPrices();
     $scope.setBlockNumbers();
     $scope.blockNumberInterval = $interval($scope.setBlockNumbers, 1000 * 30);
+    $scope.tokensInterval = $interval($scope.setTokensWallet, 4000);
 };
 module.exports = tabsCtrl;

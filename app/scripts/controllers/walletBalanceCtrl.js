@@ -97,6 +97,7 @@ var walletBalanceCtrl = function(
         $scope.stakerInfo = { amount: 0, time: 0, reward: 0 };
         $scope.stakerInfoV2 = { amount: 0, time: 0, reward: 0 };
         $scope.handleStake();
+        // walletService.wallet.setTokens();
         console.log(walletService.wallet.balances);
     });
 
@@ -108,7 +109,7 @@ var walletBalanceCtrl = function(
             if (!$scope.stakerInfoV2.amount) {
                 await $scope._handleStakeV2();
             }
-        }, 700);
+        }, 1000);
 
         $timeout(() => $interval.cancel($scope.interval_), 1000 * 10);
     };
@@ -313,39 +314,41 @@ var walletBalanceCtrl = function(
 
         getNameFunction.inputs[0].value = newSymbol;
 
-        $scope.nodeList[backgroundNodeService.backgroundNode].lib.getEthCall(
-            {
-                to: DEXNS.address,
-                data: $scope.getTxData($scope.erc20Indexes.DEXNSFunction)
-            },
-            function(data) {
-                if (data.error) {
-                    uiFuncs.notifier.danger(
-                        "Ops, we'd had an error communicating with DexNS."
-                    );
-                    return;
-                }
+        $scope.getTokenInfo(contractAddress, newSymbol);
 
-                var outputs = $scope.readData(
-                    $scope.erc20Indexes.DEXNSFunction,
-                    data
-                ).outputs;
-                var contractAddress = outputs[1].value;
-
-                if (
-                    contractAddress ===
-                    "0x0000000000000000000000000000000000000000"
-                ) {
-                    $scope.resetLocalToken();
-                    uiFuncs.notifier.danger("Symbol not found.");
-                    return;
-                }
-
-                // FIXME: if not connected to correct network, info not loaded and correct network not saved
-
-                $scope.getTokenInfo(contractAddress, newSymbol);
-            }
-        );
+        // $scope.nodeList[backgroundNodeService.backgroundNode].lib.getEthCall(
+        //     {
+        //         to: DEXNS.address,
+        //         data: $scope.getTxData($scope.erc20Indexes.DEXNSFunction)
+        //     },
+        //     function(data) {
+        //         if (data.error) {
+        //             uiFuncs.notifier.danger(
+        //                 "Ops, we'd had an error communicating with DexNS."
+        //             );
+        //             return;
+        //         }
+        //
+        //         var outputs = $scope.readData(
+        //             $scope.erc20Indexes.DEXNSFunction,
+        //             data
+        //         ).outputs;
+        //         var contractAddress = outputs[1].value;
+        //
+        //         if (
+        //             contractAddress ===
+        //             "0x0000000000000000000000000000000000000000"
+        //         ) {
+        //             $scope.resetLocalToken();
+        //             uiFuncs.notifier.danger("Symbol not found.");
+        //             return;
+        //         }
+        //
+        //         // FIXME: if not connected to correct network, info not loaded and correct network not saved
+        //
+        //         $scope.getTokenInfo(contractAddress, newSymbol);
+        //     }
+        // );
     };
     $scope.removeTokenFromLocal = function(tokensymbol) {
         globalFuncs.removeTokenFromLocal(

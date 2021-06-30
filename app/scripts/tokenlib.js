@@ -36,7 +36,7 @@ var Token = function(
         name: ""
     };
 
-    this.initDexns();
+    // this.initDexns();
 };
 
 Token.balanceHex = "0x70a08231";
@@ -57,6 +57,42 @@ Token.prototype.getBalance = function() {
 
 Token.prototype.setBalance = function(balance) {
     this.balance = balance;
+};
+
+Token.prototype.setBalanceChain = function(callback) {
+    var balanceCall = ethFuncs.getDataObj(
+        this.contractAddress,
+        Token.balanceHex,
+        [ethFuncs.getNakedAddress(this.userAddress)]
+    );
+
+    var parentObj = this;
+
+    const node_ = this.node;
+
+    // check that node has proper getEthCall method or resort to ajax Req
+    const requestObj =
+        node_ &&
+        node_.hasOwnProperty("lib") &&
+        node_.lib.hasOwnProperty("getEthCall")
+            ? node_.lib
+            : ajaxReq;
+    requestObj.getEthCall(balanceCall, function(data) {
+        try {
+            console.log(data);
+            if (!data.error) {
+                parentObj.balance = new BigNumber(data.data)
+                    .div(new BigNumber(10).pow(parentObj.getDecimal()))
+                    .toString();
+                parentObj.balanceBN = new BigNumber(data.data).toString();
+                if (callback) callback();
+            }
+        } catch (e) {
+            console.log(e);
+            parentObj.balance = globalFuncs.errorMsgs[20];
+            parentObj.balanceBN = "0";
+        }
+    });
 };
 
 Token.prototype.initDexns = function() {
@@ -108,11 +144,13 @@ Token.prototype.fetchBalance = function() {
                         .div(new BigNumber(10).pow(this.getDecimal()))
                         .toString()
                 );
+                console.log(this);
             } else {
                 this.setBalance(globalFuncs.errorMsgs[20]);
             }
         });
     } catch (e) {
+        console.log(e);
         this.setBalance("0"); //globalFuncs.errorMsgs[20];
     }
 };

@@ -1,0 +1,14 @@
+[
+    {
+        "address": "0x1eAa43544dAa399b87EEcFcC6Fa579D5ea4A6187",
+        "symbol": "CLOE",
+        "decimal": 18,
+        "type": "default"
+    },
+    {
+        "address": "0x6182d2cd59227c20B486a53976dcEeAF38e76Eed",
+        "symbol": "CYT",
+        "decimal": 18,
+        "type": "default"
+    }
+]

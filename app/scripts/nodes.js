@@ -87,13 +87,12 @@ nodes.alternativeBalance = {
 nodes.nodeList = {
     clo_mainnet: {
         name: "Callisto - CLO",
-        blockExplorerTX: "https://explorer2.callisto.network/tx/[[txHash]]",
-        blockExplorerAddr:
-            "https://explorer2.callisto.network/addr/[[address]]",
+        blockExplorerTX: "https://explorer.callisto.network/tx/[[txHash]]",
+        blockExplorerAddr: "https://explorer.callisto.network/addr/[[address]]",
         type: nodes.nodeTypes.CLO,
         eip155: true,
         chainId: 820,
-        tokenList: [],
+        tokenList: require("./tokens/cloTokens.json"),
         service: "Callisto.network",
         abiList: require("./abiDefinitions/clo.json"),
         lib: new nodes.customNode("https://clo-geth.0xinfra.com/", "")
@@ -101,7 +100,7 @@ nodes.nodeList = {
     clo_testnet3: {
         name: "CLO Testnet",
         blockExplorerTX:
-            "https://explorer-testnet.callisto.network/tx/[[txHash]]",
+            "https://testnet-explorer.callisto.network/tx/[[txHash]]",
         blockExplorerAddr:
             "https://explorer-testnet.callisto.network/addr/[[address]]",
         type: nodes.nodeTypes.CLOT,

@@ -5,7 +5,6 @@
         <tr ng-repeat="token in walletService.wallet.tokenObjs | filter: {type: ajaxReq.type} | filter: balanceFilter track by $index + token.contractAddress"
             ng-show="tokenVisibility === 'shown'"
         >
-
             <td class="text-left">
                 <a
                     style="color: inherit"
@@ -59,7 +58,7 @@
     <div class="custom-token-fields" ng-show="customTokenField">
         <div class="row">
             <address-field
-                placeholder="mewsupport.eth"
+                placeholder=""
                 var-name="localToken.contractAdd"
                 labelTranslated="TOKEN_Addr"
             >
@@ -83,10 +82,10 @@
         <div ng-bind-html="validateLocalToken"></div>
     </div>
 
-    <a class="btn btn-default btn-xs wrap" style="white-space: normal;"
-       ng-click="customTokenDexNSField = !customTokenDexNSField; initContract()">
-        <span translate="SEND_custom_dexns">Add Custom Token by Token Symbol (DexNS)</span>
-    </a>
+<!--    <a class="btn btn-default btn-xs wrap" style="white-space: normal;"-->
+<!--       ng-click="customTokenDexNSField = !customTokenDexNSField; initContract()">-->
+<!--        <span translate="SEND_custom_dexns">Add Custom Token by Token Symbol (DexNS)</span>-->
+<!--    </a>-->
     <div class="custom-token-fields" ng-show="customTokenDexNSField">
 
         <label translate="TOKEN_Symbol" for="customTokenSymbol"> Token Symbol: </label>

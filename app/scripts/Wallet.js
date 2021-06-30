@@ -24,6 +24,7 @@ var Wallet = function(priv, pub, path, hwType, hwTransport) {
     this.hwType = hwType;
     this.hwTransport = hwTransport;
     this.type = "default";
+    this.tokenObjs = [];
 
     this.balances = Object.keys(nodes.alternativeBalance).reduce(
         (total, key) => {
@@ -52,55 +53,84 @@ Wallet.generate = function(icapDirect) {
     }
 };
 Wallet.prototype.setTokens = function() {
-    const { popTokens: _popTokens } = Token;
+    // var defaultTokensAndNetworkType = globalFuncs.getDefaultTokensAndNetworkType();
+    var tokens = Token.popTokens;
 
-    const popTokens = _popTokens.map(token =>
-        Object.assign(token, { local: false })
-    );
-
-    let _localTokens = globalFuncs.localStorage.getItem("localTokens", null);
-    let _tokens = [];
-    if (_localTokens) {
-        try {
-            _tokens = JSON.parse(_localTokens);
-        } catch (e) {
-            _tokens = [];
-        }
-    }
-    const localTokens = _tokens.map(token =>
-        Object.assign(token, { address: token.contractAddress, local: true })
-    );
-
-    const addr = this.getAddressString();
-    this.tokenObjs = []
-        .concat(popTokens, localTokens)
-        .map(
-            token =>
-                new Token(
-                    token.address,
-                    addr,
-                    globalFuncs.stripTags(token.symbol),
-                    token.decimal,
-                    token.type,
-                    token.node,
-                    token.local
-                )
+    for (var i = 0; i < tokens.length; i++) {
+        this.tokenObjs.push(
+            new Token(
+                tokens[i].address,
+                this.getAddressString(),
+                tokens[i].symbol,
+                tokens[i].decimal,
+                tokens[i].type,
+                tokens[i].node,
+                false
+            )
         );
 
-    return Promise.all(
-        this.tokenObjs
-            .filter(token => token.type === ajaxReq.type)
-            .map(token => {
-                token.fetchBalance();
-            })
-    );
+        this.tokenObjs[this.tokenObjs.length - 1].fetchBalance();
+        console.log(this.tokenObjs[this.tokenObjs.length - 1]);
+    }
+    //
+    // const popTokens = _popTokens.map(token =>
+    //     Object.assign(token, { local: false })
+    // );
+    // let _localTokens = globalFuncs.localStorage.getItem("localTokens", null);
+    // let _tokens = [];
+    // if (_localTokens) {
+    //     try {
+    //         _tokens = JSON.parse(_localTokens);
+    //     } catch (e) {
+    //         _tokens = [];
+    //     }
+    // }
+    // const localTokens = _tokens.map(token =>
+    //     Object.assign(token, { address: token.contractAddress, local: true })
+    // );
+    //
+    // const addr = this.getAddressString();
+    // this.tokenObjs = []
+    //     .concat(popTokens, localTokens)
+    //     .map(
+    //         token =>
+    //             new Token(
+    //                 token.address,
+    //                 addr,
+    //                 globalFuncs.stripTags(token.symbol),
+    //                 token.decimal,
+    //                 token.type,
+    //                 token.node,
+    //                 token.local
+    //             )
+    //     );
+    // console.log(ajaxReq.type)
+    // console.log(this.tokenObjs)
+    // console.log(Promise.all(
+    //     this.tokenObjs
+    //         .filter(token => token.type === ajaxReq.type)
+    //         .map(token => {
+    //             token.fetchBalance();
+    //         })
+    // ))
+    // return Promise.all(
+    //     this.tokenObjs
+    //         .filter(token => token.type === ajaxReq.type)
+    //         .map(token => {
+    //             token.fetchBalance();
+    //         })
+    // );
 };
 
 Wallet.prototype.setBalance = function() {
     for (let coin in this.balances) {
         Object.assign(this.balances[coin], defaultWalletBalance);
     }
-    return Promise.all([this._setBalances(), this.setTokens()]);
+    // setTimeout(() => {
+    //     this.setTokens()
+    // }, 2000)
+
+    return Promise.all([this._setBalances()]);
 };
 
 Wallet.prototype.setBalanceOfNetwork = function() {

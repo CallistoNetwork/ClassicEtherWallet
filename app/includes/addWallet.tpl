@@ -363,10 +363,10 @@
                                 </a>
                             </td>
                             <td class="text-center">
-                                <a href="https://ethplorer.io/address/{{wallet.getAddressString()}}" target="_blank"
-                                   rel="noopener" title="https://ethplorer.io/address/{{wallet.getAddressString()}}">
+                                <a href="https://explorer.callisto.network/tokens/{{wallet.getAddressString()}}" target="_blank"
+                                   rel="noopener" title="https://explorer.callisto.network/tokens/{{wallet.getAddressString()}}">
                                     <img src="images/icon-external-link.svg"
-                                         title="https://ethplorer.io/address/{{wallet.getAddressString()}}"
+                                         title="https://explorer.callisto.network/tokens/{{wallet.getAddressString()}}"
                                          ng-click="removeTokenFromLocal(token.symbol)"
                                          ng-show="token.type!=='default'"/>
                                 </a>

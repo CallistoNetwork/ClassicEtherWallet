@@ -81,6 +81,11 @@ nodes.alternativeBalance = {
         balance: "Loading",
         node: "clo_mainnet",
         symbol: "CLO"
+    },
+	CLOT: {
+        balance: "Loading",
+        node: "clo_testnet3",
+        symbol: "CLOT"
     }
 };
 
@@ -102,11 +107,11 @@ nodes.nodeList = {
         blockExplorerTX:
             "https://testnet-explorer.callisto.network/tx/[[txHash]]",
         blockExplorerAddr:
-            "https://explorer-testnet.callisto.network/addr/[[address]]",
+            "https://testnet-explorer.callisto.network/address/[[address]]",
         type: nodes.nodeTypes.CLOT,
         eip155: true,
         chainId: 20729,
-        tokenList: [],
+        tokenList: require("./tokens/cloTestTokens.json"),
         service: "Callisto.network",
         abiList: require("./abiDefinitions/clo.json"),
         lib: new nodes.customNode("https://testnet-rpc.callisto.network/", "")

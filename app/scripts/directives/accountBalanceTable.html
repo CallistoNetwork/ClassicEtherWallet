@@ -230,6 +230,11 @@
             <!--remaining: {{progressBar.remaining | number}},-->
 
             <!--</p>-->
+			
+			<p class="small" ng-if="progressBarV2.currentStakingRound <= progressBarV2.stakingRounds">V2: Round {{progressBarV2.currentStakingRound}} of {{progressBarV2.stakingRounds}}</p>
+			<p class="small" ng-if="progressBarV2.currentStakingRound > progressBarV2.stakingRounds">V2: Staking Term exceeded</p>
+			
+			
             <div class="progress">
                 <div class="progress-bar"
                      role="progressbar"

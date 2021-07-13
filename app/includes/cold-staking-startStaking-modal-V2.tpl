@@ -70,7 +70,7 @@
                     </div>
                     <br/>
 
-                    <div class="form-group" ng-if="coldStakingV2Service.stakingInfo.amount <= 0">
+                    <div class="form-group">
                         <label>
                             Staking Period
                         </label>

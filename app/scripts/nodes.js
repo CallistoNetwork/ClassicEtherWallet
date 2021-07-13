@@ -82,7 +82,7 @@ nodes.alternativeBalance = {
         node: "clo_mainnet",
         symbol: "CLO"
     },
-	CLOT: {
+    CLOT: {
         balance: "Loading",
         node: "clo_testnet3",
         symbol: "CLOT"

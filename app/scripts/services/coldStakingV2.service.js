@@ -146,8 +146,8 @@ const coldStakingV2Service = function(walletService) {
                     amount: new BigNumber(
                         etherUnits.toEther(amount, "wei")
                     ).toNumber(),
-					multiplier: new BigNumber(etherUnits.toEther(multiplier, "wei")).toNumber(),
-					end_time:new BigNumber(end_time).times(1000).toNumber(),
+                    multiplier: new BigNumber(etherUnits.toEther(multiplier, "wei")).toNumber(),
+                    end_time:new BigNumber(end_time).times(1000).toNumber(),
                     reward: new BigNumber(
                         etherUnits.toEther(reward, "wei")
                     ).toNumber()
@@ -178,7 +178,7 @@ const coldStakingV2Service = function(walletService) {
                 inputs: [walletService.wallet.getAddressString()]
             })
             .then(result => {
-				
+                
                 const [amount, time, multiplier, end_time] = result.data;
 
                 return { amount, time , multiplier, end_time};

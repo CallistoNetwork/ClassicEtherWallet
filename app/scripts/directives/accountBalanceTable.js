@@ -50,7 +50,9 @@ module.exports = function accountBalanceTable(
                 const _date = new Date();
                 const {
                     time: _time,
-                    amount
+                    amount: amount,
+                    multiplier: multiplier,
+                    end_time: end_time
                 } = coldStakingV2Service.stakingInfo;
 
                 if (!(0 < _time && 0 < amount)) {
@@ -61,14 +63,19 @@ module.exports = function accountBalanceTable(
 
                 const _thresholdTime = coldStakingV2Service.getThresholdTime();
                 const thresholdTime = new Date(_thresholdTime + _time);
+                const stakingRounds = Math.ceil((end_time - _time) / _thresholdTime);
+                const currentStakingRound  = Math.floor((Date.now() - _time) / _thresholdTime) + 1;
 
                 const num = _date - time;
                 const denom = thresholdTime - time;
                 const progress = num / denom;
                 const width = progress * 100;
+
                 Object.assign(scope.progressBarV2, {
                     klass: 100 <= width ? "progress-bar-success" : "",
                     width: Math.min(100, Math.floor(width)),
+                    stakingRounds: stakingRounds,
+                    currentStakingRound : currentStakingRound,
                     elapsed: num,
                     threshold: thresholdTime,
                     remaining: thresholdTime - _date

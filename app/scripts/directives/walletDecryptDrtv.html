@@ -614,12 +614,12 @@
                                     </a>
                                 </td>
                                 <td class="text-center">
-                                    <a href="https://ethplorer.io/address/{{_wallet.getAddressString()}}"
+                                    <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', _wallet.getAddressString())}}/tokens"
                                        target="_blank"
                                        rel="noopener"
-                                       title="https://ethplorer.io/address/{{_wallet.getAddressString()}}">
+                                       title="{{ajaxReq.blockExplorerAddr.replace('[[address]]', _wallet.getAddressString())}}/tokens">
                                         <img src="images/icon-external-link.svg"
-                                             title="https://ethplorer.io/address/{{_wallet.getAddressString()}}"
+                                             title="{{ajaxReq.blockExplorerAddr.replace('[[address]]', _wallet.getAddressString())}}/tokens"
                                              ng-click="removeTokenFromLocal(token.symbol)"
                                              ng-show="token.type!=='default'"/>
                                     </a>

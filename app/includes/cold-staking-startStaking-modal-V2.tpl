@@ -133,6 +133,19 @@
                     </p>
 
                     <h4 translate="SENDModal_Content_3">Are you sure you want to do this?</h4>
+                    
+                    <div class="checkbox" ng-if="coldStakingV2Service.stakingInfo.amount > 0">
+                        <label>
+
+
+                            <input name="understand" id="understand" type="checkbox"
+                                ng-model="input.understand"/>
+
+                            <span translate="COLD_STAKING_UNDERSTAND">
+                            I understand, proceed anyways
+                            </span>
+                        </label>
+                    </div>
 
                 </div>
 

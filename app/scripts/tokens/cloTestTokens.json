@@ -1,0 +1,20 @@
+[
+    {
+        "address": "0xF247c669E08837129965fF3cBcaC9E3695A9684B",
+        "symbol": "CLOE",
+        "decimal": 18,
+        "type": "default"
+    },
+    {
+        "address": "0xAB99622d19298EC2BEAB50EFF91A9b6F46Af747C",
+        "symbol": "BUSDT",
+        "decimal": 18,
+        "type": "default"
+    },
+    {
+        "address": "0x0fA3Aab74949a4F43261EB38E3c29E126CAF4864",
+        "symbol": "CYT",
+        "decimal": 18,
+        "type": "default"
+    }
+]

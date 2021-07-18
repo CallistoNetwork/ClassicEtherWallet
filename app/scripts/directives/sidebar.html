@@ -22,7 +22,7 @@
         </a>
     </div>
     <div>
-        <a href="https://explorer.callisto.network/tokens/{{walletService.wallet.getAddressString()}}" target="_blank"
+        <a href="{{ajaxReq.blockExplorerTX.replace('/tx/[[txHash]]', '')}}/address/{{walletService.wallet.getAddressString()}}/tokens" target="_blank"
            rel="noopener">
             <div class="row">
                 <div class="col-xs-3">

@@ -55,6 +55,7 @@ Wallet.generate = function(icapDirect) {
 Wallet.prototype.setTokens = function() {
     // var defaultTokensAndNetworkType = globalFuncs.getDefaultTokensAndNetworkType();
     var tokens = Token.popTokens;
+    this.tokenObjs = [];
 
     for (var i = 0; i < tokens.length; i++) {
         this.tokenObjs.push(
@@ -130,7 +131,7 @@ Wallet.prototype.setBalance = function() {
     //     this.setTokens()
     // }, 2000)
 
-    return Promise.all([this._setBalances()]);
+    return Promise.all([this._setBalances(),this.setTokens()]);
 };
 
 Wallet.prototype.setBalanceOfNetwork = function() {
@@ -138,6 +139,7 @@ Wallet.prototype.setBalanceOfNetwork = function() {
         if (!(!result.error && result.data)) {
             return false;
         }
+
         this._saveBalance(ajaxReq.type, result);
     });
 };

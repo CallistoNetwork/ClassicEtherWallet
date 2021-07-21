@@ -175,7 +175,7 @@ Token.prototype.getData = function(toAdd, value) {
         else if (!globalFuncs.isNumeric(value) || parseFloat(value) < 0)
             throw globalFuncs.errorMsgs[7];
         var value = ethFuncs.padLeft(
-            new BigNumber(value)
+            new BigNumber((value).toString())
                 .times(new BigNumber(10).pow(this.getDecimal()))
                 .toString(16),
             64

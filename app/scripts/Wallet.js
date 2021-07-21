@@ -55,22 +55,31 @@ Wallet.generate = function(icapDirect) {
 Wallet.prototype.setTokens = function() {
     // var defaultTokensAndNetworkType = globalFuncs.getDefaultTokensAndNetworkType();
     var tokens = Token.popTokens;
-    this.tokenObjs = [];
 
     for (var i = 0; i < tokens.length; i++) {
-        this.tokenObjs.push(
-            new Token(
-                tokens[i].address,
-                this.getAddressString(),
-                tokens[i].symbol,
-                tokens[i].decimal,
-                tokens[i].type,
-                tokens[i].node,
-                false
-            )
-        );
+        var tokenFound = false;
+        for (var j = 0; j < this.tokenObjs.length; j++){
+            tokenFound = this.tokenObjs[j].contractAddress == tokens[i].address
+            if (tokenFound){
+                this.tokenObjs[j].fetchBalance();
+                break;
+            }
+        }
 
-        this.tokenObjs[this.tokenObjs.length - 1].fetchBalance();
+        if (!tokenFound){
+            this.tokenObjs.push(
+                new Token(
+                    tokens[i].address,
+                    this.getAddressString(),
+                    tokens[i].symbol,
+                    tokens[i].decimal,
+                    tokens[i].type,
+                    tokens[i].node,
+                    false
+                )
+            );
+            this.tokenObjs[this.tokenObjs.length - 1].fetchBalance();
+        }        
         console.log(this.tokenObjs[this.tokenObjs.length - 1]);
     }
     //

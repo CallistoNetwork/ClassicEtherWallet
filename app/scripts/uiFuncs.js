@@ -457,7 +457,7 @@ uiFuncs.transferAllBalance = function(addr, { gasLimit = 21000 } = {}) {
             const valueEther = etherUnits.toEther(value, "wei");
             return resolve({
                 unit: "ether",
-                value: new BigNumber(valueEther).toNumber(),
+                value: new BigNumber(parseFloat(valueEther).toFixed(9)).toNumber(),
                 nonce,
                 gasPrice: gasPrice.toNumber(),
                 gasCost

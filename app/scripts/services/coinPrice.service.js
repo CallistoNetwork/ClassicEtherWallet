@@ -55,6 +55,14 @@ const coinPriceService = function coinPriceService() {
             })
             .catch(err => {
                 console.log("err", err);
+                // when a coin is not available on crypto compare, example TestNet CLO, return the following values
+                return { 
+                    usd: 0,
+                    eur: 0,
+                    btc: 0,
+                    chf: 0,
+                    gbp: 0
+                };
             });
     };
 

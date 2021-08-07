@@ -33,14 +33,10 @@ module.exports = function sendTransactionForm(walletService, globalService) {
                     return true;
                 }
 
-                const txCost = new BigNumber(
-                    etherUnits.toWei(_val, "ether")
-                ).add(etherUnits.toWei(scope.txCostEther, "ether"));
-
                 let balance = 0;
-
-                if (scope.tx.sendMode === "ether") {
-                    balance = new BigNumber(
+                let enoughTokens = true;
+                
+                balance = new BigNumber(
                         etherUnits.toWei(
                             _get(
                                 walletService,
@@ -49,29 +45,32 @@ module.exports = function sendTransactionForm(walletService, globalService) {
                             ),
                             "ether"
                         )
-                    );
-                } else if (scope.tx.sendMode === "token") {
-                    balance = new BigNumber(
-                        etherUnits.toWei(
-                            _get(
-                                walletService,
-                                `wallet.tokenObjs[${scope.tokenTx.id}].balance`,
-                                0
-                            ),
-                            "ether"
+                );
+                if (scope.tx.sendMode === "token") {
+                    
+                    const tokenBalance = new BigNumber(
+                        _get(
+                            walletService,
+                            `wallet.tokenObjs[${scope.tokenTx.id}].balance`,
+                            0
                         )
                     );
-                } else {
+                    enoughTokens = new BigNumber(_val.toString()).lte(tokenBalance);
+                    _val = 0;
+                } else if (scope.tx.sendMode !== "ether") {
                     throw new Error(
                         "Unknown tx.sendMode, must be token / ether"
                     );
                 }
 
+                const txCost = new BigNumber(
+                    etherUnits.toWei(_val, "ether")
+                ).add(etherUnits.toWei(scope.txCostEther, "ether"));
+
                 Object.assign(scope.tx, {
                     totalTxCost: txCost.toString()
                 });
-
-                return txCost.lte(balance);
+                return (txCost.lte(balance) && enoughTokens);
             };
         }
     };

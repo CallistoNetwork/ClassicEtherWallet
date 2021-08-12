@@ -4,7 +4,7 @@ const AddressOnlyWallet = require("../AddressOnlyWallet");
 
 const _sample = require("lodash/sample");
 
-const Transport = require("@ledgerhq/hw-transport-u2f").default;
+const Transport = require("../LedgerTransport");
 const LedgerEth = require("@ledgerhq/hw-app-eth").default;
 
 const decryptWalletCtrl = function(
@@ -279,8 +279,7 @@ const decryptWalletCtrl = function(
         } else uiFuncs.notifier.danger(error);
     };
     $scope.scanLedger = function() {
-        Transport.create()
-            .then(transport => {
+        Transport().then(transport => {
                 const eth = new LedgerEth(transport);
                 $scope.ledger = eth;
 

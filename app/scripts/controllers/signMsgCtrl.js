@@ -1,6 +1,6 @@
 "use strict";
 const u2f = require("u2f-api");
-const Transport = require("@ledgerhq/hw-transport-u2f").default;
+const Transport = require("../LedgerTransport");
 const LedgerEth = require("@ledgerhq/hw-app-eth").default;
 
 var signMsgCtrl = function($scope, $sce, walletService) {
@@ -62,7 +62,7 @@ var signMsgCtrl = function($scope, $sce, walletService) {
             } else if (typeof hwType != "undefined" && hwType == "ledger") {
                 var msg = Buffer.from(thisMessage).toString("hex");
 
-                Transport.create.then(trasport => {
+                Transport().then(trasport => {
                     var app = new LedgerEth(trasport);
                     var localCallback = function(signed) {
                         var combined = signed["r"] + signed["s"] + signed["v"];

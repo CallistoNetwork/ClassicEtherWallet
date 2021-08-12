@@ -13,7 +13,7 @@ const ethUtil = require("ethereumjs-util");
 
 const BigNumber = require("bignumber.js");
 
-const Transport = require("@ledgerhq/hw-transport-u2f").default;
+const Transport = require("./LedgerTransport");
 const LedgerEth = require("@ledgerhq/hw-app-eth").default;
 
 const uiFuncs = function() {};
@@ -264,8 +264,7 @@ uiFuncs.genTxWithInfo = function(data, callback = console.log) {
     const eTx = new ethUtil.Tx(rawTx);
 
     if (data.hwType === "ledger") {
-        Transport.create()
-            .then(transport => {
+        Transport().then(transport => {
                 const app = new LedgerEth(transport);
 
                 let EIP155Supported = false;

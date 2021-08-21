@@ -587,6 +587,7 @@
                             <tr>
                                 <th translate="x_Address">Address</th>
                                 <th class="text-right" translate="MYWAL_Bal">Balance</th>
+                                <th class="text-right" translate="MYWAL_Staking" ng-if="isCLO">Staking</th>
                                 <th translate="sidebar_TokenBal" class="text-center">Token<br>Balances</th>
                             </tr>
                             </thead>
@@ -613,6 +614,9 @@
                                         {{ajaxReq.type}}
                                     </a>
                                 </td>
+                                <td class="text-right" ng-show="isCLO"> <!-- staking status -->
+                                    <span class="small">{{ HDWallet.staking[_wallet.getChecksumAddressString()].status !== undefined ? HDWallet.staking[_wallet.getChecksumAddressString()].status : 'Ldg..' }}</span>
+                                </td>
                                 <td class="text-center">
                                     <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', _wallet.getAddressString())}}/tokens"
                                        target="_blank"
@@ -637,6 +641,7 @@
                                     > Previous Addresses </a>
                                 </td>
                                 <td></td>
+                                <td ng-if="isCLO"></td>
                                 <td>
                                     <a ng-click="AddRemoveHDAddresses(true)"
                                        role="link"

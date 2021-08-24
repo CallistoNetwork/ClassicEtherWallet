@@ -1,6 +1,6 @@
 "use strict";
 
-const Transport = require("@ledgerhq/hw-transport-u2f").default;
+const Transport = require("../LedgerTransport");
 
 const LedgerEth = require("@ledgerhq/hw-app-eth").default;
 
@@ -74,7 +74,9 @@ var walletBalanceCtrl = function(
     $scope.stakerInfoV2 = {
         amount: 0,
         time: 0,
-        reward: 0
+        reward: 0,
+        multiplier: 0,
+        end_time: 0
     };
 
     /*
@@ -87,7 +89,7 @@ var walletBalanceCtrl = function(
     $scope.refreshBalances = function() {
         walletService.wallet.setBalance();
         $scope.stakerInfo = { amount: 0, time: 0, reward: 0 };
-        $scope.stakerInfoV2 = { amount: 0, time: 0, reward: 0 };
+        $scope.stakerInfoV2 = { amount: 0, time: 0, reward: 0, multiplier:0, end_time:0 };
         $scope.handleStake();
     };
 
@@ -95,7 +97,7 @@ var walletBalanceCtrl = function(
         coldStakingService.initStakerInfo();
         coldStakingV2Service.initStakerInfo();
         $scope.stakerInfo = { amount: 0, time: 0, reward: 0 };
-        $scope.stakerInfoV2 = { amount: 0, time: 0, reward: 0 };
+        $scope.stakerInfoV2 = { amount: 0, time: 0, reward: 0, multiplier:0, end_time:0 };
         $scope.handleStake();
         // walletService.wallet.setTokens();
         console.log(walletService.wallet.balances);
@@ -152,7 +154,7 @@ var walletBalanceCtrl = function(
                 return result;
             })
             .catch(err => {
-                $scope.stakerInfoV2 = { amount: 0, time: 0, reward: 0 };
+                $scope.stakerInfoV2 = { amount: 0, time: 0, reward: 0, multiplier:0, end_time:0 };
 
                 return $scope.stakerInfoV2;
             });
@@ -379,8 +381,7 @@ var walletBalanceCtrl = function(
     };
 
     $scope.displayOnLedger = function() {
-        Transport.create()
-            .then(transport => {
+        Transport().then(transport => {
                 const app = new LedgerEth(transport);
                 const display = true;
 

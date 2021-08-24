@@ -77,18 +77,18 @@
                         <select ng-model="input.stakingPeriod"
                                 class="form-control"
                                 required="true">
-                            <option value="1" selected="selected">1 Round (27 days)</option>
-                            <option value="2">2 Rounds (54 days)</option>
-                            <option value="3">3 Rounds (81 days)</option>
-                            <option value="4">4 Rounds (108 days)</option>
-                            <option value="5">5 Rounds (135 days)</option>
-                            <option value="6">6 Rounds (162 days)</option>
-                            <option value="7">7 Rounds (189 days)</option>
-                            <option value="8">8 Rounds (216 days)</option>
-                            <option value="9">9 Rounds (243 days)</option>
-                            <option value="10">10 Rounds (270 days)</option>
-                            <option value="11">11 Rounds (297 days)</option>
-                            <option value="12">12 Rounds (324 days)</option>
+                            <option value="1" selected="selected">1 Round (27 days, Multiplier 0.45)</option>
+                            <option value="2">2 Rounds (54 days, Multiplier 0.50)</option>
+                            <option value="3">3 Rounds (81 days, Multiplier 0.55)</option>
+                            <option value="4">4 Rounds (108 days, Multiplier 0.60)</option>
+                            <option value="5">5 Rounds (135 days, Multiplier 0.65)</option>
+                            <option value="6">6 Rounds (162 days, Multiplier 0.70)</option>
+                            <option value="7">7 Rounds (189 days, Multiplier 0.75)</option>
+                            <option value="8">8 Rounds (216 days, Multiplier 0.80)</option>
+                            <option value="9">9 Rounds (243 days, Multiplier 0.85)</option>
+                            <option value="10">10 Rounds (270 days, Multiplier 0.90)</option>
+                            <option value="11">11 Rounds (297 days, Multiplier 0.95)</option>
+                            <option value="12">12 Rounds (324 days, Multiplier 1)</option>
                         </select>
 
                     </div>

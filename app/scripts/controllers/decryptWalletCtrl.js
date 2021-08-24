@@ -4,8 +4,9 @@ const AddressOnlyWallet = require("../AddressOnlyWallet");
 
 const _sample = require("lodash/sample");
 
-const Transport = require("@ledgerhq/hw-transport-u2f").default;
+const Transport = require("../LedgerTransport");
 const LedgerEth = require("@ledgerhq/hw-app-eth").default;
+const stakingApi = require("./stakingApi");
 
 const decryptWalletCtrl = function(
     $rootScope,
@@ -21,6 +22,7 @@ const decryptWalletCtrl = function(
     $scope.isSSL = window.location.protocol === "https:";
     $scope.nodeType = ajaxReq.type;
     $scope.wd = false;
+    $scope.isCLO = true;
 
     $scope.HDWallet = Object.assign({}, globalFuncs.HDWallet, {
         numWallets: 0,
@@ -35,6 +37,7 @@ const decryptWalletCtrl = function(
     $scope.$watch("ajaxReq.type", function() {
         $scope.nodeType = ajaxReq.type;
         $scope.setdPath();
+        $scope.isCLO = (['CLO','Testnet CLO'].indexOf(ajaxReq.type) > -1);
     });
     $scope.$watch("walletType", function() {
         $scope.setdPath();
@@ -110,6 +113,8 @@ const decryptWalletCtrl = function(
     };
     $scope.setHDAddresses = function(start, limit) {
         $scope.HDWallet.wallets = [];
+        $scope.HDWallet.staking = {};
+        let adrs = [];
         for (var i = start; i < start + limit; i++) {
             $scope.HDWallet.wallets.push(
                 new Wallet(
@@ -118,15 +123,21 @@ const decryptWalletCtrl = function(
                     )._privateKey
                 )
             );
+            adrs.push($scope.HDWallet.wallets[$scope.HDWallet.wallets.length - 1].getChecksumAddressString());
             $scope.HDWallet.wallets[
                 $scope.HDWallet.wallets.length - 1
             ].setBalanceOfNetwork();
         }
         $scope.HDWallet.id = 0;
         $scope.HDWallet.numWallets = start + limit;
+        stakingApi.getStakingStatus(ajaxReq.type.toLowerCase(),adrs).then(function(result){
+            $scope.HDWallet.staking = result
+        });
     };
     $scope.setHDAddressesHWWallet = function(start, limit) {
         $scope.HDWallet.wallets = [];
+        $scope.HDWallet.staking = {};
+        let adrs = [];
         for (let i = start; i < start + limit; i++) {
             const derivedKey = $scope.HDWallet.hdk.derive("m/" + i);
             if ($scope.walletType === "ledger") {
@@ -139,6 +150,7 @@ const decryptWalletCtrl = function(
                         $scope.ledger
                     )
                 );
+                adrs.push($scope.HDWallet.wallets[$scope.HDWallet.wallets.length - 1].getChecksumAddressString());
             } else if ($scope.walletType === "digitalBitbox") {
                 $scope.HDWallet.wallets.push(
                     new Wallet(
@@ -149,6 +161,7 @@ const decryptWalletCtrl = function(
                         $scope.digitalBitbox
                     )
                 );
+                adrs.push($scope.HDWallet.wallets[$scope.HDWallet.wallets.length - 1].getChecksumAddressString());
             } else {
                 $scope.HDWallet.wallets.push(
                     new Wallet(
@@ -158,6 +171,7 @@ const decryptWalletCtrl = function(
                         $scope.walletType
                     )
                 );
+                adrs.push($scope.HDWallet.wallets[$scope.HDWallet.wallets.length - 1].getChecksumAddressString());
             }
             $scope.HDWallet.wallets[$scope.HDWallet.wallets.length - 1].type =
                 "addressOnly";
@@ -167,6 +181,9 @@ const decryptWalletCtrl = function(
         }
         $scope.HDWallet.id = 0;
         $scope.HDWallet.numWallets = start + limit;
+        stakingApi.getStakingStatus(ajaxReq.type.toLowerCase(),adrs).then(function(result){
+            $scope.HDWallet.staking = result
+        });
     };
     $scope.AddRemoveHDAddresses = function(isAdd) {
         if (
@@ -279,8 +296,7 @@ const decryptWalletCtrl = function(
         } else uiFuncs.notifier.danger(error);
     };
     $scope.scanLedger = function() {
-        Transport.create()
-            .then(transport => {
+        Transport().then(transport => {
                 const eth = new LedgerEth(transport);
                 $scope.ledger = eth;
 

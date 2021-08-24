@@ -231,7 +231,9 @@
 
             <!--</p>-->
             
-            <p class="small" ng-if="progressBarV2.currentStakingRound <= progressBarV2.stakingRounds">V2: Round {{progressBarV2.currentStakingRound}} of {{progressBarV2.stakingRounds}}</p>
+            <p class="small" ng-if="progressBarV2.currentStakingRound <= progressBarV2.stakingRounds">
+                V2: <strong>Round: </strong> {{progressBarV2.currentStakingRound}} of {{progressBarV2.stakingRounds}} | <strong>Multiplier:</strong> {{ progressBarV2.multiplier }}
+            </p>
             <p class="small" ng-if="progressBarV2.currentStakingRound > progressBarV2.stakingRounds">V2: Staking Term exceeded</p>
             
             

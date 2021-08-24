@@ -76,6 +76,7 @@ module.exports = function accountBalanceTable(
                     width: Math.min(100, Math.floor(width)),
                     stakingRounds: stakingRounds,
                     currentStakingRound : currentStakingRound,
+                    multiplier: multiplier,
                     elapsed: num,
                     threshold: thresholdTime,
                     remaining: thresholdTime - _date

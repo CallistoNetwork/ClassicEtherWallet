@@ -8,6 +8,7 @@ nodes.metamaskNode = require("./nodeHelpers/metamask");
 nodes.nodeTypes = {
     CLO: "CLO",
     CLOT: "Testnet CLO",
+    BSC: "BSC",
     ETH: "ETH",
     ETC: "ETC",
     ETCT: "Testnet ETC",
@@ -77,6 +78,11 @@ nodes.alternativeBalance = {
         node: "etc_ethercluster",
         symbol: "ETC"
     },
+    BSC: {
+        balance: "Loading",
+        node: "bsc_main",
+        symbol: "BNB",
+    },
     CLO: {
         balance: "Loading",
         node: "clo_mainnet",
@@ -140,6 +146,18 @@ nodes.nodeList = {
         abiList: require("./abiDefinitions/ethAbi.json"),
         service: "mycrypto.com",
         lib: new nodes.customNode("https://api.mycryptoapi.com/eth", "")
+    },
+    bsc_main: {
+        name: "BSC",
+        blockExplorerTX: "https://bscscan.com/tx/[[txHash]]",
+        blockExplorerAddr: "https://bscscan.com/address/[[address]]",
+        type: nodes.nodeTypes.BSC,
+        eip155: true,
+        chainId: 56,
+        tokenList: require("./tokens/bscTokens.json"),
+        abiList: [],
+        service: "Binance SmartChain",
+        lib: new nodes.customNode("https://bsc-dataseed.binance.org", "")
     }
 };
 module.exports = nodes;

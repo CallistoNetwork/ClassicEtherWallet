@@ -10,6 +10,7 @@ module.exports = function coinIcon() {
         },
         link: function(scope, e, attrs) {
             scope.colors = colors;
+            scope.colors['bnb']='#f3ba2f';
             if (!attrs.hidetext) {
                 attrs.hidetext = false;
             }

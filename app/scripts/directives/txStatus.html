@@ -90,7 +90,7 @@
             <tr>
                 <td translate="SEND_amount_short">Amount</td>
                 <td>{{ txInfo.valueStr }}
-                    <coin-icon icon="{{ajaxReq.type.toLowerCase()}}">
+                    <coin-icon icon="{{ajaxReq.icon}}">
                     </coin-icon>
                     <span ng-show="txInfo.value_fiat">
                        ({{txInfo.value_fiat | currency}})

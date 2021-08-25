@@ -106,6 +106,7 @@ nodes.nodeList = {
         tokenList: require("./tokens/cloTokens.json"),
         service: "Callisto.network",
         abiList: require("./abiDefinitions/clo.json"),
+        icon: "clo",
         lib: new nodes.customNode("https://clo-geth.0xinfra.com/", "")
     },
     clo_testnet3: {
@@ -119,6 +120,7 @@ nodes.nodeList = {
         chainId: 20729,
         tokenList: require("./tokens/cloTestTokens.json"),
         service: "Callisto.network",
+        icon: "clo",
         abiList: require("./abiDefinitions/clo.json"),
         lib: new nodes.customNode("https://testnet-rpc.callisto.network/", "")
     },
@@ -133,6 +135,7 @@ nodes.nodeList = {
         tokenList: require("./tokens/etcTokens.json"),
         abiList: require("./abiDefinitions/etcAbi.json"),
         service: "Ether Cluster",
+        icon: "etc",
         lib: new nodes.customNode("https://www.ethercluster.com/etc", "")
     },
     eth_mew: {
@@ -145,6 +148,7 @@ nodes.nodeList = {
         tokenList: require("./tokens/ethTokens.json"),
         abiList: require("./abiDefinitions/ethAbi.json"),
         service: "mycrypto.com",
+        icon: "eth",
         lib: new nodes.customNode("https://api.mycryptoapi.com/eth", "")
     },
     bsc_main: {
@@ -157,6 +161,7 @@ nodes.nodeList = {
         tokenList: require("./tokens/bscTokens.json"),
         abiList: [],
         service: "Binance SmartChain",
+        icon: "bnb",
         lib: new nodes.customNode("https://bsc-dataseed.binance.org", "")
     }
 };

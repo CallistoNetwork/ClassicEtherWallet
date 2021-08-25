@@ -68,7 +68,7 @@
                     <a style="min-width: 170px"
                        class="btn"
                     >
-                        <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"></coin-icon>
+                        <coin-icon icon="{{ajaxReq.icon}}"></coin-icon>
                     </a>
                 </div>
             </div>

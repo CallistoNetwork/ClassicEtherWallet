@@ -159,7 +159,7 @@ nodes.nodeList = {
         eip155: true,
         chainId: 56,
         tokenList: require("./tokens/bscTokens.json"),
-        abiList: [],
+        abiList: require("./abiDefinitions/bsc.json"),
         service: "Binance SmartChain",
         icon: "bnb",
         lib: new nodes.customNode("https://bsc-dataseed.binance.org", "")

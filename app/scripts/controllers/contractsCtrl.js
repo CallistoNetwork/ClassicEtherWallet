@@ -368,7 +368,7 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.initContract = function() {
         let tAbi = $scope.contract.address;
         try {
-            if (!Validator.isValidAddress($scope.contract.address)) {
+            if ($scope.contract.address!='' && !Validator.isValidAddress($scope.contract.address)) {
                 uiFuncs.notifier.danger(globalFuncs.errorMsgs[5]);
                 return;
             }

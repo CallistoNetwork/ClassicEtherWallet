@@ -107,7 +107,7 @@ nodes.nodeList = {
         service: "Callisto.network",
         abiList: require("./abiDefinitions/clo.json"),
         icon: "clo",
-        lib: new nodes.customNode("https://clo-geth.0xinfra.com/", "")
+        lib: new nodes.customNode("https://ip-159-175.cust.aspone.cz/walletclonode", "")
     },
     clo_testnet3: {
         name: "CLO Testnet",
@@ -136,7 +136,7 @@ nodes.nodeList = {
         abiList: require("./abiDefinitions/etcAbi.json"),
         service: "Ether Cluster",
         icon: "etc",
-        lib: new nodes.customNode("https://www.ethercluster.com/etc", "")
+        lib: new nodes.customNode("https://ip-159-175.cust.aspone.cz/walletetcnode", "")
     },
     eth_mew: {
         name: "ETH",

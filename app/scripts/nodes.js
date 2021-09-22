@@ -147,9 +147,9 @@ nodes.nodeList = {
         chainId: 1,
         tokenList: require("./tokens/ethTokens.json"),
         abiList: require("./abiDefinitions/ethAbi.json"),
-        service: "mycrypto.com",
+        service: "Ether Cluster",
         icon: "eth",
-        lib: new nodes.customNode("https://api.mycryptoapi.com/eth", "")
+        lib: new nodes.customNode("https://ip-159-225.cust.aspone.cz/walletethnode", "")
     },
     bsc_main: {
         name: "BSC",

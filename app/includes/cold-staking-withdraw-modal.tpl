@@ -30,7 +30,7 @@
 
                     <h2 class="modal-title">You are about to <b>withdraw
 
-                        <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}">
+                        <coin-icon icon="{{ajaxReq.icon}}" hidetext="{{true}}">
 
                         </coin-icon>
                         {{coldStakingService.stakingInfo.amount || 0 | number}}
@@ -62,7 +62,7 @@
                             - >
                             <br/>
                             {{tx.value || 0}}
-                            <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}">
+                            <coin-icon icon="{{ajaxReq.icon}}" hidetext="{{true}}">
 
                             </coin-icon>
                             {{ajaxReq.type}}

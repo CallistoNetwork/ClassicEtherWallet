@@ -66,6 +66,14 @@ validator.isPositiveNumber = function(value) {
 validator.isValidHex = function(hex) {
     return ethFuncs.validateHexString(hex);
 };
+validator.isValidByteCode = function(value){
+    try {
+        var json = JSON.parse(value);
+        return (typeof json === 'object') && (('object' in json) && this.isValidHex(json['object']));
+    } catch (e) {
+        return false;
+    }
+}
 validator.isValidPrivKey = function(privkeyLen) {
     return (
         privkeyLen == 64 ||

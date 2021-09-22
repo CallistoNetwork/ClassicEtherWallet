@@ -47,7 +47,7 @@
                     <div class="row col-xs-12">
                         On the
                         <b>
-                            <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"></coin-icon>
+                            <coin-icon icon="{{ajaxReq.icon}}"></coin-icon>
                             Chain
                         </b>
                     </div>

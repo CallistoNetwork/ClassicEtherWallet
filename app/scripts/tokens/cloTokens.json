@@ -10,5 +10,17 @@
         "symbol": "CYT",
         "decimal": 18,
         "type": "default"
+    },
+    {
+        "address": "0xcC00860947035a26Ffe24EcB1301ffAd3a89f910",
+        "symbol": "ccETH",
+        "decimal": 18,
+        "type": "default"
+    },
+    {
+        "address": "0xCC78D0A86B0c0a3b32DEBd773Ec815130F9527CF",
+        "symbol": "ccBNB",
+        "decimal": 18,
+        "type": "default"
     }
 ]

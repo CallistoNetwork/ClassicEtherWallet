@@ -38,7 +38,7 @@
         <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownAmount">
             <li><a ng-class="{true:'active'}[tx.sendMode === 'ether']"
                    ng-click="setSendMode('ether')">
-                <coin-icon icon="{{ajaxReq.type.toLowerCase()}}" hidetext="{{true}}"></coin-icon>
+                <coin-icon icon="{{ajaxReq.icon}}" hidetext="{{true}}"></coin-icon>
                 {{ajaxReq.type}}
             </a>
             </li>

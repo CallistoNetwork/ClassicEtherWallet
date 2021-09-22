@@ -8,6 +8,7 @@ nodes.metamaskNode = require("./nodeHelpers/metamask");
 nodes.nodeTypes = {
     CLO: "CLO",
     CLOT: "Testnet CLO",
+    BSC: "BSC",
     ETH: "ETH",
     ETC: "ETC",
     ETCT: "Testnet ETC",
@@ -77,6 +78,11 @@ nodes.alternativeBalance = {
         node: "etc_ethercluster",
         symbol: "ETC"
     },
+    BSC: {
+        balance: "Loading",
+        node: "bsc_main",
+        symbol: "BNB",
+    },
     CLO: {
         balance: "Loading",
         node: "clo_mainnet",
@@ -100,7 +106,8 @@ nodes.nodeList = {
         tokenList: require("./tokens/cloTokens.json"),
         service: "Callisto.network",
         abiList: require("./abiDefinitions/clo.json"),
-        lib: new nodes.customNode("https://clo-geth.0xinfra.com/", "")
+        icon: "clo",
+        lib: new nodes.customNode("https://ip-159-175.cust.aspone.cz/walletclonode", "")
     },
     clo_testnet3: {
         name: "CLO Testnet",
@@ -113,6 +120,7 @@ nodes.nodeList = {
         chainId: 20729,
         tokenList: require("./tokens/cloTestTokens.json"),
         service: "Callisto.network",
+        icon: "clo",
         abiList: require("./abiDefinitions/clo.json"),
         lib: new nodes.customNode("https://testnet-rpc.callisto.network/", "")
     },
@@ -127,7 +135,8 @@ nodes.nodeList = {
         tokenList: require("./tokens/etcTokens.json"),
         abiList: require("./abiDefinitions/etcAbi.json"),
         service: "Ether Cluster",
-        lib: new nodes.customNode("https://www.ethercluster.com/etc", "")
+        icon: "etc",
+        lib: new nodes.customNode("https://ip-159-175.cust.aspone.cz/walletetcnode", "")
     },
     eth_mew: {
         name: "ETH",
@@ -138,8 +147,22 @@ nodes.nodeList = {
         chainId: 1,
         tokenList: require("./tokens/ethTokens.json"),
         abiList: require("./abiDefinitions/ethAbi.json"),
-        service: "mycrypto.com",
-        lib: new nodes.customNode("https://api.mycryptoapi.com/eth", "")
+        service: "Ether Cluster",
+        icon: "eth",
+        lib: new nodes.customNode("https://ip-159-225.cust.aspone.cz/walletethnode", "")
+    },
+    bsc_main: {
+        name: "BSC",
+        blockExplorerTX: "https://bscscan.com/tx/[[txHash]]",
+        blockExplorerAddr: "https://bscscan.com/address/[[address]]",
+        type: nodes.nodeTypes.BSC,
+        eip155: true,
+        chainId: 56,
+        tokenList: require("./tokens/bscTokens.json"),
+        abiList: require("./abiDefinitions/bsc.json"),
+        service: "Binance SmartChain",
+        icon: "bnb",
+        lib: new nodes.customNode("https://bsc-dataseed.binance.org", "")
     }
 };
 module.exports = nodes;

@@ -338,7 +338,14 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
         $scope.contract.applyConstructorParams = !$scope.contract
             .applyConstructorParams;
     };
-
+    $scope.parseByteCode = function(value){
+        if (Validator.isValidByteCode(value)){
+            return JSON.parse(value)['object'];
+        } else if (Validator.isValidHex(value)) {
+            return value;
+        }
+        return '';
+    }
     $scope.readFromContract = function() {
         const data = $scope.getContractData();
 
@@ -368,7 +375,7 @@ const contractsCtrl = function($scope, $sce, $rootScope, walletService) {
     $scope.initContract = function() {
         let tAbi = $scope.contract.address;
         try {
-            if (!Validator.isValidAddress($scope.contract.address)) {
+            if ($scope.contract.address!='' && !Validator.isValidAddress($scope.contract.address)) {
                 uiFuncs.notifier.danger(globalFuncs.errorMsgs[5]);
                 return;
             }

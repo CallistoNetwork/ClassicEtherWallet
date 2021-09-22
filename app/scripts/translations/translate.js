@@ -21,7 +21,7 @@ var ko = require("./ko");
 var tr = require("./tr");
 var vi = require("./vi");
 var zhcn = require("./zhcn");
-var zhtw = require("./zhtw");
+//var zhtw = require("./zhtw");
 
 var translate = function($translateProvider) {
     $translateProvider.translations(de.code, translate.marked(de.data));
@@ -46,7 +46,7 @@ var translate = function($translateProvider) {
     $translateProvider.translations(tr.code, translate.marked(tr.data));
     $translateProvider.translations(vi.code, translate.marked(vi.data));
     $translateProvider.translations(zhcn.code, translate.marked(zhcn.data));
-    $translateProvider.translations(zhtw.code, translate.marked(zhtw.data));
+    //$translateProvider.translations(zhtw.code, translate.marked(zhtw.data));
     $translateProvider.preferredLanguage("en");
     $translateProvider.fallbackLanguage("en");
     $translateProvider.useSanitizeValueStrategy(null);

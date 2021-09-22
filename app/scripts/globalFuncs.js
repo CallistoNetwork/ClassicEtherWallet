@@ -47,6 +47,7 @@ globalFuncs.networks = {
     CLO: "clo_mainnet",
     RIN: "rin_ethscan",
     CLOT: "clo_testnet3",
+    BSC: 'bsc_main',
     "Testnet CLO": "clo_testnet3",
     "ROPSTEN ETH": "rop_mew",
     "KOVAN ETH": "kov_ethscan",

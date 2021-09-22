@@ -359,7 +359,7 @@
                                 <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', wallet.getAddressString())}}"
                                    target="_blank" rel="noopener">
                                     {{wallet.getBalance()}}
-                                    <coin-icon icon="{{ajaxReq.type.toLowerCase()}}"/>
+                                    <coin-icon icon="{{ajaxReq.icon}}"/>
                                 </a>
                             </td>
                             <td class="text-center">

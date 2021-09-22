@@ -1,5 +1,11 @@
 [
 	{
+		"address": "0xCcbf1C9E8b4f2cDF3Bfba1098b8f56f97d219D53",
+		"symbol": "ccCLO",
+		"decimal": 18,
+		"type": "default"
+	},
+	{
 		"address": "0x4E84E9e5fb0A972628Cf4568c403167EF1D40431",
 		"symbol": "$FFC",
 		"decimal": 18,

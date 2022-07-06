@@ -107,7 +107,7 @@ nodes.nodeList = {
         service: "Callisto.network",
         abiList: require("./abiDefinitions/clo.json"),
         icon: "clo",
-        lib: new nodes.customNode("https://ip-159-175.cust.aspone.cz/walletclonode", "")
+        lib: new nodes.customNode("https://rpc.callisto.network", "")
     },
     clo_testnet3: {
         name: "CLO Testnet",

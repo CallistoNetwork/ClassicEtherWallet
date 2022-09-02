@@ -99,7 +99,7 @@ nodes.nodeList = {
     clo_mainnet: {
         name: "Callisto - CLO",
         blockExplorerTX: "https://explorer.callisto.network/tx/[[txHash]]",
-        blockExplorerAddr: "https://explorer.callisto.network/addr/[[address]]",
+        blockExplorerAddr: "https://explorer.callisto.network/address/[[address]]",
         type: nodes.nodeTypes.CLO,
         eip155: true,
         chainId: 820,

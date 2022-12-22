@@ -117,7 +117,7 @@ var tabsCtrl = function(
         defaultValue,
         curVal: gasValue,
         value: gasValue,
-        max: 100,
+        max: 10000,
         min: 0.1,
         step: 0.1,
         recommendedGas: {
@@ -126,7 +126,7 @@ var tabsCtrl = function(
         }
     };
 
-    const isValidPrice = price => 0.1 <= price && price <= 100;
+    const isValidPrice = price => 0.1 <= price && price <= 10000;
 
     $scope.validateGasPrice = function validateGasPrice() {
         if (!isValidPrice($scope.gas.value)) {

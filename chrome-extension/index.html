@@ -1,0 +1,3845 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="mewApp">
+<head>
+    <meta charset="utf-8">
+    <title>Callisto Wallet: Client-Side CLO Wallet</title>
+    <link rel="canonical" href="https://wallet.callisto.network"/>
+    <meta name="description"
+          content="Callisto Wallet is a free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URLbefore unlocking your wallet.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" href="images/fav/favicon.png">
+    <meta name="apple-mobile-web-app-title" content="Callisto Wallet">
+    <meta name="application-name" content="Callisto Wallet">
+    <meta name="theme-color" content="#1d6986">
+    <meta property="og:url" content="https://wallet.callisto.network/"/>
+    <meta property="og:title" content="Callisto Wallet"/>
+    <meta property="og:image" content="/images/logo-myetherwallet.png"/>
+    <meta property="og:description"
+          content="Callisto Wallet is a free, open-source, client-side interface for generating Ethereum wallets &amp; more. Interact with the Ethereum blockchain easily &amp; securely. Double-check the URL before unlocking your wallet."/>
+
+    <link rel="stylesheet" href="css/crypto-icons/font.css">
+    <link rel="stylesheet" href="css/crypto-icons/styles.css">
+    <link rel="stylesheet" href="css/etherwallet-master.min.css">
+
+    <script type="text/javascript" src="js/etherwallet-static.min.js?v=1.3"></script>
+    <script type="text/javascript" src="js/etherwallet-master.js?v=1.3"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.5/web3.min.js"></script>
+
+
+</head>
+
+
+<body>
+
+<div ng-controller="switchNetworkCtrl"></div>
+<div ng-controller="backgroundNodeCtrl">
+</div>
+
+<div ng-controller="tabsCtrl">
+
+
+    <header class="{{curNode.name}} {{curNode.service}} nav-index-{{gService.currentTab}}"
+        aria-label="header">
+
+
+    
+
+    <article class="modal fade" id="customNodeModal" tabindex="-1">
+        <section class="modal-dialog">
+            <section class="modal-content">
+                <form name="customNodeForm" custom-node-form ng-submit="saveCustomNode()">
+                </form>
+            </section>
+        </section>
+    </article>
+
+
+    <section class="bg-gradient header-branding">
+        <section class="container">
+            
+            <a class="brand" href="/" aria-label="Go to homepage">
+                <img src="images/clo-logo.svg" height="64px" width="245px" alt="ClassicEtherWallet"/>
+            </a>
+            
+            
+            <div class="tagline">
+
+                <!--<span>3.11.0.0</span>-->
+
+                <span class="dropdown dropdown-lang" ng-cloak>
+          <a tabindex="0" aria-haspopup="true" aria-expanded="false"
+             aria-label="change language. current language {{curLang}}" class="dropdown-toggle  btn btn-white"
+             ng-click="dropdown = !dropdown">{{curLang}}<i class="caret"></i></a>
+          <ul class="dropdown-menu" ng-show="dropdown">
+            <li><a ng-class="{true:'active'}[curLang=='Deutsch']" ng-click="changeLanguage('de','Deutsch'     )"> Deutsch         </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Ελληνικά']" ng-click="changeLanguage('el','Ελληνικά'    )"> Ελληνικά        </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='English']" ng-click="changeLanguage('en','English'     )"> English         </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Español']" ng-click="changeLanguage('es','Español'     )"> Español         </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Suomi']"
+                   ng-click="changeLanguage('fi','Suomi'       )"> Suomi           </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Français']" ng-click="changeLanguage('fr','Français'    )"> Français        </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Magyar']"
+                   ng-click="changeLanguage('hu','Magyar'      )"> Magyar          </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Indonesian']" ng-click="changeLanguage('id','Indonesian'  )"> Bahasa Indonesia</a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Italiano']" ng-click="changeLanguage('it','Italiano'    )"> Italiano        </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='日本語']"
+                   ng-click="changeLanguage('ja','日本語'       )"> 日本語           </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='한국어']"
+                   ng-click="changeLanguage('ko','한국어'       )"> 한국어            </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Nederlands']" ng-click="changeLanguage('nl','Nederlands'  )"> Nederlands      </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Norsk Bokmål']" ng-click="changeLanguage('no','Norsk Bokmål')"> Norsk Bokmål    </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Polski']"
+                   ng-click="changeLanguage('pl','Polski'      )"> Polski          </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Português']" ng-click="changeLanguage('pt','Português'   )"> Português       </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Русский']" ng-click="changeLanguage('ru','Русский'     )"> Русский         </a></li>
+              <!--<li><a ng-class="{true:'active'}[curLang=='Slovenčina']"   ng-click="changeLanguage('sk','Slovenčina'  )"> Slovenčina      </a></li>-->
+              <!--<li><a ng-class="{true:'active'}[curLang=='Slovenščina']"  ng-click="changeLanguage('sl','Slovenščina' )"> Slovenščina     </a></li>-->
+              <!--<li><a ng-class="{true:'active'}[curLang=='Svenska']"      ng-click="changeLanguage('sv','Svenska'     )"> Svenska         </a></li>-->
+            <li><a ng-class="{true:'active'}[curLang=='Türkçe']"
+                   ng-click="changeLanguage('tr','Türkçe'      )"> Türkçe          </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='Tiếng Việt']" ng-click="changeLanguage('vi','Tiếng Việt'  )"> Tiếng Việt      </a></li>
+            <li><a ng-class="{true:'active'}[curLang=='简体中文']"
+                   ng-click="changeLanguage('zhcn','简体中文'   )"> 简体中文         </a></li>
+            <!--<li><a ng-class="{true:'active'}[curLang=='繁體中文']"
+                   ng-click="changeLanguage('zhtw','繁體中文'   )"> 繁體中文         </a></li>-->
+            <li role="separator" class="divider"></li>
+            <li><a data-toggle="modal" data-target="#disclaimerModal" translate="FOOTER_4"> Disclaimer </a></li>
+          </ul>
+        </span>
+
+                <span class="dropdown dropdown-gas" ng-cloak>
+          <a tabindex="0" aria-haspopup="true" aria-label="adjust gas price" class="dropdown-toggle  btn btn-white"
+             ng-click="dropdownGasPrice = !dropdownGasPrice">
+            <span translate="OFFLINE_Step2_Label_3">Gas Price</span>: {{gas.value}} Gwei
+            <i class="caret"></i>
+          </a>
+          <ul class="dropdown-menu" ng-show="dropdownGasPrice">
+            <div class="header--gas">
+              <span translate="OFFLINE_Step2_Label_3">Gas Price</span>: <input type="number" ng-model="gas.value"
+                                                                               value="{{gas.value}}" min="{{gas.min}}"
+                                                                               max="{{gas.max}}" step="{{gas.step}}"
+                                                                               ng-change="gasChanged()"
+                                                                               ng-blur="validateGasPrice()"
+            /> Gwei
+              <p class="small col-xs-4 text-left"><{{recommendedGas.low}}</p>
+              <p class="small col-xs-4 text-center">{{recommendedGas.low}} - {{recommendedGas.high}}</p>
+              <p class="small col-xs-4 text-right">>{{recommendedGas.high}}</p>
+              <p class="small col-xs-4 text-left">Not So Fast</p>
+              <p class="small col-xs-4 text-center">Fast</p>
+              <p class="small col-xs-4 text-right">Fast AF</p>
+              <p class="small" style="white-space:normal;font-weight:300;margin: 2rem 0 0;"
+                 translate="GAS_PRICE_Desc"></p>
+              <a class="small" translate="x_ReadMore"
+                 href="https://support.ethereumcommonwealth.io/gas/what-is-gas-ethereum.html" target="_blank"
+                 rel="noopener"></a>
+            </div>
+          </ul>
+
+
+        </span>
+
+                <div ng-switch="walletService.wallet.type === 'web3' || walletService.wallet.hwType === 'web3'">
+                    <div ng-switch-when="true" class="dropdown dropdown-node">
+                        <a tabindex="0" aria-haspopup="true"
+                           class="dropdown-toggle btn btn-white"
+                        >
+                            <span translate="Network"></span>
+                            {{walletService.wallet.network}}
+                        </a>
+                    </div>
+
+                    <div ng-switch-default
+                         class="dropdown dropdown-node"
+                    >
+                        <a tabindex="0"
+                           aria-haspopup="true"
+                           aria-label="change node. current node {{curNode.name}} node by {{curNode.service}}"
+                           class="dropdown-toggle  btn btn-white"
+                           ng-click="globalService.dropdownNode = !globalService.dropdownNode"
+                        >
+                            Network: {{curNode.name}}
+                            <small>({{curNode.service}})</small>
+                            <i class="caret"></i>
+                        </a>
+
+                        <network-selector></network-selector>
+                    </div>
+                </div>
+                <!-- Note: The separator colors you see on the frontend are in styles/etherwallet-custom.less. If you add / change a node, you have to adjust these. Ping j-chimienti if you're not a CSS wizard -->
+
+
+            </div>
+        </section>
+    </section>
+
+    <nav role="navigation" aria-label="main navigation" class="container nav-container overflowing">
+        <a aria-hidden="true" ng-show="showLeftArrow" class="nav-arrow-left" ng-click="scrollLeft(100);"
+           ng-mouseover="scrollHoverIn(true,2);" ng-mouseleave="scrollHoverOut()">&#171;</a>
+        <div class="nav-scroll">
+            <ul class="nav-inner">
+
+
+                
+                <li ng-repeat="tab in tabNames track by $index" class="nav-item {{tab.name}}"
+                    ng-class="{active: $index==gService.currentTab}" ng-show="tab.mew" ng-click="tabClick($index)"><a
+                    tabindex="0" aria-label="nav item: {{tab.name | translate}}" translate="{{tab.name}}"></a></li>
+                
+                
+            </ul>
+        </div>
+        <a aria-hidden="true" ng-show="showRightArrow" class="nav-arrow-right" ng-click="scrollRight(100);"
+           ng-mouseover="scrollHoverIn(false,2);" ng-mouseleave="scrollHoverOut()">&#187;</a>
+    </nav>
+
+
+
+</header>
+
+
+    <section class="container" style="min-height: 50%" ng-controller='viewCtrl'>
+
+        <div class="tab-content">
+
+            <div ng-controller="messagesCtrl">
+
+                <new-messages-drtv></new-messages-drtv>
+
+
+<article class="modal fade" id="sendMessageModal" tabindex="-1">
+    <section class="modal-dialog">
+        <section class="modal-content">
+
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+
+                <h2 class="modal-title text-danger" translate="SENDModal_Title">Warning!</h2>
+
+                <p>You are about to <strong>send a message </strong>
+                </p>
+
+                <!-- Data -->
+                <section class="row">
+                    <!-- Raw TX -->
+                    <div class="form-group col-sm-6">
+                        <h4 translate="SEND_raw"> Raw Transaction </h4>
+                        <textarea class="form-control" rows="3" readonly>{{rawTx}}</textarea>
+                    </div>
+                    <!-- Singed TX -->
+                    <div class="form-group col-sm-6">
+                        <h4 translate="SEND_signed"> Signed Transaction </h4>
+                        <textarea class="form-control" rows="3" readonly>{{signedTx}}</textarea>
+                    </div>
+                </section>
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
+                    No, get me out of here!
+                </button>
+                <button class="btn btn-primary" ng-click="confirmSendMessage()" translate="SENDModal_Yes">
+                    Yes, I am sure! Make transaction.
+                </button>
+            </div>
+
+        </section>
+    </section>
+</article>
+
+
+
+
+<main class="tab-pane active"
+
+      ng-if="globalService.tabs.messages.id === globalService.currentTab"
+>
+
+
+    <!-- Unlock Wallet -->
+    <article class="collapse-container">
+        <div ng-click="wd = !wd">
+
+
+            <h1>
+
+                 <span
+                     style="margin: 0; padding: 0 2px;"
+                     class="collapse-button glyphicon"
+                     ng-class="wd ? 'glyphicon-plus' : 'glyphicon-minus'"
+                 ></span>
+                <span translate="NAV_Messages">
+                    Messages
+                </span>
+            </h1>
+        </div>
+        <div ng-show="!wd">
+            
+            
+            <wallet-decrypt-drtv></wallet-decrypt-drtv>
+            
+        </div>
+
+    </article>
+
+
+    <div ng-show="wd || walletService.wallet">
+
+        <!-- Title -->
+        <div class="block text-center">
+            <h1>
+                <a
+                    ng-class="{'isActive': visibility === VISIBILITY.LIST}"
+                    ng-click="setVisibility(VISIBILITY.LIST)">
+                    <span class="glyphicon glyphicon-th-list"></span>
+                    <span class="NAV_LIST">
+                        List
+                    </span>
+
+                </a>
+                <span>
+                <a
+                    ng-class="{'isActive': visibility === VISIBILITY.NEW}"
+                    ng-click="setVisibility(VISIBILITY.NEW)">
+                    <span class="glyphicon glyphicon-envelope"></span>
+                    <span translate="NAV_NEW_MESSAGE">New Message</span>
+                </a>
+
+                </span>
+            </h1>
+        </div>
+        <!-- / Title -->
+
+        <!-- Message List-->
+        <article class="row block" ng-if="visibility === VISIBILITY.LIST">
+
+             <section class="messagesList">
+    <h2>
+        Inbox
+
+        <small>
+            <span class="label label-default"
+            >
+            {{messageService.numberOfMessages(walletService.wallet.getAddressString())}}
+            <span translate="total">
+                total
+            </span>
+        </span>
+            <span
+                ng-class="0 < messageService.numberOfNewMessages() ? 'label label-success' : 'label label-default'"
+            >
+            {{messageService.numberOfNewMessages(walletService.wallet.getAddressString())}}
+            <span translate="total">
+                total
+            </span>
+        </span>
+        </small>
+
+    </h2>
+
+    <ul class="list-group">
+
+        <li ng-if="!messageService.loadingMessages && empty()">
+            No messages found for
+            <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', walletService.wallet.getChecksumAddressString())}}"
+               target="_blank"
+               rel="noopener">
+                {{walletService.wallet.getChecksumAddressString()}}
+            </a>
+        </li>
+
+        <li ng-if="messageService.loadingMessages">
+            <div class="bouncing-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <small class="pull-right" ng-if="!messageService.loadingMessages && messageService.msgCheckTime">
+                last checked: {{messageService.msgCheckTime}}
+            </small>
+        </li>
+
+
+        <li
+
+            class="list-group-item pointer"
+            ng-repeat="message in messageService.messagesList"
+            ng-click="viewMessagesConversation(message[0].from)"
+
+        >
+            <div class="row">
+                <div class="col-sm-12 row d-flex" style="justify-content: flex-start">
+                    <h5 style="padding-right: 1rem;">From</h5>
+                    <div class="address-identicon-container" style="padding-right: 1rem;">
+
+                        <div class="addressIdenticon med float" title="Address Indenticon"
+                             blockie-address="{{message[0].from}}"></div>
+                    </div>
+                    <span class="from" style="padding-right: 1rem;">
+                            {{ethUtil.toChecksumAddress(message[0].from)}}
+                    </span>
+
+
+                </div>
+
+            </div>
+            <div class="row">
+
+
+                  <span
+                      class="label label-default"
+                  >
+
+                            {{messageService.numberOfMessages(message[0].to, message[0].from)}}
+                            total
+                        </span>
+                <span
+                    ng-class="0 < messageService.numberOfNewMessages(message[0].to, message[0].from) ? 'label label-success' : 'label label-default'"
+                >
+
+                            {{messageService.numberOfNewMessages(message[0].to, message[0].from)}}
+                            new
+                        </span>
+            </div>
+            <p class="message_text">
+                {{message[0].text}}
+                <span class="pull-right">
+                     {{message[0].time | date}}
+                </span>
+            </p>
+            <hr/>
+        </li>
+    </ul>
+</section>
+
+
+
+ 
+            
+
+        </article>
+
+
+        <!-- Conversation w/ 1 addr -->
+        <article class="row block" ng-if="visibility === VISIBILITY.CONVERSATION">
+
+             <div class="messagesConversation">
+    <h2>{{messageService.messagesConversation[0].from}}
+        <span class="addressIdenticon med float" title="Address Indenticon"
+              blockie-address="{{messageService.messagesConversation[0].from}}"></span>
+    </h2>
+    <hr/>
+    <ol class="list-group">
+        <li
+                class="list-group-item"
+                ng-repeat="message in messageService.messagesConversation | orderBy: '+time' track by $index">
+            <div class="row">
+                {{message.time | date: 'yyyy-MM-dd HH:mm:ss'}}
+            </div>
+            <p class="message_text">{{message.text}}</p>
+            <hr/>
+        </li>
+    </ol>
+</div>
+ 
+            
+
+        </article>
+
+
+        <!--New Message-->
+        <article class="row block"
+                 ng-if="[VISIBILITY.NEW, VISIBILITY.CONVERSATION].includes(visibility)">
+
+             <form ng-submit="handleSubmitNewMessage($event)">
+
+    <div ng-if="[VISIBILITY.NEW].includes(visibility)" class="row">
+
+
+        <address-field
+            var-name="newMessage.to"
+        ></address-field>
+
+    </div>
+
+    <div ng-if="[VISIBILITY.CONVERSATION].includes(visibility)" class="row">
+        <div class="row">
+
+            <div class="col-xs-2" style="max-width: 70px;">
+                <div class="addressIdenticon med float" title="Address Indenticon"
+                     blockie-address="{{messageService.messagesConversation[0].from}}"></div>
+            </div>
+            <div class="col-sm-10">
+
+                <input
+
+                    title="to"
+                    class="form-control" readonly name="to" value="{{messageService.messagesConversation[0].from}}"/>
+            </div>
+
+        </div>
+    </div>
+
+    <textarea rows="5"
+              class="form-control"
+              name="message"
+              ng-class="newMessage.text ? 'is-valid' : 'is-invalid'"
+              ng-model="newMessage.text"
+              placeholder="message"
+    >
+
+        </textarea>
+
+
+    <button
+        class="btn btn-primary"
+        type="submit"
+    >
+        Send
+    </button>
+
+</form>
+ 
+            
+
+        </article>
+    </div>
+
+
+</main>
+
+
+                <main class="tab-pane active"
+      ng-if="globalService.currentTab === globalService.tabs.sendTransaction.id"
+      ng-controller='sendTxCtrl'
+      ng-cloak>
+
+    <div class="alert alert-warning" ng-show="hasQueryString">
+        <p translate="WARN_Send_Link">You arrived via a link that has the address, amount, gas or data fields filled in
+            for you. You can change any information before sending. Unlock your wallet to get started.</p>
+    </div>
+
+    <!-- Unlock Wallet -->
+    <article class="collapse-container">
+
+        <div ng-click="wd = !wd">
+
+            <h1>
+                 <span
+                     style="margin: 0; padding: 0 2px;"
+                     class="collapse-button glyphicon"
+                     ng-class="wd ? 'glyphicon-plus' : 'glyphicon-minus'"
+                 ></span>
+                <span
+                    translate="NAV_SendEther">
+                    Send Ether &amp; Tokens
+                </span>
+            </h1>
+        </div>
+        <div ng-show="!wd">
+            
+            
+            <wallet-decrypt-drtv></wallet-decrypt-drtv>
+            
+        </div>
+    </article>
+
+
+    <!-- Send Tx Content -->
+    <article ng-show="wd">
+
+         <!-- Content -->
+<article class="col-sm-7 block">
+
+
+        <form send-transaction-form
+              name="sendTransactionForm"
+        >
+        </form>
+
+        <div ng-show="showRaw">
+            <div class="row form-group">
+                <div class="col-sm-6">
+                    <label for="rawTx" translate="SEND_raw"> Raw Transaction </label>
+                    <textarea class="form-control" id="rawTx" rows="4" readonly>{{rawTx}}</textarea>
+                </div>
+                <div class="col-sm-6">
+                    <label for="signedTx" translate="SEND_signed"> Signed Transaction </label>
+                    <textarea name="signedTx" id="signedTx" class="form-control" rows="4"
+                              readonly>{{signedTx}}</textarea>
+                </div>
+            </div>
+
+            <div class="clearfix form-group">
+                <a class="btn btn-primary btn-block col-sm-11" data-toggle="modal" data-target="#sendTransaction"
+                   translate="SEND_trans"> Send Transaction </a>
+            </div>
+        </div>
+</article>
+<!-- / Content -->
+
+<article class="col-sm-5">
+
+    <sidebar></sidebar>
+
+
+</article>
+ 
+        
+
+
+    </article>
+
+
+    <send-tx-modal></send-tx-modal>
+
+</main>
+
+            </div>
+
+            <div ng-controller="coldStakingCtrlV2">
+
+                <article class="modal fade" id="startStakingModalV2" tabindex="-1"
+
+>
+    <section class="modal-dialog">
+        <form ng-submit="startStakingV2();">
+            <section class="modal-content"
+                     ng-if="coldStakingV2Service.validNetwork()"
+
+            >
+
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+
+                    <div ng-if="coldStakingV2Service.stakingInfo.amount > 0" class="alert alert-danger" style="margin-top: 25px; display: none;">
+                        <h2> WARNING!</h2>
+                        <p translate="COLD_STAKING_START_STAKING_WARNING">
+                            You already have funds in staking contract.
+                            You will lose your staking reward if you make a new deposit into the contract.
+                            You should withdraw your staking reward first or use a another account for a new staking
+                            deposit.
+                        </p>
+
+                        <div class="checkbox">
+                            <label>
+
+
+                                <input name="understand" id="understand" type="checkbox"
+                                       ng-model="input.understand"/>
+
+                                <span translate="COLD_STAKING_UNDERSTAND">
+                                I understand, proceed anyways
+                                </span>
+                            </label>
+                        </div>
+
+
+                    </div>
+
+
+                    <h2 class="modal-title">You are about to <b>freeze your {{ajaxReq.type}} for Cold Staking:</b></h2>
+
+                    <h5>
+
+                        <span translate="SENDModal_Content_1">You are about to send</span>
+
+                        {{tx.value || 0}} {{ajaxReq.type}} to the staking contract:
+                        <a
+                            target="_blank"
+                            href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', coldStakingV2Service.contract.address)}}"
+                        >
+                            {{coldStakingV2Service.contract.address}}
+                        </a>
+
+                    </h5>
+
+                    <div class="form-group">
+                        <label translate="SEND_amount_short">
+                            Amount
+                        </label>
+                        <input name="value"
+                               ng-model="tx.value"
+                               class="form-control"
+                               required
+                               autocomplete="off"
+                               placeholder="{{ajaxReq.type}}"
+                               ng-class="coldStakingV2Service.validStakingTx(tx.value) ? 'is-valid' : 'is-invalid'"
+                        >
+
+                    </div>
+                    <br/>
+
+                    <div class="form-group">
+                        <label>
+                            Staking Period
+                        </label>
+                        <select ng-model="input.stakingPeriod"
+                                class="form-control"
+                                required="true">
+                            <option value="1" selected="selected">1 Round (27 days, Multiplier 0.45)</option>
+                            <option value="2">2 Rounds (54 days, Multiplier 0.50)</option>
+                            <option value="3">3 Rounds (81 days, Multiplier 0.55)</option>
+                            <option value="4">4 Rounds (108 days, Multiplier 0.60)</option>
+                            <option value="5">5 Rounds (135 days, Multiplier 0.65)</option>
+                            <option value="6">6 Rounds (162 days, Multiplier 0.70)</option>
+                            <option value="7">7 Rounds (189 days, Multiplier 0.75)</option>
+                            <option value="8">8 Rounds (216 days, Multiplier 0.80)</option>
+                            <option value="9">9 Rounds (243 days, Multiplier 0.85)</option>
+                            <option value="10">10 Rounds (270 days, Multiplier 0.90)</option>
+                            <option value="11">11 Rounds (297 days, Multiplier 0.95)</option>
+                            <option value="12">12 Rounds (324 days, Multiplier 1)</option>
+                        </select>
+
+                    </div>
+                    <br/>
+
+                    <div class="row justify_row">
+                        <div class="col-xs-4">
+
+                            <div class="addressIdenticon med" title="Address Indenticon"
+                                 blockie-address="{{walletService.wallet.getAddressString()}}"
+                                 watch-var="walletService.wallet.getAddressString()"></div>
+                        </div>
+
+
+                        <div class="col-xs-4 text-center">
+
+                            - >
+                            <br/>
+                            <span class="mono"> {{tx.value || 0}} {{ajaxReq.type}}</span>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="addressIdenticon med" title="Address Indenticon"
+                                 blockie-address="{{coldStakingV2Service.contract.address}}"
+                                 watch-var="staking_address"></div>
+                        </div>
+                    </div>
+
+                    <p translate="COLD_STAKING_LOCKED_WARNING">
+
+                        Your funds will be locked and you will be unable
+                        to withdraw within the locking period (staking rounds).
+
+                    </p>
+
+                    <p translate="COLD_STAKING_PAY_TX_FEE_WARNING">
+
+                    </p>
+
+                    <p translate="COLD_STAKING_UNPRED_WARNING">
+                        Staking rewards are very unpredictable and the amount of reward
+                        depends on the time when you are claiming it.
+                    </p>
+
+                    <h4 translate="SENDModal_Content_3">Are you sure you want to do this?</h4>
+                    
+                    <div class="checkbox" ng-if="coldStakingV2Service.stakingInfo.amount > 0">
+                        <label>
+
+
+                            <input name="understand" id="understand" type="checkbox"
+                                ng-model="input.understand"/>
+
+                            <span translate="COLD_STAKING_UNDERSTAND">
+                            I understand, proceed anyways
+                            </span>
+                        </label>
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
+                        No, get me out of here!
+                    </button>
+                    <button
+                        ng-disabled="coldStakingV2Service.stakingInfo.amount > 0 && !input.understand"
+                        type="submit"
+                        class="btn btn-primary" translate="SENDModal_Yes">
+                        Yes, I am sure! Make transaction.
+                    </button>
+                </div>
+
+            </section>
+
+        </form>
+    </section>
+</article>
+
+                <article class="modal fade" id="openWithdrawModalV2" tabindex="-1"
+>
+    <section class="modal-dialog">
+        <form ng-submit="withdraw_stakeV2()">
+            <section class="modal-content"
+                     ng-if="coldStakingV2Service.validNetwork()"
+            >
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+
+                    <div class="alert alert-danger"
+                         ng-if="!coldStakingV2Service.userCanWithdraw();">
+                        <h1>WARNING!
+                        </h1>
+                        Withdraw is impossible
+                        stake time < round interval
+                        ({{coldStakingV2Service.stakingInfo.time | number}} <
+                        {{coldStakingV2Service.contract.round_interval | number}})
+                    </div>
+
+                    <div class="alert alert-danger"
+                         ng-if="coldStakingV2Service.userCanWithdraw() && coldStakingV2Service.stakingInfo.amount === 0"
+                    >
+                        <h1>WARNING!
+                        </h1>
+                        You do not have any deposit to withdraw.
+                    </div>
+
+
+                    <h2 class="modal-title">You are about to <b>withdraw
+
+                        <coin-icon icon="{{ajaxReq.icon}}" hidetext="{{true}}">
+
+                        </coin-icon>
+                        {{coldStakingV2Service.stakingInfo.amount || 0 | number}}
+                        {{ajaxReq.type}}
+
+                        from Cold Staking:</b></h2>
+
+                    <h5>You will withdraw from the staking contract:
+                        <a
+                            target="_blank"
+                            href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', coldStakingV2Service.contract.address)}}"
+                        >
+                            {{coldStakingV2Service.contract.address}}
+                        </a>
+
+                    </h5>
+
+
+                    <div class="row justify_row">
+
+
+                        <div class="col-xs-4">
+                            <div class="addressIdenticon med" title="Address Indenticon"
+                                 blockie-address="{{coldStakingV2Service.contract.address}}"
+                                 watch-var="staking_address"></div>
+                        </div>
+
+                        <div class="col-xs-4 text-center">
+                            - >
+                            <br/>
+                            {{tx.value || 0}}
+                            <coin-icon icon="{{ajaxReq.icon}}" hidetext="{{true}}">
+
+                            </coin-icon>
+                            {{ajaxReq.type}}
+                        </div>
+
+
+                        <div class="col-xs-4">
+
+                            <div class="addressIdenticon med" title="Address Indenticon"
+                                 blockie-address="{{walletService.wallet.getChecksumAddressString()}}"
+                                 watch-var="walletService.wallet.getAddressString()">
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <h4 translate="SENDModal_Content_3">Are you sure you want to do this?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
+                        No, get me out of here!
+                    </button>
+                    <button
+
+                        ng-disabled="!coldStakingV2Service.userCanWithdraw();"
+                        type="submit"
+                        class="btn btn-primary" translate="SENDModal_Yes">
+                        Yes, I am sure! Make transaction.
+                    </button>
+                </div>
+
+
+            </section>
+        </form>
+    </section>
+</article>
+
+                <article class="modal fade" id="openClaimRewardModalV2" tabindex="-1"
+>
+    <section class="modal-dialog">
+        <form ng-submit="claimV2()">
+            <section class="modal-content"
+                     ng-if="coldStakingV2Service.validNetwork()"
+
+            >
+
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    <div class="alert alert-danger" ng-if="coldStakingV2Service.stakingInfo.amount === 0">
+                        <h1>WARNING!</h1>
+                        <p translate="COLD_STAKING_NO_WITHDRAW">
+                            You do not have any deposit to withdraw.
+                        </p>
+                    </div>
+
+
+                    <h2 class="modal-title">You are about to claim <b> Reward
+                        {{coldStakingV2Service.stakingInfo.reward || 0 | number}}
+                        {{ajaxReq.type}}</b>
+                    </h2>
+
+                    <h5>
+                        You will claim reward from the cold staking contract:
+                        <a
+                                target="_blank"
+                                href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', coldStakingV2Service.contract.address)}}"
+                        >
+                            {{coldStakingV2Service.contract.address}}
+                        </a>
+
+                    </h5>
+
+
+                    <p>
+                        <b translate="TRANS_gas"></b>
+
+                        {{coldStakingV2Service.tx.gasLimit | number}}
+                    </p>
+                    
+                    <p>
+                        <b>Minimum balance in your address to claim this reward: 0.1 CLO</b> 
+                    </p>
+
+                    <p>
+                        <b>Warning:</b> After claiming the reward, your funds will be frozen for the next 27 days
+
+                        and you will be unable to claim new reward OR withdraw your funds during this period.
+                    </p>
+                    
+                    <p>
+                        <b>Warning:</b>
+
+                        Claiming your reward do not give you back your initial investment and it will re stake automatically your funds. To withdraw all, press withdraw
+                    </p>
+
+                    <b>Warning:</b> Staking reward can vary over time. Your staking reward depend on:
+                    <ol>
+                        <li>
+                            Total amount of staking {{ajaxReq.type}} (network weight)
+                        </li>
+                        <li>
+                            Your staking time
+                        </li>
+                        <li>
+                            Other staker's claims
+                        </li>
+                        <li>
+                            Available staking pool
+                        </li>
+                    </ol>
+                    <h4 translate="SENDModal_Content_3">Are you sure you want to do this?</h4>
+                </div>
+
+                <div class="modal-footer">
+
+                    <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
+                        No, get me out of here!
+                    </button>
+                    <button
+                            ng-disabled="!coldStakingV2Service.stakingInfo.amount"
+
+                            type="submit"
+                            class="btn btn-primary" translate="SENDModal_Yes">
+                        Yes, I am sure! Make transaction.
+                    </button>
+                </div>
+            </section>
+        </form>
+    </section>
+</article>
+
+            </div>
+
+            <div ng-controller="coldStakingCtrl">
+
+                <article class="modal fade" id="startStakingModal" tabindex="-1"
+
+>
+    <section class="modal-dialog">
+        <form ng-submit="startStaking();">
+            <section class="modal-content"
+                     ng-if="coldStakingService.validNetwork()"
+
+            >
+
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+
+                    <div ng-if="coldStakingService.stakingInfo.amount > 0" class="alert alert-danger">
+                        <h2> WARNING!</h2>
+                        <p translate="COLD_STAKING_START_STAKING_WARNING">
+                            You already have funds in staking contract.
+                            You will lose your staking reward if you make a new deposit into the contract.
+                            You should withdraw your staking reward first or use a another account for a new staking
+                            deposit.
+
+                        </p>
+
+                        <div class="checkbox">
+                            <label>
+
+
+                                <input name="understand" id="understand" type="checkbox"
+                                       ng-model="input.understand"/>
+
+                                <span translate="COLD_STAKING_UNDERSTAND">
+                                I understand, proceed anyways
+                                </span>
+                            </label>
+                        </div>
+
+
+                    </div>
+
+
+                    <h2 class="modal-title">You are about to <b>freeze your {{ajaxReq.type}} for Cold Staking:</b></h2>
+
+                    <h5>
+
+                        <span translate="SENDModal_Content_1">You are about to send</span>
+
+                        {{tx.value || 0}} {{ajaxReq.type}} to the staking contract:
+                        <a
+                            target="_blank"
+                            href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', coldStakingService.contract.address)}}"
+                        >
+                            {{coldStakingService.contract.address}}
+                        </a>
+
+                    </h5>
+
+                    <div class="form-group">
+                        <label translate="SEND_amount_short">
+                            Amount
+                        </label>
+                        <input name="value"
+                               ng-model="tx.value"
+                               class="form-control"
+                               required
+                               autocomplete="off"
+                               placeholder="{{ajaxReq.type}}"
+                               ng-class="coldStakingService.validStakingTx(tx.value) ? 'is-valid' : 'is-invalid'"
+                        >
+
+                    </div>
+                    <br/>
+
+                    <div class="row justify_row">
+                        <div class="col-xs-4">
+
+                            <div class="addressIdenticon med" title="Address Indenticon"
+                                 blockie-address="{{walletService.wallet.getAddressString()}}"
+                                 watch-var="walletService.wallet.getAddressString()"></div>
+                        </div>
+
+
+                        <div class="col-xs-4 text-center">
+
+                            - >
+                            <br/>
+                            <span class="mono"> {{tx.value || 0}} {{ajaxReq.type}}</span>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="addressIdenticon med" title="Address Indenticon"
+                                 blockie-address="{{coldStakingService.contract.address}}"
+                                 watch-var="staking_address"></div>
+                        </div>
+                    </div>
+
+                    <p translate="COLD_STAKING_LOCKED_WARNING">
+
+                        Your funds will be locked for 27 days and you will be unable
+                        to withdraw within the locking period
+
+                    </p>
+
+                    <p translate="COLD_STAKING_PAY_TX_FEE_WARNING">
+
+                    </p>
+
+                    <p translate="COLD_STAKING_UNPRED_WARNING">
+                        Staking rewards are very unpredictable and the amount of reward
+                        depends on the time when you are claiming it.
+                    </p>
+
+                    <h4 translate="SENDModal_Content_3">Are you sure you want to do this?</h4>
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
+                        No, get me out of here!
+                    </button>
+                    <button
+                        ng-disabled="coldStakingService.stakingInfo.amount > 0 && !input.understand"
+                        type="submit"
+                        class="btn btn-primary" translate="SENDModal_Yes">
+                        Yes, I am sure! Make transaction.
+                    </button>
+                </div>
+
+            </section>
+
+        </form>
+    </section>
+</article>
+
+                <article class="modal fade" id="openWithdrawModal" tabindex="-1"
+>
+    <section class="modal-dialog">
+        <form ng-submit="withdraw_stake()">
+            <section class="modal-content"
+                     ng-if="coldStakingService.validNetwork()"
+            >
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+
+                    <div class="alert alert-danger"
+                         ng-if="!coldStakingService.userCanWithdraw();">
+                        <h1>WARNING!
+                        </h1>
+                        Withdraw is impossible
+                        stake time < round interval
+                        ({{coldStakingService.stakingInfo.time | number}} <
+                        {{coldStakingService.contract.round_interval | number}})
+                    </div>
+
+                    <div class="alert alert-danger"
+                         ng-if="coldStakingService.userCanWithdraw() && coldStakingService.stakingInfo.amount === 0"
+                    >
+                        <h1>WARNING!
+                        </h1>
+                        You do not have any deposit to withdraw.
+                    </div>
+
+
+                    <h2 class="modal-title">You are about to <b>withdraw
+
+                        <coin-icon icon="{{ajaxReq.icon}}" hidetext="{{true}}">
+
+                        </coin-icon>
+                        {{coldStakingService.stakingInfo.amount || 0 | number}}
+                        {{ajaxReq.type}}
+
+                        from Cold Staking:</b></h2>
+
+                    <h5>You will withdraw from the staking contract:
+                        <a
+                            target="_blank"
+                            href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', coldStakingService.contract.address)}}"
+                        >
+                            {{coldStakingService.contract.address}}
+                        </a>
+
+                    </h5>
+
+
+                    <div class="row justify_row">
+
+
+                        <div class="col-xs-4">
+                            <div class="addressIdenticon med" title="Address Indenticon"
+                                 blockie-address="{{coldStakingService.contract.address}}"
+                                 watch-var="staking_address"></div>
+                        </div>
+
+                        <div class="col-xs-4 text-center">
+                            - >
+                            <br/>
+                            {{tx.value || 0}}
+                            <coin-icon icon="{{ajaxReq.icon}}" hidetext="{{true}}">
+
+                            </coin-icon>
+                            {{ajaxReq.type}}
+                        </div>
+
+
+                        <div class="col-xs-4">
+
+                            <div class="addressIdenticon med" title="Address Indenticon"
+                                 blockie-address="{{walletService.wallet.getChecksumAddressString()}}"
+                                 watch-var="walletService.wallet.getAddressString()">
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <h4 translate="SENDModal_Content_3">Are you sure you want to do this?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
+                        No, get me out of here!
+                    </button>
+                    <button
+
+                        ng-disabled="!coldStakingService.userCanWithdraw();"
+                        type="submit"
+                        class="btn btn-primary" translate="SENDModal_Yes">
+                        Yes, I am sure! Make transaction.
+                    </button>
+                </div>
+
+
+            </section>
+        </form>
+    </section>
+</article>
+
+                <article class="modal fade" id="openClaimRewardModal" tabindex="-1"
+>
+    <section class="modal-dialog">
+        <form ng-submit="claim()">
+            <section class="modal-content"
+                     ng-if="coldStakingService.validNetwork()"
+
+            >
+
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    <div class="alert alert-danger" ng-if="coldStakingService.stakingInfo.amount === 0">
+                        <h1>WARNING!</h1>
+                        <p translate="COLD_STAKING_NO_WITHDRAW">
+                            You do not have any deposit to withdraw.
+                        </p>
+                    </div>
+
+
+                    <h2 class="modal-title">You are about to claim <b> Reward
+                        {{coldStakingService.stakingInfo.reward || 0 | number}}
+                        {{ajaxReq.type}}</b>
+                    </h2>
+
+                    <h5>
+                        You will claim reward from the cold staking contract:
+                        <a
+                                target="_blank"
+                                href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', coldStakingService.contract.address)}}"
+                        >
+                            {{coldStakingService.contract.address}}
+                        </a>
+
+                    </h5>
+
+
+                    <p>
+                        <b translate="TRANS_gas"></b>
+
+                        {{coldStakingService.tx.gasLimit | number}}
+                    </p>
+                    
+                    <p>
+                        <b>Minimum balance in your address to claim this reward: 0.1 CLO</b> 
+                    </p>
+
+                    <p>
+                        <b>Warning:</b> After claiming the reward, your funds will be frozen for the next 27 days
+
+                        and you will be unable to claim new reward OR withdraw your funds during this period.
+                    </p>
+                    
+                    <p>
+                        <b>Warning:</b>
+
+                        Claiming your reward do not give you back your initial investment and it will re stake automatically your funds. To withdraw all, press withdraw
+                    </p>
+
+                    <b>Warning:</b> Staking reward can vary over time. Your staking reward depend on:
+                    <ol>
+                        <li>
+                            Total amount of staking {{ajaxReq.type}} (network weight)
+                        </li>
+                        <li>
+                            Your staking time
+                        </li>
+                        <li>
+                            Other staker's claims
+                        </li>
+                        <li>
+                            Available staking pool
+                        </li>
+                    </ol>
+                    <h4 translate="SENDModal_Content_3">Are you sure you want to do this?</h4>
+                </div>
+
+                <div class="modal-footer">
+
+                    <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
+                        No, get me out of here!
+                    </button>
+                    <button
+                            ng-disabled="!coldStakingService.stakingInfo.amount"
+
+                            type="submit"
+                            class="btn btn-primary" translate="SENDModal_Yes">
+                        Yes, I am sure! Make transaction.
+                    </button>
+                </div>
+            </section>
+        </form>
+    </section>
+</article>
+
+            </div>
+
+            <network-info>
+            </network-info>
+
+            <main class="tab-pane active broadcast-tx-tab"
+      ng-if="globalService.currentTab === globalService.tabs.broadcastTx.id"
+      ng-controller='broadcastTxCtrl'
+      ng-cloak>
+
+    <article class="block">
+        <h2 class="text-center">Broadcast Signed Transaction</h2>
+
+        <p class="text-center">
+            Paste a signed transaction and click 'send transaction'
+        </p>
+
+
+        <section>
+            <div class="block">
+                <form ng-submit="handleSubmit()">
+                    <label for="signedTx">Signed Transaction</label>
+                    <input ng-model="input.signedTx"
+                           ng-change="handleDecodeTx()"
+                           name="signedTx"
+                           required
+                           id="signedTx"
+                           type="text"
+                           autocomplete="false"
+                           spellcheck="false"
+                           ng-model-options="{debounce: 300}"
+                           class="form-control"
+                           ng-class="isValidHex(input.signedTx) ? 'is-valid' : 'is-invalid'"
+                    >
+
+                    <div ng-show="input.signedTx" class="row">
+                        <div class="col-xs-6">
+                            <h3>Raw Transaction</h3>
+
+                            <pre>{{input.rawTx | json: 4}}</pre>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <h3>Decoded Transaction</h3>
+
+                            <pre class="pre-tx">{{input.decodedInput | json: 4}}</pre>
+                        </div>
+                    </div>
+
+
+                    <div class="row row-justify">
+                        <button
+                            ng-show="input.signedTx"
+                            style="max-width: 272px;"
+                            translate="SEND_trans" class="btn btn-primary btn-block text-center">Send Transaction
+                        </button>
+                    </div>
+                </form>
+
+                <br/>
+
+                <div class="row">
+                    <div class="qr-code" qr-code="{{input.signedTx}}" watch-var="input.signedTx" width="100%"></div>
+                </div>
+            </div>
+        </section>
+    </article>
+</main>
+
+
+            <main class="tab-pane active"
+      ng-if="[globalService.tabs.reEncrypt.id].includes(globalService.currentTab)"
+      ng-controller='encryptCtrl as $ctrl'
+      ng-cloak
+>
+
+
+    <div class="block">
+        <h1 class="text-center" translate="NAV_Encrypt">Encrypt</h1>
+
+        <div ng-show="!wd">
+            
+            
+            <wallet-decrypt-drtv></wallet-decrypt-drtv>
+            
+        </div>
+
+
+    </div>
+
+    <div ng-show="wd">
+
+
+        <div ng-if="loading">
+            <div class="bouncing-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div ng-if="!loading && !newWallet">
+            <form ng-submit="reEncrypt($event, $ctrl.input.newPassword)"
+            >
+
+                <div class="input-group">
+                    <input
+                        name="newPassword"
+                        id="newPassword"
+                        class="form-control"
+                        type="{{showPass && 'password' || 'text'}}"
+                        placeholder="{{'GEN_YOUR_NEW_PASSWORD' | translate }}"
+                        ng-model="$ctrl.input.newPassword"
+                        ng-class="$ctrl.input.newPassword.length > 8 ? 'is-valid' : 'is-invalid'"
+                        aria-label="{{'GEN_Label_1' |translate}}"
+                    />
+                    <span tabindex="0" aria-label="make password visible"
+                          role="button" class="input-group-addon eye"
+                          ng-click="showPass=!showPass"></span>
+                </div>
+                <button type="submit"
+
+                        class="btn btn-primary" translate="NAV_Encrypt"></button>
+            </form>
+        </div>
+
+        <!--  SAVE WALLET INFO -->
+
+
+        <div ng-if="!loading && newWallet">
+            <section class="block__main gen__2--inner">
+                <br/>
+                <h1 translate="GEN_Label_2">Save your Keystore File (UTC / JSON) </h1>
+
+                <a tabindex="0" role="button"
+                   class="btn btn-primary"
+                   href="{{newWalletDetails.blob}}"
+                   download="{{newWalletDetails.fileName}}"
+                   aria-label="{{'x_Download'|translate}} {{'x_Keystore'|translate}}"
+                   aria-describedby="x_KeystoreDesc"
+                   ng-click="downloaded()"
+                   target="_self"
+                   rel="noopener noreferrer"
+                >
+                    <span translate="x_Download"> DOWNLOAD </span> <span translate="x_Keystore2"> Keystore File (UTC / JSON) </span>
+                </a>
+
+                <div class="warn">
+                    <p><strong>Do not lose it!</strong> It cannot be recovered if you lose it.</p>
+                    <p><strong>Do not share it!</strong> Your funds will be stolen if you use this file on a
+                        malicious/phishing site.</p>
+                    <p><strong>Make a backup!</strong> Secure it like the millions of dollars it may one day be worth.
+                    </p>
+                </div>
+
+                <p>
+                    <a tabindex="0" role="button" class="btn btn-danger"
+                       ng-class="newWalletDetails.downloaded ? '' : 'disabled' " ng-click="continueToPaper()"
+                       translate="GET_ConfButton">
+                        I understand. Continue.
+                    </a>
+                </p>
+
+            </section>
+        </div>
+
+        <!-- PAPER WALLET -->
+
+        <article role="main" class="block__wrap gen__3" ng-show="showPaperWallet">
+
+            <section class="block__main gen__3--inner">
+
+                <br/>
+
+                <h1 translate="GEN_Label_5"> Save your Private Key</h1>
+                <input aria-label="{{'x_PrivKey'|translate}}" aria-describedby="x_PrivKeyDesc"
+                       value="{{wallet.getPrivateKeyString()}}"
+                       class="form-control"
+                       type="text"
+                       readonly="readonly"
+                       style="max-width: 50rem;margin: auto;"/>
+
+                <br/>
+
+                <a tabindex="0" aria-label="{{'x_Print'|translate}}" aria-describedby="x_PrintDesc" role="button"
+                   class="btn btn-primary" ng-click="printQRCode()" translate="x_Print">PRINT</a>
+
+                <div class="warn">
+                    <p><strong>Do not lose it!</strong> It cannot be recovered if you lose it.</p>
+                    <p><strong>Do not share it!</strong> Your funds will be stolen if you use this file on a
+                        malicious/phishing site.</p>
+                    <p><strong>Make a backup!</strong> Secure it like the millions of dollars it may one day be worth.
+                    </p>
+                </div>
+
+                <br/>
+
+                <a class="btn btn-default btn-sm" ng-click="getAddress()">
+                    <span translate="GEN_Label_3"> Save your Address </span> →
+                </a>
+
+            </section>
+
+            <section class="block__help">
+                <h2 translate="GEN_Help_4">Guides &amp; FAQ</h2>
+                <ul>
+                    <li>
+                        <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/how-do-i-save-slash-backup-my-wallet"
+                           target="_blank" rel="noopener">
+                            <strong translate="HELP_2a_Title">How to Save & Backup Your Wallet.</strong>
+                        </a></li>
+                    <li>
+                        <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/protecting-yourself-and-your-funds"
+                           target="_blank" rel="noopener">
+                            <strong translate="GEN_Help_15">Preventing loss &amp; theft of your funds.</strong>
+                        </a></li>
+                    <li>
+                        <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-are-the-different-formats-of-a-private-key"
+                           target="_blank" rel="noopener">
+                            <strong translate="GEN_Help_16">What are these Different Formats?</strong>
+                        </a></li>
+                </ul>
+
+                <h2 translate="GEN_Help_17"> Why Should I? </h2>
+                <ul>
+                    <li translate="GEN_Help_18"> To have a secondary backup.</li>
+                    <li translate="GEN_Help_19"> In case you ever forget your password.</li>
+                    <li>
+                        <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/how-do-i-safely-slash-offline-slash-cold-storage-with-myetherwallet"
+                           target="_blank" rel="noopener" translate="GEN_Help_20">Cold Storage</a>
+                    </li>
+                </ul>
+
+                <h2 translate="x_PrintDesc"></h2>
+
+            </section>
+
+        </article>
+
+        <!-- /PAPER WALLET -->
+
+    </div>
+
+
+</main>
+
+
+            <main class="tab-pane block--container active" ng-if="globalService.currentTab==globalService.tabs.generateWallet.id"
+      ng-controller='walletGenCtrl' role="main" ng-cloak>
+
+    <article class="block__wrap gen__1" ng-show="!wallet && !showGetAddress">
+
+        <section class="block__main gen__1--inner">
+            <br/>
+            <h1 translate="NAV_GenerateWallet" aria-live="polite"> Create New Wallet</h1>
+            <form name="generateWalletForm" generate-wallet-form novalidate ng-submit="genNewWallet()">
+
+            </form>
+            <br>
+        </section>
+
+        <section class="block__help">
+            <h2>Ledger / TREZOR:</h2>
+            <ul>
+                <li>
+                    <span translate="GEN_Help_1">Use your</span>
+                    <a ng-click="globalService.currentTab=globalService.tabs.sendTransaction.id">Ledger or TREZOR or
+                        Digital Bitbox</a>
+                    <span translate="GEN_Help_2">to access your account.</span>
+                    <span translate="GEN_Help_3">Your device * is * your wallet.</span>
+                </li>
+            </ul>
+
+            <h2>Jaxx / Metamask:</h2>
+            <ul>
+                <li>
+                    <span translate="GEN_Help_1">Use your</span>
+                    <a ng-click="globalService.currentTab=globalService.tabs.sendTransaction.id" translate="x_Mnemonic">Mnemonic
+                        Phrase</a>
+                    <span translate="GEN_Help_2">to access your account.</span>
+                </li>
+            </ul>
+
+            <h2>Mist / Geth / Parity:</h2>
+            <ul>
+                <li>
+                    <span translate="GEN_Help_1">Use your</span>
+                    <a ng-click="globalService.currentTab=globalService.tabs.sendTransaction.id"
+                       translate="x_Keystore2">Keystore File (UTC / JSON)</a>
+                    <span translate="GEN_Help_2">to access your account.</span>
+                </li>
+            </ul>
+
+        </section>
+
+    </article>
+
+
+    <article role="main" class="block__wrap gen__2" ng-show="wallet && !showPaperWallet"> <!-- -->
+
+        <section class="block__main gen__2--inner">
+            <br/>
+            <h1 translate="GEN_Label_2">Save your Keystore File (UTC / JSON) </h1>
+
+            <a tabindex="0" role="button"
+               class="btn btn-primary"
+               href="{{blobEnc}}"
+               download="{{encFileName}}"
+               aria-label="{{'x_Download'|translate}} {{'x_Keystore'|translate}}"
+               aria-describedby="x_KeystoreDesc"
+               ng-click="downloaded()"
+               target="_self"
+               rel="noopener noreferrer"
+            >
+                <span translate="x_Download"> DOWNLOAD </span> <span
+                translate="x_Keystore2"> Keystore File (UTC / JSON) </span>
+            </a>
+
+            <div class="warn">
+                <p><strong>Do not lose it!</strong> It cannot be recovered if you lose it.</p>
+                <p><strong>Do not share it!</strong> Your funds will be stolen if you use this file on a
+                    malicious/phishing site.</p>
+                <p><strong>Make a backup!</strong> Secure it like the millions of dollars it may one day be worth.</p>
+            </div>
+
+            <p>
+                <a tabindex="0" role="button" class="btn btn-danger" ng-class="fileDownloaded ? '' : 'disabled' "
+                   ng-click="continueToPaper()" translate="GET_ConfButton">
+                    I understand. Continue.
+                </a>
+            </p>
+
+        </section>
+
+        <section class="block__help">
+            <h2 translate="GEN_Help_8"> Not Downloading a File? </h2>
+            <ul>
+                <li translate="GEN_Help_9"> Try using Google Chrome</li>
+                <li translate="GEN_Help_10"> Right click &amp; save file as. Filename:</li>
+                <input value="{{encFileName}}" class="form-control input-sm"/>
+            </ul>
+
+            <h2 translate="GEN_Help_11">Don't open this file on your computer</h2>
+            <ul>
+                <li translate="GEN_Help_12">Use it to unlock your wallet via MyEtherWallet (or Mist, Geth, Parity &amp;
+                    other wallet clients.)
+                </li>
+            </ul>
+
+            <h2 translate="GEN_Help_4">Guides &amp; FAQ</h2>
+            <ul>
+                <li>
+                    <a href="https://support.ethereumcommonwealth.io/getting-started/backing-up-your-new-wallet.html"
+                       target="_blank" rel="noopener"><strong translate="GEN_Help_13">How to Back Up Your Keystore
+                        File</strong></a></li>
+                <li>
+                    <a href="https://support.ethereumcommonwealth.io/private-keys-passwords/difference-beween-private-key-and-keystore-file.html"
+                       target="_blank" rel="noopener"><strong translate="GEN_Help_14">What are these Different
+                        Formats?</strong>
+                    </a>
+                </li>
+            </ul>
+
+        </section>
+
+    </article>
+
+
+    <article role="main" class="block__wrap gen__3" ng-show="showPaperWallet">
+
+        <section class="block__main gen__3--inner">
+
+            <br/>
+
+            <h1 translate="GEN_Label_5"> Save your Private Key</h1>
+            <input aria-label="{{'x_PrivKey'|translate}}" aria-describedby="x_PrivKeyDesc"
+                   value="{{wallet.getPrivateKeyString()}}"
+                   class="form-control"
+                   type="text"
+                   readonly="readonly"
+                   style="max-width: 50rem;margin: auto;"/>
+
+            <br/>
+
+            <a tabindex="0" aria-label="{{'x_Print'|translate}}" aria-describedby="x_PrintDesc" role="button"
+               class="btn btn-primary" ng-click="printQRCode()" translate="x_Print">PRINT</a>
+
+            <div class="warn">
+                <p><strong>Do not lose it!</strong> It cannot be recovered if you lose it.</p>
+                <p><strong>Do not share it!</strong> Your funds will be stolen if you use this file on a
+                    malicious/phishing site.</p>
+                <p><strong>Make a backup!</strong> Secure it like the millions of dollars it may one day be worth.</p>
+            </div>
+
+            <br/>
+
+            <a class="btn btn-default btn-sm" ng-click="getAddress()">
+                <span translate="GEN_Label_3"> Save your Address </span> →
+            </a>
+
+        </section>
+
+        <section class="block__help">
+            <h2 translate="GEN_Help_4">Guides &amp; FAQ</h2>
+            <ul>
+                <li>
+                    <a href="https://support.ethereumcommonwealth.io/getting-started/backing-up-your-new-wallet.html"
+                       target="_blank" rel="noopener">
+                        <strong translate="HELP_2a_Title">How to Save & Backup Your Wallet.</strong>
+                    </a></li>
+                <li>
+                    <a href="https://support.ethereumcommonwealth.io/security/securing-your-ethereum.html"
+                       target="_blank" rel="noopener">
+                        <strong translate="GEN_Help_15">Preventing loss &amp; theft of your funds.</strong>
+                    </a></li>
+                <li>
+                    <a href="https://support.ethereumcommonwealth.io/private-keys-passwords/difference-beween-private-key-and-keystore-file.html"
+                       target="_blank" rel="noopener">
+                        <strong translate="GEN_Help_16">What are these Different Formats?</strong>
+                    </a></li>
+            </ul>
+
+            <h2 translate="GEN_Help_17"> Why Should I? </h2>
+            <ul>
+                <li translate="GEN_Help_18"> To have a secondary backup.</li>
+                <li translate="GEN_Help_19"> In case you ever forget your password.</li>
+                <li>
+                    <a href="https://support.ethereumcommonwealth.io/offline/ethereum-cold-storage-with-mycrypto.html"
+                       target="_blank" rel="noopener" translate="GEN_Help_20">Cold Storage</a>
+                </li>
+            </ul>
+
+            <h2 translate="x_PrintDesc"></h2>
+
+        </section>
+
+    </article>
+
+    <article class="text-left" ng-show="showGetAddress">
+        <div class="clearfix collapse-container">
+            <div ng-click="wd = !wd">
+
+
+                <h1>
+                     <span
+                         style="margin: 0; padding: 0 2px;"
+                         class="collapse-button glyphicon"
+                         ng-class="wd ? 'glyphicon-plus' : 'glyphicon-minus'"
+                     ></span>
+                    <span traslate="GEN_Unlock">Unlock your wallet to see your address</span>
+                </h1>
+                <p translate="x_AddessDesc"></p>
+            </div>
+            <div ng-show="!wd">
+                
+                <wallet-decrypt-drtv></wallet-decrypt-drtv>
+                
+                
+            </div>
+        </div>
+
+        <div class="row" ng-show="wallet!=null" ng-controller='viewWalletCtrl'>
+
+            
+             <article class="col-sm-8 view-wallet-content" ng-init="pkeyVisible = false;">
+
+    <section class="block">
+        <div class="col-xs-11">
+            <div class="account-help-icon">
+                <img src="images/icon-help.svg" class="help-icon"/>
+                <p class="account-help-text" translate="x_AddessDesc">You may know this as your "Account #" or your
+                    "Public Key". It's what you send people so they can send you ETH. That icon is an easy way to
+                    recognize your address.</p>
+                <h5 translate="x_Address">Your Address:</h5>
+            </div>
+            <input class="form-control" type="text" ng-value="walletService.wallet.getChecksumAddressString()" readonly="readonly">
+        </div>
+
+        <div class="col-xs-1 address-identicon-container">
+            <div class="addressIdenticon" title="Address Indenticon" blockie-address="{{walletService.wallet.getAddressString()}}"
+                 watch-var="wallet"></div>
+        </div>
+
+        <div class="col-xs-12" ng-show='showEnc'>
+            <div class="account-help-icon">
+                <img src="images/icon-help.svg" class="help-icon"/>
+                <p class="account-help-text" translate="x_KeystoreDesc">This Keystore / JSON file matches the format
+                    used by Mist & Geth so you can easily import it in the future. It is the recommended file to
+                    download and back up.</p>
+                <h5 translate="x_Keystore">Keystore/JSON File (Recommended • Encrypted • Mist/Geth Format)</h5>
+            </div>
+            <a class="btn btn-info btn-block" href="{{blobEnc}}" download="{{encFileName}}" translate="x_Download">
+                DOWNLOAD </a>
+        </div>
+
+        <div class="col-xs-12" ng-if="walletService.wallet.type === 'default'">
+            <div class="account-help-icon">
+                <img src="images/icon-help.svg" class="help-icon"/>
+                <p class="account-help-text" translate="x_PrivKeyDesc">This is the unencrypted text version of your
+                    private key, meaning no password is necessary. If someone were to find your unencrypted private key,
+                    they could access your wallet without a password. For this reason, encrypted versions are typically
+                    recommended.</p>
+                <h5>
+                    <span translate="x_PrivKey">Private Key (unencrypted)</span>
+                </h5>
+            </div>
+            <div class="input-group">
+                <input class="form-control no-animate" type="{{pkeyVisible ? 'text' : 'password'}}"
+                       ng-value="walletService.wallet.getPrivateKeyString()" readonly="readonly">
+                <span tabindex="0" aria-label="make private key visible" role="button" class="input-group-addon eye"
+                      ng-click="pkeyVisible = !pkeyVisible"></span>
+            </div>
+        </div>
+
+
+        <div class="col-xs-12" ng-show="walletService.wallet.type=='default'">
+            <div class="account-help-icon">
+                <img src="images/icon-help.svg" class="help-icon"/>
+                <p class="account-help-text" translate="x_PrintDesc">ProTip: Click print and save this as a PDF, even if
+                    you do not own a printer!</p>
+                <h5 translate="x_Print">Print Paper Wallet:</h5>
+            </div>
+            <a class="btn btn-info btn-block" ng-click="printQRCode()" translate="x_Print">Print Paper Wallet</a>
+        </div>
+    </section>
+
+    <section class="block">
+        <div class="col-xs-6">
+            <h5 translate="x_Address">Your Address:</h5>
+            <div class="qr-code" qr-code="{{walletService.wallet.getChecksumAddressString()}}" watch-var="walletService.wallet"></div>
+        </div>
+        <div class="col-xs-6">
+
+
+            <div ng-if="walletService.wallet.hasOwnProperty('getPrivateKeyString')">
+
+                <h5>
+                    <span translate="x_PrivKey">Private Key (unencrypted)</span>
+                </h5>
+                <div class="qr-pkey-container">
+                    <div class="qr-overlay" ng-show="!pkeyVisible"></div>
+                    <div class="qr-code" qr-code="{{walletService.wallet.getPrivateKeyString()}}" watch-var="walletService.wallet"
+                         width="100%"></div>
+                    <div class="input-group">
+                        <input class="form-control no-animate" type="{{pkeyVisible ? 'text' : 'password'}}"
+                               ng-value="walletService.wallet.getPrivateKeyString()" readonly="readonly"
+                               style="display:none;width:0;height:0;padding:0">
+                        <span tabindex="0" aria-label="make private key visible" role="button"
+                              class="input-group-addon eye"
+                              ng-click="pkeyVisible = !pkeyVisible"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="block">
+        <wallet-balances-table></wallet-balances-table>
+    </section>
+
+</article>
+
+<article class="col-sm-4">
+
+    <sidebar></sidebar>
+</article>
+ 
+
+        </div>
+    </article>
+
+</main>
+
+
+
+            <!-- Swap Page -->
+<main class="tab-pane swap-tab active" ng-if="globalService.currentTab === globalService.tabs.swap.id"
+      ng-controller='swapCtrl' ng-cloak>
+    <div ng-switch="stage">
+
+        <div ng-switch-default>
+
+             <!-- Swap Rates Panel -->
+<article class="swap-rates">
+
+    <!-- Title -->
+    <section class="row">
+        <h5 class="col-xs-6 col-xs-offset-3" translate="SWAP_rates"> Current Rates </h5>
+    </section>
+    <!-- Title -->
+
+    <!-- Colored Columns -->
+    <section class="row order-panel">
+        <div class="col-sm-4 order-info">
+            <p class="mono">
+                <input class="form-control input-sm" ng-value="priceTicker.ETCBTC | number: 6"
+                       style="min-width: 100px; padding: 0;"/>
+                <span>ETC = 1 BTC</span>
+            </p>
+        </div>
+        <div class="col-sm-4 order-info">
+            <a class="link"
+               href="{{changeNow.exchangeLink(swapOrder.fromCoin, swapOrder.toCoin, swapOrder.fromVal)}}"
+               target="_blank"
+               rel="noopener">
+                <img src="https://changenow.io/images/embeds/button.svg" alt="ChangeNOW button">
+            </a>
+        </div>
+        <div class="col-sm-4 order-info">
+            <p class="mono">
+                <input class="form-control input-sm" ng-value="priceTicker.BTCETC | number:6"
+                       style="min-width: 100px; padding: 0;"/>
+                <span>BTC = 1 ETC</span>
+            </p>
+        </div>
+
+
+    </section>
+    <!-- / Colored Columns -->
+
+</article>
+<!-- / Swap Rates Panel -->
+
+
+<form ng-submit="setFinalPrices()" name="swapInitForm" swap-init-form novalidate>
+</form>
+ 
+            
+        </div>
+
+        <div ng-switch-when="2">
+             <!-- Swap Start 2 -->
+<article class="swap-start">
+
+
+    <!-- Title -->
+    <section class="row">
+        <h5 class="col-sm-6 col-sm-offset-3" translate="SWAP_information">Your Information</h5>
+        <div class="col-sm-3">
+
+            <a href="{{changeNow.exchangeLink(swapOrder.fromCoin, swapOrder.toCoin, swapOrder.fromVal)}}"
+               rel="noopener"
+               target="_blank">
+                <img src="https://changenow.io/images/embeds/button.svg" alt="ChangeNOW button">
+            </a>
+        </div>
+    </section>
+    <!-- Title -->
+
+
+    <!-- Info Row -->
+    <section class="order-info-wrap row">
+        <div class="col-sm-4 order-info">
+            <h4> {{swapOrder.fromVal}}
+                <coin-icon icon="{{swapOrder.fromCoin.toLowerCase()}}"/>
+            </h4>
+            <p translate="SWAP_send_amt"> Amount to send </p>
+        </div>
+        <div class="col-sm-4 order-info">
+            <h4>
+                {{swapOrder.toVal}}
+                <coin-icon icon="{{swapOrder.toCoin.toLowerCase()}}"/>
+            </h4>
+            <p translate="SWAP_rec_amt"> Amount to receive </p>
+        </div>
+        <div class="col-sm-4 order-info">
+            <h4>
+                {{swapOrder.fromVal / swapOrder.toVal | number: 6}}
+                <coin-icon icon="{{swapOrder.fromCoin.toLowerCase()}}">
+                </coin-icon>
+                {{' / '}}
+                <coin-icon icon="{{swapOrder.toCoin.toLowerCase()}}">
+                </coin-icon>
+            </h4>
+
+            <h4>
+                {{swapOrder.toVal / swapOrder.fromVal | number: 6}}
+                <coin-icon icon="{{swapOrder.toCoin.toLowerCase()}}">
+                </coin-icon>
+                {{' / '}}
+                <coin-icon icon="{{swapOrder.fromCoin.toLowerCase()}}">
+                </coin-icon>
+            </h4>
+            <p translate="SWAP_your_rate"> Your rate </p>
+        </div>
+    </section>
+    <!-- / Info Row -->
+
+
+    <!-- Your Address -->
+    <section class='swap-address block'>
+
+
+        <div ng-show="initilizingOrder">
+            <h3>Processing Order</h3>
+            <div class="bouncing-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+
+
+        <form name="swapOpenOrderForm" novalidate swap-open-order-form ng-submit="openOrder();">
+        </form>
+        <!-- / CTA -->
+    </section>
+
+
+</article>
+<!-- / Swap Start 2 -->
+ 
+            
+
+        </div>
+        <div ng-switch-when="3">
+             <article class="swap-order">
+
+
+    <!-- Title -->
+    <section class="row text-center">
+        <div class="col-xs-3 text-left"><a class="btn btn-danger btn-xs" ng-click="newSwap()"> Start New Swap </a></div>
+        <h5 class="col-xs-6" translate="SWAP_information">Your Information</h5>
+        <div class="col-xs-3">
+
+            <a href="{{'https://changenow.io/exchange/txs/' + orderResult.id}}" target="_blank" rel="noopener">
+                <img src="https://changenow.io/images/embeds/button.svg" alt="ChangeNOW button">
+            </a>
+        </div>
+    </section>
+
+
+    <!-- Order Info -->
+    <section class="row order-info-wrap">
+        <div class="col-sm-4 order-info">
+            <h4>
+                <a
+                    target="_blank"
+                    rel="noopener"
+                    href="{{'https://changenow.io/exchange/txs/' + orderResult.id}}">
+
+                    {{orderResult.id}}
+                </a>
+            </h4>
+            <p translate="SWAP_ref_num">
+
+            </p>
+        </div>
+
+        <div class="col-sm-4 order-info">
+            <h4>
+                {{orderResult.expectedReceiveAmount}}
+                <coin-icon icon="{{orderResult.toCurrency.toLowerCase()}}"></coin-icon>
+            </h4>
+            <p translate="SWAP_rec_amt">Amount to receive</p>
+        </div>
+        <div class="col-sm-4 order-info">
+            <h4>{{(orderResult.expectedSendAmount / orderResult.expectedReceiveAmount) | number: 6}}
+                <coin-icon icon="{{orderResult.fromCurrency.toLowerCase()}}"></coin-icon>
+                {{' / '}}
+                <coin-icon icon="{{orderResult.toCurrency.toLowerCase()}}"></coin-icon>
+            </h4>
+
+            <h4>{{(orderResult.expectedReceiveAmount / orderResult.expectedSendAmount) | number: 6}}
+                <coin-icon icon="{{orderResult.toCurrency.toLowerCase()}}"></coin-icon>
+                {{' / '}}
+                <coin-icon icon="{{orderResult.fromCurrency.toLowerCase()}}"></coin-icon>
+            </h4>
+            <p translate="SWAP_your_rate">Your rate</p>
+        </div>
+
+
+    </section>
+
+
+    <div ng-show="initilizingOrder">
+        <h3>Processing Order</h3>
+        <div class="bouncing-loader">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+
+    <!-- Swap Progress -->
+    <section class="row swap-progress">
+        <div class="sep"></div>
+        <div class="progress-item {{orderResult.progress.bar[0]}}">
+            <div class="progress-circle"><i>1</i></div>
+            <p translate="SWAP_progress_1">Order Initiated</p>
+        </div>
+        <div class="progress-item {{orderResult.progress.bar[1]}}">
+            <div class="progress-circle"><i>2</i></div>
+            <p><span translate="SWAP_progress_2">Waiting for your </span> {{orderResult.fromCurrency}}...</p>
+        </div>
+        <div class="progress-item {{orderResult.progress.bar[2]}}">
+            <div class="progress-circle"><i>3</i></div>
+            <p>{{orderResult.fromCurrency}} <span translate="SWAP_progress_3">Received!</span></p>
+        </div>
+        <div class="progress-item {{orderResult.progress.bar[3]}}">
+            <div class="progress-circle"><i>4</i></div>
+            <p>
+                <span translate="SWAP_progress_4">Sending your </span> {{orderResult.toCurrency}} <br/>
+            </p>
+        </div>
+        <div class="progress-item {{orderResult.progress.bar[4]}}">
+            <div class="progress-circle"><i>5</i></div>
+            <p translate="SWAP_progress_5">Order Complete</p>
+        </div>
+    </section>
+
+
+    <!-- Swap CTA -->
+    <section class="row text-center"
+             ng-show="['new', 'waiting'].includes(orderResult.status.toLowerCase())">
+        <h1>
+            <span translate="SWAP_order_CTA">Please send</span>
+            <strong> {{orderResult.expectedSendAmount}}
+                <coin-icon icon="{{orderResult.fromCurrency.toLowerCase()}}"></coin-icon>
+            </strong>
+            <span
+                translate="SENDModal_Content_2">to address</span><br/>
+            <strong class="mono text-primary">{{orderResult.payinAddress}}
+            </strong>
+        </h1>
+    </section>
+
+
+    <!-- Swap CTA ETH -->
+    <article class="row"
+             ng-show="[statuses.new, statuses.waiting].includes(orderResult.status.toLowerCase())">
+        <section class="clearfix collapse-container">
+            <div class="text-center" ng-click="wd = !wd">
+
+                <h5>
+
+                          <span
+                              style="margin: 0; padding: 0 2px;"
+                              class="collapse-button glyphicon"
+                              ng-class="wd ? 'glyphicon-plus' : 'glyphicon-minus'"
+                          ></span>
+                    <span
+                        traslate="SWAP_unlock">Unlock your wallet to send ETH or Tokens directly from this page.</span>
+                </h5>
+            </div>
+            <div ng-show="!wd">
+                
+                <wallet-decrypt-drtv></wallet-decrypt-drtv>
+                
+                
+            </div>
+        </section>
+
+        <div ng-controller='sendTxCtrl'
+             ng-show="walletService && walletService.wallet && walletService.wallet.getAddressString()"
+        >
+            <send-tx-modal></send-tx-modal>
+
+            <section class="row">
+                 <!-- Content -->
+<article class="col-sm-7 block">
+
+
+        <form send-transaction-form
+              name="sendTransactionForm"
+        >
+        </form>
+
+        <div ng-show="showRaw">
+            <div class="row form-group">
+                <div class="col-sm-6">
+                    <label for="rawTx" translate="SEND_raw"> Raw Transaction </label>
+                    <textarea class="form-control" id="rawTx" rows="4" readonly>{{rawTx}}</textarea>
+                </div>
+                <div class="col-sm-6">
+                    <label for="signedTx" translate="SEND_signed"> Signed Transaction </label>
+                    <textarea name="signedTx" id="signedTx" class="form-control" rows="4"
+                              readonly>{{signedTx}}</textarea>
+                </div>
+            </div>
+
+            <div class="clearfix form-group">
+                <a class="btn btn-primary btn-block col-sm-11" data-toggle="modal" data-target="#sendTransaction"
+                   translate="SEND_trans"> Send Transaction </a>
+            </div>
+        </div>
+</article>
+<!-- / Content -->
+
+<article class="col-sm-5">
+
+    <sidebar></sidebar>
+
+
+</article>
+ 
+                
+
+            </section>
+        </div>
+    </article>
+    <!-- / Swap CTA ETH -->
+
+
+</article>
+
+ 
+            
+        </div>
+    </div>
+
+
+    <section class="changenow-contact text-center">
+
+
+
+
+        <div ng-show="orderResult && orderResult.id" ng-init="showDetails = false;" class="marg-v-md">
+
+            <div class="d-flex align-items-center justify-content-center">
+                <button class="btn" ng-click="showDetails = !showDetails;">
+                    Swap Details
+                </button>
+            </div>
+            <div ng-show="showDetails">
+                <label for="orderResult">
+                    Order
+                    <a href="{{'https://changenow.io/exchange/txs/' + orderResult.id}}" target="_blank" rel="noopener">
+                        {{orderResult.id}}
+                    </a>
+                </label>
+                <textarea readonly class="form-control" name="orderResult" id="orderResult" rows="8">
+                {{orderResult | json}}
+            </textarea>
+            </div>
+        </div>
+        <p><a class="btn-warning btn-sm"
+              href={{mailHref()}}
+              target="_blank" rel="noopener"> Issue with your Swap? Contact support</a></p>
+        <p ng-click="swapIssue = !swapIssue" style="cursor: pointer; ">
+            <small>Click here if link doesn't work</small>
+        </p>
+        <textarea class="form-control input-sm" rows="9" ng-show="swapIssue" style="max-width: 35rem;margin: auto;">
+            {{TEXT()}}
+
+        </textarea>
+
+    </section>
+
+</main>
+<!-- / Swap Page -->
+
+
+
+
+
+
+            <main class="tab-pane active" ng-if="globalService.currentTab==globalService.tabs.offlineTransaction.id" ng-controller='offlineTxCtrl' ng-cloak style="max-width:1000px; margin: auto">
+
+  <h1 translate="OFFLINE_Title"> Generate & Send Offline Transaction </h1>
+
+   <!-- Step 1 -->
+<article class="row block">
+
+  <h2 class="col-xs-11 clearfix" translate="OFFLLINE_Step1_Title">Step 1: Generate Information (Online Computer)</h2>
+
+  <!-- From Address Input -->
+  <section class="col-xs-11 clearfix">
+    <div class="account-help-icon"><img src="images/icon-help.svg" class="help-icon" />
+      <p class="account-help-text" translate="OFFLINE_Step1_Label_2">Note: This is the FROM address, not the TO address.</p>
+      <label translate="OFFLINE_Step1_Label_1"> From Address: </label>
+    </div>
+    <input class="form-control"
+           type="text"
+           placeholder="0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8"
+           ng-model="tx.from"
+           ng-change="validateAddress(tx.from,'')"
+           ng-class="Validator.isValidAddress(tx.from) ? 'is-valid' : 'is-invalid'" />
+  </section>
+  <!-- From Address Icon -->
+  <section class="col-xs-1 address-identicon-container">
+    <div class="addressIdenticon" title="Address Indenticon" blockie-address="{{tx.from}}" watch-var="tx.from"></div>
+  </section>
+
+
+  <!-- Button -->
+  <section class="col-xs-12 clearfix">
+    <a class="btn btn-info" ng-click="getWalletInfo()" translate="OFFLINE_Step1_Button">GENERATE INFORMATION</a>
+  </section>
+
+
+  <section class="clearfix" ng-show="showWalletInfo">
+
+    <!-- Gas Price -->
+    <div class="col-xs-6 col-sm-5">
+      <label translate="OFFLINE_Step2_Label_3"> Gas Price </label>
+      <input class="form-control" type="text" placeholder="" readonly="readonly" ng-model="gasPriceDec"/>
+    </div>
+
+    <!-- Nonce -->
+    <div class="col-xs-6 col-sm-5">
+      <label translate="OFFLINE_Step2_Label_5"> Nonce </label>
+      <input class="form-control" type="text" placeholder="" readonly="readonly" ng-model="nonceDec"/>
+    </div>
+
+  </section>
+
+</article>
+<!-- / Step 1 -->
+ 
+  
+
+   <article class="block">
+
+  <!-- To Address -->
+  <article class="clearfix">
+    <h2 class="col-xs-12" translate="OFFLINE_Step2_Title"> Step 2: Generate Transaction (Offline Computer) </h2>
+
+    <address-field var-name="tx.to"></address-field>
+
+
+  </article>
+
+  <!-- Amount to Send -->
+  <article class="clearfix">
+    <section class="col-sm-11">
+      <label translate="OFFLINE_Step2_Label_2">
+        Amount to Send
+      </label>
+      <div class="input-group">
+        <input class="form-control" type="text" placeholder="{{'SEND_amount_short' | translate }}" ng-model="tx.value"/>
+        <div class="input-group-btn">
+          <a style="min-width: 150px"
+             class="btn btn-default dropdown-toggle"
+             ng-click="dropdownAmount = !dropdownAmount"
+             ng-class="dropdownEnabled ? '' : 'disabled'">
+                {{unitReadable}}<i class="caret"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownAmount">
+            <li><a ng-class="{true:'active'}[tokenTx.id == 'ether']" ng-click="setSendMode('ether')">{{ajaxReq.type}}</a></li>
+            <li ng-repeat="token in tokenObjs track by $index">
+              <a ng-class="{true:'active'}[tokenTx.id == $index]" ng-click="setSendMode($index, token.getSymbol())" > {{token.getSymbol()}} </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <!-- Gas Limit -->
+  <article class="clearfix">
+    <section class="col-sm-11">
+      <a class="account-help-icon" href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-gas" target="_blank" rel="noopener">
+        <img src="images/icon-help.svg" class="help-icon" />
+        <p class="account-help-text" translate="OFFLINE_Step2_Label_4b">21000 is the default gas limit.</p>
+      </a>
+      <label translate="OFFLINE_Step2_Label_4"> Gas Limit </label>
+      <input class="form-control" type="text" placeholder="" ng-model="tx.gasLimit"/>
+    </section>
+  </article>
+
+  <!-- Gas Price -->
+  <article class="clearfix">
+    <section class="col-sm-11">
+      <a class="account-help-icon" href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-gas" target="_blank" rel="noopener">
+        <img src="images/icon-help.svg" class="help-icon" />
+        <p class="account-help-text" translate="OFFLINE_Step2_Label_3b">This was displayed in Step 1</p>
+      </a>
+      <label translate="OFFLINE_Step2_Label_3"> Gas Price </label>
+      <div class="input-group">
+        <input type="text"
+               class="form-control"
+               placeholder="50"
+               ng-model="gasPriceDec"
+               ng-disabled="checkTxReadOnly"
+               ng-class="Validator.isPositiveNumber(gasPriceDec) ? 'is-valid' : 'is-invalid'" />
+        <div class="input-group-btn">
+          <button style="min-width: 170px" class="btn btn-default">  WEI </button>
+        </div>
+      </div>
+    </section>
+  </article>
+
+
+  <!-- Nonce -->
+  <article class="clearfix">
+    <section class="col-sm-11">
+      <a class="account-help-icon" href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-nonce" target="_blank" rel="noopener">
+        <img src="images/icon-help.svg" class="help-icon" />
+        <p class="account-help-text" translate="OFFLINE_Step2_Label_5b">This was displayed in Step 1.</p>
+      </a>
+      <label translate="OFFLINE_Step2_Label_5"> Nonce </label>
+      <input class="form-control" type="text" placeholder="" ng-model="nonceDec"/>
+    </section>
+  </article>
+
+
+  <!-- Data -->
+  <article class="clearfix">
+    <section class="col-sm-11" ng-show="tokenTx.id=='ether'">
+      <span class="account-help-icon">
+        <img src="images/icon-help.svg" class="help-icon" />
+        <p class="account-help-text" translate="OFFLINE_Step2_Label_6b">This is optional.</p>
+      </span>
+      <label translate="OFFLINE_Step2_Label_6"> Data </label>
+      <input class="form-control" type="text" placeholder="0x4d792045746865722057616c6c6574" id="offlineData" ng-model="tx.data" />
+    </section>
+  </article>
+
+</article>
+
+
+<!-- Decrypt -->
+<article class="clearfix">
+  <wallet-decrypt-drtv></wallet-decrypt-drtv>
+</article>
+
+
+<!-- Button -->
+<article class="row block" ng-show="wallet!=null">
+  <section class="col-xs-12 clearfix">
+    <a class="btn btn-info" ng-click="generateTx()" translate="SEND_generate">Generate Signed Transaction</a>
+  </section>
+  <section class="col-sm-5 clearfix">
+    <label translate="SEND_raw"> Raw Transaction </label>
+    <textarea class="form-control" placeholder="" readonly="readonly" rows="5" ng-model="rawTx"></textarea>
+  </section>
+  <section class="col-sm-5 clearfix">
+    <label translate="SEND_signed"> Signed Transaction </label>
+    <textarea class="form-control" placeholder="" readonly="readonly" rows="5" ng-model="signedTx"></textarea>
+  </section>
+  <section class="col-sm-2 cleafix">
+    <div class="qr-code" qr-code="{{signedTx}}" watch-var="signedTx" width="100%"></div>
+  </section>
+</article>
+ 
+  
+
+   <article class="block">
+
+  <h2 translate="OFFLINE_Step3_Title"> Step 3: Send / Publish Transaction </h2>
+
+  <p translate="OFFLINE_Step3_Label_1"> Paste the signed transaction from Step 2 </p>
+
+  <label translate="SEND_signed"> Signed Transaction </label>
+  <textarea class="form-control" rows="3" ng-model="signedTx"></textarea>
+
+  <a class="btn btn-primary" ng-click="confirmSendTx()" translate="SEND_trans">SEND TRANSACTION</a>
+
+</article>
+ 
+  
+
+   <article class="modal fade" id="sendTransactionOffline" tabindex="-1">
+  <section class="modal-dialog">
+    <section class="modal-content">
+
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        <h2 class="modal-title text-danger" translate="SENDModal_Title">Warning!</h2>
+
+        <table class="table text-center"><tbody><tr>
+
+          <td ng-show="tx.sendMode=='ether'">
+            <div class="addressIdenticon med" title="Address Indenticon" blockie-address="{{tx.from}}" watch-var="tx.from"></div>
+          </td>
+          <td ng-show="tx.sendMode!=='ether'">
+            <div class="addressIdenticon med" title="Address Indenticon" blockie-address="{{tokenTx.from}}" watch-var="tokenTx.from"></div>
+          </td>
+
+          <td ng-show="tx.sendMode=='ether'" class="mono">-><br />{{tx.value}} {{unitReadable}}</td>
+          <td ng-show="tx.sendMode!=='ether'" class="mono">-><br />{{tokenTx.value}} {{unitReadable}}</td>
+
+          <td ng-show="tx.sendMode=='ether'">
+            <div class="addressIdenticon med" title="Address Indenticon" blockie-address="{{tx.to}}" watch-var="tx.to"></div>
+          </td>
+          <td ng-show="tx.sendMode!=='ether'">
+            <div class="addressIdenticon med" title="Address Indenticon" blockie-address="{{tokenTx.to}}" watch-var="tokenTx.to"></div>
+          </td>
+
+        </tr></tbody></table>
+
+        <br />
+
+        <p>
+          <span translate="SENDModal_Content_1">You are about to send</span>
+          <strong ng-show="tx.sendMode=='ether'" class="mono">{{tx.value}} {{unitReadable}}</strong>
+          <strong ng-show="tx.sendMode!=='ether'" class="mono">{{tokenTx.value}} {{unitReadable}}</strong>
+          <br />
+          <span translate="SENDModal_Content_2">to address</span>
+          <strong ng-show="tx.sendMode=='ether'" class="mono"> {{tx.to}}. </strong>
+          <strong ng-show="tx.sendMode!=='ether'" class="mono"> {{tokenTx.to}} </strong>
+        </p>
+
+        <p> The <strong>{{ajaxReq.type}}</strong> node you are sending through is provided by <strong>{{ajaxReq.service}}</strong>.</p>
+
+        <h4 translate="SENDModal_Content_3"> Are you sure you want to do this? </h4>
+
+      </div>
+
+
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
+          No, get me out of here!
+        </button>
+        <button class="btn btn-primary" ng-click="sendTx()" translate="SENDModal_Yes">
+          Yes, I am sure! Make transaction.
+        </button>
+      </div>
+
+    </section>
+  </section>
+</article>
+ 
+  
+
+</main>
+
+
+            <main
+    ng-if="globalService.currentTab === globalService.tabs.contracts.id"
+    class="tab-pane contracts active"
+    ng-controller='contractsCtrl'
+    ng-cloak
+>
+
+    <!-- Modals -->
+
+    <!-- Interact Modal -->
+    <!-- Interact Modal -->
+    <article class="modal fade" id="interactWithContractModal" tabindex="-1">
+        <section class="modal-dialog">
+            <form name="sendContractTx" ng-submit="sendTx()" contract-interact-modal>
+            </form>
+        </section>
+    </article>
+    <!-- / Interact Modal -->
+
+    <!-- Contract Deploy Modal -->
+
+    <article class="modal fade" id="deployContract" tabindex="-1">
+        <section class="modal-dialog">
+            <section class="modal-content">
+                <div class="modal-body" ng-if="tx.contractAddr">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" translate="SENDModal_Title">Confirm Transaction!</h2>
+
+
+                    <div class="row col-xs-12">You are about to
+                        <strong>
+                            deploy a contract
+                        </strong>
+                    </div>
+                    <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', tx.contractAddr);}}" target="_blank" rel="noopener">
+                        <div class="row col-xs-12 d-flex justify-content-center align-items-center">
+                            <div class="addressIdenticon med"
+                                 title="Address Indenticon"
+                                 style="display: inline-block; margin: 1rem; padding-right: .2rem;"
+                                 blockie-address="{{tx.contractAddr}}"
+                                 watch-var="tx.contractAddr">
+
+                            </div>
+                            <span>{{ethUtil.toChecksumAddress(tx.contractAddr)}}</span>
+                        </div>
+                    </a>
+                    <div class="row col-xs-12">
+                        On the
+                        <b>
+                            <coin-icon icon="{{ajaxReq.icon}}"></coin-icon>
+                            Chain
+                        </b>
+                    </div>
+
+
+                    <h4 translate="SENDModal_Content_3"> Are you sure you want to do this? </h4>
+                </div>
+
+                <div ng-init="showDetails = false;" class="container-fluid">
+                    <div class="row">
+                        <div class="text-center col-xs-12">
+                            <button type="button"
+                                    class="btn btn-default"
+                                    ng-click="showDetails = !showDetails"
+                            >Details
+                            </button>
+                        </div>
+                    </div>
+                    <div ng-show="showDetails" class="row">
+                        <textarea readonly class="form-control" title="tx details" rows="5">
+                            {{tx | json }}
+                        </textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" translate="SENDModal_No">
+                        No, get me out of here!
+                    </button>
+                    <button class="btn btn-primary" ng-click="sendTx()" translate="SENDModal_Yes">
+                        Yes, I am sure! Make transaction.
+                    </button>
+                </div>
+
+            </section>
+        </section>
+    </article>
+
+
+    <!-- /Contract Deploy Modal -->
+
+    <!-- Modals -->
+
+
+    <!-- Title -->
+    <div class="block text-center">
+        <h2>
+            <a translate="NAV_InteractContract" ng-class="{'isActive': visibility === 'interactView'}"
+               ng-click="setVisibility('interactView')"> Interact with Contract </a>
+            or
+            <a translate="NAV_DeployContract" ng-class="{'isActive': visibility === 'deployView'}"
+               ng-click="setVisibility('deployView')"> Deploy Contract </a>
+        </h2>
+    </div>
+    <!-- / Title -->
+
+
+    <!-- Interact Contracts -->
+
+    <div ng-show="visibility === 'interactView'">
+
+
+        <article class="row block">
+
+             <!-- Address -->
+<section class="col-sm-6 clearfix">
+    <div class="row">
+        <address-field labeltranslated="CONTRACT_Title" var-name="contract.address"></address-field>
+    </div>
+</section>
+
+<!-- Select Contract Dropdown -->
+<section class="col-sm-6 clearfix">
+    <label translate="CONTRACT_Title_2"> Select Existing Contract </label>
+    <div class="dropdown">
+        <a class="btn btn-default dropdown-toggle"
+           ng-click="dropdownExistingContracts = !dropdownExistingContracts">
+            {{selectedAbi.name}}
+            <small class="mono">{{selectedAbi.address}}</small>
+            <i class="caret"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-left" ng-show="dropdownExistingContracts">
+
+            <li ng-repeat="abi in ajaxReq.abiList track by $index"><a ng-click="selectExistingAbi($index)">
+                {{abi.name}}
+                <small class="mono">{{abi.address}}</small>
+            </a></li>
+        </ul>
+    </div>
+</section>
+
+<!-- ABI Textarea -->
+<section class="col-xs-12 clearfix">
+    <label translate="CONTRACT_Json"> ABI / JSON Interface </label>
+    <textarea class="form-control" rows="6"
+              placeholder='[{ "type":"contructor", "inputs": [{ "name":"param1", "type":"uint256", "indexed":true }], "name":"Event" }, { "type":"function", "inputs": [{"name":"a", "type":"uint256"}], "name":"foo", "outputs": [] }] '
+              ng-class="Validator.isJSON(contract.abi) ? 'is-valid' : 'is-invalid'" ng-model="contract.abi"></textarea>
+</section>
+
+<!-- Button -->
+<section class="col-xs-12 clearfix">
+    <button class="btn btn-primary" ng-click="initContract()" translate="x_Access"> ACCESS</button>
+</section>
+ 
+            
+
+        </article>
+
+
+        <article class="row block" ng-show="showReadWrite">
+
+             <!-- STEP READ/WRITE -->
+<section class="col-xs-12 clearfix">
+
+    <!-- Contract Info CONTRACT_Interact_CTA -->
+    <div class="form-group">
+        <h4>
+            <span translate="CONTRACT_Interact_Title">
+            Read / Write Contract
+            </span>
+
+            <a href="{{ajaxReq.blockExplorerAddr.replace('[[address]]', ethUtil.toChecksumAddress(contract.address))}}"
+               target="_blank" rel="noopener"
+               class="pull-right"
+            >
+                <small class="d-inline-flex align-items-center justify-content-center">
+                    <div class="addressIdenticon med" title="Address Indenticon" blockie-address="{{contract.address}}"
+                         watch-var="contract.address"></div>
+                    {{ ethUtil.toChecksumAddress(contract.address) }}
+                </small>
+            </a>
+        </h4>
+
+        <div class="form-group well"
+             ng-show="contract.address === '0x0101010101010101010101010101010101010101' || contract.address === '0x1010101010101010101010101010101010101010'">
+            <p> Please change the address to your Multisig Address to your own address.</p>
+        </div>
+
+        <eos-keypair></eos-keypair>
+
+        <div class="btn-group">
+            <a class="btn btn-default" ng-click="dropdownContracts = !dropdownContracts">
+                {{!(contract.selectedFunc && contract.selectedFunc.name) ? "Select a function" : contract.selectedFunc.name}}<i
+                class="caret"></i></a>
+            <ul class="dropdown-menu" ng-show="dropdownContracts">
+                <li ng-repeat="func in contract.functions track by $index"
+                    ng-class="func.stateMutability === 'view' ? 'btn-read' : 'btn-write'"
+                ><a
+                    style="color: rgb(0,0,0)"
+                    ng-click="selectFunc($index)">{{func.name}}</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- Write -->
+    <div class="form-group" ng-show="contract.selectedFunc">
+        <form name="writeValue"
+              ng-show="contract.selectedFunc &&
+              contract.selectedFunc.stateMutability  &&
+              'payable' === contract.selectedFunc.stateMutability"
+        >
+            <label translate="SEND_amount">Amount to Send:</label>
+            <div class="input-group col-sm-11">
+                <input
+                    type="number"
+                    class="form-control"
+                    min="0"
+                    step="1e-18"
+                    placeholder="{{ 'SEND_amount_short' | translate }}"
+                    ng-model="tx.value"
+                    autocomplete="off"
+                    ng-model-options="{debounce: 500}"
+                    spellcheck="false"
+                    name="value"
+                    ng-class="writeValue.value.$valid ? 'is-valid' : 'is-invalid'"
+                />
+                <div class="input-group-btn">
+                    <a style="min-width: 170px"
+                       class="btn"
+                    >
+                        <coin-icon icon="{{ajaxReq.icon}}"></coin-icon>
+                    </a>
+                </div>
+            </div>
+        </form>
+
+        <div ng-repeat="input in contract.functions[contract.selectedFunc.index].inputs track by $index">
+
+            <label> {{input.name}}
+    <small> {{input.type}}</small>
+</label>
+<div ng-switch="input.type.slice(-2) === '[]'">
+    <array-input-drtv ng-switch-when="true" name="{{input.name}}" type="{{input.type}}"></array-input-drtv>
+    <div ng-switch-default="false" ng-switch="input.type">
+        <p class="item write-unit256" ng-switch-when="uint256">
+
+            <input
+                class="form-control"
+                type="text"
+                placeholder="151"
+                ng-model="input.value"
+                ng-class="Validator.isPositiveNumber(input.value) ? 'is-valid' : 'is-invalid'"
+            />
+        </p>
+        <p class="item write-string" ng-switch-when="string">
+
+            <input
+                class="form-control"
+                type="text"
+                placeholder="Ohh! Shiny!"
+                ng-model="input.value"
+                ng-class="input.value!='' ? 'is-valid' : 'is-invalid'"
+            />
+        </p>
+        <p class="item write-bytes" ng-switch-when="bytes">
+
+            <input
+                class="form-control"
+                type="text"
+                placeholder="0x151bc..."
+                ng-model="input.value"
+                ng-class="Validator.isValidHex(input.value) ? 'is-valid' : 'is-invalid'"/>
+        </p>
+        <p class="item write-boolean" ng-switch-when="bool">
+
+            <span class="radio">
+                <label>
+                <input ng-model="input.value"
+                       type="radio"
+                       name="optradio-{{input.name}}"
+                       ng-value="true"
+                >
+                    True
+                </label>
+            </span>
+            <span class="radio">
+                    <label>
+                        <input ng-model="input.value"
+                               type="radio"
+                               name="optradio-{{input.name}}"
+                               ng-value="false">
+                        False
+                    </label>
+                </span>
+        </p>
+        <p class="item" ng-switch-default>
+            <input class="form-control"
+                   type="{{input.type}}"
+                   placeholder=""
+                   ng-model="input.value"
+                   ng-class="input.value ? 'is-valid' : 'is-invalid'"
+            />
+        </p>
+    </div>
+</div>
+
+
+        </div>
+    </div>
+    <!-- / Write -->
+    <!-- Output -->
+    <div class="form-group output" ng-show="(contract.functions[contract.selectedFunc.index].constant || contract.functions[contract.selectedFunc.index].stateMutability === 'view')">
+        <div ng-repeat="output in contract.functions[contract.selectedFunc.index].outputs track by $index"
+             class="form-group">
+
+            <!-- Address -->
+
+<label> &#8627; {{output.name}}
+    <small> {{output.type}}</small>
+</label>
+<div ng-switch on="output.type">
+
+    <div class="item write-address" ng-switch-when="address">
+        <div class="row">
+            <div class="col-xs-11"><input class="form-control" type="text" placeholder="0x314156..."
+                                          ng-model="output.value" readonly/></div>
+            <div class="col-xs-1">
+                <div class="addressIdenticon med" title="Address Indenticon"
+                     blockie-address="{{output.value}}" watch-var="output.value"></div>
+            </div>
+        </div>
+    </div>
+    <!-- unit256 -->
+    <p class="item write-unit256" ng-switch-when="uint256">
+
+        <input class="form-control" type="text" placeholder="151" ng-model="output.value" readonly/>
+    </p>
+    <!-- Address -->
+    <p class="item write-string" ng-switch-when="string">
+
+        <input class="form-control" type="text" placeholder="Ohh! Shiny!" ng-model="output.value" readonly/>
+    </p>
+    <!-- Bytes -->
+    <p class="item write-bytes" ng-switch-when="bytes">
+
+        <input class="form-control" type="text" placeholder="0x151bc..." ng-model="output.value" readonly/>
+    </p>
+    <!-- Boolean -->
+    <div class="item write-boolean" ng-switch-when="bool">
+
+        <div ng-switch="output.value">
+
+            <span ng-switch-when="{{true}}" class="output-boolean-true">
+                <img src="images/icon-check-green.svg" width="22px" height="22px"/>
+                TRUE
+            </span>
+            <span ng-switch-default class="output-boolean-false">
+                <img src="images/icon-x.svg" width="22px" height="22px"/>
+                FALSE
+            </span>
+        </div>
+    </div>
+    <!--  -->
+    <p class="item" ng-switch-default>
+
+        <input class="form-control" type="text" placeholder="" ng-model="output.value" readonly/>
+    </p>
+</div>
+
+
+
+        </div>
+    </div>
+    <!-- / Output -->
+
+
+</section>
+ 
+            
+
+        </article>
+
+
+        <!-- / Interact Contracts -->
+
+    </div>
+    <!-- Deploy Contract -->
+    <article class="row block" ng-show="visibility === 'deployView'">
+
+         <section class="col-xs-12">
+
+    <!-- Byte Code -->
+    <div class="form-group">
+        <h4 translate="CONTRACT_ByteCode"> Byte Code: </h4>
+        <input type='hidden' ng-model="contract.bytecode">
+        <textarea
+            class="form-control"
+            rows="8"
+            placeholder="608060405234801561001057600080fd5b5061003533601260ff16600a0a6127100261003a640100000000026401000000009004565b6101b3565b60008273ffffffffffffffffffffffffffffffffffffffff161415151561006057600080fd5b610082816002546101926401000000000261104a179091906401000000009004565b6002819055506100e6816000808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020546101926401000000000261104a179091906401000000009004565b6000808473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055508173ffffffffffffffffffffffffffffffffffffffff16600073ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef836040518082815260200191505060405180910390a35050565b60008082840190508381101515156101a957600080fd5b8091505092915050565b611097806101c26000396000f3006080604052600436106100ba576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806306fdde03146100bf578063095ea7b31461014f57806318160ddd146101b457806323b872dd146101df5780632ff2e9dc14610264578063313ce5671461028f57806339509351146102c057806370a082311461032557806395d89b411461037c578063a457c2d71461040c578063a9059cbb14610471578063dd62ed3e146104d6575b600080fd5b3480156100cb57600080fd5b506100d461054d565b6040518080602001828103825283818151815260200191508051906020019080838360005b838110156101145780820151818401526020810190506100f9565b50505050905090810190601f1680156101415780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b34801561015b57600080fd5b5061019a600480360381019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919080359060200190929190505050610586565b604051808215151515815260200191505060405180910390f35b3480156101c057600080fd5b506101c96106b3565b6040518082815260200191505060405180910390f35b3480156101eb57600080fd5b5061024a600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803590602001909291905050506106bd565b604051808215151515815260200191505060405180910390f35b34801561027057600080fd5b5061027961086f565b6040518082815260200191505060405180910390f35b34801561029b57600080fd5b506102a461087e565b604051808260ff1660ff16815260200191505060405180910390f35b3480156102cc57600080fd5b5061030b600480360381019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919080359060200190929190505050610883565b604051808215151515815260200191505060405180910390f35b34801561033157600080fd5b50610366600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610aba565b6040518082815260200191505060405180910390f35b34801561038857600080fd5b50610391610b02565b6040518080602001828103825283818151815260200191508051906020019080838360005b838110156103d15780820151818401526020810190506103b6565b50505050905090810190601f1680156103fe5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b34801561041857600080fd5b50610457600480360381019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919080359060200190929190505050610b3b565b604051808215151515815260200191505060405180910390f35b34801561047d57600080fd5b506104bc600480360381019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919080359060200190929190505050610d72565b604051808215151515815260200191505060405180910390f35b3480156104e257600080fd5b50610537600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610d89565b6040518082815260200191505060405180910390f35b6040805190810160405280600881526020017f54657374436f696e00000000000000000000000000000000000000000000000081525081565b60008073ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff16141515156105c357600080fd5b81600160003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055508273ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925846040518082815260200191505060405180910390a36001905092915050565b6000600254905090565b6000600160008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002054821115151561074a57600080fd5b6107d982600160008773ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002054610e1090919063ffffffff16565b600160008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002081905550610864848484610e31565b600190509392505050565b601260ff16600a0a6127100281565b601281565b60008073ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff16141515156108c057600080fd5b61094f82600160003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205461104a90919063ffffffff16565b600160003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055508273ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925600160003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008773ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020546040518082815260200191505060405180910390a36001905092915050565b60008060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b6040805190810160405280600381526020017f545354000000000000000000000000000000000000000000000000000000000081525081565b60008073ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff1614151515610b7857600080fd5b610c0782600160003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002054610e1090919063ffffffff16565b600160003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055508273ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925600160003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008773ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020546040518082815260200191505060405180910390a36001905092915050565b6000610d7f338484610e31565b6001905092915050565b6000600160008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002054905092915050565b600080838311151515610e2257600080fd5b82840390508091505092915050565b6000808473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020548111151515610e7e57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614151515610eba57600080fd5b610f0b816000808673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002054610e1090919063ffffffff16565b6000808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002081905550610f9e816000808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205461104a90919063ffffffff16565b6000808473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055508173ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef836040518082815260200191505060405180910390a3505050565b600080828401905083811015151561106157600080fd5b80915050929150505600a165627a7a723058207bb550678df83ed0a4f4399d81213b89a48101fcc713a607c43b5a8443a03f2e0029"
+            ng-model ="contract.input"
+            ng-change="contract.bytecode=parseByteCode(contract.input)"
+            ng-class="(Validator.isValidByteCode(contract.bytecode)||Validator.isValidHex(contract.bytecode)) && contract.bytecode != '' ? 'is-valid' : 'is-invalid'"></textarea>
+    </div>
+
+    <a ng-click="toggleContractParams()" ng-show="true">
+        <p class="strong ng-scope" ng-show="!contract.applyConstructorParams">
+            <span class="glyphicon glyphicon-plus"></span>
+            <span translate="TRANS_params">
+                Advanced: Add Params
+            </span>
+        </p>
+        <p class="strong ng-scope" ng-show="contract.applyConstructorParams">
+            <span class="glyphicon glyphicon-minus"></span>
+            <span translate="TRANS_params_remove">
+                Advanced: Remove Params
+            </span>
+        </p>
+    </a>
+
+    <section class="col-xs-12 clearfix"
+             ng-show="contract.applyConstructorParams"
+    >
+        <label translate="CONTRACT_Json"> ABI / JSON Interface </label>
+        <textarea class="form-control"
+                  rows="6"
+                  placeholder='[{ "type":"contructor", "inputs": [{ "name":"param1", "type":"uint256", "indexed":true }], "name":"Event" }, { "type":"function", "inputs": [{"name":"a", "type":"uint256"}], "name":"foo", "outputs": [] }] '
+                  ng-class="Validator.isJSON(contract.abi) ? 'is-valid' : 'is-invalid'"
+                  ng-model="contract.abi"
+        ></textarea>
+    </section>
+
+    <div
+        ng-show="contract.applyConstructorParams && contract.abi"
+        ng-repeat="input in contract.constructorParams.inputs track by $index"
+        class="form-group"
+    >
+
+        <label> {{input.name}}
+    <small> {{input.type}}</small>
+</label>
+<div ng-switch="input.type.slice(-2) === '[]'">
+    <array-input-drtv ng-switch-when="true" name="{{input.name}}" type="{{input.type}}"></array-input-drtv>
+    <div ng-switch-default="false" ng-switch="input.type">
+        <p class="item write-unit256" ng-switch-when="uint256">
+
+            <input
+                class="form-control"
+                type="text"
+                placeholder="151"
+                ng-model="input.value"
+                ng-class="Validator.isPositiveNumber(input.value) ? 'is-valid' : 'is-invalid'"
+            />
+        </p>
+        <p class="item write-string" ng-switch-when="string">
+
+            <input
+                class="form-control"
+                type="text"
+                placeholder="Ohh! Shiny!"
+                ng-model="input.value"
+                ng-class="input.value!='' ? 'is-valid' : 'is-invalid'"
+            />
+        </p>
+        <p class="item write-bytes" ng-switch-when="bytes">
+
+            <input
+                class="form-control"
+                type="text"
+                placeholder="0x151bc..."
+                ng-model="input.value"
+                ng-class="Validator.isValidHex(input.value) ? 'is-valid' : 'is-invalid'"/>
+        </p>
+        <p class="item write-boolean" ng-switch-when="bool">
+
+            <span class="radio">
+                <label>
+                <input ng-model="input.value"
+                       type="radio"
+                       name="optradio-{{input.name}}"
+                       ng-value="true"
+                >
+                    True
+                </label>
+            </span>
+            <span class="radio">
+                    <label>
+                        <input ng-model="input.value"
+                               type="radio"
+                               name="optradio-{{input.name}}"
+                               ng-value="false">
+                        False
+                    </label>
+                </span>
+        </p>
+        <p class="item" ng-switch-default>
+            <input class="form-control"
+                   type="{{input.type}}"
+                   placeholder=""
+                   ng-model="input.value"
+                   ng-class="input.value ? 'is-valid' : 'is-invalid'"
+            />
+        </p>
+    </div>
+</div>
+
+
+
+    </div>
+
+    <!-- Gas -->
+    <div class="form-group">
+        <h4 translate="TRANS_gas"> Gas: </h4>
+        <div class="input-group">
+            <input class="form-control"
+                   type="number"
+                   placeholder="300000"
+                   ng-model="tx.gasLimit"
+                   min="21000"
+                   ng-class="Validator.isPositiveNumber(tx.gasLimit) ? 'is-valid' : 'is-invalid'"
+            />
+
+            <div class="input-group-btn">
+                <button style="min-width: 170px"
+                        class="btn btn-default"
+                        translate="SEND_estimateGas"
+
+                        ng-click="estimateGasLimit()"
+                > Estimate gasLimit
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign TX Button (once wallet has been unlocked) -->
+    <div class="form-group">
+        <a class="btn btn-info btn-block" ng-click="generateTx()" ng-show="wd" translate="DEP_signtx"> Sign
+            Transaction </a>
+    </div>
+
+    <!-- TXs -->
+    <section class="row" ng-show="showRaw">
+        <!-- Raw TX -->
+        <div class="form-group col-sm-6">
+            <h4 translate="SEND_raw"> Raw Transaction </h4>
+            <textarea class="form-control" rows="4" readonly>{{rawTx}}</textarea>
+        </div>
+        <!-- Singed TX -->
+        <div class="form-group col-sm-6">
+            <h4 translate="SEND_signed"> Signed Transaction </h4>
+            <textarea class="form-control" rows="4" readonly>{{signedTx}}</textarea>
+        </div>
+    </section>
+
+    <!-- Deploy Contract Button (once tx has been signed) -->
+    <div class="form-group" ng-show="showRaw">
+        <a class="btn btn-primary btn-block" data-toggle="modal" data-target="#deployContract"
+           translate="NAV_DeployContract"> Deploy Contract </a>
+    </div>
+
+
+</section>
+ 
+        
+
+    </article>
+    <!-- / Deploy Contract -->
+
+    <article class="col-xs-12" ng-show="contract.selectedFunc!=null && visibility === 'interactView'">
+
+        <button class="btn btn-primary btn-block" ng-click="readFromContract()"
+                ng-show="(contract.functions[contract.selectedFunc.index].constant || contract.functions[contract.selectedFunc.index].stateMutability === 'view') && showRead">
+            <span translate="CONTRACT_Read"> READ</span>
+        </button>
+
+        <button class="btn btn-primary btn-block" ng-click="writeToContract()"
+                ng-show="!(contract.functions[contract.selectedFunc.index].constant || contract.functions[contract.selectedFunc.index].stateMutability === 'view')">
+            <span translate="CONTRACT_Write"> WRITE</span>
+        </button>
+
+    </article>
+
+
+    <!--wallet decrypt-->
+
+    <div ng-click="wd = !wd" class="marg-v-md">
+
+        <h1>
+                 <span
+                     style="margin: 0; padding: 0 2px;"
+                     class="collapse-button glyphicon"
+                     ng-class="wd ? 'glyphicon-plus' : 'glyphicon-minus'"
+                 ></span>
+            <span>Change Wallet</span>
+        </h1>
+    </div>
+    <article class="form-group"
+             ng-show="!wd">
+        
+        
+        <wallet-decrypt-drtv></wallet-decrypt-drtv>
+        
+    </article>
+
+
+</main>
+
+
+            
+
+            <main class="tab-pane active" ng-if="globalService.currentTab === globalService.tabs.viewWalletInfo.id"
+      ng-controller='viewWalletCtrl' ng-cloak>
+
+    <article class="collapse-container">
+
+        <div ng-click="wd = !wd">
+
+
+            <h1>
+                <span
+                    style="margin: 0; padding: 0 2px;"
+                    class="collapse-button glyphicon"
+                    ng-class="wd ? 'glyphicon-plus' : 'glyphicon-minus'"
+                >
+
+                </span>
+                <span translate="NAV_ViewWallet">View Wallet Details</span>
+            </h1>
+        </div>
+
+        <div ng-show="!wd">
+            <p translate="VIEWWALLET_Subtitle">
+                This page allows you to download different versions of private keys and re-print your paper wallet. You
+                may want to do this in order to [import your account into
+                Geth/Mist](http://ethereum.stackexchange.com/questions/465/how-to-import-a-plain-private-key-into-geth/).
+                If you want to check your balance, we recommend using a blockchain explorer like <a
+                href="http://etherscan.io/" target="_blank" rel="noopener">etherscan.io</a>.
+            </p>
+            <div ng-show="!wd">
+                
+                
+                <wallet-decrypt-drtv></wallet-decrypt-drtv>
+                
+            </div>
+        </div>
+
+    </article>
+
+    <article class="row" ng-show="wd">
+
+
+        
+         <article class="col-sm-8 view-wallet-content" ng-init="pkeyVisible = false;">
+
+    <section class="block">
+        <div class="col-xs-11">
+            <div class="account-help-icon">
+                <img src="images/icon-help.svg" class="help-icon"/>
+                <p class="account-help-text" translate="x_AddessDesc">You may know this as your "Account #" or your
+                    "Public Key". It's what you send people so they can send you ETH. That icon is an easy way to
+                    recognize your address.</p>
+                <h5 translate="x_Address">Your Address:</h5>
+            </div>
+            <input class="form-control" type="text" ng-value="walletService.wallet.getChecksumAddressString()" readonly="readonly">
+        </div>
+
+        <div class="col-xs-1 address-identicon-container">
+            <div class="addressIdenticon" title="Address Indenticon" blockie-address="{{walletService.wallet.getAddressString()}}"
+                 watch-var="wallet"></div>
+        </div>
+
+        <div class="col-xs-12" ng-show='showEnc'>
+            <div class="account-help-icon">
+                <img src="images/icon-help.svg" class="help-icon"/>
+                <p class="account-help-text" translate="x_KeystoreDesc">This Keystore / JSON file matches the format
+                    used by Mist & Geth so you can easily import it in the future. It is the recommended file to
+                    download and back up.</p>
+                <h5 translate="x_Keystore">Keystore/JSON File (Recommended • Encrypted • Mist/Geth Format)</h5>
+            </div>
+            <a class="btn btn-info btn-block" href="{{blobEnc}}" download="{{encFileName}}" translate="x_Download">
+                DOWNLOAD </a>
+        </div>
+
+        <div class="col-xs-12" ng-if="walletService.wallet.type === 'default'">
+            <div class="account-help-icon">
+                <img src="images/icon-help.svg" class="help-icon"/>
+                <p class="account-help-text" translate="x_PrivKeyDesc">This is the unencrypted text version of your
+                    private key, meaning no password is necessary. If someone were to find your unencrypted private key,
+                    they could access your wallet without a password. For this reason, encrypted versions are typically
+                    recommended.</p>
+                <h5>
+                    <span translate="x_PrivKey">Private Key (unencrypted)</span>
+                </h5>
+            </div>
+            <div class="input-group">
+                <input class="form-control no-animate" type="{{pkeyVisible ? 'text' : 'password'}}"
+                       ng-value="walletService.wallet.getPrivateKeyString()" readonly="readonly">
+                <span tabindex="0" aria-label="make private key visible" role="button" class="input-group-addon eye"
+                      ng-click="pkeyVisible = !pkeyVisible"></span>
+            </div>
+        </div>
+
+
+        <div class="col-xs-12" ng-show="walletService.wallet.type=='default'">
+            <div class="account-help-icon">
+                <img src="images/icon-help.svg" class="help-icon"/>
+                <p class="account-help-text" translate="x_PrintDesc">ProTip: Click print and save this as a PDF, even if
+                    you do not own a printer!</p>
+                <h5 translate="x_Print">Print Paper Wallet:</h5>
+            </div>
+            <a class="btn btn-info btn-block" ng-click="printQRCode()" translate="x_Print">Print Paper Wallet</a>
+        </div>
+    </section>
+
+    <section class="block">
+        <div class="col-xs-6">
+            <h5 translate="x_Address">Your Address:</h5>
+            <div class="qr-code" qr-code="{{walletService.wallet.getChecksumAddressString()}}" watch-var="walletService.wallet"></div>
+        </div>
+        <div class="col-xs-6">
+
+
+            <div ng-if="walletService.wallet.hasOwnProperty('getPrivateKeyString')">
+
+                <h5>
+                    <span translate="x_PrivKey">Private Key (unencrypted)</span>
+                </h5>
+                <div class="qr-pkey-container">
+                    <div class="qr-overlay" ng-show="!pkeyVisible"></div>
+                    <div class="qr-code" qr-code="{{walletService.wallet.getPrivateKeyString()}}" watch-var="walletService.wallet"
+                         width="100%"></div>
+                    <div class="input-group">
+                        <input class="form-control no-animate" type="{{pkeyVisible ? 'text' : 'password'}}"
+                               ng-value="walletService.wallet.getPrivateKeyString()" readonly="readonly"
+                               style="display:none;width:0;height:0;padding:0">
+                        <span tabindex="0" aria-label="make private key visible" role="button"
+                              class="input-group-addon eye"
+                              ng-click="pkeyVisible = !pkeyVisible"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="block">
+        <wallet-balances-table></wallet-balances-table>
+    </section>
+
+</article>
+
+<article class="col-sm-4">
+
+    <sidebar></sidebar>
+</article>
+ 
+
+    </article>
+
+</main>
+
+
+            <main class="tab-pane block--container active" ng-if="globalService.currentTab==globalService.tabs.txStatus.id" ng-controller='txStatusCtrl' role="main" ng-cloak>
+
+  <!-- Section 1 -->
+  <section class="block txstatus__1">
+    <article class="row">
+      <section class="col-xs-12 col-sm-8 col-sm-offset-2 text-center">
+        <h1 translate="NAV_CheckTxStatus"> Check TX Status </h1>
+        <p translate="tx_Summary"></p>
+      </section>
+
+      <section class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
+          <input
+             class="form-control"
+             type="text"
+             placeholder="0x3f0efedfe0a0cd611f2465fac9a3699f92d6a06613bc3ead4f786856f5c73e9c"
+             ng-model="txInfo.hash"
+             ng-keyup="$event.keyCode == 13 && checkTxStatus()"
+             aria-label="{{'x_TxHash' | translate}}" ng-class="Validator.isValidTxHash(txInfo.hash) ? 'is-valid' : 'is-invalid'"/>
+          <button tabindex="0"
+                  role="button"
+                  class="btn btn-primary"
+                  ng-click="checkTxStatus()"
+                  translate="NAV_CheckTxStatus"> Check TX Status </button>
+      </section>
+    </article>
+  </section>
+  <!-- / Section 1 -->
+
+
+  <!-- Section 2: Current State -->
+  <section class="block" ng-show="txInfo.status==txStatus.mined || txInfo.status==txStatus.notFound || txInfo.status==txStatus.found">
+
+    <div class="cont-md" ng-show="txInfo.status == txStatus.mined">
+      <h3 class="text-success" translate="tx_FoundOnChain"> Transaction Found </h3>
+      <h5> <a href="https://etherscan.io/tx/{{ tx.hash }}" target="_blank" rel="noopener"> {{ tx.hash }} </a> </h5>
+      <p><strong translate="tx_FoundOnChain_1"></strong></p>
+      <ul>
+        <li translate="tx_FoundOnChain_2"></li>
+        <li translate="tx_FoundOnChain_3"></li>
+      </ul>
+    </div>
+
+    <div class="cont-md" ng-show="txInfo.status == txStatus.notFound">
+      <h3 class="text-danger" translate="tx_notFound">Transaction Not Found</h3>
+      <p><strong translate="tx_notFound_1"></strong></p>
+      <ul>
+        <li translate="tx_notFound_2"></li>
+        <li translate="tx_notFound_3"></li>
+        <li translate="tx_notFound_4"></li>
+      </ul>
+    </div>
+
+    <div class="cont-md" ng-show="txInfo.status == txStatus.found">
+      <h3 class="text-warning" translate="tx_foundInPending">Pending Transaction Found</h3>
+      <ul>
+        <li translate="tx_foundInPending_1"></li>
+        <li translate="tx_foundInPending_2"></li>
+        <li translate="tx_foundInPending_3"></li>
+      </ul>
+    </div>
+
+    <div ng-show="txInfo.status == txStatus.found || txInfo.status == txStatus.mined">
+    <h4 translate="tx_Details" class="cont-md">Transaction Details</h4>
+    <br />
+    <table class="table table-striped cont-md"> <!-- ng-show="tx.status=='foundOnChain' || foundInPending'"-->
+      <tbody>
+        <tr>
+          <td translate="x_TxHash">TX Hash</td>
+          <td><a href="https://etherscan.io/tx/{{ txInfo.hash }}" target="_blank" rel="noopener"> {{ txInfo.hash }} </a></td>
+        </tr>
+        <tr>
+          <td translate="OFFLINE_Step1_Label_1">From Address</td>
+          <td><a href="https://etherscan.io/address/{{ txInfo.from }}" target="_blank" rel="noopener"> {{ txInfo.from }} </a></td>
+        </tr>
+        <tr>
+          <td translate="OFFLINE_Step2_Label_1">To Address</td>
+          <td><a href="https://etherscan.io/address/{{ txInfo.to }}" target="_blank" rel="noopener"> {{ txInfo.to }} </a></td>
+        </tr>
+        <tr>
+          <td translate="SEND_amount_short">Amount</td>
+          <td>{{ txInfo.valueStr }} </td>
+        </tr>
+        <tr>
+          <td>
+            <a class="account-help-icon" href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-nonce" target="_blank" rel="noopener">
+              <img src="images/icon-help.svg" class="help-icon" />
+              <p class="account-help-text" translate="NONCE_Desc"></p>
+            </a>
+            <span translate="OFFLINE_Step2_Label_5">Nonce</span>
+          </td>
+          <td>{{ txInfo.nonce }} </td>
+        </tr>
+        <tr>
+          <td>
+            <a class="account-help-icon" href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-gas" target="_blank" rel="noopener">
+              <img src="images/icon-help.svg" class="help-icon" />
+              <p class="account-help-text" translate="GAS_LIMIT_Desc"></p>
+            </a>
+            <span translate="OFFLINE_Step2_Label_4">Gas Limit</span>
+          </td>
+          <td>{{ txInfo.gasLimit }} </td>
+        </tr>
+        <tr>
+          <td>
+            <a class="account-help-icon" href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-gas" target="_blank" rel="noopener">
+              <img src="images/icon-help.svg" class="help-icon" />
+              <p class="account-help-text" translate="GAS_PRICE_Desc"></p>
+            </a>
+            <span translate="OFFLINE_Step2_Label_3">Gas Price</span>
+          </td>
+          <td>
+            {{ txInfo.gasPrice.gwei }} GWEI
+            <small>({{ txInfo.gasPrice.wei }} WEI)</small></td>
+        </tr>
+<!--
+        <tr>
+          <td>
+            <a class="account-help-icon" href="https://myetherwallet.groovehq.com/knowledge_base/topics/what-is-gas" target="_blank" rel="noopener">
+              <img src="images/icon-help.svg" class="help-icon" />
+              <p class="account-help-text" translate="TXFEE_Desc"></p>
+            </a>
+            <span translate="x_TXFee">TX Fee</span>
+          </td>
+          <td>
+            ({{ txFee.eth }} ETH)
+            <small>({{ txFee.usd }} USD)</small>
+          </td>
+        </tr>
+-->
+        <tr>
+          <td translate="OFFLINE_Step2_Label_6">Data</td>
+          <td>{{ txInfo.data }} </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+  </section>
+  <!-- / Section 2: Current State -->
+
+
+  <!-- Section 3:  Unlock -->
+  <article class="txstatus__3" ng-show="txInfo.status == txStatus.found">
+    <br><br>
+    <h1 class="text-center" translate="x_CancelReplaceTx">Cancel or Replace Transaction</h1>
+
+    <section class="clearfix collapse-container">
+      <div class="text-center" ng-click="wd = !wd">
+        <a class="collapse-button"><span ng-show="wd">+</span><span ng-show="!wd">-</span></a>
+        <h4 class="text-danger text-center"> Unlock your wallet to replace your transaction. (But, please be careful) </h4>
+      </div>
+      <div ng-show="!wd">
+            <wallet-decrypt-drtv></wallet-decrypt-drtv>         
+          
+      </div>
+    </section>
+  </article>
+  <!-- / Section 3:  Unlock -->
+
+  <!-- Send Tx Content -->
+ <section class="row" ng-show="wallet!=null" ng-controller='sendTxCtrl'>
+      <div ng-show="wallet.getChecksumAddressString() == txInfo.from">
+       <!-- Content -->
+<article class="col-sm-7 block">
+
+
+        <form send-transaction-form
+              name="sendTransactionForm"
+        >
+        </form>
+
+        <div ng-show="showRaw">
+            <div class="row form-group">
+                <div class="col-sm-6">
+                    <label for="rawTx" translate="SEND_raw"> Raw Transaction </label>
+                    <textarea class="form-control" id="rawTx" rows="4" readonly>{{rawTx}}</textarea>
+                </div>
+                <div class="col-sm-6">
+                    <label for="signedTx" translate="SEND_signed"> Signed Transaction </label>
+                    <textarea name="signedTx" id="signedTx" class="form-control" rows="4"
+                              readonly>{{signedTx}}</textarea>
+                </div>
+            </div>
+
+            <div class="clearfix form-group">
+                <a class="btn btn-primary btn-block col-sm-11" data-toggle="modal" data-target="#sendTransaction"
+                   translate="SEND_trans"> Send Transaction </a>
+            </div>
+        </div>
+</article>
+<!-- / Content -->
+
+<article class="col-sm-5">
+
+    <sidebar></sidebar>
+
+
+</article>
+ 
+      
+
+          <send-tx-modal></send-tx-modal>
+      </div>
+      <div class="col-xs-12 block block--danger" ng-show="wallet.getChecksumAddressString() != txInfo.from">
+        <h5>Please unlock the address {{ txInfo.from }}. Only this address can replace a TX.</h5>
+      </div>
+    </section>
+
+
+            <main class="tab-pane active" ng-if="globalService.currentTab==globalService.tabs.bulkGenerate.id" ng-controller='bulkGenCtrl'  ng-cloak>
+
+  <h1 translate="NAV_BulkGenerate"> Bulk Generate Wallets </h1>
+
+  <!-- Top - Bulk Generate -->
+  <section class="row">
+    <div class="col-md-6 col-sm-12 form-group">
+      <h4 translate="BULK_Label_1">Number of Wallets To Generate</h4>
+      <input class="form-control" type="text" placeholder="{{ 'BULK_Label_1' | translate }}" ng-model="amount">
+    </div>
+    <div class="col-md-6 col-sm-12 form-group">
+      <h4 translate="BULK_Label_2">Generate Wallets</h4>
+      <a class="btn btn-primary btn-block" ng-click="genWallets()" translate="BULK_Label_2">Generate Wallets</a>
+    </div>
+  </section>
+  <!-- / Top - Bulk Generate -->
+
+  <!-- Bottom - Display Bulk Generated Wallets -->
+  <section ng-show="showWallets">
+
+    <hr />
+
+    <div class="row">
+      <div class="col-xs-12">
+        <h1 translate="BULK_SuccessMsg">Success! Your wallets have been generated.</h1>
+
+        <div class="alert alert-danger" translate="ERROR_28">**You need your Keystore File + password or Private Key** to access this wallet in the future. Please save & back it up externally! There is no way to recover a wallet if you do not save it. Read the [help page](https://www.myetherwallet.com/#help) for instructions.</div>
+      </div>
+
+      <article class="col-md-9">
+        <table id="bulkgentable" class="table">
+          <thead>
+            <tr>
+              <th width="32"> Address Identicon </th>
+              <th width="500" translate="x_Address">Address</th>
+              <th width="500" translate="x_PrivKey">Private Key (unencrypted)</th>
+            </tr>
+            <tr class="privaddkey" ng-repeat="wallet in wallets">
+            <td>
+                <div class="addressIdenticon" title="Address Indenticon" blockie-address="{{wallet.getAddressString()}}" watch-var="wallet"></div>
+            </td>
+            <td>
+                <textarea class="form-control" rows="4" type="text" readonly>{{wallet.getChecksumAddressString()}}</textarea>
+            </td>
+            <td>
+                <textarea class="form-control" rows="4" type="text" readonly>{{wallet.getPrivateKeyString()}}</textarea>
+            </td>
+            </tr>
+          </thead>
+        </table>
+      </article>
+
+      <article class="col-md-3">
+        <div class="form-group">
+          <label translate="x_Print">Print Paper Wallets (unencrypted)</label>
+          <a class="btn btn-info btn-block" ng-click="printQRCode()" translate="x_PrintShort">PRINT</a>
+        </div>
+        <div class="form-group">
+          <label translate="x_Json"> JSON file (unencrypted)</label>
+          <a class="btn btn-info btn-block" href="{{bJSON}}" download="bulk_ether_accounts.json" translate="x_Download">DOWNLOAD</a>
+        </div>
+        <div class="form-group">
+          <label translate="x_CSV"> CSV file (unencrypted)</label>
+          <a class="btn btn-info btn-block" href="{{bCSV}}" download="bulk_ether_accounts.csv" translate="x_Download">DOWNLOAD</a>
+        </div>
+        <div class="form-group">
+          <label translate="x_TXT"> TXT file (unencrypted)</label>
+          <a class="btn btn-info btn-block" href="{{bTXT}}" download="bulk_ether_accounts.txt" translate="x_Download">DOWNLOAD</a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+  <!-- / Bottom - Display Bulk Generated Wallets -->
+
+</main>
+
+
+            <main class="tab-pane active" ng-if="globalService.currentTab==globalService.tabs.bulkGenerate.id" ng-controller='bulkGenCtrl'  ng-cloak>
+
+  <h1 translate="NAV_BulkGenerate"> Bulk Generate Wallets </h1>
+
+  <!-- Top - Bulk Generate -->
+  <section class="row">
+    <div class="col-md-6 col-sm-12 form-group">
+      <h4 translate="BULK_Label_1">Number of Wallets To Generate</h4>
+      <input class="form-control" type="text" placeholder="{{ 'BULK_Label_1' | translate }}" ng-model="amount">
+    </div>
+    <div class="col-md-6 col-sm-12 form-group">
+      <h4 translate="BULK_Label_2">Generate Wallets</h4>
+      <a class="btn btn-primary btn-block" ng-click="genWallets()" translate="BULK_Label_2">Generate Wallets</a>
+    </div>
+  </section>
+  <!-- / Top - Bulk Generate -->
+
+  <!-- Bottom - Display Bulk Generated Wallets -->
+  <section ng-show="showWallets">
+
+    <hr />
+
+    <div class="row">
+      <div class="col-xs-12">
+        <h1 translate="BULK_SuccessMsg">Success! Your wallets have been generated.</h1>
+
+        <div class="alert alert-danger" translate="ERROR_28">**You need your Keystore File + password or Private Key** to access this wallet in the future. Please save & back it up externally! There is no way to recover a wallet if you do not save it. Read the [help page](https://www.myetherwallet.com/#help) for instructions.</div>
+      </div>
+
+      <article class="col-md-9">
+        <table id="bulkgentable" class="table">
+          <thead>
+            <tr>
+              <th width="32"> Address Identicon </th>
+              <th width="500" translate="x_Address">Address</th>
+              <th width="500" translate="x_PrivKey">Private Key (unencrypted)</th>
+            </tr>
+            <tr class="privaddkey" ng-repeat="wallet in wallets">
+            <td>
+                <div class="addressIdenticon" title="Address Indenticon" blockie-address="{{wallet.getAddressString()}}" watch-var="wallet"></div>
+            </td>
+            <td>
+                <textarea class="form-control" rows="4" type="text" readonly>{{wallet.getChecksumAddressString()}}</textarea>
+            </td>
+            <td>
+                <textarea class="form-control" rows="4" type="text" readonly>{{wallet.getPrivateKeyString()}}</textarea>
+            </td>
+            </tr>
+          </thead>
+        </table>
+      </article>
+
+      <article class="col-md-3">
+        <div class="form-group">
+          <label translate="x_Print">Print Paper Wallets (unencrypted)</label>
+          <a class="btn btn-info btn-block" ng-click="printQRCode()" translate="x_PrintShort">PRINT</a>
+        </div>
+        <div class="form-group">
+          <label translate="x_Json"> JSON file (unencrypted)</label>
+          <a class="btn btn-info btn-block" href="{{bJSON}}" download="bulk_ether_accounts.json" translate="x_Download">DOWNLOAD</a>
+        </div>
+        <div class="form-group">
+          <label translate="x_CSV"> CSV file (unencrypted)</label>
+          <a class="btn btn-info btn-block" href="{{bCSV}}" download="bulk_ether_accounts.csv" translate="x_Download">DOWNLOAD</a>
+        </div>
+        <div class="form-group">
+          <label translate="x_TXT"> TXT file (unencrypted)</label>
+          <a class="btn btn-info btn-block" href="{{bTXT}}" download="bulk_ether_accounts.txt" translate="x_Download">DOWNLOAD</a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+  <!-- / Bottom - Display Bulk Generated Wallets -->
+
+</main>
+
+
+            <!-- print -->
+<div class="tab-pane" id="panePrint" style="display: none;">
+    <div class="print-container">
+        <span id="printwalletjson" style="display: none;"></span>
+        <img src="images/logo-ethereum-1.png" class="ether-logo-1" height="100%" width="auto"/>
+        <img src="images/logo-myetherwallet.png" class="ether-logo-2"/>
+        <img src="images/print-sidebar.png" width="auto" class="print-title"/>
+        <div class="print-qr-code-1">
+            <div id="paperwalletaddqr"></div>
+            <p class="print-text" style="padding-top: 25px;">YOUR ADDRESS</p>
+        </div>
+        <div class="print-notes">
+            <img src="images/notes-bg.png" width="90%;" height="auto" class="pull-left"/>
+            <p class="print-text">AMOUNT / NOTES</p>
+        </div>
+        <div class="print-qr-code-2">
+            <div id="paperwalletprivqr"></div>
+            <p class="print-text" style="padding-top: 30px;">YOUR PRIVATE KEY</p>
+        </div>
+        <div class="print-address-container">
+            <p>
+                <strong>Your Address:</strong>
+                <br/>
+                <span id="paperwalletadd"></span>
+            </p>
+            <p>
+                <strong>Your Private Key:</strong>
+                <br/>
+                <span id="paperwalletpriv"></span>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- /print -->
+
+
+
+        </div>
+
+
+        <div data-ng-repeat="alert in notifier.alerts">
+  <div class="alert popup alert-{{alert.type}} animated-show-hide"
+       style="bottom: {{85*$index}}px; z-index: {{999+$index}};">
+    <div class="container">
+      <div class='alert-message' ng-bind-html="alert.message"></div>
+    </div>
+    <i class="icon-close" ng-click="alert.close()"></i>
+  </div>
+</div>
+
+
+    </section>
+
+
+    <section class="pre-footer">
+    <div class="container">
+        <p>wallet.callisto.network does not hold your keys for you. We cannot access accounts, recover keys, reset
+            passwords, nor reverse transactions. Protect your keys &amp; always check that you are on correct URL. <a
+                role="link" tabindex="0" data-toggle="modal" data-target="#disclaimerModal"> You are responsible for
+                your security.</a>
+        </p>
+    </div>
+</section>
+<footer class="footer {{curNode.type}}" role="content" aria-label="footer">
+    <article class="block__wrap" style="max-width: 1780px; margin: auto;">
+        <section class="footer--left">
+            <span>Version: 3.12.2</span>
+            <p><span translate="FOOTER_1">Free, open-source, client-side interface for generating Ethereum Classic wallets &amp; more. Interact with the Ethereum-compatible blockchains such are ETH, ETC, UBQ and EXP easily &amp; securely. Double-check the URL ( https://ethereumproject.github.io/etherwallet/ ) before unlocking your wallet.</span>
+            </p>
+            <p><a data-target="#disclaimerModal" data-toggle="modal" target="_blank" rel="noopener" role="link"
+                  tabindex="0" translate="FOOTER_4"> Disclaimer </a></p>
+            <p> &copy; Callisto Network Foundation OU</p>
+        </section>
+        <section class="footer--cent">
+            <h5><i aria-hidden="true">💝</i> Donations are always appreciated!</h5>
+            <p>CLO, ETH or ETC donation address: <span class="mono wrap"><big><a
+                href="https://explorer2.callisto.network/addr/0x74682fc32007af0b6118f259cbe7bccc21641600">0x74682fc32007af0b6118f259cbe7bccc21641600</a></big></span>
+            </p>
+            <h5><i aria-hidden="true">👫</i> You can support us by supporting our blockchain-family.</h5>
+            <p><a
+                aria-label="Swap Ether or Bitcoin via Change Now.com"
+                href="{{changeNow.affiliateLink}}" target="_blank"
+                rel="noopener">Swap via Change Now.com</a>
+            </p>
+            <p><a href="https://www.ledgerwallet.com/r/fa4b?path=/products/" target="_blank" rel="noopener">Buy a Ledger
+                Wallet</a></p>
+            <p><a href="https://trezor.io/?a=myetherwallet.com" target="_blank" rel="noopener">Buy a TREZOR</a></p>
+            <p><a href="https://digitalbitbox.com/?ref=mew" target="_blank" rel="noopener">Buy a Digital Bitbox</a></p>
+            <h5 ng-hide="curLang=='en'"><i>🏅</i> <span
+                translate="Translator_Desc"> Thank you to our translators </span></h5>
+            <p ng-hide="curLang=='en'">
+                <span translate="TranslatorName_1"></span>
+                <span translate="TranslatorName_2"></span>
+                <span translate="TranslatorName_3"></span>
+                <span translate="TranslatorName_4"></span>
+                <span translate="TranslatorName_5"></span>
+            </p>
+        </section>
+        <section class="footer--righ brand-primary">
+
+            <div class="footer-branding">
+
+            </div>
+            <p><a aria-label="our organization on github"
+                  href="https://github.com/CallistoNetwork/ClassicEtherWallet" target="_blank"
+                  rel="noopener" role="link" tabindex="0">
+                Github: Ether wallet releases 
+            </a></p>
+            <p>
+                <a aria-label="join our discord live chat" href="https://discord.gg/fGdPSA2" target="_blank"
+                   rel="noopener" role="link" tabindex="0">Discord live chat</a>
+                &middot;
+                <a aria-label="reddit" href="http://reddit.com/r/CallistoCrypto" target="_blank" rel="noopener"
+                   role="link" tabindex="0">Reddit</a>
+                &middot;
+                <a aria-label="twitter" href="https://twitter.com/CallistoSupport" target="_blank" rel="noopener"
+                   role="link" tabindex="0">Twitter</a>
+                &middot;
+                <a aria-label="medium" href="https://t.me/CallistoNetNews" target="_blank" rel="noopener" role="link"
+                   tabindex="0">Telegarm</a>
+            </p>
+            <p><b>Latest Block #:</b> {{currentBlockNumber | number}} </p>
+        </section>
+    </article>
+</footer>
+
+ <article class="modal fade" id="disclaimerModal" tabindex="-1">
+    <section class="modal-dialog">
+        <section class="modal-content">
+
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                <h2 class="modal-title text-info" translate="FOOTER_4">Disclaimer</h2>
+
+                <p class="small"><strong>Be safe &amp; secure:</strong> <a
+                    href="https://myetherwallet.groovehq.com/knowledge_base/topics/protecting-yourself-and-your-funds"
+                    target="_blank" rel="noopener"> We highly recommend that you read our guide on How to Prevent Loss
+                    &amp; Theft for some recommendations on how to be proactive about your security.</a></p>
+
+                <p class="small"><strong>Always backup your keys: </strong> ClassicEtherWallet.com &amp;
+                    ClassicEtherWallet CX are not "web wallets". You do not create an account or give us your funds to
+                    hold onto. No data leaves your computer / your browser. We make it easy for you to create, save, and
+                    access your information and interact with the blockchain.</p>
+
+                <p class="small"><strong>We are not responsible for any loss: </strong> Ethereum, ClassicEtherWallet.com
+                    & ClassicEtherWallet CX, and some of the underlying Javascript libraries we use are under active
+                    development. While we have thoroughly tested &amp; tens of thousands of wallets have been
+                    successfully created by people all over the globe, there is always the possibility something
+                    unexpected happens that causes your funds to be lost. Please do not invest more than you are willing
+                    to lose, and please be careful.</p>
+
+                <p class="small"><strong> Translations of ClassicEtherWallet: </strong> The community has done an
+                    amazing job translating ClassicEtherWallet into a variety of languages. However, ClassicEtherWallet
+                    can only verify the validity and accuracy of the information provided in English and, because of
+                    this, the English version of our website is the official text. </p>
+
+                <p class="small"><strong>MIT License</strong> Copyright &copy; 2015-2017 ClassicEtherWallet LLC</p>
+
+                <p class="small">Permission is hereby granted, free of charge, to any person obtaining a copy of this
+                    software and associated documentation files (the "Software"), to deal in the Software without
+                    restriction, including without limitation the rights to use, copy, modify, merge, publish,
+                    distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
+                    Software is furnished to do so, subject to the following conditions:</p>
+
+                <p class="small">The above copyright notice and this permission notice shall be included in all copies
+                    or substantial portions of the Software.</p>
+
+                <p class="small"><strong>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+                    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+                    PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+                    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+                    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+                    SOFTWARE.</strong></p>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Okay</button>
+            </div>
+
+        </section>
+    </section>
+</article>
+ 
+
+
+</div>
+
+</body>
+
+
+</html>
+

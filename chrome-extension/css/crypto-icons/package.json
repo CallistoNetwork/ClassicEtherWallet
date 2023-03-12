@@ -2,7 +2,7 @@
   "_args": [
     [
       "crypto-icons@1.0.35",
-      "F:\\WORK\\BlockChain\\Callisto\\ClassicEtherWallet"
+      "/Users/yograterol/ClassicEtherWallet"
     ]
   ],
   "_development": true,
@@ -27,7 +27,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/crypto-icons/-/crypto-icons-1.0.35.tgz",
   "_spec": "1.0.35",
-  "_where": "F:\\WORK\\BlockChain\\Callisto\\ClassicEtherWallet",
+  "_where": "/Users/yograterol/ClassicEtherWallet",
   "author": {
     "name": "Guarda co"
   },

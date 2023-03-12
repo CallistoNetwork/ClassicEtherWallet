@@ -81,7 +81,7 @@ nodes.alternativeBalance = {
     BSC: {
         balance: "Loading",
         node: "bsc_main",
-        symbol: "BNB",
+        symbol: "BNB"
     },
     CLO: {
         balance: "Loading",
@@ -99,7 +99,8 @@ nodes.nodeList = {
     clo_mainnet: {
         name: "Callisto - CLO",
         blockExplorerTX: "https://explorer.callisto.network/tx/[[txHash]]",
-        blockExplorerAddr: "https://explorer.callisto.network/addr/[[address]]",
+        blockExplorerAddr:
+            "https://explorer.callisto.network/address/[[address]]",
         type: nodes.nodeTypes.CLO,
         eip155: true,
         chainId: 820,
@@ -136,7 +137,10 @@ nodes.nodeList = {
         abiList: require("./abiDefinitions/etcAbi.json"),
         service: "Ether Cluster",
         icon: "etc",
-        lib: new nodes.customNode("https://ip-159-175.cust.aspone.cz/walletetcnode", "")
+        lib: new nodes.customNode(
+            "https://ip-159-175.cust.aspone.cz/walletetcnode",
+            ""
+        )
     },
     eth_mew: {
         name: "ETH",
@@ -149,7 +153,10 @@ nodes.nodeList = {
         abiList: require("./abiDefinitions/ethAbi.json"),
         service: "Ether Cluster",
         icon: "eth",
-        lib: new nodes.customNode("https://ip-159-225.cust.aspone.cz/walletethnode", "")
+        lib: new nodes.customNode(
+            "https://ip-159-225.cust.aspone.cz/walletethnode",
+            ""
+        )
     },
     bsc_main: {
         name: "BSC",

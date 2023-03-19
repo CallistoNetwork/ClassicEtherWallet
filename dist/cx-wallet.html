@@ -1014,10 +1014,10 @@
                                 </a>
                             </td>
                             <td class="text-center">
-                                <a href="https://explorer.callisto.network/tokens/{{wallet.getAddressString()}}" target="_blank"
-                                   rel="noopener" title="https://explorer.callisto.network/tokens/{{wallet.getAddressString()}}">
+                                <a href="https://explorer.callisto.network/address/{{wallet.getAddressString()}}/tokens" target="_blank"
+                                   rel="noopener" title="https://explorer.callisto.network/address/{{wallet.getAddressString()}}/tokens">
                                     <img src="images/icon-external-link.svg"
-                                         title="https://explorer.callisto.network/tokens/{{wallet.getAddressString()}}"
+                                         title="https://explorer.callisto.network/address/{{wallet.getAddressString()}}/tokens"
                                          ng-click="removeTokenFromLocal(token.symbol)"
                                          ng-show="token.type!=='default'"/>
                                 </a>
